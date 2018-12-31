@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 appStartColor() {
-  return Colors.green;
+  return Color.fromRGBO(0, 166, 90,1.0);
 }
 
 appEndColor() {
@@ -17,7 +17,7 @@ headingColor(){
 }
 
 bottomNavigationColor(){
-  return Colors.green[400];
+  return Color.fromRGBO(0, 166, 90,1.0);
 }
 
 circleIconBackgroundColor(){
