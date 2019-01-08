@@ -21,6 +21,10 @@ dependencies:
   cupertino_icons: ^0.1.2
   charts_flutter: ^0.5.0
   gradient_app_bar: ^0.0.1
+  font_awesome_flutter: ^8.0.1
+  dio: ^1.0.13
+  shared_preferences: ^0.4.3
+  modal_progress_hud: ^0.1.2
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +50,27 @@ flutter:
         - assets/settings.png
         - assets/visits.png
         - assets/profile.png
+        - assets/img/login_logo.png
+        - assets/attendance_icon1.png
+        - assets/leave_icon1.png
+        - assets/timeoff_icon1.png
+        - assets/reports1.png
+        - assets/settings1.png
+        - assets/profile1.png
+
+
+  fonts:
+    - family: WorkSansSemiBold
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-SemiBold.ttf
+
+    - family: WorkSansBold
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-Bold.ttf
+
+    - family: WorkSansMedium
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-Medium.ttf
 
 
 

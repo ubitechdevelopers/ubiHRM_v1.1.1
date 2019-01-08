@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
+import 'home.dart';
 import 'global.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'login_page.dart';
 
 
 class AppDrawer extends StatefulWidget {
@@ -140,7 +142,12 @@ class _AppDrawerState extends State<AppDrawer> {
               );
             },
           ),*/
-     /*     new ListTile(
+              Text("Monika Rai",
+                style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+              )),
+          /*new ListTile(
             title: Row(
               children: <Widget>[
                 Icon(Icons.perm_contact_calendar,size: 20.0),SizedBox(width: 5.0),
@@ -210,7 +217,6 @@ class _AppDrawerState extends State<AppDrawer> {
                 new Text("User Guide", style: new TextStyle(fontSize: 14.0)),
               ],
             ),
-
           ),
         /*  new ListTile(
             title: Row(
@@ -234,7 +240,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-
+                logout();
             },
           ),
         ],
@@ -242,5 +248,13 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
+  logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('response');
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
+    );
+  }
 
 }
