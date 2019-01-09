@@ -3,6 +3,7 @@ import 'home.dart';
 import 'global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
+import 'profile.dart';
 
 
 class AppDrawer extends StatefulWidget {
@@ -61,7 +62,10 @@ class _AppDrawerState extends State<AppDrawer> {
                   top: MediaQuery.of(context).size.height*.07,
                   child: new RawMaterialButton(
                     onPressed: () {
-
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CollapsingTab()),
+                      );
                     },
                     child: new Icon(
                       Icons.edit,

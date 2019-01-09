@@ -22,6 +22,23 @@ getAllPermission(Employee emp) async{
   globalpermissionlist = permlist;
 }
 
+getProfileInfo() async{
+  final prefs = await SharedPreferences.getInstance();
+  Dio dio = new Dio();
+  Response<String> response =
+  await dio.post(path + "getProfileInfo");
+  print(response.toString());
+  Map responseJson = json.decode(response.data.toString());
+  print(responseJson);
+  globalcontactusinfomap = responseJson['Contact'];
+  globalpersnalinfomap = responseJson['Personal'];
+  globalcompanyinfomap = responseJson['Company'];
+  print(globalcontactusinfomap);
+  print(globalcompanyinfomap);
+  print(globalpersnalinfomap);
+
+}
+
 List<Permission> createPermList(List data) {
   List<Permission> list = new List();
   for (int i = 0; i < data.length; i++) {

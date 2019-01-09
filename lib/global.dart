@@ -28,4 +28,7 @@ circleIconBackgroundColor(){
 String path="http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/";
 
 List<Permission> globalpermissionlist =new List();
+Map globalcompanyinfomap;
+Map globalpersnalinfomap;
+Map globalcontactusinfomap;
 

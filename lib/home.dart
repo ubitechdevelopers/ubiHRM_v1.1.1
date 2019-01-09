@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
      bool ish = await getAllPermission(emp);
 
     //getModulePermission("178","view");
+    getProfileInfo();
     islogin().then((Widget configuredWidget) {
       setState(() {
         mainWidget = configuredWidget;
