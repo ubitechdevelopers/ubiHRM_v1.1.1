@@ -45,3 +45,15 @@ class Permission {
   Permission({this.moduleid,this.permissionlist});
 
 }
+
+class Team {
+  String Id;
+  String FirstName; // timein or timeout
+  String LastName;
+  String Designation;
+  String DOB;
+  String Nationality;
+  String BloodGroup;
+  String CompanyEmail;
+  Team({this.Id, this.FirstName, this.LastName, this.Designation, this.DOB, this.Nationality, this.BloodGroup, this.CompanyEmail});
+}

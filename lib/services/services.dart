@@ -27,15 +27,25 @@ getProfileInfo() async{
   Dio dio = new Dio();
   Response<String> response =
   await dio.post(path + "getProfileInfo");
-  print(response.toString());
+ // print(response.toString());
   Map responseJson = json.decode(response.data.toString());
-  print(responseJson);
+  //print(responseJson);
   globalcontactusinfomap = responseJson['Contact'];
   globalpersnalinfomap = responseJson['Personal'];
   globalcompanyinfomap = responseJson['Company'];
-  print(globalcontactusinfomap);
-  print(globalcompanyinfomap);
-  print(globalpersnalinfomap);
+
+
+}
+
+getReportingTeam() async{
+  final prefs = await SharedPreferences.getInstance();
+  Dio dio = new Dio();
+  Response<String> response =
+  await dio.post(path + "getReportingTeam");
+  print(response.toString());
+  List responseJson = json.decode(response.data.toString());
+  print(responseJson);
+
 
 }
 
@@ -83,4 +93,30 @@ getModulePermission(String moduleid, String permission_type){
   }
 
   return "0";
+}
+
+Future<List<Team>> getTeamList() async {
+
+  final prefs = await SharedPreferences.getInstance();
+  Dio dio = new Dio();
+  Response<String> response =
+  await dio.post(path + "getReportingTeam");
+  List responseJson = json.decode(response.data.toString());
+  //print("1.  "+responseJson.toString());
+  List<Team> teamlist = createTeamList(responseJson);
+  return teamlist;
+}
+
+List<Team> createTeamList(List data) {
+  List<Team> list = new List();
+  for (int i = 0; i < data.length; i++) {
+    String diff = data[i]["lateby"];
+    String timeAct = data[i]["timein"];
+    String name = data[i]["name"];
+    String shift = data[i]["shift"];
+    String date = data[i]["date"];
+    Team row = new Team();
+    list.add(row);
+  }
+  return list;
 }

@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
 
     //getModulePermission("178","view");
     getProfileInfo();
+    getReportingTeam();
     islogin().then((Widget configuredWidget) {
       setState(() {
         mainWidget = configuredWidget;

@@ -187,12 +187,12 @@ class _CollapsingTabState extends State<CollapsingTab> {
                     fontSize: 20.0,
                   )),
               SizedBox(height: 10.0,),
-              Text(globalcompanyinfomap[''],
+              Text(globalcompanyinfomap['CompanyEmail'],
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.0,
                   )),
-              Text("Team Leader",
+              Text(globalcompanyinfomap['Designation'],
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 14.0,
@@ -278,28 +278,33 @@ class _CollapsingTabState extends State<CollapsingTab> {
                               Row(children: <Widget>[
                                 Container(child:Text("Name:",style: TextStyle(color: Colors.grey[600]),) ,
                                 width: 100.0,),
-                                Text("Monika Rai"),
+                                Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Father:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("Mathura prasad rai"),
+                                Text(globalpersnalinfomap["FatherName"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("DOB:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("06/12/1991"),
+                                Text(globalpersnalinfomap["DOB"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Blood Group:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("B+"),
+                                Text(globalpersnalinfomap["BloodGroup"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Nationality:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("Indian"),
+                                Text(globalpersnalinfomap["Nationality"]),
                               ],),
+                              SizedBox(height: 10.0,),
 
                             ],
                           ),
@@ -320,7 +325,58 @@ class _CollapsingTabState extends State<CollapsingTab> {
                       StickyHeader(
                         header: new Container(
                           height: 50.0,
+                          color: Colors.grey[100],
+                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
+                          alignment: Alignment.centerLeft,
+                          child: new Text(
+                            'Reporting To',
+                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        content: new Container(
+                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
+                          child: Column(
+                            children: <Widget>[
+                              // SizedBox(height: 10.0,),
+                              Row(children: <Widget>[
+                                Container(child:Container(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
+                                        )
+                                    ))
+                                ),SizedBox(width: 20.0,),
+                                Text(globalcompanyinfomap["ReportingTo"]),
+                                Text("-"),
+                                Text(globalcompanyinfomap["ReportingToDesignation"]),
+                              ],),
 
+                              SizedBox(height: 10.0,),
+
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Container(
+                      //height: MediaQuery.of(context).size.height,
+                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                      //width: MediaQuery.of(context).size.width*0.9,
+                      decoration: new ShapeDecoration(
+                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
+                        color: Colors.grey[100],
+                      ),
+                      child:
+                      StickyHeader(
+                        header: new Container(
+                          height: 50.0,
+                          color: Colors.grey[100],
                           padding: new EdgeInsets.symmetric(horizontal: 9.0),
                           alignment: Alignment.centerLeft,
                           child: new Text(
@@ -336,33 +392,39 @@ class _CollapsingTabState extends State<CollapsingTab> {
                               Row(children: <Widget>[
                                 Container(child:Text("Emp Code:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("Monika Rai"),
+                                Text(globalcompanyinfomap["EmpCode"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Company Email:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("Mathura prasad rai"),
+                                Text(globalcompanyinfomap["CompanyEmail"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("06/12/1991"),
+                                Text(globalcompanyinfomap["Designation"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Reporting To:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("B+"),
+                                Text(globalcompanyinfomap["ReportingTo"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Department:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("Indian"),
+                                Text(globalcompanyinfomap["Department"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Location:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("Indian"),
+                                Text(globalcompanyinfomap["Location"]),
                               ],),
+                              SizedBox(height: 10.0,),
 
                             ],
                           ),
@@ -383,7 +445,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
                       StickyHeader(
                         header: new Container(
                           height: 50.0,
-
+                          color: Colors.grey[100],
                           padding: new EdgeInsets.symmetric(horizontal: 9.0),
                           alignment: Alignment.centerLeft,
                           child: new Text(
@@ -399,33 +461,39 @@ class _CollapsingTabState extends State<CollapsingTab> {
                               Row(children: <Widget>[
                                 Container(child:Text("Phone:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("Monika Rai"),
+                                Text(globalcontactusinfomap["Phone"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("Mathura prasad rai"),
+                                Text(globalcontactusinfomap["Email"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Address:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("06/12/1991"),
+                                Text(globalcontactusinfomap["Address"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Postal Code:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("B+"),
+                                Text(globalcontactusinfomap["PostalCode"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("City:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("Indian"),
+                                Text(globalcontactusinfomap["City"]),
                               ],),
+                              SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Country:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                Text("Indian"),
+                                Text(globalcontactusinfomap["Country"]),
                               ],),
+                              SizedBox(height: 10.0,),
 
                             ],
                           ),
@@ -437,7 +505,194 @@ class _CollapsingTabState extends State<CollapsingTab> {
                   ],),
                 ),
               ],),
-              new Text("No Team found"),
+              /////////
+
+              //////// Team /////////
+
+              Column(children: <Widget>[
+                SizedBox(height: height),
+                Container(
+                  height: insideContainerHeight,
+                  width: 400.0,
+                  //color: Colors.green[50],
+                  child: ListView(children: <Widget>[
+                    Container(
+                      //height: MediaQuery.of(context).size.height,
+                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                      //width: MediaQuery.of(context).size.width*0.9,
+                      decoration: new ShapeDecoration(
+                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
+                        color: Colors.grey[100],
+                      ),
+                      child:
+                      StickyHeader(
+                        header: new Container(
+                          height: 50.0,
+                          //color: Colors.grey[100],
+                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
+                          alignment: Alignment.centerLeft,
+                          child: new Text(
+                            '',
+                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        content: new Container(
+                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
+                          child: Column(
+                            children: <Widget>[
+                              // SizedBox(height: 10.0,),
+                              Row(children: <Widget>[
+                                Container(child:Container(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
+                                        )
+                                    ))
+                                ),SizedBox(width: 20.0,),
+                                Text(globalcompanyinfomap["ReportingTo"]),
+                                Text("-"),
+                                Text(globalcompanyinfomap["ReportingToDesignation"]),
+                              ],),
+
+                              SizedBox(height: 10.0,),
+
+                              Row(children: <Widget>[
+                                Container(child:Container(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
+                                        )
+                                    ))
+                                ),SizedBox(width: 20.0,),
+                                Text(globalcompanyinfomap["ReportingTo"]),
+                                Text("-"),
+                                Text(globalcompanyinfomap["ReportingToDesignation"]),
+                              ],),
+
+                              SizedBox(height: 10.0,),
+
+                              Row(children: <Widget>[
+                                Container(child:Container(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
+                                        )
+                                    ))
+                                ),SizedBox(width: 20.0,),
+                                Text(globalcompanyinfomap["ReportingTo"]),
+                                Text("-"),
+                                Text(globalcompanyinfomap["ReportingToDesignation"]),
+                              ],),
+
+                              SizedBox(height: 10.0,),
+
+                              Row(children: <Widget>[
+                                Container(child:Container(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
+                                        )
+                                    ))
+                                ),SizedBox(width: 20.0,),
+                                Text(globalcompanyinfomap["ReportingTo"]),
+                                Text("-"),
+                                Text(globalcompanyinfomap["ReportingToDesignation"]),
+                              ],),
+
+                              SizedBox(height: 10.0,),
+
+                              Row(children: <Widget>[
+                                Container(child:Container(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
+                                        )
+                                    ))
+                                ),SizedBox(width: 20.0,),
+                                Text(globalcompanyinfomap["ReportingTo"]),
+                                Text("-"),
+                                Text(globalcompanyinfomap["ReportingToDesignation"]),
+                              ],),
+
+                              SizedBox(height: 10.0,),
+
+                              Row(children: <Widget>[
+                                Container(child:Container(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
+                                        )
+                                    ))
+                                ),SizedBox(width: 20.0,),
+                                Text(globalcompanyinfomap["ReportingTo"]),
+                                Text("-"),
+                                Text(globalcompanyinfomap["ReportingToDesignation"]),
+                              ],),
+
+                              SizedBox(height: 10.0,),
+
+                              Row(children: <Widget>[
+                                Container(child:Container(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
+                                        )
+                                    ))
+                                ),SizedBox(width: 20.0,),
+                                Text(globalcompanyinfomap["ReportingTo"]),
+                                Text("-"),
+                                Text(globalcompanyinfomap["ReportingToDesignation"]),
+                              ],),
+
+                              SizedBox(height: 10.0,),
+
+
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+
+
+
+
+
+                  ],),
+                ),
+              ],)
+
+
+
             ],
           ),
         ),
