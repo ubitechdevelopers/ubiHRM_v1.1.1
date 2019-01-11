@@ -7,6 +7,7 @@ import 'services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'model/model.dart';
+import 'myleave.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -203,6 +204,10 @@ class _HomePageState extends State<HomePage> {
 
                       GestureDetector(
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyLeave()),
+                            );
                           },
                           child: Column(
                             children: [

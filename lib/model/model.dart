@@ -55,5 +55,14 @@ class Team {
   String Nationality;
   String BloodGroup;
   String CompanyEmail;
-  Team({this.Id, this.FirstName, this.LastName, this.Designation, this.DOB, this.Nationality, this.BloodGroup, this.CompanyEmail});
+  String ProfilePic;
+  Team({this.Id, this.FirstName, this.LastName, this.Designation, this.DOB, this.Nationality, this.BloodGroup, this.CompanyEmail, this.ProfilePic});
 }
+
+class Leave{
+  String uid, leavefrom, leaveto, orgid, reason, leavetypeid, leavetypefrom, leavetypeto, halfdayfromtype, halfdaytotype, leavedays, approverstatus, comment, attendancedate, leaveid;
+  bool withdrawlsts;
+  Leave({this.uid, this.leavefrom, this.leaveto, this.orgid, this.reason, this.leavetypeid, this.leavetypefrom, this.leavetypeto, this.halfdayfromtype, this.halfdaytotype, this.leavedays, this.approverstatus, this.comment, this.attendancedate, this.leaveid, this.withdrawlsts});
+}
+
+

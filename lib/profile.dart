@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'global.dart';
+import 'model/model.dart';
+import 'services/services.dart';
 
 class CollapsingTab extends StatefulWidget {
   @override
@@ -10,7 +12,7 @@ class CollapsingTab extends StatefulWidget {
 class _CollapsingTabState extends State<CollapsingTab> {
   ScrollController scrollController;
   double height = 0.0;
-  double insideContainerHeight=350.0;
+  double insideContainerHeight=300.0;
 
   Widget _buildActions() {
     Widget profile = new GestureDetector(
@@ -28,6 +30,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
     );
 
     double scale;
+
     if (scrollController.hasClients) {
       scale = scrollController.offset / 300;
       scale = scale * 2;
@@ -58,6 +61,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
     );
 
     double scale;
+
     if (scrollController.hasClients) {
       scale = scrollController.offset / 300;
       scale = scale * 2;
@@ -89,14 +93,28 @@ class _CollapsingTabState extends State<CollapsingTab> {
     scrollController.addListener(_scrollListener);
   }
 
+
+
   _scrollListener() {
 
-    /*double scale;
+    double scale;
+    double scale1;
+    double scale2=150.0;
     if (scrollController.hasClients) {
+      scale1 = scrollController.offset/2;
+      scale2 = 150.0 - scrollController.offset/2;
+      print(scale2);
+      setState(() {
+        height=scale1;
+        insideContainerHeight = 450.0 - scale2;
+        print("this is cont height"+insideContainerHeight.toString());
+      });
       scale = scrollController.offset / 300;
       scale = scale * 2;
-      print(scale.toString());
-      if (scale > 1) {
+      //print(scale1);
+      //print(scale.toString());
+
+      /*if (scale > 1) {
         //scale = 1.0;
        // print(scale);
         setState(() {
@@ -115,15 +133,15 @@ class _CollapsingTabState extends State<CollapsingTab> {
         });
         print("bottom");
         print(scale);
-      }
-    }*/
+      }*/
+    }
 
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
       setState(() {
         height=150.0;
         insideContainerHeight=450.0;
-        print("reach the bottom "+height.toString());
+        //print("reach the bottom "+height.toString());
       });
     }
     if (scrollController.offset <= scrollController.position.minScrollExtent &&
@@ -131,7 +149,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
       setState(() {
         height=0.0;
         insideContainerHeight=300.0;
-        print("reach the top "+height.toString());
+        //print("reach the top "+height.toString());
       });
     }
   }
@@ -515,179 +533,53 @@ class _CollapsingTabState extends State<CollapsingTab> {
                   height: insideContainerHeight,
                   width: 400.0,
                   //color: Colors.green[50],
-                  child: ListView(children: <Widget>[
-                    Container(
-                      //height: MediaQuery.of(context).size.height,
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      //width: MediaQuery.of(context).size.width*0.9,
-                      decoration: new ShapeDecoration(
-                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
-                        color: Colors.grey[100],
-                      ),
-                      child:
-                      StickyHeader(
-                        header: new Container(
-                          height: 50.0,
-                          //color: Colors.grey[100],
-                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
-                          alignment: Alignment.centerLeft,
-                          child: new Text(
-                            '',
-                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        content: new Container(
-                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
-                          child: Column(
-                            children: <Widget>[
-                              // SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                Container(child:Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
-                                        )
-                                    ))
-                                ),SizedBox(width: 20.0,),
-                                Text(globalcompanyinfomap["ReportingTo"]),
-                                Text("-"),
-                                Text(globalcompanyinfomap["ReportingToDesignation"]),
-                              ],),
+                  child: FutureBuilder<List<Team>>(
+                    future: getTeamList(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if(snapshot.data.length>0) {
+                          return new ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return new Row(children: <Widget>[
+                                  Container(child:Container(
+                                      width: 50.0,
+                                      height: 50.0,
+                                      decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: new DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: NetworkImage(snapshot.data[index].ProfilePic) ,
+                                          )
+                                      ))
+                                  ),SizedBox(width: 20.0,),
+                                  Text(snapshot.data[index].FirstName+" "+snapshot.data[index].LastName),
+                                  Text("-"),
+                                  Text(snapshot.data[index].Designation),
+                                ],)
+                                ;
+                              }
+                          );
+                        }else{
+                          return new Center(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*1,
+                              color: Colors.teal.withOpacity(0.1),
+                              padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                              child:Text("No Team Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                            ),
+                          );
+                        }
+                      }
+                      else if (snapshot.hasError) {
+                        return new Text("Unable to connect server");
+                      }
 
-                              SizedBox(height: 10.0,),
-
-                              Row(children: <Widget>[
-                                Container(child:Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
-                                        )
-                                    ))
-                                ),SizedBox(width: 20.0,),
-                                Text(globalcompanyinfomap["ReportingTo"]),
-                                Text("-"),
-                                Text(globalcompanyinfomap["ReportingToDesignation"]),
-                              ],),
-
-                              SizedBox(height: 10.0,),
-
-                              Row(children: <Widget>[
-                                Container(child:Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
-                                        )
-                                    ))
-                                ),SizedBox(width: 20.0,),
-                                Text(globalcompanyinfomap["ReportingTo"]),
-                                Text("-"),
-                                Text(globalcompanyinfomap["ReportingToDesignation"]),
-                              ],),
-
-                              SizedBox(height: 10.0,),
-
-                              Row(children: <Widget>[
-                                Container(child:Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
-                                        )
-                                    ))
-                                ),SizedBox(width: 20.0,),
-                                Text(globalcompanyinfomap["ReportingTo"]),
-                                Text("-"),
-                                Text(globalcompanyinfomap["ReportingToDesignation"]),
-                              ],),
-
-                              SizedBox(height: 10.0,),
-
-                              Row(children: <Widget>[
-                                Container(child:Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
-                                        )
-                                    ))
-                                ),SizedBox(width: 20.0,),
-                                Text(globalcompanyinfomap["ReportingTo"]),
-                                Text("-"),
-                                Text(globalcompanyinfomap["ReportingToDesignation"]),
-                              ],),
-
-                              SizedBox(height: 10.0,),
-
-                              Row(children: <Widget>[
-                                Container(child:Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
-                                        )
-                                    ))
-                                ),SizedBox(width: 20.0,),
-                                Text(globalcompanyinfomap["ReportingTo"]),
-                                Text("-"),
-                                Text(globalcompanyinfomap["ReportingToDesignation"]),
-                              ],),
-
-                              SizedBox(height: 10.0,),
-
-                              Row(children: <Widget>[
-                                Container(child:Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
-                                        )
-                                    ))
-                                ),SizedBox(width: 20.0,),
-                                Text(globalcompanyinfomap["ReportingTo"]),
-                                Text("-"),
-                                Text(globalcompanyinfomap["ReportingToDesignation"]),
-                              ],),
-
-                              SizedBox(height: 10.0,),
-
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-
-
-
-
-
-
-                  ],),
+                      // By default, show a loading spinner
+                      return new Center( child: CircularProgressIndicator());
+                    },
+                  )
                 ),
               ],)
 

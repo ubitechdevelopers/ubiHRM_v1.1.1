@@ -83,7 +83,6 @@ getModulePermission(String moduleid, String permission_type){
     //print("permisstion list "+list[i].permissionlist.toString());
     if(list[i].moduleid==moduleid){
       for (int j = 0; j < list[i].permissionlist.length; j++) {
-
         //print(list[i].permissionlist[j].containsKey(permission_type));
         if(list[i].permissionlist[j].containsKey(permission_type)){
           return list[i].permissionlist[j][permission_type];
@@ -96,7 +95,7 @@ getModulePermission(String moduleid, String permission_type){
 }
 
 Future<List<Team>> getTeamList() async {
-
+print("get team list called");
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
   Response<String> response =
@@ -110,13 +109,134 @@ Future<List<Team>> getTeamList() async {
 List<Team> createTeamList(List data) {
   List<Team> list = new List();
   for (int i = 0; i < data.length; i++) {
-    String diff = data[i]["lateby"];
-    String timeAct = data[i]["timein"];
-    String name = data[i]["name"];
-    String shift = data[i]["shift"];
-    String date = data[i]["date"];
-    Team row = new Team();
-    list.add(row);
+    String Id = data[i]["Id"];
+    String FirstName = data[i]["FirstName"];
+    String LastName = data[i]["LastName"];
+    String Designation = data[i]["Designation"];
+    String DOB = data[i]["DOB"];
+    String Nationality = data[i]["Nationality"];
+    String BloodGroup = data[i]["BloodGroup"];
+    String CompanyEmail = data[i]["CompanyEmail"];
+    String ProfilePic = data[i]["ProfilePic"];
+    Team team = new Team(Id: Id, FirstName: FirstName, LastName: LastName, Designation: Designation, DOB: DOB, Nationality: Nationality, BloodGroup: BloodGroup, CompanyEmail: CompanyEmail, ProfilePic: ProfilePic);
+    list.add(team);
   }
   return list;
+}
+
+
+//////////////////// SERVICE TO REQUEST FOR LEAVE /////////////////////
+
+requestLeave(Leave leave) async{
+  Dio dio = new Dio();
+  try {
+    //print(leave.orgid);
+    //print(leave.uid);
+    //print(leave.leavefrom);
+    //print(leave.leaveto);
+    //print(leave.leavetypefrom);
+    //print(leave.leavetypeto);
+    //print(leave.halfdayfromtype);
+    //print(leave.halfdaytotype);
+    //print(leave.leavetypeid);
+    //print(leave.reason);
+
+    FormData formData = new FormData.from({
+      "orgid": leave.orgid,
+      "uid": leave.uid,
+      "leavefrom": leave.leavefrom,
+      "leaveto": leave.leaveto,
+      "leavetypefrom": leave.leavetypefrom,
+      "leavetypeto": leave.leavetypeto,
+      "halfdayfromtype": leave.halfdayfromtype,
+      "halfdaytotype": leave.halfdaytotype,
+      "leavetypeid": leave.leavetypeid,
+      "reason": leave.reason
+    });
+
+    Response response1 = await dio.post(path_hrm_india+"reqForLeave", data: formData);
+    //print(response1.toString());
+    if (response1.statusCode == 200) {
+      Map leaveMap = json.decode(response1.data);
+      //print(leaveMap["status"]);
+      return leaveMap["status"].toString();
+    }else{
+      return "No Connection";
+    }
+
+  }catch(e){
+    //print(e.toString());
+    return "No Connection";
+  }
+}
+
+Future<List<Leave>> getLeaveSummary(String empid) async{
+  Dio dio = new Dio();
+  try {
+    FormData formData = new FormData.from({
+      "uid": empid,
+    });
+    //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
+    Response response = await dio.post(
+        path_ubiattendance+"getLeaveList",
+        data: formData);
+    //print(response.data.toString());
+    //print('--------------------getLeaveSummary Called-----------------------');
+    List responseJson = json.decode(response.data.toString());
+    List<Leave> userList = createLeaveList(responseJson);
+    return userList;
+  }catch(e){
+    //print(e.toString());
+  }
+}
+
+List<Leave> createLeaveList(List data){
+  List<Leave> list = new List();
+  for (int i = 0; i < data.length; i++) {
+    String LeaveDate = data[i]["date"];
+    String LeaveFrom=data[i]["from"];
+    String LeaveTo=data[i]["to"];
+    String LeaveDays=data[i]["days"];
+    String Reason=data[i]["reason"];
+    String ApprovalSts=data[i]["status"];
+    String ApproverComment=data[i]["comment"];
+    String LeaveId=data[i]["leaveid"];
+    bool withdrawlsts=data[i]["withdrawlsts"];
+    Leave leave = new Leave(attendancedate: LeaveDate, leavefrom: LeaveFrom, leaveto: LeaveTo, leavedays: LeaveDays, reason: Reason, approverstatus: ApprovalSts, comment: ApproverComment, leaveid: LeaveId, withdrawlsts: withdrawlsts);
+    list.add(leave);
+  }
+  return list;
+}
+///////////////////////////
+///////////////////////////////// SERVICE TO WIDRAWL LEAVE /////////////////////////////////
+//////////////////////////////
+
+withdrawLeave(Leave leave) async{
+  Dio dio = new Dio();
+  try {
+    FormData formData = new FormData.from({
+      "leaveid": leave.leaveid,
+      "uid": leave.uid,
+      "orgid": leave.orgid,
+      "leavests": leave.approverstatus
+    });
+    //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
+    Response response = await dio.post(
+        path_hrm_india+"changeleavests",
+        data: formData);
+    //print(response.toString());
+    if (response.statusCode == 200) {
+      Map leaveMap = json.decode(response.data);
+      if(leaveMap["status"]==true){
+        return "success";
+      }else{
+        return "failure";
+      }
+    }else{
+      return "No Connection";
+    }
+  }catch(e){
+    //print(e.toString());
+    return "Poor network connection";
+  }
 }
