@@ -3,6 +3,8 @@ import 'package:ubihrm/model/model.dart';
 import 'package:dio/dio.dart';
 import 'package:ubihrm/global.dart';
 import 'dart:convert';
+import 'dart:async';
+
 
 getAllPermission(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
@@ -22,30 +24,53 @@ getAllPermission(Employee emp) async{
   globalpermissionlist = permlist;
 }
 
-getProfileInfo() async{
+getProfileInfo(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
-  Response<String> response =
-  await dio.post(path + "getProfileInfo");
- // print(response.toString());
-  Map responseJson = json.decode(response.data.toString());
-  //print(responseJson);
-  globalcontactusinfomap = responseJson['Contact'];
-  globalpersnalinfomap = responseJson['Personal'];
-  globalcompanyinfomap = responseJson['Company'];
+  try {
+    FormData formData = new FormData.from({
+      "employeeid": emp.employeeid,
+      "organization": emp.organization
+    });
+
+    Response<String> response =
+    await dio.post(path + "getProfileInfo", data: formData);
+    // print(response.toString());
+    Map responseJson = json.decode(response.data.toString());
+    //print(responseJson);
+    globalcontactusinfomap = responseJson['Contact'];
+    globalpersnalinfomap = responseJson['Personal'];
+    globalcompanyinfomap = responseJson['Company'];
+    globalprofileinfomap = responseJson['ProfilePic'];
+
+  }catch(e){
+    //print(e.toString());
+    return "Poor network connection";
+  }
+
 
 
 }
 
-getReportingTeam() async{
+getReportingTeam(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
+//print("-------------------->"+emp.employeeid);
+ // print(emp.organization);
+  try {
+    FormData formData = new FormData.from({
+      "employeeid": emp.employeeid,
+      "organization": emp.organization
+    });
   Response<String> response =
-  await dio.post(path + "getReportingTeam");
-  print(response.toString());
+  await dio.post(path + "getReportingTeam", data: formData);
+ // print("---------> response"+response.toString());
   List responseJson = json.decode(response.data.toString());
   print(responseJson);
-
+  }catch(e){
+    //print(e.toString());
+    return "Poor network connection";
+  }
 
 }
 
@@ -94,16 +119,23 @@ getModulePermission(String moduleid, String permission_type){
   return "0";
 }
 
-Future<List<Team>> getTeamList() async {
+Future<List<Team>> getTeamList(emp) async {
 print("get team list called");
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
+//try {
+  print("-------------------->"+emp.employeeid);
+  FormData formData = new FormData.from({
+    "employeeid": emp.employeeid,
+    "organization": emp.organization
+  });
   Response<String> response =
-  await dio.post(path + "getReportingTeam");
+  await dio.post(path + "getReportingTeam", data: formData);
   List responseJson = json.decode(response.data.toString());
-  //print("1.  "+responseJson.toString());
+ print("1.---------  "+responseJson.toString());
   List<Team> teamlist = createTeamList(responseJson);
   return teamlist;
+
 }
 
 List<Team> createTeamList(List data) {
@@ -118,6 +150,7 @@ List<Team> createTeamList(List data) {
     String BloodGroup = data[i]["BloodGroup"];
     String CompanyEmail = data[i]["CompanyEmail"];
     String ProfilePic = data[i]["ProfilePic"];
+
     Team team = new Team(Id: Id, FirstName: FirstName, LastName: LastName, Designation: Designation, DOB: DOB, Nationality: Nationality, BloodGroup: BloodGroup, CompanyEmail: CompanyEmail, ProfilePic: ProfilePic);
     list.add(team);
   }

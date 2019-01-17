@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'tab_item.dart';
 import 'package:vector_math/vector_math.dart' as vector;
 
+
+
 class FancyTabBar extends StatefulWidget {
   @override
   _FancyTabBarState createState() => _FancyTabBarState();
@@ -39,7 +41,7 @@ class _FancyTabBarState extends State<FancyTabBar>
         setState(() {});
       });
 
-    _fadeFabOutAnimation = Tween<double>(begin: 1, end: 0).animate(
+    _fadeFabOutAnimation = Tween<double>(begin: 1.0, end: 0).animate(
         CurvedAnimation(parent: _fadeOutController, curve: Curves.easeOut))
       ..addListener(() {
         setState(() {

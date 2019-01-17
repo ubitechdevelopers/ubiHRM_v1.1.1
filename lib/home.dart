@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'model/model.dart';
 import 'myleave.dart';
+import 'dart:async';
+import 'package:connectivity/connectivity.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,17 +19,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   int response;
+  bool loader = true;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
   @override
   void initState() {
     super.initState();
+
     initPlatformState();
+
   }
 
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
+    var connectivityResult = await (new Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
     mainWidget = loadingWidget();
-    String empid = prefs.getString('employeeid')??"";
+   String empid = prefs.getString('employeeid')??"";
     String organization =prefs.getString('organization')??"";
 
     Employee emp = new Employee(employeeid: empid, organization: organization);
@@ -35,13 +42,24 @@ class _HomePageState extends State<HomePage> {
      bool ish = await getAllPermission(emp);
 
     //getModulePermission("178","view");
-    getProfileInfo();
-    getReportingTeam();
+    bool ish1 = await getProfileInfo(emp);
+    bool ish2 = await getReportingTeam(emp);
     islogin().then((Widget configuredWidget) {
       setState(() {
         mainWidget = configuredWidget;
       });
     });
+    }else{
+      setState(() {
+        mainWidget = plateformstatee();
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+
+        content: new Text("Internet connection not found!."),
+      )
+      );
+    }
   }
 
   Future<Widget> islogin() async{
@@ -63,13 +81,24 @@ class _HomePageState extends State<HomePage> {
 
 
   Widget loadingWidget(){
-    return Center(child:SizedBox(
+     return Center(child:SizedBox(
 
-      child:
-      Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
+      //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
+      child: new CircularProgressIndicator(),
     ));
-  }
+}
 
+
+  Widget plateformstatee(){
+
+    return new Container(
+      decoration: new BoxDecoration(color: Colors.white),
+      child: new Center(
+        child: new Text("UBIHRM", style: TextStyle(fontSize: 30.0,color: Colors.green),),
+      ),
+    );
+
+}
 
 
   Widget mainScafoldWidget(){

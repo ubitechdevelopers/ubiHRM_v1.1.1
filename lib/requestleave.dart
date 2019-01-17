@@ -11,6 +11,7 @@ import 'myleave.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'services/services.dart';
+import 'dart:async';
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class RequestLeave extends StatefulWidget {
@@ -63,8 +64,8 @@ class _RequestLeaveState extends State<RequestLeave> {
       bool ish = await getAllPermission(emp);
 
     //getModulePermission("178","view");
-    getProfileInfo();
-    getReportingTeam();
+    getProfileInfo(emp);
+    getReportingTeam(emp);
     islogin().then((Widget configuredWidget) {
       setState(() {
         mainWidget = configuredWidget;

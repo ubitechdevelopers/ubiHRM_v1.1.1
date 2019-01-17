@@ -7,6 +7,7 @@ import 'home.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/services/checkLogin.dart' as login;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:connectivity/connectivity.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -720,6 +721,8 @@ class _LoginPageState extends State<LoginPage>
       _isServiceCalling = true;
     });
     UserLogin user = new UserLogin(username: username,password: pass);
+    var connectivityResult = await (new Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
     login.checklogin(user).then((res){
       if(res){
         Navigator.pushAndRemoveUntil(
@@ -744,6 +747,14 @@ class _LoginPageState extends State<LoginPage>
       showInSnackBar('Unable to connect server.');
 
     });;
+    }else{
+      showDialog(context: context, child:
+      new AlertDialog(
+
+        content: new Text("Internet connection not found!."),
+      )
+      );
+    }
   }
 
   void _onSignInButtonPress() {

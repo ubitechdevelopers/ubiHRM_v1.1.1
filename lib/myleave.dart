@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'model/model.dart';
 import 'requestleave.dart';
+import 'dart:async';
 
 class MyLeave extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class MyLeave extends StatefulWidget {
 class _MyLeaveState extends State<MyLeave> {
   int _currentIndex = 0;
   int response;
+  bool loader = true;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
   @override
   void initState() {
@@ -35,8 +37,8 @@ class _MyLeaveState extends State<MyLeave> {
       bool ish = await getAllPermission(emp);
 
     //getModulePermission("178","view");
-    getProfileInfo();
-    getReportingTeam();
+    getProfileInfo(emp);
+    getReportingTeam(emp);
     islogin().then((Widget configuredWidget) {
       setState(() {
         mainWidget = configuredWidget;
@@ -124,11 +126,14 @@ class _MyLeaveState extends State<MyLeave> {
 
 
   Widget loadingWidget(){
-    return Center(child:SizedBox(
+    return new Scaffold(
+        body: loader == true?const CircularProgressIndicator():new Container()
+    );
 
-      child:
+   /* return Center(child:SizedBox(
+     child:
       Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
-    ));
+    ));*/
   }
 
 
