@@ -32,14 +32,6 @@ class _MyLeaveState extends State<MyLeave> {
     });
     String empid = prefs.getString('employeeid')??"";
     String organization =prefs.getString('organization')??"";
-
-    Employee emp = new Employee(employeeid: empid, organization: organization);
-    if(empid!='')
-      bool ish = await getAllPermission(emp);
-
-    //getModulePermission("178","view");
-    getProfileInfo();
-    getReportingTeam();
     islogin().then((Widget configuredWidget) {
       setState(() {
         mainWidget = configuredWidget;

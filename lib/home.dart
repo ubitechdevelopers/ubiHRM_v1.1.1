@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'drawer.dart';
+import 'piegraph.dart';
 import 'graphs.dart';
+//import 'graphtest.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'global.dart';
 import 'services/services.dart';
@@ -8,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'model/model.dart';
 import 'myleave.dart';
+import 'dart:async';
+import 'package:connectivity/connectivity.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,51 +21,57 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   int response;
+  bool loader = true;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
   @override
   void initState() {
     super.initState();
+
     initPlatformState();
+
   }
 
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      mainWidget = loadingWidget();
-    });
+    var connectivityResult = await (new Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
+      setState(() {
+        mainWidget = loadingWidget();
+      });
 
-    String empid = prefs.getString('employeeid')??"";
-    String organization =prefs.getString('organization')??"";
-
-    Employee emp = new Employee(employeeid: empid, organization: organization);
-    if(empid!='')
-     bool ish = await getAllPermission(emp);
-
-    getProfileInfo();
-    getReportingTeam();
 
     islogin().then((Widget configuredWidget) {
-      if(home_load_num==0) {
-        getProfileInfo();
-        getReportingTeam();
-        //getModulePermission("178","view");
-        home_load_num = 1;
-      }
-
       setState(() {
         mainWidget = configuredWidget;
       });
     });
+    }else{
+      setState(() {
+        mainWidget = plateformstatee();
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text("Internet connection not found!."),
+      )
+      );
+    }
   }
 
   Future<Widget> islogin() async{
     final prefs = await SharedPreferences.getInstance();
     int response = prefs.getInt('response')??0;
     if(response==1){
+      String empid = prefs.getString('employeeid')??"";
+      String organization =prefs.getString('organization')??"";
+      Employee emp = new Employee(employeeid: empid, organization: organization);
+      //getModulePermission("178","view");
+      await getProfileInfo(emp);
+      await getReportingTeam(emp);
       return mainScafoldWidget();
     }else{
       return new LoginPage();
     }
+
   }
 
   @override
@@ -72,13 +82,24 @@ class _HomePageState extends State<HomePage> {
 
 
   Widget loadingWidget(){
-    return Center(child:SizedBox(
+     return Center(child:SizedBox(
 
-      child:
-      Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
+      //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
+      child: new CircularProgressIndicator(),
     ));
-  }
+}
 
+
+  Widget plateformstatee(){
+
+    return new Container(
+      decoration: new BoxDecoration(color: Colors.white),
+      child: new Center(
+        child: new Text("UBIHRM", style: TextStyle(fontSize: 30.0,color: Colors.green),),
+      ),
+    );
+
+}
 
 
   Widget mainScafoldWidget(){
@@ -169,13 +190,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget homewidget(){
+
     return Stack(
       children: <Widget>[
         Container(
             //height: MediaQuery.of(context).size.height,
               margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              //width: MediaQuery.of(context).size.width*0.9,
+             // width: MediaQuery.of(context).size.width*0.9,
               decoration: new ShapeDecoration(
                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
                 color: Colors.white,
@@ -341,13 +363,27 @@ class _HomePageState extends State<HomePage> {
 
                   Divider(height: 10.0,),
                   /*SimpleBarChart.withSampleData(),*/
+
+
+
                   new Container(
-                      padding: EdgeInsets.all(0.2),
-                      margin: EdgeInsets.all(0.2),
-                      height: 200.0,
-                      child: new GroupedFillColorBarChart.withSampleData()
+                    padding: EdgeInsets.all(0.2),
+                    margin: EdgeInsets.all(0.2),
+                    height: 200.0,
+                    child: new FutureBuilder<List<Map<String,String>>>(
+                        future: getChartDataYes(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            if (snapshot.data.length > 0) {
+                              return new StackedHorizontalBarChart.withSampleData(snapshot.data);
+                            }
+                          }
+                          return new Center( child: CircularProgressIndicator());
+                        }
+                    ),
+                    // child: new StackedHorizontalBarChart .withSampleData()
                   ),
-                  Row(children: <Widget>[
+              /*    Row(children: <Widget>[
                     Icon(Icons.brightness_1,color: Colors.blue,),
                     SizedBox(width: 20.0,),
                     Text('Leave entitled'),
@@ -362,7 +398,7 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(width: 20.0,),
                     Text('Leave utilized')
                   ],),
-
+*/
 
                   // Attendance monthly summary bar graph
 
@@ -376,12 +412,27 @@ class _HomePageState extends State<HomePage> {
                   Divider(height: 10.0,),
                   /*SimpleBarChart.withSampleData(),*/
                   new Container(
-                      padding: EdgeInsets.all(0.2),
-                      margin: EdgeInsets.all(0.2),
-                      height: 200.0,
-                      child: new GroupedFillColorBarChart.withSampleData()
+
+                    padding: EdgeInsets.all(0.2),
+                    margin: EdgeInsets.all(0.2),
+                    height: 200.0,
+
+                    child: new FutureBuilder<List<Map<String,String>>>(
+                        future: getChartDataYes(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            if (snapshot.data.length > 0) {
+                              return new DonutAutoLabelChart.withSampleData(snapshot.data);
+                            }
+                          }
+                          return new Center( child: CircularProgressIndicator());
+                        }
+                    ),
+
+                    //child: new DonutAutoLabelChart .withSampleData(),
                   ),
-                  Row(children: <Widget>[
+
+          /*        Row(children: <Widget>[
                     Icon(Icons.brightness_1,color: Colors.green,),
                     SizedBox(width: 20.0,),
                     Text('Total Present'),
@@ -396,7 +447,7 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(width: 20.0,),
                     Text('Total Leave')
                   ],),
-
+*/
 
                   SizedBox(width: 40.0,),
                   SizedBox(height: 40.0,),
@@ -468,6 +519,7 @@ class _HomePageState extends State<HomePage> {
 
                 ],
               )
+
           ),
 
 

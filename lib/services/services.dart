@@ -1,10 +1,14 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:dio/dio.dart';
-import 'package:ubihrm/global.dart';
+import 'package:ubihrm/global.dart' ;
 import 'dart:convert';
+import 'dart:async';
+//import 'package:http/http.dart' as http;
+
 
 getAllPermission(Employee emp) async{
+
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
   FormData formData = new FormData.from({
@@ -22,28 +26,53 @@ getAllPermission(Employee emp) async{
   globalpermissionlist = permlist;
 }
 
-getProfileInfo() async{
+getProfileInfo(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
-  Response<String> response =
-  await dio.post(path + "getProfileInfo");
- // print(response.toString());
-  Map responseJson = json.decode(response.data.toString());
-  //print(responseJson);
-  globalcontactusinfomap = responseJson['Contact'];
-  globalpersnalinfomap = responseJson['Personal'];
-  globalcompanyinfomap = responseJson['Company'];
+  try {
+    FormData formData = new FormData.from({
+      "employeeid": emp.employeeid,
+      "organization": emp.organization
+    });
+
+    Response<String> response =
+    await dio.post(path + "getProfileInfo", data: formData);
+    // print(response.toString());
+    Map responseJson = json.decode(response.data.toString());
+    //print(responseJson);
+    globalcontactusinfomap = responseJson['Contact'];
+    globalpersnalinfomap = responseJson['Personal'];
+    globalcompanyinfomap = responseJson['Company'];
+    globalprofileinfomap = responseJson['ProfilePic'];
+
+  }catch(e){
+    //print(e.toString());
+    return "Poor network connection";
+  }
+
+
+
 }
 
-getReportingTeam() async{
+getReportingTeam(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
+//print("-------------------->"+emp.employeeid);
+ // print(emp.organization);
+  try {
+    FormData formData = new FormData.from({
+      "employeeid": emp.employeeid,
+      "organization": emp.organization
+    });
   Response<String> response =
-  await dio.post(path + "getReportingTeam");
-  print(response.toString());
+  await dio.post(path + "getReportingTeam", data: formData);
+ // print("---------> response"+response.toString());
   List responseJson = json.decode(response.data.toString());
   print(responseJson);
-
+  }catch(e){
+    //print(e.toString());
+    return "Poor network connection";
+  }
 
 }
 
@@ -92,16 +121,23 @@ getModulePermission(String moduleid, String permission_type){
   return "0";
 }
 
-Future<List<Team>> getTeamList() async {
+Future<List<Team>> getTeamList(emp) async {
 print("get team list called");
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
+//try {
+  print("-------------------->"+emp.employeeid);
+  FormData formData = new FormData.from({
+    "employeeid": emp.employeeid,
+    "organization": emp.organization
+  });
   Response<String> response =
-  await dio.post(path + "getReportingTeam");
+  await dio.post(path + "getReportingTeam", data: formData);
   List responseJson = json.decode(response.data.toString());
-  //print("1.  "+responseJson.toString());
+ print("1.---------  "+responseJson.toString());
   List<Team> teamlist = createTeamList(responseJson);
   return teamlist;
+
 }
 
 List<Team> createTeamList(List data) {
@@ -116,6 +152,7 @@ List<Team> createTeamList(List data) {
     String BloodGroup = data[i]["BloodGroup"];
     String CompanyEmail = data[i]["CompanyEmail"];
     String ProfilePic = data[i]["ProfilePic"];
+
     Team team = new Team(Id: Id, FirstName: FirstName, LastName: LastName, Designation: Designation, DOB: DOB, Nationality: Nationality, BloodGroup: BloodGroup, CompanyEmail: CompanyEmail, ProfilePic: ProfilePic);
     list.add(team);
   }
@@ -128,16 +165,17 @@ List<Team> createTeamList(List data) {
 requestLeave(Leave leave) async{
   Dio dio = new Dio();
   try {
-    print(leave.orgid);
-    print(leave.uid);
-    print(leave.leavefrom);
-    print(leave.leaveto);
-    print(leave.leavetypefrom);
-    print(leave.leavetypeto);
-    print(leave.halfdayfromtype);
-    print(leave.halfdaytotype);
-    print(leave.leavetypeid);
-    print(leave.reason);
+    //print(leave.orgid);
+    //print(leave.uid);
+    //print(leave.leavefrom);
+    //print(leave.leaveto);
+    //print(leave.leavetypefrom);
+    //print(leave.leavetypeto);
+    //print(leave.halfdayfromtype);
+    //print(leave.halfdaytotype);
+    //print(leave.leavetypeid);
+    //print(leave.reason);
+
     FormData formData = new FormData.from({
       "orgid": leave.orgid,
       "uid": leave.uid,
@@ -152,7 +190,7 @@ requestLeave(Leave leave) async{
     });
 
     Response response1 = await dio.post(path_hrm_india+"reqForLeave", data: formData);
-    print(response1.toString());
+    //print(response1.toString());
     if (response1.statusCode == 200) {
       Map leaveMap = json.decode(response1.data);
       //print(leaveMap["status"]);
@@ -220,8 +258,7 @@ withdrawLeave(Leave leave) async{
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
         path_hrm_india+"changeleavests",
-        data: formData
-    );
+        data: formData);
     //print(response.toString());
     if (response.statusCode == 200) {
       Map leaveMap = json.decode(response.data);
@@ -237,4 +274,59 @@ withdrawLeave(Leave leave) async{
     //print(e.toString());
     return "Poor network connection";
   }
+}
+Future<List<Map<String, String>>> getChartDataYes() async {
+  final prefs = await SharedPreferences.getInstance();
+  String organization = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+  Dio dio = new Dio();
+
+  final response = await dio.post(
+      path+"getLeaveChartData?refno=$organization&eid=$empid"
+      );
+
+  final data = json.decode(response.data);
+
+  print(data['leavesummary']['data'][0]['name']);
+
+
+      List<Map<String, String>> val = [
+        {
+
+          // "present": data['present'].toString(),
+          "totalleaveC": data['leavesummary']['data'][0]['totalleave']
+              .toString(),
+          "usedleaveC": data['leavesummary']['data'][0]['usedleave'].toString(),
+          "leftleaveC": data['leavesummary']['data'][0]['leftleave'].toString(),
+
+
+          "totalleaveA":data['leavesummary']['data'][1]['totalleave'].toString(),
+          "usedleaveA": data['leavesummary']['data'][1]['usedleave'].toString(),
+          "leftleaveA": data['leavesummary']['data'][1]['leftleave'].toString(),
+
+
+          "totalleaveL":data['leavesummary']['data'][2]['totalleave'].toString(),
+          "usedleaveL": data['leavesummary']['data'][2]['usedleave'].toString(),
+          "leftleaveL": data['leavesummary']['data'][2]['leftleave'].toString()
+          /* "totalleaveC":_check ? 0:data['leavesummary']['data'][0]['totalleave'].toString(),
+      "usedleaveC": _check ? 0:data['leavesummary']['data'][0]['usedleave'].toString(),
+      "leftleaveC": _check ? 0:data['leavesummary']['data'][0]['leftleave'].toString(),
+
+      "totalleaveL":_checkL ? 0:data['leavesummary']['data'][0]['totalleave'].toString(),
+      "usedleaveL": _checkL ? 0:data['leavesummary']['data'][0]['usedleave'].toString(),
+      "leftleaveL": _checkL ? 0:data['leavesummary']['data'][0]['leftleave'].toString(),
+
+      "totalleaveA":_checkA ? 0:data['leavesummary']['data'][0]['totalleave'].toString(),
+      "usedleaveA": _checkA ? 0:data['leavesummary']['data'][0]['usedleave'].toString(),
+      "leftleaveA": _checkA ? 0:data['leavesummary']['data'][0]['leftleave'].toString()*/
+
+        }
+        ];
+
+
+
+
+  // print('==========');
+// print(val);
+  return val;
 }
