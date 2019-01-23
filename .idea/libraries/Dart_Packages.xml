@@ -75,7 +75,7 @@
         <entry key="firebase_messaging">
           <value>
             <list>
-              <option value="$USER_HOME$/development/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-2.1.0/lib" />
+              <option value="$USER_HOME$/development/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-0.2.1/lib" />
             </list>
           </value>
         </entry>
@@ -253,7 +253,7 @@
       <root url="file://$USER_HOME$/development/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-0.1.2/lib" />
       <root url="file://$USER_HOME$/development/flutter/.pub-cache/hosted/pub.dartlang.org/datetime_picker_formfield-0.1.7/lib" />
       <root url="file://$USER_HOME$/development/flutter/.pub-cache/hosted/pub.dartlang.org/dio-1.0.13/lib" />
-      <root url="file://$USER_HOME$/development/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-2.1.0/lib" />
+      <root url="file://$USER_HOME$/development/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-0.2.1/lib" />
       <root url="file://$USER_HOME$/development/flutter/.pub-cache/hosted/pub.dartlang.org/font_awesome_flutter-8.2.0/lib" />
       <root url="file://$USER_HOME$/development/flutter/.pub-cache/hosted/pub.dartlang.org/gradient_app_bar-0.0.1/lib" />
       <root url="file://$USER_HOME$/development/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.15.7/lib" />

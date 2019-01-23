@@ -61,6 +61,7 @@ class GroupedFillColorBarChart extends StatelessWidget {
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         fillColorFn: (_, __) =>
         charts.MaterialPalette.blue.shadeDefault.lighter,
+        labelAccessorFn: (OrdinalSales sales, _) => sales.sales.toString()
       ),
       // Solid red bars. Fill color will default to the series color if no
       // fillColorFn is configured.
@@ -72,6 +73,8 @@ class GroupedFillColorBarChart extends StatelessWidget {
         fillColorFn: (_, __) =>
         charts.MaterialPalette.red.shadeDefault.lighter,
         domainFn: (OrdinalSales sales, _) => sales.year,
+          labelAccessorFn: (OrdinalSales sales, _) =>
+              sales.sales.toString()
       ),
       // Hollow green bars.
       new charts.Series<OrdinalSales, String>(
@@ -81,6 +84,10 @@ class GroupedFillColorBarChart extends StatelessWidget {
         data: mobileSalesData,
         colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
         fillColorFn: (_, __) => charts.MaterialPalette.green.shadeDefault.lighter,
+          labelAccessorFn: (OrdinalSales sales, _) =>
+              sales.sales.toString(),
+        displayName: "sfad",
+
       ),
     ];
   }
@@ -90,6 +97,5 @@ class GroupedFillColorBarChart extends StatelessWidget {
 class OrdinalSales {
   final String year;
   final int sales;
-
   OrdinalSales(this.year, this.sales);
 }

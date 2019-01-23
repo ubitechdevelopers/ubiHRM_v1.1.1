@@ -12,7 +12,6 @@ class _FancyTabBarState extends State<FancyTabBar>
   AnimationController _animationController;
   Tween<double> _positionTween;
   Animation<double> _positionAnimation;
-
   AnimationController _fadeOutController;
   Animation<double> _fadeFabOutAnimation;
   Animation<double> _fadeFabInAnimation;

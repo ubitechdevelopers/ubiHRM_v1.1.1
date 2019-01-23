@@ -7,6 +7,8 @@ import 'home.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/services/checkLogin.dart' as login;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -40,7 +42,7 @@ class _LoginPageState extends State<LoginPage>
   TextEditingController signupNameController = new TextEditingController();
   TextEditingController signupPasswordController = new TextEditingController();
   TextEditingController signupConfirmPasswordController =
-      new TextEditingController();
+  new TextEditingController();
 
   PageController _pageController;
 
@@ -56,78 +58,78 @@ class _LoginPageState extends State<LoginPage>
           overscroll.disallowGlow();
         },
         child: SingleChildScrollView(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height >= 775.0
-                    ? MediaQuery.of(context).size.height
-                    : 775.0,
-                decoration: new BoxDecoration(
-                  gradient: new LinearGradient(
-                      colors: [
-                        Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.9),
-                        Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.2)
-                        /*Theme.Colors.loginGradientEnd*/
-                      ],
-                      begin: const FractionalOffset(0.0, 0.0),
-                      end: const FractionalOffset(1.0, 1.0),
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp),
-                ),
-                child:ModalProgressHUD(inAsyncCall: _isServiceCalling,opacity: 0.5,progressIndicator: SizedBox(
-                  child:
-                  new CircularProgressIndicator(
-                      valueColor: new AlwaysStoppedAnimation(Colors.green),
-                      strokeWidth: 5.0),
-                  height: 50.0,
-                  width: 50.0,),child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 30.0),
-                      child: new Image(
-                          width: 150.0,
-                          height: 150.0,
-                          fit: BoxFit.fill,
-                          image: new AssetImage('assets/img/login_logo.png')),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 5.0),
-                      child: _buildMenuBar(context),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: PageView(
-                        controller: _pageController,
-                        onPageChanged: (i) {
-                          if (i == 0) {
-                            setState(() {
-                              right = Colors.white;
-                              left = Colors.black;
-                            });
-                          } else if (i == 1) {
-                            setState(() {
-                              right = Colors.black;
-                              left = Colors.white;
-                            });
-                          }
-                        },
-                        children: <Widget>[
-                          new ConstrainedBox(
-                            constraints: const BoxConstraints.expand(),
-                            child: _buildSignIn(context),
-                          ),
-                          new ConstrainedBox(
-                            constraints: const BoxConstraints.expand(),
-                            child: _buildSignUp(context),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                )
+          child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height >= 775.0
+                  ? MediaQuery.of(context).size.height
+                  : 775.0,
+              decoration: new BoxDecoration(
+                gradient: new LinearGradient(
+                    colors: [
+                      Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.9),
+                      Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.2)
+                      /*Theme.Colors.loginGradientEnd*/
+                    ],
+                    begin: const FractionalOffset(0.0, 0.0),
+                    end: const FractionalOffset(1.0, 1.0),
+                    stops: [0.0, 1.0],
+                    tileMode: TileMode.clamp),
               ),
-            ),
+              child:ModalProgressHUD(inAsyncCall: _isServiceCalling,opacity: 0.5,progressIndicator: SizedBox(
+                child:
+                new CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation(Colors.green),
+                    strokeWidth: 5.0),
+                height: 50.0,
+                width: 50.0,),child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 30.0),
+                    child: new Image(
+                        width: 150.0,
+                        height: 150.0,
+                        fit: BoxFit.fill,
+                        image: new AssetImage('assets/img/login_logo.png')),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5.0),
+                    child: _buildMenuBar(context),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: PageView(
+                      controller: _pageController,
+                      onPageChanged: (i) {
+                        if (i == 0) {
+                          setState(() {
+                            right = Colors.white;
+                            left = Colors.black;
+                          });
+                        } else if (i == 1) {
+                          setState(() {
+                            right = Colors.black;
+                            left = Colors.white;
+                          });
+                        }
+                      },
+                      children: <Widget>[
+                        new ConstrainedBox(
+                          constraints: const BoxConstraints.expand(),
+                          child: _buildSignIn(context),
+                        ),
+                        new ConstrainedBox(
+                          constraints: const BoxConstraints.expand(),
+                          child: _buildSignUp(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              )
+          ),
+        ),
       ),
     );
   }
@@ -141,18 +143,52 @@ class _LoginPageState extends State<LoginPage>
     super.dispose();
   }
 
+
+
+  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+
+  String token1="";
+  String tokenn="";
+
+
   @override
   void initState() {
     super.initState();
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
 
     _pageController = PageController();
-  }
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) {
+        print('on message $message');
+      },
+      onResume: (Map<String, dynamic> message) {
+        print('on resume $message');
+      },
+      onLaunch: (Map<String, dynamic> message) {
+        print('on launch $message');
+      },
+    );
 
+    gettokenstate();
+
+
+  }
+   gettokenstate() async{
+    final prefs = await SharedPreferences.getInstance();
+    _firebaseMessaging.getToken().then((token){
+      token1 = token;
+      prefs.setString("token1", token1);
+     // print(tokenn);
+
+      print(token1);
+
+    });
+
+
+  }
   void showInSnackBar(String value) {
     FocusScope.of(context).requestFocus(new FocusNode());
     _scaffoldKey.currentState?.removeCurrentSnackBar();
@@ -224,192 +260,192 @@ class _LoginPageState extends State<LoginPage>
       child: Column(
         children: <Widget>[
           Form(
-      key: _formKey,
-      child:Stack(
-            alignment: Alignment.topCenter,
-            overflow: Overflow.visible,
-            children: <Widget>[
-              Card(
-                elevation: 2.0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Container(
-                  width: 300.0,
-                  height: 190.0,
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextFormField(
-                          focusNode: myFocusNodeEmailLogin,
-                          controller: loginEmailController,
-                          keyboardType: TextInputType.emailAddress,
-                          onFieldSubmitted: (String value) {
-                            FocusScope.of(context).requestFocus(myFocusNodePasswordLogin);
-                          },
-                          style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.envelope,
-                              color: Colors.black,
-                              size: 22.0,
+            key: _formKey,
+            child:Stack(
+              alignment: Alignment.topCenter,
+              overflow: Overflow.visible,
+              children: <Widget>[
+                Card(
+                  elevation: 2.0,
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Container(
+                    width: 300.0,
+                    height: 190.0,
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                          child: TextFormField(
+                            focusNode: myFocusNodeEmailLogin,
+                            controller: loginEmailController,
+                            keyboardType: TextInputType.emailAddress,
+                            onFieldSubmitted: (String value) {
+                              FocusScope.of(context).requestFocus(myFocusNodePasswordLogin);
+                            },
+                            style: TextStyle(
+                                fontFamily: "WorkSansSemiBold",
+                                fontSize: 16.0,
+                                color: Colors.black),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              icon: Icon(
+                                FontAwesomeIcons.envelope,
+                                color: Colors.black,
+                                size: 22.0,
+                              ),
+                              hintText: "Email / Phone",
+                              hintStyle: TextStyle(
+                                  fontFamily: "WorkSansSemiBold", fontSize: 17.0),
                             ),
-                            hintText: "Email / Phone",
-                            hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                          ),
-                          /*validator: (value) {
+                            /*validator: (value) {
                             if (value.isEmpty) {
                               return 'Please enter Email or Phone no.';
                             }
                           },*/
 
+                          ),
                         ),
-                      ),
-                      Container(
-                        width: 250.0,
-                        height: 1.0,
-                        color: Colors.grey[400],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextFormField(
-                          focusNode: myFocusNodePasswordLogin,
-                          controller: loginPasswordController,
-                          obscureText: _obscureTextLogin,
-                          style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.lock,
-                              size: 22.0,
-                              color: Colors.black,
-                            ),
-                            hintText: "Password",
-                            hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                            suffixIcon: GestureDetector(
-                              onTap: _toggleLogin,
-                              child: Icon(
-                                FontAwesomeIcons.eye,
-                                size: 15.0,
+                        Container(
+                          width: 250.0,
+                          height: 1.0,
+                          color: Colors.grey[400],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                          child: TextFormField(
+                            focusNode: myFocusNodePasswordLogin,
+                            controller: loginPasswordController,
+                            obscureText: _obscureTextLogin,
+                            style: TextStyle(
+                                fontFamily: "WorkSansSemiBold",
+                                fontSize: 16.0,
+                                color: Colors.black),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              icon: Icon(
+                                FontAwesomeIcons.lock,
+                                size: 22.0,
                                 color: Colors.black,
                               ),
+                              hintText: "Password",
+                              hintStyle: TextStyle(
+                                  fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                              suffixIcon: GestureDetector(
+                                onTap: _toggleLogin,
+                                child: Icon(
+                                  FontAwesomeIcons.eye,
+                                  size: 15.0,
+                                  color: Colors.black,
+                                ),
+                              ),
                             ),
-                          ),
 
-                          onFieldSubmitted: (String value) {
+                            onFieldSubmitted: (String value) {
 
-                            if (loginEmailController.text.trim().isNotEmpty && loginPasswordController.text.trim().isNotEmpty) {
+                              if (loginEmailController.text.trim().isNotEmpty && loginPasswordController.text.trim().isNotEmpty) {
 
-                              checklogin(loginEmailController.text,loginPasswordController.text);
-                            }else{
+                                checklogin(loginEmailController.text,loginPasswordController.text);
+                              }else{
 
-                              if(loginEmailController.text.trim().isEmpty) {
-                                showDialog(context: context, child:
-                                new AlertDialog(
+                                if(loginEmailController.text.trim().isEmpty) {
+                                  showDialog(context: context, child:
+                                  new AlertDialog(
 
-                                  content: new Text("Please enter Email or Phone no."),
-                                )
-                                );
-                              }else if(loginPasswordController.text.trim().isEmpty){
-                                showDialog(context: context, child:
-                                new AlertDialog(
+                                    content: new Text("Please enter Email or Phone no."),
+                                  )
+                                  );
+                                }else if(loginPasswordController.text.trim().isEmpty){
+                                  showDialog(context: context, child:
+                                  new AlertDialog(
 
-                                  content: new Text("Please enter Password."),
-                                )
-                                );
+                                    content: new Text("Please enter Password."),
+                                  )
+                                  );
+                                }
                               }
-                            }
-                          },
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 170.0),
-                decoration: new BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Theme.Colors.loginGradientStart,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                    BoxShadow(
-                      color: Theme.Colors.loginGradientEnd,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                  ],
-                  gradient: new LinearGradient(
-                      colors: [
-                        Theme.Colors.loginGradientEnd,
-                        Theme.Colors.loginGradientStart
-                      ],
-                      begin: const FractionalOffset(0.2, 0.2),
-                      end: const FractionalOffset(1.0, 1.0),
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp),
-                ),
-                child: MaterialButton(
+                Container(
+                  margin: EdgeInsets.only(top: 170.0),
+                  decoration: new BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Theme.Colors.loginGradientStart,
+                        offset: Offset(1.0, 6.0),
+                        blurRadius: 20.0,
+                      ),
+                      BoxShadow(
+                        color: Theme.Colors.loginGradientEnd,
+                        offset: Offset(1.0, 6.0),
+                        blurRadius: 20.0,
+                      ),
+                    ],
+                    gradient: new LinearGradient(
+                        colors: [
+                          Theme.Colors.loginGradientEnd,
+                          Theme.Colors.loginGradientStart
+                        ],
+                        begin: const FractionalOffset(0.2, 0.2),
+                        end: const FractionalOffset(1.0, 1.0),
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp),
+                  ),
+                  child: MaterialButton(
                     /*highlightColor: Colors.transparent,
                     splashColor: Theme.Colors.loginGradientEnd,*/
-                    color: Color.fromRGBO(0, 166, 90,1.0),
-                    //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 42.0),
-                      child: Text(
-                        "Login",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontFamily: "WorkSansBold"),
+                      color: Color.fromRGBO(0, 166, 90,1.0),
+                      //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 42.0),
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25.0,
+                              fontFamily: "WorkSansBold"),
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      if (loginEmailController.text.trim().isNotEmpty && loginPasswordController.text.trim().isNotEmpty) {
+                      onPressed: () {
+                        if (loginEmailController.text.trim().isNotEmpty && loginPasswordController.text.trim().isNotEmpty) {
 
-                        checklogin(loginEmailController.text,loginPasswordController.text);
-                      }else{
+                          checklogin(loginEmailController.text,loginPasswordController.text,);
+                        }else{
 
-                        if(loginEmailController.text.trim().isEmpty) {
-                          showDialog(context: context, child:
-                          new AlertDialog(
+                          if(loginEmailController.text.trim().isEmpty) {
+                            showDialog(context: context, child:
+                            new AlertDialog(
 
-                            content: new Text("Please enter Email or Phone no."),
-                          )
-                          );
-                        }else if(loginPasswordController.text.trim().isEmpty){
-                          showDialog(context: context, child:
-                          new AlertDialog(
+                              content: new Text("Please enter Email or Phone no."),
+                            )
+                            );
+                          }else if(loginPasswordController.text.trim().isEmpty){
+                            showDialog(context: context, child:
+                            new AlertDialog(
 
-                            content: new Text("Please enter Password."),
-                          )
-                          );
+                              content: new Text("Please enter Password."),
+                            )
+                            );
+                          }
                         }
+
+
                       }
-
-
-                    }
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 0.0),
@@ -690,7 +726,7 @@ class _LoginPageState extends State<LoginPage>
                       tileMode: TileMode.clamp),
                 ),
                 child: MaterialButton(
-                    /*highlightColor: Colors.transparent,
+                  /*highlightColor: Colors.transparent,
                     splashColor: Theme.Colors.loginGradientEnd,*/
                     color: Color.fromRGBO(0, 166, 90,1.0),
                     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
@@ -719,7 +755,8 @@ class _LoginPageState extends State<LoginPage>
     setState(() {
       _isServiceCalling = true;
     });
-    UserLogin user = new UserLogin(username: username,password: pass);
+
+    UserLogin user = new UserLogin(username: username,password: pass,token:token1);
     login.checklogin(user).then((res){
       if(res){
         Navigator.pushAndRemoveUntil(
@@ -774,3 +811,5 @@ class _LoginPageState extends State<LoginPage>
     });
   }
 }
+
+

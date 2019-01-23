@@ -26,7 +26,10 @@ class _HomePageState extends State<HomePage> {
 
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
-    mainWidget = loadingWidget();
+    setState(() {
+      mainWidget = loadingWidget();
+    });
+
     String empid = prefs.getString('employeeid')??"";
     String organization =prefs.getString('organization')??"";
 
@@ -34,10 +37,17 @@ class _HomePageState extends State<HomePage> {
     if(empid!='')
      bool ish = await getAllPermission(emp);
 
-    //getModulePermission("178","view");
     getProfileInfo();
     getReportingTeam();
+
     islogin().then((Widget configuredWidget) {
+      if(home_load_num==0) {
+        getProfileInfo();
+        getReportingTeam();
+        //getModulePermission("178","view");
+        home_load_num = 1;
+      }
+
       setState(() {
         mainWidget = configuredWidget;
       });
@@ -52,7 +62,6 @@ class _HomePageState extends State<HomePage> {
     }else{
       return new LoginPage();
     }
-
   }
 
   @override

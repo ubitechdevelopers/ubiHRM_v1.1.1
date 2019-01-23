@@ -11,7 +11,8 @@ import 'myleave.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'services/services.dart';
-final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+
 
 class RequestLeave extends StatefulWidget {
   @override
@@ -19,8 +20,9 @@ class RequestLeave extends StatefulWidget {
 }
 
 class _RequestLeaveState extends State<RequestLeave> {
+  bool isServiceCalling = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  String leavetypeid="";
+  String leavetypeid="32";
   List<Map> leavetimeList = [{"id":"2","name":"Half Day"},{"id":"1","name":"Full Day"}];
   String leavetimevalue = "1";
   String leavetimevalue1 = "1";
@@ -59,17 +61,17 @@ class _RequestLeaveState extends State<RequestLeave> {
     String organization =prefs.getString('organization')??"";
 
     Employee emp = new Employee(employeeid: empid, organization: organization);
-    if(empid!='')
-      bool ish = await getAllPermission(emp);
+    //if(empid!='')
+      //bool ish = await getAllPermission(emp);
 
     //getModulePermission("178","view");
-    getProfileInfo();
-    getReportingTeam();
-    islogin().then((Widget configuredWidget) {
+    //getProfileInfo();
+    //getReportingTeam();
+    /*islogin().then((Widget configuredWidget) {
       setState(() {
         mainWidget = configuredWidget;
       });
-    });
+    });*/
   }
 
   void _handleRadioValueChange(String value) {
@@ -102,28 +104,36 @@ class _RequestLeaveState extends State<RequestLeave> {
   }
 
   requestleave(var leavefrom, var leaveto, var leavetypefrom, var leavetypeto, var halfdayfromtype, var halfdaytotype, var reason) async{
+    setState(() {
+      isServiceCalling = true;
+    });
+    print("----> service calling "+isServiceCalling.toString());
     final prefs = await SharedPreferences.getInstance();
-    String uid = prefs.getString("empid");
-    String orgid = prefs.getString("orgid");
-
+    String uid = prefs.getString("empid")??"4140";
+    String orgid = prefs.getString("orgid")??"10";
     Leave leave =new Leave(uid: uid, leavefrom: leavefrom, leaveto: leaveto, orgid: orgid, reason: reason, leavetypeid: leavetypeid, leavetypefrom: leavetypefrom, leavetypeto: leavetypeto, halfdayfromtype: halfdayfromtype, halfdaytotype: halfdaytotype);
-
-    var islogin = await requestLeave(leave);
-    print("--->"+islogin);
-    if(islogin=="true"){
+    var islogin1 = await requestLeave(leave);
+    print("--->"+islogin1);
+    if(islogin1=="true"){
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => MyLeave()),
       );
       //showInSnackBar("Leave has been applied successfully.");
-    }else if(islogin=="false"){
+    }else if(islogin1=="false"){
+      setState(() {
+        isServiceCalling = false;
+      });
       showInSnackBar("Leave is already applied for this date.");
     }else{
+      setState(() {
+        isServiceCalling = false;
+      });
       showInSnackBar("Poor Network Connection");
     }
   }
 
-  Future<Widget> islogin() async{
+/*  Future<Widget> islogin() async{
     final prefs = await SharedPreferences.getInstance();
     int response = prefs.getInt('response')??0;
     if(response==1){
@@ -132,11 +142,11 @@ class _RequestLeaveState extends State<RequestLeave> {
       return new LoginPage();
     }
 
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
-
+    mainWidget = mainScafoldWidget();
     return mainWidget;
   }
 
@@ -153,6 +163,7 @@ class _RequestLeaveState extends State<RequestLeave> {
 
   Widget mainScafoldWidget(){
     return  Scaffold(
+        key: _scaffoldKey,
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
         appBar: GradientAppBar(
@@ -234,7 +245,19 @@ class _RequestLeaveState extends State<RequestLeave> {
                     title: Text('Settings',style: TextStyle(color: Colors.white)))
               ],
             )),
-        body: homewidget()
+        body:  ModalProgressHUD(
+    inAsyncCall: isServiceCalling,
+    opacity: 0.15,
+    progressIndicator: SizedBox(
+    child:new CircularProgressIndicator(
+    valueColor: new AlwaysStoppedAnimation(Colors.green),
+    strokeWidth: 5.0),
+    height: 50.0,
+    width: 50.0,
+    ),
+    child: homewidget()
+        )
+
     );
   }
 
@@ -250,7 +273,7 @@ class _RequestLeaveState extends State<RequestLeave> {
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
               color: Colors.white,
             ),
-            child: Form(
+            child:Form(
     key: _formKey,
     child: SafeArea(
     child: Column( children: <Widget>[
@@ -499,10 +522,11 @@ class _RequestLeaveState extends State<RequestLeave> {
     },
     ),
     RaisedButton(
-    child: Text('SAVE',style: TextStyle(color: Colors.white),),
+    child: isServiceCalling?Text('Processing',style: TextStyle(color: Colors.white),):Text('SAVE',style: TextStyle(color: Colors.white),),
     color: Colors.orangeAccent,
     onPressed: () {
     if (_formKey.currentState.validate()) {
+
     requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text);
     }
     },
@@ -519,6 +543,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     )
     ),
     ),
+
     ),
 
 

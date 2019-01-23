@@ -33,8 +33,6 @@ getProfileInfo() async{
   globalcontactusinfomap = responseJson['Contact'];
   globalpersnalinfomap = responseJson['Personal'];
   globalcompanyinfomap = responseJson['Company'];
-
-
 }
 
 getReportingTeam() async{
@@ -130,17 +128,16 @@ List<Team> createTeamList(List data) {
 requestLeave(Leave leave) async{
   Dio dio = new Dio();
   try {
-    //print(leave.orgid);
-    //print(leave.uid);
-    //print(leave.leavefrom);
-    //print(leave.leaveto);
-    //print(leave.leavetypefrom);
-    //print(leave.leavetypeto);
-    //print(leave.halfdayfromtype);
-    //print(leave.halfdaytotype);
-    //print(leave.leavetypeid);
-    //print(leave.reason);
-
+    print(leave.orgid);
+    print(leave.uid);
+    print(leave.leavefrom);
+    print(leave.leaveto);
+    print(leave.leavetypefrom);
+    print(leave.leavetypeto);
+    print(leave.halfdayfromtype);
+    print(leave.halfdaytotype);
+    print(leave.leavetypeid);
+    print(leave.reason);
     FormData formData = new FormData.from({
       "orgid": leave.orgid,
       "uid": leave.uid,
@@ -155,7 +152,7 @@ requestLeave(Leave leave) async{
     });
 
     Response response1 = await dio.post(path_hrm_india+"reqForLeave", data: formData);
-    //print(response1.toString());
+    print(response1.toString());
     if (response1.statusCode == 200) {
       Map leaveMap = json.decode(response1.data);
       //print(leaveMap["status"]);
@@ -223,7 +220,8 @@ withdrawLeave(Leave leave) async{
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
         path_hrm_india+"changeleavests",
-        data: formData);
+        data: formData
+    );
     //print(response.toString());
     if (response.statusCode == 200) {
       Map leaveMap = json.decode(response.data);

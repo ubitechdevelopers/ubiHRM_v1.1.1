@@ -26,7 +26,10 @@ class _MyLeaveState extends State<MyLeave> {
 
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
-    mainWidget = loadingWidget();
+
+    setState(() {
+      mainWidget = loadingWidget();
+    });
     String empid = prefs.getString('employeeid')??"";
     String organization =prefs.getString('organization')??"";
 
@@ -125,13 +128,10 @@ class _MyLeaveState extends State<MyLeave> {
 
   Widget loadingWidget(){
     return Center(child:SizedBox(
-
       child:
       Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
     ));
   }
-
-
 
   Widget mainScafoldWidget(){
     return  Scaffold(
@@ -280,7 +280,7 @@ class _MyLeaveState extends State<MyLeave> {
                   new Divider(),
 
                   new Container(
-                    height: MediaQuery.of(context).size.height*.60,
+                    height: MediaQuery.of(context).size.height*.55,
                     width: MediaQuery.of(context).size.width*.99,
                     //padding: EdgeInsets.only(bottom: 15.0),
                     color: Colors.white,

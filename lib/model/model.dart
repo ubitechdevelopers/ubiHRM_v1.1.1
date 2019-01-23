@@ -2,18 +2,20 @@ class UserLogin {
 
   final String username;
   final String password;
+  final String token;
 
 
-  UserLogin({this.username,this.password});
+  UserLogin({this.username,this.password,this.token});
 
   UserLogin.fromJson(Map<String, dynamic> json)
       : username = json['username'],
-        password = json['password'];
+        password = json['password'], token = json['token'];
 
   Map<String, dynamic> toJson() =>
       {
         'username': username,
         'password': password,
+        'token': token,
       };
 
 }
@@ -64,5 +66,3 @@ class Leave{
   bool withdrawlsts;
   Leave({this.uid, this.leavefrom, this.leaveto, this.orgid, this.reason, this.leavetypeid, this.leavetypefrom, this.leavetypeto, this.halfdayfromtype, this.halfdaytotype, this.leavedays, this.approverstatus, this.comment, this.attendancedate, this.leaveid, this.withdrawlsts});
 }
-
-
