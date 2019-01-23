@@ -47,4 +47,5 @@ List<Permission> globalpermissionlist =new List();
 Map globalcompanyinfomap;
 Map globalpersnalinfomap;
 Map globalcontactusinfomap;
+Map globalprofileinfomap;
 

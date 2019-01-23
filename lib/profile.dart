@@ -3,6 +3,7 @@ import 'package:sticky_headers/sticky_headers.dart';
 import 'global.dart';
 import 'model/model.dart';
 import 'services/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CollapsingTab extends StatefulWidget {
   @override
@@ -13,6 +14,16 @@ class _CollapsingTabState extends State<CollapsingTab> {
   ScrollController scrollController;
   double height = 0.0;
   double insideContainerHeight=300.0;
+  String empid;
+  String organization;
+  Employee emp;
+  var reporttoprofileimage;
+  bool _checkLoaded = true;
+  var profileimage;
+  bool _checkLoadedprofile = true;
+
+  var toreportprofileimage;
+  bool _checkLoadedr = true;
 
   Widget _buildActions() {
     Widget profile = new GestureDetector(
@@ -91,8 +102,39 @@ class _CollapsingTabState extends State<CollapsingTab> {
     scrollController = new ScrollController();
     scrollController.addListener(() => setState(() {}));
     scrollController.addListener(_scrollListener);
+    initPlatformState();
   }
+  initPlatformState() async{
+    final prefs = await SharedPreferences.getInstance();
+    empid = prefs.getString('employeeid')??"";
+   organization =prefs.getString('organization')??"";
 
+     emp = new Employee(employeeid: empid, organization: organization);
+//print("-1111111111111"+emp.employeeid);
+//print ("22222222222222"+empid);
+   // if(empid!='')
+     // bool ish = await getAllPermission(emp);
+
+    reporttoprofileimage = new NetworkImage( globalcompanyinfomap['ReportingToProfilePic']);
+    reporttoprofileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+      if (mounted) {
+        setState(() {
+          _checkLoaded = false;
+        });
+
+      }
+    });
+
+    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+    profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+      if (mounted) {
+        setState(() {
+          _checkLoadedprofile = false;
+        });
+
+      }
+    });
+  }
 
 
   _scrollListener() {
@@ -191,8 +233,12 @@ class _CollapsingTabState extends State<CollapsingTab> {
                   shape: BoxShape.circle,
                   color: Colors.grey,
                   image: new DecorationImage(
-                    image: new ExactAssetImage("assets/avatar.png"),
-                    fit: BoxFit.cover,
+                    //image: new ExactAssetImage("assets/avatar.png"),
+
+                    fit: BoxFit.fill,
+                    //image: NetworkImage(globalcompanyinfomap['ProfilePic']),
+                    image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                   // fit: BoxFit.cover,
                   ),
                   //border:
                   //Border.all(color: Colors.black, width: 2.0),
@@ -364,7 +410,8 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                         shape: BoxShape.circle,
                                         image: new DecorationImage(
                                           fit: BoxFit.fill,
-                                          image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
+                                        //  image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
+                                          image: _checkLoaded ? AssetImage('assets/avatar.png') : reporttoprofileimage,
                                         )
                                     ))
                                 ),SizedBox(width: 20.0,),
@@ -528,20 +575,32 @@ class _CollapsingTabState extends State<CollapsingTab> {
               //////// Team /////////
 
               Column(children: <Widget>[
+
                 SizedBox(height: height),
                 Container(
                   height: insideContainerHeight,
                   width: 400.0,
                   //color: Colors.green[50],
                   child: FutureBuilder<List<Team>>(
-                    future: getTeamList(),
+                    future: getTeamList(emp),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if(snapshot.data.length>0) {
                           return new ListView.builder(
                               scrollDirection: Axis.vertical,
                               itemCount: snapshot.data.length,
+
+
                               itemBuilder: (BuildContext context, int index) {
+
+                                toreportprofileimage = new NetworkImage( snapshot.data[index].ProfilePic);
+                                toreportprofileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+                                  if (mounted) {
+                                    setState(() {
+                                      _checkLoadedr = false;
+                                    });
+                                  }
+                                });
                                 return new Row(children: <Widget>[
                                   Container(child:Container(
                                       width: 50.0,
@@ -550,7 +609,10 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                           shape: BoxShape.circle,
                                           image: new DecorationImage(
                                             fit: BoxFit.fill,
-                                            image: NetworkImage(snapshot.data[index].ProfilePic) ,
+
+                                          // image: NetworkImage(snapshot.data[index].ProfilePic) ,
+
+                                         image: _checkLoadedr ? AssetImage('assets/avatar.png') : toreportprofileimage,
                                           )
                                       ))
                                   ),SizedBox(width: 20.0,),

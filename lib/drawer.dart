@@ -4,7 +4,9 @@ import 'global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'profile.dart';
-
+import 'model/model.dart';
+import 'services/services.dart';
+import 'services/checkLogin.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -28,7 +30,30 @@ class _AppDrawerState extends State<AppDrawer> {
   String orgmail = "";
 
 
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
 
+  initPlatformState() async {
+    final prefs = await SharedPreferences.getInstance();
+    //String admin= await getUserPerm();
+    setState(() {
+     fname = prefs.getString('fname') ?? '';
+     profile = prefs.getString('profile') ?? '';
+   // print("-------555555->"+globalcompanyinfomap['ProfilePic']);
+     profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
+     profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+       if (mounted) {
+         setState(() {
+           _checkLoaded = false;
+         });
+
+       }
+     });
+    });
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -54,7 +79,8 @@ class _AppDrawerState extends State<AppDrawer> {
                           shape: BoxShape.circle,
                           image: new DecorationImage(
                             fit: BoxFit.fill,
-                            image: _checkLoaded ? AssetImage('assets/avatar.png') : profileimage,
+                           //  image: NetworkImage(globalcompanyinfomap['ProfilePic']),
+                         image: _checkLoaded ? AssetImage('assets/avatar.png') : NetworkImage(globalcompanyinfomap['ProfilePic']),
                           )
                       )),
                 new Positioned(
@@ -81,9 +107,9 @@ class _AppDrawerState extends State<AppDrawer> {
                   //SizedBox(height: 2.0),
                   //Image.asset('assets/logo.png',height: 150.0,width: 150.0),
                   // SizedBox(height: 5.0),
-                  Text("Hi "+fname,style: new TextStyle(fontSize: 20.0,color: Colors.white)),
+                  Text("Hi "+globalpersnalinfomap['FirstName'],style: new TextStyle(fontSize: 20.0,color: Colors.white)),
                   // SizedBox(height: 3.0),
-                  Text(desination,style: new TextStyle(fontSize: 12.0,color: Colors.white)),
+                  Text(globalcompanyinfomap['Designation'],style: new TextStyle(fontSize: 12.0,color: Colors.white)),
                   sstatus!=''?Text(sstatus,style: new TextStyle(fontSize: 10.0,color: Colors.white)):Center(),
                 ],
               ),
