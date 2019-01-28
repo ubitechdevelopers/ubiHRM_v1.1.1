@@ -66,3 +66,13 @@ class Leave{
   bool withdrawlsts;
   Leave({this.uid, this.leavefrom, this.leaveto, this.orgid, this.reason, this.leavetypeid, this.leavetypefrom, this.leavetypeto, this.halfdayfromtype, this.halfdaytotype, this.leavedays, this.approverstatus, this.comment, this.attendancedate, this.leaveid, this.withdrawlsts});
 }
+
+
+class Holi{
+  String name;
+  String date;
+  String message;
+
+
+  Holi({this.name, this.date, this.message});
+}

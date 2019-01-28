@@ -308,17 +308,7 @@ Future<List<Map<String, String>>> getChartDataYes() async {
           "totalleaveL":data['leavesummary']['data'][2]['totalleave'].toString(),
           "usedleaveL": data['leavesummary']['data'][2]['usedleave'].toString(),
           "leftleaveL": data['leavesummary']['data'][2]['leftleave'].toString()
-          /* "totalleaveC":_check ? 0:data['leavesummary']['data'][0]['totalleave'].toString(),
-      "usedleaveC": _check ? 0:data['leavesummary']['data'][0]['usedleave'].toString(),
-      "leftleaveC": _check ? 0:data['leavesummary']['data'][0]['leftleave'].toString(),
 
-      "totalleaveL":_checkL ? 0:data['leavesummary']['data'][0]['totalleave'].toString(),
-      "usedleaveL": _checkL ? 0:data['leavesummary']['data'][0]['usedleave'].toString(),
-      "leftleaveL": _checkL ? 0:data['leavesummary']['data'][0]['leftleave'].toString(),
-
-      "totalleaveA":_checkA ? 0:data['leavesummary']['data'][0]['totalleave'].toString(),
-      "usedleaveA": _checkA ? 0:data['leavesummary']['data'][0]['usedleave'].toString(),
-      "leftleaveA": _checkA ? 0:data['leavesummary']['data'][0]['leftleave'].toString()*/
 
         }
         ];
@@ -329,4 +319,78 @@ Future<List<Map<String, String>>> getChartDataYes() async {
   // print('==========');
 // print(val);
   return val;
+}
+
+
+Future<List<Map<String, String>>> getAttsummaryChart() async {
+  final prefs = await SharedPreferences.getInstance();
+  String organization = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+  Dio dio = new Dio();
+ // ?eid=$empid&refno=$organization
+  final response = await dio.post(
+      path+"getAttSummaryChart?eid=$empid&refno=$organization"
+  );
+// print(response.toString());
+  final data = json.decode(response.data.toString());
+//print("fdgdgdfgd"+data.toString());
+ print(data['att']['month']);
+
+
+  List<Map<String, String>> val = [
+    {
+
+      // "present": data['present'].toString(),
+      "present": data['att']['present']
+          .toString(),
+      "absent": data['att']['absent'].toString(),
+      "leave": data['att']['leave'].toString(),
+
+
+    }
+  ];
+
+
+
+
+  // print('==========');
+// print(val);
+  return val;
+}
+////Get Holidays//
+Future<List<Holi>> getHolidays(emp) async {
+  print("get holiday list called");
+  final prefs = await SharedPreferences.getInstance();
+  Dio dio = new Dio();
+//try {
+ // print("-------------------->"+emp.employeeid);
+  FormData formData = new FormData.from({
+    "employeeid": emp.employeeid,
+    "organization": emp.organization
+  });
+  print(path + "getHolidays");
+  Response<String> response =
+  await dio.post(path+"getHolidays",
+      data: formData);
+ // print("1777.---------  "+response.toString());
+  List responseJson = json.decode(response.data.toString());
+ // print("1.---------  "+responseJson.toString());
+  List<Holi> holilist = createHolidayList(responseJson);
+  return holilist;
+
+}
+
+List<Holi> createHolidayList(List data) {
+  List<Holi> list = new List();
+  for (int i = 0; i < data.length; i++) {
+
+    String name = data[i]["name"];
+    String date = data[i]["date"];
+    String message = data[i]["message"];
+
+
+    Holi holi = new Holi(name: name, date: date, message: message);
+    list.add(holi);
+  }
+  return list;
 }

@@ -12,6 +12,7 @@ import 'model/model.dart';
 import 'myleave.dart';
 import 'dart:async';
 import 'package:connectivity/connectivity.dart';
+import 'package:date_format/date_format.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,9 +20,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  double height = 0.0;
+  double insideContainerHeight=300.0;
   int _currentIndex = 0;
   int response;
   bool loader = true;
+  String empid;
+  String organization;
+  Employee emp;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
   @override
   void initState() {
@@ -33,6 +39,12 @@ class _HomePageState extends State<HomePage> {
 
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
+
+    empid = prefs.getString('employeeid')??"";
+    organization =prefs.getString('organization')??"";
+
+    emp = new Employee(employeeid: empid, organization: organization);
+
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       setState(() {
@@ -418,7 +430,7 @@ class _HomePageState extends State<HomePage> {
                     height: 200.0,
 
                     child: new FutureBuilder<List<Map<String,String>>>(
-                        future: getChartDataYes(),
+                        future: getAttsummaryChart(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if (snapshot.data.length > 0) {
@@ -453,23 +465,103 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 40.0,),
                   Row(children: <Widget>[
                     SizedBox(width: 20.0,),
+
+                    Text("Holidays this month",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                  ]
+                  ),
+                  Divider(height: 10.0,),
+                  SizedBox(height: 10.0,),
+
+            new   Row(children: <Widget>[
+
+                    SizedBox(height: height),
+                    new Expanded(
+                 child:   Container(
+
+                        height: insideContainerHeight,
+                        width: 400.0,
+              //  padding: new EdgeInsets.all(2.0),
+                        //color: Colors.green[50],
+
+                        child: FutureBuilder<List<Holi>>(
+                          future: getHolidays(emp),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if(snapshot.data.length>0) {
+
+                                return new ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      var string=snapshot.data[index].name;
+                                      var name =  string.replaceAll("Holiday - ", "");
+                                 return new Row(
+                                 children: <Widget>
+                                    [
+                                    SizedBox(width: 20.0,),
+                                  Text(name+" ",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                                   Text("-"),
+                                      //  Text(snapshot.data[index].message),
+                                    Text(snapshot.data[index].date,style: TextStyle(color: Colors.grey[600]),),
+
+                                     ],);
+
+
+                                    }
+
+                                );
+
+                              }else{
+                                return new Center(
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width*1,
+                                    color: Colors.teal.withOpacity(0.1),
+                                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                    child:Text("No Holiday Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  ),
+                                );
+                              }
+                            }
+                            else if (snapshot.hasError) {
+                              return new Text("Unable to connect server");
+                            }
+
+                            // By default, show a loading spinner
+                            return new Center( child: CircularProgressIndicator());
+                          },
+                        )
+                    ),),
+                  ],)
+
+
+
+            /*      Row(children: <Widget>[
+                    SizedBox(width: 20.0,),
                     Text("Holidays this month",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
                   ]
                   ),
                   Divider(height: 10.0,),
                   SizedBox(height: 10.0,),
                   Row(children: <Widget>[
-                   Text('1. Holiday - Makar sankranti 2019',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
-
-
-                  ],),
-                  Row(
+                   Text('1.Makar sankranti ',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
+                   Expanded(
+                     child: Container(
+                      width:0.5,
+                     ),
+                   ),
+                   Container(child:Text("14th Jan 2019",style: TextStyle(color: Colors.grey[600]),)) ,
+                  ],
+                  )
+                  ,
+                /*  Row(
                     //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       SizedBox(width: 20.0,),
-                      Text('14th Jan',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
+                      Text('14th Jan 2019',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
 
-                  ],),
+                  ],
+
+                  ),*/
                   Row(
                     //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -478,7 +570,7 @@ class _HomePageState extends State<HomePage> {
                     ],),
                   SizedBox(width: 30.0,),
                   Row(children: <Widget>[
-                    Text('2. Holiday - Republic Day 2019',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
+                    Text('2.Republic Day 2019',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
 
 
                   ],),
@@ -516,7 +608,7 @@ class _HomePageState extends State<HomePage> {
                       Text('Festival of colors')
                     ],),
                   SizedBox(width: 20.0,),
-
+*/
                 ],
               )
 

@@ -22,7 +22,7 @@ class StackedHorizontalBarChart  extends StatelessWidget {
       animate: false,
     );
   }
- /*@override
+  /*@override
   Widget build(BuildContext context) {
     return new charts.BarChart(
       seriesList,
@@ -36,7 +36,7 @@ class StackedHorizontalBarChart  extends StatelessWidget {
   }
 */
 
- /*@override
+  /*@override
   Widget build(BuildContext context) {
 
     return new charts.BarChart(
@@ -185,70 +185,58 @@ class OrdinalSales {
   Widget build(BuildContext context) {
     return new charts.BarChart(
       seriesList,
-      animate: animate,
-     // vertical: false,
+      animate: true,
+      // vertical: false,
       // Configure a stroke width to enable borders on the bars.
-     defaultRenderer: new charts.BarRendererConfig(
-          groupingType: charts.BarGroupingType.grouped, strokeWidthPx: 2.0,
- ),
+      defaultRenderer: new charts.BarRendererConfig(
+        groupingType: charts.BarGroupingType.grouped, strokeWidthPx: 2.0,
+      ),
 
-    primaryMeasureAxis: new charts.NumericAxisSpec(
-    tickProviderSpec: new charts.BasicNumericTickProviderSpec(
-    desiredTickCount: 11,
-    ),
-    ),
-   // barRendererDecorator: new charts.BarLabelDecorator<String>(),
-     // domainAxis:   new charts.OrdinalAxisSpec(renderSpec: new charts.NoneRenderSpec()),
+      primaryMeasureAxis: new charts.NumericAxisSpec(
+        tickProviderSpec: new charts.BasicNumericTickProviderSpec(
+          desiredTickCount: 11,
+        ),
+      ),
+      // barRendererDecorator: new charts.BarLabelDecorator<String>(),
+      // domainAxis:   new charts.OrdinalAxisSpec(renderSpec: new charts.NoneRenderSpec()),
       barRendererDecorator: new charts.BarLabelDecorator<String>(),
       behaviors: [new charts.SeriesLegend()
-        ],
-    /*    customSeriesRenderers: [
+      ],
+      /*    customSeriesRenderers: [
           new charts.BarTargetLineRendererConfig<String>(
             // ID used to link series to this renderer.
               customRendererId: 'customTargetLine',
               groupingType: charts.BarGroupingType.grouped)
         ]*/
     );
-      // Hide domain axis.
-     // domainAxis:
-  //   new charts.OrdinalAxisSpec(renderSpec: new charts.NoneRenderSpec()),
+    // Hide domain axis.
+    // domainAxis:
+    //   new charts.OrdinalAxisSpec(renderSpec: new charts.NoneRenderSpec()),
 
-   // );
+    // );
 
   }
- factory StackedHorizontalBarChart.withRandomData(info) {
+  factory StackedHorizontalBarChart.withRandomData(info) {
     return new StackedHorizontalBarChart(_createSampleData(info));
   }
   /// Create series list with multiple series
   static List<charts.Series<OrdinalSales, String>> _createSampleData(info) {
     final random = new Random();
     final desktopSalesData = [
-   //   new OrdinalSales('Casual Leave', 5),
-    //  new OrdinalSales('Loss of pay', 25),
-      new OrdinalSales('Total leave', double .parse(info[0]['totalleaveC'])),
-      new OrdinalSales('Utilized',  double .parse(info[0]['usedleaveC'])),
-      new OrdinalSales('Balance', double .parse(info[0]['leftleaveC'])),
-
-     // new OrdinalSales('2016', 2),
-     // new OrdinalSales('2017', 6),
-
+      new OrdinalSales('Casual Leave', double .parse(info[0]['totalleaveC'])),
+      new OrdinalSales('LOP',  double .parse(info[0]['totalleaveL'])),
+      new OrdinalSales('Annual', double .parse(info[0]['totalleaveA'])),
     ];
     final mobileSalesData = [
-      //new OrdinalSales('Casual Leave', 13),
-      //  new OrdinalSales('Loss of pay', 17),
-      new OrdinalSales('Total leave', double .parse(info[0]['totalleaveL'])),
-      new OrdinalSales('Utilized',  double .parse(info[0]['usedleaveL'])),
-      new OrdinalSales('Balance', double .parse(info[0]['leftleaveL'])),
+      new OrdinalSales('Casual Leave', double .parse(info[0]['usedleaveC'])),
+      new OrdinalSales('LOP',  double .parse(info[0]['usedleaveL'])),
+      new OrdinalSales('Annual', double .parse(info[0]['usedleaveA'])),
     ];
 
     final tableSalesData = [
-      //new OrdinalSales('Casual Leave', 27),
-     // new OrdinalSales('Loss of pay', 2),
-      new OrdinalSales('Total leave', double .parse(info[0]['totalleaveA'])),
-      new OrdinalSales('Utilized',  double .parse(info[0]['usedleaveA'])),
-      new OrdinalSales('Balance', double .parse(info[0]['leftleaveA'])),
-
-
+      new OrdinalSales('Casual Leave', double .parse(info[0]['leftleaveC'])),
+      new OrdinalSales('LOP',  double .parse(info[0]['leftleaveL'])),
+      new OrdinalSales('Annual', double .parse(info[0]['leftleaveA'])),
     ];
 
 
@@ -256,7 +244,7 @@ class OrdinalSales {
     return [
       // Blue bars with a lighter center color.
       new charts.Series<OrdinalSales, String>(
-        id: 'Casual ',
+        id: 'Total',
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data: desktopSalesData,
@@ -266,29 +254,18 @@ class OrdinalSales {
         charts.MaterialPalette.blue.shadeDefault.lighter,
 
         labelAccessorFn: (OrdinalSales sales, _) =>
-       ' ${sales.sales}',
+        ' ${sales.sales}',
 
-        insideLabelStyleAccessorFn: (OrdinalSales sales, _) {
-          final color = (sales.year == '2014')
-              ? charts.MaterialPalette.red.shadeDefault
-              : charts.MaterialPalette.yellow.shadeDefault.darker;
-          return new charts.TextStyleSpec(color: color);
-        },
-        outsideLabelStyleAccessorFn: (OrdinalSales sales, _) {
-          final color = (sales.year == '2014')
-              ? charts.MaterialPalette.red.shadeDefault
-              : charts.MaterialPalette.yellow.shadeDefault.darker;
-          return new charts.TextStyleSpec(color: color);
-        },
+
       ),
 
       // Solid red bars. Fill color will default to the series color if no
       // fillColorFn is configured.
-     new charts.Series<OrdinalSales, String>(
-        id: 'LOP',
+      new charts.Series<OrdinalSales, String>(
+        id: 'Utilized',
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data: mobileSalesData,
-      // labelAccessorFn: (OrdinalSales row, _) => '${row.year}: ${row.sales}',
+        // labelAccessorFn: (OrdinalSales row, _) => '${row.year}: ${row.sales}',
         colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
         fillColorFn: (_, __) =>
         charts.MaterialPalette.red.shadeDefault.lighter,
@@ -296,22 +273,11 @@ class OrdinalSales {
 
         labelAccessorFn: (OrdinalSales sales, _) =>
         '${sales.sales}',
-        insideLabelStyleAccessorFn: (OrdinalSales sales, _) {
-          final color = (sales.year == sales.year)
-              ? charts.MaterialPalette.red.shadeDefault
-              : charts.MaterialPalette.yellow.shadeDefault.darker;
-          return new charts.TextStyleSpec(color: color);
-        },
-        outsideLabelStyleAccessorFn: (OrdinalSales sales, _) {
-          final color = (sales.year == sales.year)
-              ? charts.MaterialPalette.red.shadeDefault
-              : charts.MaterialPalette.yellow.shadeDefault.darker;
-          return new charts.TextStyleSpec(color: color);
-        },
+
       ),
       // Hollow green bars.
       new charts.Series<OrdinalSales, String>(
-        id: 'Annual',
+        id: 'Left',
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data:  tableSalesData,
@@ -322,22 +288,11 @@ class OrdinalSales {
 
         labelAccessorFn: (OrdinalSales sales, _) =>
         '${sales.sales}',
-        insideLabelStyleAccessorFn: (OrdinalSales sales, _) {
-          final color = (sales.year == sales.year)
-              ? charts.MaterialPalette.red.shadeDefault
-              : charts.MaterialPalette.yellow.shadeDefault.darker;
-          return new charts.TextStyleSpec(color: color);
-        },
-        outsideLabelStyleAccessorFn: (OrdinalSales sales, _) {
-          final color = (sales.year == sales.year)
-              ? charts.MaterialPalette.red.shadeDefault
-              : charts.MaterialPalette.yellow.shadeDefault.darker;
-          return new charts.TextStyleSpec(color: color);
-        },
+
       ),
 
 
-    // Configure our custom bar target renderer for this series.
+      // Configure our custom bar target renderer for this series.
       /*   new charts.Series<OrdinalSales, String>(
         id: 'Casual',
         domainFn: (OrdinalSales sales, _) => sales.year,

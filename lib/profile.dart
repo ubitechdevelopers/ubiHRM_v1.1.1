@@ -252,7 +252,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
                     color: Colors.white,
                     fontSize: 20.0,
                   )),
-              SizedBox(height: 10.0,),
+              SizedBox(height: 5.0,),
               Text(globalcompanyinfomap['CompanyEmail'],
                   style: TextStyle(
                     color: Colors.white,
@@ -310,7 +310,8 @@ class _CollapsingTabState extends State<CollapsingTab> {
             children: <Widget>[
               Column(children: <Widget>[
                 SizedBox(height: height),
-                Container(
+          new Expanded(
+            child:Container(
                   height: insideContainerHeight,
                   width: 400.0,
                   //color: Colors.green[50],
@@ -451,44 +452,53 @@ class _CollapsingTabState extends State<CollapsingTab> {
                             style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                           ),
                         ),
+
                         content: new Container(
                           padding: new EdgeInsets.symmetric(horizontal: 9.0),
                           child: Column(
                             children: <Widget>[
                               // SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                Container(child:Text("Emp Code:",style: TextStyle(color: Colors.grey[600]),) ,
+                                new Expanded(
+                                  child:  Container(child:Text("Emp Code:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
+                      ),
                                 Text(globalcompanyinfomap["EmpCode"]),
                               ],),
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                Container(child:Text("Company Email:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
+                                new Expanded(
+                                  child:Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
                                 Text(globalcompanyinfomap["CompanyEmail"]),
                               ],),
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
+                                new Expanded(
+                                  child:Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
                                 Text(globalcompanyinfomap["Designation"]),
                               ],),
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                Container(child:Text("Reporting To:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
+                                new Expanded(
+                                  child:Container(child:Text("Reporting To:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
                                 Text(globalcompanyinfomap["ReportingTo"]),
                               ],),
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
+                                new Expanded(
+                                  child:
                                 Container(child:Text("Department:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
+                                  width: 100.0,),),
                                 Text(globalcompanyinfomap["Department"]),
                               ],),
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                Container(child:Text("Location:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
+                                new Expanded(
+                                  child: Container(child:Text("Location:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
                                 Text(globalcompanyinfomap["Location"]),
                               ],),
                               SizedBox(height: 10.0,),
@@ -526,38 +536,44 @@ class _CollapsingTabState extends State<CollapsingTab> {
                             children: <Widget>[
                               // SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                Container(child:Text("Phone:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
+                                new Expanded(
+                                  child:  Container(child:Text("Phone:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
                                 Text(globalcontactusinfomap["Phone"]),
                               ],),
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
+                                new Expanded(
+                                  child:Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
                                 Text(globalcontactusinfomap["Email"]),
                               ],),
-                              SizedBox(height: 10.0,),
+                         /*     SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                Container(child:Text("Address:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
+                                new Expanded(
+                                  child: Container(child:Text("Address:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
                                 Text(globalcontactusinfomap["Address"]),
-                              ],),
+                              ],),*/
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                Container(child:Text("Postal Code:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
+                                new Expanded(
+                                  child: Container(child:Text("Postal Code:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
                                 Text(globalcontactusinfomap["PostalCode"]),
                               ],),
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                Container(child:Text("City:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
+                                new Expanded(
+                                  child:  Container(child:Text("City:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
                                 Text(globalcontactusinfomap["City"]),
                               ],),
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                Container(child:Text("Country:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
+                                new Expanded(
+                                  child:  Container(child:Text("Country:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
                                 Text(globalcontactusinfomap["Country"]),
                               ],),
                               SizedBox(height: 10.0,),
@@ -571,7 +587,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
 
                   ],),
                 ),
-              ],),
+          ),  ],),
               /////////
 
               //////// Team /////////
@@ -579,7 +595,8 @@ class _CollapsingTabState extends State<CollapsingTab> {
               Column(children: <Widget>[
 
                 SizedBox(height: height),
-                Container(
+                new Expanded(
+                  child: Container(
                   height: insideContainerHeight,
                   width: 400.0,
                   //color: Colors.green[50],
@@ -645,7 +662,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
                     },
                   )
                 ),
-              ],)
+                ),],)
 
 
 

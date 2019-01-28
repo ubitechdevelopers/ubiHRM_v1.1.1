@@ -20,7 +20,9 @@ class DonutAutoLabelChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new charts.PieChart(seriesList,
-        animate: animate,
+        animate: true,
+
+
         // Configure the width of the pie slices to 60px. The remaining space in
         // the chart will be left as a hole in the center.
         //
@@ -38,7 +40,12 @@ class DonutAutoLabelChart extends StatelessWidget {
         //          outsideLabelStyleSpec: new charts.TextStyleSpec(...)),
         defaultRenderer: new charts.ArcRendererConfig(
             arcWidth: 60,
-            arcRendererDecorators: [new charts.ArcLabelDecorator()]));
+            arcRendererDecorators: [new charts.ArcLabelDecorator(labelPosition: charts.ArcLabelPosition.auto)]),
+
+
+    );
+
+
   }
 
   /// Create one series with sample hard coded data.
@@ -52,19 +59,25 @@ class DonutAutoLabelChart extends StatelessWidget {
 */
     final data = [
 
-      new LinearSales('T', double.parse(info[0]['totalleaveC'])),
-      new LinearSales('U', double.parse(info[0]['usedleaveC'])),
-      new LinearSales('L', double.parse(info[0]['leftleaveC'])),
+
+
+      new LinearSales('Leave', int.parse(info[0]['leave'])),
+
+      new LinearSales('Absent', int.parse(info[0]['absent'])),
+      new LinearSales('Present', int.parse(info[0]['present'])),
+
 
     ];
     return [
       new charts.Series<LinearSales, String >(
-        id: 'Sales',
+        id: 'Attandance',
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
         data: data,
         // Set a label accessor to control the text of the arc label.
-        labelAccessorFn: (LinearSales row, _) => '${row.year}: ${row.sales}',
+     labelAccessorFn: (LinearSales row, _) => '${row.year}:${row.sales}',
+        //  labelAccessorFn: (LinearSales sales, _) =>
+          //'${sales.year}: \$${sales.sales.toString()}'
       )
     ];
   }
@@ -73,7 +86,7 @@ class DonutAutoLabelChart extends StatelessWidget {
 /// Sample linear data type.
 class LinearSales {
   final String year;
-  final double  sales;
+  final int  sales;
 
   LinearSales(this.year, this.sales);
 }

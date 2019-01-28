@@ -58,11 +58,12 @@ class _AppDrawerState extends State<AppDrawer> {
   Widget build(BuildContext context) {
 
     return new Drawer(
+
       child:new ListView(
         children: <Widget>[
           new Container(
             color: bottomNavigationColor(),
-            height: sstatus==''?160.0:172.0,
+            height: sstatus==''?170.0:182.0,
             child: new DrawerHeader(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -70,11 +71,12 @@ class _AppDrawerState extends State<AppDrawer> {
                   Center(),
                   Column(
                 children: <Widget>[
-                  new Stack(
+                  Stack(
                     children: <Widget>[
+
                   new Container(
-                      width: 90.0,
-                      height: 90.0,
+                      width: 85.0,
+                      height: 85.0,
                       decoration: new BoxDecoration(
                           shape: BoxShape.circle,
                           image: new DecorationImage(
@@ -86,6 +88,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 new Positioned(
                   right: MediaQuery.of(context).size.width*-.06,
                   top: MediaQuery.of(context).size.height*.07,
+
                   child: new RawMaterialButton(
                     onPressed: () {
                       Navigator.push(
@@ -95,10 +98,10 @@ class _AppDrawerState extends State<AppDrawer> {
                     },
                     child: new Icon(
                       Icons.edit,
-                      size: 18.0,
+                      size: 16.0,
                     ),
                     shape: new CircleBorder(),
-                    elevation: 0.5,
+                    elevation: 0.2,
                     fillColor: Colors.orangeAccent,
                     padding: const EdgeInsets.all(1.0),
                   ),
@@ -107,7 +110,9 @@ class _AppDrawerState extends State<AppDrawer> {
                   //SizedBox(height: 2.0),
                   //Image.asset('assets/logo.png',height: 150.0,width: 150.0),
                   // SizedBox(height: 5.0),
-                  Text("Hi "+globalpersnalinfomap['FirstName'],style: new TextStyle(fontSize: 20.0,color: Colors.white)),
+
+                  SizedBox(height: 4.0,),
+                    Text("Hi "+globalpersnalinfomap['FirstName'],style: new TextStyle(fontSize: 18.0,color: Colors.white)),
                   // SizedBox(height: 3.0),
                   Text(globalcompanyinfomap['Designation'],style: new TextStyle(fontSize: 12.0,color: Colors.white)),
                   sstatus!=''?Text(sstatus,style: new TextStyle(fontSize: 10.0,color: Colors.white)):Center(),
