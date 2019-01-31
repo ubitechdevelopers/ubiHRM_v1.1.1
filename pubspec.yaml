@@ -64,7 +64,11 @@ flutter:
         - assets/reports1.png
         - assets/settings1.png
         - assets/profile1.png
-
+        - assets/reporr.png
+        - assets/Hom.png
+        - assets/reportt.png
+        - assets/repo.ico
+        - assets/approval.png
 
   fonts:
     - family: WorkSansSemiBold

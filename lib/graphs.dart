@@ -277,7 +277,7 @@ class OrdinalSales {
       ),
       // Hollow green bars.
       new charts.Series<OrdinalSales, String>(
-        id: 'Left',
+        id: 'Balance',
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data:  tableSalesData,

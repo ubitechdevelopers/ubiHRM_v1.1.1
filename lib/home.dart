@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'drawer.dart';
 import 'piegraph.dart';
 import 'graphs.dart';
-//import 'graphtest.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'global.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
+
 import 'services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'model/model.dart';
 import 'myleave.dart';
 import 'dart:async';
+import 'profile.dart';
+import 'approval.dart';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:date_format/date_format.dart';
 
@@ -149,11 +152,18 @@ class _HomePageState extends State<HomePage> {
             child:  BottomNavigationBar(
               currentIndex: _currentIndex,
               onTap: (newIndex) {
+                if (newIndex == 1) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                  return;
+                }
                 if (newIndex == 2) {
-                  /* Navigator.push(
+                   Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Settings()),
-              );*/
+                MaterialPageRoute(builder: (context) => TabbedApp()),
+              );
                   return;
                 } else if (newIndex == 0) {
                   /* (admin_sts == '1')
@@ -175,20 +185,30 @@ class _HomePageState extends State<HomePage> {
               }, // this will be set when a new tab is tapped
               items: [
                 BottomNavigationBarItem(
-                  icon: new Icon(
+
+                  icon:  new Image.asset("assets/repo.ico", height: 25.0, width: 30.0),
+
+               //   new Tab(icon: new Image.asset("assets/img/logo.png"), text: "Browse"),
+                 /* icon: new Icon(
                     Icons.library_books,
                     color: Colors.white,
-                  ),
-                  title: new Text('Reports',style: TextStyle(color: Colors.white)),
+                  ),*/
+                title: new Text('Reports',style: TextStyle(color: Colors.white)),
                 ),
                 BottomNavigationBarItem(
-                  icon: new Icon(
+               /*   icon: new Icon(
                     Icons.home,
                     color: Colors.orangeAccent,
-                  ),
-                  title: new Text('Home',
-                      style: TextStyle(color: Colors.orangeAccent)),
+                  ),*/
+              icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
+
+             title: new Text('Home', style: TextStyle(color: Colors.orangeAccent)),
+
                 ),
+                BottomNavigationBarItem(
+                  icon:  new Image.asset("assets/approval.png", height: 40.0, width:                    35.0),
+                  title: new Text('Approvals',style: TextStyle(color: Colors.white)),
+                   ),
                 BottomNavigationBarItem(
                     icon: Icon(
                       Icons.settings,
@@ -322,6 +342,10 @@ class _HomePageState extends State<HomePage> {
                           )),
                       GestureDetector(
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => CollapsingTab()),
+                            );
                           },
                           child: Column(
                             children: [

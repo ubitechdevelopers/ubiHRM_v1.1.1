@@ -17,8 +17,10 @@ headingColor(){
   return Colors.green;
 }
 
+
 bottomNavigationColor(){
-  return Color.fromRGBO(0, 166, 90,1.0);
+ // return Color.fromRGBO(0, 166, 90,1.0);
+  return Color.fromRGBO(51,51,51,1.0);
 }
 
 circleIconBackgroundColor(){

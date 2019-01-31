@@ -75,6 +75,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     children: <Widget>[
 
                   new Container(
+
                       width: 85.0,
                       height: 85.0,
                       decoration: new BoxDecoration(
@@ -101,7 +102,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       size: 16.0,
                     ),
                     shape: new CircleBorder(),
-                    elevation: 0.2,
+                    elevation: 0.5,
                     fillColor: Colors.orangeAccent,
                     padding: const EdgeInsets.all(1.0),
                   ),

@@ -270,8 +270,8 @@ class _MyLeaveState extends State<MyLeave> {
                     ],
                   ),
                   new Divider(),
-
-                  new Container(
+            new Expanded(
+                child: Container(
                     height: MediaQuery.of(context).size.height*.55,
                     width: MediaQuery.of(context).size.width*.99,
                     //padding: EdgeInsets.only(bottom: 15.0),
@@ -470,7 +470,7 @@ class _MyLeaveState extends State<MyLeave> {
                     ),
                     //////////////////////////////////////////////////////////////////////---------------------------------
                   ),
-
+            ),
                 ])
         ),
 

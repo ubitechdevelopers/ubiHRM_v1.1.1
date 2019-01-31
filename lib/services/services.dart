@@ -335,7 +335,7 @@ Future<List<Map<String, String>>> getAttsummaryChart() async {
   final data = json.decode(response.data.toString());
 //print("fdgdgdfgd"+data.toString());
  print(data['att']['month']);
-
+  prefs.setString("attmonth", data['att']['month']);
 
   List<Map<String, String>> val = [
     {
@@ -394,3 +394,41 @@ List<Holi> createHolidayList(List data) {
   }
   return list;
 }
+
+/*
+class LeaveA {
+  String Id;
+  String Leavests;
+  String Reason;
+  String applydate;
+
+  LeaveA(
+      { this.Id,
+        this.Leavests,
+        this.Reason,
+        this.applydate});
+}
+
+
+Future<List<LeaveA>> getApprovals(listType) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('orgdir') ?? '';
+  //final response = await http.get(
+     // globals.path + 'getAttendances_new?refno=$orgdir&datafor=$listType');
+  Response<String> response =
+  await dio.post(path+"getHolidays",
+      data: formData);
+  final res = json.decode(response.body);
+  // print(res);
+  List responseJson;
+  if (listType == 'present')
+    responseJson = res['present'];
+  else if (listType == 'absent')
+    responseJson = res['absent'];
+  else if (listType == 'latecomings')
+    responseJson = res['lateComings'];
+  else if (listType == 'earlyleavings') responseJson = res['earlyLeavings'];
+  List<Attn> userList = createTodayEmpList(responseJson);
+  return userList;
+}
+*/
