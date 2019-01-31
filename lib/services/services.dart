@@ -395,7 +395,7 @@ List<Holi> createHolidayList(List data) {
   return list;
 }
 
-
+/*
 class LeaveA {
   String Id;
   String Leavests;
@@ -431,4 +431,4 @@ Future<List<LeaveA>> getApprovals(listType) async {
   List<Attn> userList = createTodayEmpList(responseJson);
   return userList;
 }
-
+*/
