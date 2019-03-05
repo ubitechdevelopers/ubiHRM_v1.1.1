@@ -39,6 +39,14 @@ class Employee {
       };
 
 }
+class Profile{
+  String uid;
+  String orgid;
+  String mobile;
+  String countryid;
+
+  Profile(this.uid,this.orgid,this.mobile,this.countryid);
+}
 
 class Permission {
 

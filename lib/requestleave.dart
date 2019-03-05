@@ -12,7 +12,8 @@ import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'services/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-
+import 'home.dart';
+import 'approval.dart';
 
 class RequestLeave extends StatefulWidget {
   @override
@@ -24,10 +25,14 @@ class _RequestLeaveState extends State<RequestLeave> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String leavetypeid="32";
   List<Map> leavetimeList = [{"id":"2","name":"Half Day"},{"id":"1","name":"Full Day"}];
+  List<Map> leavetypeList = [];
+
   String leavetimevalue = "1";
   String leavetimevalue1 = "1";
+  String leavetypevalue = "1";
   bool isloading = false;
   String admin_sts='0';
+  String leavetype='0';
   DateTime Date1 = new DateTime.now();
   DateTime Date2 = new DateTime.now();
   final _dateController = TextEditingController();
@@ -48,6 +53,7 @@ class _RequestLeaveState extends State<RequestLeave> {
   int _currentIndex = 0;
   int response;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
+
   @override
   void initState() {
     super.initState();
@@ -61,6 +67,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     String organization =prefs.getString('organization')??"";
 
     Employee emp = new Employee(employeeid: empid, organization: organization);
+
     //if(empid!='')
       //bool ish = await getAllPermission(emp);
 
@@ -109,17 +116,18 @@ class _RequestLeaveState extends State<RequestLeave> {
     });
     print("----> service calling "+isServiceCalling.toString());
     final prefs = await SharedPreferences.getInstance();
-    String uid = prefs.getString("empid")??"4140";
-    String orgid = prefs.getString("orgid")??"10";
-    Leave leave =new Leave(uid: uid, leavefrom: leavefrom, leaveto: leaveto, orgid: orgid, reason: reason, leavetypeid: leavetypeid, leavetypefrom: leavetypefrom, leavetypeto: leavetypeto, halfdayfromtype: halfdayfromtype, halfdaytotype: halfdaytotype);
+    String uid = prefs.getString("employeeid")??"";
+    String orgid = prefs.getString("organization")??"";
+    Leave leave =new Leave(uid: uid, leavefrom: leavefrom, leaveto: leaveto, orgid: orgid, reason: reason, leavetypeid: leavetype, leavetypefrom: leavetypefrom, leavetypeto: leavetypeto, halfdayfromtype: halfdayfromtype, halfdaytotype: halfdaytotype);
     var islogin1 = await requestLeave(leave);
-    print("--->"+islogin1);
+    print("---ss>"+islogin1);
     if(islogin1=="true"){
-      Navigator.push(
+      showInSnackBar("Leave has been applied successfully.");
+
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => MyLeave()),
+        MaterialPageRoute(builder: (context) => MyLeave()), (Route<dynamic> route) => false,
       );
-      //showInSnackBar("Leave has been applied successfully.");
     }else if(islogin1=="false"){
       setState(() {
         isServiceCalling = false;
@@ -197,14 +205,32 @@ class _RequestLeaveState extends State<RequestLeave> {
             child:  BottomNavigationBar(
               currentIndex: _currentIndex,
               onTap: (newIndex) {
-                if (newIndex == 2) {
-                  /* Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Settings()),
-              );*/
+                if (newIndex == 1) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
                   return;
-                } else if (newIndex == 0) {
-                  /* (admin_sts == '1')
+                }
+                if (newIndex == 2) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TabbedApp()),
+                  );
+                  return;
+                }
+                if (newIndex == 3) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TabbedApp()),
+                  );
+                  return;
+                }else if (newIndex == 0) { Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TabbedApp()),
+                );
+
+                /* (admin_sts == '1')
                   ? Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Reports()),
@@ -214,7 +240,7 @@ class _RequestLeaveState extends State<RequestLeave> {
                 MaterialPageRoute(builder: (context) => ProfilePage()),
               );*/
 
-                  return;
+                return;
                 }
 
                 setState(() {
@@ -223,26 +249,49 @@ class _RequestLeaveState extends State<RequestLeave> {
               }, // this will be set when a new tab is tapped
               items: [
                 BottomNavigationBarItem(
-                  icon: new Icon(
+
+                  // icon:  new Image.asset("assets/repo.ico", height: 25.0, width: 30.0),
+
+                  //   new Tab(icon: new Image.asset("assets/img/logo.png"), text: "Browse"),
+                  /* icon: new Icon(
                     Icons.library_books,
                     color: Colors.white,
-                  ),
+                  ),*/
+
+                  icon: Icon(
+                      Icons.description,
+                      color: Colors.white,
+                      size: 25.0),
+
                   title: new Text('Reports',style: TextStyle(color: Colors.white)),
                 ),
                 BottomNavigationBarItem(
-                  icon: new Icon(
+                  /*   icon: new Icon(
                     Icons.home,
                     color: Colors.orangeAccent,
-                  ),
-                  title: new Text('Home',
-                      style: TextStyle(color: Colors.orangeAccent)),
+                  ),*/
+                  icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
+
+                  title: new Text('Home', style: TextStyle(color: Colors.orangeAccent)),
+
+                ),
+                BottomNavigationBarItem(
+                  /*  icon:  new Image.asset("assets/approval.png",
+                      height: 40.0,
+                      width: 35.0),*/
+                  icon: Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.white,
+                      size: 25.0),
+                  title: new Text('Approvals',style: TextStyle(color: Colors.white)),
                 ),
                 BottomNavigationBarItem(
                     icon: Icon(
-                      Icons.settings,
-                      color: Colors.white,
-                    ),
+                        Icons.settings,
+                        color: Colors.white,
+                        size: 25.0 ),
                     title: Text('Settings',style: TextStyle(color: Colors.white)))
+
               ],
             )),
         body:  ModalProgressHUD(
@@ -287,6 +336,9 @@ class _RequestLeaveState extends State<RequestLeave> {
     Column(
     mainAxisAlignment: MainAxisAlignment.start,
     children: <Widget>[
+
+
+      getLeaveType_DD(),
     SizedBox(height: 20.0),
     //Enter date
     Row(
@@ -327,7 +379,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     Expanded(
     child: new InputDecorator(
     decoration: InputDecoration(
-    labelText: 'Leave Type',
+   // labelText: 'Leave Type',
     prefixIcon: Padding(
     padding: EdgeInsets.all(0.0),
     child: Icon(
@@ -357,6 +409,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     items: leavetimeList.map((Map map) {
     return new DropdownMenuItem<String>(
     value: map["id"].toString(),
+
     child: new Text(
     map["name"],
     ),
@@ -429,7 +482,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     Expanded(
     child:new InputDecorator(
     decoration: InputDecoration(
-    labelText: 'Leave Type',
+   // labelText: 'Leave Type',
     prefixIcon: Padding(
     padding: EdgeInsets.all(0.0),
     child: Icon(
@@ -467,8 +520,11 @@ class _RequestLeaveState extends State<RequestLeave> {
     ),
     )
     ),
+
+
     ],
     ),
+
     (visibilityToHalf)?Row(
     mainAxisAlignment: MainAxisAlignment.start,
     children: <Widget>[
@@ -551,5 +607,63 @@ class _RequestLeaveState extends State<RequestLeave> {
 
       ],
     );
+  }
+
+  ////////////////common dropdowns
+  Widget getLeaveType_DD() {
+    String dc = "0";
+    return new FutureBuilder<List<Map>>(
+        future: getleavetype(0), //with -select- label
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return new Container(
+              //    width: MediaQuery.of(context).size.width*.45,
+              padding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: 'Leave Type',
+
+
+                  // icon is 48px widget.
+
+                ),
+
+                child:  new DropdownButton<String>(
+                  isDense: true,
+                  style: new TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.black
+                  ),
+                  value: leavetype,
+                  onChanged: (String newValue) {
+                    setState(() {
+                      leavetype =newValue;
+                    });
+                  },
+                  items: snapshot.data.map((Map map) {
+                    return new DropdownMenuItem<String>(
+                      value: map["Id"].toString(),
+                      child:  new SizedBox(
+                          width: 200.0,
+                          child: new Text(
+                            map["Name"],
+                          )
+                      ),
+                    );
+                  }).toList(),
+
+                ),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return new Text("${snapshot.error}");
+          }
+          // return loader();
+          return new Center(child: SizedBox(
+            child: CircularProgressIndicator(strokeWidth: 2.2,),
+            height: 20.0,
+            width: 20.0,
+          ),);
+        });
   }
 }

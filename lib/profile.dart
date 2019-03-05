@@ -4,6 +4,8 @@ import 'global.dart';
 import 'model/model.dart';
 import 'services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rounded_modal/rounded_modal.dart';
+
 
 class CollapsingTab extends StatefulWidget {
   @override
@@ -11,6 +13,11 @@ class CollapsingTab extends StatefulWidget {
 }
 
 class _CollapsingTabState extends State<CollapsingTab> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  PersistentBottomSheetController controller;
+  //bool _checkLoaded = true;
+  bool _isButtonDisabled= false;
+  //bool _isProfileUploading= false;
   ScrollController scrollController;
   double height = 0.0;
   double insideContainerHeight=300.0;
@@ -21,10 +28,9 @@ class _CollapsingTabState extends State<CollapsingTab> {
   bool _checkLoaded = true;
   var profileimage;
   bool _checkLoadedprofile = true;
-
+  bool _isProfileUploading= false;
   var toreportprofileimage;
   bool _checkLoadedr = true;
-
 
 
   Widget _buildActions() {
@@ -106,6 +112,8 @@ class _CollapsingTabState extends State<CollapsingTab> {
     scrollController.addListener(_scrollListener);
     initPlatformState();
   }
+
+
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('employeeid')??"";
@@ -202,9 +210,10 @@ class _CollapsingTabState extends State<CollapsingTab> {
   Widget build(BuildContext context) {
 
     var flexibleSpaceWidget = new SliverAppBar(
-
+    //  key: _scaffoldKey,
       expandedHeight: 200.0,
       pinned: true,
+      backgroundColor: Color.fromRGBO(0,102,153,1.0),
       flexibleSpace: FlexibleSpaceBar(
 
         centerTitle: true,
@@ -225,10 +234,20 @@ class _CollapsingTabState extends State<CollapsingTab> {
               )),
             //appBarHeading()
           ]),*/
+
         background: Column(
-            children:<Widget>[
-              SizedBox(height: 40.0,),
-              Container(
+
+        children:<Widget>[
+        Stack(
+        children: <Widget>[
+              SizedBox(height: 50.0,),
+              new GestureDetector(
+                onTap: (){
+                  showBottomNavigation();
+                },
+                child:Container(
+                margin: EdgeInsets.only(
+                    top: 30.0),
                 height: 100.0,
                 width: 100.0,
                 decoration: new BoxDecoration(
@@ -247,6 +266,29 @@ class _CollapsingTabState extends State<CollapsingTab> {
 
                 ),
               ),
+      ),
+            /*  new Positioned(
+              left: MediaQuery.of(context).size.width*.11,
+                top: MediaQuery.of(context).size.height*.09,
+                child: new RawMaterialButton(
+                  onPressed: () {
+                   // controller.close();
+                    showBottomNavigation();
+                  },
+                  child: new Icon(
+                    Icons.camera_alt,
+                    size: 18.0,
+                  ),
+                  shape: new CircleBorder(),
+                  elevation: 0.5,
+                  fillColor: Colors.teal,
+                  padding: const EdgeInsets.all(1.0),
+                ),
+              ),*/
+
+
+        ]),
+
               Text(globalpersnalinfomap['FirstName'],
                   style: TextStyle(
                     color: Colors.white,
@@ -276,26 +318,24 @@ class _CollapsingTabState extends State<CollapsingTab> {
     );
 
     return Scaffold(
+  key: _scaffoldKey,
       body: new DefaultTabController(
-        length: 3,
+       length: 3,
         child: NestedScrollView(
           controller: scrollController,
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               flexibleSpaceWidget,
-
-              SliverPersistentHeader(
+               SliverPersistentHeader(
                 delegate: _SliverAppBarDelegate(
-
                   TabBar(
-
                     labelColor: Colors.black87,
                     unselectedLabelColor: Colors.black26,
                     tabs: [
                       Tab(
                           icon: Icon(Icons.account_box),
                           text: "Profile"
-                      ),
+                         ),
                       Tab(icon: Icon(Icons.group), text: "Team"),
                     ],
                   ),
@@ -359,7 +399,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                   width: 100.0,),
                                 Text(globalpersnalinfomap["DOB"]),
                               ],),
-                              SizedBox(height: 10.0,),
+                            /*  SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("Blood Group:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
@@ -371,7 +411,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                   width: 100.0,),
                                 Text(globalpersnalinfomap["Nationality"]),
                               ],),
-                              SizedBox(height: 10.0,),
+                              SizedBox(height: 10.0,),*/
 
                             ],
                           ),
@@ -479,13 +519,13 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                   width: 100.0,),),
                                 Text(globalcompanyinfomap["Designation"]),
                               ],),
-                              SizedBox(height: 10.0,),
+                            /*  SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 new Expanded(
                                   child:Container(child:Text("Reporting To:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),),
                                 Text(globalcompanyinfomap["ReportingTo"]),
-                              ],),
+                              ],),*/
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 new Expanded(
@@ -497,7 +537,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 new Expanded(
-                                  child: Container(child:Text("Location:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  child: Container(child:Text("Location:",style: TextStyle(color: Colors.grey[600]),),
                                   width: 100.0,),),
                                 Text(globalcompanyinfomap["Location"]),
                               ],),
@@ -554,14 +594,14 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                   child: Container(child:Text("Address:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),),
                                 Text(globalcontactusinfomap["Address"]),
-                              ],),*/
+                              ],),
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 new Expanded(
                                   child: Container(child:Text("Postal Code:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),),
                                 Text(globalcontactusinfomap["PostalCode"]),
-                              ],),
+                              ],),*/
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 new Expanded(
@@ -606,13 +646,9 @@ class _CollapsingTabState extends State<CollapsingTab> {
                       if (snapshot.hasData) {
                         if(snapshot.data.length>0) {
                           return new ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              itemCount: snapshot.data.length,
-
-
-                              itemBuilder: (BuildContext context, int index) {
-
-                                toreportprofileimage = new NetworkImage( snapshot.data[index].ProfilePic);
+                          scrollDirection: Axis.vertical,
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (BuildContext context, int index) {toreportprofileimage = new NetworkImage( snapshot.data[index].ProfilePic);
                                 toreportprofileimage.resolve(new ImageConfiguration()).addListener((_, __) {
                                   if (mounted) {
                                     setState(() {
@@ -676,6 +712,202 @@ class _CollapsingTabState extends State<CollapsingTab> {
   showProfile() {
     Navigator.pushNamed(context, '/profile');
   }
+
+
+
+  updatePhoto(int uploadtype) async{
+    setState(() {
+      _isProfileUploading = true;
+    });
+    NewServices ns = NewServices();
+    bool isupdate = await ns.updateProfilePhoto(uploadtype,empid,organization);
+    // bool isupdate = true;
+    if(isupdate){
+      setState(() {
+        _isProfileUploading = false;
+      });
+      if(uploadtype==3){
+        setState(() {
+          _checkLoaded = true;
+        });
+      }
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text("Profile image has been changed."),
+      )
+      );
+      Navigator.push(
+        context,
+       MaterialPageRoute(builder: (context) => CollapsingTab()),
+      );
+    }else{
+      setState(() {
+        _isProfileUploading = false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+        //title: new Text("Congrats!"),
+        content: new Text("Couldn't load this photo, Please try again."),
+      )
+      );
+    }
+  }
+
+  updateProfile(String mobile, String countryid) async{
+    var profile = Profile(empid, organization, mobile, countryid);
+    NewServices ns = NewServices();
+    var islogin = await ns.updateProfile(profile);
+    //print(islogin);
+    if(islogin=="success"){
+      setState(() {
+        _isButtonDisabled=false;
+      });
+      /* Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );*/
+      showDialog(context: context, child:
+      new AlertDialog(
+        title: new Text("Congrats!"),
+        content: new Text("Your Profile is updated."),
+      )
+      );
+    }else if(islogin=="failure"){
+      setState(() {
+        _isButtonDisabled=false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+        title: new Text("Sorry!"),
+        content: new Text("Phone no. already exists"),
+      )
+      );
+    }else{
+      setState(() {
+        _isButtonDisabled=false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+        title: new Text("Sorry!"),
+        content: new Text("Poor network connection."),
+      )
+      );
+    }
+  }
+
+
+  showBottomNavigation() async{
+   controller = _scaffoldKey.currentState
+       .showBottomSheet<Null>((BuildContext context) {
+  //  showRoundedModalBottomSheet(
+       // context: context,
+        //  radius: 190.0,
+        //   radius: 190.0, // This is the default
+        // color:Colors.lightGreen.withOpacity(0.9),
+       // color:Colors.grey[300],
+        //   color:Colors.cyan[200].withOpacity(0.7),
+      //  builder: (BuildContext bc){
+      return new Container(
+          color: Colors.teal.withOpacity(0.1),
+          child: new Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(height: 20.0,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Update profile photo", style: TextStyle(fontWeight: FontWeight.bold),)
+                ],),
+              SizedBox(height: 20.0,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        new RawMaterialButton(
+                          onPressed: () {
+                            controller.close();
+                            updatePhoto(1);
+                          },
+                          child: new Icon(
+                            Icons.photo,
+                            size: 18.0,
+                          ),
+                          shape: new CircleBorder(),
+                          elevation: 0.5,
+                          fillColor: Colors.teal[100],
+                          padding: const EdgeInsets.all(1.0),
+                        ),
+                        Text("Gallery\n")
+                      ]
+                  ),
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        new RawMaterialButton(
+                          onPressed: () {
+                            controller.close();
+                            updatePhoto(2);
+                          },
+                          child: new Icon(
+                            Icons.camera_alt,
+                            size: 18.0,
+                          ),
+                          shape: new CircleBorder(),
+                          elevation: 0.5,
+                          fillColor: Colors.teal[100],
+                          padding: const EdgeInsets.all(1.0),
+                        ),
+                        Text("Camera\n")
+                      ]
+                  ),
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        new RawMaterialButton(
+                          onPressed: () {
+                            controller.close();
+                            updatePhoto(3);
+                          },
+                          child: new Icon(
+                            Icons.delete,
+                            size: 18.0,
+                          ),
+                          shape: new CircleBorder(),
+                          elevation: 0.5,
+                          fillColor: Colors.teal[100],
+                          padding: const EdgeInsets.all(1.0),
+                        ),
+                        Text("Remove\n photo")
+                      ]
+                  )
+                ],
+              ),
+              SizedBox(height: 20.0,),
+              Divider(color: Colors.black,height: 3.0,),
+              Container(
+                  color: Colors.teal.withOpacity(0.15),
+                  child:Column(
+                    children: <Widget>[
+                      Center(
+                          child:FlatButton(child:Text("Cancel"),onPressed: (){
+                            controller.close();
+                          },)
+                      )
+                    ],
+                  )
+              )
+
+            ],
+          ));
+        }
+    );
+
+    //  }
+   // );
+  }
+
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

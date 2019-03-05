@@ -30,6 +30,16 @@ dependencies:
   firebase_messaging: 0.2.1
   connectivity: 0.3.2
   date_format: ^1.0.6
+  flutter_slidable: ^0.4.9
+  rounded_modal: ^1.0.0
+  image_picker: ^0.4.10
+  image: ^2.0.4
+  flutter_image_compress: ^0.2.2
+  http: ^0.12.0+1
+
+
+
+
 
 
 

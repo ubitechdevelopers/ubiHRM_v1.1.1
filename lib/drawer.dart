@@ -62,8 +62,30 @@ class _AppDrawerState extends State<AppDrawer> {
       child:new ListView(
         children: <Widget>[
           new Container(
-            color: bottomNavigationColor(),
+           // color: bottomNavigationColor(),
+            //color: Color.fromRGBO(38,102,75,1.0),
             height: sstatus==''?170.0:182.0,
+            decoration: BoxDecoration(
+              // Box decoration takes a gradient
+              gradient: LinearGradient(
+                // Where the linear gradient begins and ends
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                // Add one stop for each color. Stops should increase from 0 to 1
+                stops: [0.1, 0.5, 0.7, 0.9],
+                colors: [
+                  // Colors are easy thanks to Flutter's Colors class.
+                  Colors.green[900],
+                  Colors.green[800],
+                  Colors.green[700],
+                  Colors.green[600],
+                  //Color.fromRGBO(0,102,153,1.0),
+              //  Color.fromRGBO(7,99,145,1.0),
+              //Color.fromRGBO(12,99,142,1.0),
+              // Color.fromRGBO(34,94,124,1.0),
+                ],
+              ),
+            ),
             child: new DrawerHeader(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -73,8 +95,14 @@ class _AppDrawerState extends State<AppDrawer> {
                 children: <Widget>[
                   Stack(
                     children: <Widget>[
-
-                  new Container(
+                      new GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => CollapsingTab()),
+                            );
+                          },
+                          child: Container(
 
                       width: 85.0,
                       height: 85.0,
@@ -85,8 +113,8 @@ class _AppDrawerState extends State<AppDrawer> {
                            //  image: NetworkImage(globalcompanyinfomap['ProfilePic']),
                          image: _checkLoaded ? AssetImage('assets/avatar.png') : NetworkImage(globalcompanyinfomap['ProfilePic']),
                           )
-                      )),
-                new Positioned(
+                      )),),
+             /*   new Positioned(
                   right: MediaQuery.of(context).size.width*-.06,
                   top: MediaQuery.of(context).size.height*.07,
 
@@ -106,7 +134,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     fillColor: Colors.orangeAccent,
                     padding: const EdgeInsets.all(1.0),
                   ),
-                ),
+                ),*/
             ]),
                   //SizedBox(height: 2.0),
                   //Image.asset('assets/logo.png',height: 150.0,width: 150.0),
@@ -178,11 +206,11 @@ class _AppDrawerState extends State<AppDrawer> {
               );
             },
           ),*/
-              Text("Monika Rai",
+           /*   Text("Monika Rai",
                 style: TextStyle(
                 color: Colors.white,
                 fontSize: 16.0,
-              )),
+              )),*/
           /*new ListTile(
             title: Row(
               children: <Widget>[

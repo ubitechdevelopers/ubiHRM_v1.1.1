@@ -200,7 +200,20 @@ class OrdinalSales {
       // barRendererDecorator: new charts.BarLabelDecorator<String>(),
       // domainAxis:   new charts.OrdinalAxisSpec(renderSpec: new charts.NoneRenderSpec()),
       barRendererDecorator: new charts.BarLabelDecorator<String>(),
-      behaviors: [new charts.SeriesLegend()
+      behaviors: [
+        new charts.SeriesLegend(),
+        // Add the sliding viewport behavior to have the viewport center on the
+        // domain that is currently selected.
+        //new charts.SlidingViewport(),
+        // A pan and zoom behavior helps demonstrate the sliding viewport
+        // behavior by allowing the data visible in the viewport to be adjusted
+        // dynamically.
+       // new charts.PanAndZoomBehavior
+        //
+        //
+        //
+        //
+        // (),
       ],
       /*    customSeriesRenderers: [
           new charts.BarTargetLineRendererConfig<String>(
@@ -222,6 +235,7 @@ class OrdinalSales {
   /// Create series list with multiple series
   static List<charts.Series<OrdinalSales, String>> _createSampleData(info) {
     final random = new Random();
+    print("00000000000"+info[0]['totalleaveC']);
     final desktopSalesData = [
       new OrdinalSales('Casual Leave', double .parse(info[0]['totalleaveC'])),
       new OrdinalSales('LOP',  double .parse(info[0]['totalleaveL'])),
@@ -244,7 +258,7 @@ class OrdinalSales {
     return [
       // Blue bars with a lighter center color.
       new charts.Series<OrdinalSales, String>(
-        id: 'Total',
+        id: 'Entitle',
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
         data: desktopSalesData,

@@ -15,7 +15,7 @@ import 'profile.dart';
 import 'approval.dart';
 
 import 'package:connectivity/connectivity.dart';
-import 'package:date_format/date_format.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
     empid = prefs.getString('employeeid')??"";
     organization =prefs.getString('organization')??"";
 
+
     emp = new Employee(employeeid: empid, organization: organization);
 
     var connectivityResult = await (new Connectivity().checkConnectivity());
@@ -55,11 +56,11 @@ class _HomePageState extends State<HomePage> {
       });
 
 
-    islogin().then((Widget configuredWidget) {
-      setState(() {
-        mainWidget = configuredWidget;
+      islogin().then((Widget configuredWidget) {
+        setState(() {
+          mainWidget = configuredWidget;
+        });
       });
-    });
     }else{
       setState(() {
         mainWidget = plateformstatee();
@@ -82,6 +83,7 @@ class _HomePageState extends State<HomePage> {
       //getModulePermission("178","view");
       await getProfileInfo(emp);
       await getReportingTeam(emp);
+
       return mainScafoldWidget();
     }else{
       return new LoginPage();
@@ -97,12 +99,12 @@ class _HomePageState extends State<HomePage> {
 
 
   Widget loadingWidget(){
-     return Center(child:SizedBox(
+    return Center(child:SizedBox(
 
       //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
       child: new CircularProgressIndicator(),
     ));
-}
+  }
 
 
   Widget plateformstatee(){
@@ -114,7 +116,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
-}
+  }
 
 
   Widget mainScafoldWidget(){
@@ -160,12 +162,23 @@ class _HomePageState extends State<HomePage> {
                   return;
                 }
                 if (newIndex == 2) {
-                   Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TabbedApp()),
-              );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TabbedApp()),
+                  );
                   return;
-                } else if (newIndex == 0) {
+                }
+                if (newIndex == 3) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TabbedApp()),
+                  );
+                  return;
+                }else if (newIndex == 0) { Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TabbedApp()),
+                );
+
                   /* (admin_sts == '1')
                   ? Navigator.push(
                 context,
@@ -186,35 +199,47 @@ class _HomePageState extends State<HomePage> {
               items: [
                 BottomNavigationBarItem(
 
-                  icon:  new Image.asset("assets/repo.ico", height: 25.0, width: 30.0),
+                 // icon:  new Image.asset("assets/repo.ico", height: 25.0, width: 30.0),
 
-               //   new Tab(icon: new Image.asset("assets/img/logo.png"), text: "Browse"),
-                 /* icon: new Icon(
+                  //   new Tab(icon: new Image.asset("assets/img/logo.png"), text: "Browse"),
+                  /* icon: new Icon(
                     Icons.library_books,
                     color: Colors.white,
                   ),*/
-                title: new Text('Reports',style: TextStyle(color: Colors.white)),
+
+                 icon: Icon(
+                      Icons.description,
+                      color: Colors.white,
+                      size: 25.0),
+  title: new Text('',style: TextStyle(color: Colors.white)),
                 ),
                 BottomNavigationBarItem(
-               /*   icon: new Icon(
+                  /*   icon: new Icon(
                     Icons.home,
                     color: Colors.orangeAccent,
                   ),*/
-              icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
+                  icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
 
-             title: new Text('Home', style: TextStyle(color: Colors.orangeAccent)),
+                  title: new Text('Home', style: TextStyle(color: Colors.orangeAccent)),
 
                 ),
                 BottomNavigationBarItem(
-                  icon:  new Image.asset("assets/approval.png", height: 40.0, width:                    35.0),
+                /*  icon:  new Image.asset("assets/approval.png",
+                      height: 40.0,
+                      width: 35.0),*/
+                  icon: Icon(
+                    Icons.check_circle_outline,
+                    color: Colors.white,
+                      size: 25.0),
                   title: new Text('Approvals',style: TextStyle(color: Colors.white)),
-                   ),
+                ),
                 BottomNavigationBarItem(
                     icon: Icon(
-                      Icons.settings,
-                      color: Colors.white,
-                    ),
+                    Icons.settings,
+                    color: Colors.white,
+                    size: 25.0 ),
                     title: Text('Settings',style: TextStyle(color: Colors.white)))
+
               ],
             )),
         body: homewidget()
@@ -226,200 +251,200 @@ class _HomePageState extends State<HomePage> {
     return Stack(
       children: <Widget>[
         Container(
-            //height: MediaQuery.of(context).size.height,
-              margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-             // width: MediaQuery.of(context).size.width*0.9,
-              decoration: new ShapeDecoration(
-                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
-                color: Colors.white,
-              ),
-              child: ListView(
+          //height: MediaQuery.of(context).size.height,
+            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            // width: MediaQuery.of(context).size.width*0.9,
+            decoration: new ShapeDecoration(
+              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+              color: Colors.white,
+            ),
+            child: ListView(
 
-                children: <Widget>[
-                  SizedBox(height: 20.0,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      GestureDetector(
-                          onTap: () {
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
+              children: <Widget>[
+                SizedBox(height: 20.0,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                        },
+                        child: Column(
+                          children: [
+                            new Container(
+                                width: 60.0,
+                                height: 60.0,
+                                decoration: new BoxDecoration(
 
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
 
-                                        fit: BoxFit.fill,
-                                        image: AssetImage('assets/attendance_icon.png'),
-                                      ),
-                                      color: circleIconBackgroundColor()
-                                  )),
-                              Text('My Attendance',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                            ],
-                          )),
+                                      fit: BoxFit.fill,
+                                      image: AssetImage('assets/attendance_icon.png'),
+                                    ),
+                                    color: circleIconBackgroundColor()
+                                )),
+                            Text('My Attendance',
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                          ],
+                        )),
 
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => MyLeave()),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage('assets/leave_icon.png'),
-                                      ),
-                                      color: circleIconBackgroundColor()
-                                  )),
-                              Text('My Leave',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                            ],
-                          )),
-                      GestureDetector(
-                          onTap: () {
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage('assets/timeoff_icon.png'),
-                                      ),
-                                      color: circleIconBackgroundColor()
-                                  )),
-                              Text('My Timeoff',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                            ],
-                          )),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MyLeave()),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            new Container(
+                                width: 60.0,
+                                height: 60.0,
+                                decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: AssetImage('assets/leave_icon.png'),
+                                    ),
+                                    color: circleIconBackgroundColor()
+                                )),
+                            Text('My Leave',
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                          ],
+                        )),
+                    GestureDetector(
+                        onTap: () {
+                        },
+                        child: Column(
+                          children: [
+                            new Container(
+                                width: 60.0,
+                                height: 60.0,
+                                decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: AssetImage('assets/timeoff_icon.png'),
+                                    ),
+                                    color: circleIconBackgroundColor()
+                                )),
+                            Text('My Timeoff',
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                          ],
+                        )),
 
-                    ],
+                  ],
 
-                  ),
-                  SizedBox(height: 20.0,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      GestureDetector(
-                          onTap: () {
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage('assets/settings.png'),
-                                      ),
-                                      color:circleIconBackgroundColor()
-                                  )),
-                              Text(' Settings         ',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                            ],
-                          )),
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => CollapsingTab()),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage('assets/profile.png'),
-                                      ),
-                                      color: circleIconBackgroundColor()
-                                  )),
-                              Text('My Profile',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                            ],
-                          )),
-                      GestureDetector(
-                          onTap: () {
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage('assets/reports.png'),
-                                      ),
-                                      color: circleIconBackgroundColor()
-                                  )),
-                              Text('My Reports',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                            ],
-                          )),
+                ),
+                SizedBox(height: 20.0,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                        },
+                        child: Column(
+                          children: [
+                            new Container(
+                                width: 60.0,
+                                height: 60.0,
+                                decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: AssetImage('assets/settings.png'),
+                                    ),
+                                    color:circleIconBackgroundColor()
+                                )),
+                            Text(' Settings         ',
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                          ],
+                        )),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CollapsingTab()),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            new Container(
+                                width: 60.0,
+                                height: 60.0,
+                                decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: AssetImage('assets/profile.png'),
+                                    ),
+                                    color: circleIconBackgroundColor()
+                                )),
+                            Text('My Profile',
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                          ],
+                        )),
+                    GestureDetector(
+                        onTap: () {
+                        },
+                        child: Column(
+                          children: [
+                            new Container(
+                                width: 60.0,
+                                height: 60.0,
+                                decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: AssetImage('assets/reports.png'),
+                                    ),
+                                    color: circleIconBackgroundColor()
+                                )),
+                            Text('My Reports',
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                          ],
+                        )),
 
-                    ],
+                  ],
 
-                  ),
-                  SizedBox(height: 40.0,),
-                  Row(children: <Widget>[
-                    SizedBox(width: 20.0,),
-                    Text("Leave Summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
-                  ]
-                  ),
+                ),
+                SizedBox(height: 40.0,),
+                Row(children: <Widget>[
+                  SizedBox(width: 20.0,),
+                  Text("Leave Summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                ]
+                ),
 
-                  Divider(height: 10.0,),
-                  /*SimpleBarChart.withSampleData(),*/
+                Divider(height: 10.0,),
+                /*SimpleBarChart.withSampleData(),*/
 
 
 
-                  new Container(
-                    padding: EdgeInsets.all(0.2),
-                    margin: EdgeInsets.all(0.2),
-                    height: 200.0,
-                    child: new FutureBuilder<List<Map<String,String>>>(
-                        future: getChartDataYes(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data.length > 0) {
-                              return new StackedHorizontalBarChart.withSampleData(snapshot.data);
-                            }
+                new Container(
+                  padding: EdgeInsets.all(0.2),
+                  margin: EdgeInsets.all(0.2),
+                  height: 200.0,
+                  child: new FutureBuilder<List<Map<String,String>>>(
+                      future: getChartDataYes(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data.length > 0) {
+                            return new StackedHorizontalBarChart.withSampleData(snapshot.data);
                           }
-                          return new Center( child: CircularProgressIndicator());
                         }
-                    ),
-                    // child: new StackedHorizontalBarChart .withSampleData()
+                        return new Center( child: CircularProgressIndicator());
+                      }
                   ),
-              /*    Row(children: <Widget>[
+                  // child: new StackedHorizontalBarChart .withSampleData()
+                ),
+                /*    Row(children: <Widget>[
                     Icon(Icons.brightness_1,color: Colors.blue,),
                     SizedBox(width: 20.0,),
                     Text('Leave entitled'),
@@ -436,39 +461,39 @@ class _HomePageState extends State<HomePage> {
                   ],),
 */
 
-                  // Attendance monthly summary bar graph
+                // Attendance monthly summary bar graph
 
-                  SizedBox(height: 40.0,),
-                  Row(children: <Widget>[
-                    SizedBox(width: 20.0,),
-                    Text("Attendance monthly summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
-                  ]
-                  ),
+                SizedBox(height: 40.0,),
+                Row(children: <Widget>[
+                  SizedBox(width: 20.0,),
+                  Text("Attendance monthly summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                ]
+                ),
 
-                  Divider(height: 10.0,),
-                  /*SimpleBarChart.withSampleData(),*/
-                  new Container(
+                Divider(height: 10.0,),
+                /*SimpleBarChart.withSampleData(),*/
+                new Container(
 
-                    padding: EdgeInsets.all(0.2),
-                    margin: EdgeInsets.all(0.2),
-                    height: 200.0,
+                  padding: EdgeInsets.all(0.2),
+                  margin: EdgeInsets.all(0.2),
+                  height: 200.0,
 
-                    child: new FutureBuilder<List<Map<String,String>>>(
-                        future: getAttsummaryChart(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data.length > 0) {
-                              return new DonutAutoLabelChart.withSampleData(snapshot.data);
-                            }
+                  child: new FutureBuilder<List<Map<String,String>>>(
+                      future: getAttsummaryChart(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data.length > 0) {
+                            return new DonutAutoLabelChart.withSampleData(snapshot.data);
                           }
-                          return new Center( child: CircularProgressIndicator());
                         }
-                    ),
-
-                    //child: new DonutAutoLabelChart .withSampleData(),
+                        return new Center( child: CircularProgressIndicator());
+                      }
                   ),
 
-          /*        Row(children: <Widget>[
+                  //child: new DonutAutoLabelChart .withSampleData(),
+                ),
+
+                /*        Row(children: <Widget>[
                     Icon(Icons.brightness_1,color: Colors.green,),
                     SizedBox(width: 20.0,),
                     Text('Total Present'),
@@ -485,81 +510,100 @@ class _HomePageState extends State<HomePage> {
                   ],),
 */
 
-                  SizedBox(width: 40.0,),
-                  SizedBox(height: 40.0,),
-                  Row(children: <Widget>[
-                    SizedBox(width: 20.0,),
+                SizedBox(width: 40.0,),
+                SizedBox(height: 40.0,),
+                Row(children: <Widget>[
+                  SizedBox(width: 20.0,),
 
-                    Text("Holidays this month",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
-                  ]
-                  ),
-                  Divider(height: 10.0,),
-                  SizedBox(height: 10.0,),
+                  Text("Holidays this month",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                ]
+                ),
+                Divider(height: 10.0,),
+                SizedBox(height: 10.0,),
 
-            new   Row(children: <Widget>[
+                new Column(
+                  children: <Widget>[
+                    new   Row(children: <Widget>[
 
-                    SizedBox(height: height),
-                    new Expanded(
-                 child:   Container(
+                      SizedBox(height: height),
+                      new Expanded(
+                        child:   Container(
 
-                        height: insideContainerHeight,
-                        width: 400.0,
-              //  padding: new EdgeInsets.all(2.0),
-                        //color: Colors.green[50],
+                            height: insideContainerHeight,
+                            width: 400.0,
+                            //  padding: new EdgeInsets.all(2.0),
+                            //color: Colors.green[50],
 
-                        child: FutureBuilder<List<Holi>>(
-                          future: getHolidays(emp),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              if(snapshot.data.length>0) {
+                            child: FutureBuilder<List<Holi>>(
+                              future: getHolidays(emp),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  if(snapshot.data.length>0) {
 
-                                return new ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: snapshot.data.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      var string=snapshot.data[index].name;
-                                      var name =  string.replaceAll("Holiday - ", "");
-                                 return new Row(
-                                 children: <Widget>
-                                    [
-                                    SizedBox(width: 20.0,),
-                                  Text(name+" ",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
-                                   Text("-"),
-                                      //  Text(snapshot.data[index].message),
-                                    Text(snapshot.data[index].date,style: TextStyle(color: Colors.grey[600]),),
+                                    return new ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: snapshot.data.length,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          var string=snapshot.data[index].name;
+                                          var name =  string.replaceAll("Holiday - ", "");                            return new Column(
+                                            children: <Widget>
+                                            [
+                                              new Row(
+                                                children: <Widget>
+                                                [
+                                                  SizedBox(width: 20.0,),
+                                                  Text(name+" ",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                                                  Text("-"),
+                                                  //  Text(snapshot.data[index].message),
+                                                  Text(snapshot.data[index].date,style: TextStyle(color: Colors.grey[600]),),
 
-                                     ],);
+                                                ],),
+                                              new Row(
+                                                children: <Widget>
+                                                [
+                                                  SizedBox(width: 20.0,),
+                                                  snapshot.data[index].message.toString() != '-'
+                                                      ? Container(
 
+                                                    //  SizedBox(width: 20.0,),
+                                                    child: Text("Indian Ritual"+snapshot.data[index].message,style: TextStyle(color: Colors.grey[600]),),
+                                                  ): Center(),
+                                                  Divider(color: Colors.black45,),
 
-                                    }
+                                                ],)
+                                            ],);
 
-                                );
+                                        }
 
-                              }else{
-                                return new Center(
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width*1,
-                                    color: Colors.teal.withOpacity(0.1),
-                                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                    child:Text("No Holiday Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
-                                  ),
-                                );
-                              }
-                            }
-                            else if (snapshot.hasError) {
-                              return new Text("Unable to connect server");
-                            }
+                                    );
 
-                            // By default, show a loading spinner
-                            return new Center( child: CircularProgressIndicator());
-                          },
-                        )
-                    ),),
+                                  }else{
+                                    return new Center(
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width*1,
+                                        color: Colors.teal.withOpacity(0.1),
+                                        padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                        child:Text("No Holiday Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                      ),
+                                    );
+                                  }
+                                }
+                                else if (snapshot.hasError) {
+                                  return new Text("Unable to connect server");
+                                }
+
+                                // By default, show a loading spinner
+                                return new Center( child: CircularProgressIndicator());
+                              },
+                            )
+                        ),),
+                    ],),
+
                   ],)
 
 
 
-            /*      Row(children: <Widget>[
+                /*      Row(children: <Widget>[
                     SizedBox(width: 20.0,),
                     Text("Holidays this month",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
                   ]
@@ -633,10 +677,10 @@ class _HomePageState extends State<HomePage> {
                     ],),
                   SizedBox(width: 20.0,),
 */
-                ],
-              )
+              ],
+            )
 
-          ),
+        ),
 
 
 
