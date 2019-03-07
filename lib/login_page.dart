@@ -866,6 +866,7 @@ class _LoginPageState extends State<LoginPage>
 
                           });
                           var url = path+"register_org";
+
                           http.post(url, body: {
                             "org_name": signupNameController.text,
                             "name": signupNameController.text,
@@ -878,7 +879,7 @@ class _LoginPageState extends State<LoginPage>
                           }) .then((response) {
                             if (response.statusCode == 200) {
 
-                              print("-----------------> After Registration ---------------->");
+                            print("-----------------> After Registration ---------------->");
                               print(response.body.toString());
                               res = json.decode(response.body);
                               if (res['sts'] == 'true') {

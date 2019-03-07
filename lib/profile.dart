@@ -213,7 +213,9 @@ class _CollapsingTabState extends State<CollapsingTab> {
     //  key: _scaffoldKey,
       expandedHeight: 200.0,
       pinned: true,
-      backgroundColor: Color.fromRGBO(0,102,153,1.0),
+     // backgroundColor: Color.fromRGBO(0,102,153,1.0),
+    backgroundColor: Colors.green[800],
+
       flexibleSpace: FlexibleSpaceBar(
 
         centerTitle: true,

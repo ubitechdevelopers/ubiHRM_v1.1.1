@@ -588,9 +588,10 @@ class ChoiceCard extends StatelessWidget {
                                                         ),
                                                         children: <TextSpan>[
                                                           new TextSpan(text: 'Reason: ' ,style: new TextStyle(fontWeight: FontWeight.bold)),
-                                                          new TextSpan(text: snapshot.data[index].Reason.toString() ),
+                                                          new TextSpan(text: snapshot.data[index].Reason.toString()),
 
-                                                          new TextSpan(text: "     "+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.deepOrange), ),
+                                                          snapshot.data[index].Psts.toString() != ''
+                                                              ? new TextSpan(text: "\n"+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.deepOrange), ): new TextSpan(text: ""+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.deepOrange), ),
 
                                                         ],
                                                       ),
@@ -754,7 +755,7 @@ class ChoiceCard extends StatelessWidget {
                                               children: <Widget>[
                                               new Expanded(
                                               child: Container(width: MediaQuery.of(context).size.width * 0.07,
-                                              child: Text("Leave Type: "+snapshot.data[index].name .toString(),                                             style: TextStyle( color: Colors.black54,                                                      fontSize: 16.0),),
+                                              child: Text("Leave Type: "+snapshot.data[index].name .toString(),                                             style: TextStyle( color: Colors.black,                                                      fontSize: 16.0),),
                                                )),  ] )),
                                           new Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceAround,

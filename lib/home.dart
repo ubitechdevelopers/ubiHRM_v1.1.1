@@ -485,8 +485,11 @@ class _HomePageState extends State<HomePage> {
                           if (snapshot.data.length > 0) {
                             return new DonutAutoLabelChart.withSampleData(snapshot.data);
                           }
+                          return new Center(child: CircularProgressIndicator());
+
                         }
-                        return new Center( child: CircularProgressIndicator());
+                        return new Center( child: Text("No data found"),);
+                       // return new Center( child: CircularProgressIndicator());
                       }
                   ),
 
@@ -555,10 +558,10 @@ class _HomePageState extends State<HomePage> {
                                                   Text(name+" ",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
                                                   Text("-"),
                                                   //  Text(snapshot.data[index].message),
-                                                  Text(snapshot.data[index].date,style: TextStyle(color: Colors.grey[600]),),
+                                                  Text(snapshot.data[index].date,style: TextStyle(color: Colors.grey[600]),textAlign: TextAlign.right),
 
                                                 ],),
-                                              new Row(
+                                            /*  new Row(
                                                 children: <Widget>
                                                 [
                                                   SizedBox(width: 20.0,),
@@ -570,7 +573,7 @@ class _HomePageState extends State<HomePage> {
                                                   ): Center(),
                                                   Divider(color: Colors.black45,),
 
-                                                ],)
+                                                ],)*/
                                             ],);
 
                                         }
