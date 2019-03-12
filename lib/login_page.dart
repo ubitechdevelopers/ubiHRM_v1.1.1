@@ -784,7 +784,10 @@ class _LoginPageState extends State<LoginPage>
                       tileMode: TileMode.clamp),*/
                 ),
                 child: _isButtonDisabled?new RaisedButton(
-                    color: Colors.orange,
+                    color: Color.fromRGBO(0, 166, 90,1.0),
+                    //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
                     textColor: Colors.white,
                     padding: EdgeInsets.all(20.0),
                     child: const Text('Please wait...',style: TextStyle(fontSize: 18.0),),
@@ -802,7 +805,7 @@ class _LoginPageState extends State<LoginPage>
                     onPressed: () {
                       if(_isButtonDisabled)
                         return null;
-                        showInSnackBar("SignUp button pressed");
+                      //  showInSnackBar("SignUp button pressed");
                         if(signupNameController.text=='') {
                           showDialog(context: context, child:
                           new AlertDialog(
@@ -890,7 +893,7 @@ class _LoginPageState extends State<LoginPage>
                                   title: new Text("ubiAttendance"),
                                   content: new Text("Hi " + res['f_name'] +
                                       " \n Your company has been registered successfully."),
-                                  actions: <Widget>[
+                                /* actions: <Widget>[
                                     new RaisedButton(
                                       color: Colors.green,
                                       textColor: Colors.white,
@@ -900,10 +903,10 @@ class _LoginPageState extends State<LoginPage>
                                       //  login(signupPhoneController.text, signupPasswordController.text, context);
                                       },
                                     ),
-                                  ],
+                                  ],*/
                                 ));
 
-                              } else if (res['sts'] == 'false1' ||
+                              } /*else if (res['sts'] == 'false1' ||
                                   res['sts'] == 'false3') {
                                 showDialog(context: context, child:
                                 new AlertDialog(
@@ -919,10 +922,11 @@ class _LoginPageState extends State<LoginPage>
                                   content: new Text(
                                       "Phone id is already registered"),
                                 ));
-                              } else {
+                              }*/
+                              else {
                                 showDialog(context: context, child:
                                 new AlertDialog(
-                                  title: new Text("ubiAttendance"),
+                                  title: new Text("ubihrm"),
                                   content: new Text(
                                       "Oops!! Company not registered \n Try later"),
                                 ));
@@ -1008,7 +1012,7 @@ class _LoginPageState extends State<LoginPage>
 
   void _onSignInButtonPress() {
     _pageController.animateToPage(0,
-        duration: Duration(milliseconds: 500), curve: Curves.decelerate);
+     duration: Duration(milliseconds: 500), curve: Curves.decelerate);
   }
 
   void _onSignUpButtonPress() {

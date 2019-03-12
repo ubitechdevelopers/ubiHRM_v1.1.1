@@ -14,6 +14,8 @@ import 'services/services.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'home.dart';
 import 'approval.dart';
+//import 'bottom_navigationbar.dart';
+import 'b_navigationbar.dart';
 
 class RequestLeave extends StatefulWidget {
   @override
@@ -197,7 +199,8 @@ class _RequestLeaveState extends State<RequestLeave> {
 
           ),
         ),
-        bottomNavigationBar:new Theme(
+        bottomNavigationBar:  new HomeNavigation(),
+      /*  bottomNavigationBar:new Theme(
             data: Theme.of(context).copyWith(
               // sets the background color of the `BottomNavigationBar`
               canvasColor: bottomNavigationColor(),
@@ -293,7 +296,7 @@ class _RequestLeaveState extends State<RequestLeave> {
                     title: Text('Settings',style: TextStyle(color: Colors.white)))
 
               ],
-            )),
+            )),*/
         body:  ModalProgressHUD(
     inAsyncCall: isServiceCalling,
     opacity: 0.15,
@@ -343,8 +346,11 @@ class _RequestLeaveState extends State<RequestLeave> {
     //Enter date
     Row(
     children: <Widget>[
-    Expanded(
-    child: DateTimePickerFormField(
+   new Expanded(
+    child: Container(
+     // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
+      height: 70.0,
+      child:DateTimePickerFormField(
 
     firstDate: new DateTime.now(),
     initialDate: new DateTime.now(),
@@ -375,11 +381,14 @@ class _RequestLeaveState extends State<RequestLeave> {
     },
     ),
     ),
+
+            ),
     SizedBox(width: 10.0),
     Expanded(
     child: new InputDecorator(
     decoration: InputDecoration(
    // labelText: 'Leave Type',
+
     prefixIcon: Padding(
     padding: EdgeInsets.all(0.0),
     child: Icon(
@@ -387,6 +396,9 @@ class _RequestLeaveState extends State<RequestLeave> {
     color: Colors.grey,
     ), // icon is 48px widget.
     ),
+      border: new UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.white,
+            width: 0.0, style: BorderStyle.none ),),
     ),
     //   isEmpty: _color == '',
     child:  new DropdownButton<String>(
@@ -441,8 +453,11 @@ class _RequestLeaveState extends State<RequestLeave> {
     SizedBox(height: 10.0,),
     Row(
     children: <Widget>[
-    Expanded(
-    child: DateTimePickerFormField(
+      new Expanded(
+      child: Container(
+          // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
+      height: 70.0,
+     child:DateTimePickerFormField(
     firstDate: new DateTime.now(),
     initialDate: new DateTime.now(),
     dateOnly: true,
@@ -478,6 +493,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     },
     ),
     ),
+            ),
     SizedBox(width: 10.0),
     Expanded(
     child:new InputDecorator(
@@ -570,6 +586,17 @@ class _RequestLeaveState extends State<RequestLeave> {
     ),
     ButtonBar(
     children: <Widget>[
+
+      RaisedButton(
+        child: isServiceCalling?Text('Processing',style: TextStyle(color: Colors.white),):Text('APPLY',style: TextStyle(color: Colors.white),),
+        color: Colors.orangeAccent,
+        onPressed: () {
+          if (_formKey.currentState.validate()) {
+
+            requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text);
+          }
+        },
+      ),
     FlatButton(
     shape: Border.all(color: Colors.black54),
     child: Text('CANCEL'),
@@ -577,16 +604,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     Navigator.of(context).pop();
     },
     ),
-    RaisedButton(
-    child: isServiceCalling?Text('Processing',style: TextStyle(color: Colors.white),):Text('SAVE',style: TextStyle(color: Colors.white),),
-    color: Colors.orangeAccent,
-    onPressed: () {
-    if (_formKey.currentState.validate()) {
 
-    requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text);
-    }
-    },
-    ),
     ],
     ),
     ],

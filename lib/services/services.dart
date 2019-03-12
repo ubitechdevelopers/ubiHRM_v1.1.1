@@ -25,15 +25,17 @@ getAllPermission(Employee emp) async{
   await dio.post(path + "getAllPermission", data: formData);
   print(response.toString());
   List responseJson = json.decode(response.data.toString());
-  //print("1.  "+responseJson.toString());
+ print("1.  "+responseJson.toString());
   List<Permission> permlist = createPermList(responseJson);
-  //print("3. "+permlist.toString());
+ print("3. "+permlist.toString());
   globalpermissionlist = permlist;
 }
 
 
 getProfileInfo(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
   try {
     FormData formData = new FormData.from({
@@ -50,7 +52,8 @@ getProfileInfo(Employee emp) async{
     globalpersnalinfomap = responseJson['Personal'];
     globalcompanyinfomap = responseJson['Company'];
     globalprofileinfomap = responseJson['ProfilePic'];
-
+    //prefs.setString("profilepic", responseJson['ProfilePic']);
+   // print("vvvvvvvvvvvvv"+responseJson['ProfilePic']);
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
@@ -59,6 +62,24 @@ getProfileInfo(Employee emp) async{
 
 
 }
+
+getCountAproval() async{
+  final prefs = await SharedPreferences.getInstance();
+  Dio dio = new Dio();
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+var respons =
+  await dio.post(path+"getapprovalCount?datafor=Pending"'&empid='+empid+'&orgid='+orgdir);
+ // print("&&&&&&&iiiii");
+ // print("-----------------ooo"+respons.data[0].toString());
+  List responseJson = json.decode(respons.data.toString());
+ // print("&&&&&&&11111"+responseJson.toString());
+  //  String Approvalcount =
+ // prefs.setInt("attmonth",respons);
+   return respons;
+  }
+
+
 
 getReportingTeam(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
@@ -74,7 +95,7 @@ getReportingTeam(Employee emp) async{
   await dio.post(path + "getReportingTeam", data: formData);
  // print("---------> response"+response.toString());
   List responseJson = json.decode(response.data.toString());
-  print(responseJson);
+ // print(responseJson);
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
@@ -112,8 +133,10 @@ List<Permission> createPermList(List data) {
 getModulePermission(String moduleid, String permission_type){
   List<Permission> list = new List();
   list = globalpermissionlist;
+  print("********");
+  print(globalpermissionlist);
   for (int i = 0; i < list.length; i++) {
-    //print("permisstion list "+list[i].permissionlist.toString());
+    print("permisstion list "+list[i].permissionlist.toString());
     if(list[i].moduleid==moduleid){
       for (int j = 0; j < list[i].permissionlist.length; j++) {
         //print(list[i].permissionlist[j].containsKey(permission_type));
@@ -208,10 +231,10 @@ requestLeave(Leave leave) async{
    // print("yyyyyyyyy"+leaveMap);
   //  print("yyyyyyyyy"+response1.toString());
       if (leaveMap.contains("false")) {
-        print("false--->" + response1.data.toString());
+      //  print("false--->" + response1.data.toString());
         return "false";
       } else {
-        print("true---" + response1.data.toString());
+       // print("true---" + response1.data.toString());
         return "true";
       }
     }
@@ -313,7 +336,7 @@ Future<List<Map<String, String>>> getChartDataYes() async {
       );
 
   final data = json.decode(response.data);
-  print(response);
+  //print(response);
   print(data['leavesummary']['data'][0]['name']);
 
 
@@ -357,7 +380,7 @@ Future<List<Map<String, String>>> getChartData() async {
   );
 
   final data = json.decode(response.data);
-  print(response);
+  //print(response);
   print(data['leavesummary']['data'][0]['name']);
 
 
@@ -481,7 +504,7 @@ List<Map> createList(List data,int label) {
  // print(data);
   for (int i = 0; i < data.length; i++) {
   //  if(data[i]["archive"].toString()=='1') {
-    print("kkkkkkk"+data[i]["name"].toString());
+   // print("kkkkkkk"+data[i]["name"].toString());
       Map tos={"Name":data[i]["name"].toString(),"Id":data[i]["id"].toString()};
       list.add(tos);
    // }
@@ -674,8 +697,17 @@ ApproveLeave(Leaveid,comment,sts) async{
     Response response = await dio.post(
         path+"Approvedleave",
         data: formData);
+    final leaveMap = response.data.toString();
+    if (leaveMap.contains("false"))
+    {
+      print("false approve leave function--->" + response.data.toString());
+      return "false";
+    } else {
+      print("true  approve leave function---" + response.data.toString());
+      return "true";
+    }
     //print(response.toString());
-    if (response.statusCode == 200) {
+   /* if (response.statusCode == 200) {
       Map leaveMap = json.decode(response.data);
       if(leaveMap["status"]==true){
         return "success";
@@ -685,7 +717,7 @@ ApproveLeave(Leaveid,comment,sts) async{
       }
     }else{
       return "No Connection";
-    }
+    }*/
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
@@ -728,15 +760,14 @@ ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
         path+"ApprovedleaveBYHr",
         data: formData);
     //print(response.toString());
-    if (response.statusCode == 200) {
-      Map leaveMap = json.decode(response.data);
-      if(leaveMap["status"]==true){
-        return "success";
-      }else{
-        return "failure";
-      }
-    }else{
-      return "No Connection";
+    final leaveMap = response.data.toString();
+    if (leaveMap.contains("false"))
+    {
+      print("false approve leave hrfunction--->" + response.data.toString());
+      return "false";
+    } else {
+      print("true  approve leave hr function---" + response.data.toString());
+      return "true";
     }
   }catch(e){
     //print(e.toString());
@@ -782,15 +813,28 @@ class NewServices {
         "no": profile.mobile,
         "con": profile.countryid
       });
-      //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
+
+
+      final prefs = await SharedPreferences.getInstance();
+
+
+        String empid = prefs.getString('employeeid')??"";
+        String organization =prefs.getString('organization')??"";
+        Employee emp = new Employee(employeeid: empid, organization: organization);
+
+
+       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
       Response response = await dio.post(
           path + "updateProfile",
           data: formData);
       //print(response.toString());
       if (response.statusCode == 200) {
         Map profileMap = json.decode(response.data);
+      // getProfileInfo(emp);
+        //print("**********))))))))");
         //print(profileMap["res"]);
         if (profileMap["res"] == 1) {
+
           return "success";
         } else {
           return "failure";

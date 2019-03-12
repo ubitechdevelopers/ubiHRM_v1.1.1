@@ -50,3 +50,12 @@ Map globalpersnalinfomap;
 Map globalcontactusinfomap;
 Map globalprofileinfomap;
 
+var perL;
+var perA;
+var perAtt;
+var perTimeO;
+var perReport;
+var perSet;
+var perAttMS;
+var perHoliday;
+

@@ -4,10 +4,16 @@ import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/global.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'services.dart';
 
 Future<bool> checklogin(UserLogin user) async{
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
+  // var empid;
+ // var organization;
+ // Employee emp;
+
+
   FormData formData = new FormData.from({
     "user_name": user.username,
     "user_password": user.password,
@@ -18,6 +24,7 @@ Future<bool> checklogin(UserLogin user) async{
   Response<String> response =
   await dio.post(path + "checklogin", data: formData);
   print(response.toString());
+
   if(response.statusCode==200){
     Map employeeMap = json.decode(response.data);
     if(employeeMap['response']==1){
@@ -28,8 +35,11 @@ Future<bool> checklogin(UserLogin user) async{
       prefs.setString('profile', employeeMap['profile']);
 
       return true;
-    }else{
+    }
+
+    else{
       return false;
     }
   }
 }
+

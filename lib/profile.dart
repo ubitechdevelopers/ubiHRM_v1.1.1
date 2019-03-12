@@ -5,6 +5,7 @@ import 'model/model.dart';
 import 'services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rounded_modal/rounded_modal.dart';
+import 'b_navigationbar.dart';
 
 
 class CollapsingTab extends StatefulWidget {
@@ -31,7 +32,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
   bool _isProfileUploading= false;
   var toreportprofileimage;
   bool _checkLoadedr = true;
-
+var profilepic;
 
   Widget _buildActions() {
     Widget profile = new GestureDetector(
@@ -69,6 +70,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
   }
 
   Widget appBarHeading() {
+
     Widget profile = new GestureDetector(
       child: new Column(
         children: <Widget>[
@@ -135,6 +137,9 @@ class _CollapsingTabState extends State<CollapsingTab> {
       }
     });
 
+
+   // profilepic =prefs.getString('profilepic')??"";
+   // profileimage = new NetworkImage(profilepic);
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
       if (mounted) {
@@ -210,6 +215,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
   Widget build(BuildContext context) {
 
     var flexibleSpaceWidget = new SliverAppBar(
+      automaticallyImplyLeading: false,
     //  key: _scaffoldKey,
       expandedHeight: 200.0,
       pinned: true,
@@ -247,7 +253,21 @@ class _CollapsingTabState extends State<CollapsingTab> {
                 onTap: (){
                   showBottomNavigation();
                 },
-                child:Container(
+                child:_isProfileUploading?new Container(
+                    margin: EdgeInsets.only(
+                        top: 40.0),
+                    height: 40.0,
+                    width: 40.0,
+                    child: new CircularProgressIndicator(),
+
+                    decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image:AssetImage('assets/spinner.gif'),
+                        )
+                    )
+                    ):Container(
                 margin: EdgeInsets.only(
                     top: 30.0),
                 height: 100.0,
@@ -659,7 +679,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                   }
                                 });
                                 return new Row(children: <Widget>[
-                                  Container(child:Container(
+                                 new Container(child:Container(
                                       width: 50.0,
                                       height: 50.0,
                                       decoration: new BoxDecoration(
@@ -705,10 +725,11 @@ class _CollapsingTabState extends State<CollapsingTab> {
 
 
             ],
+
           ),
         ),
       ),
-    );
+      bottomNavigationBar:new HomeNavigation(),);
   }
 
   showProfile() {
@@ -717,88 +738,10 @@ class _CollapsingTabState extends State<CollapsingTab> {
 
 
 
-  updatePhoto(int uploadtype) async{
-    setState(() {
-      _isProfileUploading = true;
-    });
-    NewServices ns = NewServices();
-    bool isupdate = await ns.updateProfilePhoto(uploadtype,empid,organization);
-    // bool isupdate = true;
-    if(isupdate){
-      setState(() {
-        _isProfileUploading = false;
-      });
-      if(uploadtype==3){
-        setState(() {
-          _checkLoaded = true;
-        });
-      }
-      showDialog(context: context, child:
-      new AlertDialog(
-        content: new Text("Profile image has been changed."),
-      )
-      );
-      Navigator.push(
-        context,
-       MaterialPageRoute(builder: (context) => CollapsingTab()),
-      );
-    }else{
-      setState(() {
-        _isProfileUploading = false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-        //title: new Text("Congrats!"),
-        content: new Text("Couldn't load this photo, Please try again."),
-      )
-      );
-    }
-  }
-
-  updateProfile(String mobile, String countryid) async{
-    var profile = Profile(empid, organization, mobile, countryid);
-    NewServices ns = NewServices();
-    var islogin = await ns.updateProfile(profile);
-    //print(islogin);
-    if(islogin=="success"){
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      /* Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );*/
-      showDialog(context: context, child:
-      new AlertDialog(
-        title: new Text("Congrats!"),
-        content: new Text("Your Profile is updated."),
-      )
-      );
-    }else if(islogin=="failure"){
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-        title: new Text("Sorry!"),
-        content: new Text("Phone no. already exists"),
-      )
-      );
-    }else{
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-        title: new Text("Sorry!"),
-        content: new Text("Poor network connection."),
-      )
-      );
-    }
-  }
 
 
-  showBottomNavigation() async{
+
+ void showBottomNavigation() {
    controller = _scaffoldKey.currentState
        .showBottomSheet<Null>((BuildContext context) {
   //  showRoundedModalBottomSheet(
@@ -909,7 +852,86 @@ class _CollapsingTabState extends State<CollapsingTab> {
     //  }
    // );
   }
+  updatePhoto(int uploadtype) async{
+    setState(() {
+      _isProfileUploading = true;
+    });
+    NewServices ns = NewServices();
+    bool isupdate = await ns.updateProfilePhoto(uploadtype,empid,organization);
+    // bool isupdate = true;
+    if(isupdate){
+      setState(() {
+        _isProfileUploading = false;
+      });
+      if(uploadtype==3){
+        setState(() {
+          _checkLoadedr = true;
+        });
+      }
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text("Profile image has been changed."),
+      )
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CollapsingTab()),
+      );
+    }else{
+      setState(() {
+        _isProfileUploading = false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+        //title: new Text("Congrats!"),
+        content: new Text("Couldn't load this photo, Please try again."),
+      )
+      );
+    }
+  }
 
+  updateProfile(String mobile, String countryid) async{
+    var profile = Profile(empid, organization, mobile, countryid);
+    NewServices ns = NewServices();
+    var islogin = await ns.updateProfile(profile);
+    //print(islogin);
+    if(islogin=="success"){
+      getProfileInfo(emp);
+      setState(() {
+        _isButtonDisabled=false;
+      });
+      /* Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );*/
+      showDialog(context: context, child:
+      new AlertDialog(
+        title: new Text("Congrats!"),
+        content: new Text("Your Profile is updated."),
+      )
+      );
+    }else if(islogin=="failure"){
+      setState(() {
+        _isButtonDisabled=false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+        title: new Text("Sorry!"),
+        content: new Text("Phone no. already exists"),
+      )
+      );
+    }else{
+      setState(() {
+        _isButtonDisabled=false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+        title: new Text("Sorry!"),
+        content: new Text("Poor network connection."),
+      )
+      );
+    }
+  }
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

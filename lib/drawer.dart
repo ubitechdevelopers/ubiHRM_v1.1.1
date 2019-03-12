@@ -176,7 +176,10 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
             },
           ),
 

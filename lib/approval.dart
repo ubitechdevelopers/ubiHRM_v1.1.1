@@ -8,8 +8,9 @@ import 'myleave.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'model/model.dart';
 import 'package:rounded_modal/rounded_modal.dart';
-
-
+import 'profile.dart';
+//import 'bottom_navigationbar.dart';
+import 'b_navigationbar.dart';
 
 
 class TabbedApp extends StatefulWidget {
@@ -25,7 +26,8 @@ class _TabState extends State<TabbedApp> {
   bool _checkLoadedprofile = true;
   String empid;
   String organization;  String hrsts;
-
+  var PerLeave;
+  var PerApprovalLeave;
   Employee emp;
   void initState() {
     super.initState();
@@ -47,6 +49,7 @@ class _TabState extends State<TabbedApp> {
     organization =prefs.getString('organization')??"";
 
     emp = new Employee(employeeid: empid, organization: organization);
+    getAllPermission(emp);
   }
   @override
   Widget build(BuildContext context) {
@@ -79,7 +82,15 @@ class _TabState extends State<TabbedApp> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  new Container(
+                  GestureDetector(
+                    // When the child is tapped, show a snackbar
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CollapsingTab()),
+                      );
+                    },
+                    child:Container(
                       width: 40.0,
                       height: 40.0,
                       decoration: new BoxDecoration(
@@ -89,7 +100,7 @@ class _TabState extends State<TabbedApp> {
                             //image: AssetImage('assets/avatar.png'),
                             image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
                           )
-                      )),
+                      )),),
                   Container(
                       padding: const EdgeInsets.all(8.0), child: Text('Approvals')
                   )
@@ -99,19 +110,20 @@ class _TabState extends State<TabbedApp> {
 
 
 
-              actions:<Widget>[
-                new DropdownButton<String>(
+               actions:  <Widget>[
+            perA=='1'?    new DropdownButton<String>(
                   hint: new Text("My Approvals" , style: TextStyle(
                     color: Colors.white,
                     fontSize: 15.0,
                   )),
-                  items: <String>['My Approvals', 'My Request'].map((String value) {
+                  items: <String>['My Approvals', 'My Leave'].map((String value) {
                     return new DropdownMenuItem<String>(
                       value: value,
                       child: new Text(value),
 
                     );
                   }).toList(),
+
                   onChanged: (value) {
                     value=value;
                     switch(value) {
@@ -127,11 +139,14 @@ class _TabState extends State<TabbedApp> {
                           MaterialPageRoute(builder: (context) => TabbedApp()),
                         );
                         break;
-                    }},
-                )
+                    }
+                    },
+                ):Center(),
 
 
               ],
+
+
               bottom: TabBar(
                 labelStyle: label,
                 unselectedLabelColor: Colors.white70,
@@ -157,8 +172,8 @@ class _TabState extends State<TabbedApp> {
               );
             }).toList(),
           ),
-
-          bottomNavigationBar:new Theme(
+          bottomNavigationBar:new HomeNavigation(),
+         /* bottomNavigationBar:new Theme(
               data: Theme.of(context).copyWith(
                 // sets the background color of the `BottomNavigationBar`
                 canvasColor: bottomNavigationColor(),
@@ -166,6 +181,7 @@ class _TabState extends State<TabbedApp> {
               child:  BottomNavigationBar(
                 currentIndex: _currentIndex,
                 onTap: (newIndex) {
+
                   if (newIndex == 1) {
                     Navigator.push(
                       context,
@@ -254,7 +270,7 @@ class _TabState extends State<TabbedApp> {
                       title: Text('Settings',style: TextStyle(color: Colors.white)))
 
                 ],
-              )),
+              )),*/
         ),
       ),
     );
@@ -359,80 +375,66 @@ class ChoiceCard extends StatelessWidget {
                               color: Colors.white,
                             ),//////////////////////////////////////////////////////////////////////---------------------------------
                             child: new FutureBuilder<List<LeaveA>>(
-                              future: getApprovals(choice.title),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  if(snapshot.data.length>0) {
+                            future: getApprovals(choice.title),
+                            builder: (context, snapshot) {
+                           if (snapshot.hasData) {
+                            if(snapshot.data.length>0) {
 
-                                    return new ListView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: snapshot.data.length,
+                            return new ListView.builder(
+                             scrollDirection: Axis.vertical,
+                             itemCount: snapshot.data.length,
 
-                                        itemBuilder: (BuildContext context, int index) {
+                        itemBuilder: (BuildContext context, int index) {
+                      return new Column(
+                       crossAxisAlignment: CrossAxisAlignment.start,
 
-                                          return new Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                       children: <Widget>[
+                        new Row(
+                          mainAxisAlignment: MainAxisAlignment .spaceAround,
+                          children: <Widget>[
+                           SizedBox(height: 40.0,),
+                             new Expanded(
 
-                                              children: <Widget>[
-                                                new Row(
-
-                                                  mainAxisAlignment: MainAxisAlignment
-                                                      .spaceAround,
-                                                  children: <Widget>[
-                                                    SizedBox(height: 40.0,),
-
-                                                    new Expanded(
-
-                                                      child: Container(
-
-                                                        width: MediaQuery
-                                                            .of(context)
-                                                            .size
-                                                            .width * 0.90,
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment
-                                                              .start,
-                                                          children: <Widget>[
-                                                            GestureDetector(
-                                                              // When the child is tapped, show a snackbar
-                                                              onTap: () {
+                                 child: Container(
+                                  width: MediaQuery.of(context) .size.width * 0.90,
+                                   child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment  .start,
+                                     children: <Widget>[
+                                       GestureDetector(
+                                    // When the child is tapped, show a snackbar
+                                      onTap: () {
                                                                 //  final snackBar = SnackBar(content: Text("Tap"));
 
                                                                 //Scaffold.of(context).showSnackBar(snackBar);
-                                                                showDialog(
-                                                                    context: context,
-                                                                    builder: (_) => new AlertDialog(
-                                                                      //title: new Text("Dialog Title"),
-                                                                      content: new Text(snapshot.data[index].Reason.toString()),
-                                                                    )
-                                                                );
+                             /*  showDialog(
+                               context: context,
+                               builder: (_) => new AlertDialog(
+                               //title: new Text("Dialog Title"),
+                               content: new Text(snapshot.data[index].Reason.toString()),
+                               )
+                              );*/
 
-                                                              },
-                                                              child:   Text(snapshot.data[index].name
-                                                                  .toString(), style: TextStyle(
-                                                                  color: Colors.black87,
-                                                                  fontWeight: FontWeight.bold,
-                                                                  fontSize: 16.0),),
-                                                            ), ],
-                                                        ),
-                                                      ),  ),
+                             },
+                    child:   Text(snapshot.data[index].name.toString(), style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),),
+                                       ), ],
+                                          ),
+                                         ),  ),
 
-                                                    new Expanded(
-                                                      child:Container(
-                                                          width: MediaQuery
-                                                              .of(context)
-                                                              .size
-                                                              .width * 0.50,
-                                                          child: Column(
-                                                            crossAxisAlignment: CrossAxisAlignment
-                                                                .center,
-                                                            children: <Widget>[
-                                                              Text("          "+snapshot.data[index].applydate
-                                                                  .toString()),
-                                                            ],
-                                                          )
+                                      new Expanded(
+                                    child:Container(
+                                      width: MediaQuery .of(context)  .size.width * 0.50,
+                                        child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment .center,
+                                        children: <Widget>[
+                                         Text("          "+snapshot.data[index].applydate
+                                          .toString()),
+                                                ],
+                                              )
 
-                                                      ),),
+                                              ),),
 
                                                     /*  new Expanded(
                                   child:Container(
@@ -980,7 +982,7 @@ class ChoiceCard extends StatelessWidget {
                       minWidth: 120.0,
                       height: 40.0,
                       child: RaisedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if(EntitleController.text==""){
                             EntitleController.text="0";
                           } if(LOPController.text==""){
@@ -993,15 +995,27 @@ class ChoiceCard extends StatelessWidget {
                           var LBD=EntitleController.text+","+LOPController.text+","+CFController.text+","+ADController.text;
                           print(LBD);
                           //getApprovals(choice.title);
-                          ApproveLeaveByHr(leaveid,CommentController.text,2,LBD);
+                        var sts= await ApproveLeaveByHr(leaveid,CommentController.text,2,LBD);
 
-                          showDialog(
-                              context: context,
-                              builder: (_) => new AlertDialog(
-                                //title: new Text("Dialog Title"),
-                                content: new Text("Approved succesfully"),
-                              )
-                          );
+          if(sts=="true") {
+            showDialog(
+                context: context,
+                builder: (_) =>
+                new AlertDialog(
+                  //title: new Text("Dialog Title"),
+                  content: new Text("Approved succesfully."),
+                )
+            );
+          }else{
+            showDialog(
+                context: context,
+                builder: (_) =>
+                new AlertDialog(
+                  //title: new Text("Dialog Title"),
+                  content: new Text("Some error."),
+                )
+            );
+          }
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => TabbedApp()),
@@ -1026,17 +1040,34 @@ class ChoiceCard extends StatelessWidget {
                       minWidth: 120.0,
                       height: 40.0,
                       child: RaisedButton(
-                        onPressed: () {
-                          //getApprovals(choice.title);
-                          ApproveLeave(leaveid,CommentController.text,1);
-
-                          showDialog(
-                              context: context,
-                              builder: (_) => new AlertDialog(
-                                //title: new Text("Dialog Title"),
-                                content: new Text("Rejected succesfully"),
-                              )
-                          );
+                        onPressed: () async
+          {
+          //getApprovals(choice.title);
+      var sts= await ApproveLeave(leaveid, CommentController.text, 1);
+      if(sts=="true"){
+          showDialog(
+          context
+              : context,
+          builder: (_) => new
+          AlertDialog(
+          //title: new Text("Dialog Title"),
+          content: new Text("Rejected succesfully."
+          ),
+          )
+          );
+          }
+        else{
+        showDialog(
+            context
+                : context,
+            builder: (_) => new
+            AlertDialog(
+              //title: new Text("Dialog Title"),
+              content: new Text("Some error."
+              ),
+            )
+        );
+          }
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => TabbedApp()),
@@ -1154,17 +1185,33 @@ class ChoiceCard extends StatelessWidget {
                       minWidth: 300.0,
                       height: 40.0,
                       child: RaisedButton(
-                        onPressed: () {
+                        onPressed: () async  {
                           //getApprovals(choice.title);
-                          ApproveLeave(leaveid,CommentController.text,2);
-                          showDialog(
-                              context: context,
-                              builder: (_) => new AlertDialog(
-                                //title: new Text("Dialog Title"),
-                                content: new Text("Approved succesfully"),
-                              )
-                          );
-                          Navigator.push(
+                          final sts= await ApproveLeave(leaveid,CommentController.text,2);
+                        //  print("kk");
+                         // print("kk"+sts);
+                          if(sts=="true") {
+                            showDialog(
+                                context: context,
+                                builder: (_) =>
+                                new AlertDialog(
+                                  //title: new Text("Dialog Title"),
+                                  content: new Text("Approved succesfully"),
+                                )
+                            );
+                          }
+                          else{
+                            showDialog(
+                                context: context,
+                                builder: (_) =>
+                                new AlertDialog(
+                                  //title: new Text("Dialog Title"),
+                                  content: new Text("Some error."),
+                                )
+                            );
+                          }
+
+                    Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => TabbedApp()),
                           ); },
@@ -1186,16 +1233,33 @@ class ChoiceCard extends StatelessWidget {
                       minWidth: 300.0,
                       height: 40.0,
                       child: RaisedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           //getApprovals(choice.title);
-                          ApproveLeave(leaveid,CommentController.text,1);
-                          showDialog(
-                              context: context,
-                              builder: (_) => new AlertDialog(
-                                //title: new Text("Dialog Title"),
-                                content: new Text("Rejected succesfully"),
-                              )
-                          );
+                          var sts = await ApproveLeave(leaveid,CommentController.text,1);
+print("ff"+sts);
+          if(sts=="true") {
+            showDialog(
+                context: context,
+                builder: (_) =>
+                new AlertDialog(
+                  //title: new Text("Dialog Title"),
+                  content: new Text("Rejected succesfully"),
+                )
+            );
+          }
+          else{
+            showDialog(
+                context: context,
+                builder: (_) =>
+                new AlertDialog(
+                  //title: new Text("Dialog Title"),
+                  content: new Text("Some error"),
+                )
+            );
+          }
+
+
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => TabbedApp()),

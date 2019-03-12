@@ -4,7 +4,8 @@ import 'piegraph.dart';
 import 'graphs.dart';
 import 'global.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
-
+import 'b_navigationbar.dart';
+//import 'bottom_navigationbar.dart';
 import 'services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
@@ -31,6 +32,9 @@ class _HomePageState extends State<HomePage> {
   String empid;
   String organization;
   Employee emp;
+
+  var profileimage;
+  bool _checkLoadedprofile = true;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
   @override
   void initState() {
@@ -38,6 +42,16 @@ class _HomePageState extends State<HomePage> {
 
     initPlatformState();
 
+
+   /* profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+    profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+      if (mounted) {
+        setState(() {
+          _checkLoadedprofile = false;
+        });
+
+      }
+    });*/
   }
 
   initPlatformState() async{
@@ -45,9 +59,27 @@ class _HomePageState extends State<HomePage> {
 
     empid = prefs.getString('employeeid')??"";
     organization =prefs.getString('organization')??"";
-
-
     emp = new Employee(employeeid: empid, organization: organization);
+    getAllPermission(emp);
+    //  PLeave= "1";
+    empid = prefs.getString('employeeid')??"";
+    organization =prefs.getString('organization')??"";
+    emp = new Employee(employeeid: empid, organization: organization);
+    getAllPermission(emp);
+    await getProfileInfo(emp);
+    perL= getModulePermission("18","view");
+
+    perA=  getModulePermission("124","view");
+    perAtt=  getModulePermission("124","view");
+    perTimeO=  getModulePermission("124","view");
+    perReport=  getModulePermission("124","view");
+    perSet=  getModulePermission("124","view");
+    perAttMS=  getModulePermission("124","view");
+    perHoliday=  getModulePermission("124","view");
+    //prefs.setString("PerLeave", PerLeave1);
+    //prefs.setString("PerApprovalLeave", PerApprovalLeave1);
+
+
 
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
@@ -80,10 +112,21 @@ class _HomePageState extends State<HomePage> {
       String empid = prefs.getString('employeeid')??"";
       String organization =prefs.getString('organization')??"";
       Employee emp = new Employee(employeeid: empid, organization: organization);
-      //getModulePermission("178","view");
+
       await getProfileInfo(emp);
       await getReportingTeam(emp);
 
+     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+     // profileimage = new NetworkImage(pic);
+
+      profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+        if (mounted) {
+          setState(() {
+            _checkLoadedprofile = false;
+          });
+
+        }
+      });
       return mainScafoldWidget();
     }else{
       return new LoginPage();
@@ -99,13 +142,19 @@ class _HomePageState extends State<HomePage> {
 
 
   Widget loadingWidget(){
-    return Center(child:SizedBox(
+    return Container(
 
-      //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
-      child: new CircularProgressIndicator(),
-    ));
+        decoration: new BoxDecoration(color: Colors.green[100]),
+        child: Center(
+            child:SizedBox(
+
+              //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
+              child: new CircularProgressIndicator(),
+            )
+        ));
+
+
   }
-
 
   Widget plateformstatee(){
 
@@ -129,16 +178,26 @@ class _HomePageState extends State<HomePage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              new Container(
+
+    GestureDetector(
+    // When the child is tapped, show a snackbar
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CollapsingTab()),
+      );
+        },
+              child:Container(
                   width: 40.0,
                   height: 40.0,
                   decoration: new BoxDecoration(
                       shape: BoxShape.circle,
                       image: new DecorationImage(
                         fit: BoxFit.fill,
-                        image: AssetImage('assets/avatar.png'),
+                     // image: AssetImage('assets/avatar.png'),
+                      image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
                       )
-                  )),
+                  )),),
               Container(
                   padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
               )
@@ -146,103 +205,9 @@ class _HomePageState extends State<HomePage> {
 
           ),
         ),
-        bottomNavigationBar:new Theme(
-            data: Theme.of(context).copyWith(
-              // sets the background color of the `BottomNavigationBar`
-              canvasColor: bottomNavigationColor(),
-            ), // sets the inactive color of the `BottomNavigationBar`
-            child:  BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (newIndex) {
-                if (newIndex == 1) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
-                  return;
-                }
-                if (newIndex == 2) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TabbedApp()),
-                  );
-                  return;
-                }
-                if (newIndex == 3) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TabbedApp()),
-                  );
-                  return;
-                }else if (newIndex == 0) { Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TabbedApp()),
-                );
+        bottomNavigationBar:new HomeNavigation(),
 
-                  /* (admin_sts == '1')
-                  ? Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Reports()),
-              )
-                  : Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );*/
-
-                  return;
-                }
-
-                setState(() {
-                  _currentIndex = newIndex;
-                });
-              }, // this will be set when a new tab is tapped
-              items: [
-                BottomNavigationBarItem(
-
-                 // icon:  new Image.asset("assets/repo.ico", height: 25.0, width: 30.0),
-
-                  //   new Tab(icon: new Image.asset("assets/img/logo.png"), text: "Browse"),
-                  /* icon: new Icon(
-                    Icons.library_books,
-                    color: Colors.white,
-                  ),*/
-
-                 icon: Icon(
-                      Icons.description,
-                      color: Colors.white,
-                      size: 25.0),
-  title: new Text('',style: TextStyle(color: Colors.white)),
-                ),
-                BottomNavigationBarItem(
-                  /*   icon: new Icon(
-                    Icons.home,
-                    color: Colors.orangeAccent,
-                  ),*/
-                  icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
-
-                  title: new Text('Home', style: TextStyle(color: Colors.orangeAccent)),
-
-                ),
-                BottomNavigationBarItem(
-                /*  icon:  new Image.asset("assets/approval.png",
-                      height: 40.0,
-                      width: 35.0),*/
-                  icon: Icon(
-                    Icons.check_circle_outline,
-                    color: Colors.white,
-                      size: 25.0),
-                  title: new Text('Approvals',style: TextStyle(color: Colors.white)),
-                ),
-                BottomNavigationBarItem(
-                    icon: Icon(
-                    Icons.settings,
-                    color: Colors.white,
-                    size: 25.0 ),
-                    title: Text('Settings',style: TextStyle(color: Colors.white)))
-
-              ],
-            )),
-        body: homewidget()
+       body: homewidget()
     );
   }
 
@@ -266,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    GestureDetector(
+                    perAtt=='1'?  GestureDetector(
                         onTap: () {
                         },
                         child: Column(
@@ -279,8 +244,8 @@ class _HomePageState extends State<HomePage> {
                                     shape: BoxShape.circle,
                                     image: new DecorationImage(
 
-                                      fit: BoxFit.fill,
-                                      image: AssetImage('assets/attendance_icon.png'),
+                                    fit: BoxFit.fill,
+                                    image: AssetImage('assets/attendance_icon.png'),
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
@@ -288,15 +253,16 @@ class _HomePageState extends State<HomePage> {
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
-                        )),
+                        )):Center(),
 
-                    GestureDetector(
+                    perL=='1'?  GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => MyLeave()),
                           );
                         },
+
                         child: Column(
                           children: [
                             new Container(
@@ -314,8 +280,10 @@ class _HomePageState extends State<HomePage> {
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
-                        )),
-                    GestureDetector(
+                        )):Center(),
+
+
+                    perTimeO=='1'?  GestureDetector(
                         onTap: () {
                         },
                         child: Column(
@@ -335,7 +303,7 @@ class _HomePageState extends State<HomePage> {
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
-                        )),
+                        )):Center(),
 
                   ],
 
@@ -343,13 +311,14 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 20.0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
+                 children: [
+                   perSet=='1'? GestureDetector(
                         onTap: () {
                         },
                         child: Column(
                           children: [
-                            new Container(
+                            new
+                              Container(
                                 width: 60.0,
                                 height: 60.0,
                                 decoration: new BoxDecoration(
@@ -364,7 +333,8 @@ class _HomePageState extends State<HomePage> {
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
-                        )),
+                        )):Center(),
+
                     GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -390,12 +360,15 @@ class _HomePageState extends State<HomePage> {
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
                         )),
-                    GestureDetector(
+                   perReport=='1'?   GestureDetector(
                         onTap: () {
                         },
                         child: Column(
                           children: [
-                            new Container(
+                            new
+
+
+                            Container(
                                 width: 60.0,
                                 height: 60.0,
                                 decoration: new BoxDecoration(
@@ -410,24 +383,24 @@ class _HomePageState extends State<HomePage> {
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
-                        )),
+                        )):Center(),
 
                   ],
 
                 ),
                 SizedBox(height: 40.0,),
-                Row(children: <Widget>[
+
+                perL =='1' ? Row(children: <Widget>[
                   SizedBox(width: 20.0,),
                   Text("Leave Summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
                 ]
-                ),
+                ):Center(),
 
-                Divider(height: 10.0,),
+                perL =='1' ? Divider(height: 10.0,):Center(),
                 /*SimpleBarChart.withSampleData(),*/
 
+               perL =='1' ?  new Container(
 
-
-                new Container(
                   padding: EdgeInsets.all(0.2),
                   margin: EdgeInsets.all(0.2),
                   height: 200.0,
@@ -443,6 +416,9 @@ class _HomePageState extends State<HomePage> {
                       }
                   ),
                   // child: new StackedHorizontalBarChart .withSampleData()
+                ):Center(
+                  child: Text(""),
+
                 ),
                 /*    Row(children: <Widget>[
                     Icon(Icons.brightness_1,color: Colors.blue,),
@@ -464,37 +440,40 @@ class _HomePageState extends State<HomePage> {
                 // Attendance monthly summary bar graph
 
                 SizedBox(height: 40.0,),
-                Row(children: <Widget>[
+                perAttMS=='1'?  Row(children: <Widget>[
                   SizedBox(width: 20.0,),
                   Text("Attendance monthly summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
                 ]
-                ),
+                ):Center(),
 
-                Divider(height: 10.0,),
+                perAttMS=='1'?  Divider(height: 10.0,):Center(),
                 /*SimpleBarChart.withSampleData(),*/
-                new Container(
+                perAttMS=='1'?  new Container(
 
                   padding: EdgeInsets.all(0.2),
                   margin: EdgeInsets.all(0.2),
                   height: 200.0,
 
                   child: new FutureBuilder<List<Map<String,String>>>(
-                      future: getAttsummaryChart(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          if (snapshot.data.length > 0) {
-                            return new DonutAutoLabelChart.withSampleData(snapshot.data);
-                          }
-                          return new Center(child: CircularProgressIndicator());
 
-                        }
-                        return new Center( child: Text("No data found"),);
-                       // return new Center( child: CircularProgressIndicator());
-                      }
+                future: getAttsummaryChart(),
+                builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                if (snapshot.data.length > 0) {
+                return new DonutAutoLabelChart.withSampleData(snapshot.data);
+                }
+                return new Center(
+                    child: CircularProgressIndicator());
+
+                }
+                return new Center( child: Text("No data found"), );
+                // return new Center( child: CircularProgressIndicator());
+                }
+
                   ),
 
                   //child: new DonutAutoLabelChart .withSampleData(),
-                ),
+                ):Center(),
 
                 /*        Row(children: <Widget>[
                     Icon(Icons.brightness_1,color: Colors.green,),
