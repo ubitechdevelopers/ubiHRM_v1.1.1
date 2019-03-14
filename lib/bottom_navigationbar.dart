@@ -12,7 +12,7 @@ import 'model/model.dart';
 import 'myleave.dart';
 import 'dart:async';
 import 'home.dart';
-import 'approval.dart';
+import 'package:ubihrm/approval.dart';
 
 import 'package:connectivity/connectivity.dart';
 
@@ -84,7 +84,7 @@ class _BootomNavigationState extends State<HomeNavigation> {
             if (newIndex == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage()),
+                MaterialPageRoute(builder: (context) => HomePageMain()),
               );
               return;
             }

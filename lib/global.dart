@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'model/model.dart';
+import 'model/timeinout.dart';
 
 appStartColor() {
   return Color.fromRGBO(0, 166, 90,1.0);

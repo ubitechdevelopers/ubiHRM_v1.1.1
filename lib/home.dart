@@ -13,17 +13,18 @@ import 'model/model.dart';
 import 'myleave.dart';
 import 'dart:async';
 import 'profile.dart';
-import 'approval.dart';
+import 'package:ubihrm/attandance/home.dart';
+import 'package:ubihrm/approval.dart';
 
 import 'package:connectivity/connectivity.dart';
 
 
-class HomePage extends StatefulWidget {
+class HomePageMain extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageStatemain createState() => _HomePageStatemain();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageStatemain extends State<HomePageMain> {
   double height = 0.0;
   double insideContainerHeight=300.0;
   int _currentIndex = 0;
@@ -69,7 +70,7 @@ class _HomePageState extends State<HomePage> {
     await getProfileInfo(emp);
     perL= getModulePermission("18","view");
 
-    perA=  getModulePermission("124","view");
+    perA=  '1';
     perAtt=  getModulePermission("124","view");
     perTimeO=  getModulePermission("124","view");
     perReport=  getModulePermission("124","view");
@@ -175,6 +176,7 @@ class _HomePageState extends State<HomePage> {
         appBar: GradientAppBar(
           backgroundColorStart: appStartColor(),
           backgroundColorEnd: appEndColor(),
+          automaticallyImplyLeading: false,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -233,6 +235,10 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     perAtt=='1'?  GestureDetector(
                         onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
                         },
                         child: Column(
                           children: [
@@ -255,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         )):Center(),
 
-                    perL=='1'?  GestureDetector(
+                    perA=='1'?  GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,

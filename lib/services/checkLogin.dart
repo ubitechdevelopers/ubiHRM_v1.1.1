@@ -23,7 +23,7 @@ Future<bool> checklogin(UserLogin user) async{
 
   Response<String> response =
   await dio.post(path + "checklogin", data: formData);
-  print(response.toString());
+  print("login response_______"+response.toString());
 
   if(response.statusCode==200){
     Map employeeMap = json.decode(response.data);
@@ -31,6 +31,8 @@ Future<bool> checklogin(UserLogin user) async{
       prefs.setInt("response", 1);
       prefs.setString("employeeid", employeeMap['employeeid']);
       prefs.setString("organization", employeeMap['organization']);
+      prefs.setString("empid", employeeMap['employeeid']);
+      prefs.setString("orgdir", employeeMap['organization']);
       prefs.setString('fname',employeeMap['fname']);
       prefs.setString('profile', employeeMap['profile']);
 

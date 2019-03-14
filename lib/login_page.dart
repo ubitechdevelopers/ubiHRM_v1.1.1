@@ -6,6 +6,7 @@ import 'bubble_indication_painter.dart';
 import 'home.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/services/checkLogin.dart' as login;
+import 'package:ubihrm/services/checkloginn.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -988,7 +989,7 @@ class _LoginPageState extends State<LoginPage>
       if(res){
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()), (Route<dynamic> route) => false,
+          MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
         );
       }else{
         setState(() {
@@ -1009,6 +1010,7 @@ class _LoginPageState extends State<LoginPage>
 
     });;
   }
+
 
   void _onSignInButtonPress() {
     _pageController.animateToPage(0,

@@ -694,8 +694,8 @@ var profilepic;
                                       ))
                                   ),SizedBox(width: 20.0,),
                                   Text(snapshot.data[index].FirstName+" "+snapshot.data[index].LastName),
-                                  Text("-"),
-                                  Text(snapshot.data[index].Designation),
+                                  //Text("-"),
+                                 // Text(snapshot.data[index].Designation),
                                 ],)
                                 ;
                               }
@@ -721,11 +721,7 @@ var profilepic;
                   )
                 ),
                 ),],)
-
-
-
-            ],
-
+                ],
           ),
         ),
       ),
@@ -856,7 +852,7 @@ var profilepic;
     setState(() {
       _isProfileUploading = true;
     });
-    NewServices ns = NewServices();
+    profileup ns = profileup();
     bool isupdate = await ns.updateProfilePhoto(uploadtype,empid,organization);
     // bool isupdate = true;
     if(isupdate){
@@ -892,7 +888,7 @@ var profilepic;
 
   updateProfile(String mobile, String countryid) async{
     var profile = Profile(empid, organization, mobile, countryid);
-    NewServices ns = NewServices();
+    profileup ns = profileup();
     var islogin = await ns.updateProfile(profile);
     //print(islogin);
     if(islogin=="success"){

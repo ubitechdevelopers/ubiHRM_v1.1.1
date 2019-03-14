@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:dio/dio.dart';
-import 'package:ubihrm/global.dart' ;
+import 'package:ubihrm/global.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:image_picker/image_picker.dart';
@@ -777,7 +777,7 @@ ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
 
 
 
-class NewServices {
+class profileup {
 
   var dio = new Dio();
 

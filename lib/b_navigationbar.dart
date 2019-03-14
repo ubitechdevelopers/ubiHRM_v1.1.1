@@ -12,7 +12,7 @@ import 'model/model.dart';
 import 'profile.dart';
 import 'dart:async';
 import 'home.dart';
-import 'approval.dart';
+import 'package:ubihrm/approval.dart';
 
 import 'package:connectivity/connectivity.dart';
 
@@ -201,7 +201,7 @@ var count;
             if (newIndex == 0) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage()),
+                MaterialPageRoute(builder: (context) => HomePageMain()),
               );
               return;
             }

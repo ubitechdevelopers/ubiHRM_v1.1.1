@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'model/model.dart';
 import 'requestleave.dart';
-import 'approval.dart';
+import 'package:ubihrm/approval.dart';
 import 'home.dart';
 import 'profile.dart';
 //import 'bottom_navigationbar.dart';
