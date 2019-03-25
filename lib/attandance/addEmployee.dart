@@ -4,8 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:ubihrm/attandance/drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/services/gethome.dart';
-import 'package:ubihrm/services/att_services.dart';
+import 'package:ubihrm/services/attandance_gethome.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'employee_list.dart';
 import 'home.dart';
 import 'settings.dart';

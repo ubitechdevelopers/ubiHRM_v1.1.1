@@ -3,34 +3,33 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:ubihrm/services/fetch_location.dart';
+import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'askregister.dart';
-import 'package:ubihrm/services/gethome.dart';
-import 'package:ubihrm/services/saveimage.dart';
+import 'package:ubihrm/services/attandance_gethome.dart';
+import 'package:ubihrm/services/attandance_saveimage.dart';
 import 'package:ubihrm/model/timeinout.dart';
 import 'attendance_summary.dart';
 import 'punchlocation.dart';
 import 'drawer.dart';
 import 'package:ubihrm/model/model.dart';
-import 'timeoff_summary.dart';
-import 'package:ubihrm/services/att_services.dart';
-import 'leave.dart';
-import 'package:ubihrm/services/newservices.dart';
-import 'leave_summary.dart';
+import 'package:ubihrm/services/attandance_services.dart';
+import '../leave/myleave.dart';
+import 'package:ubihrm/services/attandance_newservices.dart';
+//import 'leave_summary.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoder/geocoder.dart';
 //import 'package:location/location.dart';
 import 'dart:async';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:ubihrm/attandance/globals.dart';
+import '../global.dart';
 import 'punchlocation_summary.dart';
 import 'settings.dart';
 import 'profile.dart';
 import 'reports.dart';
-import 'package:ubihrm/services/att_services.dart';
-import 'package:ubihrm/services/newservices.dart';
+import 'package:ubihrm/services/attandance_services.dart';
+import 'package:ubihrm/services/attandance_newservices.dart';
 /*import 'openCameraInActivity.dart';
 import 'package:camera/camera.dart';*/
 import 'package:connectivity/connectivity.dart';
@@ -698,7 +697,7 @@ class _HomePageState extends State<HomePage> {
             child: new GestureDetector(
                 onTap: () {
                   //  //print('----->>>>>'+getOrgPerm(1).toString());
-                  getOrgPerm(1).then((res) {
+             /*     getOrgPerm(1).then((res) {
                     {
                       //   //print('----->>>>>'+res.toString());
                       if (res) {
@@ -710,7 +709,7 @@ class _HomePageState extends State<HomePage> {
                       } else
                         showInSnackBar('Please buy this feature');
                     }
-                  });
+                  });*/
                 },
                 child: Column(
                   children: [
@@ -806,7 +805,7 @@ class _HomePageState extends State<HomePage> {
             ],
           )));
     }
-
+/*
     if (timeoff_permission == 1) {
       list.add(new GestureDetector(
           onTap: () {
@@ -838,6 +837,8 @@ class _HomePageState extends State<HomePage> {
           )));
     }
 
+    */
+
     if (leave_permission == 1) {
       list.add(new GestureDetector(
           onTap: () {
@@ -847,7 +848,7 @@ class _HomePageState extends State<HomePage> {
                 if (res) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LeaveSummary()),
+                    MaterialPageRoute(builder: (context) => MyLeave()),
                   );
                 } else
                   showInSnackBar('Please buy this feature');

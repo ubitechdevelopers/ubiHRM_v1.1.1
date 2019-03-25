@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
-import 'package:ubihrm/services/att_services.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'outside_label.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';

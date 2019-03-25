@@ -3,13 +3,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'drawer.dart';
+import '../drawer.dart';
 import 'home.dart';
-import 'package:ubihrm/attandance/globals.dart' as globals;
-import 'package:ubihrm/services/att_services.dart';
+import 'package:ubihrm/global.dart' as globals;
+import 'package:ubihrm/services/attandance_services.dart';
 import 'settings.dart';
 import 'profile.dart';
 import 'reports.dart';
+import 'package:ubihrm/global.dart';
+import 'package:ubihrm/b_navigationbar.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:ubihrm/profile.dart';
 
 //import 'package:intl/intl.dart';
 
@@ -29,6 +33,9 @@ class _MyApp extends State<MyApp> {
   String org_name="";
   int _currentIndex = 1;
   String admin_sts='0';
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool _checkLoaded = true;
   @override
   void initState() {
     super.initState();
@@ -37,7 +44,16 @@ class _MyApp extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
-
+    profile = prefs.getString('profile') ?? '';
+    profileimage = new NetworkImage(profile);
+    // //print("1-"+profile);
+    profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+      if (mounted) {
+        setState(() {
+          _checkLoaded = false;
+        });
+      }
+    });
     setState(() {
       fname = prefs.getString('fname') ?? '';
       lname = prefs.getString('lname') ?? '';
@@ -65,23 +81,45 @@ class _MyApp extends State<MyApp> {
   Widget build(BuildContext context) {
     return new WillPopScope(
         onWillPop: ()=> sendToHome(),
-    child: new Scaffold(
-        appBar: new AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              new Text(org_name, style: new TextStyle(fontSize: 20.0)),
-            ],
+        child: new Scaffold(
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: GradientAppBar(
+            backgroundColorStart: appStartColor(),
+            backgroundColorEnd: appEndColor(),
+            automaticallyImplyLeading: false,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+
+                GestureDetector(
+                  // When the child is tapped, show a snackbar
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CollapsingTab()),
+                    );
+                  },
+                  child:Container(
+                      width: 40.0,
+                      height: 40.0,
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                            fit: BoxFit.fill,
+                            // image: AssetImage('assets/avatar.png'),
+                            image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                          )
+                      )),),
+                Container(
+                    padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
+                )
+              ],
+
+            ),
           ),
-          leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },),
-          backgroundColor: Colors.teal,
-        ),
-        bottomNavigationBar: BottomNavigationBar(
+          bottomNavigationBar:new HomeNavigation(),
+          /* bottomNavigationBar: BottomNavigationBar(
 
           currentIndex: _currentIndex,
           onTap: (newIndex) {
@@ -136,11 +174,11 @@ class _MyApp extends State<MyApp> {
                 title: Text('Settings')
             )
           ],
-        ),
-        endDrawer: new AppDrawer(),
+        ),*/
+          //endDrawer: new AppDrawer(),
 
-        body: getWidgets(context),
-      )
+          body: getWidgets(context),
+        )
     );
 
   }
@@ -172,209 +210,218 @@ String dateFormatter(String date_) {
   return(date[2]+""+dy[int.parse(date[2])-1]+" "+months[int.parse(date[1])-1]);
 }
 getWidgets(context){
-  return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget> [
-        Container(
-          padding: EdgeInsets.only(top:12.0,bottom: 2.0),
-          child:Center(
-            child:Text('My Attendance Log',
-                style: new TextStyle(fontSize: 22.0, color: Colors.teal,)),
-          ),
+  return
+    Container(
+        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        // width: MediaQuery.of(context).size.width*0.9,
+        decoration: new ShapeDecoration(
+          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+          color: Colors.white,
         ),
-        Divider(color: Colors.black54,height: 1.5,),
-        new Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget> [
+              Container(
+                padding: EdgeInsets.only(top:12.0,bottom: 2.0),
+                child:Center(
+                  child:Text('My Attendance Log',
+                      style: new TextStyle(fontSize: 22.0, color: Colors.teal,)),
+                ),
+              ),
+              Divider(color: Colors.black54,height: 1.5,),
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //            crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 50.0,),
-            SizedBox(width: MediaQuery.of(context).size.width*0.02),
-            Container(
-              width: MediaQuery.of(context).size.width*0.50,
-              child:Text('Date',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
-            ),
+                children: <Widget>[
+                  SizedBox(height: 50.0,),
+                  SizedBox(width: MediaQuery.of(context).size.width*0.02),
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.45,
+                    child:Text('Date',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                  ),
 
-            SizedBox(height: 50.0,),
-            Container(
-              width: MediaQuery.of(context).size.width*0.2,
-              child:Text('Time In',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
-            ),
-            SizedBox(height: 50.0,),
-            Container(
-              width: MediaQuery.of(context).size.width*0.2,
-              child:Text('Time Out',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
-            ),
-          ],
-        ),
-        Divider(),
+                  SizedBox(height: 50.0,),
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.2,
+                    child:Text('Time In',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                  ),
+                  SizedBox(height: 50.0,),
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.2,
+                    child:Text('Time Out',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                  ),
+                ],
+              ),
+              Divider(),
 
-        Container(
-            height: MediaQuery.of(context).size.height*0.60,
-            child:
-            FutureBuilder<List<User>>(
-              future: getSummary(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return new ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                     //   double h_width = MediaQuery.of(context).size.width*0.5; // screen's 50%
-                     //   double f_width = MediaQuery.of(context).size.width*1; // screen's 100%
+              Expanded(child:  Container(
+                  height: MediaQuery.of(context).size.height*0.60,
+                  child:
+                  FutureBuilder<List<User>>(
+                    future: getSummary(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return new ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (context, index) {
+                              //   double h_width = MediaQuery.of(context).size.width*0.5; // screen's 50%
+                              //   double f_width = MediaQuery.of(context).size.width*1; // screen's 100%
 
 
-                        return new Column(
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceAround,
-                                children: <Widget>[
-                                  SizedBox(height: 40.0,),
-                                  Container(
-                                    width: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width * 0.46,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
+                              return new Column(
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .spaceAround,
                                       children: <Widget>[
-                                        Text(snapshot.data[index].AttendanceDate
-                                            .toString(), style: TextStyle(
-                                            color: Colors.black87,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16.0),),
+                                        SizedBox(height: 40.0,),
+                                        Container(
+                                          width: MediaQuery
+                                              .of(context)
+                                              .size
+                                              .width * 0.40,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment
+                                                .start,
+                                            children: <Widget>[
+                                              Text(snapshot.data[index].AttendanceDate
+                                                  .toString(), style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16.0),),
 
-                                        InkWell(
-                                          child: Text('Time In: ' +
+                                              InkWell(
+                                                child: Text('Time In: ' +
+                                                    snapshot.data[index]
+                                                        .checkInLoc.toString(),
+                                                    style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 12.0)),
+                                                onTap: () {
+                                                  goToMap(
+                                                      snapshot.data[index]
+                                                          .latit_in ,
+                                                      snapshot.data[index]
+                                                          .longi_in);
+                                                },
+                                              ),
+                                              SizedBox(height:2.0),
+                                              InkWell(
+                                                child: Text('Time Out: ' +
+                                                    snapshot.data[index]
+                                                        .CheckOutLoc.toString(),
+                                                  style: TextStyle(
+                                                      color: Colors.black54,
+                                                      fontSize: 12.0),),
+                                                onTap: () {
+                                                  goToMap(
+                                                      snapshot.data[index]
+                                                          .latit_out,
+                                                      snapshot.data[index]
+                                                          .longi_out);
+                                                },
+                                              ),
                                               snapshot.data[index]
-                                                  .checkInLoc.toString(),
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 12.0)),
-                                          onTap: () {
-                                            goToMap(
-                                                snapshot.data[index]
-                                                    .latit_in ,
-                                                snapshot.data[index]
-                                                    .longi_in);
-                                          },
-                                        ),
-                                        SizedBox(height:2.0),
-                                        InkWell(
-                                          child: Text('Time Out: ' +
-                                              snapshot.data[index]
-                                                  .CheckOutLoc.toString(),
-                                            style: TextStyle(
-                                                color: Colors.black54,
-                                                fontSize: 12.0),),
-                                          onTap: () {
-                                            goToMap(
-                                                snapshot.data[index]
-                                                    .latit_out,
-                                                snapshot.data[index]
-                                                    .longi_out);
-                                          },
-                                        ),
-                                        snapshot.data[index]
-                                            .bhour.toString()!=''?Container(
-                                          color:Colors.orangeAccent,
-                                          child:Text(""+snapshot.data[index]
-                                              .bhour.toString()+" Hr(s)",style: TextStyle(),),
-                                        ):SizedBox(height: 10.0,),
+                                                  .bhour.toString()!=''?Container(
+                                                color:Colors.orangeAccent,
+                                                child:Text(""+snapshot.data[index]
+                                                    .bhour.toString()+" Hr(s)",style: TextStyle(),),
+                                              ):SizedBox(height: 10.0,),
 
 
+                                            ],
+                                          ),
+                                        ),
+
+                                        Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.22,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .center,
+                                              children: <Widget>[
+                                                Text(snapshot.data[index].TimeIn
+                                                    .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                                Container(
+                                                  width: 62.0,
+                                                  height: 62.0,
+                                                  child: Container(
+                                                      decoration: new BoxDecoration(
+                                                          shape: BoxShape
+                                                              .circle,
+                                                          image: new DecorationImage(
+                                                              fit: BoxFit.fill,
+                                                              image: new NetworkImage(
+                                                                  snapshot
+                                                                      .data[index]
+                                                                      .EntryImage)
+                                                          )
+                                                      )),),
+
+                                              ],
+                                            )
+
+                                        ),
+                                        Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.22,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .center,
+                                              children: <Widget>[
+                                                Text(snapshot.data[index].TimeOut
+                                                    .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                                Container(
+                                                  width: 62.0,
+                                                  height: 62.0,
+                                                  child: Container(
+                                                      decoration: new BoxDecoration(
+                                                          shape: BoxShape
+                                                              .circle,
+                                                          image: new DecorationImage(
+                                                              fit: BoxFit.fill,
+                                                              image: new NetworkImage(
+                                                                  snapshot
+                                                                      .data[index]
+                                                                      .ExitImage)
+                                                          )
+                                                      )),),
+
+                                              ],
+                                            )
+
+                                        ),
                                       ],
+
                                     ),
-                                  ),
-
-                                  Container(
-                                      width: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width * 0.22,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .center,
-                                        children: <Widget>[
-                                          Text(snapshot.data[index].TimeIn
-                                              .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                          Container(
-                                            width: 62.0,
-                                            height: 62.0,
-                                            child: Container(
-                                                decoration: new BoxDecoration(
-                                                    shape: BoxShape
-                                                        .circle,
-                                                    image: new DecorationImage(
-                                                        fit: BoxFit.fill,
-                                                        image: new NetworkImage(
-                                                            snapshot
-                                                                .data[index]
-                                                                .EntryImage)
-                                                    )
-                                                )),),
-
-                                        ],
-                                      )
-
-                                  ),
-                                  Container(
-                                      width: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width * 0.22,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .center,
-                                        children: <Widget>[
-                                          Text(snapshot.data[index].TimeOut
-                                              .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                          Container(
-                                            width: 62.0,
-                                            height: 62.0,
-                                            child: Container(
-                                                decoration: new BoxDecoration(
-                                                    shape: BoxShape
-                                                        .circle,
-                                                    image: new DecorationImage(
-                                                        fit: BoxFit.fill,
-                                                        image: new NetworkImage(
-                                                            snapshot
-                                                                .data[index]
-                                                                .ExitImage)
-                                                    )
-                                                )),),
-
-                                        ],
-                                      )
-
-                                  ),
-                                ],
-
-                              ),
-                              Divider(color: Colors.black26,),
-                            ]);
+                                    Divider(color: Colors.black26,),
+                                  ]);
+                            }
+                        );
+                      } else if (snapshot.hasError) {
+                        return new Text("Unable to connect server");
                       }
-                  );
-                } else if (snapshot.hasError) {
-                  return new Text("Unable to connect server");
-                }
 
-                // By default, show a loading spinner
-                return new Center( child: CircularProgressIndicator());
-              },
-            )
-        ),
-      ]
-  );
+                      // By default, show a loading spinner
+                      return new Center( child: CircularProgressIndicator());
+                    },
+                  )
+              )),
+            ]
+        ));
 }
 Future<List<User>> getSummary() async {
   final prefs = await SharedPreferences.getInstance();
   String empid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
- final response = await http.get(globals.path+'getHistory?uid=$empid&refno=$orgdir');
+  final response = await http.get(globals.path_ubiattendance+'getHistory?uid=$empid&refno=$orgdir');
   print(response.body);
   List responseJson = json.decode(response.body.toString());
   List<User> userList = createUserList(responseJson);

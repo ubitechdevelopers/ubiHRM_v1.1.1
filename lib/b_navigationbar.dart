@@ -12,7 +12,8 @@ import 'model/model.dart';
 import 'profile.dart';
 import 'dart:async';
 import 'home.dart';
-import 'package:ubihrm/approval.dart';
+import 'leave/approval.dart';
+import 'all_approvals.dart';
 
 import 'package:connectivity/connectivity.dart';
 
@@ -71,9 +72,12 @@ var count;
     getAllPermission(emp);
 
     //  PLeave= "1";
+
+    /*
     count= await getCountAproval();
     print("count approval");
     print(count);
+    */
   //  emp = new Employee(employeeid: empid, organization: organization);
 
    //setState(() {
@@ -209,10 +213,10 @@ var count;
               (perA =='1') ?
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TabbedApp()),
+                MaterialPageRoute(builder: (context) => AllApprovals()),
               ):Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CollapsingTab()),
+                MaterialPageRoute(builder: (context) => AllApprovals()),
               );
               return;
             }

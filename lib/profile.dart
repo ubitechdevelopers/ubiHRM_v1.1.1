@@ -259,14 +259,14 @@ var profilepic;
                     height: 40.0,
                     width: 40.0,
                     child: new CircularProgressIndicator(),
-
+/*
                     decoration: new BoxDecoration(
                         shape: BoxShape.circle,
-                        image: new DecorationImage(
+                       image: new DecorationImage(
                           fit: BoxFit.fill,
                           image:AssetImage('assets/spinner.gif'),
                         )
-                    )
+                    )*/
                     ):Container(
                 margin: EdgeInsets.only(
                     top: 30.0),

@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/attandance/globals.dart' as globals;
+import 'package:ubihrm/global.dart' ;
 import 'askregister.dart';
 import 'package:ubihrm/services/checkloginn.dart';
 import 'home.dart';
-import 'package:ubihrm/services/att_services.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/model/user.dart';
 
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'drawer.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
+import '../global.dart';
+import '../drawer.dart';
 import 'today_attendance_report.dart';
 import 'late_comers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +20,7 @@ import 'profile.dart';
 import 'department_att.dart';
 import 'designation_att.dart';
 import 'Employeewise_att.dart';
+import '../b_navigationbar.dart';
 
 
 
@@ -62,22 +65,36 @@ class _Reports extends State<Reports> {
   //  print('99999999999999' + _orgName.toString());
     return new Scaffold(
           key: _scaffoldKey,
-          appBar: AppBar(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                new Text(_orgName, style: new TextStyle(fontSize: 20.0)),
-                /*  Image.asset(
-                    'assets/logo.png', height: 40.0, width: 40.0),*/
-              ],
-            ),
-            leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-              Navigator.pop(context);}),
-            backgroundColor: Colors.teal,
-          ),
+      backgroundColor:scaffoldBackColor(),
+      endDrawer: new AppDrawer(),
+      appBar: GradientAppBar(
+        automaticallyImplyLeading: false,
 
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _currentIndex,
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            new Container(
+                width: 40.0,
+                height: 40.0,
+                decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage('assets/avatar.png'),
+                    )
+                )),
+            Container(
+                padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
+            )
+          ],
+
+        ),
+      ),
+
+      bottomNavigationBar: HomeNavigation(),
+       /*     currentIndex: _currentIndex,
             onTap: (newIndex) {
               if(newIndex==2){
                 Navigator.push(
@@ -129,29 +146,36 @@ class _Reports extends State<Reports> {
                   icon: Icon(Icons.settings),
                   title: Text('Settings')
               )
-            ],
-          ),
+            ],*/
 
-          endDrawer: new AppDrawer(),
-          body:
-          Container(
-            padding: EdgeInsets.only(left: 2.0,right: 2.0),
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 8.0),
-                Text('Reports',
-                  style: new TextStyle(fontSize: 22.0, color: Colors.teal,),),
-                SizedBox(height: 5.0),
-                new Expanded(
-                  child: getReportsWidget(),
-                )
-              ],
-            ),
 
-          ),
+          body:mainbodyWidget(),
+
         );
 
   }
+
+  mainbodyWidget() {
+    return SafeArea(
+      child: ListView(
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: 15.0),
+              getReportsWidget(),
+              //getMarkAttendanceWidgit(),
+            ],
+          ),
+
+
+        ],
+      ),
+
+    );
+  }
+
+
   loader(){
     return new Container(
       child: Center(
@@ -211,11 +235,25 @@ class _Reports extends State<Reports> {
   }
 
   getReportsWidget(){
-    return Container(
-      child:
-      ListView(
+    return Stack(
+      children: <Widget>[
+      Container(
+      margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 5.0),
+      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+      //width: MediaQuery.of(context).size.width*0.9,
+      height:MediaQuery.of(context).size.height*0.75,
+      decoration: new ShapeDecoration(
+        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+        color: Colors.white,
+      ),
+      child: ListView(
           padding: EdgeInsets.only(left: 5.0,right: 5.0),
           children: <Widget>[
+            Text('Attendance Reports',
+                style: new TextStyle(fontSize: 22.0, color: Colors.teal),textAlign: TextAlign.center),
+            //SizedBox(height: 10.0),
+
+            SizedBox(height: 6.0),
             new RaisedButton(
               child: Container(
                 padding: EdgeInsets.only(top: 5.0,bottom: 5.0),
@@ -717,6 +755,8 @@ class _Reports extends State<Reports> {
 
 
           ]),
+    ),
+    ],
     );
   }
 }

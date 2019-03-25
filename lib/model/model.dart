@@ -70,9 +70,9 @@ class Team {
 }
 
 class Leave{
-  String uid, leavefrom, leaveto, orgid, reason, leavetypeid, leavetypefrom, leavetypeto, halfdayfromtype, halfdaytotype, leavedays, approverstatus, comment, attendancedate, leaveid;
+  String uid, leavefrom, leaveto, orgid, reason, leavetypeid, leavetypefrom, leavetypeto, halfdayfromtype, halfdaytotype, leavedays, approverstatus, comment, attendancedate, leaveid, substituteemp;
   bool withdrawlsts;
-  Leave({this.uid, this.leavefrom, this.leaveto, this.orgid, this.reason, this.leavetypeid, this.leavetypefrom, this.leavetypeto, this.halfdayfromtype, this.halfdaytotype, this.leavedays, this.approverstatus, this.comment, this.attendancedate, this.leaveid, this.withdrawlsts});
+  Leave({this.uid, this.leavefrom, this.leaveto, this.orgid, this.reason, this.leavetypeid, this.leavetypefrom, this.leavetypeto, this.halfdayfromtype, this.halfdaytotype, this.leavedays, this.approverstatus, this.comment, this.attendancedate, this.leaveid, this.withdrawlsts, this.substituteemp});
 }
 
 

@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
-import 'package:ubihrm/services/fetch_location.dart';
+import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
-import 'package:ubihrm/services/att_services.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'home.dart';
 import 'drawer.dart';
-import 'package:ubihrm/services/newservices.dart';
-import 'package:ubihrm/attandance/globals.dart';
+import 'package:ubihrm/services/attandance_newservices.dart';
+import 'package:ubihrm/global.dart';
 import 'settings.dart';
 import 'punchlocation_summary.dart';
 import 'profile.dart';

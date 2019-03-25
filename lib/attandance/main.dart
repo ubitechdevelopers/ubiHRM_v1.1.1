@@ -15,7 +15,7 @@
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:ubihrm/attandance/app.dart';
-import 'package:ubihrm/services/newservices.dart';
+import 'package:ubihrm/services/attandance_newservices.dart';
 void main(){
 
   runApp(

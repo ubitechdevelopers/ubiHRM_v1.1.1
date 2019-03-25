@@ -5,16 +5,16 @@ import 'graphs.dart';
 import 'global.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'b_navigationbar.dart';
-//import 'bottom_navigationbar.dart';
 import 'services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'model/model.dart';
-import 'myleave.dart';
+import 'leave/myleave.dart';
+import 'timeoff/timeoff_summary.dart';
 import 'dart:async';
 import 'profile.dart';
-import 'package:ubihrm/attandance/home.dart';
-import 'package:ubihrm/approval.dart';
+import 'attandance/home.dart';
+
 
 import 'package:connectivity/connectivity.dart';
 
@@ -291,6 +291,10 @@ class _HomePageStatemain extends State<HomePageMain> {
 
                     perTimeO=='1'?  GestureDetector(
                         onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => TimeoffSummary()),
+                          );
                         },
                         child: Column(
                           children: [

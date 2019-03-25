@@ -4,10 +4,10 @@ import 'package:ubihrm/model/employee.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart' as globals;
-import 'gethome.dart';
+import 'attandance_gethome.dart';
 import 'package:ubihrm/model/timeinout.dart';
-import 'saveimage.dart';
-import 'newservices.dart';
+import 'attandance_saveimage.dart';
+import 'attandance_newservices.dart';
 
 class Login{
 

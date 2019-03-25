@@ -18,13 +18,13 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 import 'login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/attandance/globals.dart';
+import '../global.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:location/location.dart';
 import 'dart:async';
 import 'check_update.dart';
-import 'package:ubihrm/services/att_services.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 
 
 class ShrineApp extends StatefulWidget {

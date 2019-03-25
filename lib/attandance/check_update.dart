@@ -20,7 +20,7 @@ import 'home.dart';
 import 'login.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/services/att_services.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 class CheckUpdate extends StatefulWidget {
   @override
   _CheckUpdate createState() => _CheckUpdate();

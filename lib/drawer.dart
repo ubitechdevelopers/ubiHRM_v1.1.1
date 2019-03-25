@@ -4,6 +4,7 @@ import 'global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'profile.dart';
+import 'all_reports.dart';
 import 'model/model.dart';
 import 'services/services.dart';
 import 'services/checkLogin.dart';
@@ -284,6 +285,21 @@ class _AppDrawerState extends State<AppDrawer> {
                 new Text("User Guide", style: new TextStyle(fontSize: 14.0)),
               ],
             ),
+          ),
+
+          new ListTile(
+            title: Row(
+              children: <Widget>[
+                Icon(Icons.library_books,size: 20.0),SizedBox(width: 5.0),
+                new Text('Reports', style: new TextStyle(fontSize: 15.0)),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AllReports()),
+              );
+            },
           ),
         /*  new ListTile(
             title: Row(

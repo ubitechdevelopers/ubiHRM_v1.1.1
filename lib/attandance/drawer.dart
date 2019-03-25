@@ -4,18 +4,17 @@ import 'login.dart';
 import 'privacypolicy.dart';
 import 'attendance_summary.dart';
 import 'about.dart';
-import 'package:ubihrm/services/att_services.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'home.dart';
 import 'settings.dart';
-import 'Reports.dart';
-import 'package:ubihrm/attandance/globals.dart' as globals;
+import 'reports.dart';
+import 'package:ubihrm/global.dart' ;
 import 'package:share/share.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'payment.dart';
 import 'profile.dart';
 import 'userGuide.dart';
-import 'package:ubihrm/attandance/globals.dart';
 
 
 class AppDrawer extends StatefulWidget {
