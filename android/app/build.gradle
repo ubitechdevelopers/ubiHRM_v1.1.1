@@ -36,8 +36,8 @@ android {
         applicationId "com.ubihrm.ubihrm"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode 10000
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
