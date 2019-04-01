@@ -32,6 +32,54 @@ getAllPermission(Employee emp) async{
 }
 
 
+List<Permission> createPermList(List data) {
+  List<Permission> list = new List();
+  for (int i = 0; i < data.length; i++) {
+    // print(i.toString());
+    //print(data[i]['module'].toString());
+    List<Map<String,String>> permissionlist = new List();
+    String moduleid = data[i]["module"];
+    String view = data[i]["view"];
+    /*String edit = data[i]["edit"];
+    String delete = data[i]["delete"];
+    String add = data[i]["add"];*/
+    //print(moduleid +" " +view+" "+edit+" "+delete+" "+add);
+    Map<String,String> viewpermission = {'view': view};
+    /*Map<String,String> editpermission = {'edit': edit};
+    Map<String,String> deletepermission = {'delete': delete};
+    Map<String,String> addpermission = {'add': add};*/
+    permissionlist.add(viewpermission);
+   /* permissionlist.add(editpermission);
+    permissionlist.add(deletepermission);
+    permissionlist.add(addpermission);*/
+    // print("2. "+permissionlist.toString());
+    Permission p = new Permission(moduleid: moduleid,permissionlist: permissionlist);
+    list.add(p);
+  }
+  return list;
+}
+
+getModulePermission(String moduleid, String permission_type){
+  List<Permission> list = new List();
+  list = globalpermissionlist;
+  // print("********");
+//  print(globalpermissionlist);
+  for (int i = 0; i < list.length; i++) {
+    print("permisstion list "+list[i].permissionlist.toString());
+    if(list[i].moduleid==moduleid){
+      for (int j = 0; j < list[i].permissionlist.length; j++) {
+        //print(list[i].permissionlist[j].containsKey(permission_type));
+        if(list[i].permissionlist[j].containsKey(permission_type)){
+          return list[i].permissionlist[j][permission_type];
+        }
+      }
+    }
+  }
+
+  return "0";
+}
+
+
 getProfileInfo(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('organization') ?? '';
@@ -105,67 +153,22 @@ getReportingTeam(Employee emp) async{
 
 }
 
-List<Permission> createPermList(List data) {
-  List<Permission> list = new List();
-  for (int i = 0; i < data.length; i++) {
-   // print(i.toString());
-    //print(data[i]['module'].toString());
-    List<Map<String,String>> permissionlist = new List();
-    String moduleid = data[i]["module"];
-    String view = data[i]["view"];
-    String edit = data[i]["edit"];
-    String delete = data[i]["delete"];
-    String add = data[i]["add"];
-    //print(moduleid +" " +view+" "+edit+" "+delete+" "+add);
-    Map<String,String> viewpermission = {'view': view};
-    Map<String,String> editpermission = {'edit': edit};
-    Map<String,String> deletepermission = {'delete': delete};
-    Map<String,String> addpermission = {'add': add};
-    permissionlist.add(viewpermission);
-    permissionlist.add(editpermission);
-    permissionlist.add(deletepermission);
-    permissionlist.add(addpermission);
-   // print("2. "+permissionlist.toString());
-    Permission p = new Permission(moduleid: moduleid,permissionlist: permissionlist);
-    list.add(p);
-  }
-  return list;
-}
 
-getModulePermission(String moduleid, String permission_type){
-  List<Permission> list = new List();
-  list = globalpermissionlist;
-  print("********");
-  print(globalpermissionlist);
-  for (int i = 0; i < list.length; i++) {
-    print("permisstion list "+list[i].permissionlist.toString());
-    if(list[i].moduleid==moduleid){
-      for (int j = 0; j < list[i].permissionlist.length; j++) {
-        //print(list[i].permissionlist[j].containsKey(permission_type));
-        if(list[i].permissionlist[j].containsKey(permission_type)){
-          return list[i].permissionlist[j][permission_type];
-        }
-      }
-    }
-  }
 
-  return "0";
-}
-
-Future<List<Team>> getTeamList(emp) async {
-print("get team list called");
+Future<List<Team>> getTeamList() async {
+//print(emp);
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
-//try {
-  print("-------------------->"+emp.employeeid);
-  FormData formData = new FormData.from({
-    "employeeid": emp.employeeid,
-    "organization": emp.organization
-  });
+
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+
   Response<String> response =
-  await dio.post(path + "getReportingTeam", data: formData);
+  await dio.post(path + "getReportingTeam?&employeeid="+empid+"&organization="+orgdir);
   List responseJson = json.decode(response.data.toString());
- print("1.---------  "+responseJson.toString());
+
+
+
   List<Team> teamlist = createTeamList(responseJson);
   return teamlist;
 
@@ -1013,3 +1016,17 @@ List<TimeOff> createTimeOffList(List data){
 }
 
 */
+
+class Choice {
+  const Choice({this.title});
+  final String title;
+//final IconData icon;
+}
+
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'Approved'),
+  const Choice(title: 'Pending'),
+  const Choice(title: 'Rejected'),
+  // const Choice(title: 'REJECTED', icon: Icons.directions_boat),
+
+];

@@ -14,6 +14,8 @@ import 'timeoff/timeoff_summary.dart';
 import 'dart:async';
 import 'profile.dart';
 import 'attandance/home.dart';
+import 'all_reports.dart';
+import 'appbar.dart';
 
 
 import 'package:connectivity/connectivity.dart';
@@ -35,6 +37,7 @@ class _HomePageStatemain extends State<HomePageMain> {
   Employee emp;
 
   var profileimage;
+  bool showtabbar;
   bool _checkLoadedprofile = true;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
   @override
@@ -63,20 +66,20 @@ class _HomePageStatemain extends State<HomePageMain> {
     emp = new Employee(employeeid: empid, organization: organization);
     getAllPermission(emp);
     //  PLeave= "1";
-    empid = prefs.getString('employeeid')??"";
+    /*empid = prefs.getString('employeeid')??"";
     organization =prefs.getString('organization')??"";
     emp = new Employee(employeeid: empid, organization: organization);
-    getAllPermission(emp);
+    getAllPermission(emp);*/
     await getProfileInfo(emp);
-    perL= getModulePermission("18","view");
+    perEmployeeLeave= getModulePermission("18","view");
 
-    perA=  '1';
-    perAtt=  getModulePermission("124","view");
-    perTimeO=  getModulePermission("124","view");
-    perReport=  getModulePermission("124","view");
-    perSet=  getModulePermission("124","view");
-    perAttMS=  getModulePermission("124","view");
-    perHoliday=  getModulePermission("124","view");
+    perLeaveApproval=  getModulePermission("124","view");
+    perAttendance=  getModulePermission("5","view");
+    perTimeoff=  getModulePermission("179","view");
+  //  perReport=  getModulePermission("124","view");
+  //  perSet=  getModulePermission("124","view");
+ //   perAttMS=  getModulePermission("124","view");
+ //   perHoliday=  getModulePermission("29","view");
     //prefs.setString("PerLeave", PerLeave1);
     //prefs.setString("PerApprovalLeave", PerApprovalLeave1);
 
@@ -116,10 +119,11 @@ class _HomePageStatemain extends State<HomePageMain> {
 
       await getProfileInfo(emp);
       await getReportingTeam(emp);
-
+      showtabbar =false;
      profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
      // profileimage = new NetworkImage(pic);
-
+//print("ABCDEFGHI");
+//print(profileimage);
       profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
         if (mounted) {
           setState(() {
@@ -173,7 +177,9 @@ class _HomePageStatemain extends State<HomePageMain> {
     return  Scaffold(
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
-        appBar: GradientAppBar(
+        appBar: new AppHeader(profileimage,showtabbar),
+
+/*        appBar: GradientAppBar(
           backgroundColorStart: appStartColor(),
           backgroundColorEnd: appEndColor(),
           automaticallyImplyLeading: false,
@@ -206,7 +212,7 @@ class _HomePageStatemain extends State<HomePageMain> {
             ],
 
           ),
-        ),
+        ),*/
         bottomNavigationBar:new HomeNavigation(),
 
        body: homewidget()
@@ -233,7 +239,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    perAtt=='1'?  GestureDetector(
+                    perAttendance=='1'?  GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
@@ -261,7 +267,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                           ],
                         )):Center(),
 
-                    perA=='1'?  GestureDetector(
+                    perEmployeeLeave=='1'?  GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
@@ -289,7 +295,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                         )):Center(),
 
 
-                    perTimeO=='1'?  GestureDetector(
+                    perTimeoff=='1'?  GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
@@ -322,9 +328,11 @@ class _HomePageStatemain extends State<HomePageMain> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                  children: [
-                   perSet=='1'? GestureDetector(
-                        onTap: () {
-                        },
+               //    perSet=='1'? GestureDetector(
+                   GestureDetector(
+                       onTap: () {
+
+                       },
                         child: Column(
                           children: [
                             new
@@ -343,7 +351,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
-                        )):Center(),
+                        )),
 
                     GestureDetector(
                         onTap: () {
@@ -370,15 +378,18 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
                         )),
-                   perReport=='1'?   GestureDetector(
+            //     perReport=='1'?   GestureDetector(
+                      GestureDetector(
                         onTap: () {
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AllReports()),
+                          );
                         },
                         child: Column(
                           children: [
-                            new
-
-
-                            Container(
+                            new  Container(
                                 width: 60.0,
                                 height: 60.0,
                                 decoration: new BoxDecoration(
@@ -393,23 +404,23 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
-                        )):Center(),
+                        )),
 
                   ],
 
                 ),
                 SizedBox(height: 40.0,),
 
-                perL =='1' ? Row(children: <Widget>[
+                perEmployeeLeave =='1' ? Row(children: <Widget>[
                   SizedBox(width: 20.0,),
                   Text("Leave Summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
                 ]
                 ):Center(),
 
-                perL =='1' ? Divider(height: 10.0,):Center(),
+                perEmployeeLeave =='1' ? Divider(height: 10.0,):Center(),
                 /*SimpleBarChart.withSampleData(),*/
 
-               perL =='1' ?  new Container(
+                perEmployeeLeave =='1' ?  new Container(
 
                   padding: EdgeInsets.all(0.2),
                   margin: EdgeInsets.all(0.2),
@@ -450,15 +461,15 @@ class _HomePageStatemain extends State<HomePageMain> {
                 // Attendance monthly summary bar graph
 
                 SizedBox(height: 40.0,),
-                perAttMS=='1'?  Row(children: <Widget>[
+                perAttendance=='1'?  Row(children: <Widget>[
                   SizedBox(width: 20.0,),
                   Text("Attendance monthly summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
                 ]
                 ):Center(),
 
-                perAttMS=='1'?  Divider(height: 10.0,):Center(),
+                perAttendance=='1'?  Divider(height: 10.0,):Center(),
                 /*SimpleBarChart.withSampleData(),*/
-                perAttMS=='1'?  new Container(
+                perAttendance=='1'?  new Container(
 
                   padding: EdgeInsets.all(0.2),
                   margin: EdgeInsets.all(0.2),

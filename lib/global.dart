@@ -66,10 +66,10 @@ int globalalertcount = 0;
 MarkTime mk1;
 //////Copied from  attendance global///////
 
-var perL;
-var perA;
-var perAtt;
-var perTimeO;
+var perEmployeeLeave;
+var perLeaveApproval;
+var perAttendance;
+var perTimeoff;
 var perReport;
 var perSet;
 var perAttMS;

@@ -13,32 +13,16 @@ import 'package:ubihrm/model/timeinout.dart';
 import 'attendance_summary.dart';
 import 'punchlocation.dart';
 import '../drawer.dart';
-import 'package:ubihrm/model/model.dart';
-//import 'timeoff_summary.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import '../leave/myleave.dart';
 import 'package:ubihrm/services/attandance_newservices.dart';
 import '../global.dart';
-import '../leave/myleave.dart';
-import 'package:flutter/services.dart';
-import 'package:geocoder/geocoder.dart';
-//import 'package:location/location.dart';
 import 'dart:async';
 import 'package:url_launcher/url_launcher.dart';
-//import 'package:ubihrm/attandance/globals.dart' ;
-import 'punchlocation_summary.dart';
-import 'settings.dart';
-import 'profile.dart';
-import 'reports.dart';
-import 'package:ubihrm/services/services.dart';
-/*import 'openCameraInActivity.dart';
-import 'package:camera/camera.dart';*/
 import 'package:connectivity/connectivity.dart';
-import 'package:ubihrm/services/checkLogin.dart';
 import 'package:ubihrm/b_navigationbar.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'package:ubihrm/profile.dart';
-import 'package:ubihrm/profile.dart';
+import '../appbar.dart';
+
 
 // This app is a stateful, it tracks the user's current choice.
 class HomePage extends StatefulWidget {
@@ -52,6 +36,7 @@ class _HomePageState extends State<HomePage> {
   /*var _defaultimage =
       new NetworkImage("http://ubiattendance.ubihrm.com/assets/img/avatar.png");*/
   var profileimage;
+  bool showtabbar ;
   bool _checkLoaded = true;
   int _currentIndex = 1;
   String userpwd = "new";
@@ -168,7 +153,7 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('empid') ?? '';
     orgdir = prefs.getString('orgdir') ?? '';
-    print("employeeid---"+empid);
+ //   print("employeeid---"+empid);
     desinationId =globalcompanyinfomap['Designation'];
     response = prefs.getInt('response') ?? 0;
 
@@ -202,8 +187,8 @@ class _HomePageState extends State<HomePage> {
         org_name = prefs.getString('org_name') ?? '';
         desination = prefs.getString('desination') ?? '';
         profile = prefs.getString('profile') ?? '';
-        profileimage = new NetworkImage(profile);
-        // //print("1-"+profile);
+        profileimage = new NetworkImage( profile);
+  //      print("ABCDEFGHI-"+profile);
         profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
           if (mounted) {
             setState(() {
@@ -211,7 +196,8 @@ class _HomePageState extends State<HomePage> {
             });
           }
         });
-        // //print("2-"+_checkLoaded.toString());
+        showtabbar=false;
+   //    print("ABCDEF"+fname);
         latit = prefs.getString('latit') ?? '';
         longi = prefs.getString('longi') ?? '';
         aid = prefs.getString('aid') ?? "";
@@ -252,7 +238,9 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
-          appBar: GradientAppBar(
+          appBar: new AppHeader(profileimage,showtabbar),
+
+/*          appBar: GradientAppBar(
             backgroundColorStart: appStartColor(),
             backgroundColorEnd: appEndColor(),
             automaticallyImplyLeading: false,
@@ -276,7 +264,8 @@ class _HomePageState extends State<HomePage> {
                           image: new DecorationImage(
                             fit: BoxFit.fill,
                             // image: AssetImage('assets/avatar.png'),
-                            image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                            image: _checkLoaded ? AssetImage('assets/avatar.png') : profileimage,
+
                           )
                       )),),
                 Container(
@@ -285,7 +274,7 @@ class _HomePageState extends State<HomePage> {
               ],
 
             ),
-          ),
+          ),*/
           bottomNavigationBar:new HomeNavigation(),
        // endDrawer: new AppDrawer(),
         body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),

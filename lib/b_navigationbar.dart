@@ -65,7 +65,7 @@ var count;
    // PerLeave =prefs.getString('PerLeave')??"";
    // PerApprovalLeave =prefs.getString('PerApprovalLeave')??"";
 
-    print("22222222222"+perA);
+ //  print("22222222222"+perA);
    // print("22222222222"+PerApprovalLeave);
 
     emp = new Employee(employeeid: empid, organization: organization);
@@ -136,7 +136,8 @@ var count;
                     color: Colors.white,
                     size: 25.0 ),
                 title: Text('Settings',style: TextStyle(color: Colors.white))),*/
-            (perA=='1') ?  new  BottomNavigationBarItem(
+       //     (perA=='1') ?  new  BottomNavigationBarItem(
+              new  BottomNavigationBarItem(
                 icon: Icon(
                     Icons.check_circle_outline,
                     color: Colors.white,
@@ -182,15 +183,15 @@ var count;
                ]),*/
                 title: new Text(
                   "Approvals",
-    style: TextStyle(color: Colors.white)))
-                :
+    style: TextStyle(color: Colors.white))),
+   /*             :
 
             new   BottomNavigationBarItem(
     icon: Icon(
     Icons.person,
     color: Colors.white,
     size: 25.0 ),
-    title: Text('Profile',style: TextStyle(color: Colors.white))),
+    title: Text('Profile',style: TextStyle(color: Colors.white))),*/
 
             BottomNavigationBarItem(
                 icon: Icon(
@@ -210,14 +211,14 @@ var count;
               return;
             }
             else if  (newIndex == 1) {
-              (perA =='1') ?
+            //  (perA =='1') ?
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AllApprovals()),
-              ):Navigator.push(
+              );/*:Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AllApprovals()),
-              );
+              );*/
               return;
             }
             if (newIndex == 2) {

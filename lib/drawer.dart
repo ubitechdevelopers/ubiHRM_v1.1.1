@@ -109,6 +109,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       height: 85.0,
                       decoration: new BoxDecoration(
                           shape: BoxShape.circle,
+                          color: Colors.white,
                           image: new DecorationImage(
                             fit: BoxFit.fill,
                            //  image: NetworkImage(globalcompanyinfomap['ProfilePic']),

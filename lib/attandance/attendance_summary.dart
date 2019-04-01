@@ -14,6 +14,7 @@ import 'package:ubihrm/global.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:ubihrm/profile.dart';
+import '../appbar.dart';
 
 //import 'package:intl/intl.dart';
 
@@ -35,6 +36,7 @@ class _MyApp extends State<MyApp> {
   String admin_sts='0';
   bool _checkLoadedprofile = true;
   var profileimage;
+  bool showtabbar ;
   bool _checkLoaded = true;
   @override
   void initState() {
@@ -54,6 +56,7 @@ class _MyApp extends State<MyApp> {
         });
       }
     });
+    showtabbar=false;
     setState(() {
       fname = prefs.getString('fname') ?? '';
       lname = prefs.getString('lname') ?? '';
@@ -84,7 +87,8 @@ class _MyApp extends State<MyApp> {
         child: new Scaffold(
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
-          appBar: GradientAppBar(
+          appBar: new AppHeader(profileimage,showtabbar),
+/*          appBar: GradientAppBar(
             backgroundColorStart: appStartColor(),
             backgroundColorEnd: appEndColor(),
             automaticallyImplyLeading: false,
@@ -108,7 +112,7 @@ class _MyApp extends State<MyApp> {
                           image: new DecorationImage(
                             fit: BoxFit.fill,
                             // image: AssetImage('assets/avatar.png'),
-                            image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                            image: _checkLoaded ? AssetImage('assets/avatar.png') : profileimage,
                           )
                       )),),
                 Container(
@@ -117,7 +121,7 @@ class _MyApp extends State<MyApp> {
               ],
 
             ),
-          ),
+          ),*/
           bottomNavigationBar:new HomeNavigation(),
           /* bottomNavigationBar: BottomNavigationBar(
 

@@ -141,6 +141,7 @@ var profilepic;
    // profilepic =prefs.getString('profilepic')??"";
    // profileimage = new NetworkImage(profilepic);
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+  //  print("ABC"+profileimage);
     profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
       if (mounted) {
         setState(() {
@@ -274,7 +275,7 @@ var profilepic;
                 width: 100.0,
                 decoration: new BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.grey,
+                  color: Colors.white,
                   image: new DecorationImage(
                     //image: new ExactAssetImage("assets/avatar.png"),
 
@@ -663,7 +664,7 @@ var profilepic;
                   width: 400.0,
                   //color: Colors.green[50],
                   child: FutureBuilder<List<Team>>(
-                    future: getTeamList(emp),
+                    future: getTeamList(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if(snapshot.data.length>0) {
