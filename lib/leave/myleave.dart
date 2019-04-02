@@ -83,8 +83,11 @@ class _MyLeaveState extends State<MyLeave> {
   }
 
   withdrawlLeave(String leaveid) async{
+    final prefs = await SharedPreferences.getInstance();
 
-    var leave = Leave(leaveid: leaveid, orgid: '10', uid: '4140', approverstatus: '5');
+    String empid = prefs.getString('employeeid')??"";
+   String orgid =prefs.getString('organization')??"";
+    var leave = Leave(leaveid: leaveid, orgid: orgid, uid: empid, approverstatus: '5');
     var islogin = await withdrawLeave(leave);
     print(islogin);
     if(islogin=="success"){

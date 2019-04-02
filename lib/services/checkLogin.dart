@@ -36,6 +36,20 @@ Future<bool> checklogin(UserLogin user) async{
       prefs.setString('fname',employeeMap['fname']);
       prefs.setString('profile', employeeMap['profile']);
 
+      String empid = prefs.getString('employeeid')??"";
+      String organization =prefs.getString('organization')??"";
+      Employee emp = new Employee(employeeid: empid, organization: organization);
+
+      //  await getProfileInfo(emp);
+      getAllPermission(emp);
+      await getProfileInfo(emp);
+      perEmployeeLeave= getModulePermission("18","view");
+
+      perLeaveApproval=  getModulePermission("124","view");
+      perAttendance=  getModulePermission("5","view");
+      perTimeoff=  getModulePermission("179","view");
+      await getReportingTeam(emp);
+
       return true;
     }
 

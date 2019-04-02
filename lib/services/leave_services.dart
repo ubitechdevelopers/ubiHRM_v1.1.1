@@ -28,7 +28,7 @@ requestLeave(Leave leave) async{
     //print(leave.halfdaytotype);
     //print(leave.leavetypeid);
     //print(leave.reason);
-    print(leave.substituteemp);
+  //  print(leave.substituteemp);
 
     FormData formData = new FormData.from({
       "orgid": leave.orgid,
@@ -45,9 +45,9 @@ requestLeave(Leave leave) async{
     });
 
     Response response1 = await dio.post(path_hrm_india+"reqForLeave", data: formData);
-    print("xxxxxxxxxx"+response1.toString());
-    print("******************");
-    print(response1.statusCode);
+  //  print("xxxxxxxxxx"+response1.toString());
+  //  print("******************");
+  //  print(response1.statusCode);
     // final leaveMap = json.decode(response1.toString());
     final leaveMap = response1.data.toString();
     // print("-------ddddddddd"+leaveMap["status"]);

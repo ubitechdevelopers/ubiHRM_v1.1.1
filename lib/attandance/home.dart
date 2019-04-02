@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage> {
         shiftId = prefs.getString('shiftId') ?? "";
         ////print("this is set state "+location_addr1);
         act1 = act;
-        // //print(act1);
+        print("ABC"+act1);
         streamlocationaddr = globalstreamlocationaddr;
       });
     //}

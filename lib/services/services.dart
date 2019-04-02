@@ -463,14 +463,15 @@ Future<List<Holi>> getHolidays(emp) async {
   Dio dio = new Dio();
 //try {
  // print("-------------------->"+emp.employeeid);
-  FormData formData = new FormData.from({
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+ /* FormData formData = new FormData.from({
     "employeeid": emp.employeeid,
     "organization": emp.organization
-  });
+  });*/
   print(path + "getHolidays");
   Response<String> response =
-  await dio.post(path+"getHolidays",
-      data: formData);
+  await dio.post(path+"getHolidays?&employeeid="+empid+"&organization="+orgdir);
  // print("1777.---------  "+response.toString());
   List responseJson = json.decode(response.data.toString());
  // print("1.---------  "+responseJson.toString());

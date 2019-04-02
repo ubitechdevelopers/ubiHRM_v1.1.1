@@ -61,21 +61,22 @@ class _HomePageStatemain extends State<HomePageMain> {
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
 
-    empid = prefs.getString('employeeid')??"";
+    /*empid = prefs.getString('employeeid')??"";
     organization =prefs.getString('organization')??"";
     emp = new Employee(employeeid: empid, organization: organization);
-    getAllPermission(emp);
+  */
     //  PLeave= "1";
     /*empid = prefs.getString('employeeid')??"";
     organization =prefs.getString('organization')??"";
     emp = new Employee(employeeid: empid, organization: organization);
     getAllPermission(emp);*/
+    /*getAllPermission(emp);
     await getProfileInfo(emp);
     perEmployeeLeave= getModulePermission("18","view");
 
     perLeaveApproval=  getModulePermission("124","view");
     perAttendance=  getModulePermission("5","view");
-    perTimeoff=  getModulePermission("179","view");
+    perTimeoff=  getModulePermission("179","view");*/
   //  perReport=  getModulePermission("124","view");
   //  perSet=  getModulePermission("124","view");
  //   perAttMS=  getModulePermission("124","view");
@@ -117,7 +118,14 @@ class _HomePageStatemain extends State<HomePageMain> {
       String organization =prefs.getString('organization')??"";
       Employee emp = new Employee(employeeid: empid, organization: organization);
 
+    //  await getProfileInfo(emp);
+      getAllPermission(emp);
       await getProfileInfo(emp);
+      perEmployeeLeave= getModulePermission("18","view");
+
+      perLeaveApproval=  getModulePermission("124","view");
+      perAttendance=  getModulePermission("5","view");
+      perTimeoff=  getModulePermission("179","view");
       await getReportingTeam(emp);
       showtabbar =false;
      profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
