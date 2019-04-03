@@ -41,7 +41,7 @@ Future<bool> checklogin(UserLogin user) async{
       Employee emp = new Employee(employeeid: empid, organization: organization);
 
       //  await getProfileInfo(emp);
-      getAllPermission(emp);
+      await getAllPermission(emp);
       await getProfileInfo(emp);
       perEmployeeLeave= getModulePermission("18","view");
 

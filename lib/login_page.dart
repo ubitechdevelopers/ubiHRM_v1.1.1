@@ -103,8 +103,8 @@ class _LoginPageState extends State<LoginPage>
                   Padding(
                     padding: EdgeInsets.only(top: 30.0),
                     child: new Image(
-                        width: 150.0,
-                        height: 150.0,
+                        width: 130.0,
+                        height: 130.0,
                         fit: BoxFit.fill,
                         image: new AssetImage('assets/img/login_logo.png')),
                   ),
@@ -288,8 +288,8 @@ class _LoginPageState extends State<LoginPage>
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: Container(
-                    width: 300.0,
-                    height: 190.0,
+                    width: 370.0,
+                    height: 200.0,
                     child: Column(
                       children: <Widget>[
                         Padding(
@@ -425,12 +425,12 @@ class _LoginPageState extends State<LoginPage>
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0)),
             child: Padding(
-            padding: const EdgeInsets.symmetric( vertical: 10.0, horizontal: 42.0),
+            padding: const EdgeInsets.symmetric( vertical: 11.0, horizontal: 44.0),
                         child: Text(
                           "Login",
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 25.0,
+                              fontSize: 20.0,
                               fontFamily: "WorkSansBold"),
                         ),
                       ),
@@ -477,7 +477,7 @@ class _LoginPageState extends State<LoginPage>
                       fontFamily: "WorkSansMedium"),
                 )),
           ),
-          Padding(
+          /*Padding(
             padding: EdgeInsets.only(top: 0.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -524,8 +524,8 @@ class _LoginPageState extends State<LoginPage>
                 ),
               ],
             ),
-          ),
-          Row(
+          ),*/
+          /*Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
@@ -563,7 +563,7 @@ class _LoginPageState extends State<LoginPage>
                 ),
               ),
             ],
-          ),
+          ),*/
         ],
       ),
     );
@@ -585,7 +585,7 @@ class _LoginPageState extends State<LoginPage>
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Container(
-                  width: 300.0,
+                  width: 370.0,
                   height: 450.0,
                   child: Column(
                     children: <Widget>[
@@ -801,7 +801,7 @@ class _LoginPageState extends State<LoginPage>
                     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                     shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(30.0)),
-                    padding: EdgeInsets.all(20.0),
+                    padding: EdgeInsets.all(17.0),
                     child: const Text('Register Company',style: TextStyle(fontSize: 18.0),),
                     onPressed: () {
                       if(_isButtonDisabled)

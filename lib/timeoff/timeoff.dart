@@ -81,15 +81,15 @@ class _TimeOffPageState extends State<TimeOffPage> {
     admin_sts = prefs.getString('sstatus') ?? '0';
     //  response = prefs.getInt('response') ?? 0;
     // if(response==1) {
-    Loc lock = new Loc();
-    location_addr = await lock.initPlatformState();
+   // Loc lock = new Loc();
+  //  location_addr = await lock.initPlatformState();
 
     Home ho = new Home();
     act = await ho.checkTimeIn(empid, orgdir);
 
-    print("this is main "+location_addr);
+  ///  print("this is main "+location_addr);
     setState(() {
-      location_addr1 = location_addr;
+   //   location_addr1 = location_addr;
       //     response = prefs.getInt('response') ?? 0;
       fname = prefs.getString('fname') ?? '';
       lname = prefs.getString('lname') ?? '';
@@ -113,13 +113,13 @@ class _TimeOffPageState extends State<TimeOffPage> {
         }
       });
    //   print("2-"+_checkLoaded.toString());
-      latit = prefs.getString('latit') ?? '';
-      longi = prefs.getString('longi') ?? '';
+   //   latit = prefs.getString('latit') ?? '';
+    //  longi = prefs.getString('longi') ?? '';
       aid = prefs.getString('aid') ?? "";
       shiftId = prefs.getString('shiftId') ?? "";
-      print("this is set state "+location_addr1);
-      act1=act;
-      print(act1);
+  //    print("this is set state "+location_addr1);
+  //    act1=act;
+   //   print(act1);
     });
 //    }
   }
@@ -232,14 +232,19 @@ class _TimeOffPageState extends State<TimeOffPage> {
           child:Form(
             key: _formKey,
             child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: Column( children: <Widget>[
+              SizedBox(height: 10.0),
+           //   mainAxisAlignment: MainAxisAlignment.start,
+              Text('Request Time Off',
+                  style: new TextStyle(fontSize: 22.0, color: Colors.teal)),
+              new Divider(color: Colors.black54,height: 1.5,),
+              new Expanded(child: ListView(
               children: <Widget>[
-                Text('Request Time Off',
-                    style: new TextStyle(fontSize: 22.0, color: Colors.teal)),
-                new Divider(color: Colors.black54,height: 1.5,),
-                SizedBox(height: 10.0),
-                new Row(
+                Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                    SizedBox(height: 10.0),
+                    Row(
                   children: <Widget>[
                //     SizedBox(height: MediaQuery.of(context).size.height * .01),
 
@@ -407,7 +412,12 @@ class _TimeOffPageState extends State<TimeOffPage> {
 
                   ],
                 ),
+
+                ],
+                ),
+
               ],
+            ),),],
             ),),),
         ),
       ],
@@ -426,7 +436,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
     RequestTimeOffService request =new RequestTimeOffService();
     var islogin = await request.requestTimeOff(timeoff);
     print("--->"+islogin);
-    if(islogin=="success"){
+    if(islogin=="true"){
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => TimeoffSummary()),
@@ -434,7 +444,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       setState(() {
         _isButtonDisabled=false;
       });
-    }else if(islogin=="No Connection"){
+    }else if(islogin=="false"){
       showInSnackBar("Poor Network Connection");
       setState(() {
         _isButtonDisabled=false;

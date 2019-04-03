@@ -47,15 +47,6 @@ class _HomePageStatemain extends State<HomePageMain> {
     initPlatformState();
 
 
-   /* profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-    profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
-      if (mounted) {
-        setState(() {
-          _checkLoadedprofile = false;
-        });
-
-      }
-    });*/
   }
 
   initPlatformState() async{
@@ -89,6 +80,7 @@ class _HomePageStatemain extends State<HomePageMain> {
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       setState(() {
+   //    print("HIIIIIIIIIIIIII");
         mainWidget = loadingWidget();
       });
 
@@ -114,15 +106,16 @@ class _HomePageStatemain extends State<HomePageMain> {
     final prefs = await SharedPreferences.getInstance();
     int response = prefs.getInt('response')??0;
     if(response==1){
+     //   print("AAAAAAAAA");
       String empid = prefs.getString('employeeid')??"";
       String organization =prefs.getString('organization')??"";
       Employee emp = new Employee(employeeid: empid, organization: organization);
 
     //  await getProfileInfo(emp);
-      getAllPermission(emp);
+      await getAllPermission(emp);
       await getProfileInfo(emp);
       perEmployeeLeave= getModulePermission("18","view");
-
+print(perEmployeeLeave);
       perLeaveApproval=  getModulePermission("124","view");
       perAttendance=  getModulePermission("5","view");
       perTimeoff=  getModulePermission("179","view");
@@ -182,6 +175,7 @@ class _HomePageStatemain extends State<HomePageMain> {
 
 
   Widget mainScafoldWidget(){
+    //print("BBBBBB");
     return  Scaffold(
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
@@ -228,7 +222,7 @@ class _HomePageStatemain extends State<HomePageMain> {
   }
 
   Widget homewidget(){
-
+   // print("CCCCCCCC");
     return Stack(
       children: <Widget>[
         Container(
@@ -419,36 +413,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                 ),
                 SizedBox(height: 40.0,),
 
-                perEmployeeLeave =='1' ? Row(children: <Widget>[
-                  SizedBox(width: 20.0,),
-                  Text("Leave Summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
-                ]
-                ):Center(),
 
-                perEmployeeLeave =='1' ? Divider(height: 10.0,):Center(),
-                /*SimpleBarChart.withSampleData(),*/
-
-                perEmployeeLeave =='1' ?  new Container(
-
-                  padding: EdgeInsets.all(0.2),
-                  margin: EdgeInsets.all(0.2),
-                  height: 200.0,
-                  child: new FutureBuilder<List<Map<String,String>>>(
-                      future: getChartDataYes(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          if (snapshot.data.length > 0) {
-                            return new StackedHorizontalBarChart.withSampleData(snapshot.data);
-                          }
-                        }
-                        return new Center( child: CircularProgressIndicator());
-                      }
-                  ),
-                  // child: new StackedHorizontalBarChart .withSampleData()
-                ):Center(
-                  child: Text(""),
-
-                ),
                 /*    Row(children: <Widget>[
                     Icon(Icons.brightness_1,color: Colors.blue,),
                     SizedBox(width: 20.0,),
@@ -522,6 +487,36 @@ class _HomePageStatemain extends State<HomePageMain> {
 */
 
                 SizedBox(width: 40.0,),
+                perEmployeeLeave =='1' ? Row(children: <Widget>[
+                  SizedBox(width: 20.0,),
+                  Text("Leave Summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                ]
+                ):Center(),
+
+                perEmployeeLeave =='1' ? Divider(height: 10.0,):Center(),
+                /*SimpleBarChart.withSampleData(),*/
+
+                perEmployeeLeave =='1' ?  new Container(
+
+                  padding: EdgeInsets.all(0.2),
+                  margin: EdgeInsets.all(0.2),
+                  height: 200.0,
+                  child: new FutureBuilder<List<Map<String,String>>>(
+                      future: getChartDataYes(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data.length > 0) {
+                            return new StackedHorizontalBarChart.withSampleData(snapshot.data);
+                          }
+                        }
+                        return new Center( child: CircularProgressIndicator());
+                      }
+                  ),
+                  // child: new StackedHorizontalBarChart .withSampleData()
+                ):Center(
+                  child: Text(""),
+
+                ),
                 SizedBox(height: 40.0,),
                 Row(children: <Widget>[
                   SizedBox(width: 20.0,),
@@ -546,7 +541,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                             //color: Colors.green[50],
 
                             child: FutureBuilder<List<Holi>>(
-                              future: getHolidays(emp),
+                              future: getHolidays(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   if(snapshot.data.length>0) {

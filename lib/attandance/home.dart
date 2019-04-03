@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
         Is_Delete = prefs.getInt('Is_Delete') ?? 0;
         newpwd = prefs.getString('newpwd') ?? "";
         userpwd = prefs.getString('usrpwd') ?? "";
-        print("New pwd"+newpwd+"  User ped"+userpwd);
+      //  print("New pwd"+newpwd+"  User ped"+userpwd);
         location_addr1 = location_addr;
         admin_sts = prefs.getString('sstatus').toString() ?? '0';
         mail_varified = prefs.getString('mail_varified').toString() ?? '0';
@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage> {
         shiftId = prefs.getString('shiftId') ?? "";
         ////print("this is set state "+location_addr1);
         act1 = act;
-        print("ABC"+act1);
+    //    print("ABC"+act1);
         streamlocationaddr = globalstreamlocationaddr;
       });
     //}
@@ -623,7 +623,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: MediaQuery.of(context).size.height * .01),
                   //Image.asset('assets/logo.png',height: 150.0,width: 150.0),
                   // SizedBox(height: 5.0),
-                  Text("Hi " + fname, style: new TextStyle(fontSize: 16.0)),
+                  Text("Hi " + globalpersnalinfomap['FirstName'], style: new TextStyle(fontSize: 16.0)),
                   SizedBox(height: MediaQuery.of(context).size.height * .01),
                   // SizedBox(height: MediaQuery.of(context).size.height*.01),
                   (act1 == '') ? loader() : getMarkAttendanceWidgit(),

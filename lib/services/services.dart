@@ -65,7 +65,7 @@ getModulePermission(String moduleid, String permission_type){
   // print("********");
 //  print(globalpermissionlist);
   for (int i = 0; i < list.length; i++) {
-    print("permisstion list "+list[i].permissionlist.toString());
+  //  print("permisstion list "+list[i].permissionlist.toString());
     if(list[i].moduleid==moduleid){
       for (int j = 0; j < list[i].permissionlist.length; j++) {
         //print(list[i].permissionlist[j].containsKey(permission_type));
@@ -229,6 +229,7 @@ requestLeave(Leave leave) async{
 
     Response response1 = await dio.post(path_hrm_india+"reqForLeave", data: formData);
     print("xxxxxxxxxx"+response1.toString());
+
     print("******************");
     print(response1.statusCode);
    // final leaveMap = json.decode(response1.toString());
@@ -457,7 +458,7 @@ Future<List<Map<String, String>>> getAttsummaryChart() async {
   return val;
 }
 ////Get Holidays//
-Future<List<Holi>> getHolidays(emp) async {
+Future<List<Holi>> getHolidays() async {
   //print("get holiday list called");
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
@@ -469,7 +470,7 @@ Future<List<Holi>> getHolidays(emp) async {
     "employeeid": emp.employeeid,
     "organization": emp.organization
   });*/
-  print(path + "getHolidays");
+ // print(path + "getHolidays" + empid);
   Response<String> response =
   await dio.post(path+"getHolidays?&employeeid="+empid+"&organization="+orgdir);
  // print("1777.---------  "+response.toString());

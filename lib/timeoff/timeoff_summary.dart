@@ -80,14 +80,14 @@ class _TimeoffSummary extends State<TimeoffSummary> {
  //   response = prefs.getInt('response') ?? 0;
     admin_sts = prefs.getString('sstatus') ?? 0.toString();
   //  if (response == 1) {
-      Loc lock = new Loc();
-      location_addr = await lock.initPlatformState();
+  //    Loc lock = new Loc();
+  //    location_addr = await lock.initPlatformState();
       //act =await checkPunch(empid, orgdir);
 
       //act= 'PunchOut';
 
       setState(() {
-        location_addr1 = location_addr;
+  //      location_addr1 = location_addr;
    //    response = prefs.getInt('response') ?? 0;
         fname = prefs.getString('fname') ?? '';
         lname = prefs.getString('lname') ?? '';
@@ -101,7 +101,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
         desination = prefs.getString('desination') ?? '';
         profile = prefs.getString('profile') ?? '';
         lid = prefs.getString('lid') ?? "0";
-        act= lid!='0'?'PunchOut':'PunchIn';
+    //    act= lid!='0'?'PunchOut':'PunchIn';
         showtabbar=false;
         profileimage = new NetworkImage(profile);
         profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
@@ -111,11 +111,11 @@ class _TimeoffSummary extends State<TimeoffSummary> {
             });
           }
         });
-        latit = prefs.getString('latit') ?? '';
-        longi = prefs.getString('longi') ?? '';
-        shiftId = prefs.getString('shiftId') ?? "";
-        print("this is set state " + lid);
-        act1 = act;
+   //     latit = prefs.getString('latit') ?? '';
+  //      longi = prefs.getString('longi') ?? '';
+  //      shiftId = prefs.getString('shiftId') ?? "";
+  //      print("this is set state " + lid);
+   //     act1 = act;
       });
 //    }
   }
@@ -125,7 +125,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
     var timeoff = TimeOff(TimeOffId: timeoffid, OrgId: orgid, EmpId: empid, ApprovalSts: '5');
     var islogin = await ns.withdrawTimeOff(timeoff);
-    print(islogin);
+   // print(islogin);
     if(islogin=="success"){
       setState(() {
         _isButtonDisabled=false;
@@ -134,12 +134,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
         context,
         MaterialPageRoute(builder: (context) => TimeoffSummary()),
       );
-      /*showDialog(context: context, child:
-      new AlertDialog(
-        title: new Text("Congrats!"),
-        content: new Text("Your leave is withdrawl successfully!"),
-      )
-      );*/
+
     }else if(islogin=="failure"){
       setState(() {
         _isButtonDisabled=false;

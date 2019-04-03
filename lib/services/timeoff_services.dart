@@ -13,14 +13,11 @@ import 'dart:io';
 class RequestTimeOffService{
 
   var dio = new Dio();
+
   requestTimeOff(TimeOff timeoff) async{
+   // print("abcd");
     try {
-      //print(timeoff.OrgId);
-      //print(timeoff.EmpId + "----");
-      //print(timeoff.TimeofDate + "----");
-      //print(timeoff.TimeFrom + "----");
-      //print(timeoff.TimeTo + "----");
-      //print(timeoff.Reason + "----");
+   //   print("efgh");
       FormData formData = new FormData.from({
         "orgid": timeoff.OrgId,
         "uid": timeoff.EmpId,
@@ -29,23 +26,20 @@ class RequestTimeOffService{
         "etime": timeoff.TimeTo,
         "reason": timeoff.Reason
       });
+  //    print("ijkl");
+      Response response1 = await dio.post(path_hrm_india+"reqForTimeOff", data: formData);
+   //   print("mnop"+response1.toString());
+   //   print(response1.toString());
 
-      Response response1 = await dio.post(path_ubiattendance+"reqForTimeOff", data: formData);
-      //print(response1.toString());
-      if (response1.statusCode == 200) {
-        Map timeoffMap = json.decode(response1.data);
-        //print(timeoffMap["status"]);
-        if(timeoffMap["status"]==true){
-          return "success";
-        }else{
-          return timeoffMap["errorMsg"];
-        }
-      }else{
-        return "No Connection";
+      final timeoffMap = response1.data.toString();
+      if (timeoffMap.contains("false")) {
+        return "false";
+      } else {
+        return "true";
       }
-
     }catch(e){
-      //print(e.toString());
+   //   print(e.toString());
+   //   print("DDDD");
       return "No Connection";
     }
   }
@@ -63,7 +57,13 @@ class RequestTimeOffService{
           path_ubiattendance+"changetimeoffsts",
           data: formData);
       //print(response.toString());
-      if (response.statusCode == 200) {
+      final timeoffMap = response.data.toString();
+      if (timeoffMap.contains("false")) {
+        return "failure";
+      } else {
+        return "success";
+      }
+      /*if (response.statusCode == 200) {
         Map leaveMap = json.decode(response.data);
         if(leaveMap["status"]==true){
           return "success";
@@ -72,9 +72,9 @@ class RequestTimeOffService{
         }
       }else{
         return "No Connection";
-      }
+      }*/
     }catch(e){
-      //print(e.toString());
+      print(e.toString());
       return "Poor network connection";
     }
   }
