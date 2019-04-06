@@ -46,10 +46,10 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     return new GradientAppBar(
        backgroundColorStart: appStartColor(),
        backgroundColorEnd: appEndColor(),
-       // automaticallyImplyLeading: false,
-        leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
+       automaticallyImplyLeading: false,
+        /*leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
           Navigator.pop(context,true);
-        },),
+        },),*/
         title: Row(
 
           mainAxisAlignment: MainAxisAlignment.start,
