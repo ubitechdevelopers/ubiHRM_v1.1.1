@@ -222,22 +222,23 @@ var count;
               return;
             }
             if (newIndex == 2) {
-              Navigator.push(
+             /* Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => TabbedApp()),
               );
-              return;
+              return;*/
             }
             if (newIndex == 3) {
-              Navigator.push(
+              /*Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => TabbedApp()),
               );
-              return;
-            }else if (newIndex == 0) { Navigator.push(
+              return;*/
+            }else if (newIndex == 0) {
+             /* Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => TabbedApp()),
-            );
+            );*/
 
             /* (admin_sts == '1')
                   ? Navigator.push(
@@ -249,7 +250,7 @@ var count;
                 MaterialPageRoute(builder: (context) => ProfilePage()),
               );*/
 
-            return;
+           // return;
             }
 
             setState(() {

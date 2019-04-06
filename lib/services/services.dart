@@ -101,7 +101,7 @@ getProfileInfo(Employee emp) async{
     globalcompanyinfomap = responseJson['Company'];
     globalprofileinfomap = responseJson['ProfilePic'];
     //prefs.setString("profilepic", responseJson['ProfilePic']);
-   // print("vvvvvvvvvvvvv"+responseJson['ProfilePic']);
+  //  print("vvvvvvvvvvvvv"+globalcompanyinfomap['Division']);
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
@@ -1034,8 +1034,8 @@ class Choice {
 }
 
 const List<Choice> choices = const <Choice>[
-  const Choice(title: 'Approved'),
   const Choice(title: 'Pending'),
+  const Choice(title: 'Approved'),
   const Choice(title: 'Rejected'),
   // const Choice(title: 'REJECTED', icon: Icons.directions_boat),
 

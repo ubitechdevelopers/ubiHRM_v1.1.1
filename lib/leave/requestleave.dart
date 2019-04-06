@@ -348,7 +348,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     child: Column( children: <Widget>[
     SizedBox(height: 10.0),
     Text('Request Leave',
-    style: new TextStyle(fontSize: 22.0, color: Colors.teal)),
+    style: new TextStyle(fontSize: 22.0, color: appStartColor())),
     new Divider(color: Colors.black54,height: 1.5,),
     new Expanded(child: ListView(
     //padding: EdgeInsets.symmetric(horizontal: 15.0),
@@ -610,7 +610,7 @@ class _RequestLeaveState extends State<RequestLeave> {
 
       RaisedButton(
         child: isServiceCalling?Text('Processing',style: TextStyle(color: Colors.white),):Text('APPLY',style: TextStyle(color: Colors.white),),
-        color: Colors.orangeAccent,
+        color: Colors.orange[800],
         onPressed: () {
           if (_formKey.currentState.validate()) {
 
@@ -686,7 +686,7 @@ class _RequestLeaveState extends State<RequestLeave> {
                     return new DropdownMenuItem<String>(
                       value: map["Id"].toString(),
                       child:  new SizedBox(
-                          width: 200.0,
+                   //     width: MediaQuery.of(context).size.width * 10,
                           child: new Text(
                             map["Name"],
                           )
@@ -745,7 +745,7 @@ class _RequestLeaveState extends State<RequestLeave> {
                     return new DropdownMenuItem<String>(
                       value: map["Id"].toString(),
                       child:  new SizedBox(
-                          width: 200.0,
+                    //      width: 200.0,
                           child: new Text(
                             map["Name"],
                           )

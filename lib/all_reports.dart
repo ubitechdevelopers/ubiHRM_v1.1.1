@@ -238,62 +238,117 @@ class _AllReports extends State<AllReports> {
                     elevation: 4.0,
                     textColor: Colors.black,
                     onPressed: () {
-                      Navigator.push(
+                      /*Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Reports()),
-                      );
+                      );*/
                     },
                   ),
 
+                  SizedBox(height: 16.0),
 
-               /*         new RaisedButton(
-                          color: Colors.orange[300],
-                          elevation: 4.0,
-                          splashColor: Colors.lightBlueAccent,
-                          textColor: Colors.white,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Reports()),
-                            );
-                          },
-                          child:Container(
+                  new RaisedButton(
+                    //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                    shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                    //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    child: Container(
 
-                        //    width:MediaQuery.of(context).size.width*0.80,
-                        //    height:MediaQuery.of(context).size.height*0.10,
-                            padding: EdgeInsets.only(top: 5.0,bottom: 5.0),
-                            /*    decoration: new ShapeDecoration(
-                            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
-                            color: Colors.orange[300],
-                          ),*/
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
+                      //     padding: EdgeInsets.only(left:  5.0),
+                      child: Row(
 
-                                Icon(Icons.add_to_home_screen,size: 40.0,color: Colors.white),
-                                //      SizedBox(width: 5.0,),
-                                Expanded(
-//                            widthFactor: MediaQuery.of(context).size.width*0.10,
-                                  child:Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                      //    padding: EdgeInsets.fromLTRB(5.0, 15.0, 5.0, 15.0),
-
-                                          child: Text('Attendance Report',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0,color: Colors.white),)
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Icon(Icons.keyboard_arrow_right,size: 50.0,color: Colors.white),
-
-                              ],
-
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: appStartColor(),
                             ),
+                            child: Icon(Icons.directions_walk,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
+                            padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                           ),
 
+                          SizedBox(width: 15.0),
+                          Expanded(
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Text('Leave Report',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                ),
 
-                        )*/
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Colors.white,
+                    elevation: 4.0,
+                    textColor: Colors.black,
+                    onPressed: () {
+                     /* Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Reports()),
+                      );*/
+                    },
+                  ),
+
+                  SizedBox(height: 16.0),
+
+                  new RaisedButton(
+                    //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                    shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                    //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    child: Container(
+
+                      //     padding: EdgeInsets.only(left:  5.0),
+                      child: Row(
+
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: appStartColor(),
+                            ),
+                            child: Icon(Icons.alarm_on,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
+                            padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                          ),
+
+                          SizedBox(width: 15.0),
+                          Expanded(
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Text('Time off Report',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                ),
+
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Colors.white,
+                    elevation: 4.0,
+                    textColor: Colors.black,
+                    onPressed: () {
+                      /* Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Reports()),
+                      );*/
+                    },
+                  ),
+
                 ])
         ),
       ],

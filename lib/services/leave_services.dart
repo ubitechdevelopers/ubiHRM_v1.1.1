@@ -112,7 +112,7 @@ List<Leave> createLeaveList(List data){
     else{
       LeaveTo=" - "+LeaveTo;
     }
-    //  print(LeaveDate);
+ //    print(LeaveDate);
     Leave leave = new Leave(attendancedate: LeaveDate, leavefrom: LeaveFrom, leaveto: LeaveTo, leavedays: LeaveDays, reason: Reason, approverstatus: ApprovalSts, comment: ApproverComment, leaveid: LeaveId, withdrawlsts: withdrawlsts);
     list.add(leave);
   }
@@ -179,7 +179,7 @@ List<Map> createList(List data,int label) {
   for (int i = 0; i < data.length; i++) {
     //  if(data[i]["archive"].toString()=='1') {
     // print("kkkkkkk"+data[i]["name"].toString());
-    Map tos={"Name":data[i]["name"].toString(),"Id":data[i]["id"].toString()};
+    Map tos={"Name":data[i]["name"].toString()  +" (Balance Leave - "+data[i]["leftleave"].toString()+") " ,"Id":data[i]["id"].toString()};
     list.add(tos);
     // }
   }

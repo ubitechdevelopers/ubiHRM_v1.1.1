@@ -132,8 +132,8 @@ class _MyLeaveState extends State<MyLeave> {
             },
           ),
           RaisedButton(
-            child: Text('Withdraw'),
-            color: Colors.teal,
+            child: Text('Withdraw',style: TextStyle(color: Colors.white),),
+            color: Colors.orange[800],
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
               withdrawlLeave(leaveid);
@@ -272,7 +272,7 @@ class _MyLeaveState extends State<MyLeave> {
         bottomNavigationBar:new HomeNavigation(),
 
         floatingActionButton: new FloatingActionButton(
-          backgroundColor: Colors.orangeAccent,
+          backgroundColor: Colors.orange[800],
           onPressed: (){
             Navigator.push(
               context,
@@ -302,7 +302,7 @@ class _MyLeaveState extends State<MyLeave> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text('My Leave',
-                   style: new TextStyle(fontSize: 22.0, color: Colors.teal)),
+                   style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                   //SizedBox(height: 10.0),
 
                   new Divider(color: Colors.black54,height: 1.5,),
@@ -316,7 +316,7 @@ class _MyLeaveState extends State<MyLeave> {
                       new Expanded(
                         child: Container(
                         width: MediaQuery.of(context).size.width*0.45,
-                        child:Text('Applied on',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        child:Text('Applied on',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
                       /*  new Expanded(
                         child: Container(
@@ -324,7 +324,7 @@ class _MyLeaveState extends State<MyLeave> {
                     SizedBox(height: 50.0,),
                       Container(
                         width: MediaQuery.of(context).size.width*0.25,
-                        child:Text('From',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        child:Text('From',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),*/
                       //SizedBox(height: 50.0,),
 
@@ -332,7 +332,7 @@ class _MyLeaveState extends State<MyLeave> {
                         child: Container(
                         width: MediaQuery.of(context).size.width*0.20,
                           margin: EdgeInsets.only(left:22.0),
-                        child:Text('Duration',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        child:Text('Duration',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),
         ),
 
@@ -340,7 +340,7 @@ class _MyLeaveState extends State<MyLeave> {
                         child: Container(
                           margin: EdgeInsets.only(left:42.0),
                         width: MediaQuery.of(context).size.width*0.30,
-                        child:Text('Action',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        child:Text('Action',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
                     ],
                   ),
@@ -370,9 +370,9 @@ class _MyLeaveState extends State<MyLeave> {
                                  children: <Widget>[
                                    new Expanded(
                                      child: Container(
-                       width: MediaQuery .of(context).size .width * 0.35,
-                                      child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                         width: MediaQuery .of(context).size .width * 0.35,
+                                         child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
                                           new SizedBox(width: 5.0,),
                                           new Text(
@@ -428,7 +428,7 @@ class _MyLeaveState extends State<MyLeave> {
 
                                    new Expanded(
                                      child: Container(
-                    width: MediaQuery .of(context).size.width * 0.30,
+                                      width: MediaQuery .of(context).size.width * 0.30,
                                          child: Column(
                                            crossAxisAlignment: CrossAxisAlignment.start,
                                            children: <Widget>[
@@ -444,8 +444,8 @@ class _MyLeaveState extends State<MyLeave> {
                                                  margin: EdgeInsets.only(
                                                  left:25.0),
                                                  child: new OutlineButton(
-                                                 child:new Icon(Icons.replay, size: 18.0,color:Colors.green, ),
-                                                borderSide: BorderSide(color: Colors.green),
+                                                 child:new Icon(Icons.replay, size: 18.0,color:appStartColor(), ),
+                                                borderSide: BorderSide(color:appStartColor()),
 
                                                    //  color: Colors.orangeAccent,
                                                  onPressed: () {
@@ -453,17 +453,7 @@ class _MyLeaveState extends State<MyLeave> {
                                                  snapshot.data[index].leaveid.toString());},
                                                  shape: new CircleBorder(),
                                                  )
-                                             ) : Center()/* new Container(
-                                                 height: 6.5,
-                                                 margin: EdgeInsets.only(
-                                                     left:25.0),
-                                                 child: new RawMaterialButton(
-
-                                                   //  color: Colors.orangeAccent,
-                                         child:new Icon(Icons.check, size: 18.0,color:Colors.black,
-                                                 ),
-                                                 )
-                                             )*/
+                                             ) : Center()
                                            ],
                                          )
                               //  decoration: new ShapeDecoration(
@@ -540,44 +530,49 @@ class _MyLeaveState extends State<MyLeave> {
                                                 ),
                                               )
                                           ),*/
-     new  Container(width: MediaQuery .of(context).size.width * .90,
-        padding: EdgeInsets.only(
-            top: 0.0, bottom: 0.5),
-        margin: EdgeInsets.only(top: 0.0,left:0.0),
-        child: Text( snapshot.data[index].approverstatus .toString(), style: TextStyle( color: snapshot.data[index] .approverstatus.toString() =='Approved' ? Colors.green.withOpacity(0.75) : snapshot.data[index].toString() == 'Rejected' || snapshot.data[index].approverstatus .toString() == 'Cancel' ? Colors.red.withOpacity(0.65) : snapshot.data[index].approverstatus .toString().startsWith('Pending') ? Colors.deepOrange[300] : Colors.grey[600],),
-         ),
-                                          )
-                                              ,
+                                          snapshot.data[index].reason.toString()!='-'?Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            padding: EdgeInsets.only(top:1.5,bottom: 1.5),
+                                            margin: EdgeInsets.only(top: 4.0),
+                                            child: Text('Reason: '+snapshot.data[index].reason.toString(), style: TextStyle(color: Colors.black54),),
+                                          ):Center(),
 
-/* snapshot.data[index].reason.toString() != '-'
-                                              ? Container(
-                                              width: MediaQuery
-                                                  .of(context)
-                                                  .size
-                                                  .width * .90,
-                                              padding: EdgeInsets.only(
-                                                  top: 1.5, bottom: 1.5),
-                                              margin: EdgeInsets.only(top: 0.5),
-                                              child: RichText(
-                                                text: new TextSpan(
-                                                  // Note: Styles for TextSpans must be explicitly defined.
-                                                  // Child text spans will inherit styles from parent
-                                                  style: new TextStyle(
-                                                    fontSize: 14.0,
-                                                    color: Colors.black,
-                                                  ),
-                                                  children: <TextSpan>[
-                                                    new TextSpan(text: 'Reason: '
-                                                        ,style: new TextStyle(fontWeight: FontWeight.bold)),
-                                                    new TextSpan(text: snapshot.data[index].reason.toString() ),
-                                                  ],
+
+
+
+
+                                          snapshot.data[index].comment.toString() != '-' ? Container(
+                                            width: MediaQuery .of(context).size .width * .90,
+                                            padding: EdgeInsets.only( top: 0.0, bottom: 0.5),
+                                            margin: EdgeInsets.only(top: 0.0),
+                                            child: Text('Comment: ' +  snapshot.data[index].comment.toString(),style: TextStyle(color: Colors.black54),),
+                                          ): Center(),
+
+
+
+                                          snapshot.data[index].approverstatus.toString()!='-'?Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            padding: EdgeInsets.only(top:1.5,bottom: 1.5),
+                                            margin: EdgeInsets.only(top: 4.0),
+                                            child: RichText(
+                                              text: new TextSpan(
+                                                // Note: Styles for TextSpans must be explicitly defined.
+                                                // Child text spans will inherit styles from parent
+                                                style: new TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: Colors.black,
                                                 ),
-                                              )
-                                          )
-                                              : Center(),*/
-                                          snapshot.data[index].comment.toString() != '-' ? Container( width: MediaQuery .of(context).size .width * .90, padding: EdgeInsets.only( top: 0.0, bottom: 0.5), margin: EdgeInsets.only(top: 0.0),child: Text('Comment: ' +  snapshot.data[index].comment.toString(),style: TextStyle(color: Colors.black54),),
-                             ): Center(),
- Divider(color: Colors.grey,),
+                                                children: <TextSpan>[
+                                                  new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black54,), ),
+                                                  new TextSpan(text: snapshot.data[index].approverstatus.toString(), style: TextStyle(color: snapshot.data[index].approverstatus.toString()=='Approved'?appStartColor() :snapshot.data[index].approverstatus.toString()=='Rejected' || snapshot.data[index].approverstatus.toString()=='Cancel' ?Colors.red:snapshot.data[index].approverstatus.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 14.0,fontWeight: FontWeight.bold),),
+                                                ],
+                                              ),
+                                            ),
+                                          ):Center(
+                                            // child:Text(snapshot.data[index].withdrawlsts.toString()),
+                                          ),
+
+                                          Divider(color: Colors.grey,),
                              ]);
                               }
                           );

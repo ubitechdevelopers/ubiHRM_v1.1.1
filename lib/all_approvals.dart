@@ -367,7 +367,7 @@ class _AllApprovals extends State<AllApprovals> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                    child: Text('Time Off',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Time off',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
 
                               ],

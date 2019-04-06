@@ -15,6 +15,9 @@ import 'package:ubihrm/b_navigationbar.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:ubihrm/profile.dart';
 import '../appbar.dart';
+import 'package:photo_view/photo_view.dart';
+import './image_view.dart';
+
 
 //import 'package:intl/intl.dart';
 
@@ -47,7 +50,7 @@ class _MyApp extends State<MyApp> {
   initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
     profile = prefs.getString('profile') ?? '';
- //   profileimage = new NetworkImage(profile);
+    //   profileimage = new NetworkImage(profile);
     // //print("1-"+profile);
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
 
@@ -353,21 +356,29 @@ getWidgets(context){
                                               children: <Widget>[
                                                 Text(snapshot.data[index].TimeIn
                                                     .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                Container(
-                                                  width: 62.0,
-                                                  height: 62.0,
-                                                  child: Container(
-                                                      decoration: new BoxDecoration(
-                                                          shape: BoxShape
-                                                              .circle,
-                                                          image: new DecorationImage(
-                                                              fit: BoxFit.fill,
-                                                              image: new NetworkImage(
-                                                                  snapshot
-                                                                      .data[index]
-                                                                      .EntryImage)
-                                                          )
-                                                      )),),
+                                                GestureDetector(
+                                                  // When the child is tapped, show a snackbar
+                                                  onTap: (){
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                    );
+                                                  },
+                                                  child:Container(
+                                                    width: 62.0,
+                                                    height: 62.0,
+                                                    child: Container(
+                                                        decoration: new BoxDecoration(
+                                                            shape: BoxShape
+                                                                .circle,
+                                                            image: new DecorationImage(
+                                                                fit: BoxFit.fill,
+                                                                image: new NetworkImage(
+                                                                    snapshot
+                                                                        .data[index]
+                                                                        .EntryImage)
+                                                            )
+                                                        )),),),
 
                                               ],
                                             )
@@ -384,21 +395,29 @@ getWidgets(context){
                                               children: <Widget>[
                                                 Text(snapshot.data[index].TimeOut
                                                     .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                Container(
-                                                  width: 62.0,
-                                                  height: 62.0,
-                                                  child: Container(
-                                                      decoration: new BoxDecoration(
-                                                          shape: BoxShape
-                                                              .circle,
-                                                          image: new DecorationImage(
-                                                              fit: BoxFit.fill,
-                                                              image: new NetworkImage(
-                                                                  snapshot
-                                                                      .data[index]
-                                                                      .ExitImage)
-                                                          )
-                                                      )),),
+                                                GestureDetector(
+                                                  // When the child is tapped, show a snackbar
+                                                  onTap: (){
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                    );
+                                                  },
+                                                  child:Container(
+                                                    width: 62.0,
+                                                    height: 62.0,
+                                                    child: Container(
+                                                        decoration: new BoxDecoration(
+                                                            shape: BoxShape
+                                                                .circle,
+                                                            image: new DecorationImage(
+                                                                fit: BoxFit.fill,
+                                                                image: new NetworkImage(
+                                                                    snapshot
+                                                                        .data[index]
+                                                                        .ExitImage)
+                                                            )
+                                                        )),),),
 
                                               ],
                                             )

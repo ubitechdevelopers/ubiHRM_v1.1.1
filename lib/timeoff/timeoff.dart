@@ -185,7 +185,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Icon(Icons.android,color: Colors.teal,),Text("Under development",style: new TextStyle(fontSize: 30.0,color: Colors.teal),)
+              Icon(Icons.android,color: appStartColor(),),Text("Under development",style: new TextStyle(fontSize: 30.0,color: appStartColor()),)
             ]),
       ),
     );
@@ -237,7 +237,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
               SizedBox(height: 10.0),
            //   mainAxisAlignment: MainAxisAlignment.start,
               Text('Request Time Off',
-                  style: new TextStyle(fontSize: 22.0, color: Colors.teal)),
+                  style: new TextStyle(fontSize: 22.0, color: appStartColor())),
               new Divider(color: Colors.black54,height: 1.5,),
               new Expanded(child: ListView(
               children: <Widget>[
@@ -391,8 +391,8 @@ class _TimeOffPageState extends State<TimeOffPage> {
                   children: <Widget>[
                     RaisedButton(
                       /* child: _isButtonDisabled?Row(children: <Widget>[Text('Processing ',style: TextStyle(color: Colors.white),),SizedBox(width: 10.0,), SizedBox(child:CircularProgressIndicator(),height: 20.0,width: 20.0,),],):Text('SAVE',style: TextStyle(color: Colors.white),),*/
-                      child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('SAVE',style: TextStyle(color: Colors.white),),
-                      color: Colors.orangeAccent,
+                      child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('APPLY',style: TextStyle(color: Colors.white),),
+                      color: Colors.orange[800],
                       onPressed: () {
 
 

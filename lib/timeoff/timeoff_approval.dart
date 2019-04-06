@@ -233,7 +233,7 @@ class ChoiceCard extends StatelessWidget {
               child:Column(
                   children: <Widget>[
                     Text('Timeoff Approvals',
-                        style: new TextStyle(fontSize: 22.0, color: Colors.teal)),
+                        style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                     new Divider(color: Colors.black54,height: 1.5,),
                     new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -245,7 +245,7 @@ class ChoiceCard extends StatelessWidget {
                           child:   Container(
 
                             width: MediaQuery.of(context).size.width*0.22,
-                            child:Text('    Name',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                            child:Text('    Name',style: TextStyle(color:  appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                           ),
                         ),
                         /*SizedBox(height: 30.0,),
@@ -254,7 +254,7 @@ class ChoiceCard extends StatelessWidget {
                             color: Colors.green,
 
                             width: MediaQuery.of(context).size.width*0.30,
-                            child:Text(' ',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                            child:Text(' ',style: TextStyle(color:  appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                           ), ),*/
 
                         SizedBox(height: 30.0,),
@@ -262,7 +262,7 @@ class ChoiceCard extends StatelessWidget {
                           child: Container(
 
                             width: MediaQuery.of(context).size.width*0.30,
-                            child:Text('Applied On',style: TextStyle(color: Colors.teal, fontWeight:FontWeight.bold,fontSize: 16.0),textAlign: TextAlign.center,),
+                            child:Text('Applied On',style: TextStyle(color:  appStartColor(), fontWeight:FontWeight.bold,fontSize: 16.0),textAlign: TextAlign.center,),
                           ), ),
 
                       ],
@@ -402,9 +402,9 @@ class ChoiceCard extends StatelessWidget {
                                                           child: new Icon(
                                                             Icons.thumb_up,
                                                             size: 17.0,
-                                                            color:Colors.green[300],
+                                                            color: appStartColor(),
                                                           ),
-                                                          borderSide: BorderSide(color: Colors.green),
+                                                          borderSide: BorderSide(color:  appStartColor()),
                                                           padding:EdgeInsets.all(3.0),
                                                           shape: new CircleBorder(),
                                                         ),
@@ -430,13 +430,32 @@ class ChoiceCard extends StatelessWidget {
                                                           new TextSpan(text: 'Reason: ' ,style: new TextStyle(fontWeight: FontWeight.bold)),
                                                           new TextSpan(text: snapshot.data[index].Reason.toString()),
 
-                                                          snapshot.data[index].Psts.toString() != ''
-                                                              ? new TextSpan(text: "\n"+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.deepOrange), ): new TextSpan(text: ""+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.deepOrange), ),
-
                                                         ],
                                                       ),
                                                     )
                                                 ): Center(),
+
+                                                snapshot.data[index].Psts.toString()!=''?Container(
+                                                  width: MediaQuery.of(context).size.width*.90,
+                                                  padding: EdgeInsets.only(top:1.5,bottom: 1.5),
+                                                  margin: EdgeInsets.only(top: 4.0),
+                                                  child: RichText(
+                                                    text: new TextSpan(
+                                                      // Note: Styles for TextSpans must be explicitly defined.
+                                                      // Child text spans will inherit styles from parent
+                                                      style: new TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: Colors.black,
+                                                      ),
+                                                      children: <TextSpan>[
+                                                        new TextSpan(text: 'Status: ',style: new TextStyle(fontWeight: FontWeight.bold)),
+                                                        new TextSpan(text: ""+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold),),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ):Center(
+                                                  // child:Text(snapshot.data[index].withdrawlsts.toString()),
+                                                ),
 
                                                 Divider(color: Colors.black45,),
                                               ] );
@@ -945,7 +964,7 @@ class ChoiceCard extends StatelessWidget {
         //  radius: 190.0,
         //   radius: 190.0, // This is the default
         // color:Colors.lightGreen.withOpacity(0.9),
-        color:Colors.grey[300],
+        color:Colors.grey[100],
         //   color:Colors.cyan[200].withOpacity(0.7),
         builder: (BuildContext bc){
           return new  Container(

@@ -221,14 +221,14 @@ var profilepic;
       expandedHeight: 200.0,
       pinned: true,
      // backgroundColor: Color.fromRGBO(0,102,153,1.0),
-    backgroundColor: Colors.green[800],
+    backgroundColor: appStartColor(),
 
       flexibleSpace: FlexibleSpaceBar(
 
         centerTitle: true,
         title:Column(children:<Widget>[
           SizedBox(height: 30.0,),
-          Text(globalpersnalinfomap['FirstName'],
+          Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"],
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20.0,
@@ -558,13 +558,13 @@ var profilepic;
                                 Text(globalcompanyinfomap["Department"]),
                               ],),
                               SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
+                              /*Row(children: <Widget>[
                                 new Expanded(
-                                  child: Container(child:Text("Location:",style: TextStyle(color: Colors.grey[600]),),
+                                  child: Container(child:Text("Division:",style: TextStyle(color: Colors.grey[600]),),
                                   width: 100.0,),),
                                 Text(globalcompanyinfomap["Division"]),
                               ],),
-                              SizedBox(height: 10.0,),
+                              SizedBox(height: 10.0,),*/
 
                             ],
                           ),
@@ -672,6 +672,7 @@ var profilepic;
                           return new ListView.builder(
                           scrollDirection: Axis.vertical,
                           itemCount: snapshot.data.length,
+
                           itemBuilder: (BuildContext context, int index) {toreportprofileimage = new NetworkImage( snapshot.data[index].ProfilePic);
                                 /*toreportprofileimage.resolve(new ImageConfiguration()).addListener((_, __) {
                                   if (mounted) {
@@ -680,11 +681,16 @@ var profilepic;
                                     });
                                   }
                                 });*/
-                                return new Row(children: <Widget>[
+
+
+
+                            return new Row(
+                              children: <Widget>[
                                  new Container(child:Container(
                                       width: 50.0,
                                       height: 50.0,
                                       decoration: new BoxDecoration(
+                                        color:Colors.grey[300],
                                           shape: BoxShape.circle,
                                           image: new DecorationImage(
                                             fit: BoxFit.fill,
@@ -699,8 +705,12 @@ var profilepic;
                                   Text(snapshot.data[index].FirstName+" "+snapshot.data[index].LastName),
                                   //Text("-"),
                                  // Text(snapshot.data[index].Designation),
-                                ],)
-                                ;
+
+
+                                ],
+
+                            );
+
                               }
                           );
                         }else{
