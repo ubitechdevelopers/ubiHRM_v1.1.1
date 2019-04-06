@@ -100,11 +100,11 @@ var profilepic;
     );
   }
 
-  @override
+ /* @override
   void dispose() {
     scrollController.dispose();
     super.dispose();
-  }
+  }*/
 
   @override
   void initState() {
@@ -312,7 +312,7 @@ var profilepic;
 
         ]),
 
-              Text(globalpersnalinfomap['FirstName'],
+             Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"],
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
@@ -562,7 +562,7 @@ var profilepic;
                                 new Expanded(
                                   child: Container(child:Text("Location:",style: TextStyle(color: Colors.grey[600]),),
                                   width: 100.0,),),
-                                Text(globalcompanyinfomap["Location"]),
+                                Text(globalcompanyinfomap["Division"]),
                               ],),
                               SizedBox(height: 10.0,),
 
@@ -625,11 +625,12 @@ var profilepic;
                                   width: 100.0,),),
                                 Text(globalcontactusinfomap["PostalCode"]),
                               ],),*/
+
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 new Expanded(
                                   child:  Container(child:Text("City:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
+                                    width: 100.0,),),
                                 Text(globalcontactusinfomap["City"]),
                               ],),
                               SizedBox(height: 10.0,),
@@ -672,13 +673,13 @@ var profilepic;
                           scrollDirection: Axis.vertical,
                           itemCount: snapshot.data.length,
                           itemBuilder: (BuildContext context, int index) {toreportprofileimage = new NetworkImage( snapshot.data[index].ProfilePic);
-                                toreportprofileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+                                /*toreportprofileimage.resolve(new ImageConfiguration()).addListener((_, __) {
                                   if (mounted) {
                                     setState(() {
                                       _checkLoadedr = false;
                                     });
                                   }
-                                });
+                                });*/
                                 return new Row(children: <Widget>[
                                  new Container(child:Container(
                                       width: 50.0,
@@ -690,7 +691,8 @@ var profilepic;
 
                                           // image: NetworkImage(snapshot.data[index].ProfilePic) ,
 
-                                         image: _checkLoadedr ? AssetImage('assets/avatar.png') : toreportprofileimage,
+                                         image:  toreportprofileimage,
+                                   //      image: _checkLoadedr ? AssetImage('assets/avatar.png') : toreportprofileimage,
                                           )
                                       ))
                                   ),SizedBox(width: 20.0,),

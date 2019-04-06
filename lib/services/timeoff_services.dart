@@ -26,20 +26,22 @@ class RequestTimeOffService{
         "etime": timeoff.TimeTo,
         "reason": timeoff.Reason
       });
-  //    print("ijkl");
+     print("ORGANIZATIONID"+timeoff.OrgId);
       Response response1 = await dio.post(path_hrm_india+"reqForTimeOff", data: formData);
    //   print("mnop"+response1.toString());
    //   print(response1.toString());
 
       final timeoffMap = response1.data.toString();
       if (timeoffMap.contains("false")) {
+        print("ijkl");
         return "false";
       } else {
+        print("mnop");
         return "true";
       }
     }catch(e){
-   //   print(e.toString());
-   //   print("DDDD");
+     print(e.toString());
+      print("DDDD");
       return "No Connection";
     }
   }
@@ -98,10 +100,12 @@ Future<List<TimeOff>> getTimeOffSummary() async{
         data: formData);
     //print('--------------------getLeaveSummary Called-----------------------');
     List responseJson = json.decode(response.data.toString());
-    //   print('---getLeaveSummary Called---' + json.decode(response.data.toString()));
+       print( json.decode(response.data.toString()));
 
     List<TimeOff> userList = createTimeOffList(responseJson);
+
     return userList;
+
   }catch(e){
     //print(e.toString());
   }
@@ -121,11 +125,13 @@ List<TimeOff> createTimeOffList(List data){
     String TimeOffId=data[i]["timeoffid"].toString();
     bool withdrawlsts=data[i]["withdrawlsts"];
 
-    //  print(LeaveDate);
+
     TimeOff timeoff = new TimeOff(TimeofDate: TimeofDate, TimeFrom: TimeFrom, TimeTo: TimeTo, hrs: hrs, Reason: Reason, ApprovalSts: ApprovalSts, ApproverComment: ApproverComment, TimeOffId: TimeOffId, withdrawlsts: withdrawlsts);
+
     list.add(timeoff);
 
   }
+
   return list;
 }
 

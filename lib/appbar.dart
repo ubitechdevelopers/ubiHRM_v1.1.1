@@ -26,8 +26,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   bool showtabbar;
   AppHeader(profileimage1,showtabbar1){
     profileimage = profileimage1;
- // print("aaaaaaaaaaaaa");
-  // print(profileimage);
+  print("--------->");
+   print(profileimage);
+    print("--------->");
  //   print(_checkLoadedprofile);
     if (profileimage!=null) {
       _checkLoadedprofile = false;
@@ -45,8 +46,12 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     return new GradientAppBar(
        backgroundColorStart: appStartColor(),
        backgroundColorEnd: appEndColor(),
-        automaticallyImplyLeading: false,
+       // automaticallyImplyLeading: false,
+        leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
+          Navigator.pop(context,true);
+        },),
         title: Row(
+
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             GestureDetector(
@@ -58,6 +63,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                 );
               },
               child:Container(
+
                   width: 40.0,
                   height: 40.0,
                   decoration: new BoxDecoration(

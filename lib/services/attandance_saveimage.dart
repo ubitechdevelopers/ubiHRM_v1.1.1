@@ -37,10 +37,10 @@ class SaveImage{
         Map<String, double> _currentLocation = globals.list[globals.list.length-1];
         String lat = _currentLocation["latitude"].toString();
         String long = _currentLocation["longitude"].toString();
-        print("global Address: "+ location);
-        print("global lat" + lat);
-        print("global long" + long);
-        print(mk.uid+" "+location+ " "+mk.aid+" "+mk.act+" "+mk.shiftid+ " " +mk.refid+" "+lat+" "+long);
+  //      print("global Address: "+ location);
+   //     print("global lat" + lat);
+  //      print("global long" + long);
+  //      print(mk.uid+" "+location+ " "+mk.aid+" "+mk.act+" "+mk.shiftid+ " " +mk.refid+" "+lat+" "+long);
         FormData formData = new FormData.from({
           "uid": mk.uid,
           "location": location,
@@ -52,7 +52,7 @@ class SaveImage{
           "longi": long,
           "file": new UploadFileInfo(imagei, "image.png"),
         });
-        print("5");
+ //       print("5");
         Response<String> response1=await dio.post(globals.path_ubiattendance+"saveImage",data:formData);
         //Response<String> response1=await dio.post("https://ubiattendance.ubihrm.com/index.php/services/saveImage",data:formData);
         //Response<String> response1=await dio.post("http://192.168.0.200/ubiattendance/index.php/services/saveImage",data:formData);
@@ -99,10 +99,10 @@ class SaveImage{
         Map<String, double> _currentLocation = globals.list[globals.list.length-1];
         String lat = _currentLocation["latitude"].toString();
         String long = _currentLocation["longitude"].toString();
-        print("global Address: "+ location);
-        print("global lat" + lat);
-        print("global long" + long);
-        print(mk.uid+" "+location+ " "+mk.aid+" "+mk.act+" "+mk.shiftid+ " " +mk.refid+" "+lat+" "+long);
+    //    print("global Address: "+ location);
+     //   print("global lat" + lat);
+     //   print("global long" + long);
+     //   print(mk.uid+" "+location+ " "+mk.aid+" "+mk.act+" "+mk.shiftid+ " " +mk.refid+" "+lat+" "+long);
         FormData formData = new FormData.from({
           "uid": mk.uid,
           "location": location,
@@ -114,7 +114,7 @@ class SaveImage{
           "longi": long,
           "file": new UploadFileInfo(imagei, "image.png"),
         });
-        print("5");
+    //    print("5");
         Response<String> response1=await dio.post(globals.path_ubiattendance+"saveImage",data:formData);
         //Response<String> response1=await dio.post("https://ubiattendance.ubihrm.com/index.php/services/saveImage",data:formData);
         //Response<String> response1=await dio.post("http://192.168.0.200/ubiattendance/index.php/services/saveImage",data:formData);
@@ -123,17 +123,23 @@ class SaveImage{
         imageCache.clear();
         /*getTempImageDirectory();*/
         Map MarkAttMap = json.decode(response1.data);
+        print("AAAAAA---->");
         print(MarkAttMap["status"].toString());
+        print("AAAAAA---->");
         if (MarkAttMap["status"] == 1 || MarkAttMap["status"] == 2)
           return true;
         else
           return false;
       }else{
+        print("BBBB---->");
         print("6");
+        print("BBBB---->");
         return false;
       }
     } catch (e) {
-      print(e.toString());
+      print("CCCC---->");
+     print(e.toString());
+      print("CCCC---->");
       return false;
     }
   }

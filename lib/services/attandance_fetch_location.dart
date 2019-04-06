@@ -23,7 +23,7 @@ class Loc{
       // message was in flight, we want to discard the reply rather than calling
       // setState to update our non-existent appearance.
       bool res = await SimplePermissions.checkPermission(permission);
-      //print(res);
+      print(res);
       if (res) {
         return fetchlocation();
       } else {

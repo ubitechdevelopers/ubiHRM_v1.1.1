@@ -103,8 +103,9 @@ class _TimeOffPageState extends State<TimeOffPage> {
       desination = prefs.getString('desination') ?? '';
       profile = prefs.getString('profile') ?? '';
       showtabbar=false;
-      profileimage = new NetworkImage(profile);
-    //  print("1-"+profile);
+      profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+
+      //  print("1-"+profile);
       profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
         if (mounted) {
           setState(() {
@@ -430,7 +431,8 @@ class _TimeOffPageState extends State<TimeOffPage> {
   requesttimeoff(var timeoffdate,var starttime,var endtime,var reason, BuildContext context) async{
     final prefs = await SharedPreferences.getInstance();
     String empid = prefs.getString("empid");
-    String orgid = prefs.getString("orgid");
+    String orgid = prefs.getString("orgdir");
+   // print(orgid);
     //var timeoff = TimeOffModal.TimeOff(Time timeoffdate, starttime, endtime, reason, empid, orgid);
     var timeoff = TimeOffModal.TimeOff(TimeofDate: timeoffdate,TimeFrom: starttime, TimeTo: endtime, Reason: reason, EmpId: empid, OrgId: orgid);
     RequestTimeOffService request =new RequestTimeOffService();

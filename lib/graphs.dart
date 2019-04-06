@@ -202,13 +202,15 @@ class OrdinalSales {
       barRendererDecorator: new charts.BarLabelDecorator<String>(),
       behaviors: [
         new charts.SeriesLegend(),
+        new charts.SlidingViewport(),
+        new charts.PanAndZoomBehavior(),
         // Add the sliding viewport behavior to have the viewport center on the
         // domain that is currently selected.
         //new charts.SlidingViewport(),
         // A pan and zoom behavior helps demonstrate the sliding viewport
         // behavior by allowing the data visible in the viewport to be adjusted
         // dynamically.
-       // new charts.PanAndZoomBehavior
+        // new charts.PanAndZoomBehavior
         //
         //
         //
@@ -235,13 +237,46 @@ class OrdinalSales {
   /// Create series list with multiple series
   static List<charts.Series<OrdinalSales, String>> _createSampleData(info) {
     final random = new Random();
-    print("00000000000"+info[0]['totalleaveC']);
-    final desktopSalesData = [
+    print(info);
+    // print("00000000000"+info[]['totalleaveC']);
+    final desktopSalesData = [new OrdinalSales('', 0) ];
+    final mobileSalesData = [new OrdinalSales('', 0) ];
+    final tableSalesData = [new OrdinalSales('', 0) ];
+    desktopSalesData.clear();
+    for(int i=0;i<info.length;i++){
+      print(")))))))))))))");
+      print(info[i]['total']);
+      print("--------");
+      print(info[i]['used']);
+      print("2222222222");
+      print(info[i]['left']);
+
+      desktopSalesData.add(
+        new OrdinalSales(info[i]['name'], double.parse(info[i]['total'])),
+      );
+      mobileSalesData.add(
+        new OrdinalSales(info[i]['name'], double.parse(info[i]['used'])),
+      );
+      tableSalesData.add(
+        new OrdinalSales(info[i]['name'], double.parse(info[i]['left'])),
+      );
+    }
+
+    /*final desktopSalesData = [
       new OrdinalSales('Casual Leave', double .parse(info[0]['totalleaveC'])),
       new OrdinalSales('LOP',  double .parse(info[0]['totalleaveL'])),
       new OrdinalSales('Annual', double .parse(info[0]['totalleaveA'])),
-    ];
-    final mobileSalesData = [
+
+      new OrdinalSales('Casual Leave', double .parse(info[0]['usedleaveC'])),
+      new OrdinalSales('LOP',  double .parse(info[0]['usedleaveL'])),
+      new OrdinalSales('Annual', double .parse(info[0]['usedleaveA'])),
+
+      new OrdinalSales('Casual Leave', double .parse(info[0]['leftleaveC'])),
+      new OrdinalSales('LOP',  double .parse(info[0]['leftleaveL'])),
+      new OrdinalSales('Annual', double .parse(info[0]['leftleaveA'])),
+
+    ];*/
+    /*final mobileSalesData = [
       new OrdinalSales('Casual Leave', double .parse(info[0]['usedleaveC'])),
       new OrdinalSales('LOP',  double .parse(info[0]['usedleaveL'])),
       new OrdinalSales('Annual', double .parse(info[0]['usedleaveA'])),
@@ -251,16 +286,19 @@ class OrdinalSales {
       new OrdinalSales('Casual Leave', double .parse(info[0]['leftleaveC'])),
       new OrdinalSales('LOP',  double .parse(info[0]['leftleaveL'])),
       new OrdinalSales('Annual', double .parse(info[0]['leftleaveA'])),
-    ];
+    ];*/
 
 
 
     return [
       // Blue bars with a lighter center color.
+
+
       new charts.Series<OrdinalSales, String>(
         id: 'Entitle',
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
+
         data: desktopSalesData,
 
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
@@ -306,33 +344,6 @@ class OrdinalSales {
       ),
 
 
-      // Configure our custom bar target renderer for this series.
-      /*   new charts.Series<OrdinalSales, String>(
-        id: 'Casual',
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
-        data: desktopSalesData,
-      )
-      // Configure our custom bar target renderer for this series.
-       ..setAttribute(charts.rendererIdKey, 'customTargetLine'),
-    new charts.Series<OrdinalSales, String>(
-    id: 'Loss of',
-    domainFn: (OrdinalSales sales, _) => sales.year,
-    measureFn: (OrdinalSales sales, _) => sales.sales,
-    data: tableSalesData,
-    )
-    // Configure our custom bar target renderer for this series.
-    ..setAttribute(charts.rendererIdKey, 'customTargetLine'),
-    new charts.Series<OrdinalSales, String>(
-    id: 'Sick',
-    domainFn: (OrdinalSales sales, _) => sales.year,
-    measureFn: (OrdinalSales sales, _) => sales.sales,
-    data: mobileSalesData,
-    )
-    // Configure our custom bar target renderer for this series.
-    ..setAttribute(charts.rendererIdKey, 'customTargetLine'),
-
-*/
     ];
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 import 'drawer.dart';
 import 'piegraph.dart';
 import 'graphs.dart';
@@ -16,6 +17,8 @@ import 'profile.dart';
 import 'attandance/home.dart';
 import 'all_reports.dart';
 import 'appbar.dart';
+import 'services/attandance_fetch_location.dart';
+//import 'services/attandance_newservices.dart';
 
 
 import 'package:connectivity/connectivity.dart';
@@ -27,6 +30,8 @@ class HomePageMain extends StatefulWidget {
 }
 
 class _HomePageStatemain extends State<HomePageMain> {
+ // StreamLocation sl = new StreamLocation();
+
   double height = 0.0;
   double insideContainerHeight=300.0;
   int _currentIndex = 0;
@@ -39,6 +44,10 @@ class _HomePageStatemain extends State<HomePageMain> {
   var profileimage;
   bool showtabbar;
   bool _checkLoadedprofile = true;
+
+  String location_addr = "";
+
+
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
   @override
   void initState() {
@@ -115,11 +124,17 @@ class _HomePageStatemain extends State<HomePageMain> {
       await getAllPermission(emp);
       await getProfileInfo(emp);
       perEmployeeLeave= getModulePermission("18","view");
-print(perEmployeeLeave);
+//print(perEmployeeLeave);
       perLeaveApproval=  getModulePermission("124","view");
       perAttendance=  getModulePermission("5","view");
       perTimeoff=  getModulePermission("179","view");
       await getReportingTeam(emp);
+
+      Loc lock = new Loc();
+      location_addr = await lock.initPlatformState();
+
+
+
       showtabbar =false;
      profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
      // profileimage = new NetworkImage(pic);
@@ -380,8 +395,8 @@ print(perEmployeeLeave);
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
                         )),
-            //     perReport=='1'?   GestureDetector(
-                      GestureDetector(
+                   (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?   GestureDetector(
+                   //   GestureDetector(
                         onTap: () {
 
                           Navigator.push(
@@ -406,7 +421,7 @@ print(perEmployeeLeave);
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
-                        )),
+                        )):Center(),
 
                   ],
 
@@ -452,15 +467,15 @@ print(perEmployeeLeave);
 
                 future: getAttsummaryChart(),
                 builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                if (snapshot.data.length > 0) {
-                return new DonutAutoLabelChart.withSampleData(snapshot.data);
-                }
-                return new Center(
-                    child: CircularProgressIndicator());
+                  if (snapshot.hasData) {
+                  if (snapshot.data.length > 0) {
+                  return new DonutAutoLabelChart.withSampleData(snapshot.data);
+                  }
+                  return new Center(
+                      child: CircularProgressIndicator());
 
-                }
-                return new Center( child: Text("No data found"), );
+                  }
+                  return new Center( child: Text("No data found"), );
                 // return new Center( child: CircularProgressIndicator());
                 }
 

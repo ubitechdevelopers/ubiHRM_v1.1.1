@@ -103,7 +103,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
         lid = prefs.getString('lid') ?? "0";
     //    act= lid!='0'?'PunchOut':'PunchIn';
         showtabbar=false;
-        profileimage = new NetworkImage(profile);
+        profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
         profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
           if (mounted) {
             setState(() {

@@ -47,8 +47,10 @@ class _MyApp extends State<MyApp> {
   initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
     profile = prefs.getString('profile') ?? '';
-    profileimage = new NetworkImage(profile);
+ //   profileimage = new NetworkImage(profile);
     // //print("1-"+profile);
+    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+
     profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
       if (mounted) {
         setState(() {
@@ -242,18 +244,18 @@ getWidgets(context){
                   SizedBox(width: MediaQuery.of(context).size.width*0.02),
                   Container(
                     width: MediaQuery.of(context).size.width*0.45,
-                    child:Text('Date',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Date',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
 
                   SizedBox(height: 50.0,),
                   Container(
                     width: MediaQuery.of(context).size.width*0.2,
-                    child:Text('Time In',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Time In',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
                   SizedBox(height: 50.0,),
                   Container(
                     width: MediaQuery.of(context).size.width*0.2,
-                    child:Text('Time Out',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Time Out',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
                 ],
               ),

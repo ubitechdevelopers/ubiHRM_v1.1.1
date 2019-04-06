@@ -347,15 +347,15 @@ Future<List<Map<String, String>>> getChartDataYes() async {
 
   final response = await dio.post(
       path+"getLeaveChartData?refno=$organization&eid=$empid"
-      );
+  );
 
   final data = json.decode(response.data);
   //print(response);
   print(data['leavesummary']['data'][0]['name']);
 
-
-      List<Map<String, String>> val = [
-        {
+  List<Map<String, String>> val = [];
+  /*  List<Map<String, String>> val = [
+       {
 
           // "present": data['present'].toString(),
   "totalleaveC": data['leavesummary']['data'][0]['totalleave'].toString(),
@@ -372,13 +372,21 @@ Future<List<Map<String, String>>> getChartDataYes() async {
 
 
         }
-        ];
+        ];*/
 
-
-
-
-  // print('==========');
-// print(val);
+  for (int i = 0; i < data.length; i++) {
+    for (int j = 0; j < data['leavesummary']['data'].length; j++) {
+      val.add({
+        "id": data['leavesummary']['data'][j]['id'].toString(),
+        "name": data['leavesummary']['data'][j]['name'].toString(),
+        "total": data['leavesummary']['data'][j]['totalleave'].toString(),
+        "used": data['leavesummary']['data'][j]['usedleave'].toString(),
+        "left": data['leavesummary']['data'][j]['leftleave'].toString(),
+      });
+    }
+  }
+  print('==========');
+  print(val);
   return val;
 }
 
@@ -440,7 +448,7 @@ Future<List<Map<String, String>>> getAttsummaryChart() async {
   final data = json.decode(response.data.toString());
 //print("fdgdgdfgd"+data.toString());
  //print(data['att']['month']);
-  prefs.setString("attmonth", data['att']['month']);
+  prefs.setString("attmonth", data['att']['month'].toString());
 
   List<Map<String, String>> val = [
     {
@@ -1032,3 +1040,6 @@ const List<Choice> choices = const <Choice>[
   // const Choice(title: 'REJECTED', icon: Icons.directions_boat),
 
 ];
+
+
+

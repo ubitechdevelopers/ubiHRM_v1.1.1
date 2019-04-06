@@ -264,7 +264,7 @@ List<LeaveH> createleavehistory(List data) {
     String CF = data[i]["carryforward"].toString();
     String Left = data[i]["leftleave"].toString();
 
-    print("********************"+Left+"***"+Used+"***"+Entitle);
+  //  print("********************"+Left+"***"+Used+"***"+Entitle);
     LeaveH tos = new LeaveH(
       Id: Id,
       name: name,
@@ -321,7 +321,7 @@ Future<List<LeaveA>> getApprovals(listType) async {
   Response<String> response =
   await dio.post(path+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
-  print(res);
+//  print(res);
   // print(path+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
 
 /*  List responseJson;

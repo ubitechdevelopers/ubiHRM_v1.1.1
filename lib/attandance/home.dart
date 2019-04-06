@@ -88,11 +88,11 @@ class _HomePageState extends State<HomePage> {
   }
 
 
-  @override
+ /* @override
   void dispose() {
     super.dispose();
     timer.cancel();
-  }
+  }*/
   startTimer() {
     const fiveSec = const Duration(seconds: 5);
     int count = 0;
@@ -186,9 +186,11 @@ class _HomePageState extends State<HomePage> {
         orgdir = prefs.getString('orgdir') ?? '';
         org_name = prefs.getString('org_name') ?? '';
         desination = prefs.getString('desination') ?? '';
-        profile = prefs.getString('profile') ?? '';
-        profileimage = new NetworkImage( profile);
-  //      print("ABCDEFGHI-"+profile);
+ //       profile = prefs.getString('profile') ?? '';
+  //      profileimage = new NetworkImage( profile);
+        profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+
+        //      print("ABCDEFGHI-"+profile);
         profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
           if (mounted) {
             setState(() {
@@ -1086,31 +1088,39 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         act1 = "";
       });
-      issave = await saveImage.saveTimeInOutImagePicker(mk);
-      ////print(issave);
-      if (issave) {
-        showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text("Attendance marked successfully!"),
-        )
-        );
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyApp()),
-        );
-        setState(() {
-          act1 = act;
-        });
-      } else {
-        showDialog(context: context, child:
-        new AlertDialog(
-          title: new Text("!"),
-          content: new Text("Problem while marking attendance, try again."),
-        )
-        );
-        setState(() {
-          act1 = act;
-        });
+      try {
+        issave = await saveImage.saveTimeInOutImagePicker(mk);
+       print('------------------>');
+       print(issave);
+       print('------------------>');
+        if (issave) {
+          showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text("Attendance marked successfully!"),
+          )
+          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyApp()),
+          );
+          setState(() {
+            act1 = act;
+          });
+        } else {
+         print('------------------<<<<<<<<<<<');
+          showDialog(context: context, child:
+          new AlertDialog(
+            title: new Text("!"),
+            content: new Text("Problem while marking attendance, try again."),
+          )
+          );
+          setState(() {
+            act1 = act;
+          });
+        }
+      }catch(e){
+        print("EXCEPTION PRINT: "+e.toString());
+
       }
     }else{
       showDialog(context: context, child:

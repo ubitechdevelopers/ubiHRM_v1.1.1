@@ -192,12 +192,12 @@ class _LoginPageState extends State<LoginPage>
 
 
   }
-   gettokenstate() async{
+  gettokenstate() async{
     final prefs = await SharedPreferences.getInstance();
     _firebaseMessaging.getToken().then((token){
       token1 = token;
       prefs.setString("token1", token1);
-     // print(tokenn);
+      // print(tokenn);
 
       print(token1);
 
@@ -395,7 +395,7 @@ class _LoginPageState extends State<LoginPage>
                   margin: EdgeInsets.only(top: 170.0),
                   decoration: new BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  /*  boxShadow: <BoxShadow>[
+                    /*  boxShadow: <BoxShadow>[
                       BoxShadow(
                         color: Theme.Colors.loginGradientStart,
                         offset: Offset(1.0, 6.0),
@@ -407,7 +407,7 @@ class _LoginPageState extends State<LoginPage>
                         blurRadius: 20.0,
                       ),
                     ],*/
-                  /*  gradient: new LinearGradient(
+                    /*  gradient: new LinearGradient(
                         colors: [
                           Theme.Colors.loginGradientEnd,
                           Theme.Colors.loginGradientStart
@@ -424,8 +424,8 @@ class _LoginPageState extends State<LoginPage>
                       //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0)),
-            child: Padding(
-            padding: const EdgeInsets.symmetric( vertical: 11.0, horizontal: 44.0),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric( vertical: 11.0, horizontal: 44.0),
                         child: Text(
                           "Login",
                           style: TextStyle(
@@ -607,7 +607,7 @@ class _LoginPageState extends State<LoginPage>
                               FontAwesomeIcons.user,
                               color: Colors.black,
                             ),
-                            hintText: "Name",
+                            hintText: "Company Name",
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiBold", fontSize: 16.0),
                           ),
@@ -710,48 +710,48 @@ class _LoginPageState extends State<LoginPage>
                       ),
 
                       Container(
-                        width: 200.0,
+                        width: 250.0,
                         height: 1.0,
                         color: Colors.grey[400],
                       ),
-                    //  Padding(
-                     //   padding: EdgeInsets.only(
+                      //  Padding(
+                      //   padding: EdgeInsets.only(
                       //      top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                       // child:
-        Expanded(
-          child:Container(
+                      // child:
+                      Expanded(
+                        child:Container(
 
-            padding: EdgeInsets.only(
-                top: 20.0, bottom: 20.0, left: 25.0, right: 15.0),
-                        child:new InputDecorator(
-                          decoration: const InputDecoration(
-                            //icon: const Icon(Icons.satellite,size: 15.0,),
-                            labelText: 'Country',
-                          ),
-                          //   isEmpty: _color == '',
+                          padding: EdgeInsets.only(
+                              top: 20.0, bottom: 20.0, left: 25.0, right: 15.0),
+                          child:new InputDecorator(
+                            decoration: const InputDecoration(
+                              //icon: const Icon(Icons.satellite,size: 15.0,),
+                              labelText: 'Country',
+                            ),
+                            //   isEmpty: _color == '',
+                            child: DropdownButtonHideUnderline(
+                              child:  new DropdownButton<String>(
+                                isDense: true,
 
-                          child:  new DropdownButton<String>(
-                            isDense: true,
+                                //    hint: new Text("Select"),
+                                value: _country,
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    _country = newValue;
+                                  });
+                                },
+                                items: _myJson.map((Map map) {
+                                  return new DropdownMenuItem<String>(
+                                    value: map["id"].toString(),
+                                    child: new Text(
+                                      map["name"],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
 
-                            //    hint: new Text("Select"),
-                            value: _country,
-                            onChanged: (String newValue) {
-                              setState(() {
-                                _country = newValue;
-                              });
-                            },
-                            items: _myJson.map((Map map) {
-                              return new DropdownMenuItem<String>(
-                                value: map["id"].toString(),
-                                child: new Text(
-                                  map["name"],
-                                ),
-                              );
-                            }).toList(),
-                          ),
-
-
-                        ),),
+                          ),),
                       ),
 
                     ],
@@ -759,10 +759,10 @@ class _LoginPageState extends State<LoginPage>
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 450.0),
+                margin: EdgeInsets.only(top: 433.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                 /* boxShadow: <BoxShadow>[
+                  /* boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Theme.Colors.loginGradientStart,
                       offset: Offset(1.0, 6.0),
@@ -774,7 +774,7 @@ class _LoginPageState extends State<LoginPage>
                       blurRadius: 20.0,
                     ),
                   ],*/
-                 /* gradient: new LinearGradient(
+                  /* gradient: new LinearGradient(
                       colors: [
                         Theme.Colors.loginGradientEnd,
                         Theme.Colors.loginGradientStart
@@ -794,8 +794,8 @@ class _LoginPageState extends State<LoginPage>
                     child: const Text('Please wait...',style: TextStyle(fontSize: 18.0),),
                     onPressed: (){}
                 ):new RaisedButton(
-                    //color: Colors.orange,
-                   // textColor: Colors.white,
+                  //color: Colors.orange,
+                  // textColor: Colors.white,
                     color: Color.fromRGBO(0, 166, 90,1.0),
                     textColor: Colors.white,
                     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
@@ -807,93 +807,93 @@ class _LoginPageState extends State<LoginPage>
                       if(_isButtonDisabled)
                         return null;
                       //  showInSnackBar("SignUp button pressed");
-                        if(signupNameController.text=='') {
-                          showDialog(context: context, child:
-                          new AlertDialog(
-                            title: new Text("Alert"),
-                            content: new Text("Please enter company name"),
-                          ));
-                          FocusScope.of(context).requestFocus(myFocusNodeName);
-                        }
+                      if(signupNameController.text=='') {
+                        showDialog(context: context, child:
+                        new AlertDialog(
+                          title: new Text("Alert"),
+                          content: new Text("Please enter company name"),
+                        ));
+                        FocusScope.of(context).requestFocus(myFocusNodeName);
+                      }
 
-                        else if(signupEmailController.text=='') {
-                          showDialog(context: context, child:
-                          new AlertDialog(
-                            title: new Text("Alert"),
-                            content: new Text("Please enter Email"),
-                          ));
-                          FocusScope.of(context).requestFocus(myFocusNodeEmail);
-                        }
-                        else if(signupPasswordController.text=='') {
-                          showDialog(context: context, child:
-                          new AlertDialog(
-                            title: new Text("Alert"),
-                            content: new Text("Please enter password"),
-                          ));
-                          FocusScope.of(context).requestFocus(myFocusNodePassword);
-                        }
-                        else if(signupPhoneController.text=='') {
-                          showDialog(context: context, child:
-                          new AlertDialog(
-                            title: new Text("Alert"),
-                            content: new Text("Please enter phone no"),
-                          ));
-                          FocusScope.of(context).requestFocus(myFocusNodephone);
-                        }
-                        else if(signupPasswordController.text.length<6) {
-                          showDialog(context: context, child:
-                          new AlertDialog(
-                            title: new Text("Alert"),
-                            content: new Text("Please enter valid password \n (password must contains at least 6 character)"),
-                          ));
-                          FocusScope.of(context).requestFocus(myFocusNodePassword);
-                        }
-                        else if(_country=='0') {
-                          showDialog(context: context, child:
-                          new AlertDialog(
-                            title: new Text("Alert"),
-                            content: new Text("Please enter country"),
-                          ));
-                          FocusScope.of(context).requestFocus(myFocusNodephone);
-                        }
-                        else if(signupPhoneController.text.length<6) {
-                          showDialog(context: context, child:
-                          new AlertDialog(
-                            title: new Text("Alert"),
-                            content: new Text("Please enter valid phone"),
-                          ));
-                          FocusScope.of(context).requestFocus(myFocusNodephone);
-                        }
-                        else {
-                          setState(() {
-                            _isButtonDisabled=true;
+                      else if(signupEmailController.text=='') {
+                        showDialog(context: context, child:
+                        new AlertDialog(
+                          title: new Text("Alert"),
+                          content: new Text("Please enter Email"),
+                        ));
+                        FocusScope.of(context).requestFocus(myFocusNodeEmail);
+                      }
+                      else if(signupPasswordController.text=='') {
+                        showDialog(context: context, child:
+                        new AlertDialog(
+                          title: new Text("Alert"),
+                          content: new Text("Please enter password"),
+                        ));
+                        FocusScope.of(context).requestFocus(myFocusNodePassword);
+                      }
+                      else if(signupPhoneController.text=='') {
+                        showDialog(context: context, child:
+                        new AlertDialog(
+                          title: new Text("Alert"),
+                          content: new Text("Please enter phone no"),
+                        ));
+                        FocusScope.of(context).requestFocus(myFocusNodephone);
+                      }
+                      else if(signupPasswordController.text.length<6) {
+                        showDialog(context: context, child:
+                        new AlertDialog(
+                          title: new Text("Alert"),
+                          content: new Text("Please enter valid password \n (password must contains at least 6 character)"),
+                        ));
+                        FocusScope.of(context).requestFocus(myFocusNodePassword);
+                      }
+                      else if(_country=='0') {
+                        showDialog(context: context, child:
+                        new AlertDialog(
+                          title: new Text("Alert"),
+                          content: new Text("Please enter country"),
+                        ));
+                        FocusScope.of(context).requestFocus(myFocusNodephone);
+                      }
+                      else if(signupPhoneController.text.length<6) {
+                        showDialog(context: context, child:
+                        new AlertDialog(
+                          title: new Text("Alert"),
+                          content: new Text("Please enter valid phone"),
+                        ));
+                        FocusScope.of(context).requestFocus(myFocusNodephone);
+                      }
+                      else {
+                        setState(() {
+                          _isButtonDisabled=true;
 
-                          });
-                          var url = path+"register_org";
+                        });
+                        var url = path+"register_org";
 
-                          http.post(url, body: {
-                            "org_name": signupNameController.text,
-                            "name": signupNameController.text,
-                            "phone": signupPhoneController.text,
-                            "email": signupEmailController.text,
-                            "password": signupPasswordController.text,
-                            "country": _country,
-                            "countrycode": '',
-                            "address": _country,
-                          }) .then((response) {
-                            if (response.statusCode == 200) {
+                        http.post(url, body: {
+                          "org_name": signupNameController.text,
+                          "name": signupNameController.text,
+                          "phone": signupPhoneController.text,
+                          "email": signupEmailController.text,
+                          "password": signupPasswordController.text,
+                          "country": _country,
+                          "countrycode": '',
+                          "address": _country,
+                        }) .then((response) {
+                          if (response.statusCode == 200) {
 
                             print("-----------------> After Registration ---------------->");
-                              print(response.body.toString());
-                              res = json.decode(response.body);
-                              if (res['sts'] == 'true') {
-                                setLocal(res['f_name'],res['id'],res['org_id']);
+                            print(response.body.toString());
+                            res = json.decode(response.body);
+                            if (res['sts'] == 'true') {
+                              setLocal(res['f_name'],res['id'],res['org_id']);
 
-                                showDialog(context: context, child:
-                                new AlertDialog(
-                                  title: new Text("ubiAttendance"),
-                                  content: new Text("Hi " + res['f_name'] +
-                                      " \n Your company has been registered successfully."),
+                              showDialog(context: context, child:
+                              new AlertDialog(
+                                title: new Text("ubiAttendance"),
+                                content: new Text("Hi " + res['f_name'] +
+                                    " \n Your company has been registered successfully."),
                                 /* actions: <Widget>[
                                     new RaisedButton(
                                       color: Colors.green,
@@ -905,9 +905,9 @@ class _LoginPageState extends State<LoginPage>
                                       },
                                     ),
                                   ],*/
-                                ));
+                              ));
 
-                              } /*else if (res['sts'] == 'false1' ||
+                            } /*else if (res['sts'] == 'false1' ||
                                   res['sts'] == 'false3') {
                                 showDialog(context: context, child:
                                 new AlertDialog(
@@ -924,48 +924,48 @@ class _LoginPageState extends State<LoginPage>
                                       "Phone id is already registered"),
                                 ));
                               }*/
-                              else {
-                                showDialog(context: context, child:
-                                new AlertDialog(
-                                  title: new Text("ubihrm"),
-                                  content: new Text(
-                                      "Oops!! Company not registered \n Try later"),
-                                ));
-                              }
-                              setState(() {
-                                _isButtonDisabled=false;
-
-                              });
-                            } else {
-                              setState(() {
-                                _isButtonDisabled=false;
-
-                              });
+                            else {
                               showDialog(context: context, child:
                               new AlertDialog(
-                                title: new Text("Error"),
-                                // content: new Text("Unable to call service"),
-                                content: new Text("Response status: ${response
-                                    .statusCode} \n Response body: ${response
-                                    .body}"),
-                              )
-                              );
-
+                                title: new Text("ubihrm"),
+                                content: new Text(
+                                    "Oops!! Company not registered \n Try later"),
+                              ));
                             }
-                            //   print("Response status: ${response.statusCode}");
-                            //   print("Response body: ${response.body}");
-                          }).catchError((onError) {
                             setState(() {
                               _isButtonDisabled=false;
+
+                            });
+                          } else {
+                            setState(() {
+                              _isButtonDisabled=false;
+
                             });
                             showDialog(context: context, child:
                             new AlertDialog(
                               title: new Text("Error"),
-                              content: new Text("Too slow internet"),
+                              // content: new Text("Unable to call service"),
+                              content: new Text("Response status: ${response
+                                  .statusCode} \n Response body: ${response
+                                  .body}"),
                             )
                             );
+
+                          }
+                          //   print("Response status: ${response.statusCode}");
+                          //   print("Response body: ${response.body}");
+                        }).catchError((onError) {
+                          setState(() {
+                            _isButtonDisabled=false;
                           });
-                        }
+                          showDialog(context: context, child:
+                          new AlertDialog(
+                            title: new Text("Error"),
+                            content: new Text("Too slow internet"),
+                          )
+                          );
+                        });
+                      }
                     }
 
                 ),
@@ -1014,7 +1014,7 @@ class _LoginPageState extends State<LoginPage>
 
   void _onSignInButtonPress() {
     _pageController.animateToPage(0,
-     duration: Duration(milliseconds: 500), curve: Curves.decelerate);
+        duration: Duration(milliseconds: 500), curve: Curves.decelerate);
   }
 
   void _onSignUpButtonPress() {
@@ -1040,5 +1040,3 @@ class _LoginPageState extends State<LoginPage>
     });
   }
 }
-
-
