@@ -545,7 +545,7 @@ class _MyLeaveState extends State<MyLeave> {
                                             width: MediaQuery .of(context).size .width * .90,
                                             padding: EdgeInsets.only( top: 0.0, bottom: 0.5),
                                             margin: EdgeInsets.only(top: 0.0),
-                                            child: Text('Comment: ' +  snapshot.data[index].comment.toString(),style: TextStyle(color: Colors.black54),),
+                                            child: Text('Approver Comment: ' +  snapshot.data[index].comment.toString(),style: TextStyle(color: Colors.black54),),
                                           ): Center(),
 
 

@@ -262,7 +262,7 @@ class ChoiceCard extends StatelessWidget {
                           child: Container(
 
                             width: MediaQuery.of(context).size.width*0.30,
-                            child:Text('Applied On',style: TextStyle(color:  appStartColor(), fontWeight:FontWeight.bold,fontSize: 16.0),textAlign: TextAlign.center,),
+                            child:Text('Applied on',style: TextStyle(color:  appStartColor(), fontWeight:FontWeight.bold,fontSize: 16.0),textAlign: TextAlign.center,),
                           ), ),
 
                       ],

@@ -27,6 +27,7 @@ void main() => runApp(new MyApp());
 class MyApp extends StatefulWidget {
   @override
   _MyApp createState() => _MyApp();
+
 }
 
 class _MyApp extends State<MyApp> {
@@ -235,7 +236,7 @@ getWidgets(context){
                 padding: EdgeInsets.only(top:12.0,bottom: 2.0),
                 child:Center(
                   child:Text('My Attendance Log',
-                      style: new TextStyle(fontSize: 22.0, color: Colors.teal,)),
+                      style: new TextStyle(fontSize: 22.0, color: appStartColor(),)),
                 ),
               ),
               Divider(color: Colors.black54,height: 1.5,),
@@ -247,18 +248,18 @@ getWidgets(context){
                   SizedBox(width: MediaQuery.of(context).size.width*0.02),
                   Container(
                     width: MediaQuery.of(context).size.width*0.45,
-                    child:Text('Date',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Date',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
 
                   SizedBox(height: 50.0,),
                   Container(
                     width: MediaQuery.of(context).size.width*0.2,
-                    child:Text('Time In',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Time In',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
                   SizedBox(height: 50.0,),
                   Container(
                     width: MediaQuery.of(context).size.width*0.2,
-                    child:Text('Time Out',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Time Out',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
                 ],
               ),

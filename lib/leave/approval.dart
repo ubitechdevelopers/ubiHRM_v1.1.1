@@ -366,7 +366,7 @@ class ChoiceCard1 extends StatelessWidget {
                         new Expanded(
                           child: Container(
                             width: MediaQuery.of(context).size.width*0.30,
-                            child:Text('Applied On',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                            child:Text('Applied on',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                           ), ),
 
                       ],
@@ -724,7 +724,7 @@ class ChoiceCard1 extends StatelessWidget {
 
             // child: new Expanded(
             //height: MediaQuery.of(context).size.height-100.0,
-            height: 400.0,
+            height: 550.0,
             child: new Container(
               decoration: new BoxDecoration(
                   color: Colors.teal.withOpacity(0.05),
@@ -786,8 +786,8 @@ class ChoiceCard1 extends StatelessWidget {
 
                                             child:Text("Leave History",style:TextStyle(
                                             // fontFamily: "WorkSansSemiBold",
-                                            fontSize: 18.0,
-                                            color: Colors.green), textAlign: TextAlign.center,                                           ),
+                                            fontSize: 20.0,
+                                            color: Colors.green,fontWeight: FontWeight.bold, ), textAlign: TextAlign.center,                                           ),
                                           ),
                                          Divider(color: Colors.black26,),
                                           new Container(
@@ -810,7 +810,7 @@ class ChoiceCard1 extends StatelessWidget {
                                            child: Column(
                                            crossAxisAlignment: CrossAxisAlignment .center,
                                            children: <Widget>[
-                                           new Text("Entitle: "+snapshot.data[index].Entitle .toString(), style: TextStyle( color: Colors.black54, fontSize: 16.0),),
+                                           new Text("Entitled: "+snapshot.data[index].Entitle .toString(), style: TextStyle( color: Colors.black54, fontSize: 16.0),),
                                                         // shape: new CircleBorder(),
                                                         // borderSide: BorderSide(color: Colors.green),
                                                       ] ),
@@ -828,7 +828,7 @@ class ChoiceCard1 extends StatelessWidget {
                                                       crossAxisAlignment: CrossAxisAlignment
                                                           .center,
                                                       children: <Widget>[
-                                                        Text("Used: "+snapshot.data[index].Used
+                                                        Text("Utilized: "+snapshot.data[index].Used
                                                             .toString(), style: TextStyle( color: Colors.black54, fontSize: 16.0,),),
                                                       ],
                                                     )
@@ -844,7 +844,7 @@ class ChoiceCard1 extends StatelessWidget {
                                                       crossAxisAlignment: CrossAxisAlignment
                                                           .center,
                                                       children: <Widget>[
-                                                        Text("Left: "+snapshot.data[index].Left
+                                                        Text("Balance: "+snapshot.data[index].Left
                                                             .toString(), style: TextStyle( color: Colors.black54, fontSize: 16.0),),
                                                       ],
                                                     )

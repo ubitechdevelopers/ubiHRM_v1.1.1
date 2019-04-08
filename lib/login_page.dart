@@ -891,7 +891,7 @@ class _LoginPageState extends State<LoginPage>
 
                               showDialog(context: context, child:
                               new AlertDialog(
-                                title: new Text("ubiAttendance"),
+                                title: new Text("UBIHRM"),
                                 content: new Text("Hi " + res['f_name'] +
                                     " \n Your company has been registered successfully."),
                                 /* actions: <Widget>[

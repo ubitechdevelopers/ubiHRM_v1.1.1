@@ -78,7 +78,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             Container(
-                padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
+                padding: const EdgeInsets.all(8.0), child: Text('Ubitech Solutions pvt ltd')
             )
           ],
         ),
