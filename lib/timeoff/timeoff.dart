@@ -236,7 +236,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
             child: Column( children: <Widget>[
               SizedBox(height: 10.0),
            //   mainAxisAlignment: MainAxisAlignment.start,
-              Text('Request Time Off',
+              Text('Request Time off',
                   style: new TextStyle(fontSize: 22.0, color: appStartColor())),
               new Divider(color: Colors.black54,height: 1.5,),
               new Expanded(child: ListView(

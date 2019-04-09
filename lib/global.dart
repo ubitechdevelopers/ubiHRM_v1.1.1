@@ -38,13 +38,13 @@ String path_ubiattendance="http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php
 
 String path_hrm_india="http://192.168.0.200/UBIHRM/HRMINDIA/services/";*/
 
-/*String path="https://ubitech.ubihrm.com/ubiapp/";
+String path="https://ubitech.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/";
-String path_hrm_india="https://ubitech.ubihrm.com/services/";*/
+String path_hrm_india="https://ubitech.ubihrm.com/services/";
 
-String path="https://sandbox.ubihrm.com/ubiapp/";
+/*String path="https://sandbox.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://sandbox.ubihrm.com/HRMAPP/index.php/Att_services/";
-String path_hrm_india="https://sandbox.ubihrm.com/services/";
+String path_hrm_india="https://sandbox.ubihrm.com/services/";*/
 
 int home_load_num = 0;
 List<Permission> globalpermissionlist =new List();
@@ -52,6 +52,7 @@ Map globalcompanyinfomap;
 Map globalpersnalinfomap;
 Map globalcontactusinfomap;
 Map globalprofileinfomap;
+Map globalyearfiscal;
 
 
 //////Copied from  attendance global///////
@@ -72,4 +73,5 @@ var perReport;
 var perSet;
 var perAttMS;
 var perHoliday;
+var fiscalyear;
 

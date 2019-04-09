@@ -445,7 +445,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                         child:  Container(
                         width: MediaQuery.of(context).size.width*0.22,
                         margin: EdgeInsets.only(left:7.0),
-                        child:Text('Status',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        child:Text('Action',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
                     ],
                   ),
@@ -581,7 +581,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
                                         snapshot.data[index].Reason.toString()!='-'?Container(
                                           width: MediaQuery.of(context).size.width*.90,
-                                          padding: EdgeInsets.only(top:1.5,bottom: 1.5),
+                                          padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                           margin: EdgeInsets.only(top: 4.0),
                                           child: Text('Reason: '+snapshot.data[index].Reason.toString(), style: TextStyle(color: Colors.black54),),
                                         ):Center(),
@@ -589,8 +589,8 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
                                         snapshot.data[index].ApproverComment.toString()!='-'?Container(
                                           width: MediaQuery.of(context).size.width*.90,
-                                          padding: EdgeInsets.only(top:1.5,bottom: 1.5),
-                                          margin: EdgeInsets.only(top: 4.0),
+                                          padding: EdgeInsets.only(top:1.5,bottom: 0.5),
+                                          margin: EdgeInsets.only(top: 3.0),
                                           child: Text('Comment: '+snapshot.data[index].ApproverComment.toString(), style: TextStyle(color: Colors.black54), ),
                                         ):Center(
                                           // child:Text(snapshot.data[index].withdrawlsts.toString()),
@@ -610,7 +610,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                               ),
                                               children: <TextSpan>[
                                                 new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black54,), ),
-                                                new TextSpan(text: snapshot.data[index].ApprovalSts.toString(), style: TextStyle(color: snapshot.data[index].ApprovalSts.toString()=='Approved'?appStartColor() :snapshot.data[index].ApprovalSts.toString()=='Rejected' || snapshot.data[index].ApprovalSts.toString()=='Cancel' ?Colors.red:snapshot.data[index].ApprovalSts.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 14.0,fontWeight: FontWeight.bold),),
+                                                new TextSpan(text: snapshot.data[index].ApprovalSts.toString(), style: TextStyle(color: snapshot.data[index].ApprovalSts.toString()=='Approved'?appStartColor() :snapshot.data[index].ApprovalSts.toString()=='Rejected' || snapshot.data[index].ApprovalSts.toString()=='Cancel' ?Colors.red:snapshot.data[index].ApprovalSts.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 14.0),),
                                               ],
                                             ),
                                           ),

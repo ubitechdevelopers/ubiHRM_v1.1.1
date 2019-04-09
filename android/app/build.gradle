@@ -42,8 +42,8 @@ android {
         applicationId "com.ubihrm.ubihrm"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 10000
-        versionName "1.0.0"
+        versionCode 10001
+        versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {

@@ -100,8 +100,36 @@ getProfileInfo(Employee emp) async{
     globalpersnalinfomap = responseJson['Personal'];
     globalcompanyinfomap = responseJson['Company'];
     globalprofileinfomap = responseJson['ProfilePic'];
-    //prefs.setString("profilepic", responseJson['ProfilePic']);
+    prefs.setString("profilepic", responseJson['ProfilePic']);
   //  print("vvvvvvvvvvvvv"+globalcompanyinfomap['Division']);
+  }catch(e){
+    //print(e.toString());
+    return "Poor network connection";
+  }
+
+
+
+}
+
+getfiscalyear(Employee emp) async{
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+  Dio dio = new Dio();
+  try {
+    FormData formData = new FormData.from({
+      "employeeid": emp.employeeid,
+      "organization": emp.organization
+    });
+
+    Response<String> response =
+    await dio.post(path + "getfiscalyear", data: formData);
+    // print(response.toString());
+    Map responseJson = json.decode(response.data.toString());
+    //print(responseJson);
+    fiscalyear = responseJson['year'];
+
+    //  print("vvvvvvvvvvvvv"+globalcompanyinfomap['Division']);
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
@@ -356,6 +384,10 @@ Future<List<Map<String, String>>> getChartDataYes() async {
   List<Map<String, String>> val = [];
   /*  List<Map<String, String>> val = [
        {
+
+
+
+
 
           // "present": data['present'].toString(),
   "totalleaveC": data['leavesummary']['data'][0]['totalleave'].toString(),

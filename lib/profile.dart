@@ -410,17 +410,49 @@ var profilepic;
                                 width: 100.0,),
                                 Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"]),
                               ],),
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                Container(child:Text("Father:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
-                                Text(globalpersnalinfomap["FatherName"]),
-                              ],),
+
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
                                 Container(child:Text("DOB:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
                                 Text(globalpersnalinfomap["DOB"]),
+                              ],),
+
+                              SizedBox(height: 10.0,),
+                              Row(children: <Widget>[
+                                  Container(child:Text("Emp Code:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+
+                                Text(globalcompanyinfomap["EmpCode"]),
+                              ],),
+                              /* SizedBox(height: 10.0,),
+                              Row(children: <Widget>[
+                                new Expanded(
+                                  child:Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
+                                Text(globalcompanyinfomap["CompanyEmail"]),
+                              ],),*/
+                              SizedBox(height: 10.0,),
+                              Row(children: <Widget>[
+                                //new Expanded(
+                                 Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+                                //),
+                                Text(globalcompanyinfomap["Designation"]),
+                              ],),
+                              /*  SizedBox(height: 10.0,),
+                              Row(children: <Widget>[
+                                new Expanded(
+                                  child:Container(child:Text("Reporting To:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),),
+                                Text(globalcompanyinfomap["ReportingTo"]),
+                              ],),*/
+                              SizedBox(height: 10.0,),
+                              Row(children: <Widget>[
+
+                                  Container(child:Text("Department:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+                                Text(globalcompanyinfomap["Department"]),
                               ],),
                             /*  SizedBox(height: 10.0,),
                               Row(children: <Widget>[
@@ -459,7 +491,7 @@ var profilepic;
                           padding: new EdgeInsets.symmetric(horizontal: 9.0),
                           alignment: Alignment.centerLeft,
                           child: new Text(
-                            'Reporting To',
+                            'Reporting to',
                             style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -494,83 +526,6 @@ var profilepic;
                       ),
                     ),
 
-                    Container(
-                      //height: MediaQuery.of(context).size.height,
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      //width: MediaQuery.of(context).size.width*0.9,
-                      decoration: new ShapeDecoration(
-                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
-                        color: Colors.grey[100],
-                      ),
-                      child:
-                      StickyHeader(
-                        header: new Container(
-                          height: 50.0,
-                          color: Colors.grey[100],
-                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
-                          alignment: Alignment.centerLeft,
-                          child: new Text(
-                            'Company Info',
-                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-
-                        content: new Container(
-                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
-                          child: Column(
-                            children: <Widget>[
-                              // SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                new Expanded(
-                                  child:  Container(child:Text("Emp Code:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
-                      ),
-                                Text(globalcompanyinfomap["EmpCode"]),
-                              ],),
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                new Expanded(
-                                  child:Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
-                                Text(globalcompanyinfomap["CompanyEmail"]),
-                              ],),
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                new Expanded(
-                                  child:Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
-                                Text(globalcompanyinfomap["Designation"]),
-                              ],),
-                            /*  SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                new Expanded(
-                                  child:Container(child:Text("Reporting To:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
-                                Text(globalcompanyinfomap["ReportingTo"]),
-                              ],),*/
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                new Expanded(
-                                  child:
-                                Container(child:Text("Department:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
-                                Text(globalcompanyinfomap["Department"]),
-                              ],),
-                              SizedBox(height: 10.0,),
-                              /*Row(children: <Widget>[
-                                new Expanded(
-                                  child: Container(child:Text("Division:",style: TextStyle(color: Colors.grey[600]),),
-                                  width: 100.0,),),
-                                Text(globalcompanyinfomap["Division"]),
-                              ],),
-                              SizedBox(height: 10.0,),*/
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
 
                     Container(
                       //height: MediaQuery.of(context).size.height,

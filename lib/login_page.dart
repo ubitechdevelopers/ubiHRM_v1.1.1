@@ -35,6 +35,7 @@ class _LoginPageState extends State<LoginPage>
   final FocusNode myFocusNodeEmail = FocusNode();
   final FocusNode myFocusNodeName = FocusNode();
   final FocusNode myFocusNodephone = FocusNode();
+  final FocusNode myFocusNodecity = FocusNode();
 
   TextEditingController loginEmailController = new TextEditingController();
   TextEditingController loginPasswordController = new TextEditingController();
@@ -48,6 +49,7 @@ class _LoginPageState extends State<LoginPage>
   TextEditingController signupPasswordController = new TextEditingController();
   TextEditingController signupPhoneController =
   new TextEditingController();
+  TextEditingController signupcityController = new TextEditingController();
 
   PageController _pageController;
 
@@ -591,7 +593,7 @@ class _LoginPageState extends State<LoginPage>
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                            top: 10.0, bottom: 10.0, left: 25.0, right: 25.0),
                         child: TextField(
                           focusNode: myFocusNodeName,
                           controller: signupNameController,
@@ -607,7 +609,7 @@ class _LoginPageState extends State<LoginPage>
                               FontAwesomeIcons.user,
                               color: Colors.black,
                             ),
-                            hintText: "Company Name",
+                            hintText: "Company ",
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiBold", fontSize: 16.0),
                           ),
@@ -620,7 +622,7 @@ class _LoginPageState extends State<LoginPage>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                            top: 10.0, bottom: 10.0, left: 25.0, right: 25.0),
                         child: TextField(
                           focusNode: myFocusNodeEmail,
                           controller: signupEmailController,
@@ -635,7 +637,7 @@ class _LoginPageState extends State<LoginPage>
                               FontAwesomeIcons.envelope,
                               color: Colors.black,
                             ),
-                            hintText: "Email Address",
+                            hintText: "Email ",
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiBold", fontSize: 16.0),
                           ),
@@ -648,7 +650,7 @@ class _LoginPageState extends State<LoginPage>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                            top: 8.0, bottom:8.0, left: 25.0, right: 25.0),
                         child: TextField(
                           focusNode: myFocusNodePassword,
                           controller: signupPasswordController,
@@ -684,7 +686,7 @@ class _LoginPageState extends State<LoginPage>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 0.0),
+                            top: 10.0, bottom: 10.0, left: 25.0, right: 0.0),
                         child: TextField(
                           focusNode: myFocusNodephone,
                           controller: signupPhoneController,
@@ -708,7 +710,36 @@ class _LoginPageState extends State<LoginPage>
                           ),
                         ),
                       ),
+                      Container(
+                        width: 250.0,
+                        height: 1.0,
+                        color: Colors.grey[400],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 10.0, bottom: 10.0, left: 25.0, right: 25.0),
+                        child: TextField(
+                          focusNode: myFocusNodecity,
+                          controller: signupcityController,
+                          keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.words,
+                          style: TextStyle(
+                              fontFamily: "WorkSansSemiBold",
+                              fontSize: 16.0,
+                              color: Colors.black),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            icon: Icon(
+                              FontAwesomeIcons.city,
+                              color: Colors.black,
 
+                            ),
+                            hintText: "City ",
+                            hintStyle: TextStyle(
+                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                          ),
+                        ),
+                      ),
                       Container(
                         width: 250.0,
                         height: 1.0,
@@ -722,7 +753,7 @@ class _LoginPageState extends State<LoginPage>
                         child:Container(
 
                           padding: EdgeInsets.only(
-                              top: 20.0, bottom: 20.0, left: 25.0, right: 15.0),
+                              top: 0.0, bottom: 0.0, left: 25.0, right: 15.0),
                           child:new InputDecorator(
                             decoration: const InputDecoration(
                               //icon: const Icon(Icons.satellite,size: 15.0,),
@@ -811,7 +842,7 @@ class _LoginPageState extends State<LoginPage>
                         showDialog(context: context, child:
                         new AlertDialog(
                           title: new Text("Alert"),
-                          content: new Text("Please enter company name"),
+                          content: new Text("Please enter the company name"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodeName);
                       }
@@ -820,7 +851,7 @@ class _LoginPageState extends State<LoginPage>
                         showDialog(context: context, child:
                         new AlertDialog(
                           title: new Text("Alert"),
-                          content: new Text("Please enter Email"),
+                          content: new Text("Please enter the Email"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodeEmail);
                       }
@@ -828,7 +859,7 @@ class _LoginPageState extends State<LoginPage>
                         showDialog(context: context, child:
                         new AlertDialog(
                           title: new Text("Alert"),
-                          content: new Text("Please enter password"),
+                          content: new Text("Please enter the password"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodePassword);
                       }
@@ -836,7 +867,7 @@ class _LoginPageState extends State<LoginPage>
                         showDialog(context: context, child:
                         new AlertDialog(
                           title: new Text("Alert"),
-                          content: new Text("Please enter phone no"),
+                          content: new Text("Please enter the Phone no"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodephone);
                       }
@@ -844,15 +875,23 @@ class _LoginPageState extends State<LoginPage>
                         showDialog(context: context, child:
                         new AlertDialog(
                           title: new Text("Alert"),
-                          content: new Text("Please enter valid password \n (password must contains at least 6 character)"),
+                          content: new Text("Please enter a valid password \n (password must contain at least 6 characters)"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodePassword);
+                      }
+                      else if(signupcityController.text=='') {
+                        showDialog(context: context, child:
+                        new AlertDialog(
+                          title: new Text("Alert"),
+                          content: new Text("Please enter the city"),
+                        ));
+                        FocusScope.of(context).requestFocus(myFocusNodecity);
                       }
                       else if(_country=='0') {
                         showDialog(context: context, child:
                         new AlertDialog(
                           title: new Text("Alert"),
-                          content: new Text("Please enter country"),
+                          content: new Text("Please select a country"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodephone);
                       }
@@ -860,7 +899,7 @@ class _LoginPageState extends State<LoginPage>
                         showDialog(context: context, child:
                         new AlertDialog(
                           title: new Text("Alert"),
-                          content: new Text("Please enter valid phone"),
+                          content: new Text("Please enter a valid Phone no."),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodephone);
                       }
@@ -877,23 +916,26 @@ class _LoginPageState extends State<LoginPage>
                           "phone": signupPhoneController.text,
                           "email": signupEmailController.text,
                           "password": signupPasswordController.text,
+                          "city": signupcityController.text,
                           "country": _country,
                           "countrycode": '',
                           "address": _country,
                         }) .then((response) {
+
                           if (response.statusCode == 200) {
 
                             print("-----------------> After Registration ---------------->");
                             print(response.body.toString());
-                            res = json.decode(response.body);
-                            if (res['sts'] == 'true') {
-                              setLocal(res['f_name'],res['id'],res['org_id']);
+                             // res = json.decode(response.body.toString());
+                            print("999");
+                          // print(res);
+                            if (response.body.toString().contains("true")) {
+                             // setLocal(res['f_name'],res['id'],res['org_id']);
 
                               showDialog(context: context, child:
                               new AlertDialog(
                                 title: new Text("UBIHRM"),
-                                content: new Text("Hi " + res['f_name'] +
-                                    " \n Your company has been registered successfully."),
+                                content: new Text("Company is registered successfully."),
                                 /* actions: <Widget>[
                                     new RaisedButton(
                                       color: Colors.green,
@@ -929,7 +971,7 @@ class _LoginPageState extends State<LoginPage>
                               new AlertDialog(
                                 title: new Text("ubihrm"),
                                 content: new Text(
-                                    "Oops!! Company not registered \n Try later"),
+                                    "Oops! Company not registered. Try later"),
                               ));
                             }
                             setState(() {
@@ -960,8 +1002,8 @@ class _LoginPageState extends State<LoginPage>
                           });
                           showDialog(context: context, child:
                           new AlertDialog(
-                            title: new Text("Error"),
-                            content: new Text("Too slow internet"),
+                            //title: new Text("Error"),
+                            content: new Text("Poor network connection."),
                           )
                           );
                         });

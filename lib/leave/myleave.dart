@@ -104,14 +104,14 @@ class _MyLeaveState extends State<MyLeave> {
     }else if(islogin=="failure"){
       showDialog(context: context, child:
       new AlertDialog(
-        title: new Text("Sorry!"),
-        content: new Text("Leave withdrawl failed."),
+        //title: new Text("Sorry!"),
+        content: new Text("Leave could not be withdrawn."),
       )
       );
     }else{
       showDialog(context: context, child:
       new AlertDialog(
-        title: new Text("Sorry!"),
+       // title: new Text("Sorry!"),
         content: new Text("Poor network connection."),
       )
       );
@@ -121,7 +121,7 @@ class _MyLeaveState extends State<MyLeave> {
   confirmWithdrawl(String leaveid) async{
     showDialog(context: context, child:
     new AlertDialog(
-      title: new Text("Do you really want to withdraw your leave."),
+      title: new Text("Withdraw  leave?"),
       content:  ButtonBar(
         children: <Widget>[
           FlatButton(
@@ -370,10 +370,10 @@ class _MyLeaveState extends State<MyLeave> {
                                  children: <Widget>[
                                    new Expanded(
                                      child: Container(
-                                         width: MediaQuery .of(context).size .width * 0.35,
-                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
+                                      width: MediaQuery .of(context).size .width * 0.35,
+                                      child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
                                           new SizedBox(width: 5.0,),
                                           new Text(
                                           snapshot.data[index].attendancedate.toString(),
@@ -532,7 +532,7 @@ class _MyLeaveState extends State<MyLeave> {
                                           ),*/
                                           snapshot.data[index].reason.toString()!='-'?Container(
                                             width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:1.5,bottom: 1.5),
+                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
                                             margin: EdgeInsets.only(top: 4.0),
                                             child: Text('Reason: '+snapshot.data[index].reason.toString(), style: TextStyle(color: Colors.black54),),
                                           ):Center(),
@@ -552,8 +552,8 @@ class _MyLeaveState extends State<MyLeave> {
 
                                           snapshot.data[index].approverstatus.toString()!='-'?Container(
                                             width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:1.5,bottom: 1.5),
-                                            margin: EdgeInsets.only(top: 4.0),
+                                            padding: EdgeInsets.only(top:.5,bottom: 1.5),
+                                            margin: EdgeInsets.only(top: 1.0),
                                             child: RichText(
                                               text: new TextSpan(
                                                 // Note: Styles for TextSpans must be explicitly defined.
@@ -564,7 +564,7 @@ class _MyLeaveState extends State<MyLeave> {
                                                 ),
                                                 children: <TextSpan>[
                                                   new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black54,), ),
-                                                  new TextSpan(text: snapshot.data[index].approverstatus.toString(), style: TextStyle(color: snapshot.data[index].approverstatus.toString()=='Approved'?appStartColor() :snapshot.data[index].approverstatus.toString()=='Rejected' || snapshot.data[index].approverstatus.toString()=='Cancel' ?Colors.red:snapshot.data[index].approverstatus.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 14.0,fontWeight: FontWeight.bold),),
+                                                  new TextSpan(text: snapshot.data[index].approverstatus.toString(), style: TextStyle(color: snapshot.data[index].approverstatus.toString()=='Approved'?appStartColor() :snapshot.data[index].approverstatus.toString()=='Rejected' || snapshot.data[index].approverstatus.toString()=='Cancel' ?Colors.red:snapshot.data[index].approverstatus.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 14.0),),
                                                 ],
                                               ),
                                             ),

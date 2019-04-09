@@ -22,17 +22,19 @@ class DonutAutoLabelChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
    // String attmonthh =getmonth();
-  var now = new DateTime.now();
- var formatter = new DateFormat('MMMM');
-  String formatted = formatter.format(now);
+  //var now = new DateTime.now();
+// var formatter = new DateFormat('MMMM');
+
+ // String formatted = formatter.format(now);
     return new charts.PieChart(seriesList,
         animate: true,
 
-      behaviors: [
+    /*  behaviors: [
         new charts.ChartTitle(formatted,
        behaviorPosition: charts.BehaviorPosition.top,
         titleOutsideJustification: charts.OutsideJustification.start,
-        innerPadding: 18),],
+        innerPadding: 18),
+      ],*/
 
         // Configure the width of the pie slices to 60px. The remaining space in
         // the chart will be left as a hole in the center.

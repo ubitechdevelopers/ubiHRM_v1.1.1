@@ -295,7 +295,7 @@ class OrdinalSales {
 
 
       new charts.Series<OrdinalSales, String>(
-        id: 'Entitle',
+        id: 'Entitled',
         domainFn: (OrdinalSales sales, _) => sales.year,
         measureFn: (OrdinalSales sales, _) => sales.sales,
 

@@ -600,7 +600,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
     }
     },
-    maxLines: 3,
+    maxLines: 1,
     ),
 
     getSubstituteEmp_DD(),
@@ -612,8 +612,8 @@ class _RequestLeaveState extends State<RequestLeave> {
         child: isServiceCalling?Text('Processing',style: TextStyle(color: Colors.white),):Text('APPLY',style: TextStyle(color: Colors.white),),
         color: Colors.orange[800],
         onPressed: () {
-          if (_formKey.currentState.validate()) {
-
+          if (_formKey.currentState.validate())
+          {
             requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text, substituteemp);
           }
         },
@@ -722,7 +722,7 @@ class _RequestLeaveState extends State<RequestLeave> {
               padding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
               child: InputDecorator(
                 decoration: InputDecoration(
-                  labelText: 'Substitute',
+                  labelText: 'Suggest Substitute',
 
 
                   // icon is 48px widget.

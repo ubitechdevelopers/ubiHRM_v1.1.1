@@ -19,6 +19,7 @@ import 'all_reports.dart';
 import 'appbar.dart';
 import 'services/attandance_fetch_location.dart';
 //import 'services/attandance_newservices.dart';
+import 'package:intl/intl.dart';
 
 
 import 'package:connectivity/connectivity.dart';
@@ -40,7 +41,7 @@ class _HomePageStatemain extends State<HomePageMain> {
   String empid;
   String organization;
   Employee emp;
-
+  String month;
   var profileimage;
   bool showtabbar;
   bool _checkLoadedprofile = true;
@@ -83,7 +84,9 @@ class _HomePageStatemain extends State<HomePageMain> {
  //   perHoliday=  getModulePermission("29","view");
     //prefs.setString("PerLeave", PerLeave1);
     //prefs.setString("PerApprovalLeave", PerApprovalLeave1);
-
+    var now = new DateTime.now();
+    var formatter = new DateFormat('MMMM');
+     month = formatter.format(now);
 
 
     var connectivityResult = await (new Connectivity().checkConnectivity());
@@ -123,6 +126,7 @@ class _HomePageStatemain extends State<HomePageMain> {
     //  await getProfileInfo(emp);
       await getAllPermission(emp);
       await getProfileInfo(emp);
+    await getfiscalyear(emp);
       perEmployeeLeave= getModulePermission("18","view");
 //print(perEmployeeLeave);
       perLeaveApproval=  getModulePermission("124","view");
@@ -332,7 +336,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
-                            Text('My Timeoff',
+                            Text('My Time off',
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
@@ -399,7 +403,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                    //   GestureDetector(
                         onTap: () {
 
-                          Navigator.push(
+                         Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => AllReports()),
                           );
@@ -451,7 +455,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                 SizedBox(height: 40.0,),
                 perAttendance=='1'?  Row(children: <Widget>[
                   SizedBox(width: 20.0,),
-                  Text("Attendance monthly summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                  Text("Attendance monthly summary  ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
                 ]
                 ):Center(),
 
@@ -502,13 +506,16 @@ class _HomePageStatemain extends State<HomePageMain> {
 */
 
                 SizedBox(width: 40.0,),
-                perEmployeeLeave =='1' ? Row(children: <Widget>[
+                Divider(height: 10.0,),
+                perEmployeeLeave =='1' ?
+
+                Row(children: <Widget>[
                   SizedBox(width: 20.0,),
-                  Text("Leave Summary",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                  Text("Leave Summary ["+fiscalyear+"]",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
                 ]
                 ):Center(),
 
-                perEmployeeLeave =='1' ? Divider(height: 10.0,):Center(),
+             //   perEmployeeLeave =='1' ? Divider(height: 0.0,):Center(),
                 /*SimpleBarChart.withSampleData(),*/
 
                 perEmployeeLeave =='1' ?  new Container(
@@ -536,7 +543,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                 Row(children: <Widget>[
                   SizedBox(width: 20.0,),
 
-                  Text("Holidays this month",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                  Text("Monthly Holidays ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
                 ]
                 ),
                 Divider(height: 10.0,),
@@ -604,7 +611,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                         width: MediaQuery.of(context).size.width*1,
                                         color: Colors.teal.withOpacity(0.1),
                                         padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                        child:Text("No Holiday Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                        child:Text("No Holidays this month ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                       ),
                                     );
                                   }
@@ -614,7 +621,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 }
 
                                 // By default, show a loading spinner
-                                return new Center( child: CircularProgressIndicator());
+                                return new Center(child: CircularProgressIndicator());
                               },
                             )
                         ),),

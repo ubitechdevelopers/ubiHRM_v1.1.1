@@ -232,7 +232,7 @@ class ChoiceCard extends StatelessWidget {
               // child: Center(
               child:Column(
                   children: <Widget>[
-                    Text('Timeoff Approvals',
+                    Text('Time off Applications',
                         style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                     new Divider(color: Colors.black54,height: 1.5,),
                     new Row(
@@ -368,7 +368,7 @@ class ChoiceCard extends StatelessWidget {
                                                             children: <TextSpan>[
                                                               new TextSpan(
                                                                   text: 'Duration: ',
-                                                                  style: new TextStyle(fontWeight: FontWeight.bold)),
+                                                                  style: new TextStyle()),
                                                               new TextSpan(
                                                                 text: snapshot.data[index].Fdate.toString()+snapshot.data[index].Tdate.toString(),style: TextStyle(color: Colors.grey[600]), ),
                                                               /*   new TextSpan(text: " Days: "+snapshot.data[index].Ldays.toString(),style: TextStyle(color: Colors.black), ),*/
@@ -416,7 +416,7 @@ class ChoiceCard extends StatelessWidget {
                                                 snapshot.data[index].Reason.toString() != '-'
                                                     ? Container(
                                                     width: MediaQuery.of(context).size.width * .90,
-                                                    padding: EdgeInsets.only(top: 1.5, bottom: 1.5),
+                                                    padding: EdgeInsets.only(top: 1.5),
                                                     margin: EdgeInsets.only(top: 4.0),
                                                     child: RichText(
                                                       text: new TextSpan(
@@ -427,8 +427,8 @@ class ChoiceCard extends StatelessWidget {
                                                           color: Colors.black,
                                                         ),
                                                         children: <TextSpan>[
-                                                          new TextSpan(text: 'Reason: ' ,style: new TextStyle(fontWeight: FontWeight.bold)),
-                                                          new TextSpan(text: snapshot.data[index].Reason.toString()),
+                                                          new TextSpan(text: 'Reason: ' ,style: new TextStyle()),
+                                                          new TextSpan(text: snapshot.data[index].Reason.toString(),style: TextStyle(color: Colors.grey[600])),
 
                                                         ],
                                                       ),
@@ -437,8 +437,8 @@ class ChoiceCard extends StatelessWidget {
 
                                                 snapshot.data[index].Psts.toString()!=''?Container(
                                                   width: MediaQuery.of(context).size.width*.90,
-                                                  padding: EdgeInsets.only(top:1.5,bottom: 1.5),
-                                                  margin: EdgeInsets.only(top: 4.0),
+                                                  padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                                  margin: EdgeInsets.only(top: .5),
                                                   child: RichText(
                                                     text: new TextSpan(
                                                       // Note: Styles for TextSpans must be explicitly defined.
@@ -448,8 +448,8 @@ class ChoiceCard extends StatelessWidget {
                                                         color: Colors.black,
                                                       ),
                                                       children: <TextSpan>[
-                                                        new TextSpan(text: 'Status: ',style: new TextStyle(fontWeight: FontWeight.bold)),
-                                                        new TextSpan(text: ""+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold),),
+                                                        new TextSpan(text: 'Status: ',style: new TextStyle()),
+                                                        new TextSpan(text: ""+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800]),),
                                                       ],
                                                     ),
                                                   ),
@@ -1056,7 +1056,7 @@ class ChoiceCard extends StatelessWidget {
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Approved succesfully"),
+                                  content: new Text("Approved"),
                                 )
                             );
                           }
@@ -1066,7 +1066,7 @@ class ChoiceCard extends StatelessWidget {
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Some error."),
+                                  content: new Text("Could not be approved. Try again."),
                                 )
                             );
                           }
@@ -1103,7 +1103,7 @@ class ChoiceCard extends StatelessWidget {
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Rejected succesfully"),
+                                  content: new Text("Application for timeoff is rejected"),
                                 )
                             );
                           }
@@ -1113,7 +1113,7 @@ class ChoiceCard extends StatelessWidget {
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Some error"),
+                                  content: new Text("Could not be rejected"),
                                 )
                             );
                           }

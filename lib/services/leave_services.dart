@@ -179,7 +179,7 @@ List<Map> createList(List data,int label) {
   for (int i = 0; i < data.length; i++) {
     //  if(data[i]["archive"].toString()=='1') {
     // print("kkkkkkk"+data[i]["name"].toString());
-    Map tos={"Name":data[i]["name"].toString()  +" (Balance Leave - "+data[i]["leftleave"].toString()+") " ,"Id":data[i]["id"].toString()};
+    Map tos={"Name":data[i]["name"].toString()  +" ("+data[i]["leftleave"].toString()+" Remaining ) " ,"Id":data[i]["id"].toString()};
     list.add(tos);
     // }
   }
@@ -360,7 +360,12 @@ List<LeaveA> createleaveapporval(List data) {
     if(data[i]["Pstatus"].contains("Pending at")) {
       Psts = data[i]["Pstatus"].toString();
     }
-
+    if(Fdate==Tdate){
+      Tdate=" - "+Fdate;
+    }
+    else{
+      Tdate=" - "+Tdate;
+    }
     LeaveA tos = new LeaveA(
         Id: Id,
         name: name,

@@ -70,16 +70,17 @@ class _AppDrawerState extends State<AppDrawer> {
               // Box decoration takes a gradient
               gradient: LinearGradient(
                 // Where the linear gradient begins and ends
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
+                begin: FractionalOffset.topRight,
+                end: FractionalOffset.bottomLeft,
                 // Add one stop for each color. Stops should increase from 0 to 1
-                stops: [0.1, 0.5, 0.7, 0.9],
+               // stops: [0.1, 0.5, 0.7, 0.9],
                 colors: [
                   // Colors are easy thanks to Flutter's Colors class.
-                  Colors.green[900],
-                  Colors.green[800],
-                  Colors.green[700],
-                  Colors.green[600],
+
+                  appStartColor(),
+                  appStartColor(),
+                  appStartColor(),
+                  appStartColor(),
                   //Color.fromRGBO(0,102,153,1.0),
               //  Color.fromRGBO(7,99,145,1.0),
               //Color.fromRGBO(12,99,142,1.0),

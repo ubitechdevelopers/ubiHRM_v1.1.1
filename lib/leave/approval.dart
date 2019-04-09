@@ -339,7 +339,7 @@ class ChoiceCard1 extends StatelessWidget {
               // child: Center(
               child:Column(
                   children: <Widget>[
-                    Text('Leave Approvals',
+                    Text('Leave Applications',
                         style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                     new Divider(color: Colors.black54,height: 1.5,),
                     new Row(
@@ -547,7 +547,7 @@ class ChoiceCard1 extends StatelessWidget {
                                                             children: <TextSpan>[
                                                               new TextSpan(
                                                                   text: 'Duration: ',
-                                                                  style: new TextStyle(fontWeight: FontWeight.bold)),
+                                                                  style: new TextStyle()),
                                                               new TextSpan(
                                                                 text: snapshot.data[index].Fdate.toString()+snapshot.data[index].Tdate.toString(),style: TextStyle(color: Colors.grey[600]), ),
                                                               /*   new TextSpan(text: " Days: "+snapshot.data[index].Ldays.toString(),style: TextStyle(color: Colors.black), ),*/
@@ -596,7 +596,7 @@ class ChoiceCard1 extends StatelessWidget {
                                                 snapshot.data[index].Reason.toString() != '-'
                                                     ? Container(
                                                     width: MediaQuery.of(context).size.width * .90,                                padding: EdgeInsets.only(
-                                                    top: 1.5, bottom: 1.5),
+                                                    top: 1.5, bottom: .0),
                                                     margin: EdgeInsets.only(top: 4.0),
                                                     child: RichText(
                                                       text: new TextSpan(
@@ -607,8 +607,8 @@ class ChoiceCard1 extends StatelessWidget {
                                                           color: Colors.black,
                                                         ),
                                                         children: <TextSpan>[
-                                                          new TextSpan(text: 'Reason: ' ,style: new TextStyle(fontWeight: FontWeight.bold)),
-                                                          new TextSpan(text: snapshot.data[index].Reason.toString()),
+                                                          new TextSpan(text: 'Reason: ' ,style: new TextStyle()),
+                                                          new TextSpan(text: snapshot.data[index].Reason.toString(),style: TextStyle(color: Colors.grey[600])),
 
                                                 /*          snapshot.data[index].Psts.toString() != ''
                                                               ? new TextSpan(text: "\n"+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold
@@ -621,8 +621,8 @@ class ChoiceCard1 extends StatelessWidget {
 
                                                 snapshot.data[index].Psts.toString()!=''?Container(
                                                   width: MediaQuery.of(context).size.width*.90,
-                                                  padding: EdgeInsets.only(top:1.5,bottom: 1.5),
-                                                  margin: EdgeInsets.only(top: 4.0),
+                                                  padding: EdgeInsets.only(top:1.0,bottom: .5),
+                                                  margin: EdgeInsets.only(top: .5),
                                                   child: RichText(
                                                     text: new TextSpan(
                                                       // Note: Styles for TextSpans must be explicitly defined.
@@ -632,8 +632,8 @@ class ChoiceCard1 extends StatelessWidget {
                                                         color: Colors.black,
                                                       ),
                                                       children: <TextSpan>[
-                                                        new TextSpan(text: 'Status: ',style: new TextStyle(fontWeight: FontWeight.bold)),
-                                                        new TextSpan(text: ""+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold),),
+                                                        new TextSpan(text: 'Status: ',style: new TextStyle()),
+                                                        new TextSpan(text: ""+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800]),),
                                                       ],
                                                     ),
                                                   ),
@@ -1247,7 +1247,7 @@ class ChoiceCard1 extends StatelessWidget {
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Some error."),
+                                  content: new Text("Could not be approved. Try again. "),
                                 )
                             );
                           }
@@ -1284,7 +1284,7 @@ print("ff"+sts);
                 builder: (_) =>
                 new AlertDialog(
                   //title: new Text("Dialog Title"),
-                  content: new Text("Rejected succesfully"),
+                  content: new Text("Leave rejected"),
                 )
             );
           }
@@ -1294,7 +1294,7 @@ print("ff"+sts);
                 builder: (_) =>
                 new AlertDialog(
                   //title: new Text("Dialog Title"),
-                  content: new Text("Some error"),
+                  content: new Text("Could not be rejected. Try again."),
                 )
             );
           }
@@ -1466,12 +1466,12 @@ print("ff"+sts);
                 );
               }else{
                 return new Center(
-                  child:Text("No Records"),
+                  child:Text("No pending Leave applications"),
                 );
               }
             }
             else if (snapshot.hasError) {
-              return new Text("Unable to connect server");
+              return new Text("Unable to connect to server");
             }
 
             // By default, show a loading spinner
