@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'global.dart';
 import 'dart:convert';
+import 'attandance/forgot_password.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -106,7 +107,7 @@ class _LoginPageState extends State<LoginPage>
                     padding: EdgeInsets.only(top: 30.0),
                     child: new Image(
                         width: 130.0,
-                        height: 130.0,
+                        height: 125.0,
                         fit: BoxFit.fill,
                         image: new AssetImage('assets/img/login_logo.png')),
                   ),
@@ -469,7 +470,13 @@ class _LoginPageState extends State<LoginPage>
           Padding(
             padding: EdgeInsets.only(top: 0.0),
             child: FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ForgotPassword()),
+                  );
+
+                },
                 child: Text(
                   "Forgot Password?",
                   style: TextStyle(

@@ -106,6 +106,7 @@ List<Leave> createLeaveList(List data){
     String ApproverComment=data[i]["comment"];
     String LeaveId=data[i]["leaveid"];
     bool withdrawlsts=data[i]["withdrawlsts"];
+    print(LeaveFrom+"@@@@@@@"+LeaveTo);
     if(LeaveFrom==LeaveTo){
       LeaveTo=" - "+LeaveFrom;
     }
@@ -356,16 +357,18 @@ List<LeaveA> createleaveapporval(List data) {
     String LeaveTypeId = data[i]["LeaveTypeId"].toString();
  //   print("********************"+data[i]["Pstatus"].toString());
     String HRSts = data[i]["HRSts"].toString();
+    print(Fdate+"@@@@@@@"+Tdate);
+    if(Fdate==Tdate){
+      Tdate="- "+Fdate;
+    }
+    else{
+      Tdate="- "+Tdate;
+    }
     String Psts="";
     if(data[i]["Pstatus"].contains("Pending at")) {
       Psts = data[i]["Pstatus"].toString();
     }
-    if(Fdate==Tdate){
-      Tdate=" - "+Fdate;
-    }
-    else{
-      Tdate=" - "+Tdate;
-    }
+
     LeaveA tos = new LeaveA(
         Id: Id,
         name: name,

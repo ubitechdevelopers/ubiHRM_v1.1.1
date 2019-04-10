@@ -14,6 +14,7 @@ import 'dart:async';
 import 'home.dart';
 import 'leave/approval.dart';
 import 'all_approvals.dart';
+import 'settings.dart';
 
 import 'package:connectivity/connectivity.dart';
 
@@ -112,7 +113,6 @@ var count;
             BottomNavigationBarItem(
               icon: new Icon(
                   Icons.home,
-
                   color: Colors.white,
                   size: 25.0 ),
               //  icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
@@ -222,11 +222,11 @@ var count;
               return;
             }
             if (newIndex == 2) {
-             /* Navigator.push(
+             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TabbedApp()),
+                MaterialPageRoute(builder: (context) => AllSetting()),
               );
-              return;*/
+              return;
             }
             if (newIndex == 3) {
               /*Navigator.push(

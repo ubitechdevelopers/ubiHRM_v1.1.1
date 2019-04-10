@@ -9,7 +9,9 @@ import 'package:ubihrm/services/attandance_services.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/time_picker_formfield.dart';
 import 'home.dart';
-import 'login.dart';
+import 'package:ubihrm/login_page.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
+import '../global.dart';
 
 
 class ForgotPassword extends StatefulWidget {
@@ -54,22 +56,23 @@ class _ForgotPassword extends State<ForgotPassword> {
 
   getmainhomewidget(){
     return Scaffold(
+      backgroundColor:scaffoldBackColor(),
       key: _scaffoldKey,
-      appBar: AppBar(
+      appBar:  new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Text('ubiAttendance', style: new TextStyle(fontSize: 20.0)),
+          //  new Text(widget.org_name, style: new TextStyle(fontSize: 20.0)),
           ],
         ),
-        leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-          Navigator.pop(context);
-          /*  Navigator.push(
-            context,
-           MaterialPageRoute(builder: (context) => TimeoffSummary()),
-          );*/
-        },),
-        backgroundColor: Colors.teal,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        // backgroundColor: Colors.teal,
       ),
       body:  mainbodyWidget(),
     );
@@ -90,8 +93,15 @@ class _ForgotPassword extends State<ForgotPassword> {
 
 
   mainbodyWidget(){
-    return Center(
-      child: Form(
+    return Container(
+      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+      // width: MediaQuery.of(context).size.width*0.9,
+      decoration: new ShapeDecoration(
+        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+        color: Colors.white,
+      ),
+      child:  Form(
         key: _formKey,
         child: SafeArea(
           child: ListView(
@@ -111,7 +121,7 @@ class _ForgotPassword extends State<ForgotPassword> {
                       child: Row(
                         children: <Widget>[
                           Container(
-                            width: MediaQuery.of(context).size.width*.8,
+                            width: MediaQuery.of(context).size.width*.7,
                             child: TextFormField(
                               controller: _username,
                               focusNode: __username,
@@ -167,8 +177,7 @@ class _ForgotPassword extends State<ForgotPassword> {
                                 if(res==1) {
                                   username = _username.text;
                                   _username.text='';
-                                  showInSnackBar(
-                                      "Request submitted successfully");
+                                  showInSnackBar("Request submitted successfully");
                                   setState(() {
                                     login=true;
                                     succ=true;

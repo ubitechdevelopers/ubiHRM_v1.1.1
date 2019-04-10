@@ -8,14 +8,14 @@ import 'package:url_launcher/url_launcher.dart';
 import 'profile.dart';
 import 'b_navigationbar.dart';
 import 'appbar.dart';
-import 'attandance/reports.dart';
+import 'change_pass.dart';
 
 
-class AllReports extends StatefulWidget {
+class AllSetting extends StatefulWidget {
   @override
-  _AllReports createState() => _AllReports();
+  _AllSetting createState() => _AllSetting();
 }
-class _AllReports extends State<AllReports> {
+class _AllSetting extends State<AllSetting> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _currentIndex = 1;
   String _orgName;
@@ -189,7 +189,7 @@ class _AllReports extends State<AllReports> {
 
               //    mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text('Reports',
+                  Text('Settings',
                       style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center),
                   //SizedBox(height: 10.0),
 
@@ -222,7 +222,7 @@ class _AllReports extends State<AllReports> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                    child: Text('Attendance',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Change Password',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
 
                               ],
@@ -238,9 +238,9 @@ class _AllReports extends State<AllReports> {
                     elevation: 4.0,
                     textColor: Colors.black,
                     onPressed: () {
-                     Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Reports()),
+                        MaterialPageRoute(builder: (context) => changePassword()),
                       );
                     },
                   ),
@@ -274,7 +274,7 @@ class _AllReports extends State<AllReports> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                    child: Text('Leave',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Profile',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
 
                               ],
@@ -290,64 +290,16 @@ class _AllReports extends State<AllReports> {
                     elevation: 4.0,
                     textColor: Colors.black,
                     onPressed: () {
-                      /* Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Reports()),
-                      );*/
+                        MaterialPageRoute(builder: (context) =>CollapsingTab()),
+                      );
                     },
                   ),
 
                   SizedBox(height: 6.0),
 
-                  new RaisedButton(
-                    //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-                    //      shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-                    //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                    child: Container(
 
-                      //     padding: EdgeInsets.only(left:  5.0),
-                      child: Row(
-
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            decoration: new BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: appStartColor(),
-                            ),
-                            child: Icon(Icons.alarm_on,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
-                            padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                          ),
-
-                          SizedBox(width: 15.0),
-                          Expanded(
-                            child:Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Container(
-                                    child: Text('Time off',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
-                                ),
-
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                          ),
-                        ],
-                      ),
-                    ),
-                    color: Colors.white,
-                    elevation: 4.0,
-                    textColor: Colors.black,
-                    onPressed: () {
-                      /* Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Reports()),
-                      );*/
-                    },
-                  ),
 
                 ])
         ),

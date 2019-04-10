@@ -1155,7 +1155,7 @@ class ChoiceCard1 extends StatelessWidget {
 
             // child: new Expanded(
             //height: MediaQuery.of(context).size.height-100.0,
-            height: 400.0,
+            height: 300.0,
             child: new Container(
               decoration: new BoxDecoration(
                   color: Colors.teal.withOpacity(0.1),
@@ -1178,7 +1178,7 @@ class ChoiceCard1 extends StatelessWidget {
                   Divider(color: Colors.black45,),*/
                   Padding(
                     padding: EdgeInsets.only(
-                        top: 80.0, bottom: 20.0, left: 40.0, right: 50.0),
+                        top: 40.0, bottom: 20.0, left: 40.0, right: 50.0),
                     child: TextFormField(
                       focusNode: myFocusNodeComment,
                       controller: CommentController,
@@ -1189,6 +1189,7 @@ class ChoiceCard1 extends StatelessWidget {
                       style: TextStyle(
                           fontFamily: "WorkSansSemiBold",
                           fontSize: 16.0,
+                          height: 1.0,
                           color: Colors.black),
                       decoration: InputDecoration(
                         border: InputBorder.none,
