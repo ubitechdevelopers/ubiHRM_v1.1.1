@@ -7,7 +7,7 @@ import 'profile.dart';
 import 'all_reports.dart';
 import 'model/model.dart';
 import 'services/services.dart';
-import 'services/checkLogin.dart';
+import 'settings.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -260,7 +260,10 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-             // Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AllSetting()),
+              );
 
             },
           ),

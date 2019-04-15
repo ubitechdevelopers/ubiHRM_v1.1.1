@@ -13,6 +13,8 @@ import '../profile.dart';
 //import 'bottom_navigationbar.dart';
 import '../b_navigationbar.dart';
 import '../appbar.dart';
+import '../gradient_button.dart';
+
 import '../drawer.dart';
 import '../services/timeoff_services.dart';
 
@@ -400,7 +402,7 @@ class ChoiceCard extends StatelessWidget {
                                                          //  }
                                                           },
                                                           child: new Icon(
-                                                            Icons.thumb_up,
+                                                            Icons.edit,
                                                             size: 17.0,
                                                             color: appStartColor(),
                                                           ),
@@ -974,7 +976,7 @@ class ChoiceCard extends StatelessWidget {
 
             // child: new Expanded(
             //height: MediaQuery.of(context).size.height-100.0,
-            height: 400.0,
+            height: 300.0,
             child: new Container(
               decoration: new BoxDecoration(
                   color: Colors.teal.withOpacity(0.1),
@@ -997,7 +999,7 @@ class ChoiceCard extends StatelessWidget {
                   Divider(color: Colors.black45,),*/
                   Padding(
                     padding: EdgeInsets.only(
-                        top: 80.0, bottom: 20.0, left: 40.0, right: 50.0),
+                        top: 40.0, bottom: 20.0, left: 40.0, right: 50.0),
                     child: TextFormField(
                       focusNode: myFocusNodeComment,
                       controller: CommentController,
@@ -1008,6 +1010,7 @@ class ChoiceCard extends StatelessWidget {
                       style: TextStyle(
                           fontFamily: "WorkSansSemiBold",
                           fontSize: 16.0,
+                          height: 1.0,
                           color: Colors.black),
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -1020,14 +1023,14 @@ class ChoiceCard extends StatelessWidget {
                         hintText: "Comment",
                         hintStyle: TextStyle(
                             fontFamily: "WorkSansSemiBold", fontSize: 15.0),
-                        suffixIcon: GestureDetector(
+                      /*  suffixIcon: GestureDetector(
                           //onTap: _toggleLogin,
                           child: Icon(
                             Icons.edit,
                             size: 15.0,
                             color: Colors.black,
                           ),
-                        ),
+                        ),*/
                       ),
 
                       /*validator: (value) {
@@ -1035,16 +1038,16 @@ class ChoiceCard extends StatelessWidget {
                               return 'Please enter Email or Phone no.';
                             }
                           },*/
-
+maxLines: 3,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                        top: 10.0, bottom: 10.0, left: 30.0, right: 30.0),
+                        top: 10.0, bottom: 10.0, left: 40.0, right: 20.0),
                     child:  ButtonTheme(
                       minWidth: 300.0,
                       height: 40.0,
-                      child: RaisedButton(
+                      child: RaisedGradientButton(
                         onPressed: () async  {
                           //getApprovals(choice.title);
                           final sts= await ApproveTimeoff(timeoffid,CommentController.text,2);
@@ -1075,9 +1078,9 @@ class ChoiceCard extends StatelessWidget {
                             context,
                             MaterialPageRoute(builder: (context) => TimeOffApp()),
                           ); },
-                        color: Colors.green,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
+                        gradient: LinearGradient(
+                          colors: <Color>[Colors.green[200], Colors.green[800]],
+                        ),
                         child: new Text('Approve',
                             style: new TextStyle(
                               color: Colors.white,
@@ -1088,11 +1091,11 @@ class ChoiceCard extends StatelessWidget {
                     ),),
                   Padding(
                     padding: EdgeInsets.only(
-                        top: 10.0, bottom: 0.0, left: 30.0, right: 30.0),
+                        top: 10.0, bottom: 0.0, left: 5.0, right: 20.0),
                     child:  ButtonTheme(
                       minWidth: 300.0,
                       height: 40.0,
-                      child: RaisedButton(
+                      child: RaisedGradientButton(
                         onPressed: () async {
                           //getApprovals(choice.title);
                           var sts = await ApproveTimeoff(timeoffid,CommentController.text,1);
@@ -1124,9 +1127,12 @@ class ChoiceCard extends StatelessWidget {
                             context,
                             MaterialPageRoute(builder: (context) => TimeOffApp()),
                           ); },
-                        color: Colors.red,
+                       /* color: Colors.red,
                         shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
+                            borderRadius: new BorderRadius.circular(30.0)),*/
+                        gradient: LinearGradient(
+                          colors: <Color>[Colors.red[200], Colors.red[800]],
+                        ),
                         child: new Text('Reject',
                             style: new TextStyle(
                                 color: Colors.white,

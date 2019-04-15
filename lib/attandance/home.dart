@@ -11,6 +11,7 @@ import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/attandance_saveimage.dart';
 import 'package:ubihrm/model/timeinout.dart';
 import 'attendance_summary.dart';
+import 'punchlocation_summary.dart';
 import 'punchlocation.dart';
 import '../drawer.dart';
 import 'package:ubihrm/services/attandance_services.dart';
@@ -710,7 +711,7 @@ class _HomePageState extends State<HomePage> {
                 )),
           ),
 
-        /*  Container(
+        Container(
             padding: EdgeInsets.only(top: 10.0),
             constraints: BoxConstraints(
               maxHeight: 60.0,
@@ -742,7 +743,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 )])),
           ),
-          Container(
+         /* Container(
             padding: EdgeInsets.only(top: 10.0),
             constraints: BoxConstraints(
               maxHeight: 60.0,

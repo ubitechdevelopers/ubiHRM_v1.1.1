@@ -110,16 +110,7 @@ var count;
 
             ),*/
 
-            BottomNavigationBarItem(
-              icon: new Icon(
-                  Icons.home,
-                  color: Colors.white,
-                  size: 25.0 ),
-              //  icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
 
-              title: new Text('Home', style: TextStyle(color: Colors.white)),
- 
-            ),
          /*   BottomNavigationBarItem(
               /*  icon:  new Image.asset("assets/approval.png",
                       height: 40.0,
@@ -193,6 +184,18 @@ var count;
     size: 25.0 ),
     title: Text('Profile',style: TextStyle(color: Colors.white))),
 
+
+          BottomNavigationBarItem(
+            icon: new Icon(
+                Icons.home,
+                color: Colors.white,
+                size: 25.0 ),
+            //  icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
+
+            title: new Text('Home', style: TextStyle(color: Colors.white)),
+
+          ),
+
             BottomNavigationBarItem(
                 icon: Icon(
                     Icons.settings,
@@ -204,20 +207,23 @@ var count;
           currentIndex: _currentIndex,
           onTap: (newIndex) {
             if (newIndex == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePageMain()),
-              );
-              return;
-            }
-            else if  (newIndex == 1) {
-             (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?
+              (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AllApprovals()),
               ):Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => CollapsingTab()),
+              );
+              return;
+
+
+            }
+            else if  (newIndex == 1) {
+
+          Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePageMain()),
               );
               return;
             }

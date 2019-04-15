@@ -14,6 +14,7 @@ import '../profile.dart';
 //import 'bottom_navigationbar.dart';
 import '../b_navigationbar.dart';
 import '../appbar.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 
 class MyLeave extends StatefulWidget {
@@ -27,6 +28,7 @@ class _MyLeaveState extends State<MyLeave> {
   var profileimage;
   bool showtabbar ;
   bool _checkLoadedprofile = true;
+  bool _checkwithdrawnleave = false;
   var PerLeave;
   var PerApprovalLeave;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -83,6 +85,10 @@ class _MyLeaveState extends State<MyLeave> {
   }
 
   withdrawlLeave(String leaveid) async{
+    setState(() {
+      _checkwithdrawnleave = true;
+    });
+    print("----> withdrawn service calling "+_checkwithdrawnleave.toString());
     final prefs = await SharedPreferences.getInstance();
 
     String empid = prefs.getString('employeeid')??"";
@@ -95,12 +101,12 @@ class _MyLeaveState extends State<MyLeave> {
         context,
         MaterialPageRoute(builder: (context) => MyLeave()),
       );
-      /*showDialog(context: context, child:
+      showDialog(context: context, child:
       new AlertDialog(
-        title: new Text("Congrats!"),
-        content: new Text("Your leave is withdrawl successfully!"),
+      //  title: new Text("Congrats!"),
+        content: new Text("Your leave is withdrawn successfully!"),
       )
-      );*/
+      );
     }else if(islogin=="failure"){
       showDialog(context: context, child:
       new AlertDialog(
@@ -135,8 +141,12 @@ class _MyLeaveState extends State<MyLeave> {
             child: Text('Withdraw',style: TextStyle(color: Colors.white),),
             color: Colors.orange[800],
             onPressed: () {
+              setState(() {
+                _checkwithdrawnleave = true;
+              });
               Navigator.of(context, rootNavigator: true).pop();
               withdrawlLeave(leaveid);
+
             },
           ),
         ],
@@ -176,102 +186,20 @@ class _MyLeaveState extends State<MyLeave> {
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
         appBar: new AppHeader(profileimage,showtabbar),
-/*        appBar: GradientAppBar(
-
-          backgroundColorStart: appStartColor(),
-          backgroundColorEnd: appEndColor(),
-          automaticallyImplyLeading: false,
-          // title: const Text('Approvals'),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              GestureDetector(
-                // When the child is tapped, show a snackbar
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CollapsingTab()),
-                  );
-                },
-                child: Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        //image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
-                      )
-                  )),),
-          new Expanded(
-            child: Container(
-                  padding: const EdgeInsets.all(5.0), child: Text('UBIHRM')
-              ),),
-            ],
-
-          ),
-
-
-
-          actions:<Widget>[
-            new DropdownButton<String>(
-              hint: new Text("My Leave" , style: TextStyle(
-                color: Colors.white,
-                fontSize: 15.0,
-              )),
-              items: <String>['My Approvals', 'My Leave'].map((String value) {
-                return new DropdownMenuItem<String>(
-                  value: value,
-                  child: new Text(value),
-
-                );
-              }).toList(),
-              onChanged: (value) {
-                value=value;
-                switch(value) {
-                  case "My Approvals" :
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TabbedApp()),
-                    );
-                    break;
-                  case "My Leave" :
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyLeave()),
-                    );
-                    break;
-                }},
-            )
-
-
-          ],
-        *//*  backgroundColorStart: appStartColor(),
-          backgroundColorEnd: appEndColor(),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              new Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: AssetImage('assets/avatar.png'),
-                      )
-                  )),
-              Container(
-                  padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-              )
-            ],
-
-          ),*//*
-        ),*/
         bottomNavigationBar:new HomeNavigation(),
-
-        floatingActionButton: new FloatingActionButton(
+      body:  ModalProgressHUD(
+          inAsyncCall: _checkwithdrawnleave,
+          opacity: 0.15,
+          progressIndicator: SizedBox(
+            child:new CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation(Colors.green),
+                strokeWidth: 5.0),
+            height: 50.0,
+            width: 50.0,
+          ),
+          child: homewidget()
+      ),
+         floatingActionButton: new FloatingActionButton(
           backgroundColor: Colors.orange[800],
           onPressed: (){
             Navigator.push(
@@ -282,7 +210,7 @@ class _MyLeaveState extends State<MyLeave> {
           tooltip: 'Request Leave',
           child: new Icon(Icons.add),
         ),
-        body: homewidget()
+
     );
   }
 

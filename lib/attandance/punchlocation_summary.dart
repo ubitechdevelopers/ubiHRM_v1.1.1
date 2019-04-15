@@ -11,6 +11,8 @@ import 'punchlocation.dart';
 import 'reports.dart';
 import 'profile.dart';
 import 'settings.dart';
+import '../appbar.dart';
+import 'package:ubihrm/b_navigationbar.dart';
 
 //import 'package:intl/intl.dart';
 
@@ -30,6 +32,10 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
   String org_name="";
   String admin_sts='0';
   int _currentIndex = 1;
+  var profileimage;
+  bool showtabbar;
+  bool _checkLoaded = true;
+
   @override
   void initState() {
     super.initState();
@@ -47,85 +53,29 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
       admin_sts = prefs.getString('sstatus') ?? '0';
       org_name = prefs.getString('org_name') ?? '';
     });
+
+    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+
+    //      print("ABCDEFGHI-"+profile);
+    profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+      if (mounted) {
+        setState(() {
+          _checkLoaded = false;
+        });
+      }
+    });
+    showtabbar=false;
   }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            new Text(org_name, style: new TextStyle(fontSize: 20.0)),
-          ],
-        ),
-        leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()),
-          );
-        },),
-        backgroundColor: Colors.teal,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-
-        currentIndex: _currentIndex,
-        onTap: (newIndex) {
-          if(newIndex==2){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Settings()),
-            );
-            return;
-          }
-          if(newIndex==1){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-            return;
-          }else if (newIndex == 0) {
-            (admin_sts == '1')
-                ? Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Reports()),
-            )
-                : Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
-            );
-            return;
-          }
-          setState((){_currentIndex = newIndex;});
-
-        }, // this will be set when a new tab is tapped
-        items: [
-          (admin_sts == '1')
-              ? BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.library_books,
-            ),
-            title: new Text('Reports'),
-          )
-              : BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.person,
-            ),
-            title: new Text('Profile'),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.home,color: Colors.black54,),
-            title: new Text('Home',style:TextStyle(color: Colors.black54,)),
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings,),
-              title: Text('Settings')
-          )
-        ],
-      ),
+      backgroundColor:scaffoldBackColor(),
+      appBar:new AppHeader(profileimage,showtabbar),
+      bottomNavigationBar: new HomeNavigation(),
       endDrawer: new AppDrawer(),
       floatingActionButton: new FloatingActionButton(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.deepOrange,
         onPressed: (){
           Navigator.push(
             context,
@@ -168,7 +118,15 @@ String dateFormatter(String date_) {
   return(date[2]+""+dy[int.parse(date[2])-1]+" "+months[int.parse(date[1])-1]);
 }
 getWidgets(context){
-  return Column(
+  return
+    Container(
+        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        decoration: new ShapeDecoration(
+          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+          color: Colors.white,
+        ),
+        child:  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget> [
         Container(
@@ -186,20 +144,20 @@ getWidgets(context){
             SizedBox(height: 50.0,),
             SizedBox(width: MediaQuery.of(context).size.width*0.02),
             Container(
-              width: MediaQuery.of(context).size.width*0.35,
+              width: MediaQuery.of(context).size.width*0.25,
               child:Text('Client',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
             ),
 
             SizedBox(height: 50.0,),
             SizedBox(width: 5.0,),
             Container(
-              width: MediaQuery.of(context).size.width*0.30,
+              width: MediaQuery.of(context).size.width*0.25,
               child:Text('In',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
             ),
             SizedBox(height: 50.0,),
             SizedBox(width: 3.0,),
             Container(
-              width: MediaQuery.of(context).size.width*0.30,
+              width: MediaQuery.of(context).size.width*0.25,
               child:Text('Out',style: TextStyle(color: Colors.orangeAccent,fontWeight:FontWeight.bold,fontSize: 16.0),),
             ),
           ],
@@ -207,6 +165,7 @@ getWidgets(context){
         Divider(),
 
         Container(
+
             height: MediaQuery.of(context).size.height*0.60,
           child: new FutureBuilder<List<Punch>>(
             future: getSummaryPunch(),
@@ -291,5 +250,5 @@ getWidgets(context){
           ),
         ),
       ]
-  );
+  ));
 }

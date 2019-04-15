@@ -7,7 +7,11 @@ import 'outside_label.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'drawer.dart';
+import '../drawer.dart';
+import '../appbar.dart';
+import '../global.dart';
+import '../b_navigationbar.dart';
+
 // This app is a stateful, it tracks the user's current choice.
 class CustomDateAttendance extends StatefulWidget {
   @override
@@ -19,6 +23,9 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _orgName;
   var formatter = new DateFormat('dd-MMM-yyyy');
+  var profileimage;
+  bool showtabbar;
+
   bool res = true;
   List<Map<String,String>> chartData;
   void showInSnackBar(String value) {
@@ -39,22 +46,43 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
     getOrgName();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
+    showtabbar =false;
+    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+
   }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       key: _scaffoldKey,
-      appBar: new AppBar(
-        title: new Text(_orgName, style: new TextStyle(fontSize: 20.0)),
-        backgroundColor: Colors.teal,
-      ),
+      backgroundColor:scaffoldBackColor(),
+      appBar: new AppHeader(profileimage, showtabbar),
       endDrawer: new AppDrawer(),
-      body: new ListView(
+      bottomNavigationBar: HomeNavigation(),
+
+      body: getReportsWidget(),
+    );
+  }
+
+
+  getReportsWidget() {
+    return Stack(
+      children: <Widget>[
+      Container(
+      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+      padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+      //width: MediaQuery.of(context).size.width*0.9,
+      //  height:MediaQuery.of(context).size.height*0.75,
+      decoration: new ShapeDecoration(
+      shape: new RoundedRectangleBorder(
+      borderRadius: new BorderRadius.circular(20.0)),
+      color: Colors.white,
+      ),
+      child: ListView(
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
-          SizedBox(height:3.0),
+          SizedBox(height:1.0),
           new Container(
-            child: Center(child:Text("Custom Date Attendance",style: TextStyle(fontSize: 22.0,color: Colors.black54,),),),
+            child: Center(child:Text("Custom Date Attendance",style: TextStyle(fontSize: 20.0,color: Colors.black54,),),),
           ),
           Container(
             child: DateTimePickerFormField(
@@ -90,7 +118,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
             padding: EdgeInsets.all(0.1),
             margin: EdgeInsets.all(0.1),
             child: new ListTile(
-              title: new SizedBox(height: MediaQuery.of(context).size.height*0.27,
+              title: new SizedBox(height: MediaQuery.of(context).size.height*0.20,
 
                 child: new FutureBuilder<List<Map<String,String>>>(
                     future: getChartDataCDate(today.text),
@@ -128,7 +156,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
           new Container(
             decoration: new BoxDecoration(color: Colors.black54),
             child: new TabBar(
-              indicator: BoxDecoration(color: Colors.orangeAccent,),
+              indicator: BoxDecoration(color: Colors.orange[800],),
               controller: _controller,
               tabs: [
                 new Tab(
@@ -152,18 +180,18 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
             children: <Widget>[
               SizedBox(height: 50.0,),
               Container(
-                width: MediaQuery.of(context).size.width*0.46,
-                child:Text('  Name',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                width: MediaQuery.of(context).size.width*0.42,
+                child:Text('  Name',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
               SizedBox(height: 50.0,),
               Container(
-                width: MediaQuery.of(context).size.width*0.22,
-                child:Text('Time In',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                width: MediaQuery.of(context).size.width*0.20,
+                child:Text('Time In',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
               SizedBox(height: 50.0,),
               Container(
-                width: MediaQuery.of(context).size.width*0.22,
-                child:Text('Time Out',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                width: MediaQuery.of(context).size.width*0.20,
+                child:Text('Time Out',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
             ],
           ),
@@ -202,7 +230,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                 width: MediaQuery
                                                     .of(context)
                                                     .size
-                                                    .width * 0.46,
+                                                    .width * 0.40,
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment
                                                       .start,
@@ -255,7 +283,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -286,7 +314,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -375,7 +403,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                           width: MediaQuery
                                               .of(context)
                                               .size
-                                              .width * 0.46,
+                                              .width * 0.42,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment
                                                 .start,
@@ -393,7 +421,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
-                                                .width * 0.22,
+                                                .width * 0.20,
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment
                                                   .center,
@@ -408,7 +436,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
-                                                .width * 0.22,
+                                                .width * 0.20,
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment
                                                   .center,
@@ -489,7 +517,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                 width: MediaQuery
                                                     .of(context)
                                                     .size
-                                                    .width * 0.46,
+                                                    .width * 0.42,
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment
                                                       .start,
@@ -542,7 +570,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -573,7 +601,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -668,7 +696,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                 width: MediaQuery
                                                     .of(context)
                                                     .size
-                                                    .width * 0.46,
+                                                    .width * 0.42,
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment
                                                       .start,
@@ -721,7 +749,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -752,7 +780,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -815,13 +843,14 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
               ],
             ),
           ):Container(
-      height: MediaQuery.of(context).size.height*0.25,
-      child:Center(
-        child: Text('No Data Available'),
-      ),
-    ),
+            height: MediaQuery.of(context).size.height*0.25,
+            child:Center(
+              child: Text('No Data Available'),
+            ),
+          ),
         ],
       ),
-    );
+      ),
+      ]);
   }
 }

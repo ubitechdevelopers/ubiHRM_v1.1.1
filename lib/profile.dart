@@ -554,16 +554,18 @@ var profilepic;
                             children: <Widget>[
                               // SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                new Expanded(
-                                  child:  Container(child:Text("Phone:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
+                               // new Expanded(
+                                    Container(child:Text("Phone:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),
+                               // ),
                                 Text(globalcontactusinfomap["Phone"]),
                               ],),
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                new Expanded(
-                                  child:Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
+                              //  new Expanded(child:
+                                Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),
+                                  //),
                                 Text(globalcontactusinfomap["Email"]),
                               ],),
                          /*     SizedBox(height: 10.0,),
@@ -583,16 +585,18 @@ var profilepic;
 
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                new Expanded(
-                                  child:  Container(child:Text("City:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),),
+                               // new Expanded( child:
+                                  Container(child:Text("City:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+                                //),
                                 Text(globalcontactusinfomap["City"]),
                               ],),
                               SizedBox(height: 10.0,),
                               Row(children: <Widget>[
-                                new Expanded(
-                                  child:  Container(child:Text("Country:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
+                               // new Expanded(child:
+                                Container(child:Text("Country:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),
+                                //),
                                 Text(globalcontactusinfomap["Country"]),
                               ],),
                               SizedBox(height: 10.0,),

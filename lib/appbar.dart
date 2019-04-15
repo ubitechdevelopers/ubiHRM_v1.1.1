@@ -26,9 +26,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   bool showtabbar;
   AppHeader(profileimage1,showtabbar1){
     profileimage = profileimage1;
-  print("--------->");
-   print(profileimage);
-    print("--------->");
+ // print("--------->");
+  // print(profileimage);
+  //  print("--------->");
  //   print(_checkLoadedprofile);
     if (profileimage!=null) {
       _checkLoadedprofile = false;

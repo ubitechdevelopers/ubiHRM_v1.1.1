@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'drawer.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:ubihrm/attandance/addShift.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'home.dart';
-import 'settings.dart';
-import 'profile.dart';
-import 'reports.dart';
+import '../drawer.dart';
+import '../appbar.dart';
+import '../global.dart';
+import '../b_navigationbar.dart';
 
 class VisitList extends StatefulWidget {
   @override
@@ -26,6 +25,8 @@ class _VisitList extends State<VisitList> {
   String admin_sts='0';
   bool res = true;
   var formatter = new DateFormat('dd-MMM-yyyy');
+  var profileimage;
+  bool showtabbar;
 
   @override
   void initState() {
@@ -33,6 +34,8 @@ class _VisitList extends State<VisitList> {
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
     // f_dept = FocusNode();
+    showtabbar =false;
+    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     getOrgName();
   }
 
@@ -61,87 +64,37 @@ class _VisitList extends State<VisitList> {
   getmainhomewidget() {
     return new Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            new Text(_orgName, style: new TextStyle(fontSize: 20.0)),
-
-            /*  Image.asset(
-                    'assets/logo.png', height: 40.0, width: 40.0),*/
-          ],
-        ),
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        backgroundColor: Colors.teal,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (newIndex) {
-          if(newIndex==2){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Settings()),
-            );
-            return;
-          }if (newIndex == 0) {
-            (admin_sts == '1')
-                ? Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Reports()),
-            )
-                : Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
-            );
-            return;
-          }
-          if(newIndex==1){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-            return;
-          }
-          setState((){_currentIndex = newIndex;});
-
-        },// this will be set when a new tab is tapped
-        items: [
-          (admin_sts == '1')
-              ? BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.library_books,
-            ),
-            title: new Text('Reports'),
-          )
-              : BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.person,
-            ),
-            title: new Text('Profile'),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.home,color: Colors.black54,),
-            title: new Text('Home',style: TextStyle(color: Colors.black54),),
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), title: Text('Settings'))
-        ],
-      ),
+      backgroundColor:scaffoldBackColor(),
+      appBar: new AppHeader(profileimage, showtabbar),
       endDrawer: new AppDrawer(),
-      body: Container(
+      bottomNavigationBar: HomeNavigation(),
+      body: getReportsWidget(),
+    );
+  }
+
+
+  getReportsWidget() {
+    return Stack(
+      children: <Widget>[
+        Container(
+        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+        //width: MediaQuery.of(context).size.width*0.9,
+        //  height:MediaQuery.of(context).size.height*0.75,
+        decoration: new ShapeDecoration(
+        shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(20.0)),
+        color: Colors.white,
+        ),
         //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
         child: Column(
           children: <Widget>[
-            SizedBox(height: 8.0),
+            SizedBox(height: 1.0),
             Center(
               child: Text(
                 'Visits',
                 style: new TextStyle(
-                  fontSize: 22.0,
+                  fontSize: 20.0,
                   color: Colors.black54,
                 ),
               ),
@@ -193,28 +146,36 @@ class _VisitList extends State<VisitList> {
                     width: MediaQuery.of(context).size.width * 0.22,
                     child: Text(
                       'Name',
-                      style: TextStyle(color: Colors.orange),
+                      style: TextStyle(color: appStartColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0),
                       textAlign: TextAlign.left,
                     ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.44,
+                    width: MediaQuery.of(context).size.width * 0.42,
                     child: Text(
                       'Client',
-                      style: TextStyle(color: Colors.orange),
+                      style: TextStyle(color: appStartColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0),
                       textAlign: TextAlign.left,
                     ),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.12,
                     child: Text('In',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: appStartColor(),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0),
                         textAlign: TextAlign.left),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.12,
                     child: Text('Out ',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: appStartColor(),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0),
                         textAlign: TextAlign.left),
                   ),
                 ],
@@ -230,7 +191,7 @@ class _VisitList extends State<VisitList> {
           ],
         ),
       ),
-    );
+   ] );
   }
 
   loader() {
@@ -334,7 +295,7 @@ class _VisitList extends State<VisitList> {
                   });
             } else {
               return new Center(
-                child: Text("No Visits ", style: TextStyle(color: Colors.orangeAccent,fontSize: 18.0),),
+                child: Text("No Visits ", style: TextStyle(color: appStartColor(),fontSize: 18.0),),
               );
             }
           } else if (snapshot.hasError) {

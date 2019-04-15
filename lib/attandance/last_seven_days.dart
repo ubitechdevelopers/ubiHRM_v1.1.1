@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'outside_label.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'drawer.dart';
+import '../drawer.dart';
+import '../appbar.dart';
+import '../global.dart';
+import '../b_navigationbar.dart';
 // This app is a stateful, it tracks the user's current choice.
 class LastSeven extends StatefulWidget {
   @override
@@ -17,6 +20,9 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
   TabController _controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _orgName;
+  var profileimage;
+  bool showtabbar;
+
   List<Map<String,String>> chartData;
   void showInSnackBar(String value) {
     final snackBar = SnackBar(
@@ -33,28 +39,47 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller = new TabController(length: 4, vsync: this);
+    showtabbar =false;
+    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     getOrgName();
   }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       key: _scaffoldKey,
-      appBar: new AppBar(
-        title: new Text(_orgName, style: new TextStyle(fontSize: 20.0)),
-        backgroundColor: Colors.teal,
-      ),
+      backgroundColor:scaffoldBackColor(),
+      appBar: new AppHeader(profileimage, showtabbar),
       endDrawer: new AppDrawer(),
-      body: new ListView(
+      bottomNavigationBar: HomeNavigation(),
+      body: getReportsWidget(),
+    );
+  }
+
+  getReportsWidget() {
+    return Stack(
+      children: <Widget>[
+      Container(
+      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+      padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+      //width: MediaQuery.of(context).size.width*0.9,
+      //  height:MediaQuery.of(context).size.height*0.75,
+      decoration: new ShapeDecoration(
+      shape: new RoundedRectangleBorder(
+      borderRadius: new BorderRadius.circular(20.0)),
+      color: Colors.white,
+      ),
+      child: ListView(
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
+          SizedBox(height: 1.0),
           new Container(
-            child: Center(child:Text("Attendance Snap - Last Seven Days",style: TextStyle(fontSize: 22.0,color: Colors.black54,),),),
+            child: Center(child:Text("Attendance Snap - Last Seven Days",style: TextStyle(fontSize: 20.0,color: Colors.black54,),),),
           ),
           new Container(
             padding: EdgeInsets.all(0.1),
             margin: EdgeInsets.all(0.1),
             child: new ListTile(
-              title: new SizedBox(height: MediaQuery.of(context).size.height*0.30,
+              title: new SizedBox(height: MediaQuery.of(context).size.height*0.20,
 
                 child: new FutureBuilder<List<Map<String,String>>>(
                     future: getChartDataLast('l7'),
@@ -87,7 +112,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
           new Container(
             decoration: new BoxDecoration(color: Colors.black54),
             child: new TabBar(
-              indicator: BoxDecoration(color: Colors.orangeAccent,),
+              indicator: BoxDecoration(color: Colors.orange[800],),
               controller: _controller,
               tabs: [
                 new Tab(
@@ -106,29 +131,33 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
             ),
           ),
           new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //    mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SizedBox(height: 50.0,),
               SizedBox(width: MediaQuery.of(context).size.width*0.02),
               Container(
-                width: MediaQuery.of(context).size.width*0.18,
-                child:Text('Date',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+
+                width: MediaQuery.of(context).size.width*0.20,
+                child:Text('Date',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
               SizedBox(height: 50.0,),
               Container(
+
                 width: MediaQuery.of(context).size.width*0.35,
-                child:Text('Name',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                child:Text('Name',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
               SizedBox(height: 50.0,),
               Container(
-                width: MediaQuery.of(context).size.width*0.18,
-                child:Text('Time In',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+
+                width: MediaQuery.of(context).size.width*0.14,
+                child:Text('Time In',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
               SizedBox(height: 50.0,),
               Container(
-                width: MediaQuery.of(context).size.width*0.18,
-                child:Text('Time Out',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+
+                width: MediaQuery.of(context).size.width*0.16,
+                child:Text('Time Out',textAlign: TextAlign.center,style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
             ],
           ),
@@ -136,6 +165,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
           new Container(
             height: MediaQuery.of(context).size.height*0.30,
             child: new TabBarView(
+
               controller: _controller,
               children: <Widget>[
                 new Container(
@@ -157,7 +187,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (BuildContext context, int index) {
                                     return new Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.start,
                                       children: <Widget>[
 
                                         SizedBox(height: 40.0,),
@@ -172,10 +202,11 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                               fontSize: 16.0),),
                                         ),
                                         Container(
+
                                           width: MediaQuery
                                               .of(context)
                                               .size
-                                              .width * 0.40,
+                                              .width * 0.35,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment
                                                 .start,
@@ -188,16 +219,18 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                           ),
                                         ),
                                         Container(
+
                                           width: MediaQuery
                                               .of(context)
                                               .size
-                                              .width * 0.16,
+                                              .width * 0.13,
                                           child:  Text(snapshot.data[index].TimeIn
                                               .toString(), style: TextStyle(
                                               color: Colors.black87,
                                               fontSize: 16.0),),
                                         ),
                                         Container(
+
                                           width: MediaQuery
                                               .of(context)
                                               .size
@@ -205,7 +238,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                           child:  Text(snapshot.data[index].TimeOut
                                               .toString(), style: TextStyle(
                                               color: Colors.black87,
-                                              fontSize: 16.0),),
+                                              fontSize: 16.0),textAlign: TextAlign.center,),
                                         ),
                                       ],
 
@@ -275,7 +308,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                           width: MediaQuery
                                               .of(context)
                                               .size
-                                              .width * 0.40,
+                                              .width * 0.35,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment
                                                 .start,
@@ -292,7 +325,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                           width: MediaQuery
                                               .of(context)
                                               .size
-                                              .width * 0.16,
+                                              .width * 0.13,
                                           child:  Text(snapshot.data[index].TimeIn
                                               .toString(), style: TextStyle(
                                               color: Colors.black87,
@@ -306,7 +339,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                           child:  Text(snapshot.data[index].TimeOut
                                               .toString(), style: TextStyle(
                                               color: Colors.black87,
-                                              fontSize: 16.0),),
+                                              fontSize: 16.0),textAlign: TextAlign.center,),
                                         ),
 
                                       ],
@@ -384,7 +417,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                           width: MediaQuery
                                               .of(context)
                                               .size
-                                              .width * 0.40,
+                                              .width * 0.35,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment
                                                 .start,
@@ -401,7 +434,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                           width: MediaQuery
                                               .of(context)
                                               .size
-                                              .width * 0.16,
+                                              .width * 0.13,
                                           child:  Text(snapshot.data[index].TimeIn
                                               .toString(), style: TextStyle(
                                               color: Colors.black87,
@@ -415,7 +448,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                           child:  Text(snapshot.data[index].TimeOut
                                               .toString(), style: TextStyle(
                                               color: Colors.black87,
-                                              fontSize: 16.0),),
+                                              fontSize: 16.0),textAlign: TextAlign.center,),
                                         ),
 
                                       ],
@@ -491,7 +524,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                           width: MediaQuery
                                               .of(context)
                                               .size
-                                              .width * 0.40,
+                                              .width * 0.35,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment
                                                 .start,
@@ -508,7 +541,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                           width: MediaQuery
                                               .of(context)
                                               .size
-                                              .width * 0.16,
+                                              .width * 0.13,
                                           child:  Text(snapshot.data[index].TimeIn
                                               .toString(), style: TextStyle(
                                               color: Colors.black87,
@@ -559,6 +592,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
           ),
         ],
       ),
-    );
+    ),
+    ]);
   }
 }

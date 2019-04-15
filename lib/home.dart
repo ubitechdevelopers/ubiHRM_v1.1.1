@@ -20,6 +20,7 @@ import 'appbar.dart';
 import 'services/attandance_fetch_location.dart';
 //import 'services/attandance_newservices.dart';
 import 'package:intl/intl.dart';
+import 'settings.dart';
 
 
 import 'package:connectivity/connectivity.dart';
@@ -352,7 +353,10 @@ class _HomePageStatemain extends State<HomePageMain> {
                //    perSet=='1'? GestureDetector(
                    GestureDetector(
                        onTap: () {
-
+                         Navigator.push(
+                           context,
+                           MaterialPageRoute(builder: (context) => AllSetting()),
+                         );
                        },
                         child: Column(
                           children: [

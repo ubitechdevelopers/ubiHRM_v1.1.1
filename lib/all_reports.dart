@@ -9,6 +9,7 @@ import 'profile.dart';
 import 'b_navigationbar.dart';
 import 'appbar.dart';
 import 'attandance/reports.dart';
+import 'leave/leave_reports.dart';
 
 
 class AllReports extends StatefulWidget {
@@ -222,7 +223,7 @@ class _AllReports extends State<AllReports> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                    child: Text('Attendance',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text(' Attendance',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
 
                               ],
@@ -238,7 +239,7 @@ class _AllReports extends State<AllReports> {
                     elevation: 4.0,
                     textColor: Colors.black,
                     onPressed: () {
-                     Navigator.push(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Reports()),
                       );
@@ -290,10 +291,10 @@ class _AllReports extends State<AllReports> {
                     elevation: 4.0,
                     textColor: Colors.black,
                     onPressed: () {
-                      /* Navigator.push(
+                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Reports()),
-                      );*/
+                        MaterialPageRoute(builder: (context) => LeaveReports()),
+                      );
                     },
                   ),
 

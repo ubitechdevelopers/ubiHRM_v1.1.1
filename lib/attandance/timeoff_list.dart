@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'drawer.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'profile.dart';
-import 'reports.dart';
-import 'settings.dart';
-import 'home.dart';
+import '../drawer.dart';
+import '../appbar.dart';
+import '../global.dart';
+import '../b_navigationbar.dart';
 
 class TimeOffList extends StatefulWidget {
   @override
@@ -23,11 +22,16 @@ class _TimeOffList extends State<TimeOffList> {
   bool res = true;
   String admin_sts='0';
   var formatter = new DateFormat('dd-MMM-yyyy');
+  var profileimage;
+  bool showtabbar;
+
   @override
   void initState() {
     super.initState();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
+    showtabbar =false;
+    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     // f_dept = FocusNode();
     getOrgName();
   }
@@ -57,87 +61,37 @@ class _TimeOffList extends State<TimeOffList> {
   getmainhomewidget() {
     return new Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            new Text(_orgName, style: new TextStyle(fontSize: 20.0)),
-
-            /*  Image.asset(
-                    'assets/logo.png', height: 40.0, width: 40.0),*/
-          ],
-        ),
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        backgroundColor: Colors.teal,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-          onTap: (newIndex) {
-            if(newIndex==2){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Settings()),
-              );
-              return;
-            }
-            if(newIndex==1){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
-              return;
-            }else if (newIndex == 0) {
-              (admin_sts == '1')
-                  ? Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Reports()),
-              )
-                  : Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );
-              return;
-            }
-            setState((){_currentIndex = newIndex;});
-          },
-          // this will be set when a new tab is tapped
-        items: [
-          (admin_sts == '1')
-              ? BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.library_books,
-            ),
-            title: new Text('Reports'),
-          )
-              : BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.person,
-            ),
-            title: new Text('Profile'),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.home,color: Colors.black54,),
-            title: new Text('Home',style: TextStyle(color: Colors.black54)),
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), title: Text('Settings'))
-        ],
-      ),
+      backgroundColor:scaffoldBackColor(),
+      appBar: new AppHeader(profileimage, showtabbar),
       endDrawer: new AppDrawer(),
-      body: Container(
-        //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
+      bottomNavigationBar: HomeNavigation(),
+      body: getReportsWidget(),
+    );
+  }
+
+
+  getReportsWidget() {
+    return Stack(
+      children: <Widget>[
+        Container(
+        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+        //width: MediaQuery.of(context).size.width*0.9,
+        //  height:MediaQuery.of(context).size.height*0.75,
+        decoration: new ShapeDecoration(
+        shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(20.0)),
+        color: Colors.white,
+        ),
+
         child: Column(
           children: <Widget>[
-            SizedBox(height: 8.0),
+            SizedBox(height: 1.0),
             Center(
               child: Text(
                 'Time Off History',
                 style: new TextStyle(
-                  fontSize: 22.0,
+                  fontSize: 20.0,
                   color: Colors.black54,
                 ),
               ),
@@ -182,13 +136,16 @@ class _TimeOffList extends State<TimeOffList> {
               width: MediaQuery.of(context).size.width * .9,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.37,
+
+                    width: MediaQuery.of(context).size.width * 0.35,
                     child: Text(
-                      'Name',
-                      style: TextStyle(color: Colors.orange),
+                      '   Name',
+                      style: TextStyle(color: appStartColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0),
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -196,20 +153,26 @@ class _TimeOffList extends State<TimeOffList> {
                     width: MediaQuery.of(context).size.width * 0.2,
                     child: Text(
                       'From',
-                      style: TextStyle(color: Colors.orange),
+                      style: TextStyle(color: appStartColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0),
                       textAlign: TextAlign.left,
                     ),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.2,
                     child: Text('To',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: appStartColor(),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0),
                         textAlign: TextAlign.left),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.12,
                     child: Text('Total Time',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: appStartColor(),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0),
                         textAlign: TextAlign.left),
                   ),
                 ],
@@ -225,7 +188,7 @@ class _TimeOffList extends State<TimeOffList> {
           ],
         ),
       ),
-    );
+    ]);
   }
 
   loader() {
@@ -254,10 +217,10 @@ class _TimeOffList extends State<TimeOffList> {
                       new FlatButton(
                         child: new Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             new Container(
-                                width: MediaQuery.of(context).size.width * 0.37,
+                                width: MediaQuery.of(context).size.width * 0.32,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -279,11 +242,11 @@ class _TimeOffList extends State<TimeOffList> {
                               ),
                             ),
                             new Container(
-                              width: MediaQuery.of(context).size.width * 0.12,
+                              width: MediaQuery.of(context).size.width * 0.10,
                               child: new Text(
                                 snapshot.data[index].diff.toString(),
                                 style: TextStyle(
-                                    color:Colors.deepOrange),
+                                    color:appStartColor()),
                               ),
                             ),
                           ],

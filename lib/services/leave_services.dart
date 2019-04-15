@@ -684,3 +684,99 @@ List<TimeOff> createTimeOffList(List data){
 
 */
 
+
+
+/////////FOR EMPLOYEE LEAVE REPORT///////////
+
+Future<List<Map>> getEmployeesList(int label) async{
+  Dio dio = new Dio();
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  String empid = prefs.getString('employeeid') ?? "";
+
+  final response = await dio.post(path + 'getReportingTeam?organization=$orgid&employeeid=$empid');
+  List data = json.decode(response.data.toString());
+  List<Map> depts = createEMpListDD(data,label);
+  print(depts);
+  return depts;
+}
+List<Map> createEMpListDD(List data,int label) {
+  List<Map> list = new List();
+  if(label==1) // with -All- label
+    list.add({"Id":"0","Name":"-All-","Code":""});
+  else
+    list.add({"Id":"0","Name":"-Select-","Code":""});
+  for (int i = 0; i < data.length; i++) {
+    Map tos;
+    if(data[i]["LastName"].toString()!='' && data[i]["LastName"].toString()!=null)
+      tos={"Name":data[i]["FirstName"].toString()+" "+data[i]["LastName"].toString(),"Id":data[i]["Id"].toString(),"Code":data[i]["Code"].toString()};
+    list.add(tos);
+  }
+  return list;
+}
+
+
+Future<List<EmpListLeave>> getEmployeeLeaveList(date,emp) async {
+  Dio dio = new Dio();
+  // String empid;
+  if (date == '' || date == null) return null;
+  try {
+    /* print("ABC");
+    print(emp);
+    print(date);
+    print("ABC");*/
+
+
+    final prefs = await SharedPreferences.getInstance();
+    String orgid = prefs.getString('orgdir') ?? '';
+    String empid = prefs.getString('employeeid') ?? "";
+    /* print("-------->");
+    print(empid);
+    print(date);
+    print("-------->");*/
+
+    final response = await dio.post(path_hrm_india +
+        'getEmployeeLeaveList?fd=$date&orgid=$orgid&empid=$empid&emp=$emp');
+
+    List responseJson = json.decode(response.data.toString());
+
+    List<EmpListLeave> list = createEmployeeLeaveDataList(responseJson);
+
+    return list;
+  }catch(e){
+    print(e.toString());
+  }
+}
+
+List<EmpListLeave> createEmployeeLeaveDataList(List data) {
+  List<EmpListLeave> list = new List();
+  /*print("XYZ");
+    print(data.length);
+    print("XYZ");*/
+  for (int i = 0; i < data.length; i++) {
+    String days = data[i]["days"];
+    String to = data[i]["to"];
+    String from = data[i]["from"];
+    String name = data[i]["name"];
+    String date = data[i]["date"];  //this is leave appy date
+    String leavetype = data[i]["leavetype"];
+    String breakdown = data[i]["breakdown"];
+    EmpListLeave row = new EmpListLeave(
+        days: days, to: to, from: from, name: name, date: date, leavetype: leavetype, breakdown: breakdown);
+    list.add(row);
+  }
+  return list;
+}
+
+class EmpListLeave {
+  String days;
+  String to;
+  String from;
+  String name;
+  String date;
+  String leavetype;
+  String breakdown;
+
+  EmpListLeave({this.days, this.to, this.from, this.name, this.date, this.leavetype, this.breakdown});
+}
+

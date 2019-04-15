@@ -7,7 +7,10 @@ import 'outside_label.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'drawer.dart';
+import '../drawer.dart';
+import '../appbar.dart';
+import '../global.dart';
+import '../b_navigationbar.dart';
 // This app is a stateful, it tracks the user's current choice.
 class EmployeeWise_att extends StatefulWidget {
   @override
@@ -18,6 +21,9 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
   TabController _controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _orgName;
+  var profileimage;
+  bool showtabbar;
+
   String emp='0';
 //  var formatter = new DateFormat('dd-MMM-yyyy');
   bool res = true;
@@ -37,6 +43,9 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
   void initState() {
     super.initState();
     _controller = new TabController(length: 4, vsync: this);
+
+    showtabbar =false;
+    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     getOrgName();
  //   today = new TextEditingController();
    // today.text = formatter.format(DateTime.now());
@@ -45,24 +54,40 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
   Widget build(BuildContext context) {
     return new Scaffold(
       key: _scaffoldKey,
-      appBar: new AppBar(
-        title: new Text(_orgName, style: new TextStyle(fontSize: 20.0)),
-        backgroundColor: Colors.teal,
-      ),
+      backgroundColor:scaffoldBackColor(),
+      appBar: new AppHeader(profileimage, showtabbar),
       endDrawer: new AppDrawer(),
-      body: new ListView(
+      bottomNavigationBar: HomeNavigation(),
+      body: getReportsWidget(),
+    );
+  }
+
+  getReportsWidget() {
+    return Stack(
+        children: <Widget>[
+        Container(
+        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+        //width: MediaQuery.of(context).size.width*0.9,
+        //  height:MediaQuery.of(context).size.height*0.75,
+        decoration: new ShapeDecoration(
+        shape: new RoundedRectangleBorder(
+        borderRadius: new BorderRadius.circular(20.0)),
+        color: Colors.white,
+        ),
+        child: ListView(
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
-          SizedBox(height:3.0),
+          SizedBox(height:1.0),
           new Container(
-            child: Center(child:Text("Employee Wise Attendance",style: TextStyle(fontSize: 22.0,color: Colors.black54,),),),
+            child: Center(child:Text("Employee Wise Attendance",style: TextStyle(fontSize: 20.0,color: Colors.black54,),),),
           ),
           Divider(height: 2.0,),
           getEmployee_DD(),
           new Container(
             decoration: new BoxDecoration(color: Colors.black54),
             child: new TabBar(
-              indicator: BoxDecoration(color: Colors.orangeAccent,),
+              indicator: BoxDecoration(color: Colors.orange[800],),
               controller: _controller,
               tabs: [
                 new Tab(
@@ -86,19 +111,19 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
             children: <Widget>[
               SizedBox(height: 50.0,),
               Container(
-                width: MediaQuery.of(context).size.width*0.50,
-                child:Text('        Date',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                width: MediaQuery.of(context).size.width*0.42,
+                child:Text('    Date',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
 
               SizedBox(height: 50.0,),
               Container(
                 width: MediaQuery.of(context).size.width*0.20,
-                child:Text('Time In',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                child:Text('Time In',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
               SizedBox(height: 50.0,),
               Container(
-                width: MediaQuery.of(context).size.width*0.24,
-                child:Text('Time Out',style: TextStyle(color: Colors.teal,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                width: MediaQuery.of(context).size.width*0.20,
+                child:Text('Time Out',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
             ],
           ),
@@ -137,7 +162,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                 width: MediaQuery
                                                     .of(context)
                                                     .size
-                                                    .width * 0.38,
+                                                    .width * 0.42,
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment
                                                       .start,
@@ -190,7 +215,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.24,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -310,7 +335,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                           width: MediaQuery
                                               .of(context)
                                               .size
-                                              .width * 0.18,
+                                              .width * 0.42,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment
                                                 .start,
@@ -328,7 +353,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
-                                                .width * 0.22,
+                                                .width * 0.20,
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment
                                                   .center,
@@ -343,7 +368,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
-                                                .width * 0.22,
+                                                .width * 0.20,
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment
                                                   .center,
@@ -424,7 +449,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                 width: MediaQuery
                                                     .of(context)
                                                     .size
-                                                    .width * 0.46,
+                                                    .width * 0.42,
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment
                                                       .start,
@@ -477,7 +502,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -508,7 +533,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -603,7 +628,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                 width: MediaQuery
                                                     .of(context)
                                                     .size
-                                                    .width * 0.46,
+                                                    .width * 0.42,
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment
                                                       .start,
@@ -656,7 +681,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -687,7 +712,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -757,7 +782,8 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
           ),
         ],
       ),
-    );
+    )
+    ]);
   }
 
   Widget getEmployee_DD() {

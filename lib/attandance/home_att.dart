@@ -1058,7 +1058,7 @@ class _HomePageState extends State<HomePage> {
           content: new Text("Problem while marking attendance, try again."),
         )
         );
-        setState(() {
+        setState((){
           act1 = act;
         });
       }

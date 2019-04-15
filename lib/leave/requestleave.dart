@@ -191,130 +191,8 @@ class _RequestLeaveState extends State<RequestLeave> {
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
         appBar: new AppHeader(profileimage,showtabbar),
-
-/*        appBar: GradientAppBar(
-          backgroundColorStart: appStartColor(),
-          backgroundColorEnd: appEndColor(),
-          automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              new Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: AssetImage('assets/avatar.png'),
-                      )
-                  )),
-              Container(
-                  padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-              )
-            ],
-
-          ),
-        ),*/
-        bottomNavigationBar:  new HomeNavigation(),
-      /*  bottomNavigationBar:new Theme(
-            data: Theme.of(context).copyWith(
-              // sets the background color of the `BottomNavigationBar`
-              canvasColor: bottomNavigationColor(),
-            ), // sets the inactive color of the `BottomNavigationBar`
-            child:  BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (newIndex) {
-                if (newIndex == 1) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
-                  return;
-                }
-                if (newIndex == 2) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TabbedApp()),
-                  );
-                  return;
-                }
-                if (newIndex == 3) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TabbedApp()),
-                  );
-                  return;
-                }else if (newIndex == 0) { Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TabbedApp()),
-                );
-
-                /* (admin_sts == '1')
-                  ? Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Reports()),
-              )
-                  : Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );*/
-
-                return;
-                }
-
-                setState(() {
-                  _currentIndex = newIndex;
-                });
-              }, // this will be set when a new tab is tapped
-              items: [
-                BottomNavigationBarItem(
-
-                  // icon:  new Image.asset("assets/repo.ico", height: 25.0, width: 30.0),
-
-                  //   new Tab(icon: new Image.asset("assets/img/logo.png"), text: "Browse"),
-                  /* icon: new Icon(
-                    Icons.library_books,
-                    color: Colors.white,
-                  ),*/
-
-                  icon: Icon(
-                      Icons.description,
-                      color: Colors.white,
-                      size: 25.0),
-
-                  title: new Text('Reports',style: TextStyle(color: Colors.white)),
-                ),
-                BottomNavigationBarItem(
-                  /*   icon: new Icon(
-                    Icons.home,
-                    color: Colors.orangeAccent,
-                  ),*/
-                  icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
-
-                  title: new Text('Home', style: TextStyle(color: Colors.orangeAccent)),
-
-                ),
-                BottomNavigationBarItem(
-                  /*  icon:  new Image.asset("assets/approval.png",
-                      height: 40.0,
-                      width: 35.0),*/
-                  icon: Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.white,
-                      size: 25.0),
-                  title: new Text('Approvals',style: TextStyle(color: Colors.white)),
-                ),
-                BottomNavigationBarItem(
-                    icon: Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                        size: 25.0 ),
-                    title: Text('Settings',style: TextStyle(color: Colors.white)))
-
-              ],
-            )),*/
-        body:  ModalProgressHUD(
+       bottomNavigationBar:  new HomeNavigation(),
+       body:  ModalProgressHUD(
     inAsyncCall: isServiceCalling,
     opacity: 0.15,
     progressIndicator: SizedBox(
@@ -614,7 +492,7 @@ class _RequestLeaveState extends State<RequestLeave> {
         onPressed: () {
           if (_formKey.currentState.validate())
           {
-            requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text, substituteemp);
+           requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text, substituteemp);
           }
         },
       ),

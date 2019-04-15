@@ -122,7 +122,7 @@ class _changePassword extends State<changePassword> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Icon(Icons.android,color: Colors.teal,),Text("Under development",style: new TextStyle(fontSize: 30.0,color: Colors.teal),)
             ]),
@@ -132,8 +132,8 @@ class _changePassword extends State<changePassword> {
 
   mainbodyWidget(){
     return Container(
-      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+      margin: EdgeInsets.fromLTRB(10.0, 10.0, 5.0, 10.0),
+      padding: EdgeInsets.fromLTRB(10.0, 10.0, 5.0, 10.0),
       //width: MediaQuery.of(context).size.width*0.9,
       //      height:MediaQuery.of(context).size.height*0.75,
       decoration: new ShapeDecoration(
@@ -144,7 +144,7 @@ class _changePassword extends State<changePassword> {
         key: _formKey,
         child: SafeArea(
           child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
             children: <Widget>[
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -160,7 +160,7 @@ class _changePassword extends State<changePassword> {
                       child: Row(
                         children: <Widget>[
                           Container(
-                            width: MediaQuery.of(context).size.width*.6,
+                            width: MediaQuery.of(context).size.width*.7,
                             child: TextFormField(
                               controller: _oldPass,
                               onFieldSubmitted: (String value) {
@@ -205,7 +205,7 @@ class _changePassword extends State<changePassword> {
                       child: Row(
                         children: <Widget>[
                           Container(
-                            width: MediaQuery.of(context).size.width*.6,
+                            width: MediaQuery.of(context).size.width*.7,
                             child: TextFormField(
                               controller: _newPass,
                               focusNode: __newPass,

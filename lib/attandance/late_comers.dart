@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'drawer.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'settings.dart';
-import 'home.dart';
-import 'reports.dart';
-import 'profile.dart';
-
+import '../drawer.dart';
+import '../appbar.dart';
+import '../global.dart';
+import '../b_navigationbar.dart';
 
 class LateComers extends StatefulWidget {
   @override
@@ -23,12 +21,17 @@ class _LateComers extends State<LateComers> {
   String _orgName;
   String admin_sts='0';
   bool res = true;
+  var profileimage;
+  bool showtabbar;
+
   var formatter = new DateFormat('dd-MMM-yyyy');
   @override
   void initState() {
     super.initState();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
+    showtabbar =false;
+    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     // f_dept = FocusNode();
     getOrgName();
   }
@@ -58,176 +61,151 @@ class _LateComers extends State<LateComers> {
   getmainhomewidget() {
     return new Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            new Text(_orgName, style: new TextStyle(fontSize: 20.0)),
+      backgroundColor:scaffoldBackColor(),
+      appBar: new AppHeader(profileimage, showtabbar),
+      endDrawer: new AppDrawer(),
+      bottomNavigationBar: HomeNavigation(),
 
-            /*  Image.asset(
-                    'assets/logo.png', height: 40.0, width: 40.0),*/
-          ],
-        ),
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        backgroundColor: Colors.teal,
+      body: getReportsWidget(),
+
+    );
+  }
+
+  getReportsWidget() {
+    return Stack(
+      children: <Widget>[
+    Container(
+      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+      padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+      //width: MediaQuery.of(context).size.width*0.9,
+      //  height:MediaQuery.of(context).size.height*0.75,
+      decoration: new ShapeDecoration(
+        shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(20.0)),
+        color: Colors.white,
       ),
 
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (newIndex) {
-          if(newIndex==2){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Settings()),
-            );
-            return;
-          }
-          if(newIndex==1){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-            return;
-          }else if (newIndex == 0) {
-            (admin_sts == '1')
-                ? Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Reports()),
-            )
-                : Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
-            );
-            return;
-          }
-          setState((){_currentIndex = newIndex;});
-
-        }, // this will be set when a new tab is tapped
-        items: [
-          (admin_sts == '1')
-              ? BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.library_books,
+      //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 1.0),
+          Center(
+            child: Text(
+              'Late Comers',
+              style: new TextStyle(
+                fontSize: 20.0,
+                color: Colors.black54,
+              ),
             ),
-            title: new Text('Reports'),
-          )
-              : BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.person,
+          ),
+          Divider(
+            height: 10.0,
+          ),
+          SizedBox(height: 2.0),
+          Container(
+            child: DateTimePickerFormField(
+              dateOnly: true,
+              format: formatter,
+              controller: today,
+              decoration: InputDecoration(
+                prefixIcon: Padding(
+                  padding: EdgeInsets.all(0.0),
+                  child: Icon(
+                    Icons.date_range,
+                    color: Colors.grey,
+                  ), // icon is 48px widget.
+                ), // icon is 48px widget.
+                labelText: 'Select Date',
+              ),
+              onChanged: (date) {
+                setState(() {
+                  if (date != null && date.toString() != '')
+                    res = true; //showInSnackBar(date.toString());
+                  else
+                    res = false;
+                });
+              },
+              validator: (date) {
+                if (date == null) {
+                  return 'Please select date';
+                }
+              },
             ),
-            title: new Text('Profile'),
           ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.home,color: Colors.black54,),
-            title: new Text('Home',style: TextStyle(color: Colors.black54),),
+          SizedBox(height: 12.0),
+          Container(
+            //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
+            width: MediaQuery
+                .of(context)
+                .size
+                .width * .9,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.35,
+                  child: Text(
+                    '   Name',
+                    style: TextStyle(color: appStartColor(),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.20,
+                  child: Text(
+                    'Shift',
+                    style: TextStyle(color: appStartColor(),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.20,
+                  child: Text('Time In',
+                      style: TextStyle(color: appStartColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0),
+                      textAlign: TextAlign.left),
+                ),
+                Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.12,
+                  child: Text('Late By',
+                      style: TextStyle(color: appStartColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0),
+                      textAlign: TextAlign.left),
+                ),
+              ],
+            ),
           ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), title: Text('Settings'))
+          SizedBox(height: 5.0),
+          Divider(
+            height: 5.2,
+          ),
+          new Expanded(
+            child: res == true ? getEmpDataList(today.text) : Center(),
+          ),
         ],
       ),
-      endDrawer: new AppDrawer(),
-      body: Container(
-        //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 8.0),
-            Center(
-              child: Text(
-                'Late Comers',
-                style: new TextStyle(
-                  fontSize: 22.0,
-                  color: Colors.black54,
-                ),
-              ),
-            ),
-            Divider(
-              height: 10.0,
-            ),
-            SizedBox(height: 2.0),
-            Container(
-              child: DateTimePickerFormField(
-                dateOnly: true,
-                format: formatter,
-                controller: today,
-                decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.all(0.0),
-                    child: Icon(
-                      Icons.date_range,
-                      color: Colors.grey,
-                    ), // icon is 48px widget.
-                  ), // icon is 48px widget.
-                  labelText: 'Select Date',
-                ),
-                onChanged: (date) {
-                  setState(() {
-                    if (date != null && date.toString()!='')
-                      res = true; //showInSnackBar(date.toString());
-                    else
-                      res = false;
-                  });
-                },
-                validator: (date) {
-                  if (date == null) {
-                    return 'Please select date';
-                  }
-                },
-              ),
-            ),
-            SizedBox(height: 12.0),
-            Container(
-              //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
-              width: MediaQuery.of(context).size.width * .9,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.37,
-                    child: Text(
-                      'Name',
-                      style: TextStyle(color: Colors.orange),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.20,
-                    child: Text(
-                      'Shift',
-                      style: TextStyle(color: Colors.orange),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.20,
-                    child: Text('Time In',
-                        style: TextStyle(color: Colors.orange),
-                        textAlign: TextAlign.left),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.12,
-                    child: Text('Late By',
-                        style: TextStyle(color: Colors.orange),
-                        textAlign: TextAlign.left),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 5.0),
-            Divider(
-              height: 5.2,
-            ),
-            new Expanded(
-              child: res == true ? getEmpDataList(today.text) : Center(),
-            ),
-          ],
-        ),
-      ),
-    );
+
+    ),
+   ] );
   }
 
   loader() {
@@ -259,7 +237,7 @@ class _LateComers extends State<LateComers> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           new Container(
-                              width: MediaQuery.of(context).size.width * 0.37,
+                              width: MediaQuery.of(context).size.width * 0.31,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -281,11 +259,11 @@ class _LateComers extends State<LateComers> {
                             ),
                           ),
                           new Container(
-                            width: MediaQuery.of(context).size.width * 0.12,
+                            width: MediaQuery.of(context).size.width * 0.11,
                             child: new Text(
                               snapshot.data[index].diff.toString(),
                               style: TextStyle(
-                                  color:Colors.deepOrange),
+                                  color:appStartColor()),
                             ),
                           ),
                         ],

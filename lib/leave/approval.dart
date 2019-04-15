@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import '../global.dart';
+import '../gradient_button.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import '../home.dart';
 import '../services/services.dart';
@@ -33,6 +34,13 @@ class _TabState extends State<TabbedApp> {
   var PerApprovalLeave;
   bool showtabbar;
   Employee emp;
+
+
+
+
+
+
+
   void initState() {
     super.initState();
     initPlatformState();
@@ -307,6 +315,8 @@ const List<Choice> choices = const <Choice>[
 class ChoiceCard1 extends StatelessWidget {
   const ChoiceCard1({Key key, this.choice}) : super(key: key);
 
+
+
   final Choice choice;
 
   @override
@@ -579,7 +589,7 @@ class ChoiceCard1 extends StatelessWidget {
                                                             }
                                                           },
                                                           child: new Icon(
-                                                            Icons.thumb_up,
+                                                            Icons.edit,
                                                             size: 18.0,
                                                             color:appStartColor(),
 
@@ -786,7 +796,7 @@ class ChoiceCard1 extends StatelessWidget {
 
                                             child:Text("Leave History",style:TextStyle(
                                             // fontFamily: "WorkSansSemiBold",
-                                            fontSize: 20.0,
+                                            fontSize: 16.0,
                                             color: Colors.green,fontWeight: FontWeight.bold, ), textAlign: TextAlign.center,                                           ),
                                           ),
                                          Divider(color: Colors.black26,),
@@ -930,14 +940,14 @@ class ChoiceCard1 extends StatelessWidget {
                         hintText: "Comment",
                         hintStyle: TextStyle(
                             fontFamily: "WorkSansSemiBold", fontSize: 15.0),
-                        suffixIcon: GestureDetector(
+                      /*  suffixIcon: GestureDetector(
                           //onTap: _toggleLogin,
                           child: Icon(
                             Icons.edit,
                             size: 15.0,
                             color: Colors.black,
                           ),
-                        ),
+                        ),*/
                       ),
 
                       /*validator: (value) {
@@ -945,7 +955,7 @@ class ChoiceCard1 extends StatelessWidget {
                               return 'Please enter Email or Phone no.';
                             }
                           },*/
-
+                      maxLines: 3,
                     ),
                   ),
                   //if the user is hr////
@@ -1018,11 +1028,11 @@ class ChoiceCard1 extends StatelessWidget {
                         new Expanded(
                           child:Container(
                     padding: EdgeInsets.only(
-                        top: 10.0, bottom: 10.0, left: 30.0, right: 30.0),
+                        top: 15.0, bottom: 10.0, left: 30.0, right: 30.0),
                     child:  ButtonTheme(
                       minWidth: 120.0,
                       height: 40.0,
-                      child: RaisedButton(
+                      child: RaisedGradientButton(
                         onPressed: () async {
                           if(EntitleController.text==""){
                             EntitleController.text="0";
@@ -1061,9 +1071,9 @@ class ChoiceCard1 extends StatelessWidget {
                             context,
                             MaterialPageRoute(builder: (context) => TabbedApp()),
                           ); },
-                        color: Colors.green,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
+                        gradient: LinearGradient(
+                          colors: <Color>[Colors.green[400], Colors.green[900]],
+                        ),
                         child: new Text('Approve',
                             style: new TextStyle(
                               color: Colors.white,
@@ -1076,11 +1086,11 @@ class ChoiceCard1 extends StatelessWidget {
           child:Container(
 
                     padding: EdgeInsets.only(
-                        top: 10.0, bottom: 10.0, left: 30.0, right: 30.0),
+                        top: 15.0, bottom: 10.0, left: 30.0, right: 30.0),
                     child:  ButtonTheme(
                       minWidth: 120.0,
                       height: 40.0,
-                      child: RaisedButton(
+                      child: RaisedGradientButton(
                         onPressed: () async
           {
           //getApprovals(choice.title);
@@ -1113,9 +1123,9 @@ class ChoiceCard1 extends StatelessWidget {
                             context,
                             MaterialPageRoute(builder: (context) => TabbedApp()),
                           );   },
-                        color: Colors.red,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
+                        gradient: LinearGradient(
+                          colors: <Color>[Colors.red[400], Colors.red[900]],
+                        ),
                         child: new Text('Reject',
                             style: new TextStyle(
                                 color: Colors.white,
@@ -1201,15 +1211,15 @@ class ChoiceCard1 extends StatelessWidget {
                         ),*/
                         hintText: "Comment",
                         hintStyle: TextStyle(
-                            fontFamily: "WorkSansSemiBold", fontSize: 15.0),
-                        suffixIcon: GestureDetector(
+                            fontFamily: "WorkSansSemiBold", fontSize: 15.0 ),
+                        /*suffixIcon: GestureDetector(
                           //onTap: _toggleLogin,
                           child: Icon(
                             Icons.edit,
                             size: 15.0,
                             color: Colors.black,
                           ),
-                        ),
+                        ),*/
                       ),
 
                       /*validator: (value) {
@@ -1217,16 +1227,16 @@ class ChoiceCard1 extends StatelessWidget {
                               return 'Please enter Email or Phone no.';
                             }
                           },*/
-
+                      maxLines: 3,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                        top: 10.0, bottom: 10.0, left: 30.0, right: 30.0),
+                        top: 10.0, bottom: 0.0, left: 40.0, right: 30.0),
                     child:  ButtonTheme(
                       minWidth: 300.0,
                       height: 40.0,
-                      child: RaisedButton(
+                      child: RaisedGradientButton(
                         onPressed: () async  {
                           //getApprovals(choice.title);
                           final sts= await ApproveLeave(leaveid,CommentController.text,2);
@@ -1257,9 +1267,12 @@ class ChoiceCard1 extends StatelessWidget {
                             context,
                             MaterialPageRoute(builder: (context) => TabbedApp()),
                           ); },
-                        color: Colors.green,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
+                       // color: Colors.green[400],
+                        //shape: new RoundedRectangleBorder(
+                          //  borderRadius: new BorderRadius.circular(30.0)),
+                        gradient: LinearGradient(
+                          colors: <Color>[Colors.green[400], Colors.green[900]],
+                        ),
                         child: new Text('Approve',
                             style: new TextStyle(
                               color: Colors.white,
@@ -1268,13 +1281,15 @@ class ChoiceCard1 extends StatelessWidget {
                             )),
                       ),
                     ),),
+
+
                   Padding(
                     padding: EdgeInsets.only(
-                        top: 10.0, bottom: 0.0, left: 30.0, right: 30.0),
+                        top: 10.0, bottom: 0.0, left: 5.0, right: 40.0),
                     child:  ButtonTheme(
                       minWidth: 300.0,
                       height: 40.0,
-                      child: RaisedButton(
+                      child: RaisedGradientButton(
                         onPressed: () async {
                           //getApprovals(choice.title);
                           var sts = await ApproveLeave(leaveid,CommentController.text,1);
@@ -1306,9 +1321,10 @@ print("ff"+sts);
                             context,
                             MaterialPageRoute(builder: (context) => TabbedApp()),
                           ); },
-                        color: Colors.red,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
+                       // color: Colors.red[400],
+                        gradient: LinearGradient(
+                          colors: <Color>[Colors.red[200], Colors.red[800]],
+                        ),
                         child: new Text('Reject',
                             style: new TextStyle(
                                 color: Colors.white,

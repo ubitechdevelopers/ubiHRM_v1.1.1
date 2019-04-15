@@ -57,6 +57,15 @@ class _LoginPageState extends State<LoginPage>
   Color left = Colors.black;
   Color right = Colors.white;
   bool _isButtonDisabled = false;
+  bool _obscureText_old = true;
+  bool _obscureText_new = true;
+
+
+  void _toggle_new() {
+    setState(() {
+      _obscureText_new = !_obscureText_new;
+    });
+  }
   setLocal(var fname, var empid, var  orgid) async {
     prefs = await SharedPreferences.getInstance();
     await prefs.setString('fname',fname);
@@ -113,7 +122,7 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 5.0),
-                    child: _buildMenuBar(context),
+                  //  child: _buildMenuBar(context),
                   ),
                   Expanded(
                     flex: 2,
@@ -225,7 +234,7 @@ class _LoginPageState extends State<LoginPage>
     ));
   }
 
-  Widget _buildMenuBar(BuildContext context) {
+ /* Widget _buildMenuBar(BuildContext context) {
     return Container(
       width: 300.0,
       height: 50.0,
@@ -271,11 +280,11 @@ class _LoginPageState extends State<LoginPage>
         ),
       ),
     );
-  }
+  }*/
 
   Widget _buildSignIn(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 23.0),
+      padding: EdgeInsets.only(top: 20.0),
       child: Column(
         children: <Widget>[
           Form(
@@ -292,12 +301,12 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   child: Container(
                     width: 370.0,
-                    height: 200.0,
+                    height: 350.0,
                     child: Column(
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(
-                              top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                              top: 20.0, bottom: 10.0, left: 25.0, right: 25.0),
                           child: TextFormField(
                             focusNode: myFocusNodeEmailLogin,
                             controller: loginEmailController,
@@ -312,13 +321,13 @@ class _LoginPageState extends State<LoginPage>
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               icon: Icon(
-                                FontAwesomeIcons.envelope,
+                                FontAwesomeIcons.userAlt,
                                 color: Colors.black,
                                 size: 22.0,
                               ),
                               hintText: "Email / Phone",
                               hintStyle: TextStyle(
-                                  fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                                   fontSize: 14.0),
                             ),
                             /*validator: (value) {
                             if (value.isEmpty) {
@@ -335,11 +344,11 @@ class _LoginPageState extends State<LoginPage>
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                              top: 10.0, bottom: 0.0, left: 25.0, right: 25.0),
                           child: TextFormField(
                             focusNode: myFocusNodePasswordLogin,
                             controller: loginPasswordController,
-                            obscureText: _obscureTextLogin,
+                            obscureText: _obscureText_new,
                             style: TextStyle(
                                 fontFamily: "WorkSansSemiBold",
                                 fontSize: 16.0,
@@ -353,12 +362,12 @@ class _LoginPageState extends State<LoginPage>
                               ),
                               hintText: "Password",
                               hintStyle: TextStyle(
-                                  fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                                  fontSize: 14.0),
                               suffixIcon: GestureDetector(
-                                onTap: _toggleLogin,
+                                onTap: _toggle_new,
                                 child: Icon(
-                                  FontAwesomeIcons.eye,
-                                  size: 15.0,
+                                _obscureText_new ?Icons.visibility_off:Icons.visibility,
+                                  size: 20.0,
                                   color: Colors.black,
                                 ),
                               ),
@@ -389,16 +398,49 @@ class _LoginPageState extends State<LoginPage>
                               }
                             },
                           ),
+
+
+
+
+
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 170.0),
-                  decoration: new BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    /*  boxShadow: <BoxShadow>[
+                        Container(
+                          width: 250.0,
+                          height: 1.0,
+                          color: Colors.grey[400],
+                        ),
+                        Container(
+                          //   margin: EdgeInsets.only(top: 170.0),
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.only(
+                              top: 0.0, bottom: 0.0, left: 180.0, right: 10.0),
+
+                          child: FlatButton(
+                          onPressed: () {
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ForgotPassword()),
+                            );
+
+                              },
+                              child: Text(
+                                "Forgot Password?",
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color:appStartColor(),
+                                    fontSize: 15.0,
+                                    fontFamily: "WorkSansMedium"),
+                              )),
+                        ),
+
+                        Container(
+                       //   margin: EdgeInsets.only(top: 170.0),
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.only(
+                              top: 0.0, bottom: 0.0, left: 10.0, right: 10.0),
+                          decoration: new BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                            /*  boxShadow: <BoxShadow>[
                       BoxShadow(
                         color: Theme.Colors.loginGradientStart,
                         offset: Offset(1.0, 6.0),
@@ -410,7 +452,7 @@ class _LoginPageState extends State<LoginPage>
                         blurRadius: 20.0,
                       ),
                     ],*/
-                    /*  gradient: new LinearGradient(
+                            /*  gradient: new LinearGradient(
                         colors: [
                           Theme.Colors.loginGradientEnd,
                           Theme.Colors.loginGradientStart
@@ -419,73 +461,127 @@ class _LoginPageState extends State<LoginPage>
                         end: const FractionalOffset(1.0, 1.0),
                         stops: [0.0, 1.0],
                         tileMode: TileMode.clamp),*/
-                  ),
-                  child: RaisedButton(
-                    /*highlightColor: Colors.transparent,
+                          ),
+                          child: RaisedButton(
+                            /*highlightColor: Colors.transparent,
                     splashColor: Theme.Colors.loginGradientEnd,*/
-                      color: Color.fromRGBO(0, 166, 90,1.0),
-                      //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0)),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric( vertical: 11.0, horizontal: 44.0),
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                              fontFamily: "WorkSansBold"),
+                              color: Color.fromRGBO(0, 166, 90,1.0),
+                              //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                              /* shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0)),*/
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric( vertical: 11.0, horizontal: 44.0),
+                                child: Text(
+                                  "Login",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {
+                                if (loginEmailController.text.trim().isNotEmpty && loginPasswordController.text.trim().isNotEmpty) {
+
+                                  checklogin(loginEmailController.text,loginPasswordController.text,);
+                                }else{
+
+                                  if(loginEmailController.text.trim().isEmpty) {
+                                    showDialog(context: context, child:
+                                    new AlertDialog(
+
+                                      content: new Text("Please enter Email or Phone no."),
+                                    )
+                                    );
+                                  }else if(loginPasswordController.text.trim().isEmpty){
+                                    showDialog(context: context, child:
+                                    new AlertDialog(
+
+                                      content: new Text("Please enter Password."),
+                                    )
+                                    );
+                                  }
+                                }
+
+
+                              }
+                          ),
                         ),
+
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Expanded(child: Container(
+                   margin: EdgeInsets.only(left: 40.0),
+                        child:Text("Not registered ?", style: TextStyle(
+                          color: appStartColor(),),),
+                  ),),
+                       Expanded(child: Container(
+                          //margin: EdgeInsets.only(top: 250.0),
+                            //width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.only(
+                                top: 0.0, bottom: 0.0, left: 0.0, right: 10.0),
+                            decoration: new BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                              /*  boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Theme.Colors.loginGradientStart,
+                        offset: Offset(1.0, 6.0),
+                        blurRadius: 20.0,
                       ),
-                      onPressed: () {
-                        if (loginEmailController.text.trim().isNotEmpty && loginPasswordController.text.trim().isNotEmpty) {
+                      BoxShadow(
+                        color: Theme.Colors.loginGradientEnd,
+                        offset: Offset(1.0, 6.0),
+                        blurRadius: 20.0,
+                      ),
+                    ],*/
+                              /*  gradient: new LinearGradient(
+                        colors: [
+                          Theme.Colors.loginGradientEnd,
+                          Theme.Colors.loginGradientStart
+                        ],
+                        begin: const FractionalOffset(0.2, 0.2),
+                        end: const FractionalOffset(1.0, 1.0),
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp),*/
+                            ),
 
-                          checklogin(loginEmailController.text,loginPasswordController.text,);
-                        }else{
 
-                          if(loginEmailController.text.trim().isEmpty) {
-                            showDialog(context: context, child:
-                            new AlertDialog(
+                            child: new OutlineButton(
+                              color: Colors.white,
+                              child: new Text("Signup", style: TextStyle(
+                                color: appStartColor(),
+                              ),),
+                              onPressed: _onSignUpButtonPress,
+                             borderSide: BorderSide(color:  appStartColor()),
+                              /* shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))*/
 
-                              content: new Text("Please enter Email or Phone no."),
                             )
-                            );
-                          }else if(loginPasswordController.text.trim().isEmpty){
-                            showDialog(context: context, child:
-                            new AlertDialog(
-
-                              content: new Text("Please enter Password."),
-                            )
-                            );
-                          }
-                        }
 
 
-                      }
+
+
+                        ),),
+
+]),
+                      ],
+                    ),
                   ),
                 ),
+
+
+
+
+
+
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 0.0),
-            child: FlatButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ForgotPassword()),
-                  );
 
-                },
-                child: Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Colors.white,
-                      fontSize: 16.0,
-                      fontFamily: "WorkSansMedium"),
-                )),
-          ),
+
+
+
+
           /*Padding(
             padding: EdgeInsets.only(top: 0.0),
             child: Row(
@@ -580,9 +676,11 @@ class _LoginPageState extends State<LoginPage>
 
   Widget _buildSignUp(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 23.0),
+      padding: EdgeInsets.only(top: 20.0),
       child: Column(
         children: <Widget>[
+
+
           Stack(
             alignment: Alignment.topCenter,
             overflow: Overflow.visible,
@@ -600,7 +698,7 @@ class _LoginPageState extends State<LoginPage>
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
-                            top: 10.0, bottom: 10.0, left: 25.0, right: 25.0),
+                            top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
                         child: TextField(
                           focusNode: myFocusNodeName,
                           controller: signupNameController,
@@ -613,12 +711,12 @@ class _LoginPageState extends State<LoginPage>
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.user,
+                              FontAwesomeIcons.userAlt,
                               color: Colors.black,
                             ),
                             hintText: "Company ",
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                fontSize: 14.0),
                           ),
                         ),
                       ),
@@ -629,7 +727,7 @@ class _LoginPageState extends State<LoginPage>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: 10.0, bottom: 10.0, left: 25.0, right: 25.0),
+                            top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
                         child: TextField(
                           focusNode: myFocusNodeEmail,
                           controller: signupEmailController,
@@ -641,12 +739,12 @@ class _LoginPageState extends State<LoginPage>
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.envelope,
+                              FontAwesomeIcons.solidEnvelope,
                               color: Colors.black,
                             ),
                             hintText: "Email ",
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                 fontSize: 14.0),
                           ),
                         ),
                       ),
@@ -657,7 +755,7 @@ class _LoginPageState extends State<LoginPage>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: 8.0, bottom:8.0, left: 25.0, right: 25.0),
+                            top: 7.0, bottom:7.0, left: 25.0, right: 25.0),
                         child: TextField(
                           focusNode: myFocusNodePassword,
                           controller: signupPasswordController,
@@ -674,7 +772,7 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hintText: "Password",
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                 fontSize: 14.0),
                             suffixIcon: GestureDetector(
                               onTap: _toggleSignup,
                               child: Icon(
@@ -693,7 +791,7 @@ class _LoginPageState extends State<LoginPage>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: 10.0, bottom: 10.0, left: 25.0, right: 0.0),
+                            top: 7.0, bottom: 7.0, left: 25.0, right: 0.0),
                         child: TextField(
                           focusNode: myFocusNodephone,
                           controller: signupPhoneController,
@@ -713,7 +811,7 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hintText: "Phone",
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                               fontSize: 14.0),
                           ),
                         ),
                       ),
@@ -724,7 +822,7 @@ class _LoginPageState extends State<LoginPage>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: 10.0, bottom: 10.0, left: 25.0, right: 25.0),
+                            top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
                         child: TextField(
                           focusNode: myFocusNodecity,
                           controller: signupcityController,
@@ -743,7 +841,7 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hintText: "City ",
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                                 fontSize: 14.0),
                           ),
                         ),
                       ),
@@ -760,11 +858,16 @@ class _LoginPageState extends State<LoginPage>
                         child:Container(
 
                           padding: EdgeInsets.only(
-                              top: 0.0, bottom: 0.0, left: 25.0, right: 15.0),
+                              top: 0.0, bottom: 0.0, left: 20.0, right: 47.0),
                           child:new InputDecorator(
                             decoration: const InputDecoration(
                               //icon: const Icon(Icons.satellite,size: 15.0,),
                               labelText: 'Country',
+                              icon: Icon(
+                                FontAwesomeIcons.globeAsia,
+                                color: Colors.black,
+
+                              ),
                             ),
                             //   isEmpty: _color == '',
                             child: DropdownButtonHideUnderline(
@@ -796,8 +899,13 @@ class _LoginPageState extends State<LoginPage>
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(top: 433.0),
+              Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+
+                    Container(
+              margin: EdgeInsets.only(top: 400.0),
+                      padding: EdgeInsets.only(
+                          top: 0.0, bottom: 0.0, left: 100.0, right: 10.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   /* boxShadow: <BoxShadow>[
@@ -825,22 +933,24 @@ class _LoginPageState extends State<LoginPage>
                 child: _isButtonDisabled?new RaisedButton(
                     color: Color.fromRGBO(0, 166, 90,1.0),
                     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0)),
+                   /* shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),*/
                     textColor: Colors.white,
-                    padding: EdgeInsets.all(20.0),
-                    child: const Text('Please wait...',style: TextStyle(fontSize: 18.0),),
-                    onPressed: (){}
+                    padding: EdgeInsets.all(10.0),
+                    child: const Text('Please wait...',style: TextStyle(fontSize: 16.0),),
+                    onPressed: (){
+
+                    }
                 ):new RaisedButton(
                   //color: Colors.orange,
                   // textColor: Colors.white,
-                    color: Color.fromRGBO(0, 166, 90,1.0),
+                    color: Color.fromRGBO(0,166, 90,1.0),
                     textColor: Colors.white,
                     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0)),
-                    padding: EdgeInsets.all(17.0),
-                    child: const Text('Register Company',style: TextStyle(fontSize: 18.0),),
+                   /* shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),*/
+                    padding: EdgeInsets.all(10.0),
+                    child: const Text('Register',style: TextStyle(fontSize: 16.0),),
                     onPressed: () {
                       if(_isButtonDisabled)
                         return null;
@@ -1019,12 +1129,63 @@ class _LoginPageState extends State<LoginPage>
 
                 ),
 
+       ),
+                    Expanded(child:  Container(
+                  margin: EdgeInsets.only(top: 400.0),
+                 padding: EdgeInsets.only(
+                     top: 0.0, bottom: 0.0, left: 0.0, right: 20.0),
+                    decoration: new BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      /*  boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Theme.Colors.loginGradientStart,
+                        offset: Offset(1.0, 6.0),
+                        blurRadius: 20.0,
+                      ),
+                      BoxShadow(
+                        color: Theme.Colors.loginGradientEnd,
+                        offset: Offset(1.0, 6.0),
+                        blurRadius: 20.0,
+                      ),
+                    ],*/
+                      /*  gradient: new LinearGradient(
+                        colors: [
+                          Theme.Colors.loginGradientEnd,
+                          Theme.Colors.loginGradientStart
+                        ],
+                        begin: const FractionalOffset(0.2, 0.2),
+                        end: const FractionalOffset(1.0, 1.0),
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp),*/
+                    ),
+                    child: new OutlineButton(
 
-              ),
+
+                      child: new Text("Back",style:TextStyle( color: appStartColor(),)),
+                      onPressed: _onSignInButtonPress,
+
+                       borderSide: BorderSide(color:appStartColor()),
+                      /* shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))*/
+
+                    )
+
+                ),
+                ),
+
+
+
+  ]),
             ],
           ),
+
+
+
         ],
+
+
+
       ),
+
     );
   }
 
