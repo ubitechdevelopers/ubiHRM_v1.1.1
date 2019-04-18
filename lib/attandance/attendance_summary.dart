@@ -41,11 +41,22 @@ class _MyApp extends State<MyApp> {
   bool _checkLoadedprofile = true;
   var profileimage;
   bool showtabbar ;
+  String orgName="";
+
+
   bool _checkLoaded = true;
   @override
   void initState() {
     super.initState();
     initPlatformState();
+    getOrgName();
+
+  }
+  getOrgName() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName= prefs.getString('orgname') ?? '';
+    });
   }
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
@@ -93,7 +104,7 @@ class _MyApp extends State<MyApp> {
         child: new Scaffold(
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
-          appBar: new AppHeader(profileimage,showtabbar),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
 /*          appBar: GradientAppBar(
             backgroundColorStart: appStartColor(),
             backgroundColorEnd: appEndColor(),
@@ -208,8 +219,9 @@ class User {
   String longi_in;
   String latit_out;
   String longi_out;
+  String AttendanceStatus;
   int id=0;
-  User({this.AttendanceDate,this.thours,this.id,this.TimeOut,this.TimeIn,this.bhour,this.EntryImage,this.checkInLoc,this.ExitImage,this.CheckOutLoc,this.latit_in,this.longi_in,this.latit_out,this.longi_out});
+  User({this.AttendanceDate,this.thours,this.id,this.TimeOut,this.TimeIn,this.bhour,this.EntryImage,this.checkInLoc,this.ExitImage,this.CheckOutLoc,this.latit_in,this.longi_in,this.latit_out,this.longi_out,this.AttendanceStatus});
 }
 
 String dateFormatter(String date_) {
@@ -334,6 +346,21 @@ getWidgets(context){
                                                           .longi_out);
                                                 },
                                               ),
+                                              SizedBox(height:2.0),
+                                              RichText(
+                                                text: new TextSpan(
+                                                  // Note: Styles for TextSpans must be explicitly defined.
+                                                  // Child text spans will inherit styles from parent
+                                                  style: new TextStyle(
+                                                    fontSize: 12.0,
+                                                    color: Colors.black54,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black54,), ),
+                                                  ],
+                                                ),
+                                              ),
+
                                               snapshot.data[index]
                                                   .bhour.toString()!=''?Container(
                                                 color:Colors.orangeAccent,
@@ -470,9 +497,12 @@ List<User> createUserList(List data){
     String Longi_in=data[i]["longi_in"];
     String Latit_out=data[i]["latit_out"];
     String Longi_out=data[i]["longi_out"];
+    String Att_Sts=data[i]["AttendanceStatus"];
     int id = 0;
     User user = new User(
-        AttendanceDate: title,thours: thours,id: id,TimeOut:TimeOut,TimeIn:TimeIn,bhour:bhour,EntryImage:EntryImage,checkInLoc:checkInLoc,ExitImage:ExitImage,CheckOutLoc:CheckOutLoc,latit_in: Latit_in,longi_in: Longi_in,latit_out: Latit_out,longi_out: Longi_out);
+        AttendanceDate: title,thours: thours,id: id,TimeOut:TimeOut,TimeIn:TimeIn,bhour:bhour,EntryImage:EntryImage,
+        checkInLoc:checkInLoc,ExitImage:ExitImage,CheckOutLoc:CheckOutLoc,latit_in: Latit_in,longi_in: Longi_in,
+        latit_out: Latit_out,longi_out: Longi_out, AttendanceStatus: Att_Sts);
     list.add(user);
   }
   return list;

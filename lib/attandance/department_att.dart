@@ -23,6 +23,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
   String _orgName;
   var profileimage;
   bool showtabbar;
+  String orgName="";
 
   String dept='0';
   var formatter = new DateFormat('dd-MMM-yyyy');
@@ -36,7 +37,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _orgName= prefs.getString('org_name') ?? '';
+      orgName= prefs.getString('orgname') ?? '';
     });
   }
   @override
@@ -55,7 +56,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
     return new Scaffold(
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar),
+      appBar: new AppHeader(profileimage, showtabbar,orgName),
       endDrawer: new AppDrawer(),
       bottomNavigationBar: HomeNavigation(),
       body: getReportsWidget(),

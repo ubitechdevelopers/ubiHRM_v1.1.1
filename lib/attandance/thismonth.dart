@@ -23,6 +23,9 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
   String _orgName;
   var profileimage;
   bool showtabbar;
+  String orgName="";
+
+
 
   List<Map<String,String>> chartData;
   void showInSnackBar(String value) {
@@ -33,7 +36,7 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _orgName= prefs.getString('org_name') ?? '';
+      orgName= prefs.getString('orgname') ?? '';
     });
   }
   @override
@@ -49,7 +52,7 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
     return new Scaffold(
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar),
+      appBar: new AppHeader(profileimage, showtabbar,orgName),
       endDrawer: new AppDrawer(),
       bottomNavigationBar: HomeNavigation(),
       body: getReportsWidget(),

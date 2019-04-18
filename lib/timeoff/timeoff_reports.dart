@@ -6,15 +6,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../b_navigationbar.dart';
 import '../appbar.dart';
-import 'employee_leave.dart';
+import 'timeoff_list.dart';
 
 
 
-class LeaveReports extends StatefulWidget {
+class TimeoffReports extends StatefulWidget {
   @override
-  _LeaveReports createState() => _LeaveReports();
+  _TimeoffReports createState() => _TimeoffReports();
 }
-class _LeaveReports extends State<LeaveReports> {
+class _TimeoffReports extends State<TimeoffReports> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _currentIndex = 1;
   String _orgName;
@@ -23,9 +23,9 @@ class _LeaveReports extends State<LeaveReports> {
   String orgmail = "";
   String admin_sts = "0";
   var profileimage;
-  bool showtabbar;
   String orgName="";
 
+  bool showtabbar;
   @override
   void initState() {
     super.initState();
@@ -140,7 +140,7 @@ class _LeaveReports extends State<LeaveReports> {
               padding: EdgeInsets.all(0.0),
 
               children: <Widget>[
-                Text('Leave Reports',
+                Text('Timeoff Reports',
                     style: new TextStyle(fontSize: 22.0, color: appStartColor(),),textAlign: TextAlign.center),
 
 
@@ -167,7 +167,7 @@ class _LeaveReports extends State<LeaveReports> {
                             shape: BoxShape.circle,
                             color: appStartColor(),
                           ),
-                          child: Icon(Icons.directions_walk,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
+                          child: Icon(Icons.access_alarms,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                           padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                         ),
 
@@ -180,7 +180,7 @@ class _LeaveReports extends State<LeaveReports> {
                             children: <Widget>[
                               Container(
 
-                                  child: Text("Employee's on Leave ",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                  child: Text("Employee's on Timeoff ",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                               ),
                               /*Container(
                                 //    width: MediaQuery.of(context).size.width*0.5,
@@ -209,7 +209,7 @@ class _LeaveReports extends State<LeaveReports> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => EmployeeLeaveList()),
+                      MaterialPageRoute(builder: (context) => TimeOffList()),
                     );
                   },
                 ),

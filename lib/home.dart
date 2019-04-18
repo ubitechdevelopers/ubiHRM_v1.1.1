@@ -45,6 +45,9 @@ class _HomePageStatemain extends State<HomePageMain> {
   String month;
   var profileimage;
   bool showtabbar;
+  String orgName="";
+
+
   bool _checkLoadedprofile = true;
 
   String location_addr = "";
@@ -56,8 +59,16 @@ class _HomePageStatemain extends State<HomePageMain> {
     super.initState();
 
     initPlatformState();
+    getOrgName();
 
 
+  }
+
+  getOrgName() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName= prefs.getString('orgname') ?? '';
+    });
   }
 
   initPlatformState() async{
@@ -199,7 +210,7 @@ class _HomePageStatemain extends State<HomePageMain> {
     return  Scaffold(
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
 
 /*        appBar: GradientAppBar(
           backgroundColorStart: appStartColor(),

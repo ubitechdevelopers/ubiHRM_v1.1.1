@@ -33,6 +33,7 @@ Future<bool> checklogin(UserLogin user) async{
       prefs.setString("organization", employeeMap['organization']);
       prefs.setString("empid", employeeMap['employeeid']);
       prefs.setString("orgdir", employeeMap['organization']);
+      prefs.setString("orgname", employeeMap['organizationname']);
       prefs.setString('fname',employeeMap['fname']);
       prefs.setString('profile', employeeMap['profile']);
 

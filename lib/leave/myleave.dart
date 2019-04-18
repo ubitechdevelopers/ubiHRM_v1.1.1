@@ -27,6 +27,8 @@ class _MyLeaveState extends State<MyLeave> {
   int response;
   var profileimage;
   bool showtabbar ;
+  String orgName="";
+
   bool _checkLoadedprofile = true;
   bool _checkwithdrawnleave = false;
   var PerLeave;
@@ -51,6 +53,14 @@ class _MyLeaveState extends State<MyLeave> {
     showtabbar=false;
   //  print(profileimage);
     initPlatformState();
+    getOrgName();
+  }
+
+  getOrgName() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName= prefs.getString('orgname') ?? '';
+    });
   }
 
   initPlatformState() async{
@@ -185,7 +195,7 @@ class _MyLeaveState extends State<MyLeave> {
     return  Scaffold(
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
         bottomNavigationBar:new HomeNavigation(),
       body:  ModalProgressHUD(
           inAsyncCall: _checkwithdrawnleave,
@@ -367,7 +377,7 @@ class _MyLeaveState extends State<MyLeave> {
                                                  fontWeight: FontWeight.bold),),
                                              (snapshot.data[index].withdrawlsts &&
                                               snapshot.data[index].approverstatus.toString() !='Withdrawn' && snapshot.data[index].approverstatus.toString() !=
-                                                 "Rejected"&& snapshot.data[index].approverstatus.toString() !="Approved") ? new Container(
+                                                 "Rejected") ? new Container(
                                                  height: 30.5,
                                                  margin: EdgeInsets.only(
                                                  left:25.0),

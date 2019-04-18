@@ -30,6 +30,9 @@ class _TimeOffApp extends State<TimeOffApp> {
   int _currentIndex = 0;
   var profileimage;
   bool showtabbar;
+  String orgName="";
+
+
   bool _checkLoadedprofile = true;
   String empid;
   String organization;  String hrsts;
@@ -39,6 +42,7 @@ class _TimeOffApp extends State<TimeOffApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    getOrgName();
     showtabbar=true;
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
@@ -50,6 +54,14 @@ class _TimeOffApp extends State<TimeOffApp> {
       }
     });
   }
+
+  getOrgName() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName= prefs.getString('orgname') ?? '';
+    });
+  }
+
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
 
@@ -79,7 +91,7 @@ class _TimeOffApp extends State<TimeOffApp> {
 
         child: Scaffold(
           endDrawer: new AppDrawer(),
-           appBar:new AppHeader(profileimage,showtabbar),
+           appBar:new AppHeader(profileimage,showtabbar,orgName),
  /*         appBar:PreferredSize(
             preferredSize: Size.fromHeight(100.0),
             child: GradientAppBar(

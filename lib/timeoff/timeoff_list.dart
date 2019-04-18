@@ -24,6 +24,7 @@ class _TimeOffList extends State<TimeOffList> {
   var formatter = new DateFormat('dd-MMM-yyyy');
   var profileimage;
   bool showtabbar;
+  String orgName="";
 
   @override
   void initState() {
@@ -39,8 +40,7 @@ class _TimeOffList extends State<TimeOffList> {
   getOrgName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _orgName = prefs.getString('org_name') ?? '';
-      admin_sts = prefs.getString('sstatus') ?? '0';
+      orgName= prefs.getString('orgname') ?? '';
     });
   }
 
@@ -62,7 +62,7 @@ class _TimeOffList extends State<TimeOffList> {
     return new Scaffold(
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar),
+      appBar: new AppHeader(profileimage, showtabbar,orgName),
       endDrawer: new AppDrawer(),
       bottomNavigationBar: HomeNavigation(),
       body: getReportsWidget(),

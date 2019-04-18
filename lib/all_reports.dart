@@ -10,6 +10,7 @@ import 'b_navigationbar.dart';
 import 'appbar.dart';
 import 'attandance/reports.dart';
 import 'leave/leave_reports.dart';
+import 'timeoff/timeoff_list.dart';
 
 
 class AllReports extends StatefulWidget {
@@ -26,6 +27,8 @@ class _AllReports extends State<AllReports> {
   String admin_sts = "0";
   var profileimage;
   bool showtabbar;
+  String orgName="";
+
   @override
   void initState() {
     super.initState();
@@ -36,11 +39,8 @@ class _AllReports extends State<AllReports> {
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _orgName= prefs.getString('org_name') ?? '';
-      buystatus = prefs.getString('buysts') ?? '';
-      trialstatus = prefs.getString('trialstatus') ?? '';
-      orgmail = prefs.getString('orgmail') ?? '';
-      admin_sts = prefs.getString('sstatus') ?? '';
+      orgName= prefs.getString('orgname') ?? '';
+
     });
   }
   @override
@@ -59,7 +59,7 @@ class _AllReports extends State<AllReports> {
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
       endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar),
+      appBar: new AppHeader(profileimage,showtabbar,orgName),
 /*      appBar: GradientAppBar(
 
         automaticallyImplyLeading: false,
@@ -343,10 +343,10 @@ class _AllReports extends State<AllReports> {
                     elevation: 4.0,
                     textColor: Colors.black,
                     onPressed: () {
-                      /* Navigator.push(
+                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Reports()),
-                      );*/
+                        MaterialPageRoute(builder: (context) => TimeOffList()),
+                      );
                     },
                   ),
 

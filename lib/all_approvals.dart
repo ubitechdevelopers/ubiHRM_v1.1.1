@@ -26,6 +26,7 @@ class _AllApprovals extends State<AllApprovals> {
   String admin_sts = "0";
   var profileimage;
   bool showtabbar;
+  String orgName="";
 
 
   @override
@@ -38,11 +39,8 @@ class _AllApprovals extends State<AllApprovals> {
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _orgName= prefs.getString('org_name') ?? '';
-      buystatus = prefs.getString('buysts') ?? '';
-      trialstatus = prefs.getString('trialstatus') ?? '';
-      orgmail = prefs.getString('orgmail') ?? '';
-      admin_sts = prefs.getString('sstatus') ?? '';
+      orgName= prefs.getString('orgname') ?? '';
+
     });
   }
   @override
@@ -154,7 +152,7 @@ class _AllApprovals extends State<AllApprovals> {
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
       endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar),
+      appBar: new AppHeader(profileimage,showtabbar,orgName),
 
 /*      appBar: GradientAppBar(
         automaticallyImplyLeading: false,

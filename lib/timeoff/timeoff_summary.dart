@@ -35,6 +35,10 @@ class _TimeoffSummary extends State<TimeoffSummary> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var profileimage;
   bool showtabbar;
+  String orgName="";
+
+
+
   bool _checkLoaded = true;
   int checkProcessing = 0;
   int _currentIndex = 1;
@@ -69,7 +73,17 @@ class _TimeoffSummary extends State<TimeoffSummary> {
     comments = new TextEditingController();
     super.initState();
     initPlatformState();
+    getOrgName();
+
   }
+
+  getOrgName() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName= prefs.getString('orgname') ?? '';
+    });
+  }
+
   @override
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -205,7 +219,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
       endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar),
+      appBar: new AppHeader(profileimage,showtabbar,orgName),
 
       /*appBar: GradientAppBar(
         automaticallyImplyLeading: false,

@@ -24,8 +24,10 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   bool _checkLoadedprofile = true;
   var profileimage;
   bool showtabbar;
-  AppHeader(profileimage1,showtabbar1){
+  var orgname;
+  AppHeader(profileimage1,showtabbar1,orgname1){
     profileimage = profileimage1;
+    orgname = orgname1;
  // print("--------->");
   // print(profileimage);
   //  print("--------->");
@@ -78,7 +80,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             Container(
-                padding: const EdgeInsets.all(8.0), child: Text('Ubitech Solutions pvt ltd')
+                padding: const EdgeInsets.all(8.0), child: Text(orgname)
             )
           ],
         ),

@@ -25,6 +25,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
   var formatter = new DateFormat('dd-MMM-yyyy');
   var profileimage;
   bool showtabbar;
+  String orgName="";
 
   String emp='0';
 
@@ -39,11 +40,10 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
     getOrgName();
   }
 
-  getOrgName() async {
+  getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _orgName = prefs.getString('org_name') ?? '';
-      admin_sts = prefs.getString('sstatus') ?? '0';
+      orgName= prefs.getString('orgname') ?? '';
     });
   }
 
@@ -65,7 +65,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
     return new Scaffold(
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar),
+      appBar: new AppHeader(profileimage, showtabbar,orgName),
       endDrawer: new AppDrawer(),
       bottomNavigationBar: HomeNavigation(),
       body: getReportsWidget(),

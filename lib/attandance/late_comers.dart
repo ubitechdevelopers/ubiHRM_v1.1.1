@@ -23,6 +23,7 @@ class _LateComers extends State<LateComers> {
   bool res = true;
   var profileimage;
   bool showtabbar;
+  String orgName="";
 
   var formatter = new DateFormat('dd-MMM-yyyy');
   @override
@@ -39,8 +40,7 @@ class _LateComers extends State<LateComers> {
   getOrgName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _orgName = prefs.getString('org_name') ?? '';
-      admin_sts = prefs.getString('sstatus') ?? '0';
+      orgName= prefs.getString('orgname') ?? '';
     });
   }
 
@@ -62,7 +62,7 @@ class _LateComers extends State<LateComers> {
     return new Scaffold(
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar),
+      appBar: new AppHeader(profileimage, showtabbar,orgName),
       endDrawer: new AppDrawer(),
       bottomNavigationBar: HomeNavigation(),
 

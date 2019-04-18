@@ -35,15 +35,25 @@ class _changePassword extends State<changePassword> {
   String admin_sts="0";
   var profileimage;
   bool showtabbar;
+  String orgName="";
+
   @override
   void initState() {
     super.initState();
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     showtabbar=false;
-    initPlatformState();
+  //  initPlatformState();
+    getOrgName();
   }
+  getOrgName() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName= prefs.getString('orgname') ?? '';
+    });
+  }
+
   // Platform messages are asynchronous, so we initialize in an async method.
-  initPlatformState() async {
+  /*initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
     response = prefs.getInt('response') ?? 0;
     admin_sts = prefs.getString('sstatus') ?? '0';
@@ -53,7 +63,7 @@ class _changePassword extends State<changePassword> {
         org_name = prefs.getString('org_name') ?? '';
       });
     }
-  }
+  }*/
 
 
   void _toggle_old() {
@@ -82,10 +92,10 @@ class _changePassword extends State<changePassword> {
     return Scaffold(
       backgroundColor:scaffoldBackColor(),
       key: _scaffoldKey,
-      appBar:  new AppHeader(profileimage,showtabbar),
+      appBar:  new AppHeader(profileimage,showtabbar,orgName),
       bottomNavigationBar: new HomeNavigation(),
       endDrawer: new AppDrawer(),
-      body:  checkalreadylogin(),
+      body:  mainbodyWidget(),
     );
 
   }
@@ -132,8 +142,8 @@ class _changePassword extends State<changePassword> {
 
   mainbodyWidget(){
     return Container(
-      margin: EdgeInsets.fromLTRB(10.0, 10.0, 5.0, 10.0),
-      padding: EdgeInsets.fromLTRB(10.0, 10.0, 5.0, 10.0),
+      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
       //width: MediaQuery.of(context).size.width*0.9,
       //      height:MediaQuery.of(context).size.height*0.75,
       decoration: new ShapeDecoration(
@@ -144,7 +154,7 @@ class _changePassword extends State<changePassword> {
         key: _formKey,
         child: SafeArea(
           child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
             children: <Widget>[
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -152,7 +162,7 @@ class _changePassword extends State<changePassword> {
                 children: <Widget>[
                   SizedBox(height: 20.0),
                   Center(
-                    child:Text("Change Password",style: new TextStyle(fontSize: 22.0,color: Colors.green)),
+                    child:Text("Change Password",style: new TextStyle(fontSize: 22.0,color: appStartColor())),
                   ),
                   Divider(height: 10.0,),
                   SizedBox(height: 30.0),
@@ -258,7 +268,7 @@ class _changePassword extends State<changePassword> {
                       ),
                       RaisedButton(
                         child: Text('SUBMIT',style: TextStyle(color: Colors.white),),
-                        color: Colors.orangeAccent,
+                        color: Colors.orange[800],
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             if (_oldPass.text == _newPass.text) {

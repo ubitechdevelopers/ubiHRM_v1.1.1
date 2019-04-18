@@ -14,7 +14,7 @@ import 'attendance_summary.dart';
 import 'punchlocation_summary.dart';
 import 'punchlocation.dart';
 import '../drawer.dart';
-import 'package:ubihrm/services/attandance_services.dart';
+import 'package:ubihrm/services/services.dart';
 import '../leave/myleave.dart';
 import 'package:ubihrm/services/attandance_newservices.dart';
 import '../global.dart';
@@ -76,6 +76,7 @@ class _HomePageState extends State<HomePage> {
   String aid = "";
   String shiftId = "";
   List<Widget> widgets;
+  String orgName="";
 
 
   @override
@@ -83,9 +84,17 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     initPlatformState();
+    getOrgName();
     setLocationAddress();
     startTimer();
 
+  }
+
+  getOrgName() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName= prefs.getString('orgname') ?? '';
+    });
   }
 
 
@@ -209,6 +218,8 @@ class _HomePageState extends State<HomePage> {
         act1 = act;
     //    print("ABC"+act1);
         streamlocationaddr = globalstreamlocationaddr;
+
+        perPunchLocation=  getModulePermission("305","view");
       });
     //}
   }
@@ -241,7 +252,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
-          appBar: new AppHeader(profileimage,showtabbar),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
 
 /*          appBar: GradientAppBar(
             backgroundColorStart: appStartColor(),
@@ -677,7 +688,7 @@ class _HomePageState extends State<HomePage> {
       color: Colors.green.withOpacity(0.9),
 
       width: MediaQuery.of(context).size.width * 0.95,
-
+      height:MediaQuery.of(context).size.height * 0.10,
       // padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.03,bottom:MediaQuery.of(context).size.height*0.03, ),
       child: Row(
         //  crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -711,13 +722,13 @@ class _HomePageState extends State<HomePage> {
                 )),
           ),
 
-        Container(
+          perPunchLocation == '1' ?  Container(
             padding: EdgeInsets.only(top: 10.0),
             constraints: BoxConstraints(
               maxHeight: 60.0,
               minHeight: 20.0,
             ),
-            child: new GestureDetector(
+            child:  new GestureDetector(
                 onTap: () {
                   /*showInSnackBar("Under development.");*/
                   Navigator.push(
@@ -742,7 +753,7 @@ class _HomePageState extends State<HomePage> {
                             new TextStyle(fontSize: 15.0, color: Colors.white)),
                   ],
                 )])),
-          ),
+          ):Center(),
          /* Container(
             padding: EdgeInsets.only(top: 10.0),
             constraints: BoxConstraints(
@@ -815,6 +826,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+/*
   List<GestureDetector> quickLinkList() {
     List<GestureDetector> list = new List<GestureDetector>();
     // //print("permission list-->>>>>>"+data.toString());
@@ -841,7 +853,9 @@ class _HomePageState extends State<HomePage> {
     if (punchlocation_permission == 1) {
       list.add(new GestureDetector(
           onTap: () {
-            /*showInSnackBar("Under development.");*/
+            */
+/*showInSnackBar("Under development.");*//*
+
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => PunchLocation()),
@@ -861,7 +875,8 @@ class _HomePageState extends State<HomePage> {
           )));
     }
 
-  /*  if (timeoff_permission == 1) {
+  */
+/*  if (timeoff_permission == 1) {
       list.add(new GestureDetector(
           onTap: () {
             //  //print('----->>>>>'+getOrgPerm(1).toString());
@@ -890,7 +905,8 @@ class _HomePageState extends State<HomePage> {
                   style: new TextStyle(fontSize: 15.0, color: Colors.white)),
             ],
           )));
-    }*/
+    }*//*
+
 
     if (leave_permission == 1) {
       list.add(new GestureDetector(
@@ -923,13 +939,14 @@ class _HomePageState extends State<HomePage> {
     }
     return list;
   }
+*/
 
-  getQuickLinksWidget() {
+ /* getQuickLinksWidget() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: quickLinkList(),
     );
-  }
+  }*/
 
   getAlreadyMarkedWidgit() {
     return Column(children: <Widget>[
@@ -1038,7 +1055,7 @@ class _HomePageState extends State<HomePage> {
       return RaisedButton(
         child: Text('TIME IN',
             style: new TextStyle(fontSize: 22.0, color: Colors.white)),
-        color: Colors.orangeAccent,
+        color: Colors.orange[800],
         onPressed: () {
           // //print("Time out button pressed");
           saveImage();
@@ -1049,7 +1066,7 @@ class _HomePageState extends State<HomePage> {
       return RaisedButton(
         child: Text('TIME OUT',
             style: new TextStyle(fontSize: 22.0, color: Colors.white)),
-        color: Colors.orangeAccent,
+        color: Colors.orange[800],
         onPressed: () {
           // //print("Time out button pressed");
           saveImage();
@@ -1216,7 +1233,7 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.white,
                             ),
                           ),
-                          color: Colors.orangeAccent,
+                          color: Colors.orange[800],
                           onPressed: () {
                             Navigator.of(context, rootNavigator: true).pop();
                             resendVarification();

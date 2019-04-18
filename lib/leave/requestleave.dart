@@ -57,6 +57,8 @@ class _RequestLeaveState extends State<RequestLeave> {
   int response;
   var profileimage;
   bool showtabbar;
+  String orgName="";
+
   bool _checkLoadedprofile=true;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
 
@@ -74,6 +76,14 @@ class _RequestLeaveState extends State<RequestLeave> {
       }
     });*/
     initPlatformState();
+    getOrgName();
+  }
+
+  getOrgName() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName= prefs.getString('orgname') ?? '';
+    });
   }
 
   initPlatformState() async{
@@ -148,7 +158,7 @@ class _RequestLeaveState extends State<RequestLeave> {
       setState(() {
         isServiceCalling = false;
       });
-      showInSnackBar("Leave is already applied for this date.");
+      showInSnackBar("There is some problem while applying for Leave.");
     }else{
       setState(() {
         isServiceCalling = false;
@@ -190,7 +200,7 @@ class _RequestLeaveState extends State<RequestLeave> {
         key: _scaffoldKey,
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
        bottomNavigationBar:  new HomeNavigation(),
        body:  ModalProgressHUD(
     inAsyncCall: isServiceCalling,

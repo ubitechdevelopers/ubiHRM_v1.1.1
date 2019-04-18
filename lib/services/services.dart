@@ -44,7 +44,7 @@ List<Permission> createPermList(List data) {
     String delete = data[i]["delete"];
     String add = data[i]["add"];*/
     //print(moduleid +" " +view+" "+edit+" "+delete+" "+add);
-    Map<String,String> viewpermission = {'view': view};
+    Map<String,String> viewpermission = {'module':moduleid,'view': view};
     /*Map<String,String> editpermission = {'edit': edit};
     Map<String,String> deletepermission = {'delete': delete};
     Map<String,String> addpermission = {'add': add};*/
@@ -52,7 +52,7 @@ List<Permission> createPermList(List data) {
    /* permissionlist.add(editpermission);
     permissionlist.add(deletepermission);
     permissionlist.add(addpermission);*/
-    // print("2. "+permissionlist.toString());
+ //    print("2. "+permissionlist.toString());
     Permission p = new Permission(moduleid: moduleid,permissionlist: permissionlist);
     list.add(p);
   }

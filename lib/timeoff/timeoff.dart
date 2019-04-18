@@ -55,6 +55,9 @@ class _TimeOffPageState extends State<TimeOffPage> {
       "http://ubiattendance.ubihrm.com/assets/img/avatar.png");
   var profileimage;
   bool showtabbar;
+  String orgName="";
+
+
   bool _checkLoaded = true;
   bool _isButtonDisabled=false;
   int _currentIndex = 1;
@@ -72,7 +75,17 @@ class _TimeOffPageState extends State<TimeOffPage> {
   void initState() {
     super.initState();
     initPlatformState();
+    getOrgName();
   }
+
+  getOrgName() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName= prefs.getString('orgname') ?? '';
+    });
+  }
+
+
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
@@ -140,7 +153,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage,showtabbar),
+      appBar: new AppHeader(profileimage,showtabbar,orgName),
 
       bottomNavigationBar:  new HomeNavigation(),
 

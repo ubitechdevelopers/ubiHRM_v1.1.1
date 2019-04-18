@@ -7,7 +7,7 @@ import 'late_comers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'settings.dart';
 import 'earlyLeavers.dart';
-import 'timeoff_list.dart';
+//import 'timeoff_list.dart';
 import 'cust_date_report.dart';
 import 'attendance_report_yes.dart';
 import 'last_seven_days.dart';
@@ -39,6 +39,9 @@ class _Reports extends State<Reports> {
   String admin_sts = "0";
   var profileimage;
   bool showtabbar;
+  String orgName="";
+
+
   @override
   void initState() {
     super.initState();
@@ -49,11 +52,8 @@ class _Reports extends State<Reports> {
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _orgName= prefs.getString('org_name') ?? '';
-      buystatus = prefs.getString('buysts') ?? '';
-      trialstatus = prefs.getString('trialstatus') ?? '';
-      orgmail = prefs.getString('orgmail') ?? '';
-      admin_sts = prefs.getString('sstatus') ?? '';
+      orgName= prefs.getString('orgname') ?? '';
+
     });
   }
   @override
@@ -71,7 +71,7 @@ class _Reports extends State<Reports> {
           key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
       endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar),
+      appBar: new AppHeader(profileimage,showtabbar,orgName),
 
       /*appBar: GradientAppBar(
         automaticallyImplyLeading: false,
@@ -698,6 +698,7 @@ class _Reports extends State<Reports> {
 
             */
 
+/*
 /////////5th button ///////////
 
             SizedBox(height: 6.0),
@@ -772,6 +773,7 @@ class _Reports extends State<Reports> {
                 }
               },
             ),
+*/
 
 /*
             SizedBox(height: 6.0),

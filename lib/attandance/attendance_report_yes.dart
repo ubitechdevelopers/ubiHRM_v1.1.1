@@ -21,6 +21,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
   String _orgName;
   var profileimage;
   bool showtabbar;
+  String orgName="";
 
 
   List<Map<String,String>> chartData;
@@ -32,7 +33,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _orgName= prefs.getString('org_name') ?? '';
+      orgName= prefs.getString('orgname') ?? '';
     });
   }
   @override
@@ -48,7 +49,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
     return new Scaffold(
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar),
+      appBar: new AppHeader(profileimage, showtabbar,orgName),
       endDrawer: new AppDrawer(),
       bottomNavigationBar: HomeNavigation(),
 

@@ -22,6 +22,9 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
   String _orgName;
   var profileimage;
   bool showtabbar;
+  String orgName="";
+
+
   List<Map<String,String>> chartData;
   void showInSnackBar(String value) {
     final snackBar = SnackBar(
@@ -31,7 +34,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _orgName= prefs.getString('org_name') ?? '';
+      orgName= prefs.getString('orgname') ?? '';
     });
   }
   @override
@@ -47,7 +50,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
     return new Scaffold(
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar),
+      appBar: new AppHeader(profileimage, showtabbar,orgName),
       endDrawer: new AppDrawer(),
       bottomNavigationBar: HomeNavigation(),
 

@@ -23,6 +23,7 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
   String _orgName;
   var profileimage;
   bool showtabbar;
+  String orgName="";
 
   String desg='0';
   var formatter = new DateFormat('dd-MMM-yyyy');
@@ -36,7 +37,7 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _orgName= prefs.getString('org_name') ?? '';
+      orgName= prefs.getString('orgname') ?? '';
     });
   }
   @override
@@ -54,7 +55,7 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
     return new Scaffold(
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar),
+      appBar: new AppHeader(profileimage, showtabbar,orgName),
       endDrawer: new AppDrawer(),
       bottomNavigationBar: HomeNavigation(),
       body: getReportsWidget(),

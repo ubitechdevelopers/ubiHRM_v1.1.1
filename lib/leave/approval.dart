@@ -33,6 +33,8 @@ class _TabState extends State<TabbedApp> {
   var PerLeave;
   var PerApprovalLeave;
   bool showtabbar;
+  String orgName="";
+
   Employee emp;
 
 
@@ -44,6 +46,8 @@ class _TabState extends State<TabbedApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    getOrgName();
+
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
       if (mounted) {
@@ -64,6 +68,14 @@ class _TabState extends State<TabbedApp> {
     emp = new Employee(employeeid: empid, organization: organization);
     getAllPermission(emp);
   }
+
+  getOrgName() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName= prefs.getString('orgname') ?? '';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -84,7 +96,7 @@ class _TabState extends State<TabbedApp> {
 
         child: Scaffold(
         endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
 /*          appBar:PreferredSize(
             preferredSize: Size.fromHeight(100.0),
             child: GradientAppBar(
