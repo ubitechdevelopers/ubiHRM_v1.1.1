@@ -242,6 +242,8 @@ class _PunchLocation extends State<PunchLocation> {
         onWillPop: () async => true,
         child: new Scaffold(
           key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+
           endDrawer: new AppDrawer(),
           appBar: new AppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:new HomeNavigation(),
@@ -504,7 +506,12 @@ class _PunchLocation extends State<PunchLocation> {
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
             Container(
-              // foregroundDecoration: BoxDecoration(color:Colors.red ),
+              margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+              decoration: new ShapeDecoration(
+                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+                color: Colors.white,
+              ),
               height: MediaQuery.of(context).size.height * 0.80,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,

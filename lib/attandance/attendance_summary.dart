@@ -357,6 +357,8 @@ getWidgets(context){
                                                   ),
                                                   children: <TextSpan>[
                                                     new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black54,), ),
+                                                    new TextSpan(text: snapshot.data[index]
+                                                        .AttendanceStatus.toString(),style:TextStyle(color: Colors.black54,), ),
                                                   ],
                                                 ),
                                               ),

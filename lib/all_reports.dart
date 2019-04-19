@@ -10,7 +10,7 @@ import 'b_navigationbar.dart';
 import 'appbar.dart';
 import 'attandance/reports.dart';
 import 'leave/leave_reports.dart';
-import 'timeoff/timeoff_list.dart';
+import 'timeoff/timeoff_reports.dart';
 
 
 class AllReports extends StatefulWidget {
@@ -345,7 +345,7 @@ class _AllReports extends State<AllReports> {
                     onPressed: () {
                        Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => TimeOffList()),
+                        MaterialPageRoute(builder: (context) => TimeoffReports()),
                       );
                     },
                   ),

@@ -59,7 +59,12 @@ requestLeave(Leave leave) async{
     if (leaveMap.contains("false")) {
       //  print("false--->" + response1.data.toString());
       return "false";
-    } else {
+    }
+    else if (leaveMap.contains("wrong"))
+    {
+
+      return "wrong";
+    }else {
       // print("true---" + response1.data.toString());
       return "true";
     }
@@ -483,7 +488,8 @@ ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
     {
       print("false approve leave hrfunction--->" + response.data.toString());
       return "false";
-    } else {
+    }
+    else {
       print("true  approve leave hr function---" + response.data.toString());
       return "true";
     }

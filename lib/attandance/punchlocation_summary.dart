@@ -153,6 +153,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
     return new WillPopScope(
       onWillPop: ()=> sendToHome(),
       child: new Scaffold(
+        backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
         appBar: new AppHeader(profileimage,showtabbar,orgName),
         bottomNavigationBar:new HomeNavigation(),
@@ -274,7 +275,19 @@ print('visit out called for visit id:'+visit_id);
   }
   /////////////
   getWidgets(context){
-    return Column(
+    return Stack(
+      children: <Widget>[
+        Container(
+            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            //width: MediaQuery.of(context).size.width*0.9,
+            //     height:MediaQuery.of(context).size.height*0.75,
+            decoration: new ShapeDecoration(
+              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+              color: Colors.white,
+            ),
+            child:
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget> [
           Container(
@@ -292,13 +305,13 @@ print('visit out called for visit id:'+visit_id);
               SizedBox(height: 50.0,),
               SizedBox(width: MediaQuery.of(context).size.width*0.02),
               Container(
-                width: MediaQuery.of(context).size.width*0.55,
+                width: MediaQuery.of(context).size.width*0.45,
                 child:Text(' Client',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
 
               SizedBox(height: 50.0,),
               Container(
-                width: MediaQuery.of(context).size.width*0.22,
+                width: MediaQuery.of(context).size.width*0.2,
                 child:Text(' Visit In',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
               SizedBox(height: 50.0,),
@@ -336,7 +349,7 @@ print('visit out called for visit id:'+visit_id);
                                     width: MediaQuery
                                         .of(context)
                                         .size
-                                        .width * 0.46,
+                                        .width * 0.35,
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment
                                           .start,
@@ -388,10 +401,10 @@ print('visit out called for visit id:'+visit_id);
                                               decoration: new BoxDecoration(
                                                 color: Colors.orange[800],
                                                 border: new Border.all(color: Colors.white, width: 2.0),
-                                                borderRadius: new BorderRadius.circular(10.0),
+                                                //borderRadius: new BorderRadius.circular(10.0),
                                               ),
 
-                                              child: new Center(child: new Text('Visit Out', style: new TextStyle(fontSize: 18.0, color: Colors.white),),),
+                                              child: new Center(child: new Text('Visit out', style: new TextStyle(fontSize: 16.0, color: Colors.white),),),
                                             ),
                                             onTap: (){
                                               _showDialog(snapshot.data[index].Id.toString());
@@ -517,6 +530,12 @@ print('visit out called for visit id:'+visit_id);
             ),
           ),
         ]
+    )
+    ),
+
+
+
+    ],
     );
 
   }

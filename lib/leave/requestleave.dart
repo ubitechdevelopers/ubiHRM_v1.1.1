@@ -159,6 +159,12 @@ class _RequestLeaveState extends State<RequestLeave> {
         isServiceCalling = false;
       });
       showInSnackBar("There is some problem while applying for Leave.");
+    }
+    else if(islogin1=="wrong"){
+      setState(() {
+        isServiceCalling = false;
+      });
+      showInSnackBar("Leave format is wrong");
     }else{
       setState(() {
         isServiceCalling = false;

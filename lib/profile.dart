@@ -721,7 +721,7 @@ var profilepic;
         //   color:Colors.cyan[200].withOpacity(0.7),
       //  builder: (BuildContext bc){
       return new Container(
-          color: Colors.teal.withOpacity(0.1),
+          color: Colors.green.withOpacity(0.2),
           child: new Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

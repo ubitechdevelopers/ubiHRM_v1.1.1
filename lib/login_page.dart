@@ -509,7 +509,7 @@ class _LoginPageState extends State<LoginPage>
 
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Expanded(child: Container(
                    margin: EdgeInsets.only(left: 40.0),
@@ -903,6 +903,7 @@ class _LoginPageState extends State<LoginPage>
                   children: <Widget>[
 
                     Container(
+                      width: 250,
               margin: EdgeInsets.only(top: 400.0),
                       padding: EdgeInsets.only(
                           top: 0.0, bottom: 0.0, left: 100.0, right: 10.0),

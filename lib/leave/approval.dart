@@ -1084,7 +1084,7 @@ class ChoiceCard1 extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => TabbedApp()),
                           ); },
                         gradient: LinearGradient(
-                          colors: <Color>[Colors.green[400], Colors.green[900]],
+                          colors: <Color>[Colors.green[700], Colors.green[700]],
                         ),
                         child: new Text('Approve',
                             style: new TextStyle(
@@ -1136,7 +1136,7 @@ class ChoiceCard1 extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => TabbedApp()),
                           );   },
                         gradient: LinearGradient(
-                          colors: <Color>[Colors.red[400], Colors.red[900]],
+                          colors: <Color>[Colors.red[700], Colors.red[700]],
                         ),
                         child: new Text('Reject',
                             style: new TextStyle(
@@ -1283,7 +1283,7 @@ class ChoiceCard1 extends StatelessWidget {
                         //shape: new RoundedRectangleBorder(
                           //  borderRadius: new BorderRadius.circular(30.0)),
                         gradient: LinearGradient(
-                          colors: <Color>[Colors.green[400], Colors.green[900]],
+                          colors: <Color>[Colors.green[700], Colors.green[700]],
                         ),
                         child: new Text('Approve',
                             style: new TextStyle(
@@ -1335,7 +1335,7 @@ print("ff"+sts);
                           ); },
                        // color: Colors.red[400],
                         gradient: LinearGradient(
-                          colors: <Color>[Colors.red[200], Colors.red[800]],
+                          colors: <Color>[Colors.red[700], Colors.red[700]],
                         ),
                         child: new Text('Reject',
                             style: new TextStyle(

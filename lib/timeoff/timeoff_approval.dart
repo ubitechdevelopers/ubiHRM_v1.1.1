@@ -1091,7 +1091,7 @@ maxLines: 3,
                             MaterialPageRoute(builder: (context) => TimeOffApp()),
                           ); },
                         gradient: LinearGradient(
-                          colors: <Color>[Colors.green[200], Colors.green[800]],
+                          colors: <Color>[Colors.green[700], Colors.green[700]],
                         ),
                         child: new Text('Approve',
                             style: new TextStyle(
@@ -1143,7 +1143,7 @@ maxLines: 3,
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(30.0)),*/
                         gradient: LinearGradient(
-                          colors: <Color>[Colors.red[200], Colors.red[800]],
+                          colors: <Color>[Colors.red[700], Colors.red[700]],
                         ),
                         child: new Text('Reject',
                             style: new TextStyle(
