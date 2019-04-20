@@ -180,7 +180,7 @@ class _TimeoffReports extends State<TimeoffReports> {
                             children: <Widget>[
                               Container(
 
-                                  child: Text("Employee's on Timeoff ",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                  child: Text("Employees on Timeoff ",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                               ),
                               /*Container(
                                 //    width: MediaQuery.of(context).size.width*0.5,

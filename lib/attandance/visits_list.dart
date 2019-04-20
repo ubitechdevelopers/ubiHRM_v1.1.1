@@ -296,7 +296,7 @@ class _VisitList extends State<VisitList> {
                   });
             } else {
               return new Center(
-                child: Text("No Visits ", style: TextStyle(color: appStartColor(),fontSize: 18.0),),
+                child: Text("No Visits found", style: TextStyle(color: appStartColor(),fontSize: 18.0),),
               );
             }
           } else if (snapshot.hasError) {

@@ -266,7 +266,7 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                   });
             } else {
               return new Center(
-                child: Text("No early leavers on this date"),
+                child: Text("No Employees found."),
               );
             }
           } else if (snapshot.hasError) {

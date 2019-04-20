@@ -288,7 +288,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                       width: MediaQuery.of(context).size.width*1,
                                       color: Colors.teal.withOpacity(0.1),
                                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                      child:Text("No present in last 30 days ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                      child:Text("No Employees found.",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                     ),
                                   )
                               );
@@ -393,7 +393,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                       width: MediaQuery.of(context).size.width*1,
                                       color: Colors.teal.withOpacity(0.1),
                                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                      child:Text("No absent in last 30 days ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                      child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                     ),
                                   )
                               );
@@ -575,7 +575,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                       width: MediaQuery.of(context).size.width*1,
                                       color: Colors.teal.withOpacity(0.1),
                                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                      child:Text("No late comings in last 30 days ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                      child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                     ),
                                   )
                               );
@@ -754,7 +754,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                       width: MediaQuery.of(context).size.width*1,
                                       color: Colors.teal.withOpacity(0.1),
                                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                      child:Text("No early leavings in last 30 days",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                      child:Text("No Employees found.",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                     ),
                                   )
                               );

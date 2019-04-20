@@ -94,6 +94,7 @@ flutter:
         - assets/visits.png
         - assets/profile.png
         - assets/img/login_logo.png
+        - assets/img/logohrmbg.png
         - assets/attendance_icon1.png
         - assets/leave_icon1.png
         - assets/timeoff_icon1.png

@@ -364,10 +364,10 @@ List<LeaveA> createleaveapporval(List data) {
     String HRSts = data[i]["HRSts"].toString();
     print(Fdate+"@@@@@@@"+Tdate);
     if(Fdate==Tdate){
-      Tdate="- "+Fdate;
+      Tdate=" - "+Fdate;
     }
     else{
-      Tdate="- "+Tdate;
+      Tdate=" - "+Tdate;
     }
     String Psts="";
     if(data[i]["Pstatus"].contains("Pending at")) {

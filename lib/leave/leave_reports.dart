@@ -180,7 +180,7 @@ class _LeaveReports extends State<LeaveReports> {
                             children: <Widget>[
                               Container(
 
-                                  child: Text("Employee's on Leave ",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                  child: Text("Employees on Leave ",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                               ),
                               /*Container(
                                 //    width: MediaQuery.of(context).size.width*0.5,

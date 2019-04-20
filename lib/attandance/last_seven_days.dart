@@ -254,7 +254,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width*1,
                                   color: Colors.teal.withOpacity(0.1),
                                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No one was present in the last 7 days",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  child:Text("No Employees found.",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                 ),
                               );
                             }

@@ -384,7 +384,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                     );
                                   } else {
                                     return new Center(
-                                      child: Text("No one is present today "),
+                                      child: Text("No Employees found. "),
                                     );
                                   }
                                 }
@@ -495,7 +495,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                     );
                                   } else {
                                     return new Center(
-                                      child: Text("No one is absent today"),
+                                      child: Text("No Employees found."),
                                     );
                                   }
                                 }
@@ -706,7 +706,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                     );
                                   } else {
                                     return new Center(
-                                      child: Text("No one is late today"),
+                                      child: Text("No Employees found."),
                                     );
                                   }
                                 }
@@ -916,7 +916,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                     );
                                   } else {
                                     return new Center(
-                                      child: Text("No early leavers today"),
+                                      child: Text("No Employees found."),
                                     );
                                   }
                                 }

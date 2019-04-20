@@ -112,14 +112,42 @@ class _LoginPageState extends State<LoginPage>
                 width: 50.0,),child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
+
                   Padding(
                     padding: EdgeInsets.only(top: 30.0),
+             child: new Container(
+               width: 135.0,
+               height: 132.0,
+               decoration: new BoxDecoration(
+                 color: const Color(0xff7c94b6),
+                 image: new DecorationImage(
+                   image:new AssetImage('assets/img/logohrmbg.png'),
+                   fit: BoxFit.cover,
+                 ),
+                 borderRadius: new BorderRadius.all(new Radius.circular(77.0)),
+                // border: new Border.all(
+                  // color: Colors.red,
+                   //width: 4.0,
+                // ),
+               ),
+             ),
+
+                    /* Container(
+                 // width: 100.0,
+                //  height: 100.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    color: Colors.redAccent,
+                  ),
                     child: new Image(
                         width: 130.0,
                         height: 125.0,
                         fit: BoxFit.fill,
-                        image: new AssetImage('assets/img/login_logo.png')),
+
+                        image: new AssetImage('assets/img/logohrmbg.png')),
+                  ),*/
                   ),
+
                   Padding(
                     padding: EdgeInsets.only(top: 5.0),
                   //  child: _buildMenuBar(context),
@@ -315,7 +343,7 @@ class _LoginPageState extends State<LoginPage>
                               FocusScope.of(context).requestFocus(myFocusNodePasswordLogin);
                             },
                             style: TextStyle(
-                                fontFamily: "WorkSansSemiBold",
+
                                 fontSize: 16.0,
                                 color: Colors.black),
                             decoration: InputDecoration(
@@ -350,7 +378,7 @@ class _LoginPageState extends State<LoginPage>
                             controller: loginPasswordController,
                             obscureText: _obscureText_new,
                             style: TextStyle(
-                                fontFamily: "WorkSansSemiBold",
+
                                 fontSize: 16.0,
                                 color: Colors.black),
                             decoration: InputDecoration(
@@ -413,7 +441,7 @@ class _LoginPageState extends State<LoginPage>
                           //   margin: EdgeInsets.only(top: 170.0),
                           width: MediaQuery.of(context).size.width,
                           padding: EdgeInsets.only(
-                              top: 0.0, bottom: 0.0, left: 180.0, right: 10.0),
+                              top: 0.0, bottom: 0.0, left: 170.0, right: 10.0),
 
                           child: FlatButton(
                           onPressed: () {
@@ -424,12 +452,12 @@ class _LoginPageState extends State<LoginPage>
 
                               },
                               child: Text(
-                                "Forgot Password?",
+                                "Forgot Password ?",
                                 style: TextStyle(
                                     decoration: TextDecoration.underline,
                                     color:appStartColor(),
-                                    fontSize: 15.0,
-                                    fontFamily: "WorkSansMedium"),
+ fontSize: 14,
+                                    ),
                               )),
                         ),
 
@@ -512,9 +540,9 @@ class _LoginPageState extends State<LoginPage>
                 //mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Expanded(child: Container(
-                   margin: EdgeInsets.only(left: 40.0),
+                   margin: EdgeInsets.only(left: 70.0),
                         child:Text("Not registered ?", style: TextStyle(
-                          color: appStartColor(),),),
+                          color: appStartColor(),fontSize: 14,),),
                   ),),
                        Expanded(child: Container(
                           //margin: EdgeInsets.only(top: 250.0),
@@ -547,13 +575,13 @@ class _LoginPageState extends State<LoginPage>
                             ),
 
 
-                            child: new OutlineButton(
-                              color: Colors.white,
-                              child: new Text("Signup", style: TextStyle(
-                                color: appStartColor(),
-                              ),),
+                            child: new RaisedButton(
+                              color:appStartColor(),
+                              child: new Text("Sign up", style: TextStyle(
+                                color:  Colors.white,
+                                fontSize: 16.0,),),
                               onPressed: _onSignUpButtonPress,
-                             borderSide: BorderSide(color:  appStartColor()),
+                            // borderSide: BorderSide(color:  appStartColor()),
                               /* shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))*/
 
                             )
@@ -705,7 +733,7 @@ class _LoginPageState extends State<LoginPage>
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
+
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
@@ -733,7 +761,7 @@ class _LoginPageState extends State<LoginPage>
                           controller: signupEmailController,
                           keyboardType: TextInputType.emailAddress,
                           style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
+
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
@@ -761,7 +789,7 @@ class _LoginPageState extends State<LoginPage>
                           controller: signupPasswordController,
                           obscureText: _obscureTextSignup,
                           style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
+
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
@@ -800,7 +828,7 @@ class _LoginPageState extends State<LoginPage>
                             WhitelistingTextInputFormatter.digitsOnly,
                           ],
                           style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
+
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
@@ -829,7 +857,7 @@ class _LoginPageState extends State<LoginPage>
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
+
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
