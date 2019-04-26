@@ -1396,6 +1396,20 @@ Future<List> getAttentancees() async {
   // return shiftList;
 }
 
+/*Future<List> getOvertime() async {
+
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  String empid = prefs.getString('employeeid') ?? "";
+  final response = await http.get(globals.path + 'getovertime?orgid=$orgid&empid=$empid');
+  List responseJson = json.decode(response.body.toString());
+  print(responseJson);
+  return responseJson;
+  // List<Shift> shiftList = createShiftList(responseJson);
+
+  // return shiftList;
+}*/
+
 MarkAttendance(data){
   print('bulk attendance mark successfully');
   print(data);

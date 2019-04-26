@@ -20,6 +20,22 @@ class UserLogin {
 
 }
 
+class User{
+
+  String username;
+  String password;
+  String token;
+
+  User(this.username, this.password, this.token);
+
+  User.fromMap(Map map) {
+    username = map[username];
+    password = map[password];
+    token = map[token];
+  }
+
+}
+
 class Employee {
 
   final String employeeid;

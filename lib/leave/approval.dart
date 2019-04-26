@@ -756,27 +756,7 @@ class ChoiceCard1 extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: Wrap(
                 children: <Widget>[
-                  /*    Padding(
-                            padding: EdgeInsets.only(
-                                top: 10.0, bottom: 10.0, left: 30.0, right: 30.0),
-                            child:  ButtonTheme(
-                              minWidth: 300.0,
-                              height: 30.0,
-                              child: RaisedButton(
-                              onPressed: () {
-                             showDialog(context: context,builder: (context) => _onTapImage(leavetypeid));
-                                   },
-                                color: Colors.white,
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius: new BorderRadius.circular(30.0)),
-                                child: new Text('Leave History',
-                                    style: new TextStyle(
-                                      color: Colors.green,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                              ),
-                            ),),*/
+
                   Padding(
                     padding: EdgeInsets.only(
                         top: 5.0, bottom: 0.0, left: 40.0, right: 50.0),
@@ -1098,7 +1078,7 @@ class ChoiceCard1 extends StatelessWidget {
           child:Container(
 
                     padding: EdgeInsets.only(
-                        top: 15.0, bottom: 10.0, left: 30.0, right: 30.0),
+                    top: 15.0, bottom: 10.0, left: 30.0, right: 30.0),
                     child:  ButtonTheme(
                       minWidth: 120.0,
                       height: 40.0,
@@ -1109,8 +1089,7 @@ class ChoiceCard1 extends StatelessWidget {
       var sts= await ApproveLeave(leaveid, CommentController.text, 1);
       if(sts=="true"){
           showDialog(
-          context
-              : context,
+          context : context,
           builder: (_) => new
           AlertDialog(
           //title: new Text("Dialog Title"),
@@ -1223,7 +1202,7 @@ class ChoiceCard1 extends StatelessWidget {
                         ),*/
                         hintText: "Comment",
                         hintStyle: TextStyle(
-                            fontFamily: "WorkSansSemiBold", fontSize: 15.0 ),
+                        fontFamily: "WorkSansSemiBold", fontSize: 15.0 ),
                         /*suffixIcon: GestureDetector(
                           //onTap: _toggleLogin,
                           child: Icon(

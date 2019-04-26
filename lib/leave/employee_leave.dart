@@ -92,7 +92,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                 SizedBox(height: 1.0),
                 Center(
                   child: Text(
-                    "Employee's on Leave" ,
+                    "Employees on Leave" ,
                     style: new TextStyle(
                       fontSize: 20.0,
                       color: Colors.black54,
@@ -145,6 +145,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
+                     Expanded(child:
                       Container(
 
                         width: MediaQuery.of(context).size.width * 0.33,
@@ -156,8 +157,9 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                           textAlign: TextAlign.left,
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.20,
+          ),
+                     Expanded(child: Container(
+                        width: MediaQuery.of(context).size.width * 0.40,
                         child: Text(
                           'Duration',
                           style: TextStyle(color: appStartColor(),
@@ -165,15 +167,15 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                               fontSize: 16.0),
                           textAlign: TextAlign.left,
                         ),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.36,
+                      ),),
+                     Expanded(child:    Container(
+                        width: MediaQuery.of(context).size.width * 0.50,
                         child: Text('Type',
                             style: TextStyle(color: appStartColor(),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16.0),
                             textAlign: TextAlign.left),
-                      ),
+                      ),),
                       /*Container(
                         width: MediaQuery.of(context).size.width * 0.21,
                         child: Text('Utilization',
@@ -226,8 +228,8 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            new Container(
-                                width: MediaQuery.of(context).size.width * 0.30,
+                            Expanded(child:   new Container(
+                                width: MediaQuery.of(context).size.width * 0.28,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -235,19 +237,19 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                                         snapshot.data[index].name.toString()),
 
                                   ],
-                                )),
-                            new Container(
-                              width: MediaQuery.of(context).size.width * 0.19,
+                                ))),
+                            Expanded(child:   new Container(
+                              width: MediaQuery.of(context).size.width * 0.30,
                               child: new Text(
                                 snapshot.data[index].from.toString()+" - "+snapshot.data[index].to.toString(),
                               ),
-                            ),
-                            new Container(
-                              width: MediaQuery.of(context).size.width * 0.33,
+                            )),
+                            Expanded(child:    new Container(
+                              width: MediaQuery.of(context).size.width * 0.44,
                               child: new Text(
                                 snapshot.data[index].leavetype.toString()+snapshot.data[index].days.toString()+" \n"+snapshot.data[index].breakdown.toString(),
                               ),
-                            ),
+                            )),
                             /*new Container(
                               width: MediaQuery.of(context).size.width * 0.20,
                               child: new Text(

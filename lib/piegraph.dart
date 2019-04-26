@@ -80,6 +80,7 @@ class DonutAutoLabelChart extends StatelessWidget {
       new LinearSales('Present', int.parse(info[0]['present'])),
 
 
+
     ];
     return [
       new charts.Series<LinearSales, String >(

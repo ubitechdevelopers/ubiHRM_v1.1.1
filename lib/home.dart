@@ -290,7 +290,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     image: new DecorationImage(
 
                                     fit: BoxFit.fill,
-                                    image: AssetImage('assets/attendance_icon.png'),
+                                    image: AssetImage('assets/icons/Attendance_icon.png'),
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
@@ -317,7 +317,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     shape: BoxShape.circle,
                                     image: new DecorationImage(
                                       fit: BoxFit.fill,
-                                      image: AssetImage('assets/leave_icon.png'),
+                                      image: AssetImage('assets/icons/leave_icon.png'),
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
@@ -344,7 +344,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     shape: BoxShape.circle,
                                     image: new DecorationImage(
                                       fit: BoxFit.fill,
-                                      image: AssetImage('assets/timeoff_icon.png'),
+                                      image: AssetImage('assets/icons/Timeoff_icon.png'),
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
@@ -379,7 +379,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     shape: BoxShape.circle,
                                     image: new DecorationImage(
                                       fit: BoxFit.fill,
-                                      image: AssetImage('assets/settings.png'),
+                                      image: AssetImage('assets/icons/settings_icon.png'),
                                     ),
                                     color:circleIconBackgroundColor()
                                 )),
@@ -405,7 +405,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     shape: BoxShape.circle,
                                     image: new DecorationImage(
                                       fit: BoxFit.fill,
-                                      image: AssetImage('assets/profile.png'),
+                                      image: AssetImage('assets/icons/profile_icon.png'),
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
@@ -432,7 +432,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     shape: BoxShape.circle,
                                     image: new DecorationImage(
                                       fit: BoxFit.fill,
-                                      image: AssetImage('assets/reports.png'),
+                                      image: AssetImage('assets/icons/graph_icon.png'),
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
@@ -545,8 +545,10 @@ class _HomePageStatemain extends State<HomePageMain> {
                           if (snapshot.data.length > 0) {
                             return new StackedHorizontalBarChart.withSampleData(snapshot.data);
                           }
+                          return new Center( child: CircularProgressIndicator());
                         }
-                        return new Center( child: CircularProgressIndicator());
+
+                        return new Center( child: Text("No data found"), );
                       }
                   ),
                   // child: new StackedHorizontalBarChart .withSampleData()

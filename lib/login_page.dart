@@ -6,14 +6,17 @@ import 'bubble_indication_painter.dart';
 import 'home.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/services/checkLogin.dart' as login;
-import 'package:ubihrm/services/checkloginn.dart';
+import 'package:ubihrm/services/checkLogin.dart';
+
+//import 'package:ubihrm/services/checkloginn.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'global.dart';
-import 'dart:convert';
+import 'package:ubihrm/model/user.dart';
 import 'attandance/forgot_password.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -37,6 +40,7 @@ class _LoginPageState extends State<LoginPage>
   final FocusNode myFocusNodeName = FocusNode();
   final FocusNode myFocusNodephone = FocusNode();
   final FocusNode myFocusNodecity = FocusNode();
+  final FocusNode myFocusNodeCPN = FocusNode();
 
   TextEditingController loginEmailController = new TextEditingController();
   TextEditingController loginPasswordController = new TextEditingController();
@@ -50,6 +54,7 @@ class _LoginPageState extends State<LoginPage>
   TextEditingController signupPasswordController = new TextEditingController();
   TextEditingController signupPhoneController =
   new TextEditingController();
+  TextEditingController CPNController = new TextEditingController();
   TextEditingController signupcityController = new TextEditingController();
 
   PageController _pageController;
@@ -59,7 +64,8 @@ class _LoginPageState extends State<LoginPage>
   bool _isButtonDisabled = false;
   bool _obscureText_old = true;
   bool _obscureText_new = true;
-
+  String barcode = "";
+  bool loader = false;
 
   void _toggle_new() {
     setState(() {
@@ -333,8 +339,22 @@ class _LoginPageState extends State<LoginPage>
                     child: Column(
                       children: <Widget>[
                         Padding(
+                            padding: EdgeInsets.only(
+                                top: 20.0, bottom: 0.0, left: 230.0, right: 10.0), child:GestureDetector(
+                          onTap: () {
+                            scan().then((onValue){
+                              print("******************** QR value **************************");
+                              print(onValue);
+                              markAttByQR(onValue,context,token1);
+                            });
+                          },
+                          child:  Image.asset(
+                            'assets/qr.png', height: 35.0, width: 35.0, alignment: Alignment.bottomRight,
+                          ),
+                        )),
+                        Padding(
                           padding: EdgeInsets.only(
-                              top: 20.0, bottom: 10.0, left: 25.0, right: 25.0),
+                              top: 0.0, bottom: 10.0, left: 25.0, right: 25.0),
                           child: TextFormField(
                             focusNode: myFocusNodeEmailLogin,
                             controller: loginEmailController,
@@ -370,7 +390,7 @@ class _LoginPageState extends State<LoginPage>
                           height: 1.0,
                           color: Colors.grey[400],
                         ),
-                        Padding(
+                        Container(
                           padding: EdgeInsets.only(
                               top: 10.0, bottom: 0.0, left: 25.0, right: 25.0),
                           child: TextFormField(
@@ -395,7 +415,7 @@ class _LoginPageState extends State<LoginPage>
                                 onTap: _toggle_new,
                                 child: Icon(
                                 _obscureText_new ?Icons.visibility_off:Icons.visibility,
-                                  size: 20.0,
+                                  size: 30.0,
                                   color: Colors.black,
                                 ),
                               ),
@@ -458,7 +478,8 @@ class _LoginPageState extends State<LoginPage>
                                     color:appStartColor(),
  fontSize: 14,
                                     ),
-                              )),
+                              )
+                          ),
                         ),
 
                         Container(
@@ -523,7 +544,6 @@ class _LoginPageState extends State<LoginPage>
                                   }else if(loginPasswordController.text.trim().isEmpty){
                                     showDialog(context: context, child:
                                     new AlertDialog(
-
                                       content: new Text("Please enter Password."),
                                     )
                                     );
@@ -580,7 +600,7 @@ class _LoginPageState extends State<LoginPage>
                               child: new Text("Sign up", style: TextStyle(
                                 color:  Colors.white,
                                 fontSize: 16.0,),),
-                              onPressed: _onSignUpButtonPress,
+                                onPressed: _onSignUpButtonPress,
                             // borderSide: BorderSide(color:  appStartColor()),
                               /* shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))*/
 
@@ -596,21 +616,11 @@ class _LoginPageState extends State<LoginPage>
                     ),
                   ),
                 ),
-
-
-
-
-
-
               ],
             ),
           ),
 
-
-
-
-
-          /*Padding(
+        /*Padding(
             padding: EdgeInsets.only(top: 0.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -757,6 +767,35 @@ class _LoginPageState extends State<LoginPage>
                         padding: EdgeInsets.only(
                             top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
                         child: TextField(
+                          focusNode: myFocusNodeCPN,
+                          controller: CPNController,
+                          keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.words,
+                          style: TextStyle(
+
+                              fontSize: 16.0,
+                              color: Colors.black),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            icon: Icon(
+                              FontAwesomeIcons.userAlt,
+                              color: Colors.black,
+                            ),
+                            hintText: "Contact Person Name ",
+                            hintStyle: TextStyle(
+                                fontSize: 14.0),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 250.0,
+                        height: 1.0,
+                        color: Colors.grey[400],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
+                        child: TextField(
                           focusNode: myFocusNodeEmail,
                           controller: signupEmailController,
                           keyboardType: TextInputType.emailAddress,
@@ -776,7 +815,7 @@ class _LoginPageState extends State<LoginPage>
                           ),
                         ),
                       ),
-                      Container(
+                      /* Container(
                         width: 250.0,
                         height: 1.0,
                         color: Colors.grey[400],
@@ -811,7 +850,7 @@ class _LoginPageState extends State<LoginPage>
                             ),
                           ),
                         ),
-                      ),
+                      ),*/
                       Container(
                         width: 250.0,
                         height: 1.0,
@@ -843,36 +882,7 @@ class _LoginPageState extends State<LoginPage>
                           ),
                         ),
                       ),
-                      Container(
-                        width: 250.0,
-                        height: 1.0,
-                        color: Colors.grey[400],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: myFocusNodecity,
-                          controller: signupcityController,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.words,
-                          style: TextStyle(
 
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.city,
-                              color: Colors.black,
-
-                            ),
-                            hintText: "City ",
-                            hintStyle: TextStyle(
-                                 fontSize: 14.0),
-                          ),
-                        ),
-                      ),
                       Container(
                         width: 250.0,
                         height: 1.0,
@@ -882,11 +892,12 @@ class _LoginPageState extends State<LoginPage>
                       //   padding: EdgeInsets.only(
                       //      top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
                       // child:
-                      Expanded(
-                        child:Container(
-
+                      //Expanded(
+                       // child:
+                Container(
+                  width: 350.0,
                           padding: EdgeInsets.only(
-                              top: 0.0, bottom: 0.0, left: 20.0, right: 47.0),
+                              top: 0.0, bottom: 0.0, left: 20.0, right: 40.0),
                           child:new InputDecorator(
                             decoration: const InputDecoration(
                               //icon: const Icon(Icons.satellite,size: 15.0,),
@@ -921,8 +932,41 @@ class _LoginPageState extends State<LoginPage>
                             ),
 
                           ),),
-                      ),
+                     // ),
 
+       // Expanded(
+         // child:
+          Padding(
+            padding: EdgeInsets.only(
+                top: 10.0, bottom: 0.0, left: 22.0, right: 0.0),
+                        child: TextField(
+                          focusNode: myFocusNodecity,
+                          controller: signupcityController,
+                          keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.words,
+                          style: TextStyle(
+
+                              fontSize: 16.0,
+                              color: Colors.black),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            icon: Icon(
+                              FontAwesomeIcons.city,
+                              color: Colors.black,
+
+                            ),
+                            hintText: "City ",
+                            hintStyle: TextStyle(
+                                fontSize: 14.0),
+                          ),
+                        ),
+                      ),
+              //),
+                      Container(
+                        width: 250.0,
+                        height: 1.0,
+                        color: Colors.grey[400],
+                      ),
                     ],
                   ),
                 ),
@@ -987,16 +1031,23 @@ class _LoginPageState extends State<LoginPage>
                       if(signupNameController.text=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
-                          title: new Text("Alert"),
+                         // title: new Text("Alert"),
                           content: new Text("Please enter the company name"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodeName);
                       }
-
+                      else if(CPNController.text=='') {
+                        showDialog(context: context, child:
+                        new AlertDialog(
+                         // title: new Text("Alert"),
+                          content: new Text("Please enter the Contact person name"),
+                        ));
+                        FocusScope.of(context).requestFocus(myFocusNodeCPN);
+                      }
                       else if(signupEmailController.text=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
-                          title: new Text("Alert"),
+                         // title: new Text("Alert"),
                           content: new Text("Please enter the Email"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodeEmail);
@@ -1004,7 +1055,7 @@ class _LoginPageState extends State<LoginPage>
                       else if(signupPasswordController.text=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
-                          title: new Text("Alert"),
+                         // title: new Text("Alert"),
                           content: new Text("Please enter the password"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodePassword);
@@ -1012,7 +1063,7 @@ class _LoginPageState extends State<LoginPage>
                       else if(signupPhoneController.text=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
-                          title: new Text("Alert"),
+                          //title: new Text("Alert"),
                           content: new Text("Please enter the Phone no"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodephone);
@@ -1020,7 +1071,7 @@ class _LoginPageState extends State<LoginPage>
                       else if(signupPasswordController.text.length<6) {
                         showDialog(context: context, child:
                         new AlertDialog(
-                          title: new Text("Alert"),
+                          //title: new Text("Alert"),
                           content: new Text("Please enter a valid password \n (password must contain at least 6 characters)"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodePassword);
@@ -1028,7 +1079,7 @@ class _LoginPageState extends State<LoginPage>
                       else if(signupcityController.text=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
-                          title: new Text("Alert"),
+                          //title: new Text("Alert"),
                           content: new Text("Please enter the city"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodecity);
@@ -1036,7 +1087,7 @@ class _LoginPageState extends State<LoginPage>
                       else if(_country=='0') {
                         showDialog(context: context, child:
                         new AlertDialog(
-                          title: new Text("Alert"),
+                          //title: new Text("Alert"),
                           content: new Text("Please select a country"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodephone);
@@ -1044,7 +1095,7 @@ class _LoginPageState extends State<LoginPage>
                       else if(signupPhoneController.text.length<6) {
                         showDialog(context: context, child:
                         new AlertDialog(
-                          title: new Text("Alert"),
+                         // title: new Text("Alert"),
                           content: new Text("Please enter a valid Phone no."),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodephone);
@@ -1058,7 +1109,7 @@ class _LoginPageState extends State<LoginPage>
 
                         http.post(url, body: {
                           "org_name": signupNameController.text,
-                          "name": signupNameController.text,
+                          "name": CPNController.text,
                           "phone": signupPhoneController.text,
                           "email": signupEmailController.text,
                           "password": signupPasswordController.text,
@@ -1222,9 +1273,9 @@ class _LoginPageState extends State<LoginPage>
     setState(() {
       _isServiceCalling = true;
     });
-
+    Login dologin = Login();
     UserLogin user = new UserLogin(username: username,password: pass,token:token1);
-    login.checklogin(user).then((res){
+    dologin.checklogin(user).then((res){
       if(res){
         Navigator.pushAndRemoveUntil(
           context,
@@ -1277,5 +1328,99 @@ class _LoginPageState extends State<LoginPage>
     setState(() {
       _obscureTextSignupConfirm = !_obscureTextSignupConfirm;
     });
+  }
+  markAttByQR(var qr, BuildContext context,token1) async{
+    Login dologin = Login();
+    setState(() {
+      loader = true;
+    });
+    var islogin = await dologin.markAttByQR(qr,token1);
+    print(islogin);
+    if(islogin=="Success"){
+      setState(() {
+        loader = false;
+      });
+      showDialog(
+          context : context,
+          builder: (_) => new
+          AlertDialog(
+            //title: new Text("Dialog Title"),
+            content: new Text("Successfull"
+            ),
+          )
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+      );
+     /* Scaffold.of(context)
+          .showSnackBar(
+          SnackBar(content: Text("Attendance marked successfully.")));*/
+    }else if(islogin=="failure"){
+      setState(() {
+        loader = false;
+      });
+      showDialog(
+          context : context,
+          builder: (_) => new
+          AlertDialog(
+            //title: new Text("Dialog Title"),
+            content: new Text("Invalid login."
+            ),
+          )
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
+      );
+
+    /*  Scaffold.of(context)
+          .showSnackBar(
+          SnackBar(content: Text("Invalid login credentials")));*/
+    }else if(islogin=="imposed"){
+      setState(() {
+        loader = false;
+      });
+      showDialog(
+          context : context,
+          builder: (_) => new
+          AlertDialog(
+            //title: new Text("Dialog Title"),
+            content: new Text("Invalid login."
+            ),
+          )
+      );
+    }else{
+      setState(() {
+        loader = false;
+      });
+      /*Scaffold.of(context)
+          .showSnackBar(
+          SnackBar(content: Text("Attendance is already marked")));*/
+    }
+  }
+
+  Future scan() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      setState(() => this.barcode = barcode);
+      return barcode;
+    } on PlatformException catch (e) {
+      if (e.code == BarcodeScanner.CameraAccessDenied) {
+        setState(() {
+          this.barcode = 'The user did not grant the camera permission!';
+        });
+        return "pemission denied";
+      } else {
+        setState(() => this.barcode = 'Unknown error: $e');
+        return "error";
+      }
+    } on FormatException{
+      setState(() => this.barcode = 'null (User returned using the "back"-button before scanning anything. Result)');
+      return "error";
+    } catch (e) {
+      setState(() => this.barcode = 'Unknown error: $e');
+      return "error";
+    }
   }
 }

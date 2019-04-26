@@ -103,10 +103,17 @@ flutter:
         - assets/profile1.png
         - assets/reporr.png
         - assets/Hom.png
+        - assets/qr.png
         - assets/reportt.png
         - assets/repo.ico
         - assets/approval.png
         - assets/spinner.gif
+        - assets/icons/Attendance_icon.png
+        - assets/icons/graph_icon.png
+        - assets/icons/leave_icon.png
+        - assets/icons/profile_icon.png
+        - assets/icons/settings_icon.png
+        - assets/icons/Timeoff_icon.png
 
 
 

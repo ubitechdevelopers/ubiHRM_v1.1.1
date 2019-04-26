@@ -445,6 +445,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                       new Expanded(
                         child:  Container(
                         width: MediaQuery.of(context).size.width*0.17,
+                        margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                         child:Text('Start',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
 
@@ -514,7 +515,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
                                             new Expanded(
                                               child: Container(
-                                              width: MediaQuery.of(context).size.width * 0.17,
+                                              width: MediaQuery.of(context).size.width * 0.17, margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                                               child:  Text(
                                                   snapshot.data[index].TimeFrom.toString(),style:TextStyle(fontWeight: FontWeight.bold)),
                                             ),),
@@ -526,8 +527,8 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                                   snapshot.data[index].TimeTo.toString(),style:TextStyle(fontWeight: FontWeight.bold)),
                                             ),),
                                             new Expanded(
-                                              child:  Container(
-                                              width: MediaQuery.of(context).size.width * 0.24,
+                                            child:  Container(
+                                            width: MediaQuery.of(context).size.width * 0.24,
                                               /*decoration: new ShapeDecoration(
                                   shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(2.0)),
                                   color: snapshot.data[index].ApprovalSts.toString()=='Approved'?Colors.green.withOpacity(0.75):snapshot.data[index].ApprovalSts.toString()=='Rejected' || snapshot.data[index].ApprovalSts.toString()=='Cancel' ?Colors.red.withOpacity(0.65):snapshot.data[index].ApprovalSts.toString().startsWith('Pending')?Colors.orangeAccent:Colors.black12,
