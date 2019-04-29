@@ -18,15 +18,17 @@ getAllPermission(Employee emp) async{
   Dio dio = new Dio();
   FormData formData = new FormData.from({
     "employeeid": emp.employeeid,
-    "organization": emp.organization
+    "organization": emp.organization,
+    "userprofileid": emp.userprofileid
+
   });
 
   Response<String> response =
   await dio.post(path + "getAllPermission", data: formData);
  // print(response.toString());
-  List responseJson = json.decode(response.data.toString());
+  Map responseJson = json.decode(response.data.toString());
  //print("1.  "+responseJson.toString());
-  List<Permission> permlist = createPermList(responseJson);
+  List<Permission> permlist = createPermList(responseJson['orgperm']);
  //print("3. "+permlist.toString());
   globalpermissionlist = permlist;
 }
@@ -130,6 +132,42 @@ getfiscalyear(Employee emp) async{
     fiscalyear = responseJson['year'];
 
     //  print("vvvvvvvvvvvvv"+globalcompanyinfomap['Division']);
+  }catch(e){
+    //print(e.toString());
+    return "Poor network connection";
+  }
+
+
+
+}
+
+getovertime(Employee emp) async{
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+  Dio dio = new Dio();
+  try {
+    FormData formData = new FormData.from({
+      "employeeid": emp.employeeid,
+      "organization": emp.organization
+    });
+
+    Response<String> response =
+    await dio.post(path + "getovertime", data: formData);
+    // print(response.toString());
+    Map responseJson = json.decode(response.data.toString());
+    print(responseJson['utime']);
+    print(responseJson['otime']);
+   // if(responseJson['otime']!='') {
+      overtime = responseJson['otime'];
+      //undertime='';
+  //  }
+   // if(responseJson['utime']!='') {
+      undertime = responseJson['utime'];
+     // overtime='';
+  //  }
+    print(overtime);
+    print(undertime);
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
@@ -379,8 +417,8 @@ Future<List<Map<String, String>>> getChartDataYes() async {
 
   final data = json.decode(response.data);
   //print(response);
-  print(data['leavesummary']['data'][0]['name']);
 
+  //print(data['leavesummary']['data'][0]['name']);
   List<Map<String, String>> val = [];
   /*  List<Map<String, String>> val = [
        {

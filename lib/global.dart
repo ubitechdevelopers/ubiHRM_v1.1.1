@@ -40,8 +40,8 @@ String path_hrm_india="http://192.168.0.200/UBIHRM/HRMINDIA/services/";
 
 /*String path="https://ubitech.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/";
-String path_hrm_india="https://ubitech.ubihrm.com/services/";*/
-
+String path_hrm_india="https://ubitech.ubihrm.com/services/";
+*/
 /*String path="https://sandbox.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://sandbox.ubihrm.com/HRMAPP/index.php/Att_services/";
 String path_hrm_india="https://sandbox.ubihrm.com/services/";
@@ -76,4 +76,6 @@ var perAttMS;
 var perHoliday;
 var fiscalyear;
 var perPunchLocation;
+var overtime;
+var undertime;
 

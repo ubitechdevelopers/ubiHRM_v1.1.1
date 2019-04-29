@@ -35,6 +35,7 @@ Future<bool> checklogin(UserLogin user) async{
       prefs.setInt("response", 1);
       prefs.setString("employeeid", employeeMap['employeeid']);
       prefs.setString("organization", employeeMap['organization']);
+      prefs.setString("userprofileid", employeeMap['userprofileid']);
       prefs.setString("empid", employeeMap['employeeid']);
       prefs.setString("orgdir", employeeMap['organization']);
       prefs.setString("orgname", employeeMap['organizationname']);
@@ -43,7 +44,8 @@ Future<bool> checklogin(UserLogin user) async{
 
       String empid = prefs.getString('employeeid')??"";
       String organization =prefs.getString('organization')??"";
-      Employee emp = new Employee(employeeid: empid, organization: organization);
+      String userprofileid =prefs.getString('userprofileid')??"";
+      Employee emp = new Employee(employeeid: empid, organization: organization,userprofileid:userprofileid);
 
       //  await getProfileInfo(emp);
       await getAllPermission(emp);

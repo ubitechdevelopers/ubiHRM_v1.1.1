@@ -40,18 +40,21 @@ class Employee {
 
   final String employeeid;
   final String organization;
+  final String userprofileid;
 
 
-  Employee({this.employeeid,this.organization});
+  Employee({this.employeeid,this.organization,this.userprofileid});
 
   Employee.fromJson(Map<String, dynamic> json)
       : employeeid = json['employeeid'],
-        organization = json['organization'];
+        organization = json['organization'],
+        userprofileid = json['userprofileid'];
 
   Map<String, dynamic> toJson() =>
       {
         'employeeid': employeeid,
         'organization': organization,
+        'userprofileid': userprofileid,
       };
 
 }

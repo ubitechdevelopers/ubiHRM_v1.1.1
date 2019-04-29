@@ -62,6 +62,7 @@ class _HomePageStatemain extends State<HomePageMain> {
     getOrgName();
 
 
+
   }
 
   getOrgName() async{
@@ -139,6 +140,7 @@ class _HomePageStatemain extends State<HomePageMain> {
       await getAllPermission(emp);
       await getProfileInfo(emp);
     await getfiscalyear(emp);
+      await getovertime(emp);
       perEmployeeLeave= getModulePermission("18","view");
 //print(perEmployeeLeave);
       perLeaveApproval=  getModulePermission("124","view");
@@ -466,7 +468,7 @@ class _HomePageStatemain extends State<HomePageMain> {
 */
 
                 // Attendance monthly summary bar graph
-
+                overtime!=null?getimg():getimg1(),
                 SizedBox(height: 40.0,),
                 perAttendance=='1'?  Row(children: <Widget>[
                   SizedBox(width: 20.0,),
@@ -644,6 +646,8 @@ class _HomePageStatemain extends State<HomePageMain> {
                         ),),
                     ],),
 
+                    //undertime!='null'?getimg1():getimg(),
+
                   ],)
 
 
@@ -732,4 +736,121 @@ class _HomePageStatemain extends State<HomePageMain> {
       ],
     );
   }
+}
+
+
+  Widget getimg() {
+  return  new Container(
+    height: 120,
+    width: 90,
+      decoration: new BoxDecoration(
+       color: Colors.white,
+        shape: BoxShape.circle,
+        border: new Border.all(
+          color: Colors.green,
+          width: 2.5,
+        ),
+      ),
+      child: new Center(
+        child: new
+
+        Text(
+          "Overtime \n     "+overtime,
+          style: TextStyle(
+
+              fontSize: 22.0,
+              color: overtime!=''? Colors.green:appStartColor()),
+        ),
+      ),
+    );
+  /*  return  Container(
+          height: 250,
+          width: 170,
+      decoration: new BoxDecoration(
+        //color: appStartColor(),
+        shape: BoxShape.circle,
+        border: new Border.all(
+          color: Colors.white,
+          width: 2.5,
+        ),
+      ),
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: new Image.asset(
+                  'assets/cir.png',
+                  //width: size.width,
+                //  height: size.height,
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Center(
+                child: Text(undertime,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28.0,
+                        color: Colors.black)),
+              ),
+            ],
+          ),
+
+    );*/
+  }
+Widget getimg1() {
+  return  new Container(
+    height: 120,
+    width: 90,
+    decoration: new BoxDecoration(
+      color: Colors.white,
+      shape: BoxShape.circle,
+      border: new Border.all(
+        color: Colors.red,
+        width: 2.5,
+      ),
+    ),
+    child: new Center(
+      child: new
+
+      Text(
+        "Undertime \n     "+undertime,
+        style: TextStyle(
+
+            fontSize: 16.0,
+            color: undertime!=''? Colors.redAccent:appStartColor()),
+      ),
+
+    ),
+  );
+  /*  return  Container(
+          height: 250,
+          width: 170,
+      decoration: new BoxDecoration(
+        //color: appStartColor(),
+        shape: BoxShape.circle,
+        border: new Border.all(
+          color: Colors.white,
+          width: 2.5,
+        ),
+      ),
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: new Image.asset(
+                  'assets/cir.png',
+                  //width: size.width,
+                //  height: size.height,
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Center(
+                child: Text(undertime,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28.0,
+                        color: Colors.black)),
+              ),
+            ],
+          ),
+
+    );*/
 }
