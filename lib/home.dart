@@ -468,7 +468,8 @@ class _HomePageStatemain extends State<HomePageMain> {
 */
 
                 // Attendance monthly summary bar graph
-                overtime!=null?getimg():getimg1(),
+                overtime!='00:00'?getimg():undertime!='00:00'?getimg1():Center(),
+
                 SizedBox(height: 40.0,),
                 perAttendance=='1'?  Row(children: <Widget>[
                   SizedBox(width: 20.0,),

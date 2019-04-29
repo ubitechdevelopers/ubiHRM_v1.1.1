@@ -158,13 +158,21 @@ getovertime(Employee emp) async{
     Map responseJson = json.decode(response.data.toString());
     print(responseJson['utime']);
     print(responseJson['otime']);
-   // if(responseJson['otime']!='') {
+
+
       overtime = responseJson['otime'];
-      //undertime='';
-  //  }
-   // if(responseJson['utime']!='') {
-      undertime = responseJson['utime'];
-     // overtime='';
+   // overtime = '00:00';
+
+    undertime = responseJson['utime'];
+   // undertime ='00:00';
+    if(responseJson['utime']==null){
+      undertime ='00:00';
+    }
+    if(responseJson['otime']==null){
+      overtime = '00:00';
+    }
+   // undertime ='00:00';
+    // overtime='';
   //  }
     print(overtime);
     print(undertime);
