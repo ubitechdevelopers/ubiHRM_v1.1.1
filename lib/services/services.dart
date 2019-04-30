@@ -19,18 +19,19 @@ getAllPermission(Employee emp) async{
   FormData formData = new FormData.from({
     "employeeid": emp.employeeid,
     "organization": emp.organization,
-    "userprofileid": emp.userprofileid
-
+    "userprofileid": emp.userprofileid,
   });
 
   Response<String> response =
   await dio.post(path + "getAllPermission", data: formData);
- // print(response.toString());
+  // print(response.toString());
   Map responseJson = json.decode(response.data.toString());
- //print("1.  "+responseJson.toString());
+// print("1.  "+responseJson.toString());
   List<Permission> permlist = createPermList(responseJson['orgperm']);
- //print("3. "+permlist.toString());
+  List<Permission> permlist1 = createUserPermList(responseJson['userperm']);
+
   globalpermissionlist = permlist;
+  globalpermissionlist1 = permlist1;
 }
 
 
@@ -51,23 +52,63 @@ List<Permission> createPermList(List data) {
     Map<String,String> deletepermission = {'delete': delete};
     Map<String,String> addpermission = {'add': add};*/
     permissionlist.add(viewpermission);
-   /* permissionlist.add(editpermission);
+    /* permissionlist.add(editpermission);
     permissionlist.add(deletepermission);
     permissionlist.add(addpermission);*/
- //    print("2. "+permissionlist.toString());
+    //    print("2. "+permissionlist.toString());
     Permission p = new Permission(moduleid: moduleid,permissionlist: permissionlist);
     list.add(p);
   }
   return list;
 }
 
+
 getModulePermission(String moduleid, String permission_type){
   List<Permission> list = new List();
   list = globalpermissionlist;
-  // print("********");
-//  print(globalpermissionlist);
+
   for (int i = 0; i < list.length; i++) {
-  //  print("permisstion list "+list[i].permissionlist.toString());
+    //  print("permisstion list "+list[i].permissionlist.toString());
+    if(list[i].moduleid==moduleid){
+      for (int j = 0; j < list[i].permissionlist.length; j++) {
+        //print(list[i].permissionlist[j].containsKey(permission_type));
+        if(list[i].permissionlist[j].containsKey(permission_type)){
+          return list[i].permissionlist[j][permission_type];
+        }
+      }
+    }
+  }
+
+  return "0";
+}
+
+List<Permission> createUserPermList(List data) {
+
+
+
+  List<Permission> list = new List();
+  for (int i = 0; i < data.length; i++) {
+
+    List<Map<String,String>> permissionlist = new List();
+    String moduleid = data[i]["module"];
+    String view = data[i]["view"];
+
+    Map<String,String> viewpermission = {'module':moduleid,'view': view};
+
+    permissionlist.add(viewpermission);
+
+    Permission p = new Permission(moduleid: moduleid,permissionlist: permissionlist);
+    list.add(p);
+  }
+  return list;
+}
+
+getModuleUserPermission(String moduleid, String permission_type){
+  List<Permission> list = new List();
+  list = globalpermissionlist1;
+
+  for (int i = 0; i < list.length; i++) {
+    //  print("permisstion list "+list[i].permissionlist.toString());
     if(list[i].moduleid==moduleid){
       for (int j = 0; j < list[i].permissionlist.length; j++) {
         //print(list[i].permissionlist[j].containsKey(permission_type));
@@ -92,7 +133,6 @@ getProfileInfo(Employee emp) async{
       "employeeid": emp.employeeid,
       "organization": emp.organization
     });
-
     Response<String> response =
     await dio.post(path + "getProfileInfo", data: formData);
     // print(response.toString());
@@ -108,9 +148,6 @@ getProfileInfo(Employee emp) async{
     //print(e.toString());
     return "Poor network connection";
   }
-
-
-
 }
 
 getfiscalyear(Employee emp) async{
@@ -130,15 +167,11 @@ getfiscalyear(Employee emp) async{
     Map responseJson = json.decode(response.data.toString());
     //print(responseJson);
     fiscalyear = responseJson['year'];
-
     //  print("vvvvvvvvvvvvv"+globalcompanyinfomap['Division']);
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
   }
-
-
-
 }
 
 getovertime(Employee emp) async{
@@ -163,8 +196,8 @@ getovertime(Employee emp) async{
       overtime = responseJson['otime'];
    // overtime = '00:00';
 
-    undertime = responseJson['utime'];
-   // undertime ='00:00';
+   undertime = responseJson['utime'];
+  // undertime ='00:00';
     if(responseJson['utime']==null){
       undertime ='00:00';
     }

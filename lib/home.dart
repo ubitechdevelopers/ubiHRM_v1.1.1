@@ -139,11 +139,11 @@ class _HomePageStatemain extends State<HomePageMain> {
     //  await getProfileInfo(emp);
       await getAllPermission(emp);
       await getProfileInfo(emp);
-    await getfiscalyear(emp);
+      await getfiscalyear(emp);
       await getovertime(emp);
       perEmployeeLeave= getModulePermission("18","view");
-//print(perEmployeeLeave);
-      perLeaveApproval=  getModulePermission("124","view");
+      //print(perEmployeeLeave);
+      perLeaveApproval=  getModuleUserPermission("124","view");
       perAttendance=  getModulePermission("5","view");
       perTimeoff=  getModulePermission("179","view");
       await getReportingTeam(emp);
@@ -292,7 +292,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     image: new DecorationImage(
 
                                     fit: BoxFit.fill,
-                                    image: AssetImage('assets/icons/Attendance_icon.png'),
+                                    image: AssetImage('assets/Attendanc_icon.png'),
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
@@ -447,7 +447,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                   ],
 
                 ),
-                SizedBox(height: 40.0,),
+             SizedBox(height: 10.0,),
 
 
                 /*    Row(children: <Widget>[
@@ -468,9 +468,12 @@ class _HomePageStatemain extends State<HomePageMain> {
 */
 
                 // Attendance monthly summary bar graph
+                overtime!='00:00'?Divider(height: 10.0,):undertime!='00:00'?Divider(height: 10.0,):Center(),
+                SizedBox(height: 20.0,),
                 overtime!='00:00'?getimg():undertime!='00:00'?getimg1():Center(),
 
-                SizedBox(height: 40.0,),
+
+                SizedBox(height: 20.0,),
                 perAttendance=='1'?  Row(children: <Widget>[
                   SizedBox(width: 20.0,),
                   Text("Attendance monthly summary  ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
@@ -631,7 +634,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                         width: MediaQuery.of(context).size.width*1,
                                         color: Colors.teal.withOpacity(0.1),
                                         padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                        child:Text("No Holidays this month ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                        child:Text("No Holidays this month ",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                                       ),
                                     );
                                   }
@@ -759,47 +762,19 @@ class _HomePageStatemain extends State<HomePageMain> {
           "Overtime \n     "+overtime,
           style: TextStyle(
 
-              fontSize: 22.0,
+              fontSize: 16.0,
               color: overtime!=''? Colors.green:appStartColor()),
         ),
       ),
     );
-  /*  return  Container(
-          height: 250,
-          width: 170,
-      decoration: new BoxDecoration(
-        //color: appStartColor(),
-        shape: BoxShape.circle,
-        border: new Border.all(
-          color: Colors.white,
-          width: 2.5,
-        ),
-      ),
-          child: Stack(
-            children: <Widget>[
-              Center(
-                child: new Image.asset(
-                  'assets/cir.png',
-                  //width: size.width,
-                //  height: size.height,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Center(
-                child: Text(undertime,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28.0,
-                        color: Colors.black)),
-              ),
-            ],
-          ),
-
-    );*/
   }
 Widget getimg1() {
-  return  new Container(
-    height: 120,
+
+    return  new
+
+    Container(
+
+  height: 120,
     width: 90,
     decoration: new BoxDecoration(
       color: Colors.white,
@@ -815,43 +790,11 @@ Widget getimg1() {
       Text(
         "Undertime \n     "+undertime,
         style: TextStyle(
-
-            fontSize: 16.0,
-            color: undertime!=''? Colors.redAccent:appStartColor()),
+         fontSize: 16.0,
+         color: undertime!=''? Colors.redAccent:appStartColor()),
       ),
 
     ),
   );
-  /*  return  Container(
-          height: 250,
-          width: 170,
-      decoration: new BoxDecoration(
-        //color: appStartColor(),
-        shape: BoxShape.circle,
-        border: new Border.all(
-          color: Colors.white,
-          width: 2.5,
-        ),
-      ),
-          child: Stack(
-            children: <Widget>[
-              Center(
-                child: new Image.asset(
-                  'assets/cir.png',
-                  //width: size.width,
-                //  height: size.height,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Center(
-                child: Text(undertime,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28.0,
-                        color: Colors.black)),
-              ),
-            ],
-          ),
 
-    );*/
 }

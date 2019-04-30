@@ -945,7 +945,6 @@ class _LoginPageState extends State<LoginPage>
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           style: TextStyle(
-
                               fontSize: 16.0,
                               color: Colors.black),
                           decoration: InputDecoration(
@@ -1131,8 +1130,8 @@ class _LoginPageState extends State<LoginPage>
 
                               showDialog(context: context, child:
                               new AlertDialog(
-                                title: new Text("UBIHRM"),
-                                content: new Text("Company is registered successfully."),
+                           //  title: new Text("UBIHRM"),
+                             content: new Text("Company is registered successfully. Please check your mail."),
                                 /* actions: <Widget>[
                                     new RaisedButton(
                                       color: Colors.green,

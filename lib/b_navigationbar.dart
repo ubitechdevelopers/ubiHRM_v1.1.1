@@ -63,13 +63,15 @@ var count;
 
     empid = prefs.getString('employeeid')??"";
     organization =prefs.getString('organization')??"";
-   // PerLeave =prefs.getString('PerLeave')??"";
+    String userprofileid =prefs.getString('userprofileid')??"";
+
+    // PerLeave =prefs.getString('PerLeave')??"";
    // PerApprovalLeave =prefs.getString('PerApprovalLeave')??"";
 
  //  print("22222222222"+perA);
    // print("22222222222"+PerApprovalLeave);
 
-    emp = new Employee(employeeid: empid, organization: organization);
+    emp = new Employee(employeeid: empid, organization: organization, userprofileid: userprofileid);
     getAllPermission(emp);
 
     //  PLeave= "1";
@@ -127,7 +129,8 @@ var count;
                     color: Colors.white,
                     size: 25.0 ),
                 title: Text('Settings',style: TextStyle(color: Colors.white))),*/
-          ((perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1')) ?  new  BottomNavigationBarItem(
+         ((perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1')) ?  new  BottomNavigationBarItem(
+    //      (((perLeaveApproval=='1') )) ?  new  BottomNavigationBarItem(
          //     new  BottomNavigationBarItem(
                 icon: Icon(
                     Icons.check_circle_outline,
@@ -207,7 +210,8 @@ var count;
           currentIndex: _currentIndex,
           onTap: (newIndex) {
             if (newIndex == 0) {
-              (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?
+             (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?
+          //    (perLeaveApproval=='1') ?
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AllApprovals()),

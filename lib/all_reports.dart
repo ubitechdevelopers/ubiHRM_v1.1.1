@@ -11,6 +11,7 @@ import 'appbar.dart';
 import 'attandance/reports.dart';
 import 'leave/leave_reports.dart';
 import 'timeoff/timeoff_reports.dart';
+import 'services/services.dart';
 
 
 class AllReports extends StatefulWidget {
@@ -35,6 +36,10 @@ class _AllReports extends State<AllReports> {
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     showtabbar=false;
     getOrgName();
+
+    perAttReport=  getModuleUserPermission("68","view");
+    perLeaveReport=  getModuleUserPermission("69","view");
+
   }
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
@@ -195,7 +200,7 @@ class _AllReports extends State<AllReports> {
                   //SizedBox(height: 10.0),
 
                   SizedBox(height: 15.0),
-
+                  perAttReport=='1' ?
                   new RaisedButton(
                     //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
                     //      shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
@@ -244,10 +249,10 @@ class _AllReports extends State<AllReports> {
                         MaterialPageRoute(builder: (context) => Reports()),
                       );
                     },
-                  ),
+                  ):Center(),
 
                   SizedBox(height: 6.0),
-
+                  perLeaveReport=='1' ?
                   new RaisedButton(
                     //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
                     //    shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
@@ -296,10 +301,10 @@ class _AllReports extends State<AllReports> {
                         MaterialPageRoute(builder: (context) => LeaveReports()),
                       );
                     },
-                  ),
+                  ):Center(),
 
                   SizedBox(height: 6.0),
-
+                  perLeaveReport=='1' ?
                   new RaisedButton(
                     //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
                     //      shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
@@ -348,8 +353,9 @@ class _AllReports extends State<AllReports> {
                         MaterialPageRoute(builder: (context) => TimeoffReports()),
                       );
                     },
-                  ),
-
+                  ):Center(),
+                  ( perLeaveReport!='1' &&  perAttReport!='1' ) ?
+                  Text('No Reports found for you.',style: TextStyle(fontSize: 18.0),) : Center()
                 ])
         ),
       ],

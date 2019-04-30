@@ -48,6 +48,7 @@ String path_hrm_india="https://sandbox.ubihrm.com/services/";
 */
 int home_load_num = 0;
 List<Permission> globalpermissionlist =new List();
+List<Permission> globalpermissionlist1 =new List();
 Map globalcompanyinfomap;
 Map globalpersnalinfomap;
 Map globalcontactusinfomap;
@@ -68,7 +69,10 @@ int visitImage = 1;
 
 var perEmployeeLeave;
 var perLeaveApproval;
+var perTimeoffApproval;
 var perAttendance;
+var perAttReport;
+var perLeaveReport;
 var perTimeoff;
 var perReport;
 var perSet;

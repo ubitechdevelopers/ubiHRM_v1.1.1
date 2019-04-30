@@ -10,6 +10,7 @@ import 'b_navigationbar.dart';
 import 'leave/approval.dart';
 import 'timeoff/timeoff_approval.dart';
 import 'appbar.dart';
+import 'services/services.dart';
 
 
 class AllApprovals extends StatefulWidget {
@@ -35,6 +36,9 @@ class _AllApprovals extends State<AllApprovals> {
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     showtabbar=false;
     getOrgName();
+    perLeaveApproval=  getModuleUserPermission("124","view");
+    perTimeoffApproval=  getModuleUserPermission("180","view");
+
   }
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
@@ -284,8 +288,10 @@ class _AllApprovals extends State<AllApprovals> {
                       style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center),
                   //SizedBox(height: 10.0),
 
-                  SizedBox(height: 16.0),
 
+
+                  SizedBox(height: 16.0),
+                  perLeaveApproval=='1' ?
                   new RaisedButton(
                     //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
                //     shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
@@ -334,10 +340,10 @@ class _AllApprovals extends State<AllApprovals> {
                         MaterialPageRoute(builder: (context) => TabbedApp()),
                       );
                     },
-                  ),
+                  ): Center(),
 
                   SizedBox(height: 6.0),
-
+                  perTimeoffApproval=='1' ?
                   new RaisedButton(
                     //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
           //          shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
@@ -386,8 +392,10 @@ class _AllApprovals extends State<AllApprovals> {
                         MaterialPageRoute(builder: (context) => TimeOffApp()),
                       );
                     },
-                  ),
+                  ):Center(),
 
+                  ( perLeaveApproval!='1' &&  perTimeoffApproval!='1' ) ?
+                  Text('No Approvals found for you.',style: TextStyle(fontSize: 18.0),) : Center()
          /*         new Divider(height: 5.5,),
                   new Row(
 
