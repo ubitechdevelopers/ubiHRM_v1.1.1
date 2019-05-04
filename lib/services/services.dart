@@ -174,7 +174,7 @@ getfiscalyear(Employee emp) async{
   }
 }
 
-getovertime(Employee emp) async{
+/*getovertime(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
@@ -216,7 +216,7 @@ getovertime(Employee emp) async{
 
 
 
-}
+}*/
 
 /*
 
@@ -1152,5 +1152,26 @@ const List<Choice> choices = const <Choice>[
 
 ];
 
+getCountAproval() async{
+  final prefs = await SharedPreferences.getInstance();
+  Dio dio = new Dio();
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+  // await dio.post(path+"getapprovalCount?datafor=Pending"'&empid='+empid+'&orgid='+orgdir);
 
+  var response =  await dio.post(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
+  Map responseJson = json.decode(response.data.toString());
+  /* print('AAAAAA');
+  print(responseJson['total']);
+  print('AAAAAA');*/
+  if(responseJson['total']>0) {
+    prefs.setInt('approvalcount', responseJson['total']);
+    return true;
+  }
+  else{
+    prefs.setInt('approvalcount', responseJson['total']);
+    return false;
+  }
+
+}
 

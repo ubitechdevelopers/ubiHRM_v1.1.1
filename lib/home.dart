@@ -32,7 +32,7 @@ class HomePageMain extends StatefulWidget {
 }
 
 class _HomePageStatemain extends State<HomePageMain> {
- // StreamLocation sl = new StreamLocation();
+  // StreamLocation sl = new StreamLocation();
 
   double height = 0.0;
   double insideContainerHeight=300.0;
@@ -91,21 +91,21 @@ class _HomePageStatemain extends State<HomePageMain> {
     perLeaveApproval=  getModulePermission("124","view");
     perAttendance=  getModulePermission("5","view");
     perTimeoff=  getModulePermission("179","view");*/
-  //  perReport=  getModulePermission("124","view");
-  //  perSet=  getModulePermission("124","view");
- //   perAttMS=  getModulePermission("124","view");
- //   perHoliday=  getModulePermission("29","view");
+    //  perReport=  getModulePermission("124","view");
+    //  perSet=  getModulePermission("124","view");
+    //   perAttMS=  getModulePermission("124","view");
+    //   perHoliday=  getModulePermission("29","view");
     //prefs.setString("PerLeave", PerLeave1);
     //prefs.setString("PerApprovalLeave", PerApprovalLeave1);
     var now = new DateTime.now();
     var formatter = new DateFormat('MMMM');
-     month = formatter.format(now);
+    month = formatter.format(now);
 
 
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       setState(() {
-   //    print("HIIIIIIIIIIIIII");
+        //    print("HIIIIIIIIIIIIII");
         mainWidget = loadingWidget();
       });
 
@@ -131,16 +131,17 @@ class _HomePageStatemain extends State<HomePageMain> {
     final prefs = await SharedPreferences.getInstance();
     int response = prefs.getInt('response')??0;
     if(response==1){
-     //   print("AAAAAAAAA");
+      //   print("AAAAAAAAA");
       String empid = prefs.getString('employeeid')??"";
       String organization =prefs.getString('organization')??"";
-      Employee emp = new Employee(employeeid: empid, organization: organization);
+      String userprofileid =prefs.getString('userprofileid')??"";
+      Employee emp = new Employee(employeeid: empid, organization: organization,userprofileid:userprofileid);
 
-    //  await getProfileInfo(emp);
+      //  await getProfileInfo(emp);
       await getAllPermission(emp);
       await getProfileInfo(emp);
       await getfiscalyear(emp);
-      await getovertime(emp);
+     // await getovertime(emp);
       perEmployeeLeave= getModulePermission("18","view");
       //print(perEmployeeLeave);
       perLeaveApproval=  getModuleUserPermission("124","view");
@@ -154,8 +155,8 @@ class _HomePageStatemain extends State<HomePageMain> {
 
 
       showtabbar =false;
-     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-     // profileimage = new NetworkImage(pic);
+      profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+      // profileimage = new NetworkImage(pic);
 //print("ABCDEFGHI");
 //print(profileimage);
       profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
@@ -250,18 +251,18 @@ class _HomePageStatemain extends State<HomePageMain> {
         ),*/
         bottomNavigationBar:new HomeNavigation(),
 
-       body: homewidget()
+        body: homewidget()
     );
   }
 
   Widget homewidget(){
-   // print("CCCCCCCC");
+    // print("CCCCCCCC");
     return Stack(
       children: <Widget>[
         Container(
           //height: MediaQuery.of(context).size.height,
-            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-            padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+            padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
             // width: MediaQuery.of(context).size.width*0.9,
             decoration: new ShapeDecoration(
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
@@ -291,8 +292,8 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     shape: BoxShape.circle,
                                     image: new DecorationImage(
 
-                                    fit: BoxFit.fill,
-                                    image: AssetImage('assets/Attendanc_icon.png'),
+                                      fit: BoxFit.fill,
+                                      image: AssetImage('assets/Attendanc_icon.png'),
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
@@ -362,19 +363,19 @@ class _HomePageStatemain extends State<HomePageMain> {
                 SizedBox(height: 20.0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                 children: [
-               //    perSet=='1'? GestureDetector(
-                   GestureDetector(
-                       onTap: () {
-                         Navigator.push(
-                           context,
-                           MaterialPageRoute(builder: (context) => AllSetting()),
-                         );
-                       },
+                  children: [
+                    //    perSet=='1'? GestureDetector(
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AllSetting()),
+                          );
+                        },
                         child: Column(
                           children: [
                             new
-                              Container(
+                            Container(
                                 width: 60.0,
                                 height: 60.0,
                                 decoration: new BoxDecoration(
@@ -416,11 +417,11 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
                         )),
-                   (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?   GestureDetector(
-                   //   GestureDetector(
+                    (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?   GestureDetector(
+                      //   GestureDetector(
                         onTap: () {
 
-                         Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => AllReports()),
                           );
@@ -447,7 +448,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                   ],
 
                 ),
-             SizedBox(height: 10.0,),
+                SizedBox(height: 10.0,),
 
 
                 /*    Row(children: <Widget>[
@@ -468,15 +469,15 @@ class _HomePageStatemain extends State<HomePageMain> {
 */
 
                 // Attendance monthly summary bar graph
-                overtime!='00:00'?Divider(height: 10.0,):undertime!='00:00'?Divider(height: 10.0,):Center(),
+             /*   overtime!='00:00'?Divider(height: 10.0,):undertime!='00:00'?Divider(height: 10.0,):Center(),
                 SizedBox(height: 20.0,),
-                overtime!='00:00'?getimg():undertime!='00:00'?getimg1():Center(),
+                overtime!='00:00'?getimg():undertime!='00:00'?getimg1():Center(),*/
 
 
                 SizedBox(height: 20.0,),
                 perAttendance=='1'?  Row(children: <Widget>[
                   SizedBox(width: 20.0,),
-                  Text("Attendance monthly summary  ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                  Text("Monthly summary  ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ]
                 ):Center(),
 
@@ -490,19 +491,19 @@ class _HomePageStatemain extends State<HomePageMain> {
 
                   child: new FutureBuilder<List<Map<String,String>>>(
 
-                future: getAttsummaryChart(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                  if (snapshot.data.length > 0) {
-                  return new DonutAutoLabelChart.withSampleData(snapshot.data);
-                  }
-                  return new Center(
-                      child: CircularProgressIndicator());
+                      future: getAttsummaryChart(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data.length > 0) {
+                            return new DonutAutoLabelChart.withSampleData(snapshot.data);
+                          }
+                          return new Center(
+                              child: CircularProgressIndicator());
 
-                  }
-                  return new Center( child: Text("No data found"), );
-                // return new Center( child: CircularProgressIndicator());
-                }
+                        }
+                        return new Center( child: Text("No data found"), );
+                        // return new Center( child: CircularProgressIndicator());
+                      }
 
                   ),
 
@@ -532,11 +533,11 @@ class _HomePageStatemain extends State<HomePageMain> {
 
                 Row(children: <Widget>[
                   SizedBox(width: 20.0,),
-                  Text("Leave Summary ["+fiscalyear+"]",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                  Text("Leave Data ["+fiscalyear+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ]
                 ):Center(),
 
-             //   perEmployeeLeave =='1' ? Divider(height: 0.0,):Center(),
+                //   perEmployeeLeave =='1' ? Divider(height: 0.0,):Center(),
                 /*SimpleBarChart.withSampleData(),*/
 
                 perEmployeeLeave =='1' ?  new Container(
@@ -566,7 +567,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                 Row(children: <Widget>[
                   SizedBox(width: 20.0,),
 
-                  Text("Monthly Holidays ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
+                  Text("Monthly Holidays ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ]
                 ),
                 Divider(height: 10.0,),
@@ -580,7 +581,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                       new Expanded(
                         child:   Container(
 
-                            height: insideContainerHeight,
+                          //   height: insideContainerHeight,
                             width: 400.0,
                             //  padding: new EdgeInsets.all(2.0),
                             //color: Colors.green[50],
@@ -609,7 +610,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                                   Text(snapshot.data[index].date,style: TextStyle(color: Colors.grey[600]),textAlign: TextAlign.right),
 
                                                 ],),
-                                            /*  new Row(
+                                              /*  new Row(
                                                 children: <Widget>
                                                 [
                                                   SizedBox(width: 20.0,),
@@ -740,61 +741,79 @@ class _HomePageStatemain extends State<HomePageMain> {
       ],
     );
   }
-}
+
+
 
 
   Widget getimg() {
-  return  new Container(
-    height: 120,
-    width: 90,
-      decoration: new BoxDecoration(
-       color: Colors.white,
-        shape: BoxShape.circle,
-        border: new Border.all(
-          color: Colors.green,
-          width: 2.5,
-        ),
-      ),
-      child: new Center(
-        child: new
+    return  new  Column(children: <Widget>[
+      // SizedBox(width: 20.0,),
+      Row(children: <Widget>[
+        new  Text("    "+month+"",textAlign: TextAlign.left,style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold,)),
 
-        Text(
-          "Overtime \n     "+overtime,
-          style: TextStyle(
-
-              fontSize: 16.0,
-              color: overtime!=''? Colors.green:appStartColor()),
+      ]),
+      Container(
+        height: 165,
+        width: 120,
+        decoration: new BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          border: new Border.all(
+            color: Colors.green,
+            width: 2.5,
+          ),
         ),
-      ),
-    );
+
+        child: new Center(
+          child: new
+          Text(
+            "Overtime \n     "+overtime,
+            style: TextStyle(
+
+                fontSize: 16.0,
+                color: overtime!=''? Colors.green:appStartColor()),
+          ),
+        ),
+      ), ]);
   }
-Widget getimg1() {
+  Widget getimg1() {
 
     return  new
+    Column(children: <Widget>[
+      // SizedBox(width: 20.0,),
+      Row(children: <Widget>[
+        new  Text("     "+month+"",textAlign: TextAlign.left,style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold,)),
 
-    Container(
+      ]),
+      Container(
 
-  height: 120,
-    width: 90,
-    decoration: new BoxDecoration(
-      color: Colors.white,
-      shape: BoxShape.circle,
-      border: new Border.all(
-        color: Colors.red,
-        width: 2.5,
+        height: 165,
+        width: 120,
+        decoration: new BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          border: new Border.all(
+            color: Colors.red,
+            width: 2.5,
+          ),
+        ),
+        child: new Center(
+          child: new
+
+          Text(
+            "Undertime \n     "+undertime,
+            style: TextStyle(
+                fontSize: 16.0,
+                color: undertime!=''? Colors.redAccent:appStartColor()),
+          ),
+
+        ),
       ),
-    ),
-    child: new Center(
-      child: new
+    ]
+    );
+  }
 
-      Text(
-        "Undertime \n     "+undertime,
-        style: TextStyle(
-         fontSize: 16.0,
-         color: undertime!=''? Colors.redAccent:appStartColor()),
-      ),
 
-    ),
-  );
 
 }
+

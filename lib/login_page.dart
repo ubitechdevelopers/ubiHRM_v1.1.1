@@ -474,7 +474,7 @@ class _LoginPageState extends State<LoginPage>
                               child: Text(
                                 "Forgot Password ?",
                                 style: TextStyle(
-                                    decoration: TextDecoration.underline,
+
                                     color:appStartColor(),
  fontSize: 14,
                                     ),
@@ -486,7 +486,7 @@ class _LoginPageState extends State<LoginPage>
                        //   margin: EdgeInsets.only(top: 170.0),
                           width: MediaQuery.of(context).size.width,
                           padding: EdgeInsets.only(
-                              top: 0.0, bottom: 0.0, left: 10.0, right: 10.0),
+                              top: 0.0, bottom: 0.0, left: 25.0, right: 25.0),
                           decoration: new BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5.0)),
                             /*  boxShadow: <BoxShadow>[
@@ -511,7 +511,10 @@ class _LoginPageState extends State<LoginPage>
                         stops: [0.0, 1.0],
                         tileMode: TileMode.clamp),*/
                           ),
-                          child: RaisedButton(
+                          child:  ButtonTheme(
+                            minWidth: 200.0,
+                            height: 40.0,
+                            child: RaisedButton(
                             /*highlightColor: Colors.transparent,
                     splashColor: Theme.Colors.loginGradientEnd,*/
                               color: Color.fromRGBO(0, 166, 90,1.0),
@@ -553,6 +556,7 @@ class _LoginPageState extends State<LoginPage>
 
                               }
                           ),
+                          ),
                         ),
 
 
@@ -560,15 +564,17 @@ class _LoginPageState extends State<LoginPage>
                 //mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Expanded(child: Container(
-                   margin: EdgeInsets.only(left: 70.0),
+                   margin: EdgeInsets.only(left: 80.0,right:0.0),
+
                         child:Text("Not registered ?", style: TextStyle(
                           color: appStartColor(),fontSize: 14,),),
                   ),),
                        Expanded(child: Container(
                           //margin: EdgeInsets.only(top: 250.0),
                             //width: MediaQuery.of(context).size.width,
-                            padding: EdgeInsets.only(
-                                top: 0.0, bottom: 0.0, left: 0.0, right: 10.0),
+
+                           padding: EdgeInsets.only(
+                               top: 0.0, bottom: 0.0, left: 05.0, right: 25.0),
                             decoration: new BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(5.0)),
                               /*  boxShadow: <BoxShadow>[
@@ -596,7 +602,9 @@ class _LoginPageState extends State<LoginPage>
 
 
                             child: new RaisedButton(
-                              color:appStartColor(),
+                             // color:appStartColor(),
+                              color:Colors.orange,
+
                               child: new Text("Sign up", style: TextStyle(
                                 color:  Colors.white,
                                 fontSize: 16.0,),),
@@ -749,7 +757,7 @@ class _LoginPageState extends State<LoginPage>
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             icon: Icon(
-                              FontAwesomeIcons.userAlt,
+                              FontAwesomeIcons.solidBuilding,
                               color: Colors.black,
                             ),
                             hintText: "Company ",
@@ -974,10 +982,10 @@ class _LoginPageState extends State<LoginPage>
                   children: <Widget>[
 
                     Container(
-                      width: 250,
+                      width: 220,
               margin: EdgeInsets.only(top: 400.0),
                       padding: EdgeInsets.only(
-                          top: 0.0, bottom: 0.0, left: 100.0, right: 10.0),
+                          top: 0.0, bottom: 0.0, left: 70.0, right: 10.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   /* boxShadow: <BoxShadow>[
@@ -1013,7 +1021,9 @@ class _LoginPageState extends State<LoginPage>
                     onPressed: (){
 
                     }
-                ):new RaisedButton(
+                ): new ButtonTheme(
+                      minWidth: 100.0,
+                  child:RaisedButton(
                   //color: Colors.orange,
                   // textColor: Colors.white,
                     color: Color.fromRGBO(0,166, 90,1.0),
@@ -1021,9 +1031,9 @@ class _LoginPageState extends State<LoginPage>
                     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                    /* shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(30.0)),*/
-                    padding: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.all(5.0),
                     child: const Text('Register',style: TextStyle(fontSize: 16.0),),
-                    onPressed: () {
+                    onPressed: ()  {
                       if(_isButtonDisabled)
                         return null;
                       //  showInSnackBar("SignUp button pressed");
@@ -1051,14 +1061,14 @@ class _LoginPageState extends State<LoginPage>
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodeEmail);
                       }
-                      else if(signupPasswordController.text=='') {
+                     /* else if(signupPasswordController.text=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
                          // title: new Text("Alert"),
                           content: new Text("Please enter the password"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodePassword);
-                      }
+                      }*/
                       else if(signupPhoneController.text=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
@@ -1067,14 +1077,14 @@ class _LoginPageState extends State<LoginPage>
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodephone);
                       }
-                      else if(signupPasswordController.text.length<6) {
+                    /*  else if(signupPasswordController.text.length<6) {
                         showDialog(context: context, child:
                         new AlertDialog(
                           //title: new Text("Alert"),
                           content: new Text("Please enter a valid password \n (password must contain at least 6 characters)"),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodePassword);
-                      }
+                      }*/
                       else if(signupcityController.text=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
@@ -1111,7 +1121,7 @@ class _LoginPageState extends State<LoginPage>
                           "name": CPNController.text,
                           "phone": signupPhoneController.text,
                           "email": signupEmailController.text,
-                          "password": signupPasswordController.text,
+                          //"password": signupPasswordController.text,
                           "city": signupcityController.text,
                           "country": _country,
                           "countrycode": '',
@@ -1127,12 +1137,19 @@ class _LoginPageState extends State<LoginPage>
                           // print(res);
                             if (response.body.toString().contains("true")) {
                              // setLocal(res['f_name'],res['id'],res['org_id']);
-
+                              signupNameController.clear();
+                              CPNController.clear();
+                              signupPhoneController.clear();
+                              signupEmailController.clear();
+                              signupcityController.clear();
+                              _country=null;
                               showDialog(context: context, child:
                               new AlertDialog(
                            //  title: new Text("UBIHRM"),
                              content: new Text("Company is registered successfully. Please check your mail."),
-                                /* actions: <Widget>[
+
+
+                                      /* actions: <Widget>[
                                     new RaisedButton(
                                       color: Colors.green,
                                       textColor: Colors.white,
@@ -1144,7 +1161,11 @@ class _LoginPageState extends State<LoginPage>
                                     ),
                                   ],*/
                               ));
-
+                              /*new Future.delayed(const Duration(seconds: 3));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginPage()),
+                              );*/
                             } /*else if (res['sts'] == 'false1' ||
                                   res['sts'] == 'false3') {
                                 showDialog(context: context, child:
@@ -1206,7 +1227,7 @@ class _LoginPageState extends State<LoginPage>
                       }
                     }
 
-                ),
+                ),),
 
        ),
                     Expanded(child:  Container(
@@ -1237,6 +1258,10 @@ class _LoginPageState extends State<LoginPage>
                         stops: [0.0, 1.0],
                         tileMode: TileMode.clamp),*/
                     ),
+
+                     child: ButtonTheme(
+                          minWidth: 200.0,
+                         // height: 100.0,
                     child: new OutlineButton(
 
 
@@ -1246,7 +1271,7 @@ class _LoginPageState extends State<LoginPage>
                        borderSide: BorderSide(color:appStartColor()),
                       /* shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))*/
 
-                    )
+                    )),
 
                 ),
                 ),
