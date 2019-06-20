@@ -8,15 +8,18 @@ appStartColor() {
  // return Colors.yellowAccent[200];
 }
 
-appEndColor() {
+appEndColor()
+{
   return Colors.green[200];
 }
 
-scaffoldBackColor(){
+scaffoldBackColor()
+{
   return  Colors.green[100];
 }
 
-headingColor(){
+headingColor()
+{
   return Colors.green;
 }
 
@@ -31,20 +34,29 @@ circleIconBackgroundColor(){
 }
 
 
-/*String path="http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/";
+String path="http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/";
 //String path_ubiattendance="http://192.168.0.200/ubiattendance/index.php/Att_services/";
 String path_ubiattendance="http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/";
-String path_hrm_india="http://192.168.0.200/UBIHRM/HRMINDIA/services/";*/
+String path_hrm_india="http://192.168.0.200/UBIHRM/HRMINDIA/services/";
 
 
 
-String path="https://ubitech.ubihrm.com/ubiapp/";
+/*String path="https://ubitech.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/";
-String path_hrm_india="https://ubitech.ubihrm.com/services/";
+String path_hrm_india="https://ubitech.ubihrm.com/services/";*/
 
 /*String path="https://sandbox.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://sandbox.ubihrm.com/HRMAPP/index.php/Att_services/";
 String path_hrm_india="https://sandbox.ubihrm.com/services/";*/
+
+
+////payeroll domain url
+
+/*String path="https://ubihrm.ubipayroll.com/ubiapp/";
+String path_ubiattendance="https://ubihrm.ubipayroll.com/HRMAPP/index.php/Att_services/";
+String path_hrm_india="https://ubihrm.ubipayroll.com/services/";*/
+
+
 
 int home_load_num = 0;
 List<Permission> globalpermissionlist =new List();
@@ -82,4 +94,9 @@ var fiscalyear;
 var perPunchLocation;
 var overtime;
 var undertime;
+var perSalary;
+var perExpense;
+var perFlexi;
+
+var deprtcurrency;
 

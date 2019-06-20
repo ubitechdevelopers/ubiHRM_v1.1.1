@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'model/model.dart';
 import 'leave/myleave.dart';
+import 'expence/expenselist.dart';
 import 'timeoff/timeoff_summary.dart';
 import 'dart:async';
 import 'profile.dart';
@@ -18,7 +19,7 @@ import 'attandance/home.dart';
 import 'all_reports.dart';
 import 'appbar.dart';
 import 'services/attandance_fetch_location.dart';
-//import 'services/attandance_newservices.dart';
+import 'salary/mysalary_list.dart';
 import 'package:intl/intl.dart';
 import 'settings.dart';
 
@@ -57,12 +58,8 @@ class _HomePageStatemain extends State<HomePageMain> {
   @override
   void initState() {
     super.initState();
-
     initPlatformState();
     getOrgName();
-
-
-
   }
 
   getOrgName() async{
@@ -141,12 +138,15 @@ class _HomePageStatemain extends State<HomePageMain> {
       await getAllPermission(emp);
       await getProfileInfo(emp);
       await getfiscalyear(emp);
-     // await getovertime(emp);
+      await getovertime(emp);
       perEmployeeLeave= getModulePermission("18","view");
       //print(perEmployeeLeave);
       perLeaveApproval=  getModuleUserPermission("124","view");
       perAttendance=  getModulePermission("5","view");
       perTimeoff=  getModulePermission("179","view");
+      perSalary=  getModulePermission("66","view");
+      perExpense=  getModulePermission("170","view");
+     perFlexi= getModulePermission("448","view");
       await getReportingTeam(emp);
 
       Loc lock = new Loc();
@@ -417,13 +417,11 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
                         )),
-                    (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?   GestureDetector(
+                    (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?                        GestureDetector(
                       //   GestureDetector(
                         onTap: () {
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AllReports()),
+                          Navigator.push(context,
+                           MaterialPageRoute(builder: (context) => AllReports()),
                           );
                         },
                         child: Column(
@@ -448,9 +446,64 @@ class _HomePageStatemain extends State<HomePageMain> {
                   ],
 
                 ),
-                SizedBox(height: 10.0,),
+                SizedBox(height: 20.0,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                (perSalary=='1') ? GestureDetector(
+                  //   GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SalarySummary()),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        new  Container(
+                            width: 60.0,
+                            height: 60.0,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage('assets/icons/Salary_icon.png'),
+                                ),
+                                color: circleIconBackgroundColor()
+                            )),
+                        Text('My Salary',
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                      ],
+                    )):Center(),
 
 
+                (perExpense=='1') ? GestureDetector(
+                  //   GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyExpence()),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        new  Container(
+                            width: 60.0,
+                            height: 60.0,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage('assets/icons/Expense_icon.png'),
+                                ),
+                                color: circleIconBackgroundColor()
+                            )),
+                        Text('My Expenses',
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                      ],
+                    )):Center(),
+
+]),
                 /*    Row(children: <Widget>[
                     Icon(Icons.brightness_1,color: Colors.blue,),
                     SizedBox(width: 20.0,),
@@ -469,9 +522,9 @@ class _HomePageStatemain extends State<HomePageMain> {
 */
 
                 // Attendance monthly summary bar graph
-             /*   overtime!='00:00'?Divider(height: 10.0,):undertime!='00:00'?Divider(height: 10.0,):Center(),
+             overtime!='00:00'?Divider(height: 10.0,):undertime!='00:00'?Divider(height: 10.0,):Center(),
                 SizedBox(height: 20.0,),
-                overtime!='00:00'?getimg():undertime!='00:00'?getimg1():Center(),*/
+                overtime!='00:00'?getimg():undertime!='00:00'?getimg1():Center(),
 
 
                 SizedBox(height: 20.0,),
@@ -492,13 +545,16 @@ class _HomePageStatemain extends State<HomePageMain> {
                   child: new FutureBuilder<List<Map<String,String>>>(
 
                       future: getAttsummaryChart(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          if (snapshot.data.length > 0) {
+                      builder: (context, snapshot)
+                      {
+                        if (snapshot.hasData){
+                          if (snapshot.data.length > 0)
+                          {
                             return new DonutAutoLabelChart.withSampleData(snapshot.data);
                           }
                           return new Center(
-                              child: CircularProgressIndicator());
+                              child: CircularProgressIndicator()
+                          );
 
                         }
                         return new Center( child: Text("No data found"), );
@@ -552,7 +608,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                           if (snapshot.data.length > 0) {
                             return new StackedHorizontalBarChart.withSampleData(snapshot.data);
                           }
-                          return new Center( child: CircularProgressIndicator());
+                          return new Center( child: Text("No data found"), );
                         }
 
                         return new Center( child: Text("No data found"), );
@@ -590,15 +646,14 @@ class _HomePageStatemain extends State<HomePageMain> {
                               future: getHolidays(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  if(snapshot.data.length>0) {
-
-                                    return new ListView.builder(
+                                    if(snapshot.data.length>0) {
+                                        return new ListView.builder(
                                         scrollDirection: Axis.vertical,
                                         itemCount: snapshot.data.length,
                                         itemBuilder: (BuildContext context, int index) {
                                           var string=snapshot.data[index].name;
                                           var name =  string.replaceAll("Holiday - ", "");                            return new Column(
-                                            children: <Widget>
+                                          children: <Widget>
                                             [
                                               new Row(
                                                 children: <Widget>
@@ -647,13 +702,13 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 // By default, show a loading spinner
                                 return new Center(child: CircularProgressIndicator());
                               },
-                            )
-                        ),),
-                    ],),
+                             )
+                            ),),
+                          ],),
 
                     //undertime!='null'?getimg1():getimg(),
 
-                  ],)
+                   ],)
 
 
 

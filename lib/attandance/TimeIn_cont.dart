@@ -12,9 +12,7 @@ import 'package:ubihrm/services/attandance_saveimage.dart';
 import 'package:ubihrm/model/timeinout.dart';
 import 'attendance_summary.dart';
 import 'punchlocation_summary.dart';
-import 'flexi_time.dart';
 import 'TimeOut_option.dart';
-import 'TimeIn_cont.dart';
 import 'punchlocation.dart';
 import '../drawer.dart';
 import 'package:ubihrm/services/services.dart';
@@ -29,12 +27,12 @@ import '../appbar.dart';
 
 
 // This app is a stateful, it tracks the user's current choice.
-class HomePage extends StatefulWidget {
+class HomePageTimeIn extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageTimeInState createState() => _HomePageTimeInState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageTimeInState extends State<HomePageTimeIn> {
   StreamLocation sl = new StreamLocation();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   /*var _defaultimage =
@@ -77,7 +75,7 @@ class _HomePageState extends State<HomePage> {
       profile,
       latit = "",
       longi = "",
-    Otimests = "";
+      Otimests = "";
   String aid = "";
   String shiftId = "";
   List<Widget> widgets;
@@ -104,7 +102,7 @@ class _HomePageState extends State<HomePage> {
   }
 
 
- /* @override
+  /* @override
   void dispose() {
     super.dispose();
     timer.cancel();
@@ -169,80 +167,80 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('empid') ?? '';
     orgdir = prefs.getString('orgdir') ?? '';
- //   print("employeeid---"+empid);
+    //   print("employeeid---"+empid);
     desinationId =globalcompanyinfomap['Designation'];
     response = prefs.getInt('response') ?? 0;
 
-  //var timeout=  await getLastTimeout();
+    //var timeout=  await getLastTimeout();
 
- // print(timeout);
- // print("******");
-   // if (response == 1) {
-      Loc lock = new Loc();
-      location_addr = await lock.initPlatformState();
-      Home ho = new Home();
-      act = await ho.checkTimeIn(empid, orgdir);
-      ho.managePermission(empid, orgdir, desinationId);
-      // //print(act);
-      ////print("this is-----> "+act);
-      ////print("this is main "+location_addr);
-      setState(() {
-        Is_Delete = prefs.getInt('Is_Delete') ?? 0;
-        newpwd = prefs.getString('newpwd') ?? "";
-        userpwd = prefs.getString('usrpwd') ?? "";
+    // print(timeout);
+    // print("******");
+    // if (response == 1) {
+    Loc lock = new Loc();
+    location_addr = await lock.initPlatformState();
+    Home ho = new Home();
+    act = await ho.checkTimeIn(empid, orgdir);
+    ho.managePermission(empid, orgdir, desinationId);
+    // //print(act);
+    ////print("this is-----> "+act);
+    ////print("this is main "+location_addr);
+    setState(() {
+      Is_Delete = prefs.getInt('Is_Delete') ?? 0;
+      newpwd = prefs.getString('newpwd') ?? "";
+      userpwd = prefs.getString('usrpwd') ?? "";
       //  print("New pwd"+newpwd+"  User ped"+userpwd);
-        location_addr1 = location_addr;
-        admin_sts = prefs.getString('sstatus').toString() ?? '0';
-        mail_varified = prefs.getString('mail_varified').toString() ?? '0';
-        alertdialogcount = globalalertcount;
-        response = prefs.getInt('response') ?? 0;
-        fname = prefs.getString('fname') ?? '';
-        lname = prefs.getString('lname') ?? '';
-        empid = prefs.getString('empid') ?? '';
-        email = prefs.getString('email') ?? '';
-        status = prefs.getString('status') ?? '';
-        orgid = prefs.getString('orgid') ?? '';
-        orgdir = prefs.getString('orgdir') ?? '';
-        org_name = prefs.getString('org_name') ?? '';
-        desination = prefs.getString('desination') ?? '';
-        Otimests= prefs.getString('Otimests') ?? '';
- //       profile = prefs.getString('profile') ?? '';
-  //      profileimage = new NetworkImage( profile);
-        profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+      location_addr1 = location_addr;
+      admin_sts = prefs.getString('sstatus').toString() ?? '0';
+      mail_varified = prefs.getString('mail_varified').toString() ?? '0';
+      alertdialogcount = globalalertcount;
+      response = prefs.getInt('response') ?? 0;
+      fname = prefs.getString('fname') ?? '';
+      lname = prefs.getString('lname') ?? '';
+      empid = prefs.getString('empid') ?? '';
+      email = prefs.getString('email') ?? '';
+      status= prefs.getString('status') ?? '';
+      orgid = prefs.getString('orgid') ?? '';
+      orgdir = prefs.getString('orgdir') ?? '';
+      org_name = prefs.getString('org_name') ?? '';
+      desination = prefs.getString('desination') ?? '';
+      Otimests   = prefs.getString('Otimests') ?? '';
+      //       profile = prefs.getString('profile') ?? '';
+      //      profileimage = new NetworkImage( profile);
+      profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
 
-        //      print("ABCDEFGHI-"+profile);
-        profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
-          if (mounted) {
-            setState(() {
-              _checkLoaded = false;
-            });
-          }
-        });
-        showtabbar=false;
-   //    print("ABCDEF"+fname);
-        latit = prefs.getString('latit') ?? '';
-        longi = prefs.getString('longi') ?? '';
-        aid = prefs.getString('aid') ?? "";
-        shiftId = prefs.getString('shiftId') ?? "";
-        ////print("this is set state "+location_addr1);
-        act1 = act;
-    //    print("ABC"+act1);
-        streamlocationaddr = globalstreamlocationaddr;
-
-        perPunchLocation=  getModulePermission("305","view");
-
-
+      //      print("ABCDEFGHI-"+profile);
+      profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+        if (mounted) {
+          setState(() {
+            _checkLoaded = false;
+          });
+        }
       });
+      showtabbar=false;
+      //    print("ABCDEF"+fname);
+      latit = prefs.getString('latit') ?? '';
+      longi = prefs.getString('longi') ?? '';
+      aid = prefs.getString('aid') ?? "";
+      shiftId = prefs.getString('shiftId') ?? "";
+      ////print("this is set state "+location_addr1);
+      act1 = act;
+      //    print("ABC"+act1);
+      streamlocationaddr = globalstreamlocationaddr;
+
+      perPunchLocation=  getModulePermission("305","view");
+
+
+    });
     //}
   }
 
   @override
   Widget build(BuildContext context) {
     (mail_varified=='0' && alertdialogcount==0 && admin_sts=='1')?Future.delayed(Duration.zero, () => _showAlert(context)):"";
- //act1=='1'?_showAlertbeforeTimeOut(context):"";
+    //act1=='1'?_showAlertbeforeTimeOut(context):"";
     //return (response == 0 || userpwd!=newpwd || Is_Delete!=0) ? new AskRegisterationPage//() :
 
-   return getmainhomewidget();
+    return getmainhomewidget();
 
 
 
@@ -254,9 +252,9 @@ class _HomePageState extends State<HomePage> {
   void showInSnackBar(String value) {
     final snackBar = SnackBar(
         content: Text(
-      value,
-      textAlign: TextAlign.center,
-    ));
+          value,
+          textAlign: TextAlign.center,
+        ));
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
@@ -264,7 +262,7 @@ class _HomePageState extends State<HomePage> {
     return new WillPopScope(
         onWillPop: () async => true,
 
-      child: Scaffold(
+        child: Scaffold(
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new AppHeader(profileimage,showtabbar,orgName),
@@ -305,14 +303,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ),*/
           bottomNavigationBar:new HomeNavigation(),
-       // endDrawer: new AppDrawer(),
-        body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
-        //bottomSheet: getQuickLinksWidget(),
-        persistentFooterButtons: <Widget>[
-          quickLinkList1(),
+          // endDrawer: new AppDrawer(),
+          body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
+          //bottomSheet: getQuickLinksWidget(),
+          persistentFooterButtons: <Widget>[
+            quickLinkList1(),
 
-        ],   // body: homewidget()
-      )
+          ],   // body: homewidget()
+        )
       /*  child: new Scaffold(
           backgroundColor:scaffoldBackColor(),
           key: _scaffoldKey,
@@ -404,7 +402,7 @@ class _HomePageState extends State<HomePage> {
         index: _currentIndex,
         children: <Widget>[
           underdevelopment(),
-         (streamlocationaddr != '') ? mainbodyWidget() : refreshPageWidgit(),
+          (streamlocationaddr != '') ? mainbodyWidget() : refreshPageWidgit(),
           //(false) ? mainbodyWidget() : refreshPageWidgit(),
           underdevelopment()
         ],
@@ -413,11 +411,11 @@ class _HomePageState extends State<HomePage> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => AskRegisterationPage()),
-        (Route<dynamic> route) => false,
+            (Route<dynamic> route) => false,
       );
     }
 
-   /* if(userpwd!=newpwd){
+    /* if(userpwd!=newpwd){
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => AskRegisterationPage()),
@@ -465,7 +463,7 @@ class _HomePageState extends State<HomePage> {
                       style: new TextStyle(fontSize: 12.0, color: Colors.black),
                       textAlign: TextAlign.left,
                     ),
-                   /* new InkWell(
+                    /* new InkWell(
                       child: new Text(
                         "Fetch Location now",
                         style: new TextStyle(
@@ -494,7 +492,7 @@ class _HomePageState extends State<HomePage> {
                   startTimer();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => HomePageTimeIn()),
                   );
                 },
               ),
@@ -506,17 +504,17 @@ class _HomePageState extends State<HomePage> {
       return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-        Text(
-            'Location permission is restricted from app settings, click "Open Settings" to allow permission.',
-            textAlign: TextAlign.center,
-            style: new TextStyle(fontSize: 14.0, color: Colors.red)),
-        RaisedButton(
-          child: Text('Open Settings'),
-          onPressed: () {
-            SimplePermissions.openSettings();
-          },
-        ),
-      ]);
+            Text(
+                'Location permission is restricted from app settings, click "Open Settings" to allow permission.',
+                textAlign: TextAlign.center,
+                style: new TextStyle(fontSize: 14.0, color: Colors.red)),
+            RaisedButton(
+              child: Text('Open Settings'),
+              onPressed: () {
+                SimplePermissions.openSettings();
+              },
+            ),
+          ]);
     }
   }
 
@@ -581,7 +579,7 @@ class _HomePageState extends State<HomePage> {
                   startTimer();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => HomePageTimeIn()),
                   );
                 },
               ),
@@ -604,9 +602,9 @@ class _HomePageState extends State<HomePage> {
               margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
               decoration: new ShapeDecoration(
-              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
-              color: Colors.white,
-            ),
+                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+                color: Colors.white,
+              ),
               // foregroundDecoration: BoxDecoration(color:Colors.red ),
               height: MediaQuery.of(context).size.height * 0.80,
               child: Column(
@@ -620,7 +618,7 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: new Stack(children: <Widget>[
                       Container(
-                          //   foregroundDecoration: BoxDecoration(color:Colors.yellow ),
+                        //   foregroundDecoration: BoxDecoration(color:Colors.yellow ),
                           width: MediaQuery.of(context).size.height * .18,
                           height: MediaQuery.of(context).size.height * .18,
                           decoration: new BoxDecoration(
@@ -628,9 +626,9 @@ class _HomePageState extends State<HomePage> {
                               image: new DecorationImage(
                                 fit: BoxFit.fill,
                                 image:_checkLoaded ? AssetImage('assets/avatar.png') : profileimage,
-                               //image: AssetImage('assets/avatar.png')
+                                //image: AssetImage('assets/avatar.png')
                               ))),
-                 /*     new Positioned(
+                      /*     new Positioned(
                     left: MediaQuery.of(context).size.width*.14,
                     top: MediaQuery.of(context).size.height*.11,
                     child: new RawMaterialButton(
@@ -649,13 +647,13 @@ class _HomePageState extends State<HomePage> {
                   ),*/
                     ]),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * .001),
+                  SizedBox(height: MediaQuery.of(context).size.height * .01),
                   //Image.asset('assets/logo.png',height: 150.0,width: 150.0),
                   // SizedBox(height: 5.0),
                   Text("Hi " + globalpersnalinfomap['FirstName'], style: new TextStyle(fontSize: 16.0)),
-                  SizedBox(height: MediaQuery.of(context).size.height * .001),
+                  SizedBox(height: MediaQuery.of(context).size.height * .01),
                   // SizedBox(height: MediaQuery.of(context).size.height*.01),
-                  (act1 == 'TimeIn' && Otimests !='null') ? _showAlertwidget() : getMarkAttendanceWidgit(),
+                  (act1 == '') ? loader() : getMarkAttendanceWidgit(),
 
 
                 ],
@@ -734,46 +732,10 @@ class _HomePageState extends State<HomePage> {
                     Text('Log',
                         textAlign: TextAlign.center,
                         style:
-                            new TextStyle(fontSize: 15.0, color: Colors.white)),
+                        new TextStyle(fontSize: 15.0, color: Colors.white)),
                   ],
                 )),
           ),
-
-
-          perFlexi == '1' ?  Container(
-            padding: EdgeInsets.only(top: 10.0),
-            constraints: BoxConstraints(
-              maxHeight: 60.0,
-              minHeight: 20.0,
-            ),
-            child:  new GestureDetector(
-                onTap: () {
-                  /*showInSnackBar("Under development.");*/
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Flexitime()
-                    ),
-                  );
-                },
-                child: Row(
-                    children: [
-                      SizedBox(width:MediaQuery.of(context).size.width*.08),
-                      Column(
-                        children: [
-                          Icon(
-                            Icons.av_timer,
-                            size: 30.0,
-                            color: Colors.white,
-                          ),
-                          Text('Flexi Time',
-                              textAlign: TextAlign.center,
-                              style:
-                              new TextStyle(fontSize: 15.0, color: Colors.white)),
-                        ],
-                      )])),
-          ):Center(),
-
 
           perPunchLocation == '1' ?  Container(
             padding: EdgeInsets.only(top: 10.0),
@@ -787,28 +749,27 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PunchLocationSummary()
-                    ),
+                        builder: (context) => PunchLocationSummary()),
                   );
                 },
                 child: Row(
-                children: [
-                  SizedBox(width:MediaQuery.of(context).size.width*.08),
-                  Column(
-                  children: [
-                    Icon(
-                      Icons.add_location,
-                      size: 30.0,
-                      color: Colors.white,
-                    ),
-                    Text('Visits',
-                        textAlign: TextAlign.center,
-                        style:
-                            new TextStyle(fontSize: 15.0, color: Colors.white)),
-                  ],
-                )])),
+                    children: [
+                      SizedBox(width:MediaQuery.of(context).size.width*.08),
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.add_location,
+                            size: 30.0,
+                            color: Colors.white,
+                          ),
+                          Text('Visits',
+                              textAlign: TextAlign.center,
+                              style:
+                              new TextStyle(fontSize: 15.0, color: Colors.white)),
+                        ],
+                      )])),
           ):Center(),
-         /* Container(
+          /* Container(
             padding: EdgeInsets.only(top: 10.0),
             constraints: BoxConstraints(
               maxHeight: 60.0,
@@ -995,7 +956,7 @@ class _HomePageState extends State<HomePage> {
   }
 */
 
- /* getQuickLinksWidget() {
+  /* getQuickLinksWidget() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: quickLinkList(),
@@ -1047,7 +1008,7 @@ class _HomePageState extends State<HomePage> {
             color: Colors.teal.withOpacity(0.1),
             height: MediaQuery.of(context).size.height * .15,
             child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               FlatButton(
                 child: new Text('You are at: ' + streamlocationaddr,
                     textAlign: TextAlign.center,
@@ -1078,7 +1039,7 @@ class _HomePageState extends State<HomePage> {
                         sl.startStreaming(5);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
+                          MaterialPageRoute(builder: (context) => HomePageTimeIn()),
                         );
                       },
                     )
@@ -1105,17 +1066,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   getTimeInOutButton() {
-if (act1 == 'TimeIn') {
+    if (act1 == 'TimeIn') {
 
-     return RaisedButton(
-        child: Text('TIME IN',
+      return RaisedButton(
+        child: Text('TIME IN ',
             style: new TextStyle(fontSize: 22.0, color: Colors.white)),
         color: Colors.orange[800],
         onPressed: () {
           // //print("Time out button pressed");
-         // _showAlertbeforeTimeOut(context);
+          // _showAlertbeforeTimeOut(context);
 
-         saveImage();
+          saveImage();
 
           //Navigator.pushNamed(context, '/home');
         },
@@ -1133,7 +1094,7 @@ if (act1 == 'TimeIn') {
     }
 
 
-   /*  else if(act1=='1')  {
+    /*  else if(act1=='1')  {
    // return  _showAlertbeforeTimeOut(context);
 
   return  Container(
@@ -1144,7 +1105,29 @@ if (act1 == 'TimeIn') {
       );
     }*/
   }
+  getTimeOutButtonOpt() {
 
+    return RaisedButton(
+      child: Text('TIME OUT1',
+          style: new TextStyle(fontSize: 22.0, color: Colors.white)),
+      color: Colors.orange[800],
+      onPressed: () {
+        // //print("Time out button pressed");
+        saveImage();
+      },
+    );
+
+    /*  else if(act1=='1')  {
+   // return  _showAlertbeforeTimeOut(context);
+
+  return  Container(
+        child: Text('TIME OUT1',
+            style: new TextStyle(fontSize: 22.0, color: Colors.white)),
+        color: Colors.orange[800],
+
+      );
+    }*/
+  }
   Text getText(String addrloc) {
     if (addrloc != "PermissionStatus.deniedNeverAsk") {
       return Text('You are at: ' + addrloc,
@@ -1163,11 +1146,11 @@ if (act1 == 'TimeIn') {
 
     MarkTime mk = new MarkTime(
         empid, streamlocationaddr, aid, act1, shiftId, orgdir, lat, long);
-   /* mk1 = mk;*/
+    /* mk1 = mk;*/
 
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-       /* Navigator.push(
+      /* Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => CameraExampleHome()),
       );*/
@@ -1178,9 +1161,9 @@ if (act1 == 'TimeIn') {
       });
       try {
         issave = await saveImage.saveTimeInOutImagePicker(mk);
-       print('------------------>');
-       print(issave);
-       print('------------------>');
+        print('------------------>');
+        print(issave);
+        print('------------------>');
         if (issave) {
           showDialog(context: context, child:
           new AlertDialog(
@@ -1196,7 +1179,7 @@ if (act1 == 'TimeIn') {
             act1 = act;
           });
         } else {
-         print('------------------<<<<<<<<<<<');
+          print('------------------<<<<<<<<<<<');
           showDialog(context: context, child:
           new AlertDialog(
             title: new Text("!"),
@@ -1221,7 +1204,7 @@ if (act1 == 'TimeIn') {
     }
 
 
-  /*SaveImage saveImage = new SaveImage();
+    /*SaveImage saveImage = new SaveImage();
     bool issave = false;
     setState(() {
       act1 = "";
@@ -1278,175 +1261,161 @@ if (act1 == 'TimeIn') {
 
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Verify Email"),
-          content: Container(
-              height: MediaQuery.of(context).size.height*0.22,
-              child:Column(
-              children:<Widget>[
-              Container(width:MediaQuery.of(context).size.width*0.6, child:Text("Your organization's Email is not verified. Please verify now.")),
+            title: Text("Verify Email"),
+            content: Container(
+                height: MediaQuery.of(context).size.height*0.22,
+                child:Column(
+                    children:<Widget>[
+                      Container(width:MediaQuery.of(context).size.width*0.6, child:Text("Your organization's Email is not verified. Please verify now.")),
 
-              new Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children:<Widget>[
-                    ButtonBar(
-                      children: <Widget>[
-                        FlatButton(
-                          child: Text('Later'),
-                          shape: Border.all(color: Colors.black54),
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true).pop();
-                          },
-                        ),
-                        new RaisedButton(
-                          child: new Text(
-                            "Verify",
-                            style: new TextStyle(
-                              color: Colors.white,
+                      new Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children:<Widget>[
+                            ButtonBar(
+                              children: <Widget>[
+                                FlatButton(
+                                  child: Text('Later'),
+                                  shape: Border.all(color: Colors.black54),
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true).pop();
+                                  },
+                                ),
+                                new RaisedButton(
+                                  child: new Text(
+                                    "Verify",
+                                    style: new TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  color: Colors.orange[800],
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true).pop();
+                                    resendVarification();
+                                  },
+                                ),
+                              ],
                             ),
-                          ),
-                          color: Colors.orange[800],
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true).pop();
-                            resendVarification();
-                          },
-                        ),
-                      ],
-                    ),
-             ])
-          ]
-          ))
+                          ])
+                    ]
+                ))
         )
     );
   }
- _showAlertwidget() {
- return  new
- Column(
-       children: <Widget>[
+  _showAlertwidget() {
+    return  new Column(
+        children: <Widget>[
 
-    Center(
+          Container(
 
- child: Row(
-     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-     children: <Widget>[
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
 
-     SizedBox(width: 5.0),
-   Expanded(
-   child:Column(
-   crossAxisAlignment: CrossAxisAlignment.start,
-   children: <Widget>[
+                    SizedBox(width: 5.0),
+                    Expanded(
+                        child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                // padding: EdgeInsets.fromLTRB(4.0, 3.0,4.0,0.0),
+                                margin: EdgeInsets.fromLTRB(5.0, 0.0,4.0,0.0),
+                                //height: insideContainerHeight,
+                                width: 400.0,
+                                child:Text("You have not mark time out yesterday. ",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
 
-   Container(
-    // padding: EdgeInsets.fromLTRB(4.0, 3.0,4.0,0.0),
-     // margin: EdgeInsets.fromLTRB(4.0, 0.0,4.0,0.0),
-   //height: insideContainerHeight,
-   width: 500.0,
-     child:Text("You have not marked Time Out yesterday. ",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                              ),
 
-   ),
-
- ])
-
-  )]
- )
-
-    ),
+                            ])
+                    )]
+              )),
 
 
-   ButtonTheme(
-   minWidth: 100.0,
-   height: 20.0,
-   child:  new FlatButton(
-     //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-     //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-     //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-     padding: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 10.0),
-     child: Container(
-   //     padding: EdgeInsets.only(left:  5.0),
-       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-         children: <Widget>[
+          ButtonTheme(
+            minWidth: 100.0,
+            height: 20.0,
+            child:  new FlatButton(
+              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+              //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+              child: Container(
+                //     padding: EdgeInsets.only(left:  5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
 
-           SizedBox(width: 5.0),
-           Container(
-             child: Icon(Icons.radio_button_checked,size: 20.0,color: Colors.green,),
-           ),
-           Expanded(
-            child:Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: <Widget>[
-                 Container(
-                     padding: EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
-        child: Text("Doing overtime? Punch your Time Out now.",style: TextStyle(fontSize: 16.0),)
-                 ),
+                    SizedBox(width: 5.0),
+                    Expanded(
+                      child:Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              child: Text("Are you doing overtime ?",style: TextStyle(fontSize: 16.0),)
+                          ),
 
-               ],
-             ),
-           ),
-
-       ],
-       ),
-     ),
-     color: Colors.white,
-     //elevation: 4.0,
-     //  splashColor: Colors.orangeAccent,
-     textColor: Colors.black,
-     onPressed: () {
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Icon(Icons.keyboard_arrow_right,size: 30.0,color: Colors.green,),
+                    ),
+                  ],
+                ),
+              ),
+              color: Colors.white,
+              //elevation: 4.0,
+              //  splashColor: Colors.orangeAccent,
+              textColor: Colors.black,
+              onPressed: () {
 
 
-       Navigator.push(
-         context,
-         MaterialPageRoute(builder: (context) => HomePageTimeOut()),
-       );
-     },
-   ),
-   ),
-   ButtonTheme(
-     minWidth: 100.0,
-     height: 40.0,
-     child:  new FlatButton(
-       //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-       //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-       //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-       padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-       child: Container(
-       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-         children: <Widget>[
-           SizedBox(width: 5.0),
-           Container(
-             child: Icon(Icons.radio_button_unchecked,size: 20.0,color: Colors.orange,),
-           ),
-             Expanded(
-             child:Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-                 children: <Widget>[
-                 Container(
-                     padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
-                 child: Text("Forgot to punch Timeout? Punch Time In now.",style: TextStyle(fontSize: 16.0),)
-                   ),
-                 ],
-               ),
-             ),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePageTimeOut()),
+                );
+              },
+            ),
+          ),
+          ButtonTheme(
+            minWidth: 100.0,
+            height: 40.0,
+            child:  new FlatButton(
+              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+              //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    SizedBox(width: 5.0),
+                    Expanded(
+                      child:Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              child: Text("You forgot to mark Timeout ? ",style: TextStyle(fontSize: 16.0),)
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Icon(Icons.keyboard_arrow_right,size: 30.0,color: Colors.orange,),
+                    ),
+                  ],
+                ),
+              ),
+              color: Colors.white,
+              //elevation: 4.0,
+              //  splashColor: Colors.orangeAccent,
+              textColor: Colors.black,
+              onPressed: () {
 
-           ],
-         ),
-       ),
-       color: Colors.white,
-       //elevation: 4.0,
-       //  splashColor: Colors.orangeAccent,
-       textColor: Colors.black,
-       onPressed: () {
-
-         Navigator.push(
-           context,
-           MaterialPageRoute(builder: (context) => HomePageTimeIn()),
-         );
-
-       },
-     ),
-   ),
-       ]);
-   /* showDialog(
+              },
+            ),
+          ),
+        ]);
+    /* showDialog(
         context: context,
         builder: (context) => AlertDialog(
          // title: Text("Wifi"),

@@ -65,6 +65,8 @@ dependencies:
 
 
 
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -116,6 +118,8 @@ flutter:
         - assets/icons/profile_icon.png
         - assets/icons/settings_icon.png
         - assets/icons/Timeoff_icon.png
+        - assets/icons/Salary_icon.png
+        - assets/icons/Expense_icon.png
 
 
 

@@ -9,6 +9,7 @@ class MarkTime{
   String latit;
   String longi;
 
+
   MarkTime(this.uid, this.location, this.aid, this.act, this.shiftid, this.refid, this.latit, this.longi);
 
   MarkTime.fromMap(Map map){

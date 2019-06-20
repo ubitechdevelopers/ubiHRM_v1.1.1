@@ -33,6 +33,8 @@ class Home{
         String profile = timeinoutMap['profile'].toString();
         String newpwd = timeinoutMap['pwd'].toString();
         int Is_Delete = int.parse(timeinoutMap['Is_Delete']);
+        String Otimests = timeinoutMap['Otimests'].toString();
+        String Attid = timeinoutMap['Attid'].toString();
         print("---------->"+Is_Delete.toString());
         //  print(newpwd+" new pwd  and old pwd "+  prefs.getString('userpwd'));
         // print(timeinoutMap['pwd']);
@@ -41,10 +43,16 @@ class Home{
         prefs.setString('mail_varified', mail_varified);
         prefs.setString('profile', profile);
         prefs.setString('newpwd', newpwd);
+        prefs.setString('Otimests', Otimests);
         prefs.setString('shiftId', timeinoutMap['shiftId']);
         prefs.setString('leavetypeid', timeinoutMap['leavetypeid']);
         prefs.setInt('Is_Delete', Is_Delete);
-        //print(timeinoutMap['act']);
+       print(Otimests);
+        prefs.setString('Attid', timeinoutMap['Attid']);
+
+        print(Attid);
+        print(timeinoutMap['act']);
+        print("lllllll");
         return timeinoutMap['act'];
       } else {
         return "Poor network connection";

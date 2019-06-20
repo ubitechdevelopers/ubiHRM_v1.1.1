@@ -443,10 +443,10 @@ class NewServices{
         "userid": empid
       });
       Response response = await dio.post(
-          globals.path+"saveAllDesgPermission/",data: formData, options: new Options(contentType:ContentType.parse("application/json"))
+      globals.path+"saveAllDesgPermission/",data: formData, options: new Options   (contentType:ContentType.parse("application/json"))
       );
       //print(response.data.toString());
-      //Map permissionMap = json.decode(response.data.toString());
+      // Map permissionMap = json.decode(response.data.toString());
       if (response.statusCode == 200) {
         //print("successfully");
         return "success";
@@ -517,5 +517,28 @@ class StreamLocation{
 
 }
 
+
+getLastTimeout() async{
+  final prefs = await SharedPreferences.getInstance();
+  Dio dio = new Dio();
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+  // await dio.post(path+"getapprovalCount?datafor=Pending"'&empid='+empid+'&orgid='+orgdir);
+
+  var response =  await dio.post(path_ubiattendance+"getEmplolyeeTimeout?empid="+empid+"&orgid="+orgdir);
+  Map responseJson = json.decode(response.data.toString());
+   print('AAAAAA');
+  print(responseJson['sts']);
+  print('AAAAAA');
+ /* if(responseJson['sts']>0) {
+    prefs.setInt('getLastTimeout', responseJson['sts']);
+    return true;
+  }
+  else{
+    prefs.setInt('getLastTimeout', responseJson['sts']);
+    return false;
+  }*/
+return responseJson['sts'];
+}
 
 

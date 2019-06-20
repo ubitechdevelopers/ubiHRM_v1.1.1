@@ -501,8 +501,8 @@ class _MyLeaveState extends State<MyLeave> {
                                                   color: Colors.black,
                                                 ),
                                                 children: <TextSpan>[
-                                                new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black54,), ),
-                                                new TextSpan(text: snapshot.data[index].approverstatus.toString(), style: TextStyle(color: snapshot.data[index].approverstatus.toString()=='Approved'?appStartColor() :snapshot.data[index].approverstatus.toString()=='Rejected' || snapshot.data[index].approverstatus.toString()=='Cancel' ?Colors.red:snapshot.data[index].approverstatus.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 14.0),),
+                                                  new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black54,), ),
+                                                  new TextSpan(text: snapshot.data[index].approverstatus.toString(), style: TextStyle(color: snapshot.data[index].approverstatus.toString()=='Approved'?appStartColor() :snapshot.data[index].approverstatus.toString()=='Rejected' || snapshot.data[index].approverstatus.toString()=='Cancel' ?Colors.red:snapshot.data[index].approverstatus.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 14.0),),
                                                 ],
                                               ),
                                             ),

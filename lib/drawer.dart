@@ -8,6 +8,9 @@ import 'all_reports.dart';
 import 'model/model.dart';
 import 'services/services.dart';
 import 'settings.dart';
+import 'package:ubihrm/salary/allsalary_list.dart';
+import 'package:launch_review/launch_review.dart';
+import 'package:share/share.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -66,6 +69,7 @@ class _AppDrawerState extends State<AppDrawer> {
            // color: bottomNavigationColor(),
             //color: Color.fromRGBO(38,102,75,1.0),
             height: sstatus==''?170.0:182.0,
+
             decoration: BoxDecoration(
               // Box decoration takes a gradient
               gradient: LinearGradient(
@@ -186,6 +190,52 @@ class _AppDrawerState extends State<AppDrawer> {
             },
           ),
 
+          new ListTile(
+            title: Row(
+              children: <Widget>[
+                Icon(Icons.library_books,size: 20.0),SizedBox(width: 5.0),
+                new Text('Reports', style: new TextStyle(fontSize: 15.0)),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AllReports()),
+              );
+            },
+          ),
+          (perSalary=='1') ? new ListTile(
+            title: Row(
+              children: <Widget>[
+                Icon(Icons.closed_caption,size: 20.0),SizedBox(width: 5.0),
+                new Text("Salary", style: new TextStyle(fontSize: 15.0)),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => allSalarySummary()),
+              );
+
+            },
+          ):Center(),
+
+          new ListTile(
+            title: Row(
+              children: <Widget>[
+                Icon(Icons.settings,size: 20.0),SizedBox(width: 5.0),
+                new Text("Settings", style: new TextStyle(fontSize: 15.0)),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AllSetting()),
+              );
+
+            },
+          ),
+
     /*      reportper ==1?new ListTile(
            title: Row(
               children: <Widget>[
@@ -252,21 +302,38 @@ class _AppDrawerState extends State<AppDrawer> {
               );
             },
           ),*/
+
           new ListTile(
             title: Row(
               children: <Widget>[
-                Icon(Icons.settings,size: 20.0),SizedBox(width: 5.0),
-                new Text("Settings", style: new TextStyle(fontSize: 15.0)),
+                Icon(Icons.share,size: 20.0),SizedBox(width: 5.0),
+                new Text("Share App", style: new TextStyle(fontSize: 15.0)),
               ],
             ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AllSetting()),
-              );
-
+              final RenderBox box = context.findRenderObject();
+              Share.share("Hi! I have had a great experience with UBIHRM App!  I highly recommend it to monitor Attendance & Location of  your employees. Download via the following link\n"+store,
+                  sharePositionOrigin:
+                  box.localToGlobal(Offset.zero) &
+                  box.size);
             },
           ),
+
+          new ListTile(
+            title: Row(
+              children: <Widget>[
+                Icon(Icons.star,size: 20.0),SizedBox(width: 5.0),
+                new Text("Rate Us", style: new TextStyle(fontSize: 15.0)),
+              ],
+            ),
+            onTap: () {
+              LaunchReview.launch(
+                  androidAppId: "com.ubihrm.ubihrm"
+              );
+            },
+          ),
+
+
 
 
         /*  new ListTile(
@@ -292,20 +359,7 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
           ),
 
-          new ListTile(
-            title: Row(
-              children: <Widget>[
-                Icon(Icons.library_books,size: 20.0),SizedBox(width: 5.0),
-                new Text('Reports', style: new TextStyle(fontSize: 15.0)),
-              ],
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AllReports()),
-              );
-            },
-          ),
+
         /*  new ListTile(
             title: Row(
               children: <Widget>[
@@ -323,7 +377,7 @@ class _AppDrawerState extends State<AppDrawer> {
           new ListTile(
             title: Row(
               children: <Widget>[
-                Icon(Icons.lock_open,size: 20.0),SizedBox(width: 5.0),
+                Icon(Icons.lock,size: 20.0),SizedBox(width: 5.0),
                 new Text("Log out", style: new TextStyle(fontSize: 15.0)),
               ],
             ),

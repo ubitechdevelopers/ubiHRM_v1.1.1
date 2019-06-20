@@ -40,10 +40,10 @@ class Login{
           var user = new Employee.fromJson(employeeMap);
           print(user.fname + " " + user.lname);
           print(user.org_perm);
-       //   prefs.setInt('response', user.response);
+       // prefs.setInt('response', user.response);
           prefs.setString('fname', user.fname);
           prefs.setString('lname', user.lname);
-       //  prefs.setString('empid', user.empid);
+       // prefs.setString('empid', user.empid);
           prefs.setString('email', user.email);
           prefs.setString('status', user.status);
           prefs.setString('orgid', user.orgid);

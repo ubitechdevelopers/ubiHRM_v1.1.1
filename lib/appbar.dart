@@ -53,7 +53,6 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           Navigator.pop(context,true);
         },),*/
         title: Row(
-
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             GestureDetector(
@@ -69,7 +68,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                   width: 40.0,
                   height: 40.0,
                   decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
+                  shape: BoxShape.circle,
                       color: Colors.white,
                       image: new DecorationImage(
                         fit: BoxFit.fill,
@@ -93,9 +92,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             return Tab(
               text: choice.title,
 
-           //   unselectedLabelColor: Colors.white70,
-           //   indicatorColor: Colors.white,
-            //   icon: Icon(choice.icon),
+             //   unselectedLabelColor: Colors.white70,
+             //   indicatorColor: Colors.white,
+             //   icon: Icon(choice.icon),
             );
           }).toList(),
         ):null

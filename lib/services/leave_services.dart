@@ -362,7 +362,7 @@ List<LeaveA> createleaveapporval(List data) {
     String LeaveTypeId = data[i]["LeaveTypeId"].toString();
  //   print("********************"+data[i]["Pstatus"].toString());
     String HRSts = data[i]["HRSts"].toString();
-   // print(Fdate+"@@@@@@@"+Tdate);
+    print(Fdate+"@@@@@@@"+Tdate);
     if(Fdate==Tdate){
       Tdate=" - "+Fdate;
     }

@@ -146,6 +146,19 @@ class TimeOff {
   TimeOff({this.TimeofDate,this.TimeFrom,this.TimeTo,this.hrs,this.Reason,this.ApprovalSts,this.ApproverComment,this.withdrawlsts, this.TimeOffId, this.EmpId, this.OrgId});
 }
 
+
+
+class Salary{
+  String id;
+  String name;
+  String month;
+  String paid_days;
+  String EmployeeCTC;
+  String Currency;
+
+  Salary({this.id,this.name, this.month, this.paid_days,this.EmployeeCTC,this.Currency});
+}
+
 /*class Profile{
   String uid;
   String orgid;

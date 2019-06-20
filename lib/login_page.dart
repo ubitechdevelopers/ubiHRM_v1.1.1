@@ -801,27 +801,27 @@ class _LoginPageState extends State<LoginPage>
                         color: Colors.grey[400],
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                            top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
-                        child: TextField(
+                          padding: EdgeInsets.only(
+                          top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
+                          child: TextField(
                           focusNode: myFocusNodeEmail,
                           controller: signupEmailController,
                           keyboardType: TextInputType.emailAddress,
                           style: TextStyle(
 
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.solidEnvelope,
-                              color: Colors.black,
-                            ),
-                            hintText: "Email ",
-                            hintStyle: TextStyle(
-                                 fontSize: 14.0),
-                          ),
-                        ),
+fontSize: 16.0,
+color: Colors.black),
+decoration: InputDecoration(
+border: InputBorder.none,
+icon: Icon(
+FontAwesomeIcons.solidEnvelope,
+color: Colors.black,
+),
+hintText: "Email ",
+hintStyle: TextStyle(
+fontSize: 14.0),
+),
+),
                       ),
                       /* Container(
                         width: 250.0,
@@ -878,15 +878,15 @@ class _LoginPageState extends State<LoginPage>
 
                               fontSize: 16.0,
                               color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
+                              decoration: InputDecoration(
+                              border: InputBorder.none,
+                              icon: Icon(
                               FontAwesomeIcons.phone,
                               color: Colors.black,
-                            ),
-                            hintText: "Phone",
-                            hintStyle: TextStyle(
-                               fontSize: 14.0),
+                              ),
+                                hintText: "Phone",
+                                hintStyle: TextStyle(
+                                fontSize: 14.0),
                           ),
                         ),
                       ),
@@ -907,15 +907,15 @@ class _LoginPageState extends State<LoginPage>
                           padding: EdgeInsets.only(
                               top: 0.0, bottom: 0.0, left: 20.0, right: 40.0),
                           child:new InputDecorator(
-                            decoration: const InputDecoration(
+                              decoration: const InputDecoration(
                               //icon: const Icon(Icons.satellite,size: 15.0,),
                               labelText: 'Country',
+
                               icon: Icon(
                                 FontAwesomeIcons.globeAsia,
                                 color: Colors.black,
-
-                              ),
-                            ),
+                                 ),
+                               ),
                             //   isEmpty: _color == '',
                             child: DropdownButtonHideUnderline(
                               child:  new DropdownButton<String>(

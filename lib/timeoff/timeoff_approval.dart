@@ -395,14 +395,11 @@ class ChoiceCard extends StatelessWidget {
                                                     snapshot.data[index].Timeoffsts.toString() == 'Pending'
                                                         && snapshot.data[index].Psts.toString() == ""  ?
 
-                                                    new Expanded(
-
-                                                      child: Container(
-
-                                                        width: MediaQuery.of(context) .size .width * 0.30,
-                                                        height: 28.0,
-                                                        child: new OutlineButton(
-                                                          onPressed: () {
+                                   new Expanded(
+                                   child: Container(
+                                    width: MediaQuery.of(context) .size .width * 0.30,                                     height: 28.0,
+                                     child: new OutlineButton(
+                                     onPressed: () {
                                                             //  confirmApprove(context,snapshot.data[index].Id.toString());
                                                         //    if(snapshot.data[index].HRSts.toString()=='1') {
                                                               /*   _modalBottomSheetHR(

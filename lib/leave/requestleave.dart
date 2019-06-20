@@ -538,9 +538,6 @@ class _RequestLeaveState extends State<RequestLeave> {
 
     ),
 
-
-
-
       ],
     );
   }
@@ -617,18 +614,16 @@ class _RequestLeaveState extends State<RequestLeave> {
               child: InputDecorator(
                 decoration: InputDecoration(
                   labelText: 'Suggest Substitute',
-
-
-                  // icon is 48px widget.
+                 // icon is 48px widget.
 
                 ),
 
                 child:  new DropdownButton<String>(
-                  isDense: true,
-                  style: new TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.black
-                  ),
+                isDense: true,
+                style: new TextStyle(
+                fontSize: 15.0,
+                color: Colors.black
+                ),
                   value: substituteemp,
                   onChanged: (String newValue) {
                     setState(() {

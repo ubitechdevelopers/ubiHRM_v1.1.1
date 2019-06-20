@@ -174,7 +174,7 @@ getfiscalyear(Employee emp) async{
   }
 }
 
-/*getovertime(Employee emp) async{
+getovertime(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
@@ -189,8 +189,10 @@ getfiscalyear(Employee emp) async{
     await dio.post(path + "getovertime", data: formData);
     // print(response.toString());
     Map responseJson = json.decode(response.data.toString());
+    /*print('------------->');
     print(responseJson['utime']);
     print(responseJson['otime']);
+    print('------------->');*/
 
 
       overtime = responseJson['otime'];
@@ -207,8 +209,12 @@ getfiscalyear(Employee emp) async{
    // undertime ='00:00';
     // overtime='';
   //  }
+
+   /* print('**********');
     print(overtime);
     print(undertime);
+    print('**********');*/
+
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
@@ -216,27 +222,32 @@ getfiscalyear(Employee emp) async{
 
 
 
-}*/
+}
 
-/*
 
 getCountAproval() async{
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-var respons =
-  await dio.post(path+"getapprovalCount?datafor=Pending"'&empid='+empid+'&orgid='+orgdir);
- // print("&&&&&&&iiiii");
- // print("-----------------ooo"+respons.data[0].toString());
-  List responseJson = json.decode(respons.data.toString());
- // print("&&&&&&&11111"+responseJson.toString());
-  //  String Approvalcount =
- // prefs.setInt("attmonth",respons);
-   return respons;
+  // await dio.post(path+"getapprovalCount?datafor=Pending"'&empid='+empid+'&orgid='+orgdir);
+
+  var response =  await dio.post(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
+  Map responseJson = json.decode(response.data.toString());
+ /* print('AAAAAA');
+  print(responseJson['total']);
+  print('AAAAAA');*/
+  if(responseJson['total']>0) {
+    prefs.setInt('approvalcount', responseJson['total']);
+    return true;
+  }
+  else{
+    prefs.setInt('approvalcount', responseJson['total']);
+    return false;
   }
 
-*/
+}
+
 
 getReportingTeam(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
@@ -496,8 +507,8 @@ Future<List<Map<String, String>>> getChartDataYes() async {
       });
     }
   }
-  print('==========');
-  print(val);
+//  print('==========');
+ // print(val);
   return val;
 }
 
@@ -514,7 +525,7 @@ Future<List<Map<String, String>>> getChartData() async {
 
   final data = json.decode(response.data);
   //print(response);
-  print(data['leavesummary']['data'][0]['name']);
+ // print(data['leavesummary']['data'][0]['name']);
 
 
   List<Map<String, String>> val = [
@@ -1152,26 +1163,5 @@ const List<Choice> choices = const <Choice>[
 
 ];
 
-getCountAproval() async{
-  final prefs = await SharedPreferences.getInstance();
-  Dio dio = new Dio();
-  String orgdir = prefs.getString('organization') ?? '';
-  String empid = prefs.getString('employeeid')??"";
-  // await dio.post(path+"getapprovalCount?datafor=Pending"'&empid='+empid+'&orgid='+orgdir);
 
-  var response =  await dio.post(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
-  Map responseJson = json.decode(response.data.toString());
-  /* print('AAAAAA');
-  print(responseJson['total']);
-  print('AAAAAA');*/
-  if(responseJson['total']>0) {
-    prefs.setInt('approvalcount', responseJson['total']);
-    return true;
-  }
-  else{
-    prefs.setInt('approvalcount', responseJson['total']);
-    return false;
-  }
-
-}
 

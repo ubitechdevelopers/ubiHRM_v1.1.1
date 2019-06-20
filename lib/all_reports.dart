@@ -9,6 +9,7 @@ import 'profile.dart';
 import 'b_navigationbar.dart';
 import 'appbar.dart';
 import 'attandance/reports.dart';
+import 'attandance/flexi_report.dart';
 import 'leave/leave_reports.dart';
 import 'timeoff/timeoff_reports.dart';
 import 'services/services.dart';
@@ -338,6 +339,8 @@ class _AllReports extends State<AllReports> {
                               ],
                             ),
                           ),
+
+
                           Container(
                             child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
                           ),
@@ -351,6 +354,60 @@ class _AllReports extends State<AllReports> {
                        Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => TimeoffReports()),
+                      );
+                    },
+                  ):Center(),
+
+                  SizedBox(height: 6.0),
+                  perFlexi=='1' ?
+                  new RaisedButton(
+                    //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                    //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                    //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    child: Container(
+
+                      //     padding: EdgeInsets.only(left:  5.0),
+                      child: Row(
+
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: appStartColor(),
+                            ),
+                            child: Icon(Icons.av_timer,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
+                            padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                          ),
+
+                          SizedBox(width: 15.0),
+                          Expanded(
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Text('Flexi Time',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                ),
+
+                              ],
+                            ),
+                          ),
+
+
+                          Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Colors.white,
+                    elevation: 4.0,
+                    textColor: Colors.black,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => FlexiReport()),
                       );
                     },
                   ):Center(),

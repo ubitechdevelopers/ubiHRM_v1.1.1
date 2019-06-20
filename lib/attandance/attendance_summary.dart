@@ -260,18 +260,18 @@ getWidgets(context){
                   SizedBox(width: MediaQuery.of(context).size.width*0.02),
                   Container(
                     width: MediaQuery.of(context).size.width*0.45,
-                    child:Text('Date',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Date',style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
 
                   SizedBox(height: 50.0,),
                   Container(
                     width: MediaQuery.of(context).size.width*0.2,
-                    child:Text('Time In',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Time In',style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
                   SizedBox(height: 50.0,),
                   Container(
                     width: MediaQuery.of(context).size.width*0.2,
-                    child:Text('Time Out',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Time Out',style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
                 ],
               ),
