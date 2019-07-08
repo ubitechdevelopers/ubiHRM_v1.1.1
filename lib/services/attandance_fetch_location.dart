@@ -22,8 +22,12 @@ class Loc{
       // If the widget was removed from the tree while the asynchronous platform
       // message was in flight, we want to discard the reply rather than calling
       // setState to update our non-existent appearance.
+
       bool res = await SimplePermissions.checkPermission(permission);
+    //  print("deeksha");
       print(res);
+  //    print("deeksha");
+
       if (res) {
         return fetchlocation();
       } else {
@@ -38,8 +42,8 @@ class Loc{
   requestPermission() async {
     final res  = await SimplePermissions.requestPermission(permission);
     bool res1 = await SimplePermissions.checkPermission(permission);
-    //print("permission status is " + res.toString());
-    //print(res);
+  //  print("permission status is " + res.toString());
+//    print(res);
     if(res.toString()=="PermissionStatus.authorized"){
       return fetchlocation();
     }else if(res.toString()=="PermissionStatus.deniedNeverAsk"){
@@ -101,6 +105,8 @@ class Loc{
 
   fetchlocation() async {
     try {
+      print("fetchlocation.....");
+
       /*final prefs = await SharedPreferences.getInstance();
       Map<String, double> location;
       // Platform messages may fail, so we use a try/catch PlatformException.
@@ -136,6 +142,8 @@ class Loc{
       return "${first.featureName} : ${first.addressLine}";*/
       return "Fetching location, please wait a while... or refresh";
     }catch(e){
+      print("catch fetchlocation.....");
+
       print(e.toString());
       return "Unable to fetch: Click below REFRESH link and make sure GPS is on to get location.";
     }

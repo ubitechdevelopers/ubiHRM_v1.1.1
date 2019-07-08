@@ -60,14 +60,12 @@ class _BootomNavigationState extends State<HomeNavigation> {
 
   }
 
-  initPlatformState() async{
-
-
+  initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
 
-    empid = prefs.getString('employeeid')??"";
-    organization =prefs.getString('organization')??"";
-    userprofileid =prefs.getString('userprofileid')??"";
+    empid = prefs.getString('employeeid') ?? "";
+    organization = prefs.getString('organization') ?? "";
+    userprofileid = prefs.getString('userprofileid') ?? "";
 
 
     // PerLeave =prefs.getString('PerLeave')??"";
@@ -76,14 +74,17 @@ class _BootomNavigationState extends State<HomeNavigation> {
     //  print("22222222222"+perA);
     // print("22222222222"+PerApprovalLeave);
 
-    emp = new Employee(employeeid: empid, organization: organization, userprofileid: userprofileid);
-    getAllPermission(emp);
+    emp = new Employee(employeeid: empid,
+        organization: organization,
+        userprofileid: userprofileid);
+   //getAllPermission(emp);
 
     await getCountAproval();
-    setState(() {
-
-      approval_count = prefs.getInt('approvalcount')?? 0;
-    });
+    if(mounted){
+      setState(() {
+        approval_count = prefs.getInt('approvalcount') ?? 0;
+      });
+    }
     print('------>123');
     print(approval_count);
     print('------>123');

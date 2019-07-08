@@ -905,7 +905,7 @@ fontSize: 14.0),
                 Container(
                   width: 350.0,
                           padding: EdgeInsets.only(
-                              top: 0.0, bottom: 0.0, left: 20.0, right: 40.0),
+                              top: 0.0, bottom: 0.0, left: 20.0, right: 30.0),
                           child:new InputDecorator(
                               decoration: const InputDecoration(
                               //icon: const Icon(Icons.satellite,size: 15.0,),

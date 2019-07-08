@@ -11,7 +11,7 @@ import 'leave/approval.dart';
 import 'timeoff/timeoff_approval.dart';
 import 'appbar.dart';
 import 'services/services.dart';
-
+import 'model/model.dart';
 
 class AllApprovals extends StatefulWidget {
   @override
@@ -36,8 +36,8 @@ class _AllApprovals extends State<AllApprovals> {
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     showtabbar=false;
     getOrgName();
-    perLeaveApproval=  getModuleUserPermission("124","view");
-    perTimeoffApproval=  getModuleUserPermission("180","view");
+   /* perLeaveApproval=  getModuleUserPermission("124","view");
+    perTimeoffApproval=  getModuleUserPermission("180","view");*/
 
   }
   getOrgName() async{
@@ -46,6 +46,28 @@ class _AllApprovals extends State<AllApprovals> {
       orgName= prefs.getString('orgname') ?? '';
 
     });
+    String empid = prefs.getString('employeeid')??"";
+    String organization =prefs.getString('organization')??"";
+    String userprofileid =prefs.getString('userprofileid')??"";
+    Employee emp = new Employee(employeeid: empid, organization: organization,userprofileid:userprofileid);
+
+    //  await getProfileInfo(emp);
+    getAllPermission(emp).then((res) {
+      setState(() {
+        perLeaveApproval=   getModuleUserPermission("124","view");
+        perTimeoffApproval=  getModuleUserPermission("180","view");
+        print("leave "+perLeaveApproval);
+        print("timeoff "+perTimeoffApproval);
+      });
+    });
+
+
+   /* getAllPermission(emp);
+    perLeaveApproval=   getModuleUserPermission("124","view");
+    perTimeoffApproval=  getModuleUserPermission("180","view");
+    print("leave "+perLeaveApproval);
+    print("timeoff "+perTimeoffApproval);*/
+
   }
   @override
   Widget build(BuildContext context) {

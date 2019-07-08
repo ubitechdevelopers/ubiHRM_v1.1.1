@@ -50,7 +50,9 @@ class Home{
        print(Otimests);
         prefs.setString('Attid', timeinoutMap['Attid']);
 
-        print(Attid);
+        print("------->aaaaaaaa");
+        print(aid);
+        print("------->aaaaaaaa");
         print(timeinoutMap['act']);
         print("lllllll");
         return timeinoutMap['act'];
@@ -58,7 +60,7 @@ class Home{
         return "Poor network connection";
       }
     }catch(e){
-      //print(e.toString());
+   //   print("PRATIBHA");
       return "Poor network connection";
     }
   }

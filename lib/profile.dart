@@ -343,7 +343,7 @@ var profilepic;
     return Scaffold(
   key: _scaffoldKey,
       body: new DefaultTabController(
-       length: 3,
+       length: 2,
         child: NestedScrollView(
           controller: scrollController,
            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {

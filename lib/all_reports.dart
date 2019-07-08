@@ -13,6 +13,7 @@ import 'attandance/flexi_report.dart';
 import 'leave/leave_reports.dart';
 import 'timeoff/timeoff_reports.dart';
 import 'services/services.dart';
+import 'model/model.dart';
 
 
 class AllReports extends StatefulWidget {
@@ -38,8 +39,8 @@ class _AllReports extends State<AllReports> {
     showtabbar=false;
     getOrgName();
 
-    perAttReport=  getModuleUserPermission("68","view");
-    perLeaveReport=  getModuleUserPermission("69","view");
+   /* perAttReport=  getModuleUserPermission("68","view");
+    perLeaveReport=  getModuleUserPermission("69","view");*/
 
   }
   getOrgName() async{
@@ -47,6 +48,20 @@ class _AllReports extends State<AllReports> {
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
 
+    });
+    String empid = prefs.getString('employeeid')??"";
+    String organization =prefs.getString('organization')??"";
+    String userprofileid =prefs.getString('userprofileid')??"";
+    Employee emp = new Employee(employeeid: empid, organization: organization,userprofileid:userprofileid);
+
+    //  await getProfileInfo(emp);
+    getAllPermission(emp).then((res) {
+      setState(() {
+        perAttReport=  getModuleUserPermission("68","view");
+        perLeaveReport=  getModuleUserPermission("69","view");
+        print("Att "+perAttReport);
+        print("Leave "+perLeaveReport);
+      });
     });
   }
   @override

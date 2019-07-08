@@ -49,6 +49,7 @@ class _HomePageStatemain extends State<HomePageMain> {
   String orgName="";
 
 
+
   bool _checkLoadedprofile = true;
 
   String location_addr = "";
@@ -139,6 +140,7 @@ class _HomePageStatemain extends State<HomePageMain> {
       await getProfileInfo(emp);
       await getfiscalyear(emp);
       await getovertime(emp);
+
       perEmployeeLeave= getModulePermission("18","view");
       //print(perEmployeeLeave);
       perLeaveApproval=  getModuleUserPermission("124","view");
@@ -190,7 +192,7 @@ class _HomePageStatemain extends State<HomePageMain> {
 
               //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
               child: new CircularProgressIndicator(),
-            )
+    )
         ));
 
 
@@ -522,9 +524,14 @@ class _HomePageStatemain extends State<HomePageMain> {
 */
 
                 // Attendance monthly summary bar graph
-             overtime!='00:00'?Divider(height: 10.0,):undertime!='00:00'?Divider(height: 10.0,):Center(),
+            /* overtime!='00:00'?Divider(height: 10.0,):undertime!='00:00'?Divider(height: 10.0,):Center(),
                 SizedBox(height: 20.0,),
-                overtime!='00:00'?getimg():undertime!='00:00'?getimg1():Center(),
+                overtime!='00:00'?getimg():undertime!='00:00'?getimg1():Center(),*/
+
+                overtime!=null?Divider(height: 10.0,):undertime!=null?Divider(height: 10.0,):Center(),
+                SizedBox(height: 20.0,),
+                overtime!=null?getimg():undertime!=null?getimg1():Center(),
+
 
 
                 SizedBox(height: 20.0,),

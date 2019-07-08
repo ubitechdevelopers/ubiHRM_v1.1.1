@@ -32,30 +32,22 @@ getAllPermission(Employee emp) async{
 
   globalpermissionlist = permlist;
   globalpermissionlist1 = permlist1;
+  return;
 }
 
 
 List<Permission> createPermList(List data) {
   List<Permission> list = new List();
   for (int i = 0; i < data.length; i++) {
-    // print(i.toString());
-    //print(data[i]['module'].toString());
+
     List<Map<String,String>> permissionlist = new List();
     String moduleid = data[i]["module"];
     String view = data[i]["view"];
-    /*String edit = data[i]["edit"];
-    String delete = data[i]["delete"];
-    String add = data[i]["add"];*/
-    //print(moduleid +" " +view+" "+edit+" "+delete+" "+add);
+
     Map<String,String> viewpermission = {'module':moduleid,'view': view};
-    /*Map<String,String> editpermission = {'edit': edit};
-    Map<String,String> deletepermission = {'delete': delete};
-    Map<String,String> addpermission = {'add': add};*/
+
     permissionlist.add(viewpermission);
-    /* permissionlist.add(editpermission);
-    permissionlist.add(deletepermission);
-    permissionlist.add(addpermission);*/
-    //    print("2. "+permissionlist.toString());
+
     Permission p = new Permission(moduleid: moduleid,permissionlist: permissionlist);
     list.add(p);
   }
@@ -106,7 +98,11 @@ List<Permission> createUserPermList(List data) {
 getModuleUserPermission(String moduleid, String permission_type){
   List<Permission> list = new List();
   list = globalpermissionlist1;
-
+print("--------<<<<<<<LIST");
+print(list);
+print("dfdghgdf");
+print(globalpermissionlist1);
+print('globalpermissionlist1');
   for (int i = 0; i < list.length; i++) {
     //  print("permisstion list "+list[i].permissionlist.toString());
     if(list[i].moduleid==moduleid){
@@ -191,19 +187,17 @@ getovertime(Employee emp) async{
     Map responseJson = json.decode(response.data.toString());
     /*print('------------->');
     print(responseJson['utime']);
-    print(responseJson['otime']);
-    print('------------->');*/
-
+    print(responseJson['otime']);*/
 
       overtime = responseJson['otime'];
-   // overtime = '00:00';
+    print(overtime);
 
    undertime = responseJson['utime'];
-  // undertime ='00:00';
+    print(undertime);
     if(responseJson['utime']==null){
       undertime ='00:00';
     }
-    if(responseJson['otime']==null){
+    if(responseJson['otime']==null && responseJson['utime']==null ){
       overtime = '00:00';
     }
    // undertime ='00:00';

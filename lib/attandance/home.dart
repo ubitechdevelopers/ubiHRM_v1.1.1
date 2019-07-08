@@ -98,9 +98,11 @@ class _HomePageState extends State<HomePage> {
 
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      orgName= prefs.getString('orgname') ?? '';
-    });
+    if(mounted) {
+      setState(() {
+        orgName = prefs.getString('orgname') ?? '';
+      });
+    }
   }
 
 
@@ -133,24 +135,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   setLocationAddress() async {
-    setState(() {
-      streamlocationaddr = globalstreamlocationaddr;
-      if (list != null && list.length > 0) {
-        lat = list[list.length - 1]['latitude'].toString();
-        long = list[list.length - 1]["longitude"].toString();
-        if (streamlocationaddr == '') {
-          streamlocationaddr = lat + ", " + long;
+    if(mounted) {
+      setState(() {
+        streamlocationaddr = globalstreamlocationaddr;
+        if (list != null && list.length > 0) {
+          lat = list[list.length - 1]['latitude'].toString();
+          long = list[list.length - 1]["longitude"].toString();
+          if (streamlocationaddr == '') {
+            streamlocationaddr = lat + ", " + long;
+          }
         }
-      }
-      if(streamlocationaddr == ''){
-        sl.startStreaming(5);
-        startTimer();
-      }
-      //print("home addr" + streamlocationaddr);
-      //print(lat + ", " + long);
+        if (streamlocationaddr == '') {
+          sl.startStreaming(5);
+          startTimer();
+        }
+        //print("home addr" + streamlocationaddr);
+        //print(lat + ", " + long);
 
-      //print(stopstreamingstatus.toString());
-    });
+        //print(stopstreamingstatus.toString());
+      });
+    }
   }
 
   launchMap(String lat, String long) async {
@@ -169,70 +173,72 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('empid') ?? '';
     orgdir = prefs.getString('orgdir') ?? '';
- //   print("employeeid---"+empid);
-    desinationId =globalcompanyinfomap['Designation'];
+    //   print("employeeid---"+empid);
+    desinationId = globalcompanyinfomap['Designation'];
     response = prefs.getInt('response') ?? 0;
 
-  //var timeout=  await getLastTimeout();
+    //var timeout=  await getLastTimeout();
 
- // print(timeout);
- // print("******");
-   // if (response == 1) {
-      Loc lock = new Loc();
-      location_addr = await lock.initPlatformState();
-      Home ho = new Home();
-      act = await ho.checkTimeIn(empid, orgdir);
-      ho.managePermission(empid, orgdir, desinationId);
-      // //print(act);
-      ////print("this is-----> "+act);
-      ////print("this is main "+location_addr);
-      setState(() {
-        Is_Delete = prefs.getInt('Is_Delete') ?? 0;
-        newpwd = prefs.getString('newpwd') ?? "";
-        userpwd = prefs.getString('usrpwd') ?? "";
+    // print(timeout);
+    // print("******");
+    // if (response == 1) {
+    Loc lock = new Loc();
+    location_addr = await lock.initPlatformState();
+    print(location_addr);
+    Home ho = new Home();
+    act = await ho.checkTimeIn(empid, orgdir);
+    print(act);
+    ho.managePermission(empid, orgdir, desinationId);
+    // //print(act);
+    ////print("this is-----> "+act);
+    ////print("this is main "+location_addr);
+    if(mounted) {
+    setState(() {
+      Is_Delete = prefs.getInt('Is_Delete') ?? 0;
+      newpwd = prefs.getString('newpwd') ?? "";
+      userpwd = prefs.getString('usrpwd') ?? "";
       //  print("New pwd"+newpwd+"  User ped"+userpwd);
-        location_addr1 = location_addr;
-        admin_sts = prefs.getString('sstatus').toString() ?? '0';
-        mail_varified = prefs.getString('mail_varified').toString() ?? '0';
-        alertdialogcount = globalalertcount;
-        response = prefs.getInt('response') ?? 0;
-        fname = prefs.getString('fname') ?? '';
-        lname = prefs.getString('lname') ?? '';
-        empid = prefs.getString('empid') ?? '';
-        email = prefs.getString('email') ?? '';
-        status = prefs.getString('status') ?? '';
-        orgid = prefs.getString('orgid') ?? '';
-        orgdir = prefs.getString('orgdir') ?? '';
-        org_name = prefs.getString('org_name') ?? '';
-        desination = prefs.getString('desination') ?? '';
-        Otimests= prefs.getString('Otimests') ?? '';
- //       profile = prefs.getString('profile') ?? '';
-  //      profileimage = new NetworkImage( profile);
-        profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+      location_addr1 = location_addr;
+      admin_sts = prefs.getString('sstatus').toString() ?? '0';
+      mail_varified = prefs.getString('mail_varified').toString() ?? '0';
+      alertdialogcount = globalalertcount;
+      response = prefs.getInt('response') ?? 0;
+      fname = prefs.getString('fname') ?? '';
+      lname = prefs.getString('lname') ?? '';
+      empid = prefs.getString('empid') ?? '';
+      email = prefs.getString('email') ?? '';
+      status = prefs.getString('status') ?? '';
+      orgid = prefs.getString('orgid') ?? '';
+      orgdir = prefs.getString('orgdir') ?? '';
+      org_name = prefs.getString('org_name') ?? '';
+      desination = prefs.getString('desination') ?? '';
+      Otimests = prefs.getString('Otimests') ?? '';
+      //       profile = prefs.getString('profile') ?? '';
+      //      profileimage = new NetworkImage( profile);
+      profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
 
-        //      print("ABCDEFGHI-"+profile);
-        profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
-          if (mounted) {
-            setState(() {
-              _checkLoaded = false;
-            });
-          }
-        });
-        showtabbar=false;
-   //    print("ABCDEF"+fname);
-        latit = prefs.getString('latit') ?? '';
-        longi = prefs.getString('longi') ?? '';
-        aid = prefs.getString('aid') ?? "";
-        shiftId = prefs.getString('shiftId') ?? "";
-        ////print("this is set state "+location_addr1);
-        act1 = act;
-    //    print("ABC"+act1);
-        streamlocationaddr = globalstreamlocationaddr;
-
-        perPunchLocation=  getModulePermission("305","view");
-
-
+      //      print("ABCDEFGHI-"+profile);
+      profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+        if (mounted) {
+          setState(() {
+            _checkLoaded = false;
+          });
+        }
       });
+      showtabbar = false;
+      //    print("ABCDEF"+fname);
+      latit = prefs.getString('latit') ?? '';
+      longi = prefs.getString('longi') ?? '';
+      aid = prefs.getString('aid') ?? "";
+      shiftId = prefs.getString('shiftId') ?? "";
+      ////print("this is set state "+location_addr1);
+      act1 = act;
+      //    print("ABC"+act1);
+      streamlocationaddr = globalstreamlocationaddr;
+
+      perPunchLocation = getModulePermission("305", "view");
+    });
+  }
     //}
   }
 
@@ -1167,15 +1173,17 @@ if (act1 == 'TimeIn') {
 
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-       /* Navigator.push(
+      /* Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => CameraExampleHome()),
       );*/
       SaveImage saveImage = new SaveImage();
       bool issave = false;
+      if(mounted) {
       setState(() {
         act1 = "";
       });
+    }
       try {
         issave = await saveImage.saveTimeInOutImagePicker(mk);
        print('------------------>');
@@ -1192,20 +1200,24 @@ if (act1 == 'TimeIn') {
             context,
             MaterialPageRoute(builder: (context) => MyApp()),
           );
+          if(mounted) {
           setState(() {
             act1 = act;
           });
+        }
         } else {
-         print('------------------<<<<<<<<<<<');
+          print('------------------<<<<<<<<<<<');
           showDialog(context: context, child:
           new AlertDialog(
             title: new Text("!"),
             content: new Text("Problem while marking attendance, try again."),
           )
           );
+          if(mounted) {
           setState(() {
             act1 = act;
           });
+        }
         }
       }catch(e){
         print("EXCEPTION PRINT: "+e.toString());
@@ -1271,9 +1283,11 @@ if (act1 == 'TimeIn') {
 
   void _showAlert(BuildContext context) {
     globalalertcount = 1;
+    if(mounted) {
     setState(() {
       alertdialogcount = 1;
     });
+  }
     showDialog(
 
         context: context,
