@@ -26,6 +26,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import '../appbar.dart';
+import 'team_attendance_summary.dart';
 
 
 // This app is a stateful, it tracks the user's current choice.
@@ -737,12 +738,47 @@ class _HomePageState extends State<HomePage> {
                       size: 30.0,
                       color: Colors.white,
                     ),
-                    Text('Log',
+                    Text('My Logs',
                         textAlign: TextAlign.center,
                         style:
                             new TextStyle(fontSize: 15.0, color: Colors.white)),
                   ],
                 )),
+          ),
+
+
+         Container(
+            padding: EdgeInsets.only(top: 10.0),
+            constraints: BoxConstraints(
+              maxHeight: 60.0,
+              minHeight: 20.0,
+            ),
+            child:  new GestureDetector(
+                onTap: () {
+                  /*showInSnackBar("Under development.");*/
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyTeamAtt()
+                    ),
+                  );
+                },
+                child: Row(
+                    children: [
+                      SizedBox(width:MediaQuery.of(context).size.width*.08),
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.calendar_today,
+                            size: 30.0,
+                            color: Colors.white,
+                          ),
+                          Text('Team Logs',
+                              textAlign: TextAlign.center,
+                              style:
+                              new TextStyle(fontSize: 15.0, color: Colors.white)),
+                        ],
+                      )])),
           ),
 
 
@@ -781,7 +817,7 @@ class _HomePageState extends State<HomePage> {
           ):Center(),
 
 
-          perPunchLocation == '1' ?  Container(
+/*          perPunchLocation == '1' ?  Container(
             padding: EdgeInsets.only(top: 10.0),
             constraints: BoxConstraints(
               maxHeight: 60.0,
@@ -789,7 +825,7 @@ class _HomePageState extends State<HomePage> {
             ),
             child:  new GestureDetector(
                 onTap: () {
-                  /*showInSnackBar("Under development.");*/
+                  *//*showInSnackBar("Under development.");*//*
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -813,7 +849,7 @@ class _HomePageState extends State<HomePage> {
                             new TextStyle(fontSize: 15.0, color: Colors.white)),
                   ],
                 )])),
-          ):Center(),
+          ):Center(),*/
          /* Container(
             padding: EdgeInsets.only(top: 10.0),
             constraints: BoxConstraints(

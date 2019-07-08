@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'model/model.dart';
 import 'leave/myleave.dart';
+import 'attandance/punchlocation_summary.dart';
 import 'expence/expenselist.dart';
 import 'timeoff/timeoff_summary.dart';
 import 'dart:async';
@@ -21,7 +22,8 @@ import 'appbar.dart';
 import 'services/attandance_fetch_location.dart';
 import 'salary/mysalary_list.dart';
 import 'package:intl/intl.dart';
-import 'settings.dart';
+import 'dashboard.dart';
+//import 'settings.dart';
 
 
 import 'package:connectivity/connectivity.dart';
@@ -149,6 +151,8 @@ class _HomePageStatemain extends State<HomePageMain> {
       perSalary=  getModulePermission("66","view");
       perExpense=  getModulePermission("170","view");
      perFlexi= getModulePermission("448","view");
+      perPunchLocation = getModulePermission("305", "view");
+
       await getReportingTeam(emp);
 
       Loc lock = new Loc();
@@ -277,6 +281,36 @@ class _HomePageStatemain extends State<HomePageMain> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DashboardMain()),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            new Container(
+                                width: 60.0,
+                                height: 60.0,
+                                decoration: new BoxDecoration(
+
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+
+                                      fit: BoxFit.fill,
+                                      image: AssetImage('assets/Attendanc_icon.png'),
+                                    ),
+                                    color: circleIconBackgroundColor()
+                                )),
+                            Text('Dashboard',
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                          ],
+                        )),
+
+
                     perAttendance=='1'?  GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -299,7 +333,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
-                            Text('My Attendance',
+                            Text('Attendance',
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
@@ -326,12 +360,18 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
-                            Text('My Leave',
+                            Text('Leave',
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
                         )):Center(),
+                ]),
 
+                SizedBox(height: 20.0,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    //    perSet=='1'? GestureDetector(
 
                     perTimeoff=='1'?  GestureDetector(
                         onTap: () {
@@ -353,21 +393,41 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
-                            Text('My Time off',
+                            Text('Time off',
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
                         )):Center(),
 
-                  ],
 
-                ),
-                SizedBox(height: 20.0,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    //    perSet=='1'? GestureDetector(
-                    GestureDetector(
+
+                      perPunchLocation == '1' ?  GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => PunchLocationSummary()),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            new Container(
+                                width: 60.0,
+                                height: 60.0,
+                                decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: AssetImage('assets/icons/Timeoff_icon.png'),
+                                    ),
+                                    color: circleIconBackgroundColor()
+                                )),
+                            Text('Visits',
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                          ],
+                        )):Center(),
+
+                    /*GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
@@ -392,7 +452,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
-                        )),
+                        )),*/
 
                     GestureDetector(
                         onTap: () {
@@ -419,64 +479,15 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
                         )),
-                    (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?                        GestureDetector(
-                      //   GestureDetector(
-                        onTap: () {
-                          Navigator.push(context,
-                           MaterialPageRoute(builder: (context) => AllReports()),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            new  Container(
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: AssetImage('assets/icons/graph_icon.png'),
-                                    ),
-                                    color: circleIconBackgroundColor()
-                                )),
-                            Text('My Reports',
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                          ],
-                        )):Center(),
-
                   ],
 
                 ),
+
                 SizedBox(height: 20.0,),
-            Row(
+
+             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                (perSalary=='1') ? GestureDetector(
-                  //   GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SalarySummary()),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        new  Container(
-                            width: 60.0,
-                            height: 60.0,
-                            decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: AssetImage('assets/icons/Salary_icon.png'),
-                                ),
-                                color: circleIconBackgroundColor()
-                            )),
-                        Text('My Salary',
-                            textAlign: TextAlign.center,
-                            style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                      ],
-                    )):Center(),
 
 
                 (perExpense=='1') ? GestureDetector(
@@ -499,13 +510,66 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 ),
                                 color: circleIconBackgroundColor()
                             )),
-                        Text('My Expenses',
+                        Text('Expense',
                             textAlign: TextAlign.center,
                             style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                       ],
                     )):Center(),
 
-]),
+
+                (perSalary=='1') ? GestureDetector(
+                  //   GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SalarySummary()),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        new  Container(
+                            width: 60.0,
+                            height: 60.0,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage('assets/icons/Salary_icon.png'),
+                                ),
+                                color: circleIconBackgroundColor()
+                            )),
+                        Text('Payroll',
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                      ],
+                    )):Center(),
+
+
+              (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?  GestureDetector(
+              //   GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AllReports()),
+                  );
+                },
+                child: Column(
+                  children: [
+                    new  Container(
+                        width: 60.0,
+                        height: 60.0,
+                        decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage('assets/icons/graph_icon.png'),
+                            ),
+                            color: circleIconBackgroundColor()
+                        )),
+                    Text('My Reports',
+                        textAlign: TextAlign.center,
+                        style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                  ],
+                )):Center(),
+            ]),
                 /*    Row(children: <Widget>[
                     Icon(Icons.brightness_1,color: Colors.blue,),
                     SizedBox(width: 20.0,),
@@ -528,21 +592,21 @@ class _HomePageStatemain extends State<HomePageMain> {
                 SizedBox(height: 20.0,),
                 overtime!='00:00'?getimg():undertime!='00:00'?getimg1():Center(),*/
 
-                overtime!=null?Divider(height: 10.0,):undertime!=null?Divider(height: 10.0,):Center(),
+                /*overtime!=null?Divider(height: 10.0,):undertime!=null?Divider(height: 10.0,):Center(),
                 SizedBox(height: 20.0,),
                 overtime!=null?getimg():undertime!=null?getimg1():Center(),
+*/
 
 
-
-                SizedBox(height: 20.0,),
+               /* SizedBox(height: 20.0,),
                 perAttendance=='1'?  Row(children: <Widget>[
                   SizedBox(width: 20.0,),
                   Text("Monthly summary  ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ]
-                ):Center(),
+                ):Center(),*/
 
-                perAttendance=='1'?  Divider(height: 10.0,):Center(),
-                /*SimpleBarChart.withSampleData(),*/
+/*                perAttendance=='1'?  Divider(height: 10.0,):Center(),
+                *//*SimpleBarChart.withSampleData(),*//*
                 perAttendance=='1'?  new Container(
 
                   padding: EdgeInsets.all(0.2),
@@ -571,7 +635,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                   ),
 
                   //child: new DonutAutoLabelChart .withSampleData(),
-                ):Center(),
+                ):Center(),*/
 
                 /*        Row(children: <Widget>[
                     Icon(Icons.brightness_1,color: Colors.green,),
@@ -590,7 +654,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                   ],),
 */
 
-                SizedBox(width: 40.0,),
+               /* SizedBox(width: 40.0,),
                 Divider(height: 10.0,),
                 perEmployeeLeave =='1' ?
 
@@ -598,12 +662,12 @@ class _HomePageStatemain extends State<HomePageMain> {
                   SizedBox(width: 20.0,),
                   Text("Leave Data ["+fiscalyear+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ]
-                ):Center(),
+                ):Center(),*/
 
                 //   perEmployeeLeave =='1' ? Divider(height: 0.0,):Center(),
                 /*SimpleBarChart.withSampleData(),*/
 
-                perEmployeeLeave =='1' ?  new Container(
+/*                perEmployeeLeave =='1' ?  new Container(
 
                   padding: EdgeInsets.all(0.2),
                   margin: EdgeInsets.all(0.2),
@@ -625,7 +689,9 @@ class _HomePageStatemain extends State<HomePageMain> {
                 ):Center(
                   child: Text(""),
 
-                ),
+                ),*/
+
+/*
                 SizedBox(height: 40.0,),
                 Row(children: <Widget>[
                   SizedBox(width: 20.0,),
@@ -672,7 +738,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                                   Text(snapshot.data[index].date,style: TextStyle(color: Colors.grey[600]),textAlign: TextAlign.right),
 
                                                 ],),
-                                              /*  new Row(
+                                              *//*  new Row(
                                                 children: <Widget>
                                                 [
                                                   SizedBox(width: 20.0,),
@@ -684,7 +750,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                                   ): Center(),
                                                   Divider(color: Colors.black45,),
 
-                                                ],)*/
+                                                ],)*//*
                                             ],);
 
                                         }
@@ -715,7 +781,7 @@ class _HomePageStatemain extends State<HomePageMain> {
 
                     //undertime!='null'?getimg1():getimg(),
 
-                   ],)
+                   ],)*/
 
 
 

@@ -1601,7 +1601,7 @@ List<FlexiAtt> createListFlexiReport(List data) {
         po_longi:longi_out,
         desc:desc.length>40?desc.substring(0,40)+'...':desc,
         pi_img: pi_img,
-        po_img: po_img 
+        po_img: po_img
     );
     list.add(flexi);
   }
