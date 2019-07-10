@@ -10,7 +10,7 @@ import 'home.dart';
 import 'settings.dart';
 import 'profile.dart';
 import 'reports.dart';
-import 'Image_view.dart';
+import 'image_view.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import '../global.dart';
 import '../appbar.dart';
@@ -106,9 +106,9 @@ class _FlexiList extends State<FlexiList> {
               ),
             ),
             Divider(
-              height: 10.0,
+              height: 1.0,
             ),
-            SizedBox(height: 2.0),
+            //SizedBox(height: 2.0),
            Container(
               child: DateTimePickerFormField(
                 dateOnly: true,
@@ -156,26 +156,39 @@ class _FlexiList extends State<FlexiList> {
                       textAlign: TextAlign.left,
                     ),
                   ),*/
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.37,
+               Expanded(
+                 flex: 48,
+                 child: Padding(
+                   // width: MediaQuery.of(context).size.width * 0.37,
+                   padding: EdgeInsets.only(left: 4.0),
                     child: Text(
                       'Location',
                       style: TextStyle(color: Colors.orange),
                       textAlign: TextAlign.left,
                     ),
+                   ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    child: Text('In',
+
+                  Expanded(
+                    flex: 26,
+                    child:Container(
+                  //  width: MediaQuery.of(context).size.width * 0.15,
+                    child: Text('Time In',
                         style: TextStyle(color: Colors.orange),
-                        textAlign: TextAlign.left),
+                        textAlign: TextAlign.center),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    child: Text('Out ',
+                  ),
+
+                  Expanded(
+                    flex: 26,
+                    child:Container(
+                  //  width: MediaQuery.of(context).size.width * 0.15,
+                    child: Text('Time Out ',
                         style: TextStyle(color: Colors.orange),
-                        textAlign: TextAlign.left),
+                        textAlign: TextAlign.center),
                   ),
+                  ),
+
                 ],
               ),
             ),
@@ -221,7 +234,7 @@ class _FlexiList extends State<FlexiList> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            SizedBox(width: 8.0,),
+                           // SizedBox(width: 8.0,),
                          /*   new Container(
                                 width: MediaQuery.of(context).size.width * 0.18,
                                 child: Column(
@@ -231,8 +244,10 @@ class _FlexiList extends State<FlexiList> {
                                       snapshot.data[index].Emp.toString(),style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.left,),
                                   ],
                                 )),*/
-                            new Container(
-                              width: MediaQuery.of(context).size.width * 0.37,
+                            Expanded(
+                              flex: 46,
+                           child: new Container(
+                             // width: MediaQuery.of(context).size.width * 0.37,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,6 +263,7 @@ class _FlexiList extends State<FlexiList> {
                                      goToMap(snapshot.data[index].pi_latit,snapshot.data[index].pi_longi.toString());
                                     },
                                   ),
+                                  SizedBox(height: 5.0),
                                   InkWell(
                                     child:Text("Out: "+
                                         snapshot.data[index].po_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
@@ -255,20 +271,19 @@ class _FlexiList extends State<FlexiList> {
                                   ),
                                 ],
                               ),
-
-
+                             ),
                             ),
-                            Container(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 0.19,
+
+                            Expanded(
+                              flex: 27,
+                              child:Container(
+                                //width: MediaQuery.of(context).size.width * 0.19,
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment
-                                      .center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(snapshot.data[index].pi_time
-                                        .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                        .toString()+"|"+snapshot.data[index].timeindate
+                                        .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
                                     Container(
                                       width: 62.0,
                                       height: 62.0,
@@ -289,23 +304,22 @@ class _FlexiList extends State<FlexiList> {
                                         },
                                       ),
                                     ),
-                                    Text(snapshot.data[index].timeindate
-                                        .toString(),style: TextStyle(color: Colors.grey),),
+                                    //Text(snapshot.data[index].timeindate.toString(),style: TextStyle(color: Colors.grey),),
                                   ],
                                 )
-
+                              ),
                             ),
-                            Container(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 0.22,
+
+                            Expanded(
+                              flex: 27,
+                              child:Container(
+                               // width: MediaQuery.of(context).size.width * 0.22,
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment
-                                      .center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(snapshot.data[index].po_time
-                                        .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                    .toString()+"|"+ snapshot.data[index].timeoutdate
+                                        .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
                                     Container(
                                       width: 62.0,
                                       height: 62.0,
@@ -330,19 +344,18 @@ class _FlexiList extends State<FlexiList> {
                                         },
                                       ),
                                     ),
-                                    Text(snapshot.data[index].timeoutdate
-                                        .toString(),style: TextStyle(color: Colors.grey
-                                    ),),
+                                    //Text(snapshot.data[index].timeoutdate.toString(),style: TextStyle(color: Colors.grey),),
                                   ],
                                 )
-
+                               ),
                             ),
+
                           ],
                         ),
 
                         Divider(
                           color: Colors.blueGrey.withOpacity(0.25),
-                          height: 0.2,
+                          height: 10.2,
                         ),
                       ]),
                     );

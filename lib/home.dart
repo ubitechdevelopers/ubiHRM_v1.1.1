@@ -277,7 +277,7 @@ class _HomePageStatemain extends State<HomePageMain> {
             child: ListView(
 
               children: <Widget>[
-                SizedBox(height: 20.0,),
+                SizedBox(height: 60.0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -306,7 +306,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 )),
                             Text('Dashboard',
                                 textAlign: TextAlign.center,
-                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
+                                style: new TextStyle(fontSize: 15.0, color: Colors.black )),
                           ],
                         )),
 
@@ -367,7 +367,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                         )):Center(),
                 ]),
 
-                SizedBox(height: 20.0,),
+                SizedBox(height: 60.0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -393,7 +393,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                     ),
                                     color: circleIconBackgroundColor()
                                 )),
-                            Text('Time off',
+                            Text(' Time off  ',
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
@@ -483,7 +483,7 @@ class _HomePageStatemain extends State<HomePageMain> {
 
                 ),
 
-                SizedBox(height: 20.0,),
+                SizedBox(height: 60.0,),
 
              Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -510,7 +510,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 ),
                                 color: circleIconBackgroundColor()
                             )),
-                        Text('Expense',
+                        Text(' Expense  ',
                             textAlign: TextAlign.center,
                             style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                       ],
@@ -564,7 +564,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                             ),
                             color: circleIconBackgroundColor()
                         )),
-                    Text('My Reports',
+                    Text(' Reports',
                         textAlign: TextAlign.center,
                         style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                   ],

@@ -282,7 +282,7 @@ getWidgets(context){
                   height: MediaQuery.of(context).size.height*0.60,
                   child:
                   FutureBuilder<List<User>>(
-                    future: getSummary(),
+                    future: getTeamSummary(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return new ListView.builder(
@@ -473,7 +473,7 @@ getWidgets(context){
             ]
         ));
 }
-Future<List<User>> getSummary() async {
+Future<List<User>> getTeamSummary() async {
   final prefs = await SharedPreferences.getInstance();
   String empid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
@@ -485,8 +485,11 @@ Future<List<User>> getSummary() async {
 }
 
 List<User> createUserList(List data){
+  print("CreateUserList");
+  print( data.length);
   List<User> list = new List();
   for (int i = 0; i < data.length; i++) {
+
     String title = Formatdate(data[i]["AttendanceDate"]);
     String TimeOut=data[i]["TimeOut"]=="00:00:00"?'-':data[i]["TimeOut"].toString().substring(0,5);
     String TimeIn=data[i]["TimeIn"]=="00:00:00"?'-':data[i]["TimeIn"].toString().substring(0,5);
@@ -508,6 +511,9 @@ List<User> createUserList(List data){
         checkInLoc:checkInLoc,ExitImage:ExitImage,CheckOutLoc:CheckOutLoc,latit_in: Latit_in,longi_in: Longi_in,
         latit_out: Latit_out,longi_out: Longi_out, AttendanceStatus: Att_Sts);
     list.add(user);
+    print("-----<<<<<<<");
+    print(list);
+    print("-----<<<<<<<");
   }
   return list;
 }
