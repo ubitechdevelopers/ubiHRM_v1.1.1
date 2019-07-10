@@ -546,7 +546,7 @@ class _HomePageStatemain extends State<HomePageMain> {
 
               (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?  GestureDetector(
               //   GestureDetector(
-                onTap: () {
+                onTap: () { 
                   Navigator.push(context,
                     MaterialPageRoute(builder: (context) => AllReports()),
                   );
