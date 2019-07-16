@@ -520,7 +520,7 @@ Future<List<LeaveA>> getTeamApprovals() async {
   await dio.post(path+"getteamapproval?empid="+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
 
- 
+
   List<LeaveA> userList1 = createTeamleaveapporval(res);
 
   return userList1;
