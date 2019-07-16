@@ -308,7 +308,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                   scrollDirection: Axis.vertical,
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (BuildContext context, int index) {
-                                    return new Column(
+/*                                    return new Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
                                           new Row(
@@ -345,7 +345,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                                   )
                                               ),
 
-                                              /*             new Expanded(
+                                              *//*             new Expanded(
                                                 child: Container(
                                                     width: MediaQuery .of(context).size.width * 0.30,
                                                     child: Column(
@@ -368,8 +368,8 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
 
                                                               //  color: Colors.orangeAccent,
                                                               onPressed: () {
-                                                               *//* confirmWithdrawl(
-                                                                    snapshot.data[index].leaveid.toString());*//*
+                                                               *//**//* confirmWithdrawl(
+                                                                    snapshot.data[index].leaveid.toString());*//**//*
                                                                 },
                                                               shape: new CircleBorder(),
                                                             )
@@ -377,7 +377,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                                       ],
                                                     )
                                                 ),
-                                              ),*/
+                                              ),*//*
                                             ],
                                           ),
 
@@ -388,12 +388,12 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                             child: Text('Reason: '+snapshot.data[index].Reason.toString(), style: TextStyle(color: Colors.black54),),
                                           ):Center(),
 
-                                          /* snapshot.data[index].comment.toString() != '-' ? Container(
+                                          *//* snapshot.data[index].comment.toString() != '-' ? Container(
                                             width: MediaQuery .of(context).size .width * .90,
                                             padding: EdgeInsets.only( top: 0.0, bottom: 0.5),
                                             margin: EdgeInsets.only(top: 0.0),
                                             child: Text('Approver Comment: ' +  snapshot.data[index].comment.toString(),style: TextStyle(color: Colors.black54),),
-                                          ): Center(),*/
+                                          ): Center(),*//*
 
                                           snapshot.data[index].Leavests.toString()!='-'?Container(
                                             width: MediaQuery.of(context).size.width*.90,
@@ -419,7 +419,250 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                           ),
 
                                           Divider(color: Colors.grey,),
-                                        ]);
+                                        ]);*/
+
+                                    return new Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+
+                                        children: <Widget>[
+                                          new Row(
+                                            mainAxisAlignment: MainAxisAlignment .spaceAround,
+                                            children: <Widget>[
+                                              SizedBox(height: 40.0,),
+                                              new Expanded(
+
+                                                child: Container(
+                                                  width: MediaQuery.of(context) .size.width * 0.90,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment  .start,
+                                                    children: <Widget>[
+                                                      GestureDetector(
+                                                        // When the child is tapped, show a snackbar
+                                                        onTap: () {
+                                                          //  final snackBar = SnackBar(content: Text("Tap"));
+
+                                                          //Scaffold.of(context).showSnackBar(snackBar);
+                                                          /*  showDialog(
+                               context: context,
+                               builder: (_) => new AlertDialog(
+                               //title: new Text("Dialog Title"),
+                               content: new Text(snapshot.data[index].Reason.toString()),
+                               )
+                              );*/
+
+                                                        },
+                                                        child:   Text(snapshot.data[index].name.toString(), style: TextStyle(
+                                                            color: Colors.black87,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontSize: 16.0),),
+                                                      ), ],
+                                                  ),
+                                                ),  ),
+
+                                              new Expanded(
+                                                child:Container(
+                                                    width: MediaQuery .of(context)  .size.width * 0.50,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment .center,
+                                                      children: <Widget>[
+                                                        Text("          "+snapshot.data[index].applydate
+                                                            .toString()),
+                                                      ],
+                                                    )
+
+                                                ),),
+
+                                              /*  new Expanded(
+                                  child:Container(
+                                      width: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.18,
+                                      decoration: new ShapeDecoration(
+                                        shape: new RoundedRectangleBorder(
+                                            borderRadius: new BorderRadius
+                                                .circular(2.0)),
+                                        color: snapshot.data[index].Leavests ==
+                                            'Approved' ? Colors.green
+                                            .withOpacity(0.75) : snapshot                                                    .data[index].Leavests
+                                            .toString() == 'Rejected'  ? Colors
+                                            .red.withOpacity(0.65) : snapshot                                                  .data[index].Leavests
+                                            .toString().startsWith('Pending')
+                                            ? Colors.orangeAccent
+                                            : Colors.black12,
+                                      ),
+
+
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .center,
+                                        children: <Widget>[
+                                          Text(snapshot.data[index].Leavests
+                                              .toString(),style: TextStyle(color: Colors.white),),
+                                        ],
+                                      )
+
+                                  ),),*/
+                                              Divider(color: Colors.black26,),
+                                            ],
+
+                                          ),
+
+
+                                          /*  new Row(
+                              // mainAxisAlignment: MainAxisAlignment .spaceAround,
+                              children: <Widget>[
+                                //   SizedBox(height: 10.0,),
+
+                            Container(
+
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width * 0.70,
+                            child: Column(
+                            crossAxisAlignment: CrossAxisAlignment
+                                .start,
+                            children: <Widget>[
+                            GestureDetector(
+                            // When the child is tapped, show a snackbar
+                            onTap: () {
+                            //  final snackBar = SnackBar(content: Text("Tap"));
+
+                            //Scaffold.of(context).showSnackBar(snackBar);
+                            showDialog(
+                            context: context,
+                            builder: (_) => new AlertDialog(
+                            //title: new Text("Dialog Title"),
+                            content: new Text(snapshot.data[index].Reason.toString()),
+                            )
+                            );
+
+                            },
+                            child:   Text("View Details", style: TextStyle(
+                            color: Colors.blue,
+
+                            fontSize: 12.0),),
+                            ), ],
+                            ),
+                            ),
+                              ],),*/
+
+
+                                          new Row(
+                                            // mainAxisAlignment: MainAxisAlignment .spaceAround,
+                                            children: <Widget>[
+                                              //   SizedBox(height: 10.0,),
+
+                                              Container(
+                                                  width: MediaQuery.of(context) .size .width * 0.70,
+                                                  height: 10.0,
+                                                  padding: const EdgeInsets.all(0.0),
+                                                  child: RichText(
+                                                    text: new TextSpan(
+                                                      style: new TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: Colors.black,
+                                                      ),
+                                                      children: <TextSpan>[
+                                                        new TextSpan(
+                                                            text: 'Duration: ',
+                                                            style: new TextStyle()),
+                                                        new TextSpan(
+                                                          text: snapshot.data[index].Fdate.toString()+snapshot.data[index].Tdate.toString(),style: TextStyle(color: Colors.grey[600]), ),
+                                                        /*   new TextSpan(text: " Days: "+snapshot.data[index].Ldays.toString(),style: TextStyle(color: Colors.black), ),*/
+                                                      ],
+                                                    ),
+                                                  )
+
+
+                                              ),
+                                              snapshot.data[index].Leavests.toString() == 'Pending'
+                                                  && snapshot.data[index].Psts.toString() == ""  ?
+
+                                              new Expanded(
+
+                                                child: Container(
+
+                                                  width: MediaQuery.of(context) .size .width * 0.30,
+                                                  height: 28.0,
+                                                  child: new OutlineButton(
+                                                    onPressed: () {
+                                                      //  confirmApprove(context,snapshot.data[index].Id.toString());
+                                                      if(snapshot.data[index].HRSts.toString()=='1') {
+                                                      /*  _modalBottomSheetHR(
+                                                            context, snapshot.data[index].Id.toString(),snapshot.data[index].Ldays.toString(),snapshot.data[index].LeaveTypeId.toString());
+                                                        getleavehistory(snapshot.data[index].LeaveTypeId.toString());*/
+                                                      }else{
+                                                       /* _modalBottomSheet(
+                                                            context, snapshot.data[index].Id.toString(), snapshot.data[index].Ldays.toString());
+                                                    */  }
+                                                    },
+                                                    child: new Icon(
+                                                      Icons.edit,
+                                                      size: 18.0,
+                                                      color:appStartColor(),
+
+                                                    ),
+                                                    borderSide: BorderSide(color:  appStartColor()),
+                                                    shape: new CircleBorder(),
+                                                    padding:EdgeInsets.all(5.0),
+                                                  ),
+                                                ),
+                                              ): Center(),
+
+                                            ],),
+
+                                          snapshot.data[index].Reason.toString() != '-'
+                                              ? Container(
+                                              width: MediaQuery.of(context).size.width * .90,                                padding: EdgeInsets.only(
+                                              top: 1.5, bottom: .0),
+                                              margin: EdgeInsets.only(top: 4.0),
+                                              child: RichText(
+                                                text: new TextSpan(
+                                                  // Note: Styles for TextSpans must be explicitly defined.
+                                                  // Child text spans will inherit styles from parent
+                                                  style: new TextStyle(
+                                                    fontSize: 14.0,
+                                                    color: Colors.black,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    new TextSpan(text: 'Reason: ' ,style: new TextStyle()),
+                                                    new TextSpan(text: snapshot.data[index].Reason.toString(),style: TextStyle(color: Colors.grey[600])),
+
+                                                    /*          snapshot.data[index].Psts.toString() != ''
+                                                              ? new TextSpan(text: "\n"+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold
+                                                          ), ): new TextSpan(text: ""+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold), ),*/
+
+                                                  ],
+                                                ),
+                                              )
+                                          ): Center(),
+
+                                          snapshot.data[index].Psts.toString()!=''?Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            padding: EdgeInsets.only(top:1.0,bottom: .5),
+                                            margin: EdgeInsets.only(top: .5),
+                                            child: RichText(
+                                              text: new TextSpan(
+                                                // Note: Styles for TextSpans must be explicitly defined.
+                                                // Child text spans will inherit styles from parent
+                                                style: new TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: Colors.black,
+                                                ),
+                                                children: <TextSpan>[
+                                                  new TextSpan(text: 'Status: ',style: new TextStyle()),
+                                                  new TextSpan(text: ""+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800]),),
+                                                ],
+                                              ),
+                                            ),
+                                          ):Center(
+                                            // child:Text(snapshot.data[index].withdrawlsts.toString()),
+                                          ),
+
+                                          Divider(color: Colors.black45,),
+                                        ] );
                                   }
                               );
                             }else
