@@ -23,11 +23,11 @@ import 'services/attandance_fetch_location.dart';
 import 'salary/mysalary_list.dart';
 import 'package:intl/intl.dart';
 import 'dashboard.dart';
+import 'attandance/flexi_time.dart';
+
 //import 'settings.dart';
 
-
 import 'package:connectivity/connectivity.dart';
-
 
 class HomePageMain extends StatefulWidget {
   @override
@@ -38,7 +38,7 @@ class _HomePageStatemain extends State<HomePageMain> {
   // StreamLocation sl = new StreamLocation();
 
   double height = 0.0;
-  double insideContainerHeight=300.0;
+  double insideContainerHeight = 300.0;
   int _currentIndex = 0;
   int response;
   bool loader = true;
@@ -48,16 +48,16 @@ class _HomePageStatemain extends State<HomePageMain> {
   String month;
   var profileimage;
   bool showtabbar;
-  String orgName="";
-
-
+  String orgName = "";
 
   bool _checkLoadedprofile = true;
 
   String location_addr = "";
 
-
-  Widget mainWidget= new Container(width: 0.0,height: 0.0,);
+  Widget mainWidget = new Container(
+    width: 0.0,
+    height: 0.0,
+  );
   @override
   void initState() {
     super.initState();
@@ -65,14 +65,14 @@ class _HomePageStatemain extends State<HomePageMain> {
     getOrgName();
   }
 
-  getOrgName() async{
+  getOrgName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      orgName= prefs.getString('orgname') ?? '';
+      orgName = prefs.getString('orgname') ?? '';
     });
   }
 
-  initPlatformState() async{
+  initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
 
     /*empid = prefs.getString('employeeid')??"";
@@ -101,41 +101,43 @@ class _HomePageStatemain extends State<HomePageMain> {
     var formatter = new DateFormat('MMMM');
     month = formatter.format(now);
 
-
     var connectivityResult = await (new Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
       setState(() {
         //    print("HIIIIIIIIIIIIII");
         mainWidget = loadingWidget();
       });
-
 
       islogin().then((Widget configuredWidget) {
         setState(() {
           mainWidget = configuredWidget;
         });
       });
-    }else{
+    } else {
       setState(() {
         mainWidget = plateformstatee();
       });
-      showDialog(context: context, child:
-      new AlertDialog(
-        content: new Text("Internet connection not found!."),
-      )
-      );
+      showDialog(
+          context: context,
+          child: new AlertDialog(
+            content: new Text("Internet connection not found!."),
+          ));
     }
   }
 
-  Future<Widget> islogin() async{
+  Future<Widget> islogin() async {
     final prefs = await SharedPreferences.getInstance();
-    int response = prefs.getInt('response')??0;
-    if(response==1){
+    int response = prefs.getInt('response') ?? 0;
+    if (response == 1) {
       //   print("AAAAAAAAA");
-      String empid = prefs.getString('employeeid')??"";
-      String organization =prefs.getString('organization')??"";
-      String userprofileid =prefs.getString('userprofileid')??"";
-      Employee emp = new Employee(employeeid: empid, organization: organization,userprofileid:userprofileid);
+      String empid = prefs.getString('employeeid') ?? "";
+      String organization = prefs.getString('organization') ?? "";
+      String userprofileid = prefs.getString('userprofileid') ?? "";
+      Employee emp = new Employee(
+          employeeid: empid,
+          organization: organization,
+          userprofileid: userprofileid);
 
       //  await getProfileInfo(emp);
       await getAllPermission(emp);
@@ -143,14 +145,14 @@ class _HomePageStatemain extends State<HomePageMain> {
       await getfiscalyear(emp);
       await getovertime(emp);
 
-      perEmployeeLeave= getModulePermission("18","view");
+      perEmployeeLeave = getModulePermission("18", "view");
       //print(perEmployeeLeave);
-      perLeaveApproval=  getModuleUserPermission("124","view");
-      perAttendance=  getModulePermission("5","view");
-      perTimeoff=  getModulePermission("179","view");
-      perSalary=  getModulePermission("66","view");
-      perExpense=  getModulePermission("170","view");
-     perFlexi= getModulePermission("448","view");
+      perLeaveApproval = getModuleUserPermission("124", "view");
+      perAttendance = getModulePermission("5", "view");
+      perTimeoff = getModulePermission("179", "view");
+      perSalary = getModulePermission("66", "view");
+      perExpense = getModulePermission("170", "view");
+      perFlexi = getModulePermission("448", "view");
       perPunchLocation = getModulePermission("305", "view");
 
       await getReportingTeam(emp);
@@ -158,10 +160,8 @@ class _HomePageStatemain extends State<HomePageMain> {
       Loc lock = new Loc();
       location_addr = await lock.initPlatformState();
 
-
-
-      showtabbar =false;
-      profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+      showtabbar = false;
+      profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
       // profileimage = new NetworkImage(pic);
 //print("ABCDEFGHI");
 //print(profileimage);
@@ -170,56 +170,47 @@ class _HomePageStatemain extends State<HomePageMain> {
           setState(() {
             _checkLoadedprofile = false;
           });
-
         }
       });
       return mainScafoldWidget();
-    }else{
+    } else {
       return new LoginPage();
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return mainWidget;
   }
 
-
-  Widget loadingWidget(){
+  Widget loadingWidget() {
     return Container(
-
         decoration: new BoxDecoration(color: Colors.green[100]),
         child: Center(
-            child:SizedBox(
-
-              //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
-              child: new CircularProgressIndicator(),
-    )
-        ));
-
-
+            child: SizedBox(
+          //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
+          child: new CircularProgressIndicator(),
+        )));
   }
 
-  Widget plateformstatee(){
-
+  Widget plateformstatee() {
     return new Container(
       decoration: new BoxDecoration(color: Colors.white),
       child: new Center(
-        child: new Text("UBIHRM", style: TextStyle(fontSize: 30.0,color: Colors.green),),
+        child: new Text(
+          "UBIHRM",
+          style: TextStyle(fontSize: 30.0, color: Colors.green),
+        ),
       ),
     );
-
   }
 
-
-  Widget mainScafoldWidget(){
+  Widget mainScafoldWidget() {
     //print("BBBBBB");
-    return  Scaffold(
-        backgroundColor:scaffoldBackColor(),
+    return Scaffold(
+        backgroundColor: scaffoldBackColor(),
         endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
+        appBar: new AppHeader(profileimage, showtabbar, orgName),
 
 /*        appBar: GradientAppBar(
           backgroundColorStart: appStartColor(),
@@ -255,177 +246,292 @@ class _HomePageStatemain extends State<HomePageMain> {
 
           ),
         ),*/
-        bottomNavigationBar:new HomeNavigation(),
+        bottomNavigationBar: new HomeNavigation(),
+        body: homewidget());
+  }
 
-        body: homewidget()
+  Card makeDashboardItem(String title, functionname, Imagename) {
+    return Card(
+        elevation: 1.0,
+        margin: new EdgeInsets.all(8.0),
+        child: Container(
+
+          child: new InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => functionname),
+              );
+            },
+            child: Column(
+           //   crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              verticalDirection: VerticalDirection.down,
+              children: [
+                new Container(
+                    width: 60.0,
+                    height: 60.0,
+                    decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage(
+                              Imagename),
+                        ),
+                        color: circleIconBackgroundColor())),
+                Text(title,
+                    textAlign: TextAlign.center,
+                    style: new TextStyle(
+                        fontSize: 15.0, color: Colors.black)),
+              ],
+            ),
+          ),
+        ));
+  }
+
+  Widget homewidget() {
+    return Stack(
+      children: <Widget>[
+        Container(
+
+          //height: MediaQuery.of(context).size.height,
+          margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+          padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+          // width: MediaQuery.of(context).size.width*0.9,
+          decoration: new ShapeDecoration(
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(20.0)),
+            color: Colors.white,
+          ),
+          child: GridView.count(
+            crossAxisCount: 3,
+            padding: EdgeInsets.all(3.0),
+            children: <Widget>[
+              if(perAttendance == '1') makeDashboardItem("Attendance", HomePage(), 'assets/icons/Attendance_icon.png'),
+              if(perEmployeeLeave == '1')  makeDashboardItem("Leave",  MyLeave(), 'assets/icons/leave_icon.png'),
+              if(perTimeoff == '1') makeDashboardItem("Time off", TimeoffSummary(), 'assets/icons/Timeoff_icon.png'),
+              if(perPunchLocation == '1') makeDashboardItem("Visits", PunchLocationSummary(), 'assets/icons/visits_icon.png'),
+              if( perFlexi == '1') makeDashboardItem("Flexi time", Flexitime(), 'assets/icons/Flexi_icon.png'),
+              if(perExpense == '1') makeDashboardItem("Expenses", MyExpence(), 'assets/icons/Expense_icon.png'),
+              if(perSalary == '1') makeDashboardItem("Salary", SalarySummary(), 'assets/icons/Salary_icon.png'),
+              makeDashboardItem("Dashboard",DashboardMain(), 'assets/icons/Dashboard_icon.png'),
+              if(perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1') makeDashboardItem("Reports", AllReports(), 'assets/icons/graph_icon.png'),
+              makeDashboardItem("Profile", CollapsingTab(), 'assets/icons/profile_icon.png')
+
+    ],
+          ),
+        ),
+      ],
     );
   }
 
-  Widget homewidget(){
+  Widget homewidget1() {
     // print("CCCCCCCC");
     return Stack(
       children: <Widget>[
         Container(
-          //height: MediaQuery.of(context).size.height,
+            //height: MediaQuery.of(context).size.height,
             margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
             padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
             // width: MediaQuery.of(context).size.width*0.9,
             decoration: new ShapeDecoration(
-              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+              shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(20.0)),
               color: Colors.white,
             ),
             child: ListView(
-
               children: <Widget>[
-                SizedBox(height: 60.0,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
+                SizedBox(
+                  height: 60.0,
+                ),
+             //   Row(
+               //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //      children: [
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DashboardMain()),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              new Container(
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: new DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            'assets/Attendanc_icon.png'),
+                                      ),
+                                      color: circleIconBackgroundColor())),
+                              Text('Dashboard',
+                                  textAlign: TextAlign.center,
+                                  style: new TextStyle(
+                                      fontSize: 15.0, color: Colors.black)),
+                            ],
+                          )),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CollapsingTab()),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              new Container(
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: new DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            'assets/icons/profile_icon.png'),
+                                      ),
+                                      color: circleIconBackgroundColor())),
+                              Text('Profile',
+                                  textAlign: TextAlign.center,
+                                  style: new TextStyle(
+                                      fontSize: 15.0, color: Colors.black)),
+                            ],
+                          )),
+                    if( perAttendance == '1')
+                           GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()),
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  new Container(
+                                      width: 60.0,
+                                      height: 60.0,
+                                      decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: new DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: AssetImage(
+                                                'assets/Attendanc_icon.png'),
+                                          ),
+                                          color: circleIconBackgroundColor())),
+                                  Text('Attendance',
+                                      textAlign: TextAlign.center,
+                                      style: new TextStyle(
+                                          fontSize: 15.0, color: Colors.black)),
+                                ],
+                              )),
 
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => DashboardMain()),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            new Container(
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: new BoxDecoration(
+                           if(perEmployeeLeave == '1')
+                             GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MyLeave()),
+                                    );
+                                  },
+                                  child: Column(
+                                    children: [
+                                      new Container(
+                                          width: 60.0,
+                                          height: 60.0,
+                                          decoration: new BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: new DecorationImage(
+                                                fit: BoxFit.fill,
+                                                image: AssetImage(
+                                                    'assets/icons/leave_icon.png'),
+                                              ),
+                                              color:
+                                                  circleIconBackgroundColor())),
+                                      Text('Leave',
+                                          textAlign: TextAlign.center,
+                                          style: new TextStyle(
+                                              fontSize: 15.0,
+                                              color: Colors.black)),
+                                    ],
+                                  )),
+                //    ]
+               //   ),
 
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-
-                                      fit: BoxFit.fill,
-                                      image: AssetImage('assets/Attendanc_icon.png'),
-                                    ),
-                                    color: circleIconBackgroundColor()
-                                )),
-                            Text('Dashboard',
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(fontSize: 15.0, color: Colors.black )),
-                          ],
-                        )),
-
-
-                    perAttendance=='1'?  GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            new Container(
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: new BoxDecoration(
-
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-
-                                      fit: BoxFit.fill,
-                                      image: AssetImage('assets/Attendanc_icon.png'),
-                                    ),
-                                    color: circleIconBackgroundColor()
-                                )),
-                            Text('Attendance',
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                          ],
-                        )):Center(),
-
-                    perEmployeeLeave=='1'?  GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => MyLeave()),
-                          );
-                        },
-
-                        child: Column(
-                          children: [
-                            new Container(
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: AssetImage('assets/icons/leave_icon.png'),
-                                    ),
-                                    color: circleIconBackgroundColor()
-                                )),
-                            Text('Leave',
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                          ],
-                        )):Center(),
-                ]),
-
-                SizedBox(height: 60.0,),
+                SizedBox(
+                  height: 60.0,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     //    perSet=='1'? GestureDetector(
 
-                    perTimeoff=='1'?  GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => TimeoffSummary()),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            new Container(
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: AssetImage('assets/icons/Timeoff_icon.png'),
-                                    ),
-                                    color: circleIconBackgroundColor()
-                                )),
-                            Text(' Time off  ',
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                          ],
-                        )):Center(),
+                    perTimeoff == '1'
+                        ? GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TimeoffSummary()),
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                new Container(
+                                    width: 60.0,
+                                    height: 60.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: AssetImage(
+                                              'assets/icons/Timeoff_icon.png'),
+                                        ),
+                                        color: circleIconBackgroundColor())),
+                                Text(' Time off  ',
+                                    textAlign: TextAlign.center,
+                                    style: new TextStyle(
+                                        fontSize: 15.0, color: Colors.black)),
+                              ],
+                            ))
+                        : Center(),
 
-
-
-                      perPunchLocation == '1' ?  GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => PunchLocationSummary()),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            new Container(
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: AssetImage('assets/icons/Timeoff_icon.png'),
-                                    ),
-                                    color: circleIconBackgroundColor()
-                                )),
-                            Text('Visits',
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                          ],
-                        )):Center(),
+                    perPunchLocation == '1'
+                        ? GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        PunchLocationSummary()),
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                new Container(
+                                    width: 60.0,
+                                    height: 60.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: AssetImage(
+                                              'assets/icons/Timeoff_icon.png'),
+                                        ),
+                                        color: circleIconBackgroundColor())),
+                                Text('Visits',
+                                    textAlign: TextAlign.center,
+                                    style: new TextStyle(
+                                        fontSize: 15.0, color: Colors.black)),
+                              ],
+                            ))
+                        : Center(),
 
                     /*GestureDetector(
                         onTap: () {
@@ -453,123 +559,107 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 style: new TextStyle(fontSize: 15.0, color: Colors.black)),
                           ],
                         )),*/
-
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => CollapsingTab()),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            new Container(
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: AssetImage('assets/icons/profile_icon.png'),
-                                    ),
-                                    color: circleIconBackgroundColor()
-                                )),
-                            Text('My Profile',
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                          ],
-                        )),
                   ],
-
                 ),
 
-                SizedBox(height: 60.0,),
+                SizedBox(
+                  height: 60.0,
+                ),
 
-             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-
-
-                (perExpense=='1') ? GestureDetector(
-                  //   GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyExpence()),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        new  Container(
-                            width: 60.0,
-                            height: 60.0,
-                            decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: AssetImage('assets/icons/Expense_icon.png'),
-                                ),
-                                color: circleIconBackgroundColor()
-                            )),
-                        Text(' Expense  ',
-                            textAlign: TextAlign.center,
-                            style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                      ],
-                    )):Center(),
-
-
-                (perSalary=='1') ? GestureDetector(
-                  //   GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SalarySummary()),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        new  Container(
-                            width: 60.0,
-                            height: 60.0,
-                            decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: AssetImage('assets/icons/Salary_icon.png'),
-                                ),
-                                color: circleIconBackgroundColor()
-                            )),
-                        Text('Payroll',
-                            textAlign: TextAlign.center,
-                            style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                      ],
-                    )):Center(),
-
-
-              (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?  GestureDetector(
-              //   GestureDetector(
-                onTap: () { 
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AllReports()),
-                  );
-                },
-                child: Column(
-                  children: [
-                    new  Container(
-                        width: 60.0,
-                        height: 60.0,
-                        decoration: new BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage('assets/icons/graph_icon.png'),
-                            ),
-                            color: circleIconBackgroundColor()
-                        )),
-                    Text(' Reports',
-                        textAlign: TextAlign.center,
-                        style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                  ],
-                )):Center(),
-            ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      (perExpense == '1')
+                          ? GestureDetector(
+                              //   GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyExpence()),
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  new Container(
+                                      width: 60.0,
+                                      height: 60.0,
+                                      decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: new DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: AssetImage(
+                                                'assets/icons/Expense_icon.png'),
+                                          ),
+                                          color: circleIconBackgroundColor())),
+                                  Text(' Expense  ',
+                                      textAlign: TextAlign.center,
+                                      style: new TextStyle(
+                                          fontSize: 15.0, color: Colors.black)),
+                                ],
+                              ))
+                          : Center(),
+                      (perSalary == '1')
+                          ? GestureDetector(
+                              //   GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SalarySummary()),
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  new Container(
+                                      width: 60.0,
+                                      height: 60.0,
+                                      decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: new DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: AssetImage(
+                                                'assets/icons/Salary_icon.png'),
+                                          ),
+                                          color: circleIconBackgroundColor())),
+                                  Text('Payroll',
+                                      textAlign: TextAlign.center,
+                                      style: new TextStyle(
+                                          fontSize: 15.0, color: Colors.black)),
+                                ],
+                              ))
+                          : Center(),
+                      (perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1')
+                          ? GestureDetector(
+                              //   GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AllReports()),
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  new Container(
+                                      width: 60.0,
+                                      height: 60.0,
+                                      decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: new DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: AssetImage(
+                                                'assets/icons/graph_icon.png'),
+                                          ),
+                                          color: circleIconBackgroundColor())),
+                                  Text(' Reports',
+                                      textAlign: TextAlign.center,
+                                      style: new TextStyle(
+                                          fontSize: 15.0, color: Colors.black)),
+                                ],
+                              ))
+                          : Center(),
+                    ]),
                 /*    Row(children: <Widget>[
                     Icon(Icons.brightness_1,color: Colors.blue,),
                     SizedBox(width: 20.0,),
@@ -588,7 +678,7 @@ class _HomePageStatemain extends State<HomePageMain> {
 */
 
                 // Attendance monthly summary bar graph
-            /* overtime!='00:00'?Divider(height: 10.0,):undertime!='00:00'?Divider(height: 10.0,):Center(),
+                /* overtime!='00:00'?Divider(height: 10.0,):undertime!='00:00'?Divider(height: 10.0,):Center(),
                 SizedBox(height: 20.0,),
                 overtime!='00:00'?getimg():undertime!='00:00'?getimg1():Center(),*/
 
@@ -597,8 +687,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                 overtime!=null?getimg():undertime!=null?getimg1():Center(),
 */
 
-
-               /* SizedBox(height: 20.0,),
+                /* SizedBox(height: 20.0,),
                 perAttendance=='1'?  Row(children: <Widget>[
                   SizedBox(width: 20.0,),
                   Text("Monthly summary  ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
@@ -606,7 +695,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                 ):Center(),*/
 
 /*                perAttendance=='1'?  Divider(height: 10.0,):Center(),
-                *//*SimpleBarChart.withSampleData(),*//*
+                */ /*SimpleBarChart.withSampleData(),*/ /*
                 perAttendance=='1'?  new Container(
 
                   padding: EdgeInsets.all(0.2),
@@ -654,7 +743,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                   ],),
 */
 
-               /* SizedBox(width: 40.0,),
+                /* SizedBox(width: 40.0,),
                 Divider(height: 10.0,),
                 perEmployeeLeave =='1' ?
 
@@ -738,7 +827,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                                   Text(snapshot.data[index].date,style: TextStyle(color: Colors.grey[600]),textAlign: TextAlign.right),
 
                                                 ],),
-                                              *//*  new Row(
+                                              */ /*  new Row(
                                                 children: <Widget>
                                                 [
                                                   SizedBox(width: 20.0,),
@@ -750,7 +839,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                                   ): Center(),
                                                   Divider(color: Colors.black45,),
 
-                                                ],)*//*
+                                                ],)*/ /*
                                             ],);
 
                                         }
@@ -782,8 +871,6 @@ class _HomePageStatemain extends State<HomePageMain> {
                     //undertime!='null'?getimg1():getimg(),
 
                    ],)*/
-
-
 
                 /*      Row(children: <Widget>[
                     SizedBox(width: 20.0,),
@@ -860,25 +947,22 @@ class _HomePageStatemain extends State<HomePageMain> {
                   SizedBox(width: 20.0,),
 */
               ],
-            )
-
-        ),
-
-
-
+            )),
       ],
     );
   }
 
-
-
-
   Widget getimg() {
-    return  new  Column(children: <Widget>[
+    return new Column(children: <Widget>[
       // SizedBox(width: 20.0,),
       Row(children: <Widget>[
-        new  Text("    "+month+"",textAlign: TextAlign.left,style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold,)),
-
+        new Text("    " + month + "",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: headingColor(),
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+            )),
       ]),
       Container(
         height: 165,
@@ -891,30 +975,31 @@ class _HomePageStatemain extends State<HomePageMain> {
             width: 2.5,
           ),
         ),
-
         child: new Center(
-          child: new
-          Text(
-            "Overtime \n     "+overtime,
+          child: new Text(
+            "Overtime \n     " + overtime,
             style: TextStyle(
-
                 fontSize: 16.0,
-                color: overtime!=''? Colors.green:appStartColor()),
+                color: overtime != '' ? Colors.green : appStartColor()),
           ),
         ),
-      ), ]);
+      ),
+    ]);
   }
-  Widget getimg1() {
 
-    return  new
-    Column(children: <Widget>[
+  Widget getimg1() {
+    return new Column(children: <Widget>[
       // SizedBox(width: 20.0,),
       Row(children: <Widget>[
-        new  Text("     "+month+"",textAlign: TextAlign.left,style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold,)),
-
+        new Text("     " + month + "",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: headingColor(),
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+            )),
       ]),
       Container(
-
         height: 165,
         width: 120,
         decoration: new BoxDecoration(
@@ -926,22 +1011,14 @@ class _HomePageStatemain extends State<HomePageMain> {
           ),
         ),
         child: new Center(
-          child: new
-
-          Text(
-            "Undertime \n     "+undertime,
+          child: new Text(
+            "Undertime \n     " + undertime,
             style: TextStyle(
                 fontSize: 16.0,
-                color: undertime!=''? Colors.redAccent:appStartColor()),
+                color: undertime != '' ? Colors.redAccent : appStartColor()),
           ),
-
         ),
       ),
-    ]
-    );
+    ]);
   }
-
-
-
 }
-

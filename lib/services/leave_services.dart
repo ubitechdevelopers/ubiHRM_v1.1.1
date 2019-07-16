@@ -92,8 +92,14 @@ Future<List<Leave>> getLeaveSummary() async{
     //print(response.data.toString());
     //print('--------------------getLeaveSummary Called-----------------------');
     List responseJson = json.decode(response.data.toString());
+  /*  print("LEAVE LIST");
+  //  print(userList);
+    print(response.data.toString());
+    print("LEAVE LIST");*/
     List<Leave> userList = createLeaveList(responseJson);
+
     return userList;
+
   }catch(e){
     //print(e.toString());
   }
@@ -121,6 +127,9 @@ List<Leave> createLeaveList(List data){
  //    print(LeaveDate);
     Leave leave = new Leave(attendancedate: LeaveDate, leavefrom: LeaveFrom, leaveto: LeaveTo, leavedays: LeaveDays, reason: Reason, approverstatus: ApprovalSts, comment: ApproverComment, leaveid: LeaveId, withdrawlsts: withdrawlsts);
     list.add(leave);
+   /* print("LEAVE LIST");
+    print(list);
+    print("LEAVE LIST");*/
   }
   return list;
 }
@@ -498,6 +507,74 @@ ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
     return "Poor network connection";
   }
 }
+
+
+
+Future<List<LeaveA>> getTeamApprovals() async {
+  Dio dio = new Dio();
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+//print(path+"getteamapproval?empid="+empid+'&orgid='+orgdir);
+  Response<String> response =
+  await dio.post(path+"getteamapproval?empid="+empid+'&orgid='+orgdir);
+  final res = json.decode(response.data.toString());
+
+
+  List<LeaveA> userList1 = createTeamleaveapporval(res);
+
+  return userList1;
+}
+
+List<LeaveA> createTeamleaveapporval(List data) {
+
+  List<LeaveA> list = new List();
+  for (int i = 0; i < data.length; i++) {
+
+    String Id = data[i]["Id"].toString();
+    String name = data[i]["name"].toString();
+    String Leavests = data[i]["LeaveStatus"].toString();
+    String Reason = data[i]["LeaveReason"].toString();
+    String applydate = data[i]["ApplyDate"].toString();
+    String Fdate = data[i]["FDate"].toString();
+    String Tdate = data[i]["TDate"].toString();
+    String Ldays = data[i]["Ldays"].toString();
+    String FromDayType = data[i]["FromDayType"].toString();
+    String ToDayType = data[i]["ToDayType"].toString();
+    String TimeOfTo = data[i]["TimeOfTo"].toString();
+    String LeaveTypeId = data[i]["LeaveTypeId"].toString();
+    //   print("********************"+data[i]["Pstatus"].toString());
+    String HRSts = data[i]["HRSts"].toString();
+ //   print(Fdate+"@@@@@@@"+Tdate);
+    if(Fdate==Tdate){
+      Tdate=" - "+Fdate;
+    }
+    else{
+      Tdate=" - "+Tdate;
+    }
+    String Psts="";
+    if(data[i]["Pstatus"].contains("Pending at")) {
+      Psts = data[i]["Pstatus"].toString();
+    }
+
+    LeaveA tos = new LeaveA(
+        Id: Id,
+        name: name,
+        Leavests: Leavests,
+        Reason: Reason,
+        applydate: applydate,
+        Fdate: Fdate,
+        Tdate: Tdate,
+        Psts : Psts,
+        Ldays: Ldays,
+        HRSts: HRSts,FromDayType: FromDayType,ToDayType: ToDayType,TimeOfTo: TimeOfTo,LeaveTypeId :LeaveTypeId);
+    list.add(tos);
+  }
+  return list;
+}
+
+
+
 
 /*
 class profileup {

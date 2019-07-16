@@ -98,7 +98,6 @@ flutter:
         - assets/approval.png
         - assets/spinner.gif
         - assets/icons/Attendance_icon.png
-        - assets/Attendanc_icon.png
         - assets/icons/graph_icon.png
         - assets/icons/leave_icon.png
         - assets/icons/profile_icon.png
@@ -106,6 +105,10 @@ flutter:
         - assets/icons/Timeoff_icon.png
         - assets/icons/Salary_icon.png
         - assets/icons/Expense_icon.png
+        - assets/icons/Dashboard_icon.png
+        - assets/icons/Flexi_icon.png
+        - assets/icons/visits_icon.png
+
 
 
 

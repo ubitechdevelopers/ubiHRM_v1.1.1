@@ -17,7 +17,7 @@ import 'package:ubihrm/profile.dart';
 import '../appbar.dart';
 import 'package:photo_view/photo_view.dart';
 import './image_view.dart';
-
+import 'team_attendance_summary.dart';
 
 //import 'package:intl/intl.dart';
 
@@ -234,50 +234,134 @@ String dateFormatter(String date_) {
 getWidgets(context){
   return
     Container(
-        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+        padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
         // width: MediaQuery.of(context).size.width*0.9,
         decoration: new ShapeDecoration(
           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
           color: Colors.white,
         ),
+
+
+
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget> [
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      flex:48,
+                      child:Column(
+                          children: <Widget>[
+                            // width: double.infinity,
+                            //height: MediaQuery.of(context).size.height * .07,
+                            SizedBox(height:MediaQuery.of(context).size.width*.02),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                      Icons.person,
+                                      color: Colors.orange,
+                                      size: 22.0 ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      false;
+                                    },
+
+                                    child: const Text(
+                                        'Self',
+                                        style: TextStyle(fontSize: 18,color: Colors.orange,fontWeight:FontWeight.bold)
+                                    ),
+                                  ),
+                                ]),
+
+                            SizedBox(height:MediaQuery.of(context).size.width*.036),
+                            Divider(
+                              color: Colors.orange,
+                              height: 0.4,
+                            ),
+                            Divider(
+                              color: Colors.orange,
+                              height: 0.4,
+                            ),
+                            Divider(
+                              color: Colors.orange,
+                              height: 0.4,
+                            ),
+                          ]
+                      ),
+                    ),
+
+                    Expanded(
+                      flex:48,
+                      child: Column(
+                        // width: double.infinity,
+                          children: <Widget>[
+                            SizedBox(height:MediaQuery.of(context).size.width*.02),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                      Icons.group,
+                                      color: Colors.orange,
+                                      size: 22.0 ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => MyTeamAtt()),
+                                      );
+                                    },
+                                    child: const Text(
+                                        'Team',
+                                        style: TextStyle(fontSize: 18,color: Colors.orange)
+                                    ),
+                                  ),
+                                ]),
+                            SizedBox(height:MediaQuery.of(context).size.width*.04),
+                          ]
+                      ),
+                    ),
+                  ]),
+
               Container(
-                padding: EdgeInsets.only(top:12.0,bottom: 2.0),
+                padding: EdgeInsets.only(top:12.0),
                 child:Center(
                   child:Text('My Attendance Log',
-                      style: new TextStyle(fontSize: 22.0, color: appStartColor(),)),
+                      style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
                 ),
               ),
-              Divider(color: Colors.black54,height: 1.5,),
+
+
               new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //            crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(height: 50.0,),
+                  SizedBox(height: 40.0,),
                   SizedBox(width: MediaQuery.of(context).size.width*0.02),
                   Container(
                     width: MediaQuery.of(context).size.width*0.45,
-                    child:Text('Date',style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Date',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
 
-                  SizedBox(height: 50.0,),
+                  SizedBox(height: 40.0,),
                   Container(
                     width: MediaQuery.of(context).size.width*0.2,
-                    child:Text('Time In',style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Time In',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
-                  SizedBox(height: 50.0,),
+                  SizedBox(height: 40.0,),
                   Container(
                     width: MediaQuery.of(context).size.width*0.2,
-                    child:Text('Time Out',style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Time Out',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
                 ],
               ),
               Divider(),
 
-              Expanded(child:  Container(
+              Expanded(
+                  child:  Container(
                   height: MediaQuery.of(context).size.height*0.60,
                   child:
                   FutureBuilder<List<User>>(
@@ -469,6 +553,9 @@ getWidgets(context){
                     },
                   )
               )),
+
+
+
             ]
         ));
 }

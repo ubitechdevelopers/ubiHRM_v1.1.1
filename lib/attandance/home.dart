@@ -315,10 +315,13 @@ class _HomePageState extends State<HomePage> {
        // endDrawer: new AppDrawer(),
         body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
         //bottomSheet: getQuickLinksWidget(),
-        persistentFooterButtons: <Widget>[
-          quickLinkList1(),
 
-        ],   // body: homewidget()
+
+       /* persistentFooterButtons: <Widget>[
+          quickLinkList1(),
+        ], */  // body: homewidget()
+
+
       )
       /*  child: new Scaffold(
           backgroundColor:scaffoldBackColor(),
@@ -404,6 +407,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   checkalreadylogin() {
+
 
     ////print("---->"+response.toString());
     if (response == 1) {
@@ -599,7 +603,6 @@ class _HomePageState extends State<HomePage> {
 
   mainbodyWidget() {
     ////to do check act1 for poor network connection
-
     if (act1 == "Poor network connection") {
       return poorNetworkWidget();
     } else {
@@ -608,14 +611,14 @@ class _HomePageState extends State<HomePage> {
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+              margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+              padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
               decoration: new ShapeDecoration(
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
               color: Colors.white,
             ),
               // foregroundDecoration: BoxDecoration(color:Colors.red ),
-              height: MediaQuery.of(context).size.height * 0.80,
+              height: MediaQuery.of(context).size.height * 0.76,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -707,342 +710,11 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Widget quickLinkList1() {
-    return Container(
-      color: Colors.green.withOpacity(0.9),
-
-      width: MediaQuery.of(context).size.width * 0.95,
-      height:MediaQuery.of(context).size.height * 0.10,
-      // padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.03,bottom:MediaQuery.of(context).size.height*0.03, ),
-      child: Row(
-        //  crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(top: 10.0),
-            constraints: BoxConstraints(
-              maxHeight: 60.0,
-              minHeight: 20.0,
-            ),
-            child: new GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyApp()),
-                  );
-                },
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.calendar_today,
-                      size: 30.0,
-                      color: Colors.white,
-                    ),
-                    Text('My Logs',
-                        textAlign: TextAlign.center,
-                        style:
-                            new TextStyle(fontSize: 15.0, color: Colors.white)),
-                  ],
-                )),
-          ),
 
 
-         Container(
-            padding: EdgeInsets.only(top: 10.0),
-            constraints: BoxConstraints(
-              maxHeight: 60.0,
-              minHeight: 20.0,
-            ),
-            child:  new GestureDetector(
-                onTap: () {
-                  /*showInSnackBar("Under development.");*/
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyTeamAtt()
-                    ),
-                  );
-                },
-                child: Row(
-                    children: [
-                      SizedBox(width:MediaQuery.of(context).size.width*.08),
-                      Column(
-                        children: [
-                          Icon(
-                            Icons.calendar_today,
-                            size: 30.0,
-                            color: Colors.white,
-                          ),
-                          Text('Team Logs',
-                              textAlign: TextAlign.center,
-                              style:
-                              new TextStyle(fontSize: 15.0, color: Colors.white)),
-                        ],
-                      )])),
-          ),
 
 
-          perFlexi == '1' ?  Container(
-            padding: EdgeInsets.only(top: 10.0),
-            constraints: BoxConstraints(
-              maxHeight: 60.0,
-              minHeight: 20.0,
-            ),
-            child:  new GestureDetector(
-                onTap: () {
-                  /*showInSnackBar("Under development.");*/
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Flexitime()
-                    ),
-                  );
-                },
-                child: Row(
-                    children: [
-                      SizedBox(width:MediaQuery.of(context).size.width*.08),
-                      Column(
-                        children: [
-                          Icon(
-                            Icons.av_timer,
-                            size: 30.0,
-                            color: Colors.white,
-                          ),
-                          Text('Flexi Time',
-                              textAlign: TextAlign.center,
-                              style:
-                              new TextStyle(fontSize: 15.0, color: Colors.white)),
-                        ],
-                      )])),
-          ):Center(),
 
-
-/*          perPunchLocation == '1' ?  Container(
-            padding: EdgeInsets.only(top: 10.0),
-            constraints: BoxConstraints(
-              maxHeight: 60.0,
-              minHeight: 20.0,
-            ),
-            child:  new GestureDetector(
-                onTap: () {
-                  *//*showInSnackBar("Under development.");*//*
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PunchLocationSummary()
-                    ),
-                  );
-                },
-                child: Row(
-                children: [
-                  SizedBox(width:MediaQuery.of(context).size.width*.08),
-                  Column(
-                  children: [
-                    Icon(
-                      Icons.add_location,
-                      size: 30.0,
-                      color: Colors.white,
-                    ),
-                    Text('Visits',
-                        textAlign: TextAlign.center,
-                        style:
-                            new TextStyle(fontSize: 15.0, color: Colors.white)),
-                  ],
-                )])),
-          ):Center(),*/
-         /* Container(
-            padding: EdgeInsets.only(top: 10.0),
-            constraints: BoxConstraints(
-              maxHeight: 60.0,
-              minHeight: 20.0,
-            ),
-            child: new GestureDetector(
-                onTap: () {
-                  //  //print('----->>>>>'+getOrgPerm(1).toString());
-                  getOrgPerm(1).then((res) {
-                    {
-                      //   //print('----->>>>>'+res.toString());
-                      if (res) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => TimeoffSummary()),
-                        );
-                      } else
-                        showInSnackBar('Please buy this feature');
-                    }
-                  });
-                },
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.access_alarm,
-                      size: 30.0,
-                      color: Colors.white,
-                    ),
-                    Text('Time Off',
-                        textAlign: TextAlign.center,
-                        style:
-                            new TextStyle(fontSize: 15.0, color: Colors.white)),
-                  ],
-                )),
-          ),*/
-          /*  Container(
-              padding: EdgeInsets.only(top:10.0),
-              constraints: BoxConstraints(
-                maxHeight: 60.0,
-                minHeight: 15.0,
-              ),
-              child: new GestureDetector(
-                  onTap: (){
-                    getOrgPerm(1).then((res){
-                      {
-                        //   //print('----->>>>>'+res.toString());
-                        if (res) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder:
-                                (context) => LeaveSummary()),
-                          );
-
-                        }else showInSnackBar('Please buy this feature');
-                      }
-                    });
-                  },
-                  child: Column(
-                    children: [
-                      Icon(Icons.exit_to_app,size: 30.0,color: Colors.white,),
-                      Text('Leave',textAlign: TextAlign.center,style: new TextStyle(fontSize: 15.0,color: Colors.white)),
-                    ],
-
-                  )),
-            ),*/
-        ],
-      ),
-    );
-  }
-
-/*
-  List<GestureDetector> quickLinkList() {
-    List<GestureDetector> list = new List<GestureDetector>();
-    // //print("permission list-->>>>>>"+data.toString());
-    list.add(new GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyApp()),
-          );
-        },
-        child: Column(
-          children: [
-            Icon(
-              Icons.calendar_today,
-              size: 30.0,
-              color: Colors.white,
-            ),
-            Text('Attendance',
-                textAlign: TextAlign.center,
-                style: new TextStyle(fontSize: 15.0, color: Colors.white)),
-          ],
-        )));
-
-    if (punchlocation_permission == 1) {
-      list.add(new GestureDetector(
-          onTap: () {
-            */
-/*showInSnackBar("Under development.");*//*
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PunchLocation()),
-            );
-          },
-          child: Column(
-            children: [
-              Icon(
-                Icons.add_location,
-                size: 30.0,
-                color: Colors.white,
-              ),
-              Text('Visits',
-                  textAlign: TextAlign.center,
-                  style: new TextStyle(fontSize: 15.0, color: Colors.white)),
-            ],
-          )));
-    }
-
-  */
-/*  if (timeoff_permission == 1) {
-      list.add(new GestureDetector(
-          onTap: () {
-            //  //print('----->>>>>'+getOrgPerm(1).toString());
-            getOrgPerm(1).then((res) {
-              {
-                //   //print('----->>>>>'+res.toString());
-                if (res) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TimeoffSummary()),
-                  );
-                } else
-                  showInSnackBar('Please buy this feature');
-              }
-            });
-          },
-          child: Column(
-            children: [
-              Icon(
-                Icons.access_alarm,
-                size: 30.0,
-                color: Colors.white,
-              ),
-              Text('Time Off',
-                  textAlign: TextAlign.center,
-                  style: new TextStyle(fontSize: 15.0, color: Colors.white)),
-            ],
-          )));
-    }*//*
-
-
-    if (leave_permission == 1) {
-      list.add(new GestureDetector(
-          onTap: () {
-            getOrgPerm(1).then((res) {
-              {
-                //   //print('----->>>>>'+res.toString());
-                if (res) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyLeave()),
-                  );
-                } else
-                  showInSnackBar('Please buy this feature');
-              }
-            });
-          },
-          child: Column(
-            children: [
-              Icon(
-                Icons.exit_to_app,
-                size: 30.0,
-                color: Colors.white,
-              ),
-              Text('Leave',
-                  textAlign: TextAlign.center,
-                  style: new TextStyle(fontSize: 15.0, color: Colors.white)),
-            ],
-          )));
-    }
-    return list;
-  }
-*/
-
- /* getQuickLinksWidget() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: quickLinkList(),
-    );
-  }*/
 
   getAlreadyMarkedWidgit() {
     return Column(children: <Widget>[
@@ -1052,15 +724,45 @@ class _HomePageState extends State<HomePage> {
       Container(
         decoration: new ShapeDecoration(
             shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(13.0)),
-            color: appStartColor()),
+                borderRadius: new BorderRadius.circular(0.0)),
+            color: Colors.green[50]),
         child: Text(
-          '\nToday\'s attendance has been marked. Thank You!',
+          '\nToday\'s attendance is marked',
           textAlign: TextAlign.center,
-          style: new TextStyle(color: Colors.white, fontSize: 15.0),
+          style: new TextStyle(color: Colors.black87, fontSize: 15.0),
         ),
-        width: 220.0,
-        height: 70.0,
+        width: double.infinity,
+        height: 60.0,
+      ),
+      SizedBox(
+        height: MediaQuery.of(context).size.height*.08,
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          SizedBox(width: 30.0,),
+          new InkWell(
+            child: new Text(
+              "Check Attendance Log",
+              style: new TextStyle(
+                 // color: appStartColor(),
+                  color: Colors.orange,
+                  decoration: TextDecoration.underline,
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.bold
+              ),
+            ),
+
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyApp()),
+              );
+            },
+          ),
+          Text(" "),
+
+        ],
       ),
       /*SizedBox(height: MediaQuery.of(context).size.height*.25),
           Container(
@@ -1128,7 +830,57 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ])),
+
+        const SizedBox(height: 30),
+
+    /*new SizedBox(
+    width: double.infinity,
+      height: MediaQuery.of(context).size.height * .08,
+       child: FlatButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Att_tab()),
+            );
+          },
+          child: const Text(
+              'Attendance Log',
+              style: TextStyle(fontSize: 18,color: Colors.white,)
+          ),
+          color: Colors.orange[800],
+           splashColor: Colors.orange[800],
+
+          /* shape: new RoundedRectangleBorder(
+               borderRadius: new BorderRadius.circular(0.0))*/
+        ),
+      ),*/
+
+         Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            SizedBox(width: 50.0,),
+            new InkWell(
+              child: new Text(
+                "Check Attendance Log",
+                style: new TextStyle(
+                    color: Colors.orange,
+                    decoration: TextDecoration.underline,
+                    fontSize: 17.0
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyApp()),
+                );
+              },
+            ),
+            Text(" "),
+          ],
+        ),
+
       ]);
+
     } else {
       return Column(children: [
         Text(
@@ -1228,30 +980,37 @@ if (act1 == 'TimeIn') {
         if (issave) {
           showDialog(context: context, child:
           new AlertDialog(
-            content: new Text("Attendance marked successfully!"),
+            content: new Text("     Attendance is marked"),
           )
           );
+         // if(mounted) {
+
+        //  }
           await new Future.delayed(const Duration(seconds: 2));
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyApp()),
           );
-          if(mounted) {
+
+         // Home ho = new Home();
+         // act = await ho.checkTimeIn(empid, orgdir);
           setState(() {
             act1 = act;
+            //  Navigator.of(context, rootNavigator: true).pop('dialog');
           });
-        }
+
         } else {
           print('------------------<<<<<<<<<<<');
           showDialog(context: context, child:
           new AlertDialog(
-            title: new Text("!"),
+            title: new Text("Warning"),
             content: new Text("Problem while marking attendance, try again."),
           )
           );
           if(mounted) {
           setState(() {
             act1 = act;
+
           });
         }
         }
@@ -1368,6 +1127,7 @@ if (act1 == 'TimeIn') {
         )
     );
   }
+
  _showAlertwidget() {
  return  new
  Column(
