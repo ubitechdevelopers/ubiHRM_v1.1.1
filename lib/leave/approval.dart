@@ -558,7 +558,7 @@ class ChoiceCard1 extends StatelessWidget {
 
                                                     Container(
                                                         width: MediaQuery.of(context) .size .width * 0.70,
-                                                        height: 10.0,
+                                                        height: MediaQuery.of(context) .size .height * 0.03,
                                                         padding: const EdgeInsets.all(0.0),
                                                         child: RichText(
                                                           text: new TextSpan(
@@ -714,9 +714,523 @@ class ChoiceCard1 extends StatelessWidget {
 
 
 
-
-
   _modalBottomSheetHR(context,String leaveid,days,leavetypeid) async{
+
+    final FocusNode myFocusNodeComment = FocusNode();
+    final FocusNode myFocusNodeEntitle = FocusNode();
+    final FocusNode myFocusNodeLOP = FocusNode();
+    final FocusNode myFocusNodeCF = FocusNode();
+    final FocusNode myFocusNodeAD= FocusNode();
+
+    TextEditingController CommentController = new TextEditingController();
+    TextEditingController EntitleController = new TextEditingController(text:days);
+    TextEditingController LOPController = new TextEditingController();
+    TextEditingController CFController = new TextEditingController();
+    TextEditingController  ADController = new TextEditingController();
+
+
+    showRoundedModalBottomSheet(
+        context: context,
+        //  radius: 190.0,
+        //   radius: 190.0, // This is the default
+        // color:Colors.lightGreen.withOpacity(0.9),
+        color:Colors.grey[100],
+        //   color:Colors.cyan[200].withOpacity(0.7),
+        builder: (BuildContext bc){
+          return new  Container(
+            // padding: MediaQuery.of(context).viewInsets,
+            //duration: const Duration(milliseconds: 100),
+            // curve: Curves.decelerate,
+
+            // child: new Expanded(
+            //height: MediaQuery.of(context).size.height-100.0,
+            //   height: 550.0,
+            child: new Container(
+              decoration: new BoxDecoration(
+                  color: Colors.teal.withOpacity(0.05),
+                  borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(0.0),
+                      topRight: const Radius.circular(0.0))),
+              alignment: Alignment.topCenter,
+              child: Wrap(
+                children: <Widget>[
+
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 5.0, bottom: 0.0, left: 40.0, right: 50.0),
+                    child:
+                    Container(
+                      height: MediaQuery.of(context).size.height*.13,
+                      //width: MediaQuery.of(context).size.width*.99,
+
+                      //decoration: new ShapeDecoration(
+                      // shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0),),
+                      color: Colors.transparent,
+                      //  ),
+
+                      child:  FutureBuilder<List<LeaveH>>(
+                          future: getleavehistory(leavetypeid),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if(snapshot.data.length>0) {
+
+                                return new ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return new Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            new Container(
+                                              width: MediaQuery.of(context).size.width * .99,
+
+                                              child:Text("Leave History",style:TextStyle(
+                                                // fontFamily: "WorkSansSemiBold",
+                                                fontSize: 16.0,
+                                                color: Colors.green,fontWeight: FontWeight.bold, ), textAlign: TextAlign.center,                                           ),
+                                            ),
+                                            Divider(color: Colors.black26,),
+                                            new Container(
+                                                width: MediaQuery.of(context).size.width * .99,
+                                                padding: EdgeInsets.only(
+                                                  left: 12.0,),
+                                                child: Row(
+                                                    children: <Widget>[
+                                                      new Expanded(
+                                                          child: Container(width: MediaQuery.of(context).size.width * 0.07,
+                                                            child: Text("Leave Type: "+snapshot.data[index].name .toString(),                                             style: TextStyle( color: Colors.black,                                                      fontSize: 16.0),),
+                                                          )),  ] )),
+                                            new Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                              children: <Widget>[
+
+                                                SizedBox(height: 10.0,),
+                                                new Expanded(
+                                                  child: Container( width: MediaQuery.of(context).size.width * 0.05,
+                                                    child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment .center,
+                                                        children: <Widget>[
+                                                          new Text("Entitled: "+snapshot.data[index].Entitle .toString(), style: TextStyle( color: Colors.black54, fontSize: 16.0),),
+                                                          // shape: new CircleBorder(),
+                                                          // borderSide: BorderSide(color: Colors.green),
+                                                        ] ),
+
+
+                                                  ),  ),
+
+                                                new Expanded(
+                                                  child:Container(
+                                                      width: MediaQuery
+                                                          .of(context)
+                                                          .size
+                                                          .width * 0.10,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment
+                                                            .center,
+                                                        children: <Widget>[
+                                                          Text("Utilized: "+snapshot.data[index].Used
+                                                              .toString(), style: TextStyle( color: Colors.black54, fontSize: 16.0,),),
+                                                        ],
+                                                      )
+
+                                                  ),),
+                                                new Expanded(
+                                                  child:Container(
+                                                      width: MediaQuery
+                                                          .of(context)
+                                                          .size
+                                                          .width * 0.10,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment
+                                                            .center,
+                                                        children: <Widget>[
+                                                          Text("Balance: "+snapshot.data[index].Left
+                                                              .toString(), style: TextStyle( color: Colors.black54, fontSize: 16.0),),
+                                                        ],
+                                                      )
+
+                                                  ),),
+
+                                                /*  new Expanded(
+                                  child:Container(
+                                      width: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.18,
+                                      decoration: new ShapeDecoration(
+                                        shape: new RoundedRectangleBorder(
+                                            borderRadius: new BorderRadius
+                                                .circular(2.0)),
+                                        color: snapshot.data[index].Leavests ==
+                                            'Approved' ? Colors.green
+                                            .withOpacity(0.75) : snapshot                                                    .data[index].Leavests
+                                            .toString() == 'Rejected'  ? Colors
+                                            .red.withOpacity(0.65) : snapshot                                                  .data[index].Leavests
+                                            .toString().startsWith('Pending')
+                                            ? Colors.orangeAccent
+                                            : Colors.black12,
+                                      ),
+
+
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .center,
+                                        children: <Widget>[
+                                          Text(snapshot.data[index].Leavests
+                                              .toString(),style: TextStyle(color: Colors.white),),
+                                        ],
+                                      )
+
+                                  ),),*/
+                                                Divider(color: Colors.black26,),
+                                              ],
+
+                                            ),  ] );
+                                    }
+                                );
+                              }else{
+                                return new Center(
+                                  child:Text("No Records"),
+                                );
+                              }
+                            }
+                            else if (snapshot.hasError) {
+                              return new Text("Unable to connect server");
+                            }
+
+                            // By default, show a loading spinner
+                            return new Center(child: CircularProgressIndicator());
+                          }
+                      ),  ),),
+
+
+                  Divider(color: Colors.black45,),
+
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 0.0, bottom: 10.0, left: 30.0, right: 30.0),
+                    child: TextFormField(
+                      focusNode: myFocusNodeComment,
+                      controller: CommentController,
+                      keyboardType: TextInputType.emailAddress,
+                      onFieldSubmitted: (String value) {
+                        FocusScope.of(context).requestFocus(myFocusNodeComment);
+                      },
+                      style: TextStyle(
+                          fontFamily: "WorkSansSemiBold",
+                          fontSize: 16.0,
+                          color: Colors.black),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        fillColor: Colors.white, filled: true,
+                        /* icon: Icon(
+                          Icons.edit,
+                          color: Colors.black,
+                          size: 22.0,
+                        ),*/
+                        hintText: "Comment",
+                        hintStyle: TextStyle(
+                            fontFamily: "WorkSansSemiBold", fontSize: 15.0),
+                        /*  suffixIcon: GestureDetector(
+                          //onTap: _toggleLogin,
+                          child: Icon(
+                            Icons.edit,
+                            size: 15.0,
+                            color: Colors.black,
+                          ),
+                        ),*/
+                      ),
+
+                      /*validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter Email or Phone no.';
+                            }
+                          },*/
+                      maxLines: 3,
+                    ),
+                  ),
+                  //if the user is hr////
+
+                  new Wrap(children: <Widget>[
+
+                    new Divider(color: Colors.black54, height: 1.5,),
+                    new Container(
+                      height: MediaQuery.of(context).size.height*.08,
+
+                      //    color:Colors.red,
+                      margin: const EdgeInsets.only(left: 50.0),
+                      width: 120.0,
+                      child: new TextFormField(
+                        decoration: new InputDecoration(labelText: "Entitled"),
+                        keyboardType: TextInputType.text,
+                        focusNode: myFocusNodeEntitle,
+                        controller: EntitleController,
+                        // initialValue: "days",
+                        onFieldSubmitted: (String value) {
+                          FocusScope.of(context).requestFocus(myFocusNodeEntitle);
+                        },
+                      ),
+                    ),
+
+                    new Container(
+                      height: MediaQuery.of(context).size.height*.08,
+                      margin: const EdgeInsets.only(left: 40.0),
+                      width: 100.0,
+                      child: new TextFormField(
+                        decoration: new InputDecoration(labelText: "LOP"),
+                        keyboardType: TextInputType.text,
+                        focusNode: myFocusNodeLOP,
+                        controller: LOPController,
+
+                        onFieldSubmitted: (String value) {
+                          FocusScope.of(context).requestFocus(myFocusNodeLOP);
+                        },
+
+                      ),
+                    ),
+
+                    new Container(
+                      height: MediaQuery.of(context).size.height*.08,
+                      margin: const EdgeInsets.only(left: 50.0),
+                      width: 120.0,
+                      child: new TextFormField(
+                        decoration: new InputDecoration(labelText: "Carried Forward"),
+                        keyboardType: TextInputType.text,
+                        focusNode: myFocusNodeCF,
+                        controller: CFController,
+                        onFieldSubmitted: (String value) {
+                          FocusScope.of(context).requestFocus(myFocusNodeCF);
+                        },
+                      ),
+                    ),
+
+                    new Container(
+                      height: MediaQuery.of(context).size.height*.08,
+                      margin: const EdgeInsets.only(left: 40.0),
+                      width: 100.0,
+                      child: new TextFormField(
+                        decoration: new InputDecoration(labelText: "Advance"),
+                        keyboardType: TextInputType.text,
+                        focusNode: myFocusNodeAD,
+                        controller: ADController,
+                        onFieldSubmitted: (String value) {
+                          FocusScope.of(context).requestFocus(myFocusNodeAD);
+                        },
+                      ),
+                    ),
+                  ])
+                  ,
+                  Row(
+                      children: <Widget>[
+                        new Expanded(
+                          child:Container(
+                            padding: EdgeInsets.only(
+                                top: 5.0, bottom: 10.0, left: 60.0, right: 7.0),
+                            child:  ButtonTheme(
+                              minWidth: 120.0,
+                              child: new OutlineButton(
+                                  child: new Text('Approve',
+                                      style: new TextStyle(
+                                        color: Colors.green[700],
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                      )),borderSide: BorderSide(color:Colors.green[700]),
+                                  onPressed: () async {
+                                    if(EntitleController.text==""){
+                                      EntitleController.text="0";
+                                    } if(LOPController.text==""){
+                                      LOPController.text="0";
+                                    } if(CFController.text==""){
+                                      CFController.text="0";
+                                    } if(ADController.text==""){
+                                      ADController.text="0";
+                                    }
+                                    var LBD=EntitleController.text+","+LOPController.text+","+CFController.text+","+ADController.text;
+                                    print(LBD);
+                                    //getApprovals(choice.title);
+                                    var sts= await ApproveLeaveByHr(leaveid,CommentController.text,2,LBD);
+
+                                    if(sts=="true") {
+                                      showDialog(
+                                          context: context,
+                                          builder: (_) =>
+                                          new AlertDialog(
+                                            //title: new Text("Dialog Title"),
+                                            content: new Text("Approved succesfully."),
+                                          )
+                                      );
+                                    }else{
+                                      showDialog(
+                                          context: context,
+                                          builder: (_) =>
+                                          new AlertDialog(
+                                            //title: new Text("Dialog Title"),
+                                            content: new Text("Some error."),
+                                          )
+                                      );
+                                    }
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => TabbedApp()),
+                                    ); },
+                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
+                              ),
+                              //      height: 20.0,
+/*                              child: RaisedGradientButton(
+                                onPressed: () async {
+                                  if(EntitleController.text==""){
+                                    EntitleController.text="0";
+                                  } if(LOPController.text==""){
+                                    LOPController.text="0";
+                                  } if(CFController.text==""){
+                                    CFController.text="0";
+                                  } if(ADController.text==""){
+                                    ADController.text="0";
+                                  }
+                                  var LBD=EntitleController.text+","+LOPController.text+","+CFController.text+","+ADController.text;
+                                  print(LBD);
+                                  //getApprovals(choice.title);
+                                  var sts= await ApproveLeaveByHr(leaveid,CommentController.text,2,LBD);
+
+                                  if(sts=="true") {
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) =>
+                                        new AlertDialog(
+                                          //title: new Text("Dialog Title"),
+                                          content: new Text("Approved succesfully."),
+                                        )
+                                    );
+                                  }else{
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) =>
+                                        new AlertDialog(
+                                          //title: new Text("Dialog Title"),
+                                          content: new Text("Some error."),
+                                        )
+                                    );
+                                  }
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => TabbedApp()),
+                                  ); },
+                                gradient: LinearGradient(
+                                  colors: <Color>[Colors.green[700], Colors.green[700]],
+                                ),
+                                child: new Text('Approve',
+                                    style: new TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ),*/
+                            ),),),
+                        new Expanded(
+                          child:Container(
+
+                            padding: EdgeInsets.only(
+                                top: 5.0, bottom: 10.0, left: 7.0, right: 60.0),
+                            child:  ButtonTheme(
+                              minWidth: 120.0,//   height: 0.0,
+                              child:  OutlineButton(
+                                  child: new Text('Reject',
+                                      style: new TextStyle(
+                                          color: Colors.red[700],
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold)),borderSide: BorderSide(color: Colors.red[700]),
+                                  onPressed: () async
+                                  {
+                                    //getApprovals(choice.title);
+                                    var sts= await ApproveLeave(leaveid, CommentController.text, 1);
+                                    if(sts=="true"){
+                                      showDialog(
+                                          context : context,
+                                          builder: (_) => new
+                                          AlertDialog(
+                                            //title: new Text("Dialog Title"),
+                                            content: new Text("Rejected succesfully."
+                                            ),
+                                          )
+                                      );
+                                    }
+                                    else{
+                                      showDialog(
+                                          context
+                                              : context,
+                                          builder: (_) => new
+                                          AlertDialog(
+                                            //title: new Text("Dialog Title"),
+                                            content: new Text("Some error."
+                                            ),
+                                          )
+                                      );
+                                    }
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => TabbedApp()),
+                                    );
+                                  },
+                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
+                              ),
+/*                             child: RaisedGradientButton(
+                                onPressed: () async
+                                {
+                                  //getApprovals(choice.title);
+                                  var sts= await ApproveLeave(leaveid, CommentController.text, 1);
+                                  if(sts=="true"){
+                                    showDialog(
+                                        context : context,
+                                        builder: (_) => new
+                                        AlertDialog(
+                                          //title: new Text("Dialog Title"),
+                                          content: new Text("Rejected succesfully."
+                                          ),
+                                        )
+                                    );
+                                  }
+                                  else{
+                                    showDialog(
+                                        context
+                                            : context,
+                                        builder: (_) => new
+                                        AlertDialog(
+                                          //title: new Text("Dialog Title"),
+                                          content: new Text("Some error."
+                                          ),
+                                        )
+                                    );
+                                  }
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => TabbedApp()),
+                                  );   },
+                                gradient: LinearGradient(
+                                  colors: <Color>[Colors.red[700], Colors.red[700]],
+                                ),
+                                child: new Text('Reject',
+                                    style: new TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold)),
+                              ),*/
+                            ),
+                          ),),
+                      ]),
+                ],
+              ),
+            ),
+          );
+
+        }
+    );
+  }
+
+
+
+
+
+  /*_modalBottomSheetHR(context,String leaveid,days,leavetypeid) async{
 
     final FocusNode myFocusNodeComment = FocusNode();
     final FocusNode myFocusNodeEntitle = FocusNode();
@@ -853,7 +1367,7 @@ class ChoiceCard1 extends StatelessWidget {
 
                                                 ),),
 
-                                              /*  new Expanded(
+                                              *//*  new Expanded(
                                   child:Container(
                                       width: MediaQuery
                                           .of(context)
@@ -883,7 +1397,7 @@ class ChoiceCard1 extends StatelessWidget {
                                         ],
                                       )
 
-                                  ),),*/
+                                  ),),*//*
                                               Divider(color: Colors.black26,),
                                             ],
 
@@ -924,29 +1438,29 @@ class ChoiceCard1 extends StatelessWidget {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         fillColor: Colors.white, filled: true,
-                        /* icon: Icon(
+                        *//* icon: Icon(
                           Icons.edit,
                           color: Colors.black,
                           size: 22.0,
-                        ),*/
+                        ),*//*
                         hintText: "Comment",
                         hintStyle: TextStyle(
                             fontFamily: "WorkSansSemiBold", fontSize: 15.0),
-                      /*  suffixIcon: GestureDetector(
+                      *//*  suffixIcon: GestureDetector(
                           //onTap: _toggleLogin,
                           child: Icon(
                             Icons.edit,
                             size: 15.0,
                             color: Colors.black,
                           ),
-                        ),*/
+                        ),*//*
                       ),
 
-                      /*validator: (value) {
+                      *//*validator: (value) {
                             if (value.isEmpty) {
                               return 'Please enter Email or Phone no.';
                             }
-                          },*/
+                          },*//*
                       maxLines: 3,
                     ),
                   ),
@@ -1133,10 +1647,10 @@ class ChoiceCard1 extends StatelessWidget {
 
         }
     );
-  }
+  }*/
 
 
-  _modalBottomSheet(context,String leaveid,days) async{
+/*  _modalBottomSheet(context,String leaveid,days) async{
 
     final FocusNode myFocusNodeComment = FocusNode();
     TextEditingController CommentController = new TextEditingController();
@@ -1168,7 +1682,7 @@ class ChoiceCard1 extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: Wrap(
                 children: <Widget>[
-                  /*    new Container(
+                  *//*    new Container(
                     width: MediaQuery.of(context).size.width * .20,
                     child:Text(psts,style:TextStyle(
                         fontFamily: "WorkSansSemiBold",
@@ -1176,7 +1690,7 @@ class ChoiceCard1 extends StatelessWidget {
                         color: Colors.black)),
 
                   ),
-                  Divider(color: Colors.black45,),*/
+                  Divider(color: Colors.black45,),*//*
                   Padding(
                     padding: EdgeInsets.only(
                         top: 40.0, bottom: 20.0, left: 40.0, right: 50.0),
@@ -1195,29 +1709,29 @@ class ChoiceCard1 extends StatelessWidget {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         fillColor: Colors.white, filled: true,
-                        /* icon: Icon(
+                        *//* icon: Icon(
                           Icons.edit,
                           color: Colors.black,
                           size: 22.0,
-                        ),*/
+                        ),*//*
                         hintText: "Comment",
                         hintStyle: TextStyle(
                         fontFamily: "WorkSansSemiBold", fontSize: 15.0 ),
-                        /*suffixIcon: GestureDetector(
+                        *//*suffixIcon: GestureDetector(
                           //onTap: _toggleLogin,
                           child: Icon(
                             Icons.edit,
                             size: 15.0,
                             color: Colors.black,
                           ),
-                        ),*/
+                        ),*//*
                       ),
 
-                      /*validator: (value) {
+                      *//*validator: (value) {
                             if (value.isEmpty) {
                               return 'Please enter Email or Phone no.';
                             }
-                          },*/
+                          },*//*
                       maxLines: 3,
                     ),
                   ),
@@ -1332,7 +1846,294 @@ print("ff"+sts);
         }
     );
 
+  }*/
+
+  _modalBottomSheet(context,String leaveid,days) async{
+
+    final FocusNode myFocusNodeComment = FocusNode();
+    TextEditingController CommentController = new TextEditingController();
+
+    showRoundedModalBottomSheet(
+        context: context,
+        //  radius: 190.0,
+        //   radius: 190.0, // This is the default
+        // color:Colors.lightGreen.withOpacity(0.9),
+        color:Colors.grey[100],
+        //   color:Colors.cyan[200].withOpacity(0.7),
+        builder: (BuildContext bc){
+          return new  Container(
+            // padding: MediaQuery.of(context).viewInsets,
+            //duration: const Duration(milliseconds: 100),
+            // curve: Curves.decelerate,
+
+            // child: new Expanded(
+            //height: MediaQuery.of(context).size.height-100.0,
+            height: 200.0,
+            child: new Container(
+              decoration: new BoxDecoration(
+                  color: Colors.teal.withOpacity(0.1),
+                  borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(0.0),
+                      topRight: const Radius.circular(0.0))),
+
+
+              alignment: Alignment.topCenter,
+              child: Wrap(
+                children: <Widget>[
+                  /*    new Container(
+                    width: MediaQuery.of(context).size.width * .20,
+                    child:Text(psts,style:TextStyle(
+                        fontFamily: "WorkSansSemiBold",
+                        fontSize: 18.0,
+                        color: Colors.black)),
+
+                  ),
+                  Divider(color: Colors.black45,),*/
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 20.0, bottom: 20.0, left: 20.0, right: 20.0),
+                    child: TextFormField(
+                      focusNode: myFocusNodeComment,
+                      controller: CommentController,
+                      keyboardType: TextInputType.emailAddress,
+                      onFieldSubmitted: (String value) {
+                        FocusScope.of(context).requestFocus(myFocusNodeComment);
+                      },
+                      style: TextStyle(
+                          fontFamily: "WorkSansSemiBold",
+                          fontSize: 16.0,
+                          height: 1.0,
+                          color: Colors.black),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        fillColor: Colors.white, filled: true,
+                        /* icon: Icon(
+                          Icons.edit,
+                          color: Colors.black,
+                          size: 22.0,
+                        ),*/
+                        hintText: "Comment",
+                        hintStyle: TextStyle(
+                            fontFamily: "WorkSansSemiBold", fontSize: 15.0 ),
+                        /*suffixIcon: GestureDetector(
+                          //onTap: _toggleLogin,
+                          child: Icon(
+                            Icons.edit,
+                            size: 15.0,
+                            color: Colors.black,
+                          ),
+                        ),*/
+                      ),
+
+                      /*validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter Email or Phone no.';
+                            }
+                          },*/
+                      maxLines: 3,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 10.0, bottom: 0.0, left: 60.0, right: 7.0),
+                    child:  ButtonTheme(
+                        minWidth: 50.0,
+                        height: 40.0,
+/*                      child: RaisedGradientButton(
+                        onPressed: () async  {
+                          //getApprovals(choice.title);
+                          final sts= await ApproveLeave(leaveid,CommentController.text,2);
+                          //  print("kk");
+                          // print("kk"+sts);
+                          if(sts=="true") {
+                            showDialog(
+                                context: context,
+                                builder: (_) =>
+                                new AlertDialog(
+                                  //title: new Text("Dialog Title"),
+                                  content: new Text("Approved succesfully"),
+                                )
+                            );
+                          }
+                          else{
+                            showDialog(
+                                context: context,
+                                builder: (_) =>
+                                new AlertDialog(
+                                  //title: new Text("Dialog Title"),
+                                  content: new Text("Could not be approved. Try again. "),
+                                )
+                            );
+                          }
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => TabbedApp()),
+                          ); },
+                        // color: Colors.green[400],
+                        //shape: new RoundedRectangleBorder(
+                        //  borderRadius: new BorderRadius.circular(30.0)),
+                        gradient: LinearGradient(
+                          colors: <Color>[Colors.green[700], Colors.green[700]],
+                        ),
+                        child: new Text('Approve',
+                            style: new TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),*/
+
+                        child: new OutlineButton(
+                          child: new Text('Approve',
+                              style: new TextStyle(
+                                color: Colors.green[700],
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+
+                              )),
+                          borderSide: BorderSide(color: Colors.green[700],
+                          ),
+                          onPressed: () async  {
+                            //getApprovals(choice.title);
+                            final sts= await ApproveLeave(leaveid,CommentController.text,2);
+                            //  print("kk");
+                            // print("kk"+sts);
+                            if(sts=="true") {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) =>
+                                  new AlertDialog(
+                                    //title: new Text("Dialog Title"),
+                                    content: new Text("Approved succesfully"),
+                                  )
+                              );
+                            }
+                            else{
+                              showDialog(
+                                  context: context,
+                                  builder: (_) =>
+                                  new AlertDialog(
+                                    //title: new Text("Dialog Title"),
+                                    content: new Text("Could not be approved. Try again. "),
+                                  )
+                              );
+                            }
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => TabbedApp()),
+                            ); },
+                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0),),
+
+                        )
+
+
+                    ),),
+
+
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 10.0, bottom: 0.0, left: 7.0, right: 60.0),
+                    child:  ButtonTheme(
+                      minWidth: 50.0,
+                      height: 40.0,
+/*                      child: RaisedGradientButton(
+                        onPressed: () async {
+                          //getApprovals(choice.title);
+                          var sts = await ApproveLeave(leaveid,CommentController.text,1);
+                          print("ff"+sts);
+                          if(sts=="true") {
+                            showDialog(
+                                context: context,
+                                builder: (_) =>
+                                new AlertDialog(
+                                  //title: new Text("Dialog Title"),
+                                  content: new Text("Leave rejected"),
+                                )
+                            );
+                          }
+                          else{
+                            showDialog(
+                                context: context,
+                                builder: (_) =>
+                                new AlertDialog(
+                                  //title: new Text("Dialog Title"),
+                                  content: new Text("Could not be rejected. Try again."),
+                                )
+                            );
+                          }
+
+
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => TabbedApp()),
+                          ); },
+                        // color: Colors.red[400],
+                        gradient: LinearGradient(
+                          colors: <Color>[Colors.red[700], Colors.red[700]],
+                        ),
+                        child: new Text('Reject',
+                            style: new TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold)),
+                      ),*/
+
+                      child: new OutlineButton(
+                          child: new Text('Reject',
+                              style: new TextStyle(
+                                  color: Colors.red[700],
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold)),borderSide: BorderSide(color: Colors.red[700]),
+                          onPressed: () async {
+                            //getApprovals(choice.title);
+                            var sts = await ApproveLeave(leaveid,CommentController.text,1);
+                            print("ff"+sts);
+                            if(sts=="true") {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) =>
+                                  new AlertDialog(
+                                    //title: new Text("Dialog Title"),
+                                    content: new Text("Leave rejected"),
+                                  )
+                              );
+                            }
+                            else{
+                              showDialog(
+                                  context: context,
+                                  builder: (_) =>
+                                  new AlertDialog(
+                                    //title: new Text("Dialog Title"),
+                                    content: new Text("Could not be rejected. Try again."),
+                                  )
+                              );
+                            }
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => TabbedApp()),
+                            ); },
+                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
+                      ),
+
+
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+
+        }
+    );
+
   }
+
+
+
 
   _onTapImage(leavetypeid) {
     return new

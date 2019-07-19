@@ -313,6 +313,7 @@ class LeaveA {
   String ToDayType;
   String TimeOfTo;
   String LeaveTypeId;
+  String sts;
 
   LeaveA(
       { this.Id,
@@ -323,7 +324,7 @@ class LeaveA {
         this.Fdate,
         this.Tdate,
         this.Psts,
-        this.Ldays, this.HRSts, this.FromDayType, this.ToDayType, this.TimeOfTo, this.LeaveTypeId});
+        this.Ldays, this.HRSts, this.FromDayType, this.ToDayType, this.TimeOfTo, this.LeaveTypeId, this.sts});
 }
 
 
@@ -515,12 +516,12 @@ Future<List<LeaveA>> getTeamApprovals() async {
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-//print(path+"getteamapproval?empid="+empid+'&orgid='+orgdir);
+  //print(path+"getteamapproval?empid="+empid+'&orgid='+orgdir);
   Response<String> response =
   await dio.post(path+"getteamapproval?empid="+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
 
-
+print(res);
   List<LeaveA> userList1 = createTeamleaveapporval(res);
 
   return userList1;
@@ -543,7 +544,8 @@ List<LeaveA> createTeamleaveapporval(List data) {
     String ToDayType = data[i]["ToDayType"].toString();
     String TimeOfTo = data[i]["TimeOfTo"].toString();
     String LeaveTypeId = data[i]["LeaveTypeId"].toString();
-    //   print("********************"+data[i]["Pstatus"].toString());
+    String sts = data[i]["sts"].toString();
+      print("********************"+data[i]["Pstatus"].toString());
     String HRSts = data[i]["HRSts"].toString();
  //   print(Fdate+"@@@@@@@"+Tdate);
     if(Fdate==Tdate){
@@ -567,8 +569,9 @@ List<LeaveA> createTeamleaveapporval(List data) {
         Tdate: Tdate,
         Psts : Psts,
         Ldays: Ldays,
-        HRSts: HRSts,FromDayType: FromDayType,ToDayType: ToDayType,TimeOfTo: TimeOfTo,LeaveTypeId :LeaveTypeId);
+        HRSts: HRSts,FromDayType: FromDayType,ToDayType: ToDayType,TimeOfTo: TimeOfTo,LeaveTypeId :LeaveTypeId,sts :sts);
     list.add(tos);
+
   }
   return list;
 }

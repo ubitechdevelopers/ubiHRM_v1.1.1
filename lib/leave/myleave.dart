@@ -334,12 +334,12 @@ class _MyLeaveState extends State<MyLeave> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   //            crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(height: 50.0,),
+                    SizedBox(height: 20.0,),
                     // SizedBox(width: MediaQuery.of(context).size.width*0.0),
 
                     new Expanded(
                       child: Container(
-                        color: Colors.red,
+                   //     color: Colors.red,
                         width: MediaQuery.of(context).size.width*0.50,
                         child:Text('Applied on',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
@@ -348,10 +348,11 @@ class _MyLeaveState extends State<MyLeave> {
 
                     new Expanded(
                       child: Container(
-                        color: Colors.yellow,
+                    //   color: Colors.yellow,
                         width: MediaQuery.of(context).size.width*0.50,
-                        margin: EdgeInsets.only(left:22.0),
-                        child:Text('Duration',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0,),textAlign: TextAlign.center,),
+                        margin: EdgeInsets.only(left:32.0),
+                        padding: EdgeInsets.only(right:12.0),
+                        child:Text('Action',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0,),textAlign: TextAlign.right,),
                       ),
                     ),
 
@@ -365,6 +366,7 @@ class _MyLeaveState extends State<MyLeave> {
                   child: Container(
                     height: MediaQuery.of(context).size.height*.55,
                     width: MediaQuery.of(context).size.width*.99,
+             //       margin: EdgeInsets.only(top: 4.0),
                     //padding: EdgeInsets.only(bottom: 15.0),
                     color: Colors.white,
                     //////////////////////////////////////////////////////////////////////---------------------------------
@@ -380,87 +382,60 @@ class _MyLeaveState extends State<MyLeave> {
                                   return new Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
+
                                         new Row(
+
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: <Widget>[
                                             new Expanded(
-                                              child: Container(color: Colors.red,
-                                                  width: MediaQuery .of(context).size .width * 0.45,
+                                              child: Container(
+                                            //     color:Colors.red,
+                                                  height: MediaQuery .of(context).size.height * 0.06,
+                                                  width: MediaQuery .of(context).size.width * 0.50,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: <Widget>[
-                                                      new SizedBox(width: 5.0,),
+                                                 //     new SizedBox(width: 5.0,),
                                                       new Text(snapshot.data[index].attendancedate.toString(), style: TextStyle(fontWeight: FontWeight.bold),)
                                                     ],
                                                   )
                                               ),
                                             ),
 
-                                            new Expanded(
-                                              child: Container(color: Colors.yellow,
-                                                  width: MediaQuery .of(context).size .width * 0.45,
-                                                  margin: EdgeInsets.only(left:22.0),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      new SizedBox(width: 5.0,),
-                                                      new Text(snapshot.data[index].leavefrom.toString()+snapshot.data[index].leaveto.toString() +"  ",style: TextStyle(color: Colors.grey[600]),textAlign: TextAlign.center,)
-                                                    ],
+                                            (snapshot.data[index].withdrawlsts && snapshot.data[index].approverstatus.toString() !='Withdrawn' && snapshot.data[index].approverstatus.toString() !="Rejected")?
+                                              new Expanded(
+                                                child: Container (
+                            //                   color:Colors.yellow,
+                                                 height: MediaQuery .of(context).size.height * 0.06,
+                                                 margin: EdgeInsets.only(left:32.0),
+                                                 padding: EdgeInsets.only(left:32.0),
+                                                 width: MediaQuery .of(context).size.width * 0.50,
+                                                 child: new OutlineButton(
+                                                    onPressed: () {
+                                                      confirmWithdrawl(
+                                                          snapshot.data[index].leaveid.toString());
+                                                    },
+                                                     child:new Icon(
+                                                       Icons.replay,
+                                                       size: 16.0,
+                                                       color:appStartColor(),
+                                                 //      textDirection: TextDirection.rtl,
+                                                     ),
+                                                     borderSide: BorderSide(color:appStartColor()),
+                                                     shape: new CircleBorder(),
+                                            //         padding:EdgeInsets.all(5.0),
                                                   )
-                                              ),
-                                            ),
-
-                                           /* new Container(
-                                                child: RichText(
-                                                  text: new TextSpan(
-                                                    style: new TextStyle(
-                                                      fontSize: 14.0,
-                                                      color: Colors.black,
-                                                    ),
-                                                    children: <TextSpan>[
-                                                      new TextSpan(text: ''
-                                                          ,style: new TextStyle(fontWeight: FontWeight.bold)),
-                                                      new TextSpan(text: snapshot.data[index].leavefrom.toString()+snapshot.data[index].leaveto.toString() +"  ",style: TextStyle(color: Colors.grey[600]), ),
-
-                                                    ],
-                                                  ),
-                                                )
-                                            ),*/
-
-                                         /*   new Expanded(
-                                              child: Container(
-                                                  width: MediaQuery .of(context).size.width * 0.45,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      new SizedBox(width: 5.0,),
-                                                      new Text(
-                                                        "",
-                                                        style: TextStyle(
-                                                            fontWeight: FontWeight.bold),),
-                                                      (snapshot.data[index].withdrawlsts &&
-                                                          snapshot.data[index].approverstatus.toString() !='Withdrawn' && snapshot.data[index].approverstatus.toString() !=
-                                                          "Rejected") ? new Container(
-                                                          height: 30.5,
-                                                          margin: EdgeInsets.only(
-                                                              left:25.0),
-                                                          child: new OutlineButton(
-                                                            child:new Icon(Icons.replay, size: 18.0,color:appStartColor(), ),
-                                                            borderSide: BorderSide(color:appStartColor()),
-
-                                                            //  color: Colors.orangeAccent,
-                                                            onPressed: () {
-                                                              confirmWithdrawl(
-                                                                  snapshot.data[index].leaveid.toString());},
-                                                            shape: new CircleBorder(),
-                                                          )
-                                                      ) : Center()
-                                                    ],
-                                                  )
-                                              ),
-                                            ),*/
+                                                ),
+                                              ):Center(),
                                           ],
+                                        ),
+
+                                      Container(
+                                          width: MediaQuery.of(context).size.width*.90,
+                                          padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                          margin: EdgeInsets.only(top: 4.0),
+                                          child: Text('Duration: '+snapshot.data[index].leavefrom.toString()+snapshot.data[index].leaveto.toString() +"  ",style: TextStyle(color: Colors.grey[600])),
                                         ),
 
                                         snapshot.data[index].reason.toString()!='-'?Container(
@@ -499,7 +474,7 @@ class _MyLeaveState extends State<MyLeave> {
                                           // child:Text(snapshot.data[index].withdrawlsts.toString()),
                                         ),
 
-                                        Divider(color: Colors.grey,),
+                                        Divider(),
                                       ]);
                                 }
                             );
