@@ -290,7 +290,14 @@ class _MyLeaveState extends State<MyLeave> {
 
                       Expanded(
                         flex:48,
-                        child: Column(
+                        child:InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyTeamLeave()),
+                            );
+                          },
+                         child: Column(
                           // width: double.infinity,
                             children: <Widget>[
                               SizedBox(height:MediaQuery.of(context).size.width*.02),
@@ -302,12 +309,7 @@ class _MyLeaveState extends State<MyLeave> {
                                         color: Colors.orange,
                                         size: 22.0 ),
                                     GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => MyTeamLeave()),
-                                        );
-                                      },
+
                                       child: const Text(
                                           'Team',
                                           style: TextStyle(fontSize: 18,color: Colors.orange)
@@ -316,6 +318,7 @@ class _MyLeaveState extends State<MyLeave> {
                                   ]),
                               SizedBox(height:MediaQuery.of(context).size.width*.04),
                             ]
+                        ),
                         ),
                       )
                     ]
@@ -391,7 +394,7 @@ class _MyLeaveState extends State<MyLeave> {
                                             new Expanded(
                                               child: Container(
                                             //     color:Colors.red,
-                                                  height: MediaQuery .of(context).size.height * 0.06,
+                                                  height: MediaQuery .of(context).size.height * 0.04,
                                                   width: MediaQuery .of(context).size.width * 0.50,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,7 +410,7 @@ class _MyLeaveState extends State<MyLeave> {
                                               new Expanded(
                                                 child: Container (
                             //                   color:Colors.yellow,
-                                                 height: MediaQuery .of(context).size.height * 0.06,
+                                                 height: MediaQuery .of(context).size.height * 0.04,
                                                  margin: EdgeInsets.only(left:32.0),
                                                  padding: EdgeInsets.only(left:32.0),
                                                  width: MediaQuery .of(context).size.width * 0.50,

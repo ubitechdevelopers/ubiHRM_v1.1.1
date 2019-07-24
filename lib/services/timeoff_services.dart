@@ -151,6 +151,8 @@ class TIMEOFFA {
   String ToDayType;
   String TimeOfTo;
   String TimeoffId;
+  String sts;
+  String TimeofDate;
 
   TIMEOFFA(
       { this.Id,
@@ -161,11 +163,9 @@ class TIMEOFFA {
         this.Fdate,
         this.Tdate,
         this.Psts,
-       this.HRSts, this.FromDayType, this.ToDayType, this.TimeOfTo, this.TimeoffId
+       this.HRSts, this.FromDayType, this.ToDayType, this.TimeOfTo, this.TimeoffId, this.sts, this.TimeofDate
       });
 }
-
-
 
 Future<List<TIMEOFFA>> getTimeoffapproval(listType) async {
   Dio dio = new Dio();
@@ -177,18 +177,7 @@ Future<List<TIMEOFFA>> getTimeoffapproval(listType) async {
   await dio.post(path+"getTimeoffapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
   print(res);
-  // print(path+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
-
-/*  List responseJson;
-  if (listType == 'Approved')
-    responseJson = res['Approved'];
-  else if (listType == 'Pending')
-    responseJson = res['Pending'];
-  else if (listType == 'Rejected')
-    responseJson = res['Rejected'];*/
-
   List<TIMEOFFA> userList = createtimeoffapporval(res);
-
   return userList;
 }
 
@@ -205,7 +194,7 @@ List<TIMEOFFA> createtimeoffapporval(List data) {
     String applydate = data[i]["ApplyDate"].toString();
     String Fdate = data[i]["FDate"].toString();
     String Tdate = data[i]["TDate"].toString();
- //   print("********************"+data[i]["Pstatus"].toString());
+    //   print("********************"+data[i]["Pstatus"].toString());
 
     // String Ldays = data[i]["Ldays"].toString();
     //String FromDayType = data[i]["FromDayType"].toString();
@@ -233,6 +222,65 @@ List<TIMEOFFA> createtimeoffapporval(List data) {
       // FromDayType: FromDayType,
       //ToDayType: ToDayType,TimeOfTo: TimeOfTo,
       // LeaveTypeId :LeaveTypeId
+    );
+    list.add(tos);
+  }
+  return list;
+}
+
+
+
+Future<List<TIMEOFFA>> getTeamTimeoffapproval() async {
+  Dio dio = new Dio();
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid =  prefs.getString('employeeid')??"";
+ // print(path+"getTeamTimeoffapproval?&empid="+empid+'&orgid='+orgdir);
+  Response<String>response =
+  await dio.post(path+"getTeamTimeoffapproval?&empid="+empid+'&orgid='+orgdir);
+  final res = json.decode(response.data.toString());
+
+
+  List<TIMEOFFA> userList1 = createteamtimeoffapporval(res);
+
+  return userList1;
+}
+
+
+List<TIMEOFFA> createteamtimeoffapporval(List data) {
+
+  List<TIMEOFFA> list = new List();
+  for (int i = 0; i < data.length; i++) {
+
+    String Id = data[i]["Id"].toString();
+    String name = data[i]["name"].toString();
+    String Timeoffsts = data[i]["LeaveStatus"].toString();
+    String Reason = data[i]["LeaveReason"].toString();
+    String applydate = data[i]["ApplyDate"].toString();
+    String TimeofDate = data[i]["TimeofDate"].toString();
+    String Fdate = data[i]["FDate"].toString();
+    String Tdate = data[i]["TDate"].toString();
+    String sts = data[i]["sts"].toString();
+
+
+    String HRSts = data[i]["HRSts"].toString();
+    String Psts="";
+    if(data[i]["Pstatus"].contains("Pending at")) {
+      Psts = data[i]["Pstatus"].toString();
+    }
+
+    TIMEOFFA tos = new TIMEOFFA(
+      Id: Id,
+      name: name,
+      Timeoffsts: Timeoffsts,
+      Reason: Reason,
+      applydate: applydate,
+      Fdate: Fdate,
+      Tdate: Tdate,
+      Psts : Psts,
+      HRSts: HRSts,
+      sts :sts,
+      TimeofDate:TimeofDate,
     );
     list.add(tos);
   }

@@ -601,7 +601,7 @@ class ChoiceCard1 extends StatelessWidget {
                                                             }
                                                           },
                                                           child: new Icon(
-                                                            Icons.edit,
+                                                            Icons.thumb_up,
                                                             size: 18.0,
                                                             color:appStartColor(),
 

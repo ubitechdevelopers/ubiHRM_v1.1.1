@@ -272,9 +272,11 @@ class _Flexitime extends State<Flexitime> {
           endDrawer: new AppDrawer(),
           appBar: new AppHeader(profileimage,showtabbar,orgName),
 
+           /*
           persistentFooterButtons: <Widget>[
             quickLinkList1(),
-           ],
+           ],*/
+
           bottomNavigationBar:new HomeNavigation(),
 
         //  endDrawer: new AppDrawer(),
@@ -463,10 +465,10 @@ class _Flexitime extends State<Flexitime> {
           children: <Widget>[
             Container(
               // foregroundDecoration: BoxDecoration(color:Colors.red ),
-              height: MediaQuery.of(context).size.height * 0.80,
+              height: MediaQuery.of(context).size.height * 0.76,
 
-              margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+              margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0,8.0),
+              padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
               decoration: new ShapeDecoration(
                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
                 color: Colors.white,
@@ -474,9 +476,9 @@ class _Flexitime extends State<Flexitime> {
               child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height * .06),
+                SizedBox(height: MediaQuery.of(context).size.height * .01),
                 Text("Flexi Time", style: new TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold,color: Colors.teal)),
-                SizedBox(height: MediaQuery.of(context).size.height * .03),
+                SizedBox(height: MediaQuery.of(context).size.height * .02),
                 new GestureDetector(
                 onTap: () {
                       // profile navigation
@@ -533,15 +535,17 @@ class _Flexitime extends State<Flexitime> {
       );
     }
   }
+
+/*
   Widget quickLinkList1() {
     return Container(
       color: Colors.green.withOpacity(0.9),
-
       width: MediaQuery.of(context).size.width * 0.95,
       // padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.03,bottom:MediaQuery.of(context).size.height*0.03, ),
       child: getBulkAttnWid(),
     );
-  }
+  }*/
+
   getMarkAttendanceWidgit() {
     return Container(
       child: Column(
@@ -561,7 +565,7 @@ class _Flexitime extends State<Flexitime> {
           height: 45.0,
           child:flexitimein=='2'?getFlexioutButton():getFlexiInButton(),
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * .04),
+        SizedBox(height: MediaQuery.of(context).size.height * .03),
         Container(
             color: Colors.teal.withOpacity(0.1),
             height: MediaQuery.of(context).size.height * .15,
@@ -604,8 +608,34 @@ class _Flexitime extends State<Flexitime> {
               ),
             ]) ),
 
+        SizedBox(height:MediaQuery.of(context).size.height *0.05,),
 
+    Row(
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: <Widget>[
+      SizedBox(width: 30.0,),
+        new InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => FlexiList()),
+            );
+          },
+          child: new Text(
+            "Check Flexi Log",
+            style: new TextStyle(
+              // color: appStartColor(),
+                color: Colors.orange,
+                decoration: TextDecoration.underline,
+                fontSize: 17.0,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
+       Text(" "),
+     ]),
       ]);
+
     } else {
       return Column(children: [
         Text(
@@ -623,7 +653,7 @@ class _Flexitime extends State<Flexitime> {
     return Container(width: 0.0, height: 0.0);
   }
 
-
+   /*
   Widget getBulkAttnWid() {
     List <Widget> widList = List<Widget>();
      widList.add(Container(
@@ -655,12 +685,11 @@ class _Flexitime extends State<Flexitime> {
               ],
             )),
       ));
-
-
     /* widList.add();
     widList.add();*/
     return (Row(children: widList,mainAxisAlignment: MainAxisAlignment.spaceEvenly,));
-  }
+  }*/
+
   getFlexiInButton() {
     return RaisedButton(
       child: Text('TIME IN',
@@ -682,85 +711,55 @@ class _Flexitime extends State<Flexitime> {
         child: const Text('TIME OUT',style: TextStyle(color: Colors.white,fontSize: 18),),
         color: Colors.orange[800],
         onPressed: () {
-          sl.startStreaming(5);
-          SaveImage saveImage = new SaveImage();
-          setState(() {
-            act1 = "";
-          });
-          print('****************************>>');
-          print(streamlocationaddr.toString());
-         // print(visit_id.toString());
-          print('00000000000');
-         // print(_comments.text);
-          print('111111111111111');
-          print(lat+' '+long);
-          print('22222222222222');
-          print('<<****************************');
 
-         // Navigator.of(context, rootNavigator: true).pop();
-         saveImage.saveFlexiOut(empid,streamlocationaddr.toString(),fid.toString(),lat,long,orgid)
-             .then((res){
-
-           print(res);
-           print("444");
-           checkTimeinflexi().then((EmpList) {
-             setState(() {
-               flexiidsts = EmpList;
-               fid = flexiidsts[0].fid;
-               flexitimein = flexiidsts[0].sts;
-
-              // print("id and sts1");
-            //  print(fid);
-             //  print(flexitimein);
-
-             });
-           });
-           showDialog(context: context, child:
-           new AlertDialog(
-             content: new Text("Attendance marked successfully!"),
-           )
-           );
-
-
-           Navigator.push(
-             context,
-             MaterialPageRoute(builder: (context) => FlexiList()),
-           );
-           setState(() {
-             act1 = act;
-           });
-          }).catchError((ett){
-            showInSnackBar('Unable to punch attendance');
-            setState(() {
-              act1 = act;
-            });
-          });
-          /*       //  Loc lock = new Loc();
-                //   location_addr1 = await lock.initPlatformState();
-                if(_isButtonDisabled)
-                  return null;
-
-                Navigator.of(context, rootNavigator: true).pop('dialog');
-                setState(() {
-                  _isButtonDisabled=true;
-                });
-                //PunchInOut(comments.text,'','empid', location_addr1, 'lid', 'act', 'orgdir', latit, longi).then((res){
-                SaveImage saveImage = new SaveImage();
-                 saveImage.visitOut(comments.text,visit_id,location_addr1,latit, longi).then((res){
-print('visit out called for visit id:'+visit_id);
-                /*
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PunchLocationSummary()),
-                  );
-*/
-
-
-                }).catchError((onError){
-                  showInSnackBar('Unable to punch visit');
-                });
-*/
+          saveFlexioutImage();
         });
+  }
+
+  saveFlexioutImage() async {
+    sl.startStreaming(5);
+    SaveImage saveImage = new SaveImage();
+    bool issave = false;
+    setState(() {
+      act1 = "";
+    });
+    print('****************************>>');
+    print(streamlocationaddr.toString());
+
+
+    // Navigator.of(context, rootNavigator: true).pop();
+    issave = await saveImage.saveFlexiOut(empid,streamlocationaddr.toString(),fid.toString(),lat,long,orgid);
+
+    if(issave){
+      print(issave);
+      print("444");
+    /*  checkTimeinflexi().then((EmpList) {
+        setState(() {
+          flexiidsts = EmpList;
+          fid = flexiidsts[0].fid;
+          flexitimein = flexiidsts[0].sts;
+
+        });
+      });*/
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text("Attendance punched successfully!"),
+      )
+      );
+      await new Future.delayed(const Duration(seconds: 2));
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => FlexiList()),
+      );
+      setState(() {
+        act1 = act;
+      });
+    }else{
+      showInSnackBar('Unable to punch attendance');
+      setState(() {
+        act1 = act;
+      });
+    }
   }
 
 
@@ -800,7 +799,7 @@ print('visit out called for visit id:'+visit_id);
       issave = await saveImage.saveFlexi(mk);
       ////print(issave);
       if (issave) {
-        checkTimeinflexi().then((EmpList) {
+       /* checkTimeinflexi().then((EmpList) {
           setState(() {
             flexiidsts = EmpList;
             fid = flexiidsts[0].fid;
@@ -811,12 +810,13 @@ print('visit out called for visit id:'+visit_id);
             print(flexitimein);
 
           });
-        });
+        });*/
         showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Attendance punched successfully!"),
         )
         );
+        await new Future.delayed(const Duration(seconds: 2));
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => FlexiList()),

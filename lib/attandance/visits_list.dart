@@ -142,49 +142,26 @@ class _VisitList extends State<VisitList> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  SizedBox(width: 8.0,),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.22,
-                    child: Text(
-                      'Name',
-                      style: TextStyle(color: appStartColor(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0),
-                      textAlign: TextAlign.left,
-                    ),
+
+                  SizedBox(height: 20.0,),
+                  //SizedBox(width: MediaQuery.of(context).size.width*0.02),
+                  Expanded(
+                    flex: 50,
+                    child:Text(' Name',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.42,
-                    child: Text(
-                      'Client',
-                      style: TextStyle(color: appStartColor(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0),
-                      textAlign: TextAlign.left,
-                    ),
+                  SizedBox(height: 20.0,),
+                  Expanded(
+                    flex: 50,
+                    // width: MediaQuery.of(context).size.width*0.2,
+                    child:Text('Client',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.12,
-                    child: Text('In',
-                        style: TextStyle(color: appStartColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0),
-                        textAlign: TextAlign.left),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.12,
-                    child: Text('Out ',
-                        style: TextStyle(color: appStartColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0),
-                        textAlign: TextAlign.left),
-                  ),
+
                 ],
               ),
             ),
-            SizedBox(height: 5.0),
+            //SizedBox(height: 5.0),
             Divider(
-              height: 5.2,
+              height: 8.2,
             ),
             new Expanded(
               child: res == true ? getEmpDataList(today.text) : Center(),
@@ -217,82 +194,88 @@ class _VisitList extends State<VisitList> {
                   itemCount: snapshot.data.length,
                   //    padding: EdgeInsets.only(left: 15.0,right: 15.0),
                   itemBuilder: (BuildContext context, int index) {
-                    return new Container(
-            //          width: MediaQuery.of(context).size.width * .9,
-                        child:Column(children: <Widget>[
-                      new Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            SizedBox(width: 8.0,),
-                            new Container(
-                                width: MediaQuery.of(context).size.width * 0.22,
+
+                    return new Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                  flex:50,
+
+                                  child: Column(
+
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+
+                                      Text(" "+snapshot.data[index].Emp
+                                          .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                      SizedBox(height: 10.0,),
+                                      Text(" TimeIn:    "+snapshot.data[index].pi_time
+                                          .toString(),),
+                                      SizedBox(height: 5.0,),
+                                      Text(" TimeOut: "+snapshot.data[index].po_time
+                                          .toString(),),
+
+
+                                    ],
+                                  )
+                              ),
+
+                              Expanded(
+                                flex:50,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    new Text(
-                                        snapshot.data[index].Emp.toString(),style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.left,),
+                                    Text(snapshot.data[index].client
+                                        .toString(), style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),),
+
+                                    InkWell(
+                                      child: Text('In: ' +
+                                          snapshot.data[index]
+                                              .pi_loc.toString(),
+                                          style: TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 12.0)),
+                                      onTap: () {
+                                        goToMap(
+                                            snapshot.data[index]
+                                                .pi_latit ,
+                                            snapshot.data[index]
+                                                .pi_longi);
+                                      },
+                                    ),
+                                    SizedBox(height:2.0),
+                                    InkWell(
+                                      child: Text('Out: ' +
+                                          snapshot.data[index]
+                                              .po_loc.toString(),
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 12.0),),
+                                      onTap: () {
+                                        goToMap(
+                                            snapshot.data[index]
+                                                .po_latit,
+                                            snapshot.data[index]
+                                                .po_longi);
+                                      },
+                                    ),
                                   ],
-                                )),
-                            new Container(
-                              width: MediaQuery.of(context).size.width * 0.44,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  new Text(
-                                    snapshot.data[index].client.toString(),style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.left,
-                                  ),
-                                  InkWell(
-                                    child:Text("In: "+
-                                      snapshot.data[index].pi_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
-                                    onTap: () {goToMap(snapshot.data[index].pi_latit,snapshot.data[index].pi_longi.toString());},
-                                  ),
-                                  InkWell(
-                                    child:Text("Out: "+
-                                      snapshot.data[index].po_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
-                                    onTap: () {goToMap(snapshot.data[index].po_latit.toString(),snapshot.data[index].po_longi.toString());},
-                                  ),
-                                ],
+                                ),
                               ),
 
 
-                            ),
-                            new Container(
-                              width: MediaQuery.of(context).size.width * 0.12,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(snapshot.data[index].pi_time.toString(),style: TextStyle(fontWeight:FontWeight.bold),),
 
-                                  SizedBox(height: 2.0,),
-
-                                ],
-                              )
-                            ),
-                            new Container(
-                              width: MediaQuery.of(context).size.width * 0.12,
-                              child: new Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(snapshot.data[index].po_time.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-
-                                ],
-                    ),
-
-
-                            ),
-                          ],
-                        ),
-
-                      Divider(
-                        color: Colors.blueGrey.withOpacity(0.25),
-                        height: 0.2,
-                      ),
-                    ]),
-                    );
+                            ],
+                          ),
+                          Divider(color: Colors.black26,),
+                        ]);
                   });
             } else {
               return new Center(

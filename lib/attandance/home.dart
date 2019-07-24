@@ -251,8 +251,6 @@ class _HomePageState extends State<HomePage> {
 
    return getmainhomewidget();
 
-
-
     /* return MaterialApp(
       home: (response==0) ? new AskRegisterationPage() : getmainhomewidget(),
     );*/
@@ -323,92 +321,11 @@ class _HomePageState extends State<HomePage> {
 
 
       )
-      /*  child: new Scaffold(
-          backgroundColor:scaffoldBackColor(),
-          key: _scaffoldKey,
-          appBar: AppBar(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                new Text(org_name, style: new TextStyle(fontSize: 20.0)),
-              ],
-            ),
-            automaticallyImplyLeading: false,
-              backgroundColor: Colors.teal,
-           // backgroundColor: Color.fromARGB(255,63,163,128),
-          ),
-          //bottomSheet: getQuickLinksWidget(),
-          persistentFooterButtons: <Widget>[
-            quickLinkList1(),
 
-          ],
-
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: (newIndex) {
-              if (newIndex == 2) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Settings()),
-                );
-                return;
-              } else if (newIndex == 0) {
-                (admin_sts == '1')
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Reports()),
-                      )
-                    : Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ProfilePage()),
-                      );
-
-                return;
-              }
-
-              setState(() {
-                _currentIndex = newIndex;
-              });
-            }, // this will be set when a new tab is tapped
-            items: [
-              (admin_sts == '1')
-                  ? BottomNavigationBarItem(
-                      icon: new Icon(
-                        Icons.library_books,
-                      ),
-                      title: new Text('Reports'),
-                    )
-                  : BottomNavigationBarItem(
-                      icon: new Icon(
-                        Icons.person,
-                      ),
-                      title: new Text('Profile'),
-                    ),
-              BottomNavigationBarItem(
-                icon: new Icon(
-                  Icons.home,
-                  color: Colors.orangeAccent,
-                ),
-                title: new Text('Home',
-                    style: TextStyle(color: Colors.orangeAccent)),
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.settings,
-                  ),
-                  title: Text('Settings'))
-            ],
-          ),
-
-          endDrawer: new AppDrawer(),
-          body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
-        )*/
     );
   }
 
   checkalreadylogin() {
-
-
     ////print("---->"+response.toString());
     if (response == 1) {
       return new IndexedStack(
@@ -472,7 +389,7 @@ class _HomePageState extends State<HomePage> {
                       textAlign: TextAlign.right,
                     ),
                     Text(
-                      " If Location not being fetched automatically?",
+                      " Location not fetched automatically? Click Refresh Location",
                       style: new TextStyle(fontSize: 12.0, color: Colors.black),
                       textAlign: TextAlign.left,
                     ),
@@ -692,28 +609,11 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 10.0),*/
               getwidget(location_addr1),
               //    SizedBox(height: MediaQuery.of(context).size.height*.1),
-              /*      Container(
-       //       foregroundDecoration: BoxDecoration(color:Colors.green ),
-              margin: EdgeInsets.only(bottom:MediaQuery.of(context).size.height*0),
-//              padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02,bottom:MediaQuery.of(context).size.height*0.02),
-              height: MediaQuery.of(context).size.height*.10,
-              color: Colors.teal.withOpacity(0.8),
-              child: Column(
-                  children:[
-                    SizedBox(height: 10.0,),
-                    getQuickLinksWidget()
-                  ]),
-            ),
-*/
+
             ]),
       );
     }
   }
-
-
-
-
-
 
 
   getAlreadyMarkedWidgit() {

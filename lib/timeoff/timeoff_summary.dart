@@ -16,9 +16,7 @@ import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'timeoff.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
 import 'package:ubihrm/model/model.dart';
-//import 'settings.dart';
-import '../profile.dart';
-//import 'reports.dart';
+import 'teamtimeoffsummary.dart';
 import '../b_navigationbar.dart';
 import '../global.dart';
 import '../drawer.dart';
@@ -262,65 +260,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
       ),*/
       bottomNavigationBar:  new HomeNavigation(),
-      /*     bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (newIndex) {
-          if(newIndex==2){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Settings()),
-            );
-            return;
-          }
-          else if (newIndex == 0) {
-            (admin_sts == '1')
-                ? Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Reports()),
-            )
-                : Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
-            );
-            return;
-          }
-          if(newIndex==1){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-            return;
-          }
-          print("Current pressed new indexed "+newIndex.toString());
-          setState((){_currentIndex = newIndex;});
-        }, // this will be set when a new tab is tapped
-        items: [
-          (admin_sts == '1')
-              ? BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.library_books,
-            ),
-            title: new Text('Reports'),
-          )
-              : BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.person,
-            ),
-            title: new Text('Profile'),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.home,color: Colors.black54,),
-            title: new Text('Home',style:TextStyle(color: Colors.black54,)),
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              title: Text('Settings')
-          )
-        ],
-      ),*/
 
-      // endDrawer: new AppDrawer(),
-    //  body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
       body:getMarkAttendanceWidgit(),
       floatingActionButton: new FloatingActionButton(
         backgroundColor: Colors.orange[800],
@@ -384,26 +324,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
     );
   }
 
-  /*
-  mainbodyWidget() {
-    return SafeArea(
-      child: ListView(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(height: 15.0),
-              getMarkAttendanceWidgit(),
-              //getMarkAttendanceWidgit(),
-            ],
-          ),
 
-
-        ],
-      ),
-
-    );
-  }*/
 
   Widget getMarkAttendanceWidgit() {
     //  double h_width = MediaQuery.of(context).size.width*0.5; // screen's 50%
@@ -424,43 +345,115 @@ class _TimeoffSummary extends State<TimeoffSummary> {
             child:Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text('My Time Off History',
-                      style: new TextStyle(fontSize: 22.0, color: appStartColor())),
-                  //SizedBox(height: 10.0),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          flex:48,
+                          child:Column(
+                              children: <Widget>[
+                                // width: double.infinity,
+                                //height: MediaQuery.of(context).size.height * .07,
+                                SizedBox(height:MediaQuery.of(context).size.width*.02),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(
+                                          Icons.person,
+                                          color: Colors.orange,
+                                          size: 22.0 ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          false;
+                                        },
 
-                  new Divider(color: Colors.black54,height: 1.5,),
+                                        child: const Text(
+                                            'Self',
+                                            style: TextStyle(fontSize: 18,color: Colors.orange,fontWeight:FontWeight.bold)
+                                        ),
+                                      ),
+                                    ]),
+
+                                SizedBox(height:MediaQuery.of(context).size.width*.036),
+                                Divider(
+                                  color: Colors.orange,
+                                  height: 0.4,
+                                ),
+                                Divider(
+                                  color: Colors.orange,
+                                  height: 0.4,
+                                ),
+                                Divider(
+                                  color: Colors.orange,
+                                  height: 0.4,
+                                ),
+                              ]
+                          ),
+                        ),
+
+                        Expanded(
+                          flex:48,
+                            child:InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => TeamTimeoffSummary()),
+                                );
+                              },
+                          child: Column(
+                            // width: double.infinity,
+                              children: <Widget>[
+                                SizedBox(height:MediaQuery.of(context).size.width*.02),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(
+                                          Icons.group,
+                                          color: Colors.orange,
+                                          size: 22.0 ),
+                                      GestureDetector(
+
+                                        child: const Text(
+                                            'Team',
+                                            style: TextStyle(fontSize: 18,color: Colors.orange)
+                                        ),
+                                      ),
+                                    ]),
+                                SizedBox(height:MediaQuery.of(context).size.width*.04),
+                              ]
+                           ),
+                          ),
+                        )
+                      ]
+                  ),
+
+                  Container(
+                    padding: EdgeInsets.only(top:12.0),
+                    child:Center(
+                      child:Text('My Time Off',
+                          style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                    ),
+                  ),
+
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
 //            crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height: 50.0,),
+                      SizedBox(height: 20.0,),
                  //     SizedBox(width: MediaQuery.of(context).size.width*0.02),
                       new Expanded(
                         child:  Container(
-                        width: MediaQuery.of(context).size.width*0.30,
+                        width: MediaQuery.of(context).size.width*0.50,
                         child:Text('Date',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
 
-                  //    SizedBox(height: 50.0,),
                       new Expanded(
                         child:  Container(
-                        width: MediaQuery.of(context).size.width*0.17,
-                        margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                        child:Text('Start',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
-                      ),),
-
-                  //    SizedBox(height: 50.0,),
-                      new Expanded(
-                        child:  Container(
-                        width: MediaQuery.of(context).size.width*0.17,
-                        child:Text('End',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
-                      ),),
-
-                      new Expanded(
-                        child:  Container(
-                        width: MediaQuery.of(context).size.width*0.22,
-                        margin: EdgeInsets.only(left:7.0),
-                        child:Text('Action',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        width: MediaQuery.of(context).size.width*0.50,
+                          margin: EdgeInsets.only(left:32.0),
+                          padding: EdgeInsets.only(right:12.0),
+                        child:Text('Action',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),textAlign: TextAlign.right,),
                       ),),
                     ],
                   ),
@@ -493,66 +486,34 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
                                             new Expanded(
                                               child: Container(
-                                                width: MediaQuery.of(context).size.width * 0.30,
+                                                  height: MediaQuery .of(context).size.height * 0.04,
+                                                  width: MediaQuery .of(context).size.width * 0.50,
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     new Text(
                                                       snapshot.data[index].TimeofDate.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                    /*  (snapshot.data[index].withdrawlsts && snapshot.data[index].ApprovalSts.toString()!='Withdrawn' && snapshot.data[index].ApprovalSts.toString()!="Rejected")?new Container(
-                                              height:18.5,
-                                              child:new  FlatButton(
-                                                shape: Border.all(color: Colors.blue),
-                                                padding: EdgeInsets.all(1.0),
-                                                onPressed: () {
-                                                  confirmWithdrawl(snapshot.data[index].TimeOffId.toString());
-                                                },
-                                                child: Text("Withdraw",style: TextStyle(color: Colors.blue),),
-                                              )
-                                      ):Center(),*/
+
                                                   ],
                                                 )),),
 
-                                            new Expanded(
-                                              child: Container(
-                                              width: MediaQuery.of(context).size.width * 0.17, margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                                              child:  Text(
-                                                  snapshot.data[index].TimeFrom.toString(),style:TextStyle(fontWeight: FontWeight.bold)),
-                                            ),),
 
-                                            new Expanded(
-                                              child: Container(
-                                              width: MediaQuery.of(context).size.width * 0.17,
-                                              child:  Text(
-                                                  snapshot.data[index].TimeTo.toString(),style:TextStyle(fontWeight: FontWeight.bold)),
-                                            ),),
+
+
                                             new Expanded(
                                             child:  Container(
-                                            width: MediaQuery.of(context).size.width * 0.24,
-                                              /*decoration: new ShapeDecoration(
-                                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(2.0)),
-                                  color: snapshot.data[index].ApprovalSts.toString()=='Approved'?Colors.green.withOpacity(0.75):snapshot.data[index].ApprovalSts.toString()=='Rejected' || snapshot.data[index].ApprovalSts.toString()=='Cancel' ?Colors.red.withOpacity(0.65):snapshot.data[index].ApprovalSts.toString().startsWith('Pending')?Colors.orangeAccent:Colors.black12,
-                                ),
-
-                                //color: Colors.black12, // withdrawn
-                                //color: Colors.orangeAccent, // pending
-                                //color: Colors.red.withOpacity(0.65), // rejected,cancel
-                                // color: Colors.green.withOpacity(0.75), // approved
-                                padding: EdgeInsets.only(top:1.5,bottom: 1.5,left:8.0,right:8.0),
-                                margin: EdgeInsets.only(top: 4.0),
-                                child: Text(snapshot.data[index].ApprovalSts.toString(), style: TextStyle(color: Colors.white, fontSize: 14.0,),textAlign: TextAlign.center, ),*/
                                               child:Column(
                                                 children: <Widget>[
                           //                        new Text(snapshot.data[index].ApprovalSts.toString(), style: TextStyle(color: snapshot.data[index].ApprovalSts.toString()=='Approved'?Colors.green.withOpacity(0.75):snapshot.data[index].ApprovalSts.toString()=='Rejected' || snapshot.data[index].ApprovalSts.toString()=='Cancel' ?Colors.red.withOpacity(0.65):snapshot.data[index].ApprovalSts.toString().startsWith('Pending')?Colors.orange[800]:Colors.black54, fontSize: 14.0,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
 
-                                                  SizedBox(height: 7.0,),
                                                   (snapshot.data[index].withdrawlsts && snapshot.data[index].ApprovalSts.toString()!='Withdrawn' && snapshot.data[index].ApprovalSts.toString()!="Rejected")?InkWell(
                                                     child: Container(
-                                                       height: 30.5,
-                                                       margin: EdgeInsets.only(left:25.0),
-
+                                                      height: MediaQuery .of(context).size.height * 0.04,
+                                                      margin: EdgeInsets.only(left:32.0),
+                                                      padding: EdgeInsets.only(left:32.0),
+                                                      width: MediaQuery .of(context).size.width * 0.50,
                                                       child: new OutlineButton(
-                                                      child:new Icon(Icons.replay, size: 18.0,color:appStartColor(), ),
+                                                      child:new Icon(Icons.replay, size: 16.0,color:appStartColor(), ),
                                                       borderSide: BorderSide(color: appStartColor()),
 
                                                       //  color: Colors.orangeAccent,
@@ -572,27 +533,19 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
                                                 ],
                                               ),
-                                              // child: Text(snapshot.data[index].ApprovalSts.toString(), style: TextStyle(color: snapshot.data[index].ApprovalSts.toString()=='Approved'?Colors.green.withOpacity(0.75):snapshot.data[index].ApprovalSts.toString()=='Rejected' || snapshot.data[index].ApprovalSts.toString()=='Cancel' ?Colors.red.withOpacity(0.65):snapshot.data[index].ApprovalSts.toString().startsWith('Pending')?Colors.orangeAccent:Colors.black54, fontSize: 14.0,),textAlign: TextAlign.center, )
-                                            ),),
-                                            /*  (snapshot.data[index].withdrawlsts && snapshot.data[index].ApprovalSts.toString()!='Withdraw' && snapshot.data[index].ApprovalSts.toString()!="Rejected")?Container(
-                                  height: 25.0,
-                                  width: 25.0,
-                                  child: FittedBox(
-                                      child:new  FloatingActionButton(
-                                        backgroundColor: Colors.redAccent,
-                                        onPressed: () {
-                                          confirmWithdrawl(snapshot.data[index].TimeOffId.toString());
-                                        },
-                                        tooltip: 'Withdraw Timeoff',
-                                        child: new Icon(Icons.refresh, size: 40.0,),
-                                      )
-                                  )
-                              ): Container(),*/
+                                            ),
+                                          ),
+
                                             //Divider(),
                                           ],
                                         ),
                                         //SizedBox(width: 30.0,),
-
+                                        Container(
+                                          width: MediaQuery.of(context).size.width*.90,
+                                          padding: EdgeInsets.only(top:1.5,bottom: 0.5),
+                                          margin: EdgeInsets.only(top: 4.0),
+                                          child: Text('Duration: '+snapshot.data[index].TimeFrom.toString()+' to '+snapshot.data[index].TimeTo.toString(), style: TextStyle(color: Colors.black54),),
+                                        ),
 
                                         snapshot.data[index].Reason.toString()!='-'?Container(
                                           width: MediaQuery.of(context).size.width*.90,

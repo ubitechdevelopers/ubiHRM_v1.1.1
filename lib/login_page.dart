@@ -1135,7 +1135,7 @@ fontSize: 14.0),
                              // res = json.decode(response.body.toString());
                             print("999");
                           // print(res);
-                            if (response.body.toString().contains("true")) {
+                            if (response.body.toString().contains("1")) {
                              // setLocal(res['f_name'],res['id'],res['org_id']);
                               signupNameController.clear();
                               CPNController.clear();
@@ -1183,6 +1183,14 @@ fontSize: 14.0),
                                       "Phone id is already registered"),
                                 ));
                               }*/
+                            else if(response.body.toString().contains("2")){
+                              showDialog(context: context, child:
+                              new AlertDialog(
+                                title: new Text("ubihrm"),
+                                content: new Text(
+                                    "Oops! Email or Phone no already exist. Try later"),
+                              ));
+                            }
                             else {
                               showDialog(context: context, child:
                               new AlertDialog(

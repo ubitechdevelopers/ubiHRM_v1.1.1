@@ -142,6 +142,13 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                     children: <Widget>[
                       Expanded(
                         flex:48,
+                        child:InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyApp()),
+                            );
+                          },
                         child:Column(
                             children: <Widget>[
                               // width: double.infinity,
@@ -156,13 +163,6 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                                     size: 22.0 ),
 
                               GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => MyApp()),
-                                  );
-
-                                },
                                 child: const Text(
                                     'Self',
                                     style: TextStyle(fontSize: 18,color: Colors.orange,)
@@ -176,6 +176,7 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                              ),
                               SizedBox(height:MediaQuery.of(context).size.width*.03),
                             ]
+                        ),
                         ),
                       ),
 
@@ -241,57 +242,11 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                 Container(
                   padding: EdgeInsets.only(top:12.0,),
                   child:Center(
-                    child:Text('Today Attendance Log',
+                    child:Text('Todays Attendance Log',
                         style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
                   ),
                 ),
-                /*
-                Container(
-                  child: DateTimePickerFormField(
-                    dateOnly: true,
-                    format: formatter,
-                    controller: today,
-                    decoration: InputDecoration(
-                      prefixIcon: Padding(
-                        padding: EdgeInsets.all(0.0),
-                        child: Icon(
-                          Icons.date_range,
-                          color: Colors.grey,
-                        ), // icon is 48px widget.
-                      ), // icon is 48px widget.
-                      labelText: 'Select Date',
-                    ),
-                    onChanged: (date) {
-                      setState(() {
-                        if (date != null && date.toString() != '')
-                          res = true; //showInSnackBar(date.toString());
-                        else
-                          res = false;
-                      });
-                    },
-                    validator: (date) {
-                      if (date == null) {
-                        return 'Please select date';
-                      }
-                    },
-                  ),
-                ),*/
 
-                /*Divider(
-                color: Colors.green,
-                height: 0.5,
-              ),
-              Divider(
-                color: Colors.green,
-                height: 0.5,
-              ),*/
-                /* Container(
-                padding: EdgeInsets.only(top:12.0,bottom: 2.0),
-                child:Center(
-                  child:Text('Team Attendance Log',
-                      style: new TextStyle(fontSize: 22.0, color: appStartColor(),)),
-                ),
-              ),*/
                 //Divider(color: Colors.black54,height: 1.5,),
                 new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -342,7 +297,7 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                           width: MediaQuery.of(context).size.width*1,
                           color: Colors.teal.withOpacity(0.1),
                           padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                          child:Text("No Team Data Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                          child:Text("Team data not found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                         ),
                       );
                     }

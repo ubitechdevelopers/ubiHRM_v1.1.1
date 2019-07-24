@@ -85,10 +85,6 @@ class _MyApp extends State<MyApp> {
   }
   // This widget is the root of your application.
   Future<bool> sendToHome() async{
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );*/
     print("-------> back button pressed");
     Navigator.pushAndRemoveUntil(
       context,
@@ -296,6 +292,13 @@ getWidgets(context){
 
                     Expanded(
                       flex:48,
+                      child:InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MyTeamAtt()),
+                          );
+                        },
                       child: Column(
                         // width: double.infinity,
                           children: <Widget>[
@@ -308,12 +311,7 @@ getWidgets(context){
                                       color: Colors.orange,
                                       size: 22.0 ),
                                   GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => MyTeamAtt()),
-                                      );
-                                    },
+
                                     child: const Text(
                                         'Team',
                                         style: TextStyle(fontSize: 18,color: Colors.orange)
@@ -323,6 +321,7 @@ getWidgets(context){
                             SizedBox(height:MediaQuery.of(context).size.width*.04),
                           ]
                       ),
+                    ),
                     ),
                   ]),
 

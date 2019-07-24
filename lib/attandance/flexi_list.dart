@@ -14,6 +14,7 @@ import 'image_view.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import '../global.dart';
 import '../appbar.dart';
+import 'flexi_time.dart';
 
 class FlexiList extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class FlexiList extends StatefulWidget {
 
 TextEditingController today;
 String _orgName;
+String orgName ;
 //FocusNode f_dept ;
 class _FlexiList extends State<FlexiList> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -31,7 +33,7 @@ class _FlexiList extends State<FlexiList> {
   bool res = true;
   var formatter = new DateFormat('dd-MMM-yyyy');
   bool showtabbar ;
-  String orgName="";
+  String orgName = "";
   var profileimage;
   bool _checkLoaded=true;
 
@@ -45,10 +47,13 @@ class _FlexiList extends State<FlexiList> {
   }
 
   getOrgName() async {
+
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _orgName = prefs.getString('org_name') ?? '';
+      orgName  = prefs.getString('orgname') ?? '';
       admin_sts = prefs.getString('sstatus') ?? '0';
+
       profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
 
       //      print("ABCDEFGHI-"+profile);
@@ -77,17 +82,27 @@ class _FlexiList extends State<FlexiList> {
   Widget build(BuildContext context) {
     return getmainhomewidget();
   }
+  Future<bool> sendToHome() async{
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => Flexitime()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
 
   getmainhomewidget() {
-    return new Scaffold(
+    return new WillPopScope(
+      onWillPop: ()=> sendToHome(),
+      child: new Scaffold(
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
       appBar: new AppHeader(profileimage,showtabbar,orgName),
       bottomNavigationBar: new HomeNavigation(),
       endDrawer: new AppDrawer(),
       body: Container(
-        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+        padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
         decoration: new ShapeDecoration(
           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
           color: Colors.white,
@@ -98,7 +113,7 @@ class _FlexiList extends State<FlexiList> {
             SizedBox(height: 8.0),
             Center(
               child: Text(
-                'Attendance',
+                'Flexi Log',
                 style: new TextStyle(
                   fontSize: 22.0,
                   color: Colors.black54,
@@ -163,7 +178,7 @@ class _FlexiList extends State<FlexiList> {
                    padding: EdgeInsets.only(left: 4.0),
                     child: Text(
                       'Location',
-                      style: TextStyle(color: Colors.orange),
+                      style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
                       textAlign: TextAlign.left,
                     ),
                    ),
@@ -174,7 +189,7 @@ class _FlexiList extends State<FlexiList> {
                     child:Container(
                   //  width: MediaQuery.of(context).size.width * 0.15,
                     child: Text('Time In',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
                         textAlign: TextAlign.center),
                   ),
                   ),
@@ -184,7 +199,7 @@ class _FlexiList extends State<FlexiList> {
                     child:Container(
                   //  width: MediaQuery.of(context).size.width * 0.15,
                     child: Text('Time Out ',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
                         textAlign: TextAlign.center),
                   ),
                   ),
@@ -201,6 +216,7 @@ class _FlexiList extends State<FlexiList> {
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -362,7 +378,12 @@ class _FlexiList extends State<FlexiList> {
                   });
             } else {
               return new Center(
-                child: Text("No Attendance ", style: TextStyle(color: Colors.orangeAccent,fontSize: 18.0),),
+                child: Container(
+                  width: MediaQuery.of(context).size.width*1,
+                  color: Colors.teal.withOpacity(0.1),
+                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                  child:Text("No Flexi Log Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                ),
               );
             }
           } else if (snapshot.hasError) {

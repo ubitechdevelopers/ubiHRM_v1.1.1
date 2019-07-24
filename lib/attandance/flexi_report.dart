@@ -88,8 +88,8 @@ class _FlexiReport extends State<FlexiReport> {
       bottomNavigationBar: new HomeNavigation(),
       endDrawer: new AppDrawer(),
       body: Container(
-        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        padding: EdgeInsets.fromLTRB(10.0 ,10.0, 10.0, 10.0),
+        margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+        padding: EdgeInsets.fromLTRB(8.0 ,8.0, 8.0, 8.0),
         // width: MediaQuery.of(context).size.width*0.9,
         decoration: new ShapeDecoration(
           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
@@ -158,7 +158,7 @@ class _FlexiReport extends State<FlexiReport> {
                     //width: MediaQuery.of(context).size.width * 0.15,
                     child: Text(
                       'Name',
-                      style: TextStyle(color: Colors.orange),
+                      style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -177,7 +177,7 @@ class _FlexiReport extends State<FlexiReport> {
                 child:Container(
                    // width: MediaQuery.of(context).size.width * 0.15,
                     child: Text('Time In',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
                         textAlign: TextAlign.center),
                   )
               ),
@@ -186,7 +186,7 @@ class _FlexiReport extends State<FlexiReport> {
                     child:Container(
                    // width: MediaQuery.of(context).size.width * 0.15,
                     child: Text('Time Out ',
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
                         textAlign: TextAlign.center),
                   )),
                 ],
@@ -288,9 +288,12 @@ class _FlexiReport extends State<FlexiReport> {
 
 
   getEmpDataList(date) {
+
     return new FutureBuilder<List<FlexiAtt>>(
+
         future: getFlexiDataListReport(date,emp),
         builder: (context, snapshot) {
+
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
               return new ListView.builder(
@@ -503,8 +506,13 @@ class _FlexiReport extends State<FlexiReport> {
              else
               {
                 return new Center(
-                child: Text("No Attendance",style: TextStyle(color: Colors.orangeAccent,fontSize: 18.0),),
-              );
+                  child: Container(
+                    width: MediaQuery.of(context).size.width*1,
+                    color: Colors.teal.withOpacity(0.1),
+                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                    child:Text("No Attendance Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                  ),
+                );
             }
           }
           else if (snapshot.hasError)

@@ -59,8 +59,8 @@ class _AllReports extends State<AllReports> {
       setState(() {
         perAttReport=  getModuleUserPermission("68","view");
         perLeaveReport=  getModuleUserPermission("69","view");
-        print("Att "+perAttReport);
-        print("Leave "+perLeaveReport);
+        perFlexi=  getModuleUserPermission("448","view");
+
       });
     });
   }
@@ -426,7 +426,7 @@ class _AllReports extends State<AllReports> {
                       );
                     },
                   ):Center(),
-                  ( perLeaveReport!='1' &&  perAttReport!='1' ) ?
+                  ( perLeaveReport!='1' &&  perAttReport!='1' && perFlexi!='1' ) ?
                   Text('No Reports found for you.',style: TextStyle(fontSize: 18.0),) : Center()
                 ])
         ),

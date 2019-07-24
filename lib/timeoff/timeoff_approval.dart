@@ -371,7 +371,7 @@ class ChoiceCard extends StatelessWidget {
 
                                                     Container(
                                                         width: MediaQuery.of(context) .size .width * 0.70,
-                                                        height: 10.0,
+                                                        height: MediaQuery.of(context) .size .height * 0.03,
                                                         padding: const EdgeInsets.all(0.0),
                                                         child: RichText(
                                                           text: new TextSpan(
@@ -411,7 +411,7 @@ class ChoiceCard extends StatelessWidget {
                                                          //  }
                                                           },
                                                           child: new Icon(
-                                                            Icons.edit,
+                                                            Icons.thumb_up,
                                                             size: 17.0,
                                                             color: appStartColor(),
                                                           ),
@@ -985,7 +985,7 @@ class ChoiceCard extends StatelessWidget {
 
             // child: new Expanded(
             //height: MediaQuery.of(context).size.height-100.0,
-            height: 300.0,
+            height: 200.0,
             child: new Container(
               decoration: new BoxDecoration(
                   color: Colors.teal.withOpacity(0.1),
@@ -1008,7 +1008,7 @@ class ChoiceCard extends StatelessWidget {
                   Divider(color: Colors.black45,),*/
                   Padding(
                     padding: EdgeInsets.only(
-                        top: 40.0, bottom: 20.0, left: 40.0, right: 50.0),
+                        top: 20.0, bottom: 20.0, left: 20.0, right: 20.0),
                     child: TextFormField(
                       focusNode: myFocusNodeComment,
                       controller: CommentController,
@@ -1052,11 +1052,12 @@ maxLines: 3,
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                        top: 10.0, bottom: 10.0, left: 40.0, right: 20.0),
+                        top: 10.0, bottom: 0.0, left: 60.0, right: 7.0),
                     child:  ButtonTheme(
-                      minWidth: 300.0,
+                      minWidth: 50.0,
                       height: 40.0,
-                      child: RaisedGradientButton(
+
+                      child: OutlineButton(
                         onPressed: () async  {
                           //getApprovals(choice.title);
                           final sts= await ApproveTimeoff(timeoffid,CommentController.text,2);
@@ -1087,24 +1088,23 @@ maxLines: 3,
                             context,
                             MaterialPageRoute(builder: (context) => TimeOffApp()),
                           ); },
-                        gradient: LinearGradient(
-                          colors: <Color>[Colors.green[700], Colors.green[700]],
-                        ),
+                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0)),
                         child: new Text('Approve',
                             style: new TextStyle(
-                              color: Colors.white,
+                              color: Colors.green[700],
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
-                            )),
+                            )),borderSide: BorderSide(color:Colors.green[700]),
+
                       ),
                     ),),
                   Padding(
                     padding: EdgeInsets.only(
-                        top: 10.0, bottom: 0.0, left: 5.0, right: 20.0),
+                        top: 10.0, bottom: 0.0, left: 7.0, right: 60.0),
                     child:  ButtonTheme(
-                      minWidth: 300.0,
+                      minWidth: 50.0,
                       height: 40.0,
-                      child: RaisedGradientButton(
+                      child: OutlineButton(
                         onPressed: () async {
                           //getApprovals(choice.title);
                           var sts = await ApproveTimeoff(timeoffid,CommentController.text,1);
@@ -1139,14 +1139,13 @@ maxLines: 3,
                        /* color: Colors.red,
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(30.0)),*/
-                        gradient: LinearGradient(
-                          colors: <Color>[Colors.red[700], Colors.red[700]],
-                        ),
+
                         child: new Text('Reject',
                             style: new TextStyle(
-                                color: Colors.white,
+                                color: Colors.red[700],
                                 fontSize: 16.0,
-                                fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.bold)),borderSide: BorderSide(color: Colors.red[700]),
+                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
                       ),
                     ),
                   ),

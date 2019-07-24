@@ -155,9 +155,22 @@ Future<List<Punch>> getSummaryPunch() async {
   final prefs = await SharedPreferences.getInstance();
   String empid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
-  print('getSummaryPunch called');
+  print(globals.path_ubiattendance + 'getPunchInfo?uid=$empid&orgid=$orgdir');
   final response =
   await http.get(globals.path_ubiattendance + 'getPunchInfo?uid=$empid&orgid=$orgdir');
+
+  List responseJson = json.decode(response.body.toString());
+  print("get summary punch"+responseJson.toString());
+  List<Punch> userList = createUserList(responseJson);
+  return userList;
+}
+Future<List<Punch>> getTeamSummaryPunch() async {
+  final prefs = await SharedPreferences.getInstance();
+  String empid = prefs.getString('empid') ?? '';
+  String orgdir = prefs.getString('orgdir') ?? '';
+  print(globals.path_ubiattendance + 'getTeamPunchInfo?uid=$empid&orgid=$orgdir');
+  final response =
+  await http.get(globals.path_ubiattendance + 'getTeamPunchInfo?uid=$empid&orgid=$orgdir');
 
   List responseJson = json.decode(response.body.toString());
   print("get summary punch"+responseJson.toString());
@@ -1235,7 +1248,7 @@ Future<List<EmpList>> getLateEmpDataList(date) async {
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? "";
-
+   print(globals.path_ubiattendance + 'getlateComings?refno=$orgid&cdate=$date&empid=$empid');
   final response = await http.get(
       globals.path_ubiattendance + 'getlateComings?refno=$orgid&cdate=$date&empid=$empid');
   List responseJson = json.decode(response.body.toString());
@@ -1276,7 +1289,7 @@ Future<List<EmpList>> getEarlyEmpDataList(date) async {
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? "";
-
+   print(globals.path_ubiattendance + 'getEarlyLeavings?refno=$orgid&cdate=$date&empid=$empid');
   final response = await http.get(
       globals.path_ubiattendance + 'getEarlyLeavings?refno=$orgid&cdate=$date&empid=$empid');
   List responseJson = json.decode(response.body.toString());
@@ -1542,6 +1555,7 @@ Future checkTimeinflexi() async {
 
 Future<List<FlexiAtt>> getFlexiDataListReport(date,emp) async {
 
+  print("sohan");
   final  prefs = await SharedPreferences.getInstance();
   String empid = prefs.getString('employeeid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
@@ -1553,7 +1567,7 @@ Future<List<FlexiAtt>> getFlexiDataListReport(date,emp) async {
 
 
   List<FlexiAtt> userList = createListFlexiReport(responseJson);
-  print('getSummaryPunch called--1');
+  print('getSummaryPunch called---1');
   print(userList);
   print('getSummaryPunch called--2');
   return userList;

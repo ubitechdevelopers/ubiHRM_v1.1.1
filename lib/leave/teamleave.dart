@@ -123,14 +123,25 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
       Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
     ));
   }
+  Future<bool> sendToHome() async{
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MyLeave()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
 
   Widget mainScafoldWidget(){
-    return  Scaffold(
+    return new WillPopScope(
+        onWillPop: ()=> sendToHome(),
+    child: Scaffold(
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
         appBar: new AppHeader(profileimage,showtabbar,orgName),
         bottomNavigationBar:new HomeNavigation(),
         body:   homewidget()
+    )
     );
   }
 
@@ -156,6 +167,14 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                       children: <Widget>[
                         Expanded(
                           flex:48,
+                          child:InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => MyLeave()),
+                              );
+
+                            },
                           child:Column(
                               children: <Widget>[
                                 // width: double.infinity,
@@ -170,13 +189,6 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                           size: 22.0 ),
 
                                       GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => MyLeave()),
-                                          );
-
-                                        },
                                         child: const Text(
                                             'Self',
                                             style: TextStyle(fontSize: 18,color: Colors.orange,)
@@ -190,6 +202,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                 ),
                                 SizedBox(height:MediaQuery.of(context).size.width*.03),
                               ]
+                          ),
                           ),
                         ),
 
@@ -218,19 +231,6 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                             'Team',
                                             style: TextStyle(fontSize: 18,color: Colors.orange,fontWeight:FontWeight.bold)
                                         ),
-                                        //color: Colors.teal[50],
-
-                                        /* splashColor: Colors.white,
-                                shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(0.0),
-
-                                  /* side: BorderSide(
-                                        color: Colors.blue,
-                                        width: 1,
-
-                                        style: BorderStyle.solid
-                                    )*/
-                                )*/
                                       ),
                                     ]),
                                 SizedBox(height:MediaQuery.of(context).size.width*.03),
@@ -255,7 +255,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                   Container(
                     padding: EdgeInsets.only(top:12.0),
                     child:Center(
-                      child:Text('My Team Leave',
+                      child:Text("Team's Leave",
                           style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
                     ),
                   ),
@@ -370,7 +370,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                               new Expanded(
                                                 child: Container (
                                               //      color:Colors.yellow,
-                                                    height: MediaQuery .of(context).size.height * 0.06,
+                                                    height: MediaQuery .of(context).size.height * 0.04,
                                                     margin: EdgeInsets.only(left:32.0),
                                                     padding: EdgeInsets.only(left:32.0),
                                                     width: MediaQuery.of(context).size.width * 0.30,
@@ -389,7 +389,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                                         }
                                                       },
                                                       child:new Icon(
-                                                        Icons.edit,
+                                                        Icons.thumb_up,
                                                         size: 16.0,
                                                         color:appStartColor(),
                                                         //      textDirection: TextDirection.rtl,
@@ -579,7 +579,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                         top: 10.0, bottom: 0.0, left: 60.0, right: 7.0),
                     child:  ButtonTheme(
                       minWidth: 50.0,
-                      height: 40.0,
+                  //    height: 40.0,
 /*                      child: RaisedGradientButton(
                         onPressed: () async  {
                           //getApprovals(choice.title);
@@ -633,14 +633,14 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                   fontWeight: FontWeight.bold,
 
                                 )),
-                             borderSide: BorderSide(color: Colors.green[700],
-                             ),
+                             borderSide: BorderSide(color: Colors.green[700],),
                             onPressed: () async  {
                               //getApprovals(choice.title);
                               final sts= await ApproveLeave(leaveid,CommentController.text,2);
                               //  print("kk");
                               // print("kk"+sts);
                               if(sts=="true") {
+                                Navigator.pop(context);
                                 showDialog(
                                     context: context,
                                     builder: (_) =>
@@ -648,6 +648,12 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                       //title: new Text("Dialog Title"),
                                       content: new Text("Approved succesfully"),
                                     )
+                                );
+                                await new Future.delayed(const Duration(seconds: 2));
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => MyTeamLeave()),
                                 );
                               }
                               else{
@@ -661,10 +667,8 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                 );
                               }
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => TabbedApp()),
-                              ); },
+
+                            },
                             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0),),
 
                         )
@@ -678,7 +682,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                         top: 10.0, bottom: 0.0, left: 7.0, right: 60.0),
                     child:  ButtonTheme(
                       minWidth: 50.0,
-                      height: 40.0,
+                //      height: 40.0,
 /*                      child: RaisedGradientButton(
                         onPressed: () async {
                           //getApprovals(choice.title);
@@ -733,6 +737,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                             var sts = await ApproveLeave(leaveid,CommentController.text,1);
                             print("ff"+sts);
                             if(sts=="true") {
+                              Navigator.pop(context);
                               showDialog(
                                   context: context,
                                   builder: (_) =>
@@ -740,6 +745,12 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                     //title: new Text("Dialog Title"),
                                     content: new Text("Leave rejected"),
                                   )
+                              );
+                              await new Future.delayed(const Duration(seconds: 2));
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => MyTeamLeave()),
                               );
                             }
                             else{
@@ -753,10 +764,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                               );
                             }
 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => TabbedApp()),
-                            ); },
+                            },
                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
                       ),
 
@@ -1113,6 +1121,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                     var sts= await ApproveLeaveByHr(leaveid,CommentController.text,2,LBD);
 
                                     if(sts=="true") {
+                                      Navigator.pop(context);
                                       showDialog(
                                           context: context,
                                           builder: (_) =>
@@ -1120,6 +1129,12 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                             //title: new Text("Dialog Title"),
                                             content: new Text("Approved succesfully."),
                                           )
+                                      );
+                                      await new Future.delayed(const Duration(seconds: 2));
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => MyTeamLeave()),
                                       );
                                     }else{
                                       showDialog(
@@ -1131,10 +1146,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                           )
                                       );
                                     }
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => TabbedApp()),
-                                    ); },
+                                   },
                                   shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
                               ),
                         //      height: 20.0,
@@ -1206,6 +1218,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                    //getApprovals(choice.title);
                                    var sts= await ApproveLeave(leaveid, CommentController.text, 1);
                                    if(sts=="true"){
+                                     Navigator.pop(context);
                                      showDialog(
                                          context : context,
                                          builder: (_) => new
@@ -1214,6 +1227,12 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                            content: new Text("Rejected succesfully."
                                            ),
                                          )
+                                     );
+                                     await new Future.delayed(const Duration(seconds: 2));
+                                     Navigator.pop(context);
+                                     Navigator.push(
+                                       context,
+                                       MaterialPageRoute(builder: (context) => MyTeamLeave()),
                                      );
                                    }
                                    else{
@@ -1228,10 +1247,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                          )
                                      );
                                    }
-                                   Navigator.push(
-                                     context,
-                                     MaterialPageRoute(builder: (context) => TabbedApp()),
-                                   );
+
                                 },
                                   shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
                               ),

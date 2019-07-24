@@ -297,7 +297,7 @@ class _AllApprovals extends State<AllApprovals> {
             margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             //width: MediaQuery.of(context).size.width*0.9,
-            height:MediaQuery.of(context).size.height*0.75,
+            //height:MediaQuery.of(context).size.height*0.75,
             decoration: new ShapeDecoration(
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
               color: Colors.white,

@@ -356,7 +356,7 @@ var profilepic;
                     unselectedLabelColor: Colors.black26,
                     tabs: [
                       Tab(
-                          icon: Icon(Icons.account_box),
+                          icon: Icon(Icons.person),
                           text: "Profile"
                          ),
                       Tab(icon: Icon(Icons.group), text: "Team"),
