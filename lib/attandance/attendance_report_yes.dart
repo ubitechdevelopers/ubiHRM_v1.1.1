@@ -25,7 +25,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
 
 
   List<Map<String,String>> chartData;
-  void showInSnackBar(String value) {
+  void showInSnackBar(String value) { 
     final snackBar = SnackBar(
         content: Text(value,textAlign: TextAlign.center,));
     _scaffoldKey.currentState.showSnackBar(snackBar);
