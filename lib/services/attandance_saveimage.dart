@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
+import 'package:location/location.dart';
 import 'package:ubihrm/model/timeinout.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:flutter/painting.dart';
@@ -34,9 +35,9 @@ class SaveImage{
         //// sending this base64image string +to rest api
         Dio dio = new Dio();
         String location = globals.globalstreamlocationaddr;
-        Map<String, double> _currentLocation = globals.list[globals.list.length-1];
-        String lat = _currentLocation["latitude"].toString();
-        String long = _currentLocation["longitude"].toString();
+       LocationData _currentLocation = globals.list[globals.list.length-1];
+        String lat = _currentLocation.latitude.toString();
+        String long = _currentLocation.longitude.toString();
   //      print("global Address: "+ location);
    //     print("global lat" + lat);
   //      print("global long" + long);
@@ -96,9 +97,9 @@ class SaveImage{
         //// sending this base64image string +to rest api
         Dio dio = new Dio();
         String location = globals.globalstreamlocationaddr;
-        Map<String, double> _currentLocation = globals.list[globals.list.length-1];
-        String lat = _currentLocation["latitude"].toString();
-        String long = _currentLocation["longitude"].toString();
+       LocationData _currentLocation = globals.list[globals.list.length-1];
+        String lat = _currentLocation.latitude.toString();
+        String long = _currentLocation.longitude.toString();
     //    print("global Address: "+ location);
      //   print("global lat" + lat);
      //   print("global long" + long);
@@ -163,9 +164,9 @@ class SaveImage{
         //// sending this base64image string +to rest api
         Dio dio = new Dio();
         String location = globals.globalstreamlocationaddr;
-        Map<String, double> _currentLocation = globals.list[globals.list.length-1];
-        String lat = _currentLocation["latitude"].toString();
-        String long = _currentLocation["longitude"].toString();
+        LocationData  _currentLocation = globals.list[globals.list.length-1];
+        String lat = _currentLocation.latitude.toString();
+        String long = _currentLocation.longitude.toString();
         //    print("global Address: "+ location);
         //   print("global lat" + lat);
         //   print("global long" + long);
@@ -360,10 +361,10 @@ class SaveImage{
           //// sending this base64image string +to rest api
           Dio dio = new Dio();
           String location = globals.globalstreamlocationaddr;
-          Map<String, double> _currentLocation = globals.list[globals.list
+          LocationData _currentLocation = globals.list[globals.list
               .length - 1];
-          String lat = _currentLocation["latitude"].toString();
-          String long = _currentLocation["longitude"].toString();
+          String lat = _currentLocation.latitude.toString();
+          String long = _currentLocation.longitude.toString();
           /*print('-------------------------------');
         print(mk.uid+" "+mk.cid);
         print('-------------------------------');
@@ -408,10 +409,10 @@ class SaveImage{
 
         Dio dio = new Dio();
         String location = globals.globalstreamlocationaddr;
-        Map<String, double> _currentLocation = globals.list[globals.list
+        LocationData _currentLocation = globals.list[globals.list
             .length - 1];
-        String lat = _currentLocation["latitude"].toString();
-        String long = _currentLocation["longitude"].toString();
+        String lat = _currentLocation.latitude.toString();
+        String long = _currentLocation.longitude.toString();
         /*print('-------------------------------');
         print(mk.uid+" "+mk.cid);
         print('-------------------------------');
@@ -471,10 +472,10 @@ class SaveImage{
           //// sending this base64image string +to rest api
           Dio dio = new Dio();
           String location = globals.globalstreamlocationaddr;
-          Map<String, double> _currentLocation = globals.list[globals.list
+          LocationData _currentLocation = globals.list[globals.list
               .length - 1];
-          String lat = _currentLocation["latitude"].toString();
-          String long = _currentLocation["longitude"].toString();
+          String lat = _currentLocation.latitude.toString();
+          String long = _currentLocation.longitude.toString();
     /*print('-------------------------------');
         print("****** empid "+empid+"-->  orgid"+refid+" *********");
         print('-------------------------------');*/
@@ -517,10 +518,10 @@ class SaveImage{
       }else { // if image is notmandatory while marking punchout
         Dio dio = new Dio();
         String location = globals.globalstreamlocationaddr;
-        Map<String, double> _currentLocation = globals.list[globals.list
+        LocationData _currentLocation = globals.list[globals.list
             .length - 1];
-        String lat = _currentLocation["latitude"].toString();
-        String long = _currentLocation["longitude"].toString();
+        String lat = _currentLocation.latitude.toString();
+        String long = _currentLocation.longitude.toString();
         FormData formData = new FormData.from({
           "empid": empid,
           "visit_id": visit_id,
@@ -575,9 +576,9 @@ class SaveImage{
         //// sending this base64image string +to rest api
         Dio dio = new Dio();
         String location = globals.globalstreamlocationaddr;
-        Map<String, double> _currentLocation = globals.list[globals.list.length - 1];
-        String lat = _currentLocation["latitude"].toString();
-        String long = _currentLocation["longitude"].toString();
+        LocationData _currentLocation = globals.list[globals.list.length - 1];
+        String lat = _currentLocation.latitude.toString();
+        String long = _currentLocation.longitude.toString();
         print('-------------------------------');
         print(mk.uid+" "+mk.cid);
         print('-------------------------------');
@@ -645,10 +646,10 @@ class SaveImage{
         //// sending this base64image string +to rest api
         Dio dio = new Dio();
         String location = globals.globalstreamlocationaddr;
-        Map<String, double> _currentLocation =
+        LocationData _currentLocation =
         globals.list[globals.list.length - 1];
-        String lat = _currentLocation["latitude"].toString();
-        String long = _currentLocation["longitude"].toString();
+        String lat = _currentLocation.latitude.toString();
+        String long = _currentLocation.longitude.toString();
         /*print('-------------------------------');
         print(mk.uid+" "+mk.cid);
         print('-------------------------------');

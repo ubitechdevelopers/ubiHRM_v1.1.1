@@ -97,8 +97,8 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
     setState(() {
       streamlocationaddr = globalstreamlocationaddr;
       if (list != null && list.length > 0) {
-        lat = list[list.length - 1]['latitude'].toString();
-        long = list[list.length - 1]["longitude"].toString();
+        lat = list[list.length - 1].latitude.toString();
+        long = list[list.length - 1].longitude.toString();
         if (streamlocationaddr == '') {
           streamlocationaddr = lat + ", " + long;
         }
@@ -179,8 +179,8 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
     sl.startStreaming(2);
     setState(() {
       if(list!=null && list.length>0) {
-        latit = list[list.length - 1]['latitude'].toString();
-        longi = list[list.length - 1]["longitude"].toString();
+        latit = list[list.length - 1].latitude.toString();
+        longi = list[list.length - 1].longitude.toString();
         location_addr1 = globalstreamlocationaddr;
       }else{
         latit = "0.0";

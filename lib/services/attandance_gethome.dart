@@ -145,8 +145,8 @@ class Home{
         String lat="",long="";
         String streamlocationaddr = "";
         if(globals.list!=null && globals.list.length>0) {
-          lat = globals.list[globals.list.length - 1]['latitude'].toString();
-          long = globals.list[globals.list.length - 1]["longitude"].toString();
+          lat = globals.list[globals.list.length - 1].latitude.toString();
+          long = globals.list[globals.list.length - 1].longitude.toString();
           streamlocationaddr = globals.globalstreamlocationaddr;
           timeinoutMap.putIfAbsent('latit', ()=> lat );
           timeinoutMap.putIfAbsent('longi', ()=> long );

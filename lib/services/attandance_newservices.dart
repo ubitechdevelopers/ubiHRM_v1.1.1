@@ -464,8 +464,8 @@ class NewServices{
 }
 
 class StreamLocation{
-  Map<String, double> _currentLocation;
-  StreamSubscription<Map<String, double>> _locationSubscription;
+  LocationData _currentLocation;
+  StreamSubscription<LocationData> _locationSubscription;
   Location _location = new Location();
   String streamlocationaddr="";
   String lat="";
@@ -474,10 +474,10 @@ class StreamLocation{
     int counter = 0;
     stopstreamingstatus = false;
     _locationSubscription =
-        _location.onLocationChanged().listen((Map<String,double> result) {
+        _location.onLocationChanged().listen((LocationData result) {
           _currentLocation = result;
           list.add(result);
-          getAddress(list[list.length-1]);
+          getAddress(list[list.length - 1]);
           //print("counter"+counter.toString());
           //print("List length  ->>>>>> "+list.length.toString());
           if(counter>listlength) {
@@ -492,14 +492,14 @@ class StreamLocation{
         });
   }
 
-  getAddress( Map<String, double> _currentLocation) async{
+  getAddress( LocationData _currentLocation) async{
     try {
       ////print(_currentLocation);
       //print("${_currentLocation["latitude"]},${_currentLocation["longitude"]}");
       if (_currentLocation != null) {
         var addresses = await Geocoder.local.findAddressesFromCoordinates(
             Coordinates(
-                _currentLocation['latitude'], _currentLocation['longitude']));
+                _currentLocation.latitude, _currentLocation.longitude));
         var first = addresses.first;
         //streamlocationaddr = "${first.featureName} : ${first.addressLine}";
         streamlocationaddr = "${first.addressLine}";
@@ -508,7 +508,7 @@ class StreamLocation{
     }catch(e){
       //print(e.toString());
       if (_currentLocation != null) {
-        globalstreamlocationaddr = "${_currentLocation["latitude"]},${_currentLocation["longitude"]}";
+        globalstreamlocationaddr = "${_currentLocation.latitude},${_currentLocation.longitude}";
       }
 
     }

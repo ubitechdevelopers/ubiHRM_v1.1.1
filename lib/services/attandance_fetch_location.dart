@@ -63,7 +63,7 @@ class Loc{
   fetchlatilongi() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      Map<String, double> location;
+      LocationData location;
       // Platform messages may fail, so we use a try/catch PlatformException.
       try {
         location = await _location.getLocation();
@@ -83,7 +83,7 @@ class Loc{
       // message was in flight, we want to discard the reply rather than calling
       // setState to update our non-existent appearance.
       //if (!mounted) return;
-      _startLocation = location;
+     // _startLocation = location;
       double latitude = _startLocation["latitude"];
       double longitude = _startLocation["longitude"];
       prefs.setString('latit', latitude.toString());

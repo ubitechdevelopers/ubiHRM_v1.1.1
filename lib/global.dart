@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'model/model.dart';
 import 'model/timeinout.dart';
 //import 'package:ubihrm/model/timeinout.dart';
@@ -71,7 +72,7 @@ Map globalyearfiscal;
 
 
 //////Copied from  attendance global///////
-List<Map<String, double>> list = new List();
+List<LocationData> list = new List();
 String globalstreamlocationaddr="";
 bool stopstreamingstatus = false;
 
