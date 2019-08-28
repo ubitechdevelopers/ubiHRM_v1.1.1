@@ -165,13 +165,14 @@ class _HomePageStatemain extends State<HomePageMain> {
       // profileimage = new NetworkImage(pic);
 //print("ABCDEFGHI");
 //print(profileimage);
-      profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+
+      profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
         if (mounted) {
           setState(() {
             _checkLoadedprofile = false;
           });
         }
-      });
+      }));
       return mainScafoldWidget();
     } else {
       return new LoginPage();

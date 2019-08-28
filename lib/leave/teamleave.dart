@@ -44,14 +44,14 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
   void initState() {
     super.initState();
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-    profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+    profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
           _checkLoadedprofile = false;
         });
-
       }
-    });
+    }));
+
     showtabbar=false;
     //  print(profileimage);
     initPlatformState();

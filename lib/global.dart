@@ -24,7 +24,6 @@ headingColor()
   return Colors.green;
 }
 
-
 bottomNavigationColor(){
  // return Color.fromRGBO(0, 166, 90,1.0);
   return Color.fromRGBO(51,51,51,1.0);
@@ -34,13 +33,10 @@ circleIconBackgroundColor(){
   return Colors.green[50];
 }
 
-
 String path="http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/";
 //String path_ubiattendance="http://192.168.0.200/ubiattendance/index.php/Att_services/";
 String path_ubiattendance="http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/";
 String path_hrm_india="http://192.168.0.200/UBIHRM/HRMINDIA/services/";
-
-
 
 /*
 String path="https://ubitech.ubihrm.com/ubiapp/";
@@ -100,6 +96,5 @@ var undertime;
 var perSalary;
 var perExpense;
 var perFlexi;
-
 var deprtcurrency;
 

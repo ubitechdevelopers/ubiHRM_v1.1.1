@@ -199,14 +199,14 @@ class _PunchLocation extends State<PunchLocation> {
         profile = prefs.getString('profile') ?? '';
         profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
 
-        //      print("ABCDEFGHI-"+profile);
-        profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+
+        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
           if (mounted) {
             setState(() {
               _checkLoaded = false;
             });
           }
-        });
+        }));
         showtabbar=false;
         // //print("2-"+_checkLoaded.toString());
         latit = prefs.getString('latit') ?? '';

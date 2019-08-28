@@ -128,28 +128,28 @@ var profilepic;
      // bool ish = await getAllPermission(emp);
 
     reporttoprofileimage = new NetworkImage( globalcompanyinfomap['ReportingToProfilePic']);
-    reporttoprofileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+    reporttoprofileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
           _checkLoaded = false;
         });
 
       }
-    });
+    }));
 
 
    // profilepic =prefs.getString('profilepic')??"";
    // profileimage = new NetworkImage(profilepic);
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
   //  print("ABC"+profileimage);
-    profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+    profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
           _checkLoadedprofile = false;
         });
 
       }
-    });
+    }));
   }
 
 
