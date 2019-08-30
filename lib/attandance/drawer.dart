@@ -63,14 +63,14 @@ class _AppDrawerState extends State<AppDrawer> {
       trialstatus = prefs.getString('trialstatus') ?? '';
       orgmail = prefs.getString('orgmail') ?? '';
       profileimage = new NetworkImage(profile);
-      profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+      profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
         if (mounted) {
           setState(() {
             _checkLoaded = false;
           });
 
         }
-      });
+      }));
     });
   }
 

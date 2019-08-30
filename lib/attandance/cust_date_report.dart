@@ -11,6 +11,7 @@ import '../drawer.dart';
 import '../appbar.dart';
 import '../global.dart';
 import '../b_navigationbar.dart';
+import './image_view.dart';
 
 // This app is a stateful, it tracks the user's current choice.
 class CustomDateAttendance extends StatefulWidget {
@@ -586,21 +587,29 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeIn
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .EntryImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .EntryImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )
@@ -617,21 +626,29 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeOut
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .ExitImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .ExitImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )

@@ -46,16 +46,16 @@ class _AppDrawerState extends State<AppDrawer> {
     setState(() {
      fname = prefs.getString('fname') ?? '';
      profile = prefs.getString('profile') ?? '';
-   // print("-------555555->"+globalcompanyinfomap['ProfilePic']);
+     //print("-------555555->"+globalcompanyinfomap['ProfilePic']);
      profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
-     profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+     //print("-------555555->"+profileimage);
+     profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __)  {
        if (mounted) {
          setState(() {
            _checkLoaded = false;
          });
-
        }
-     });
+     }));
     });
   }
   @override

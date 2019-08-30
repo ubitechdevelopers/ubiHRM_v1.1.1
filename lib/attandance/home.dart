@@ -381,7 +381,7 @@ class _HomePageState extends State<HomePage> {
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(width: 20.0,),
+                    //SizedBox(width: 20.0,),
                     Text(
                       "Note: ",
                       style: new TextStyle(
@@ -629,7 +629,7 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: new BorderRadius.circular(0.0)),
             color: Colors.green[50]),
         child: Text(
-          '\nToday\'s attendance is marked',
+          '\nToday\'s attendance is marked successfully',
           textAlign: TextAlign.center,
           style: new TextStyle(color: Colors.black87, fontSize: 15.0),
         ),
@@ -640,9 +640,9 @@ class _HomePageState extends State<HomePage> {
         height: MediaQuery.of(context).size.height*.08,
       ),
       Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SizedBox(width: 30.0,),
+          //SizedBox(width: 30.0,),
           new InkWell(
             child: new Text(
               "Check Attendance Log",
@@ -882,7 +882,7 @@ if (act1 == 'TimeIn') {
         if (issave) {
           showDialog(context: context, child:
           new AlertDialog(
-            content: new Text("     Attendance is marked"),
+            content: new Text("Attendance marked successfully"),
           )
           );
          // if(mounted) {

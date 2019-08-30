@@ -816,7 +816,6 @@ var profilepic;
           ));
         }
     );
-
     //  }
    // );
   }
@@ -834,17 +833,19 @@ var profilepic;
       });
       if(uploadtype==3){
         setState(() {
-          _checkLoadedr = true;
+          _checkLoaded = true;
         });
       }
+      print("Profile image has been changed.");
+      // ignore: deprecated_member_use
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CollapsingTab()),
+      );
       showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Profile image has been changed."),
       )
-      );
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CollapsingTab()),
       );
     }else{
       setState(() {

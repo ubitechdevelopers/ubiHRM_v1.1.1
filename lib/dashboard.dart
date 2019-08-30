@@ -75,8 +75,10 @@ class _DashboardStatemain extends State<DashboardMain> {
 
 
     var now = new DateTime.now();
-    var formatter = new DateFormat('MMMM');
+    print("---------------->"+now.toString());
+    var formatter = new DateFormat('MMMM yyyy');
     month = formatter.format(now);
+    print("---------------->>>>"+month);
 
 
     var connectivityResult = await (new Connectivity().checkConnectivity());
@@ -172,7 +174,6 @@ class _DashboardStatemain extends State<DashboardMain> {
               child: new CircularProgressIndicator(),
             )
         ));
-
 
   }
 
