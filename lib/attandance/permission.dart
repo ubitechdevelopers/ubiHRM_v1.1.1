@@ -4,7 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
-import 'package:simple_permissions/simple_permissions.dart';
+//import 'package:simple_permissions/simple_permissions.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';
@@ -15,7 +16,7 @@ import 'punchlocation.dart';
 import 'drawer.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:datetime_picker_formfield/time_picker_formfield.dart';
+//import 'package:datetime_picker_formfield/time_picker_formfield.dart';
 import 'package:ubihrm/model/model.dart' as TimeOffModal;
 import 'package:ubihrm/services/attandance_newservices.dart';
 import 'package:ubihrm/services/timeoff_services.dart';

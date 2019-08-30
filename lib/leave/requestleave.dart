@@ -262,12 +262,19 @@ class _RequestLeaveState extends State<RequestLeave> {
     child: Container(
      // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
       height: 70.0,
-      child:DateTimePickerFormField(
+      child:DateTimeField(
 
-    firstDate: new DateTime.now(),
-    initialDate: new DateTime.now(),
-
-    dateOnly: true,
+    //firstDate: new DateTime.now(),
+    //initialDate: new DateTime.now(),
+    //dateOnly: true,
+        readOnly: true,
+        onShowPicker: (context, currentValue) {
+          return showDatePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime(2100));
+        },
     format: dateFormat,
     controller: _dateController,
     decoration: InputDecoration(
@@ -369,12 +376,20 @@ class _RequestLeaveState extends State<RequestLeave> {
       child: Container(
           // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
       height: 70.0,
-     child:DateTimePickerFormField(
-    firstDate: new DateTime.now(),
-    initialDate: new DateTime.now(),
-    dateOnly: true,
+     child:DateTimeField(
+    //firstDate: new DateTime.now(),
+    //initialDate: new DateTime.now(),
+    //dateOnly: true,
     format: dateFormat,
     controller: _dateController1,
+       readOnly: true,
+       onShowPicker: (context, currentValue) {
+         return showDatePicker(
+             context: context,
+             firstDate: DateTime(1900),
+             initialDate: currentValue ?? DateTime.now(),
+             lastDate: DateTime(2100));
+       },
     decoration: InputDecoration(
     prefixIcon: Padding(
     padding: EdgeInsets.all(0.0),

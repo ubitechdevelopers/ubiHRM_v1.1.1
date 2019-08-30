@@ -45,14 +45,13 @@ class _TimeOffApp extends State<TimeOffApp> {
     getOrgName();
     showtabbar=true;
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-    profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+    profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
           _checkLoadedprofile = false;
         });
-
       }
-    });
+    }));
   }
 
   getOrgName() async{

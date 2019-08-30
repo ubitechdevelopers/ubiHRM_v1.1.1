@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/time_picker_formfield.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'home.dart';
 import 'settings.dart';
 import 'shift_list.dart';
@@ -292,9 +292,17 @@ class _addShift extends State<addShift> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                          child:TimePickerFormField(
+                          child:DateTimeField(
                             format: timeFormat,
                             controller: _from,
+                            readOnly: true,
+                            onShowPicker: (context, currentValue) async {
+                              final time = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                              );
+                              return DateTimeField.convert(time);
+                            },
                             decoration: InputDecoration(
                               labelText: 'From',
                               prefixIcon: Padding(
@@ -314,9 +322,17 @@ class _addShift extends State<addShift> {
                       ),
                       SizedBox(width: 10.0),
                       Expanded(
-                        child:TimePickerFormField(
+                        child:DateTimeField(
                           format: timeFormat,
                           controller: _to,
+                          readOnly: true,
+                          onShowPicker: (context, currentValue) async {
+                            final time = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                            );
+                            return DateTimeField.convert(time);
+                          },
                           decoration: InputDecoration(
                             labelText: 'To',
                             prefixIcon: Padding(
@@ -341,9 +357,17 @@ class _addShift extends State<addShift> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child:TimePickerFormField(
+                        child:DateTimeField(
                           format: timeFormat,
                           controller: _from_b,
+                          readOnly: true,
+                          onShowPicker: (context, currentValue) async {
+                            final time = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                            );
+                            return DateTimeField.convert(time);
+                          },
                           decoration: InputDecoration(
                             labelText: 'From',
                             prefixIcon: Padding(
@@ -363,9 +387,17 @@ class _addShift extends State<addShift> {
                       ),
                       SizedBox(width: 10.0),
                       Expanded(
-                        child:TimePickerFormField(
+                        child:DateTimeField(
                           format: timeFormat,
                           controller: _to_b,
+                          readOnly: true,
+                          onShowPicker: (context, currentValue) async {
+                            final time = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                            );
+                            return DateTimeField.convert(time);
+                          },
                           decoration: InputDecoration(
                             labelText: 'To',
                             prefixIcon: Padding(

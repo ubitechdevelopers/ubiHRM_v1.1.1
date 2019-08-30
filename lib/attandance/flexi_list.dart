@@ -125,10 +125,18 @@ class _FlexiList extends State<FlexiList> {
             ),
             //SizedBox(height: 2.0),
            Container(
-              child: DateTimePickerFormField(
-                dateOnly: true,
+              child: DateTimeField(
+                //dateOnly: true,
                 format: formatter,
                 controller: today,
+                readOnly: true,
+                onShowPicker: (context, currentValue) {
+                  return showDatePicker(
+                      context: context,
+                      firstDate: DateTime(1900),
+                      initialDate: currentValue ?? DateTime.now(),
+                      lastDate: DateTime(2100));
+                },
                 decoration: InputDecoration(
                   prefixIcon: Padding(
                     padding: EdgeInsets.all(0.0),

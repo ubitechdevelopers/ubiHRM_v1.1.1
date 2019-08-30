@@ -4,7 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
-import 'package:simple_permissions/simple_permissions.dart';
+//import 'package:simple_permissions/simple_permissions.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'askregister.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';
@@ -439,7 +440,7 @@ class _HomePageState extends State<HomePage> {
             RaisedButton(
               child: Text('Open Settings'),
               onPressed: () {
-                SimplePermissions.openSettings();
+                PermissionHandler().openAppSettings();
               },
             ),
           ]);
@@ -972,7 +973,7 @@ class _HomePageState extends State<HomePage> {
         RaisedButton(
           child: Text('Open Settings'),
           onPressed: () {
-            SimplePermissions.openSettings();
+            PermissionHandler().openAppSettings();
           },
         ),
       ]);

@@ -5,7 +5,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
-import 'package:simple_permissions/simple_permissions.dart';
+//import 'package:simple_permissions/simple_permissions.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';

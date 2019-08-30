@@ -17,7 +17,7 @@ import 'package:ubihrm/model/timeinout.dart';
 import '../drawer.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:datetime_picker_formfield/time_picker_formfield.dart';
+//import 'package:datetime_picker_formfield/time_picker_formfield.dart';
 import 'package:ubihrm/model/model.dart' as TimeOffModal;
 import 'package:ubihrm/services/expense_services.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
@@ -285,13 +285,21 @@ class _RequestExpenceState extends State<RequestExpence> {
 
                             new Expanded(
 
-                              child:  DateTimePickerFormField(
-                                firstDate: new DateTime.now(),
-                                initialDate: new DateTime.now(),
+                              child:  DateTimeField(
+                                //firstDate: new DateTime.now(),
+                                //initialDate: new DateTime.now(),
                                 //dateOnly: true,
-                                inputType: InputType.date,
+                                //inputType: InputType.date,
                                 format: dateFormat,
                                 controller: _dateController,
+                                readOnly: true,
+                                onShowPicker: (context, currentValue) {
+                                  return showDatePicker(
+                                      context: context,
+                                      firstDate: DateTime(1900),
+                                      initialDate: currentValue ?? DateTime.now(),
+                                      lastDate: DateTime(2100));
+                                },
                                 decoration: InputDecoration(
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.all(0.0),

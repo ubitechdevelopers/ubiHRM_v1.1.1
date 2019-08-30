@@ -820,6 +820,7 @@ var profilepic;
     //  }
    // );
   }
+
   updatePhoto(int uploadtype) async{
     setState(() {
       _isProfileUploading = true;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simple_permissions/simple_permissions.dart';
+//import 'package:simple_permissions/simple_permissions.dart';
 import 'drawer.dart';
 import 'piegraph.dart';
 import 'graphs.dart';

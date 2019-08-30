@@ -38,25 +38,19 @@ class _TabState extends State<TabbedApp> {
   Employee emp;
 
 
-
-
-
-
-
   void initState() {
     super.initState();
     initPlatformState();
     getOrgName();
 
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-    profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+    profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
           _checkLoadedprofile = false;
         });
-
       }
-    });
+    }));
     showtabbar=true;
   }
   initPlatformState() async{
