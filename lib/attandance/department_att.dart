@@ -566,21 +566,29 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeIn
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .EntryImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .EntryImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )
@@ -597,21 +605,29 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeOut
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .ExitImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .ExitImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )
@@ -745,21 +761,29 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeIn
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .EntryImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .EntryImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )
@@ -776,21 +800,29 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeOut
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .ExitImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .ExitImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )

@@ -758,7 +758,7 @@ class _HomePageState extends State<HomePage> {
       ),*/
 
          Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(width: 50.0,),
             new InkWell(

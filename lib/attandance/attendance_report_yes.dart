@@ -251,21 +251,29 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeIn
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .EntryImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .EntryImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )
@@ -282,21 +290,29 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeOut
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .ExitImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .ExitImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )
@@ -470,7 +486,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                 width: MediaQuery
                                                     .of(context)
                                                     .size
-                                                    .width * 0.46,
+                                                    .width * 0.42,
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment
                                                       .start,
@@ -523,7 +539,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -562,7 +578,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
@@ -605,12 +621,15 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                   }
                               );
                             }else{
-                              return new Center(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*1,
-                                  color: Colors.teal.withOpacity(0.1),
-                                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                              return Container(
+                                height: MediaQuery.of(context).size.height*0.30,
+                                child: new Center(
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width*1,
+                                    color: Colors.teal.withOpacity(0.1),
+                                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                    child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  ),
                                 ),
                               );
                             }
@@ -635,11 +654,11 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                 new Container(
 
 
-                  height: MediaQuery.of(context).size.height*0.3,
+                  height: MediaQuery.of(context).size.height*0.30,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.3,
+                    Container( height: MediaQuery.of(context).size.height*.30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
@@ -663,7 +682,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                 width: MediaQuery
                                                     .of(context)
                                                     .size
-                                                    .width * 0.46,
+                                                    .width * 0.42,
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment
                                                       .start,
@@ -716,28 +735,36 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeIn
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .EntryImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .EntryImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )
@@ -747,28 +774,36 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
-                                                      .width * 0.22,
+                                                      .width * 0.20,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .center,
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeOut
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .ExitImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .ExitImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )
@@ -782,12 +817,15 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                   }
                               );
                             }else{
-                              return new Center(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*1,
-                                  color: Colors.teal.withOpacity(0.1),
-                                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                              return Container(
+                                height: MediaQuery.of(context).size.height*0.25,
+                                child: new Center(
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width*1,
+                                    color: Colors.teal.withOpacity(0.1),
+                                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                    child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  ),
                                 ),
                               );
                             }

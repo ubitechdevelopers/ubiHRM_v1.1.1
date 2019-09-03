@@ -224,21 +224,29 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeIn
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .EntryImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .EntryImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )
@@ -255,21 +263,29 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeOut
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .ExitImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .ExitImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )
@@ -511,34 +527,36 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeIn
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      GestureDetector(
-                                                        onTap: (){
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
-                                                          );
-                                                        },
-                                                        child: Container(
+
+                                                      Container(
                                                           width: 62.0,
                                                           height: 62.0,
-                                                          child: Container(
-                                                              decoration: new BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  image: new DecorationImage(
-                                                                      fit: BoxFit.fill,
-                                                                      image: new NetworkImage(
-                                                                          snapshot
-                                                                              .data[index]
-                                                                              .EntryImage)
-                                                                  )
-                                                              )),),
-                                                      ),
+                                                          child: InkWell(
+                                                            child: Container(
+                                                                decoration: new BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    image: new DecorationImage(
+                                                                        fit: BoxFit.fill,
+                                                                        image: new NetworkImage(
+                                                                            snapshot
+                                                                                .data[index]
+                                                                                .EntryImage)
+                                                                    )
+                                                                )),
+                                                            onTap: (){
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                              );
+                                                            },
+                                                          ),),
+
 
                                                     ],
                                                   )
-
                                               ),
+
                                               Container(
                                                   width: MediaQuery
                                                       .of(context)
@@ -550,29 +568,30 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeOut
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      GestureDetector(
-                                                        onTap: (){
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
-                                                          );
-                                                        },
-                                                        child: Container(
+                                                      Container(
                                                           width: 62.0,
                                                           height: 62.0,
-                                                          child: Container(
-                                                              decoration: new BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  image: new DecorationImage(
-                                                                      fit: BoxFit.fill,
-                                                                      image: new NetworkImage(
-                                                                          snapshot
-                                                                              .data[index]
-                                                                              .ExitImage)
-                                                                  )
-                                                              )),),
-                                                      ),
+                                                          child: InkWell(
+                                                            child: Container(
+                                                                decoration: new BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    image: new DecorationImage(
+                                                                        fit: BoxFit.fill,
+                                                                        image: new NetworkImage(
+                                                                            snapshot
+                                                                                .data[index]
+                                                                                .ExitImage)
+                                                                    )
+                                                                )),
+                                                            onTap: (){
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                              );
+                                                            },
+                                                          ),),
+
 
                                                     ],
                                                   )
@@ -706,21 +725,29 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeIn
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .EntryImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .EntryImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )
@@ -737,21 +764,29 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                     children: <Widget>[
                                                       Text(snapshot.data[index].TimeOut
                                                           .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                        width: 62.0,
-                                                        height: 62.0,
+                                                      GestureDetector(
+                                                        onTap: (){
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                          );
+                                                        },
                                                         child: Container(
-                                                            decoration: new BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: new DecorationImage(
-                                                                    fit: BoxFit.fill,
-                                                                    image: new NetworkImage(
-                                                                        snapshot
-                                                                            .data[index]
-                                                                            .ExitImage)
-                                                                )
-                                                            )),),
+                                                          width: 62.0,
+                                                          height: 62.0,
+                                                          child: Container(
+                                                              decoration: new BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image: new DecorationImage(
+                                                                      fit: BoxFit.fill,
+                                                                      image: new NetworkImage(
+                                                                          snapshot
+                                                                              .data[index]
+                                                                              .ExitImage)
+                                                                  )
+                                                              )),),
+                                                      ),
 
                                                     ],
                                                   )

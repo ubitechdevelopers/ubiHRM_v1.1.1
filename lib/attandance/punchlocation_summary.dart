@@ -17,7 +17,7 @@ import '../services/attandance_saveimage.dart';
 import '../appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'teampunchlocatio_summary.dart';
-//import 'Image_view.dart';
+import 'Image_view.dart';
 
 //import 'package:intl/intl.dart';
 
@@ -539,10 +539,10 @@ print('visit out called for visit id:'+visit_id);
                                                        )
                                                    )),
                                                  onTap: () {
-                                                   /*Navigator.push(
+                                                   Navigator.push(
                                                   context,
                                                   MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].pi_img,org_name: org_name)),
-                                                );*/
+                                                );
                                                  },),),
 
                                            ],
@@ -578,10 +578,10 @@ print('visit out called for visit id:'+visit_id);
                                                          )
                                                      )),
                                                  onTap: () {
-                                                   /*Navigator.push(
+                                                   Navigator.push(
                                                   context,
                                                   MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].po_img,org_name: org_name)),
-                                                );*/
+                                                );
                                                  },
                                                ),),
 
