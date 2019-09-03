@@ -172,6 +172,8 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                       child: new FutureBuilder<List<Attn>>(
                         future: getYesAttn('present'),
                         builder: (context, snapshot) {
+                          //print(snapshot.hasData);
+                          //print(snapshot.data.length);
                           if (snapshot.hasData) {
                             if(snapshot.data.length>0) {
                               return new ListView.builder(
