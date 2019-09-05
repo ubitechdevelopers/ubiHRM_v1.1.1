@@ -180,10 +180,8 @@ class _MyLeaveState extends State<MyLeave> {
 
   @override
   Widget build(BuildContext context) {
-
     return mainWidget;
   }
-
 
   Widget loadingWidget(){
     return Center(child:SizedBox(

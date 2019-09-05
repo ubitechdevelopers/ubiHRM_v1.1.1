@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'login.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';
@@ -57,7 +56,7 @@ class _RequestExpenceState extends State<RequestExpence> {
   FocusNode textthirdFocusNode = new FocusNode();
   FocusNode textfourthFocusNode = new FocusNode();
   FocusNode myFocusNodeamount = new FocusNode();
-  final dateFormat = DateFormat("dd-M-yyyy");
+  final dateFormat = DateFormat("dd-MM-yyyy");
   final timeFormat = DateFormat("H:mm");
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -83,7 +82,7 @@ class _RequestExpenceState extends State<RequestExpence> {
   String shiftId="";
   Future<File> ExpenseDoc;
   File _image=null;
-  var tempvar="";
+  //var tempvar="";
   String close="";
   @override
   void initState() {
@@ -348,12 +347,12 @@ class _RequestExpenceState extends State<RequestExpence> {
                                   }
                                 },
                            onFieldSubmitted: (String value) {
-                          if (_formKey.currentState.validate()) {
+                           if (_formKey.currentState.validate()) {
 
-                         saveExpense (_dateController.text, headtype, _descController.text,amountController.text ,_image,tempvar,context);
+                            saveExpense (_dateController.text, headtype, _descController.text, amountController.text ,_image,context);
                                   }
                                 },
-                                maxLines: 3,
+                                maxLines: null,
                               ),
                             ),
                           ],
@@ -455,8 +454,8 @@ class _RequestExpenceState extends State<RequestExpence> {
 
                           children: <Widget>[
 
-                            RaisedButton(
-                              /* child: _isButtonDisabled?Row(children: <Widget>[Text('Processing ',style: TextStyle(color: Colors.white),),SizedBox(width: 10.0,), SizedBox(child:CircularProgressIndicator(),height: 20.0,width: 20.0,),],):Text('SAVE',style: TextStyle(color: Colors.white),),*/
+                            /*RaisedButton(
+                              *//* child: _isButtonDisabled?Row(children: <Widget>[Text('Processing ',style: TextStyle(color: Colors.white),),SizedBox(width: 10.0,), SizedBox(child:CircularProgressIndicator(),height: 20.0,width: 20.0,),],):Text('SAVE',style: TextStyle(color: Colors.white),),*//*
                               child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('ADD',style: TextStyle(color: Colors.white),),
                               color: Colors.orange[800],
                               onPressed: () {
@@ -464,26 +463,61 @@ class _RequestExpenceState extends State<RequestExpence> {
                 saveExpense (_dateController.text,  headtype, _descController.text,amountController.text , _image, tempvar,context);
 
                               },
-                            ),
+                            ),*/
                             RaisedButton(
                               /* child: _isButtonDisabled?Row(children: <Widget>[Text('Processing ',style: TextStyle(color: Colors.white),),SizedBox(width: 10.0,), SizedBox(child:CircularProgressIndicator(),height: 20.0,width: 20.0,),],):Text('SAVE',style: TextStyle(color: Colors.white),),*/
                               child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('SAVE',style: TextStyle(color: Colors.white),),
                               color: Colors.orange[800],
                               onPressed: () {
-                              tempvar="1";
+                                if(_dateController.text=='') {
+                                  showDialog(context: context, child:
+                                    new AlertDialog(
+                                      content: new Text('Please select expense date'),
+                                    )
+                                  );
+                                  return false;
+                                }else if(headtype=='0'){
+                                  showDialog(context: context, child:
+                                    new AlertDialog(
+                                      content: new Text('Please select expense type'),
+                                    )
+                                  );
+                                  //showInSnackBar('Please select expense type');
+                                  return false;
+                                }else if(_descController.text==''){
+                                  showDialog(context: context, child:
+                                    new AlertDialog(
+                                      content: new Text('Please enter description'),
+                                    )
+                                  );
+                                  //showInSnackBar('Please enter description');
+                                  return false;
+                                }else if(amountController.text==''){
+                                  //showInSnackBar('Please enter amount');
+                                  showDialog(context: context, child:
+                                    new AlertDialog(
+                                      content: new Text('Please enter amount'),
+                                    )
+                                  );
+                                  return false;
+                                }else {
+                                  saveExpense(_dateController.text, headtype,
+                                      _descController.text.trim(),
+                                      amountController.text.trim(), _image, context);
+                                  /*_dateController.clear();
+                                  _descController.clear();
+                                  amountController.clear();*/
+                                }
+
+                                //tempvar="1";
 
                                 // requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,
                                 //   _descController.text, context);
-                                saveExpense (_dateController.text,
-                                    headtype, _descController.text,amountController.text , _image,tempvar, context);
-
                               },
                             ),
 
 
-
                             FlatButton(
-
                               shape: Border.all(color: Colors.black54),
                               child: Text('CANCEL'),
                               onPressed: () {
@@ -566,10 +600,7 @@ class _RequestExpenceState extends State<RequestExpence> {
   }
 
 
-
-
-
-  Future<bool> saveExpense(var expensedate,var category,var desc, var amount, File doc,tempvar, BuildContext context) async { // visit in function
+  Future<bool> saveExpense(var expensedate, var category, var desc, var amount, File doc, BuildContext context) async { // visit in function
     try {
       Dio dio = new Dio();
       final prefs = await SharedPreferences.getInstance();
@@ -607,19 +638,27 @@ class _RequestExpenceState extends State<RequestExpence> {
        // print('------------2*');
         if ((response1.toString().contains("true"))) {
         //  print('------true  in img');
-          showInSnackBar("Expense has been applied successfully.");
- if(tempvar=="1"){
-   Navigator.push(
-     context,
-     MaterialPageRoute(builder: (context) => MyExpence()),
-   );
- }else{
-   Navigator.push(
-     context,
-     MaterialPageRoute(builder: (context) => RequestExpence()),
-   );
- }
-
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyExpence()),
+          );
+          showDialog(context: context, child:
+            new AlertDialog(
+              content: new Text('Expense has been applied successfully.'),
+            )
+          );
+          //showInSnackBar("Expense has been applied successfully.");
+           /*if(tempvar=="1"){
+             Navigator.push(
+               context,
+               MaterialPageRoute(builder: (context) => MyExpence()),
+             );
+           }else{
+             Navigator.push(
+               context,
+               MaterialPageRoute(builder: (context) => RequestExpence()),
+             );
+           }*/
           return true;
         }
         else if((response1.toString().contains("false1"))){
@@ -668,8 +707,16 @@ class _RequestExpenceState extends State<RequestExpence> {
        // print('------------2*');
       if ((response1.toString().contains("true"))) {
       //  print('------true');
-        showInSnackBar("Expense has been applied successfully.");
-        if(tempvar=="1"){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MyExpence()),
+        );
+        showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text('Expense has been applied successfully.'),
+          )
+        );
+       /* if(tempvar=="1"){
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyExpence()),
@@ -679,7 +726,7 @@ class _RequestExpenceState extends State<RequestExpence> {
             context,
             MaterialPageRoute(builder: (context) => RequestExpence()),
           );
-        }
+        }*/
         return true;
       }
       else if((response1.toString().contains("false1"))){

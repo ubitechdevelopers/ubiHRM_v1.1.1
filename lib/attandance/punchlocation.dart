@@ -615,7 +615,7 @@ class _PunchLocation extends State<PunchLocation> {
           style: new TextStyle(fontSize: 22.0, color: Colors.white)),
       color: Colors.orange[800],
       onPressed: () {
-        if(_clientname.text=='') {
+        if(_clientname.text.trim()=='') {
           showInSnackBar('Please insert client name first');
           return false;
         }else
@@ -639,7 +639,7 @@ class _PunchLocation extends State<PunchLocation> {
 
   saveVisitImage() async {
     sl.startStreaming(5);
-    client = _clientname.text;
+    client = _clientname.text.trim();
     MarkVisit mk = new MarkVisit(
         empid,client, streamlocationaddr, orgdir, lat, long);
     /* mk1 = mk;*/
@@ -657,25 +657,25 @@ class _PunchLocation extends State<PunchLocation> {
       });
       issave = await saveImage.saveVisit(mk);
       ////print(issave);
-      if (issave) {
-        showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text("Visit punched successfully!"),
-        )
-        );
+      if (issave==true) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => PunchLocationSummary()),
+        );
+        showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text("Visit punched successfully!"),
+          )
         );
         setState(() {
           act1 = act;
         });
       } else {
         showDialog(context: context, child:
-        new AlertDialog(
-          title: new Text("Warning!"),
-          content: new Text("Problem while punching visit, try again."),
-        )
+          new AlertDialog(
+            title: new Text("Warning!"),
+            content: new Text("Problem while punching visit, try again."),
+          )
         );
         setState(() {
           act1 = act;
@@ -683,10 +683,10 @@ class _PunchLocation extends State<PunchLocation> {
       }
     }else{
       showDialog(context: context, child:
-      new AlertDialog(
+        new AlertDialog(
 
-        content: new Text("Internet connection not found!."),
-      )
+          content: new Text("Internet connection not found!."),
+        )
       );
     }
 
@@ -741,7 +741,6 @@ class _PunchLocation extends State<PunchLocation> {
 
 ////////////////////////////////////////////////////////////
   Widget getClients_DD() {
-
     return Center(
       child: Form(
           child: TextFormField(

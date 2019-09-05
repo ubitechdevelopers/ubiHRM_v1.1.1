@@ -62,9 +62,13 @@ requestLeave(Leave leave) async{
     }
     else if (leaveMap.contains("wrong"))
     {
-
       return "wrong";
-    }else {
+    }
+    else if (leaveMap.contains("alreadyApply"))
+    {
+      return "alreadyApply";
+    }
+    else {
       // print("true---" + response1.data.toString());
       return "true";
     }

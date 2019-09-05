@@ -146,7 +146,12 @@ class _TimeoffSummary extends State<TimeoffSummary> {
         context,
         MaterialPageRoute(builder: (context) => TimeoffSummary()),
       );
-
+      showDialog(context: context, child:
+      new AlertDialog(
+        title: new Text("Withdrawl"),
+        content: new Text("Timeoff withdrawn successfully."),
+      )
+      );
     }else if(islogin=="failure"){
       setState(() {
         _isButtonDisabled=false;

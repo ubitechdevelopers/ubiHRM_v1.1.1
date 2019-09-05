@@ -149,12 +149,12 @@ class _RequestLeaveState extends State<RequestLeave> {
     print("---ss>"+islogin1);
     if(islogin1=="true"){
       showInSnackBar("Leave has been applied successfully.");
-
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => MyLeave()), (Route<dynamic> route) => false,
       );
-    }else if(islogin1=="false"){
+    }
+    else if(islogin1=="false"){
       setState(() {
         isServiceCalling = false;
       });
@@ -165,7 +165,14 @@ class _RequestLeaveState extends State<RequestLeave> {
         isServiceCalling = false;
       });
       showInSnackBar("Leave format is wrong");
-    }else{
+    }
+    else if(islogin1=="alreadyApply"){
+      setState(() {
+        isServiceCalling = false;
+      });
+      showInSnackBar("You already applied for same date");
+    }
+    else{
       setState(() {
         isServiceCalling = false;
       });
@@ -523,7 +530,7 @@ class _RequestLeaveState extends State<RequestLeave> {
         onPressed: () {
           if (_formKey.currentState.validate())
           {
-           requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text, substituteemp);
+           requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text.trim(), substituteemp);
           }
         },
       ),

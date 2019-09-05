@@ -760,7 +760,7 @@ class _HomePageState extends State<HomePage> {
          Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(width: 50.0,),
+            //SizedBox(width: 50.0,),
             new InkWell(
               child: new Text(
                 "Check Attendance Log",

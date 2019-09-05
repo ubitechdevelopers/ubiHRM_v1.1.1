@@ -476,6 +476,8 @@ class _TimeOffPageState extends State<TimeOffPage> {
     var islogin = await request.requestTimeOff(timeoff);
     print("--->"+islogin);
     if(islogin=="true"){
+      //print("&&&&&&&&&&&&&&");
+      showInSnackBar("Your application for Time off has been sent successfully");
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => TimeoffSummary()),
@@ -483,7 +485,26 @@ class _TimeOffPageState extends State<TimeOffPage> {
       setState(() {
         _isButtonDisabled=false;
       });
+    }else if(islogin=="1"){
+      //print("####################");
+      showInSnackBar("There is some problem while applying for Timeoff.");
+      setState(() {
+        _isButtonDisabled=false;
+      });
+    }else if(islogin=="2"){
+      //print("@@@@@@@@@@@@@@@@@@@");
+      showInSnackBar("Timeoff already exist");
+      setState(() {
+        _isButtonDisabled=false;
+      });
+    }else if(islogin=="3"){
+      //print("%%%%%%%%%%%%%%%%%%");
+      showInSnackBar("Timeoff should be between shift timing");
+      setState(() {
+        _isButtonDisabled=false;
+      });
     }else if(islogin=="false"){
+      //print("!!!!!!!!!!!!!!!!!!!!!!");
       showInSnackBar("Poor Network Connection");
       setState(() {
         _isButtonDisabled=false;

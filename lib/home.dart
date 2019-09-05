@@ -23,11 +23,12 @@ import 'services/attandance_fetch_location.dart';
 import 'salary/mysalary_list.dart';
 import 'package:intl/intl.dart';
 import 'dashboard.dart';
+import 'home_appbar.dart';
 import 'attandance/flexi_time.dart';
-
 //import 'settings.dart';
-
 import 'package:connectivity/connectivity.dart';
+
+
 
 class HomePageMain extends StatefulWidget {
   @override
@@ -36,7 +37,7 @@ class HomePageMain extends StatefulWidget {
 
 class _HomePageStatemain extends State<HomePageMain> {
   // StreamLocation sl = new StreamLocation();
-
+  var orgname;
   double height = 0.0;
   double insideContainerHeight = 300.0;
   int _currentIndex = 0;
@@ -49,6 +50,7 @@ class _HomePageStatemain extends State<HomePageMain> {
   var profileimage;
   bool showtabbar;
   String orgName = "";
+
 
   bool _checkLoadedprofile = true;
 
@@ -211,7 +213,8 @@ class _HomePageStatemain extends State<HomePageMain> {
     return Scaffold(
         backgroundColor: scaffoldBackColor(),
         endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage, showtabbar, orgName),
+        appBar: new HomeAppHeader(profileimage, showtabbar, orgName),
+
 
 /*        appBar: GradientAppBar(
           backgroundColorStart: appStartColor(),
@@ -247,8 +250,10 @@ class _HomePageStatemain extends State<HomePageMain> {
 
           ),
         ),*/
+
         bottomNavigationBar: new HomeNavigation(),
-        body: homewidget());
+        body: homewidget()
+    );
   }
 
   Card makeDashboardItem(String title, functionname, Imagename) {
@@ -295,7 +300,6 @@ class _HomePageStatemain extends State<HomePageMain> {
     return Stack(
       children: <Widget>[
         Container(
-
           //height: MediaQuery.of(context).size.height,
           margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
           padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
@@ -1023,3 +1027,5 @@ class _HomePageStatemain extends State<HomePageMain> {
     ]);
   }
 }
+
+

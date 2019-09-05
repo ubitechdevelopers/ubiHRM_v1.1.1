@@ -35,6 +35,15 @@ class RequestTimeOffService{
       if (timeoffMap.contains("false")) {
         print("ijkl");
         return "false";
+      }else if (timeoffMap.contains("1")){
+        //print("mnop");
+        return "1";
+      }else if (timeoffMap.contains("2")){
+        //print("mnop");
+        return "2";
+      }else if (timeoffMap.contains("3")){
+        //print("mnop");
+        return "3";
       } else {
         print("mnop");
         return "true";
