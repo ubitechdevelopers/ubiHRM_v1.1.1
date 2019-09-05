@@ -148,35 +148,71 @@ class _RequestLeaveState extends State<RequestLeave> {
     var islogin1 = await requestLeave(leave);
     print("---ss>"+islogin1);
     if(islogin1=="true"){
-      showInSnackBar("Leave has been applied successfully.");
+      //showInSnackBar("Leave has been applied successfully.");
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => MyLeave()), (Route<dynamic> route) => false,
       );
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('Leave has been applied successfully.'),
+      )
+      );
     }
     else if(islogin1=="false"){
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('There is some problem while applying for Leave.'),
+      )
+      );
       setState(() {
         isServiceCalling = false;
       });
-      showInSnackBar("There is some problem while applying for Leave.");
+      //showInSnackBar("There is some problem while applying for Leave.");
     }
     else if(islogin1=="wrong"){
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('Leave format is wrong'),
+      )
+      );
       setState(() {
         isServiceCalling = false;
       });
-      showInSnackBar("Leave format is wrong");
+      //showInSnackBar("Leave format is wrong");
     }
-    else if(islogin1=="alreadyApply"){
+   /* else if(islogin1=="wrong1"){
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('Leave can not be applied for this format'),
+      )
+      );
       setState(() {
         isServiceCalling = false;
       });
-      showInSnackBar("You already applied for same date");
+      //showInSnackBar("Leave format is wrong");
+    }*/
+    else if(islogin1=="alreadyApply"){
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('You already applied for same date'),
+      )
+      );
+      setState(() {
+        isServiceCalling = false;
+      });
+      //showInSnackBar("You already applied for same date");
     }
     else{
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('Poor Network Connection'),
+      )
+      );
       setState(() {
         isServiceCalling = false;
       });
-      showInSnackBar("Poor Network Connection");
+      //showInSnackBar("Poor Network Connection");
     }
   }
 
@@ -206,28 +242,42 @@ class _RequestLeaveState extends State<RequestLeave> {
     ));
   }
 
-
+  Future<bool> sendToLeaveList() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MyLeave()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
 
   Widget mainScafoldWidget(){
-    return  Scaffold(
-        key: _scaffoldKey,
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
-       bottomNavigationBar:  new HomeNavigation(),
-       body:  ModalProgressHUD(
-    inAsyncCall: isServiceCalling,
-    opacity: 0.15,
-    progressIndicator: SizedBox(
-    child:new CircularProgressIndicator(
-    valueColor: new AlwaysStoppedAnimation(Colors.green),
-    strokeWidth: 5.0),
-    height: 50.0,
-    width: 50.0,
-    ),
-    child: homewidget()
-        )
+    return  WillPopScope(
+      onWillPop: ()=> sendToLeaveList(),
+      child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+         bottomNavigationBar:  new HomeNavigation(),
+         body:  ModalProgressHUD(
+      inAsyncCall: isServiceCalling,
+      opacity: 0.15,
+      progressIndicator: SizedBox(
+      child:new CircularProgressIndicator(
+      valueColor: new AlwaysStoppedAnimation(Colors.green),
+      strokeWidth: 5.0),
+      height: 50.0,
+      width: 50.0,
+      ),
+      child: homewidget()
+          )
 
+      ),
     );
   }
 

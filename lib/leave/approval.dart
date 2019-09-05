@@ -325,6 +325,8 @@ class ChoiceCard1 extends StatelessWidget {
 
   final Choice choice;
 
+
+
   @override
   Widget build(BuildContext context) {
 

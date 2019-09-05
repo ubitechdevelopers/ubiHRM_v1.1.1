@@ -476,36 +476,61 @@ class _TimeOffPageState extends State<TimeOffPage> {
     var islogin = await request.requestTimeOff(timeoff);
     print("--->"+islogin);
     if(islogin=="true"){
-      //print("&&&&&&&&&&&&&&");
-      showInSnackBar("Your application for Time off has been sent successfully");
+      /*print("&&&&&&&&&&&&&&");
+      showInSnackBar("Your application for Time off has been sent successfully");*/
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => TimeoffSummary()),
+      );
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('Your application for Time off has been sent successfully'),
+      )
       );
       setState(() {
         _isButtonDisabled=false;
       });
     }else if(islogin=="1"){
       //print("####################");
-      showInSnackBar("There is some problem while applying for Timeoff.");
+      //showInSnackBar("There is some problem while applying for Timeoff.");
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('There is some problem while applying for Timeoff.'),
+      )
+      );
       setState(() {
         _isButtonDisabled=false;
       });
     }else if(islogin=="2"){
       //print("@@@@@@@@@@@@@@@@@@@");
-      showInSnackBar("Timeoff already exist");
+      //showInSnackBar("Timeoff already exist");
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('Timeoff already exist'),
+      )
+      );
       setState(() {
         _isButtonDisabled=false;
       });
     }else if(islogin=="3"){
       //print("%%%%%%%%%%%%%%%%%%");
-      showInSnackBar("Timeoff should be between shift timing");
+      //showInSnackBar("Timeoff should be between shift timing");
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('Timeoff should be between shift timing'),
+      )
+      );
       setState(() {
         _isButtonDisabled=false;
       });
     }else if(islogin=="false"){
       //print("!!!!!!!!!!!!!!!!!!!!!!");
-      showInSnackBar("Poor Network Connection");
+      //showInSnackBar("Poor Network Connection");
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('Poor Network Connection'),
+      )
+      );
       setState(() {
         _isButtonDisabled=false;
       });

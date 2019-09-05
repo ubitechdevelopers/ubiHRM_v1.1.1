@@ -44,6 +44,7 @@ class _LeaveReports extends State<LeaveReports> {
   Widget build(BuildContext context) {
     return getmainhomewidget();
   }
+
   void showInSnackBar(String value) {
     final snackBar = SnackBar(
         content: Text(value,textAlign: TextAlign.center,));
@@ -64,7 +65,6 @@ class _LeaveReports extends State<LeaveReports> {
     );
 
   }
-
 
   loader(){
     return new Container(

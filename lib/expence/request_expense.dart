@@ -170,17 +170,34 @@ class _RequestExpenceState extends State<RequestExpence> {
       backgroundColor: Colors.redAccent,);
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
+
+  Future<bool> sendToExpenseList() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MyExpence()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
+
   getmainhomewidget(){
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
+    return WillPopScope(
+      onWillPop: ()=> sendToExpenseList(),
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
 
-      bottomNavigationBar:  new HomeNavigation(),
+        bottomNavigationBar:  new HomeNavigation(),
 
-      endDrawer: new AppDrawer(),
-      // body: (act1=='') ? Center(child : loader()) : checkalreadylogin(),
-      body:  getExpenseWidgit(),
+        endDrawer: new AppDrawer(),
+        // body: (act1=='') ? Center(child : loader()) : checkalreadylogin(),
+        body:  getExpenseWidgit(),
+      ),
     );
 
   }
@@ -484,7 +501,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                                   );
                                   //showInSnackBar('Please select expense type');
                                   return false;
-                                }else if(_descController.text==''){
+                                }else if(_descController.text.trim()==''){
                                   showDialog(context: context, child:
                                     new AlertDialog(
                                       content: new Text('Please enter description'),
@@ -492,7 +509,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                                   );
                                   //showInSnackBar('Please enter description');
                                   return false;
-                                }else if(amountController.text==''){
+                                }else if(amountController.text.trim()==''){
                                   //showInSnackBar('Please enter amount');
                                   showDialog(context: context, child:
                                     new AlertDialog(
@@ -504,8 +521,9 @@ class _RequestExpenceState extends State<RequestExpence> {
                                   saveExpense(_dateController.text, headtype,
                                       _descController.text.trim(),
                                       amountController.text.trim(), _image, context);
-                                  /*_dateController.clear();
+                                 /* _dateController.clear();
                                   _descController.clear();
+                                  headtype=='0';
                                   amountController.clear();*/
                                 }
 

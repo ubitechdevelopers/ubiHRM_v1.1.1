@@ -64,6 +64,10 @@ requestLeave(Leave leave) async{
     {
       return "wrong";
     }
+    /*else if (leaveMap.contains("wrong1"))
+    {
+      return "wrong1";
+    }*/
     else if (leaveMap.contains("alreadyApply"))
     {
       return "alreadyApply";
@@ -905,6 +909,8 @@ List<Map> createEMpListDD(List data,int label) {
  //   if(data[i]["LastName"].toString()!='' && data[i]["LastName"].toString()!=null)
       tos={"Name":data[i]["Name"].toString(),"Id":data[i]["Id"].toString(),"Code":data[i]["Code"].toString()};
     list.add(tos);
+  print("-----------------"+tos.toString());
+
   }
   return list;
 }

@@ -190,36 +190,52 @@ class _MyLeaveState extends State<MyLeave> {
     ));
   }
 
-  Widget mainScafoldWidget(){
-    return  Scaffold(
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar:new HomeNavigation(),
-      body:  ModalProgressHUD(
-          inAsyncCall: _checkwithdrawnleave,
-          opacity: 0.15,
-          progressIndicator: SizedBox(
-            child:new CircularProgressIndicator(
-                valueColor: new AlwaysStoppedAnimation(Colors.green),
-                strokeWidth: 5.0),
-            height: 50.0,
-            width: 50.0,
-          ),
-          child: homewidget()
-      ),
-         floatingActionButton: new FloatingActionButton(
-          backgroundColor: Colors.orange[800],
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => RequestLeave()),
-            );
-          },
-          tooltip: 'Request Leave',
-          child: new Icon(Icons.add),
-        ),
+  Future<bool> sendToHome() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
 
+  Widget mainScafoldWidget(){
+    return  WillPopScope(
+      onWillPop: ()=> sendToHome(),
+      child: Scaffold(
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:new HomeNavigation(),
+        body:  ModalProgressHUD(
+            inAsyncCall: _checkwithdrawnleave,
+            opacity: 0.15,
+            progressIndicator: SizedBox(
+              child:new CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation(Colors.green),
+                  strokeWidth: 5.0),
+              height: 50.0,
+              width: 50.0,
+            ),
+            child: homewidget()
+        ),
+           floatingActionButton: new FloatingActionButton(
+            backgroundColor: Colors.orange[800],
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RequestLeave()),
+              );
+            },
+            tooltip: 'Request Leave',
+            child: new Icon(Icons.add),
+          ),
+
+      ),
     );
   }
 
@@ -409,8 +425,8 @@ class _MyLeaveState extends State<MyLeave> {
                                                 child: Container (
                             //                   color:Colors.yellow,
                                                  height: MediaQuery .of(context).size.height * 0.04,
-                                                 margin: EdgeInsets.only(left:32.0),
-                                                 padding: EdgeInsets.only(left:32.0),
+                                                 margin: EdgeInsets.only(left:115.0),
+                                                 //padding: EdgeInsets.only(left:32.0),
                                                  width: MediaQuery .of(context).size.width * 0.50,
                                                  child: new OutlineButton(
                                                     onPressed: () {
@@ -419,7 +435,7 @@ class _MyLeaveState extends State<MyLeave> {
                                                     },
                                                      child:new Icon(
                                                        Icons.replay,
-                                                       size: 16.0,
+                                                       size: 20.0,
                                                        color:appStartColor(),
                                                  //      textDirection: TextDirection.rtl,
                                                      ),

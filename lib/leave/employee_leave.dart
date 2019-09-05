@@ -8,6 +8,7 @@ import '../drawer.dart';
 import '../appbar.dart';
 import '../global.dart';
 import '../b_navigationbar.dart';
+import 'myleave.dart';
 
 class EmployeeLeaveList extends StatefulWidget {
   @override
@@ -61,14 +62,30 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
     return getmainhomewidget();
   }
 
+  Future<bool> sendToLeaveList() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MyLeave()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
+
   getmainhomewidget() {
-    return new Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar,orgName),
-      endDrawer: new AppDrawer(),
-      bottomNavigationBar: HomeNavigation(),
-      body: getReportsWidget(),
+    return WillPopScope(
+      onWillPop: ()=> sendToLeaveList(),
+      child: new Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        appBar: new AppHeader(profileimage, showtabbar,orgName),
+        endDrawer: new AppDrawer(),
+        bottomNavigationBar: HomeNavigation(),
+        body: getReportsWidget(),
+      ),
     );
   }
 
@@ -338,7 +355,6 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                       return new DropdownMenuItem<String>(
                         value: map["Id"].toString(),
                         child: new SizedBox(
-
                             width: 200.0,
                             child: map["Code"]!=''?new Text(map["Name"]+' ('+map["Code"]+')'):
                             new Text(map["Name"],)),
@@ -351,7 +367,6 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
             }
             catch(e){
               return Text("EX: Unable to fetch employees");
-
             }
           } else if (snapshot.hasError) {
             print(snapshot.error);

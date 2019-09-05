@@ -210,49 +210,52 @@ class _HomePageStatemain extends State<HomePageMain> {
 
   Widget mainScafoldWidget() {
     //print("BBBBBB");
-    return Scaffold(
-        backgroundColor: scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new HomeAppHeader(profileimage, showtabbar, orgName),
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
+          backgroundColor: scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new HomeAppHeader(profileimage, showtabbar, orgName),
 
 
 /*        appBar: GradientAppBar(
-          backgroundColorStart: appStartColor(),
-          backgroundColorEnd: appEndColor(),
-          automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
+            backgroundColorStart: appStartColor(),
+            backgroundColorEnd: appEndColor(),
+            automaticallyImplyLeading: false,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
 
-    GestureDetector(
-    // When the child is tapped, show a snackbar
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CollapsingTab()),
-      );
-        },
-              child:Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                     // image: AssetImage('assets/avatar.png'),
-                      image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
-                      )
-                  )),),
-              Container(
-                  padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-              )
-            ],
+      GestureDetector(
+      // When the child is tapped, show a snackbar
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CollapsingTab()),
+        );
+          },
+                child:Container(
+                    width: 40.0,
+                    height: 40.0,
+                    decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                          fit: BoxFit.fill,
+                       // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        )
+                    )),),
+                Container(
+                    padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
+                )
+              ],
 
-          ),
-        ),*/
+            ),
+          ),*/
 
-        bottomNavigationBar: new HomeNavigation(),
-        body: homewidget()
+          bottomNavigationBar: new HomeNavigation(),
+          body: homewidget()
+      ),
     );
   }
 

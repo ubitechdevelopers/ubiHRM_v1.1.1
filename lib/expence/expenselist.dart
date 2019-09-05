@@ -191,36 +191,52 @@ class _MyExpenceState extends State<MyExpence> {
     ));
   }
 
-  Widget mainScafoldWidget(){
-    return  Scaffold(
-      backgroundColor:scaffoldBackColor(),
-      endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
-      bottomNavigationBar:new HomeNavigation(),
-      body:  ModalProgressHUD(
-          inAsyncCall: _checkwithdrawnleave,
-          opacity: 0.15,
-          progressIndicator: SizedBox(
-            child:new CircularProgressIndicator(
-                valueColor: new AlwaysStoppedAnimation(Colors.green),
-                strokeWidth: 5.0),
-            height: 50.0,
-            width: 50.0,
-          ),
-          child: homewidget()
-      ),
-      floatingActionButton: new FloatingActionButton(
-        backgroundColor: Colors.orange[800],
-        onPressed: (){
-        Navigator.push(
-           context,
-           MaterialPageRoute(builder: (context) => RequestExpence()),
-         );
-        },
-        tooltip: 'Submit Expenses',
-        child: new Icon(Icons.add),
-      ),
+  Future<bool> sendToHome() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
 
+  Widget mainScafoldWidget(){
+    return  WillPopScope(
+      onWillPop: ()=> sendToHome(),
+      child: Scaffold(
+        backgroundColor:scaffoldBackColor(),
+        endDrawer: new AppDrawer(),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
+        bottomNavigationBar:new HomeNavigation(),
+        body:  ModalProgressHUD(
+            inAsyncCall: _checkwithdrawnleave,
+            opacity: 0.15,
+            progressIndicator: SizedBox(
+              child:new CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation(Colors.green),
+                  strokeWidth: 5.0),
+              height: 50.0,
+              width: 50.0,
+            ),
+            child: homewidget()
+        ),
+        floatingActionButton: new FloatingActionButton(
+          backgroundColor: Colors.orange[800],
+          onPressed: (){
+          Navigator.push(
+             context,
+             MaterialPageRoute(builder: (context) => RequestExpence()),
+           );
+          },
+          tooltip: 'Submit Expenses',
+          child: new Icon(Icons.add),
+        ),
+
+      ),
     );
   }
 
@@ -350,12 +366,13 @@ class _MyExpenceState extends State<MyExpence> {
             mainAxisAlignment: MainAxisAlignment.start,
 //            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 40.0,),
-              // SizedBox(width: MediaQuery.of(context).size.width*0.0),
+              SizedBox(height: 40.0),
+              //SizedBox(width: MediaQuery.of(context).size.width*0.10),
 
               new Expanded(
                 child: Container(
-                  width: MediaQuery.of(context).size.width*0.45,
+                  width: MediaQuery.of(context).size.width*0.35,
+                  //margin: EdgeInsets.only(left:10.0),
                   child:Text('  Category',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
                 ),),
               /*  new Expanded(
@@ -367,19 +384,27 @@ class _MyExpenceState extends State<MyExpence> {
                         child:Text('From',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),*/
               //SizedBox(height: 50.0,),
+              /*new Expanded(
+                child: Container(
+                  width: MediaQuery.of(context).size.width*0.35,
+                  //margin: EdgeInsets.only(left:5.0),
+                  child:Text('Description',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
+                ),
+              ),*/
+
               new Expanded(
                 child: Container(
-                  width: MediaQuery.of(context).size.width*0.20,
-                  margin: EdgeInsets.only(left:20.0),
-                  child:Text('Description',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
+                  width: MediaQuery.of(context).size.width*0.35,
+                  margin: EdgeInsets.only(left:40.0),
+                  child:Text('Amount',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
                 ),
               ),
 
               new Expanded(
                 child: Container(
-                  width: MediaQuery.of(context).size.width*0.20,
-                  margin: EdgeInsets.only(left:40.0),
-                  child:Text('Amount',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
+                  width: MediaQuery.of(context).size.width*0.35,
+                  margin: EdgeInsets.only(left:45.0),
+                  child:Text('Action',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
                 ),
               ),
 
@@ -394,8 +419,8 @@ class _MyExpenceState extends State<MyExpence> {
 
                 new Expanded(
                   child: Container(
-                   height: MediaQuery.of(context).size.height*.10,
-                    width: MediaQuery.of(context).size.width*.99,
+                   height: MediaQuery.of(context).size.height*0.10,
+                    //width: MediaQuery.of(context).size.width*.99,
                     //padding: EdgeInsets.only(bottom: 15.0),
                     color: Colors.green[50],
                     //////////////////////////////////////////////////////////////////////---------------------------------
@@ -419,8 +444,8 @@ class _MyExpenceState extends State<MyExpence> {
                                             children: <Widget>[
                                               new Expanded(
                                                 child: Container(
-                                                    width: MediaQuery .of(context).size .width * 0.35,
-                                                    margin: EdgeInsets.only(top:2.0,left:8.0),
+                                                    width: MediaQuery .of(context).size .width * 0.10,
+                                                    margin: EdgeInsets.only(top:2.0,left:6.0),
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
@@ -434,10 +459,10 @@ class _MyExpenceState extends State<MyExpence> {
                                                 ),
                                               ),
 
-                                              new Expanded(
+                                             /* new Expanded(
                                                 child: Container(
-                                                    width: MediaQuery .of(context).size .width * 0.35,
-                                                    margin: EdgeInsets.only(left:20.0),
+                                                    width: MediaQuery .of(context).size .width * 0.10,
+                                                    //margin: EdgeInsets.only(left:20.0),
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
@@ -450,11 +475,11 @@ class _MyExpenceState extends State<MyExpence> {
                                                       ],
                                                     )
                                                 ),
-                                              ),
+                                              ),*/
                                               new Expanded(
                                                 child: Container(
-                                                    width: MediaQuery .of(context).size .width * 0.35,
-                                                    margin: EdgeInsets.only(left:40.0),
+                                                    width: MediaQuery .of(context).size .width * 0.10,
+                                                    margin: EdgeInsets.only(left:39.0),
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
@@ -470,6 +495,29 @@ class _MyExpenceState extends State<MyExpence> {
                                                     )
                                                 ),
                                               ),
+
+                                              new Expanded(
+                                                child: Container (
+                                                  //                   color:Colors.yellow,
+                                                    height: MediaQuery .of(context).size.height * 0.04,
+                                                   margin: EdgeInsets.only(left:7.0),
+                                                    //padding: EdgeInsets.only(left:32.0),
+                                                    width: MediaQuery .of(context).size.width * 0.50,
+                                                    child: new FlatButton(
+                                                      onPressed: () {
+                                                        /*confirmWithdrawl(
+                                                            snapshot.data[index].leaveid.toString());*/
+                                                      },
+                                                      child:new Icon(
+                                                        Icons.remove_red_eye,
+                                                        size: 30.0,
+                                                        color:appStartColor(),
+                                                        //      textDirection: TextDirection.rtl,
+                                                      ),
+                                                      //         padding:EdgeInsets.all(5.0),
+                                                    )
+                                                ),
+                                              )
 
                                             ],
                                           ),
