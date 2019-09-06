@@ -100,7 +100,6 @@ class Holi{
   String date;
   String message;
 
-
   Holi({this.name, this.date, this.message});
 }
 

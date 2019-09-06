@@ -33,10 +33,77 @@ class Expense {
         this.name,
         this.category,
         this.desc,
-        this.applydate, this.deprt,this.ests,this.amt,this.currency,
+        this.applydate,
+        this.deprt,
+        this.ests,
+        this.amt,
+        this.currency,
        });
 }
 
+Future<List<Expense>> getExpenseDetail() async{
+  Dio dio = new Dio();
+  final prefs = await SharedPreferences.getInstance();
+  String id = prefs.getString('expenseid') ?? '';
+  //String organization = prefs.getString('organization') ?? '';
+  //String empid = prefs.getString('employeeid')??"";
+  try {
+    FormData formData = new FormData.from({
+      "Id" : id,
+      //"uid": empid,
+    });
+    //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
+    Response response = await dio.post(
+        path_hrm_india+"showExpenseDetail",
+        data: formData);
+    //print(response.data.toString());
+    //print('--------------------getLeaveSummary Called-----------------------');
+    List responseJson = json.decode(response.data.toString());
+    print("***************"+responseJson.toString());
+    /*  print("LEAVE LIST");
+  //  print(userList);
+    print(response.data.toString());
+    print("LEAVE LIST");*/
+    List<Expense> expenseDetail = viewExpenseDetail(responseJson);
+
+    return expenseDetail;
+
+  }catch(e){
+    //print(e.toString());
+  }
+}
+
+List<Expense> viewExpenseDetail(List data) {
+
+  List<Expense> list = new List();
+  for (int i = 0; i < data.length; i++) {
+
+    String Id = data[i]["id"].toString();
+    String name = data[i]["employee"].toString();
+    String category = data[i]["ClaimHeadname"].toString();
+    String desc = data[i]["purpose"].toString();
+    String applydate = data[i]["fromdate"].toString();
+    String deprt = data[i]["department"].toString();
+    String ests = data[i]["appsts"].toString();
+    String amt = data[i]["totalclaim"].toString();
+    String currency = data[i]["empcurency"].toString();
+    deprtcurrency=data[i]["empcurency"].toString();
+    Expense tos = new Expense(
+      Id: Id,
+      name: name,
+      category: category,
+      desc: desc,
+      applydate: applydate,
+      deprt: deprt,
+      ests: ests,
+      amt: amt,
+      currency: currency,
+
+    );
+    list.add(tos);
+  }
+  return list;
+}
 
 Future<List<Expense>> getExpenselist(date) async {
   Dio dio = new Dio();
@@ -48,7 +115,7 @@ Future<List<Expense>> getExpenselist(date) async {
   Response<String>response =
   await dio.post(path+"getExpenseDetail?empid="+empid+'&orgid='+orgdir+'&date='+date);
   final res = json.decode(response.data.toString());
- // print(res);
+  print(res);
 
   // print(path+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
 
@@ -136,12 +203,14 @@ List<Map> createList(List data,int label) {
 class Expensedate {
  String dates;
  String Fdate;
-   Expensedate(
+
+ Expensedate(
       {
         this.dates,
         this.Fdate,
       });
 }
+
 Future<List<Expensedate>> getExpenselistbydate() async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
@@ -151,13 +220,42 @@ Future<List<Expensedate>> getExpenselistbydate() async {
   Response<String>response =
   await dio.post(path+"getExpenseDetailbydate?empid="+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
- // print(res);
+  //print(res);
 
  List<Expensedate> userList = createExpenselistbydate(res);
 
   return userList;
 }
 
+withdrawExpense(Expense expense) async{
+  Dio dio = new Dio();
+  try {
+   /* FormData formData = new FormData.from({
+      "leaveid": leave.leaveid,
+      "uid": leave.uid,
+      "orgid": leave.orgid,
+      "leavests": leave.approverstatus
+    });
+    //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
+    Response response = await dio.post(
+        path_hrm_india+"changeleavests",
+        data: formData);
+    //print(response.toString());
+    if (response.statusCode == 200) {
+      Map leaveMap = json.decode(response.data);
+      if(leaveMap["status"]==true){
+        return "success";
+      }else{
+        return "failure";
+      }
+    }else{
+      return "No Connection";
+    }*/
+  }catch(e){
+    //print(e.toString());
+    return "Poor network connection";
+  }
+}
 
 List<Expensedate> createExpenselistbydate(List data) {
 

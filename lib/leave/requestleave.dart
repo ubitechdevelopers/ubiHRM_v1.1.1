@@ -133,6 +133,7 @@ class _RequestLeaveState extends State<RequestLeave> {
       ),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 3),
+
     ));
   }
 
@@ -562,9 +563,9 @@ class _RequestLeaveState extends State<RequestLeave> {
     }
     },
     onFieldSubmitted: (String value) {
-    if (_formKey.currentState.validate()) {
+    /*if (_formKey.currentState.validate()) {
     //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
-    }
+    }*/
     },
     maxLines: 1,
     ),
@@ -687,7 +688,6 @@ class _RequestLeaveState extends State<RequestLeave> {
                 decoration: InputDecoration(
                   labelText: 'Suggest Substitute',
                  // icon is 48px widget.
-
                 ),
 
                 child:  new DropdownButton<String>(

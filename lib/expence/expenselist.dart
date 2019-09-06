@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../login_page.dart';
 import '../model/model.dart';
 import 'request_expense.dart';
+import 'expense_detail_view.dart';
 import '../home.dart';
 import '../services/expense_services.dart';
 //import 'bottom_navigationbar.dart';
@@ -41,8 +42,6 @@ class _MyExpenceState extends State<MyExpence> {
   void initState() {
     super.initState();
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-
-
     profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
@@ -77,6 +76,7 @@ class _MyExpenceState extends State<MyExpence> {
       });
     });
   }
+
   void showInSnackBar(String value) {
     FocusScope.of(context).requestFocus(new FocusNode());
     _scaffoldKey.currentState?.removeCurrentSnackBar();
@@ -499,23 +499,40 @@ class _MyExpenceState extends State<MyExpence> {
                                               new Expanded(
                                                 child: Container (
                                                   //                   color:Colors.yellow,
-                                                    height: MediaQuery .of(context).size.height * 0.04,
+                                                   height: MediaQuery .of(context).size.height * 0.01,
                                                    margin: EdgeInsets.only(left:7.0),
                                                     //padding: EdgeInsets.only(left:32.0),
                                                     width: MediaQuery .of(context).size.width * 0.50,
-                                                    child: new FlatButton(
+                                                    child: FlatButton(
                                                       onPressed: () {
-                                                        /*confirmWithdrawl(
-                                                            snapshot.data[index].leaveid.toString());*/
+                                                        print("Button pressed");
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(builder: (context) => ExpenseDetailView()),
+                                                        );
+                                                      },
+                                                      child: Icon(
+                                                        Icons.remove_red_eye,
+                                                        size: 20.0,
+                                                        color:appStartColor(),
+                                                      ),
+                                                    ),
+                                                    /*child: new FlatButton(
+                                                      onPressed: () {
+                                                        print("icon pressed");
+                                                          *//*Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ExpenseDetailView()),
+                                                          );*//*
                                                       },
                                                       child:new Icon(
                                                         Icons.remove_red_eye,
-                                                        size: 30.0,
+                                                        size: 24.0,
                                                         color:appStartColor(),
                                                         //      textDirection: TextDirection.rtl,
                                                       ),
                                                       //         padding:EdgeInsets.all(5.0),
-                                                    )
+                                                    )*/
                                                 ),
                                               )
 

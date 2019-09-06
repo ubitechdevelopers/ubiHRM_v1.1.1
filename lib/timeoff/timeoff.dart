@@ -414,9 +414,9 @@ class _TimeOffPageState extends State<TimeOffPage> {
                         }
                       },
                       onFieldSubmitted: (String value) {
-                        if (_formKey.currentState.validate()) {
+                        /*if (_formKey.currentState.validate()) {
                           requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
-                        }
+                        }*/
                       },
                       maxLines: 2,
                     ),
@@ -432,8 +432,11 @@ class _TimeOffPageState extends State<TimeOffPage> {
                       color: Colors.orange[800],
                       onPressed: () {
 
+                        if (_formKey.currentState.validate()) {
+                          requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text.trim(), context);
+                        }
 
-                        requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
+                        //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
 
                       },
                     ),

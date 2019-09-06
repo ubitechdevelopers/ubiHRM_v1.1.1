@@ -364,10 +364,10 @@ class _RequestExpenceState extends State<RequestExpence> {
                                   }
                                 },
                            onFieldSubmitted: (String value) {
-                           if (_formKey.currentState.validate()) {
+                           /*if (_formKey.currentState.validate()) {
 
                             saveExpense (_dateController.text, headtype, _descController.text, amountController.text ,_image,context);
-                                  }
+                                  }*/
                                 },
                                 maxLines: null,
                               ),
@@ -399,6 +399,11 @@ class _RequestExpenceState extends State<RequestExpence> {
                                       ), // icon is 48px widget.
                                     )
                                 ),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter amount';
+                                  }
+                                },
                               ),
                             ),
 
@@ -486,45 +491,9 @@ class _RequestExpenceState extends State<RequestExpence> {
                               child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('SAVE',style: TextStyle(color: Colors.white),),
                               color: Colors.orange[800],
                               onPressed: () {
-                                if(_dateController.text=='') {
-                                  showDialog(context: context, child:
-                                    new AlertDialog(
-                                      content: new Text('Please select expense date'),
-                                    )
-                                  );
-                                  return false;
-                                }else if(headtype=='0'){
-                                  showDialog(context: context, child:
-                                    new AlertDialog(
-                                      content: new Text('Please select expense type'),
-                                    )
-                                  );
-                                  //showInSnackBar('Please select expense type');
-                                  return false;
-                                }else if(_descController.text.trim()==''){
-                                  showDialog(context: context, child:
-                                    new AlertDialog(
-                                      content: new Text('Please enter description'),
-                                    )
-                                  );
-                                  //showInSnackBar('Please enter description');
-                                  return false;
-                                }else if(amountController.text.trim()==''){
-                                  //showInSnackBar('Please enter amount');
-                                  showDialog(context: context, child:
-                                    new AlertDialog(
-                                      content: new Text('Please enter amount'),
-                                    )
-                                  );
-                                  return false;
-                                }else {
-                                  saveExpense(_dateController.text, headtype,
-                                      _descController.text.trim(),
-                                      amountController.text.trim(), _image, context);
-                                 /* _dateController.clear();
-                                  _descController.clear();
-                                  headtype=='0';
-                                  amountController.clear();*/
+                                if (_formKey.currentState.validate()) {
+
+                                  saveExpense (_dateController.text, headtype, _descController.text.trim(), amountController.text.trim() ,_image,context);
                                 }
 
                                 //tempvar="1";
@@ -588,6 +557,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                       headtype =newValue;
                     });
                   },
+
                   items: snapshot.data.map((Map map) {
                     return new DropdownMenuItem<String>(
                       value: map["Id"].toString(),
@@ -598,10 +568,12 @@ class _RequestExpenceState extends State<RequestExpence> {
                           )
                       ),
                     );
+
                   }).toList(),
 
                 ),
               ),
+
             );
           }
           else if (snapshot.hasError)

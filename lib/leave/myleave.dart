@@ -103,7 +103,7 @@ class _MyLeaveState extends State<MyLeave> {
     final prefs = await SharedPreferences.getInstance();
 
     String empid = prefs.getString('employeeid')??"";
-   String orgid =prefs.getString('organization')??"";
+    String orgid =prefs.getString('organization')??"";
     var leave = Leave(leaveid: leaveid, orgid: orgid, uid: empid, approverstatus: '5');
     var islogin = await withdrawLeave(leave);
     print(islogin);
@@ -430,8 +430,7 @@ class _MyLeaveState extends State<MyLeave> {
                                                  width: MediaQuery .of(context).size.width * 0.50,
                                                  child: new OutlineButton(
                                                     onPressed: () {
-                                                      confirmWithdrawl(
-                                                          snapshot.data[index].leaveid.toString());
+                                                      confirmWithdrawl(snapshot.data[index].leaveid.toString());
                                                     },
                                                      child:new Icon(
                                                        Icons.replay,
