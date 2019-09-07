@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:dio/dio.dart';
@@ -26,6 +27,7 @@ class Expense {
   String ests;
   String amt;
   String currency;
+  String doc;
 
 
   Expense(
@@ -38,32 +40,34 @@ class Expense {
         this.ests,
         this.amt,
         this.currency,
+        this.doc,
        });
 }
 
-Future<List<Expense>> getExpenseDetail() async{
+Future<List<Expense>> getExpenseDetailById(Id) async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String id = prefs.getString('expenseid') ?? '';
+  //String id = prefs.getString('expenseid') ?? '';
   //String organization = prefs.getString('organization') ?? '';
   //String empid = prefs.getString('employeeid')??"";
   try {
     FormData formData = new FormData.from({
-      "Id" : id,
+      "Id" : Id,
       //"uid": empid,
     });
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
         path_hrm_india+"showExpenseDetail",
-        data: formData);
+        data: formData
+        );
     //print(response.data.toString());
     //print('--------------------getLeaveSummary Called-----------------------');
     List responseJson = json.decode(response.data.toString());
     print("***************"+responseJson.toString());
-    /*  print("LEAVE LIST");
+      //print("LEAVE LIST");
   //  print(userList);
-    print(response.data.toString());
-    print("LEAVE LIST");*/
+    print("---#####################----->"+response.data.toString());
+    //print("LEAVE LIST");
     List<Expense> expenseDetail = viewExpenseDetail(responseJson);
 
     return expenseDetail;
@@ -78,23 +82,24 @@ List<Expense> viewExpenseDetail(List data) {
   List<Expense> list = new List();
   for (int i = 0; i < data.length; i++) {
 
-    String Id = data[i]["id"].toString();
-    String name = data[i]["employee"].toString();
-    String category = data[i]["ClaimHeadname"].toString();
-    String desc = data[i]["purpose"].toString();
-    String applydate = data[i]["fromdate"].toString();
-    String deprt = data[i]["department"].toString();
-    String ests = data[i]["appsts"].toString();
-    String amt = data[i]["totalclaim"].toString();
+    String Id = data[i]["Id"].toString();
+    //String name = data[i]["employee"].toString();
+    String category = data[i]["ClaimHead"].toString();
+    String desc = data[i]["Purpose"].toString();
+    String applydate = data[i]["CreatedDate"].toString();
+    //String deprt = data[i]["department"].toString();
+    String ests = data[i]["appstatus"].toString();
+    String amt = data[i]["TotalAmt"].toString();
+    String doc = data[i]["Doc"].toString();
     String currency = data[i]["empcurency"].toString();
     deprtcurrency=data[i]["empcurency"].toString();
     Expense tos = new Expense(
       Id: Id,
-      name: name,
+      //name: name,
       category: category,
       desc: desc,
       applydate: applydate,
-      deprt: deprt,
+      doc: doc,
       ests: ests,
       amt: amt,
       currency: currency,
@@ -230,15 +235,15 @@ Future<List<Expensedate>> getExpenselistbydate() async {
 withdrawExpense(Expense expense) async{
   Dio dio = new Dio();
   try {
-   /* FormData formData = new FormData.from({
-      "leaveid": leave.leaveid,
-      "uid": leave.uid,
-      "orgid": leave.orgid,
-      "leavests": leave.approverstatus
+   FormData formData = new FormData.from({
+      "id": expense.Id,
+      "status": expense.ests
     });
+   print("---------------"+expense.Id);
+   print("---------------"+expense.ests);
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
-        path_hrm_india+"changeleavests",
+        path_hrm_india+"changeExpenseSts",
         data: formData);
     //print(response.toString());
     if (response.statusCode == 200) {
@@ -250,7 +255,7 @@ withdrawExpense(Expense expense) async{
       }
     }else{
       return "No Connection";
-    }*/
+    }
   }catch(e){
     //print(e.toString());
     return "Poor network connection";

@@ -499,16 +499,17 @@ class _MyExpenceState extends State<MyExpence> {
                                               new Expanded(
                                                 child: Container (
                                                   //                   color:Colors.yellow,
-                                                   height: MediaQuery .of(context).size.height * 0.01,
+                                                   height: MediaQuery .of(context).size.height * 0.03,
                                                    margin: EdgeInsets.only(left:7.0),
                                                     //padding: EdgeInsets.only(left:32.0),
                                                     width: MediaQuery .of(context).size.width * 0.50,
                                                     child: FlatButton(
                                                       onPressed: () {
                                                         print("Button pressed");
+                                                        //getExpenseDetailById(snapshot.data[index].Id.toString());
                                                         Navigator.push(
                                                           context,
-                                                          MaterialPageRoute(builder: (context) => ExpenseDetailView()),
+                                                          MaterialPageRoute(builder: (context) => ExpenseDetailView(expenseid: snapshot.data[index].Id.toString())),
                                                         );
                                                       },
                                                       child: Icon(
