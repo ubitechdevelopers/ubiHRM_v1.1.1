@@ -37,7 +37,7 @@ class _SalarySummary extends State<SalarySummary> {
   var profileimage;
   bool showtabbar;
   String orgName="";
-  
+
   bool _checkLoaded = true;
   int checkProcessing = 0;
   int _currentIndex = 1;

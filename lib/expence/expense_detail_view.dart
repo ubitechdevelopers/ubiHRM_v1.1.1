@@ -286,27 +286,6 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                             child: Text('Total Amount: '+snapshot.data[index].amt.toString()+ "  "+snapshot.data[index].currency.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
                                           ),
                                           SizedBox(height: 5,),
-                                          new Expanded(
-                                            child: Container(
-                                              width: MediaQuery.of(context) .size .width * 0.30,margin: EdgeInsets.only(left:30.0),
-                                              height: 28.0,
-                                              child: new OutlineButton(
-                                                onPressed: () {
-                                                  /*print(path+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
-                                                  launchMap(path+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
-                                                  //   launchMap(" https://ubiattendance.ubihrm.com/");*/
-                                                },
-                                                child: new Icon(
-                                                  Icons.print,
-                                                  size: 17.0,
-                                                  color: appStartColor(),
-                                                ),
-                                                borderSide: BorderSide(color:  appStartColor()),
-                                                padding:EdgeInsets.all(3.0),
-                                                shape: new CircleBorder(),
-                                              ),
-                                            ),
-                                          ),
                                          /* Container(
                                             width: MediaQuery.of(context).size.width*.90,
                                             padding: EdgeInsets.only(top:1.5,bottom: .5),
