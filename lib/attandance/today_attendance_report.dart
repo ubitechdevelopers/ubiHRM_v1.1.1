@@ -323,7 +323,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                                               onTap: (){
                                                                 Navigator.push(
                                                                   context,
-                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                                 );
                                                               },
                                                               child: Container(
@@ -368,7 +368,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                                               onTap: (){
                                                                 Navigator.push(
                                                                   context,
-                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                                 );
                                                               },
                                                               child: Container(
@@ -661,7 +661,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                                               onTap: (){
                                                                 Navigator.push(
                                                                   context,
-                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                                 );
                                                               },
                                                               child: Container(
@@ -706,7 +706,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                                               onTap: (){
                                                                 Navigator.push(
                                                                   context,
-                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                                 );
                                                               },
                                                               child: Container(
@@ -887,7 +887,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                                               onTap: (){
                                                                 Navigator.push(
                                                                   context,
-                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                                 );
                                                               },
                                                               child: Container(
@@ -932,7 +932,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                                               onTap: (){
                                                                 Navigator.push(
                                                                   context,
-                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                                 );
                                                               },
                                                               child: Container(

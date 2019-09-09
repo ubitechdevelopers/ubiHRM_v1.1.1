@@ -23,6 +23,7 @@ import 'timeoff_summary.dart';
 import '../global.dart';
 import '../b_navigationbar.dart';
 import '../appbar.dart';
+import 'timeoff_summary.dart';
 
 
 //import 'settings.dart';
@@ -149,17 +150,33 @@ class _TimeOffPageState extends State<TimeOffPage> {
         content: Text(value,textAlign: TextAlign.center,));
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
+  Future<bool> sendToTimeoffList() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => TimeoffSummary()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
+
   getmainhomewidget(){
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
+    return WillPopScope(
+      onWillPop: ()=> sendToTimeoffList(),
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
 
-      bottomNavigationBar:  new HomeNavigation(),
+        bottomNavigationBar:  new HomeNavigation(),
 
-      endDrawer: new AppDrawer(),
-      // body: (act1=='') ? Center(child : loader()) : checkalreadylogin(),
-      body:  getTimeoffWidgit(),
+        endDrawer: new AppDrawer(),
+        // body: (act1=='') ? Center(child : loader()) : checkalreadylogin(),
+        body:  getTimeoffWidgit(),
+      ),
     );
 
   }
@@ -230,7 +247,6 @@ class _TimeOffPageState extends State<TimeOffPage> {
 
   Widget getTimeoffWidgit() {
     return Stack(
-
       children: <Widget>[
         Container(
             margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),

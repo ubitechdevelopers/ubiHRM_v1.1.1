@@ -13,7 +13,7 @@ import 'package:rounded_modal/rounded_modal.dart';
 import '../profile.dart';
 //import 'bottom_navigationbar.dart';
 import '../b_navigationbar.dart';
-import '../appbar.dart';
+import '../home_appbar.dart';
 import '../drawer.dart';
 
 
@@ -87,10 +87,10 @@ class _TabState extends State<TabbedApp> {
     return MaterialApp(
       home: DefaultTabController(
         length: choices.length,
-
         child: Scaffold(
         endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
+        appBar: new HomeAppHeader(profileimage,showtabbar,orgName),
+
 /*          appBar:PreferredSize(
             preferredSize: Size.fromHeight(100.0),
             child: GradientAppBar(
@@ -198,6 +198,7 @@ class _TabState extends State<TabbedApp> {
                 child: ChoiceCard1(choice: choice),
               );
             }).toList(),
+
           ),
           bottomNavigationBar:new HomeNavigation(),
          /* bottomNavigationBar:new Theme(
@@ -321,11 +322,7 @@ const List<Choice> choices = const <Choice>[
 class ChoiceCard1 extends StatelessWidget {
   const ChoiceCard1({Key key, this.choice}) : super(key: key);
 
-
-
   final Choice choice;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -333,9 +330,10 @@ class ChoiceCard1 extends StatelessWidget {
     final TextStyle textStyle = Theme.of(context).textTheme.display1;
 
     return  Scaffold(
-
+      //appBar: new AppHeader(profileimage,showtabbar,orgName),
       backgroundColor:scaffoldBackColor(),
       body: Stack(
+
         // color: Colors.white,
           children: <Widget>[
             Container(
@@ -583,7 +581,8 @@ class ChoiceCard1 extends StatelessWidget {
                                                       child: Container(
 
                                                         width: MediaQuery.of(context) .size .width * 0.30,
-                                                        height: 28.0,
+                                                        height: MediaQuery.of(context) .size .height * 0.03,
+                                                        //height: 28.0,
                                                         child: new OutlineButton(
                                                           onPressed: () {
                                                             //  confirmApprove(context,snapshot.data[index].Id.toString());

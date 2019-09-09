@@ -44,8 +44,8 @@ class _AllApprovals extends State<AllApprovals> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
-
     });
+
     String empid = prefs.getString('employeeid')??"";
     String organization =prefs.getString('organization')??"";
     String userprofileid =prefs.getString('userprofileid')??"";
@@ -178,7 +178,7 @@ class _AllApprovals extends State<AllApprovals> {
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
       endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
+      appBar: AppHeader(profileimage,showtabbar,orgName),
 
 /*      appBar: GradientAppBar(
         automaticallyImplyLeading: false,

@@ -1369,8 +1369,6 @@ class _HomePageTimeInState extends State<HomePageTimeIn> {
               //  splashColor: Colors.orangeAccent,
               textColor: Colors.black,
               onPressed: () {
-
-
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HomePageTimeOut()),

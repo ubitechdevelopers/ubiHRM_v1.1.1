@@ -267,7 +267,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -306,7 +306,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -570,7 +570,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -609,7 +609,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -765,7 +765,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -804,7 +804,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(

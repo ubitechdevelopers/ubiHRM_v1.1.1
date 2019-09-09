@@ -49,10 +49,7 @@ class HomeAppHeader extends StatelessWidget implements PreferredSizeWidget {
         backgroundColorStart: appStartColor(),
         backgroundColorEnd: appEndColor(),
         automaticallyImplyLeading: false,
-        leading: IconButton(icon:Icon(Icons.arrow_back),
-          onPressed:(){
-            Navigator.pop(context,true);
-          },),
+
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

@@ -548,7 +548,6 @@ class _DashboardStatemain extends State<DashboardMain> {
       ), ]);
   }
   Widget getimg1() {
-
     return  new
     Column(children: <Widget>[
       // SizedBox(width: 20.0,),

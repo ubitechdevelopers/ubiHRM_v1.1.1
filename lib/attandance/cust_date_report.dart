@@ -109,19 +109,20 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                 ), // icon is 48px widget.
                 labelText: 'Select Date',
               ),
-              onChanged: (date) {
+              /*onChanged: (date) {
                 setState(() {
                   if (date != null && date.toString()!='')
                     res = true; //showInSnackBar(date.toString());
                   else
                     res = false;
                 });
-              },
+              },*/
               validator: (date) {
                 if (date == null) {
                   return 'Please select date';
                 }
               },
+
             ),
           ),
           res==true?new Container(
@@ -304,7 +305,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -343,7 +344,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -607,7 +608,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -646,7 +647,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -802,7 +803,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -841,7 +842,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(

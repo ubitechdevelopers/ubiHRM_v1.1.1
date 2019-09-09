@@ -216,8 +216,6 @@ class _HomePageStatemain extends State<HomePageMain> {
           backgroundColor: scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new HomeAppHeader(profileimage, showtabbar, orgName),
-
-
 /*        appBar: GradientAppBar(
             backgroundColorStart: appStartColor(),
             backgroundColorEnd: appEndColor(),

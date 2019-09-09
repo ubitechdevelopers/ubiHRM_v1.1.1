@@ -255,7 +255,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -294,7 +294,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -550,7 +550,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -589,7 +589,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -746,7 +746,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(
@@ -785,7 +785,7 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                                                         onTap: (){
                                                           Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                           );
                                                         },
                                                         child: Container(

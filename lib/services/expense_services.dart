@@ -48,12 +48,13 @@ Future<List<Expense>> getExpenseDetailById(Id) async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
   //String id = prefs.getString('expenseid') ?? '';
-  //String organization = prefs.getString('organization') ?? '';
+  String orgid = prefs.getString('organization') ?? '';
   //String empid = prefs.getString('employeeid')??"";
   try {
     FormData formData = new FormData.from({
       "Id" : Id,
-      //"uid": empid,
+      //"empid":empid,
+      "orgid":orgid
     });
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
@@ -66,7 +67,7 @@ Future<List<Expense>> getExpenseDetailById(Id) async{
     print("***************"+responseJson.toString());
       //print("LEAVE LIST");
   //  print(userList);
-    print("---#####################----->"+response.data.toString());
+    //print("---#####################----->"+response.data.toString());
     //print("LEAVE LIST");
     List<Expense> expenseDetail = viewExpenseDetail(responseJson);
 
@@ -91,6 +92,7 @@ List<Expense> viewExpenseDetail(List data) {
     String ests = data[i]["appstatus"].toString();
     String amt = data[i]["TotalAmt"].toString();
     String doc = data[i]["Doc"].toString();
+    print("document"+doc);
     String currency = data[i]["empcurency"].toString();
     deprtcurrency=data[i]["empcurency"].toString();
     Expense tos = new Expense(
@@ -103,7 +105,6 @@ List<Expense> viewExpenseDetail(List data) {
       ests: ests,
       amt: amt,
       currency: currency,
-
     );
     list.add(tos);
   }
@@ -120,7 +121,7 @@ Future<List<Expense>> getExpenselist(date) async {
   Response<String>response =
   await dio.post(path+"getExpenseDetail?empid="+empid+'&orgid='+orgdir+'&date='+date);
   final res = json.decode(response.data.toString());
-  print(res);
+  //print(res);
 
   // print(path+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
 

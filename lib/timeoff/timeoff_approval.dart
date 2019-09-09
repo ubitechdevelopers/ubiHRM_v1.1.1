@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import '../all_approvals.dart';
 import '../global.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import '../home.dart';
@@ -12,7 +13,7 @@ import 'package:rounded_modal/rounded_modal.dart';
 import '../profile.dart';
 //import 'bottom_navigationbar.dart';
 import '../b_navigationbar.dart';
-import '../appbar.dart';
+import '../home_appbar.dart';
 import '../gradient_button.dart';
 
 import '../drawer.dart';
@@ -87,10 +88,11 @@ class _TimeOffApp extends State<TimeOffApp> {
     return MaterialApp(
       home: DefaultTabController(
         length: choices.length,
-
         child: Scaffold(
           endDrawer: new AppDrawer(),
-           appBar:new AppHeader(profileimage,showtabbar,orgName),
+           appBar:new HomeAppHeader(profileimage,showtabbar,orgName),
+
+
  /*         appBar:PreferredSize(
             preferredSize: Size.fromHeight(100.0),
             child: GradientAppBar(
@@ -229,6 +231,7 @@ class ChoiceCard extends StatelessWidget {
 
     return  Scaffold(
       backgroundColor:scaffoldBackColor(),
+
       body: Stack(
         // color: Colors.white,
           children: <Widget>[

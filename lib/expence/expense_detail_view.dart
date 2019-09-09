@@ -12,6 +12,7 @@ import '../appbar.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ExpenseDetailView extends StatefulWidget {
   @override
@@ -261,38 +262,10 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                             width: MediaQuery.of(context).size.width*.90,
                                             padding: EdgeInsets.only(top:1.5,bottom: .5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            child: Text(snapshot.data[index].category.toString()+"  ",style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 18.0),textAlign: TextAlign.center,),
+                                            child: Text(snapshot.data[index].category.toString()+"  ",style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 20.0),textAlign: TextAlign.center,),
                                           ),
-                                          SizedBox(height: 10,),
-                                          Container(
-                                            width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
-                                            margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('Apply Date: '+snapshot.data[index].applydate.toString()+"  ",style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
-                                          ),
-                                          SizedBox(height: 5,),
-                                          Container(
-                                            width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
-                                            margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('Description: '+snapshot.data[index].desc.toString()+"  ",style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
-                                          ),
-                                          SizedBox(height: 5,),
 
-                                          Container(
-                                            width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
-                                            margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('Total Amount: '+snapshot.data[index].amt.toString()+ "  "+snapshot.data[index].currency.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
-                                          ),
-                                          SizedBox(height: 5,),
-                                         /* Container(
-                                            width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
-                                            margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('Status '+snapshot.data[index].ests.toString()+"  ",style: TextStyle(color: Colors.grey[600],fontWeight:FontWeight.bold,fontSize: 16.0)),
-                                          ),*/
-                                          snapshot.data[index].ests.toString()!='-'?Container(
+                                          /*snapshot.data[index].category.toString()!='-'?Container(
                                             width: MediaQuery.of(context).size.width*.90,
                                             padding: EdgeInsets.only(top:.5,bottom: 1.5),
                                             margin: EdgeInsets.only(top: 1.0),
@@ -305,7 +278,176 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                                   color: Colors.black,
                                                 ),
                                                 children: <TextSpan>[
-                                                  new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.grey[600],fontSize: 16.0), ),
+                                                  new TextSpan(text: 'Category: ',style:TextStyle(color: Colors.grey[600],fontSize: 16.0), ),
+                                                  new TextSpan(text: snapshot.data[index].category.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
+
+                                                  //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
+                                                ],
+
+                                              ),
+                                            ),
+                                          ):Center(),*/
+                                          SizedBox(height: 15,),
+                                          Row(
+                                            children: <Widget>[
+                                              snapshot.data[index].applydate.toString()!='-'?Container(
+                                                width: MediaQuery.of(context).size.width*.60,
+                                                padding: EdgeInsets.only(top:.5,bottom: 1.5),
+                                                margin: EdgeInsets.only(top: 1.0),
+                                                child: RichText(
+                                                  text: new TextSpan(
+                                                    // Note: Styles for TextSpans must be explicitly defined.
+                                                    // Child text spans will inherit styles from parent
+                                                    style: new TextStyle(
+                                                      fontSize: 14.0,
+                                                      color: Colors.black,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      new TextSpan(text: 'Apply Date: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
+                                                      new TextSpan(text: snapshot.data[index].applydate.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
+
+                                                      //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
+                                                    ],
+
+                                                  ),
+                                                ),
+                                              ):Center(),
+
+                                              snapshot.data[index].doc.toString()!='null'?Container(
+                                                //width: MediaQuery.of(context).size.width*.30,
+                                                padding: EdgeInsets.only(top:.5,bottom: 1.5),
+                                                margin: EdgeInsets.only(top: 1.0),
+                                                child: Container(
+                                                  width: MediaQuery.of(context) .size .width * 0.30,
+                                                  //margin: EdgeInsets.only(left:0.0),
+                                                  height: 28.0,
+                                                  child: new OutlineButton(
+                                                    onPressed: () {
+                                                      print(snapshot.data[index].doc.toString());
+                                                      launchMap(snapshot.data[index].doc.toString());
+                                                      //   launchMap(" https://ubiattendance.ubihrm.com/");
+                                                    },
+                                                    child: new Icon(
+                                                      Icons.file_download,
+                                                      size: 20.0,
+                                                      color: appStartColor(),
+                                                    ),
+                                                    borderSide: BorderSide(color: appStartColor()),
+                                                    padding:EdgeInsets.all(3.0),
+                                                    shape: new CircleBorder(),
+                                                  ),
+                                                ),
+                                                /*child: RichText(
+                                              text: new TextSpan(
+                                                // Note: Styles for TextSpans must be explicitly defined.
+                                                // Child text spans will inherit styles from parent
+                                                style: new TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: Colors.black,
+                                                ),
+                                                children: <TextSpan>[
+                                                  new TextSpan(text: 'Document: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
+                                                  //new TextSpan(text: snapshot.data[index].doc.toString(), ),
+
+
+                                                  //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
+                                                ],
+
+                                              ),
+                                            ),*/
+                                              ):Center(),
+                                            ],
+                                          ),
+                                         /* Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                            margin: EdgeInsets.only(top: 4.0),
+                                            child: Text('Apply Date: '+snapshot.data[index].applydate.toString()+"  ",style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
+                                          ),*/
+
+
+                                          SizedBox(height: 10,),
+                                          /*Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                            margin: EdgeInsets.only(top: 4.0),
+                                            child: Text('Description: '+snapshot.data[index].desc.toString()+"  ",style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
+                                          ),*/
+
+                                          snapshot.data[index].desc.toString()!='-'?Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            padding: EdgeInsets.only(top:.5,bottom: 1.5),
+                                            margin: EdgeInsets.only(top: 1.0),
+                                            child: RichText(
+                                              text: new TextSpan(
+                                                // Note: Styles for TextSpans must be explicitly defined.
+                                                // Child text spans will inherit styles from parent
+                                                style: new TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: Colors.black,
+                                                ),
+                                                children: <TextSpan>[
+                                                  new TextSpan(text: 'Description: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
+                                                  new TextSpan(text: snapshot.data[index].desc.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
+
+                                                  //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
+                                                ],
+
+                                              ),
+                                            ),
+                                          ):Center(),
+                                          SizedBox(height: 10,),
+
+                                          /*Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                            margin: EdgeInsets.only(top: 4.0),
+                                            child: Text('Amount: '+snapshot.data[index].amt.toString()+ "  "+snapshot.data[index].currency.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
+                                          ),*/
+
+                                          snapshot.data[index].amt.toString()!='-'?Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            padding: EdgeInsets.only(top:.5,bottom: 1.5),
+                                            margin: EdgeInsets.only(top: 1.0),
+                                            child: RichText(
+                                              text: new TextSpan(
+                                                // Note: Styles for TextSpans must be explicitly defined.
+                                                // Child text spans will inherit styles from parent
+                                                style: new TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: Colors.black,
+                                                ),
+                                                children: <TextSpan>[
+                                                  new TextSpan(text: 'Amount: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
+                                                  new TextSpan(text: snapshot.data[index].amt.toString()+ "  "+snapshot.data[index].currency.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
+
+                                                  //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
+                                                ],
+
+                                              ),
+                                            ),
+                                          ):Center(),
+                                          SizedBox(height: 10,),
+                                         /* Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                            margin: EdgeInsets.only(top: 4.0),
+                                            child: Text('Status '+snapshot.data[index].ests.toString()+"  ",style: TextStyle(color: Colors.grey[600],fontWeight:FontWeight.bold,fontSize: 16.0)),
+                                          ),*/
+                                          snapshot.data[index].ests.toString()!='null'?Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            padding: EdgeInsets.only(top:.5,bottom: 1.5),
+                                            margin: EdgeInsets.only(top: 1.0),
+                                            child: RichText(
+                                              text: new TextSpan(
+                                                // Note: Styles for TextSpans must be explicitly defined.
+                                                // Child text spans will inherit styles from parent
+                                                style: new TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: Colors.black,
+                                                ),
+                                                children: <TextSpan>[
+                                                  new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
                                                   new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: snapshot.data[index].ests.toString()=='Approved'?appStartColor() :snapshot.data[index].ests.toString()=='Rejected' || snapshot.data[index].ests.toString()=='Withdrawn' ?Colors.red:snapshot.data[index].ests.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 16.0),),
 
                                                   //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
@@ -314,6 +456,51 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                               ),
                                             ),
                                           ):Center(),
+                                          SizedBox(height: 20,),
+
+                                          /*snapshot.data[index].doc.toString()!='-'?Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            padding: EdgeInsets.only(top:.5,bottom: 1.5),
+                                            margin: EdgeInsets.only(top: 1.0),
+                                              child: Container(
+                                                width: MediaQuery.of(context) .size .width * 0.30,
+                                                //margin: EdgeInsets.only(left:0.0),
+                                                height: 28.0,
+                                                child: new OutlineButton(
+                                                  onPressed: () {
+                                                    print(snapshot.data[index].doc.toString());
+                                                    launchMap(snapshot.data[index].doc.toString());
+                                                    //   launchMap(" https://ubiattendance.ubihrm.com/");
+                                                  },
+                                                  child: new Icon(
+                                                    Icons.file_download,
+                                                    size: 17.0,
+                                                    color: appStartColor(),
+                                                  ),
+                                                  borderSide: BorderSide(color:  appStartColor()),
+                                                  padding:EdgeInsets.all(3.0),
+                                                  shape: new CircleBorder(),
+                                                ),
+                                              ),
+                                            *//*child: RichText(
+                                              text: new TextSpan(
+                                                // Note: Styles for TextSpans must be explicitly defined.
+                                                // Child text spans will inherit styles from parent
+                                                style: new TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: Colors.black,
+                                                ),
+                                                children: <TextSpan>[
+                                                  new TextSpan(text: 'Document: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
+                                                  //new TextSpan(text: snapshot.data[index].doc.toString(), ),
+
+
+                                                  //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
+                                                ],
+
+                                              ),
+                                            ),*//*
+                                          ):Center(),*/
 
                                           Row(
                                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -373,6 +560,13 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
           ),
       ],
     );
+  }
+  launchMap(String url) async{
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print( 'Could not launch $url');
+    }
   }
 
 }

@@ -426,7 +426,7 @@ class _MyLeaveState extends State<MyLeave> {
                                                 child: Container (
                             //                   color:Colors.yellow,
                                                  height: MediaQuery .of(context).size.height * 0.04,
-                                                 margin: EdgeInsets.only(left:115.0),
+                                                 margin: EdgeInsets.only(left:100.0),
                                                  //padding: EdgeInsets.only(left:32.0),
                                                  width: MediaQuery .of(context).size.width * 0.50,
                                                  child: new OutlineButton(
@@ -435,7 +435,7 @@ class _MyLeaveState extends State<MyLeave> {
                                                     },
                                                      child:new Icon(
                                                        Icons.replay,
-                                                       size: 20.0,
+                                                       size: 18.0,
                                                        color:appStartColor(),
                                                  //      textDirection: TextDirection.rtl,
                                                      ),

@@ -92,7 +92,6 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           tabs: choices.map((Choice choice) {
             return Tab(
               text: choice.title,
-
              //   unselectedLabelColor: Colors.white70,
              //   indicatorColor: Colors.white,
              //   icon: Icon(choice.icon),

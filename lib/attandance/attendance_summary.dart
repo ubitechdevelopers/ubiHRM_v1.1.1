@@ -474,7 +474,7 @@ getWidgets(context){
                                                   onTap: (){
                                                     Navigator.push(
                                                       context,
-                                                      MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                                      MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "Ubitech Solutions")),
                                                     );
                                                   },
                                                   child:Container(
@@ -513,7 +513,7 @@ getWidgets(context){
                                                   onTap: (){
                                                     Navigator.push(
                                                       context,
-                                                      MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                                      MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
                                                     );
                                                   },
                                                   child:Container(

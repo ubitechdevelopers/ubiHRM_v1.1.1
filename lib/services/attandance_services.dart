@@ -1159,6 +1159,34 @@ Future<List<Map<String, String>>> getChartDataToday() async {
   return val;
 }
 
+Future<List<Map<String, String>>> getChartDataCDate(date) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('orgdir') ?? '';
+  String empid = prefs.getString('employeeid') ?? "";
+  print('==========');
+  print(orgdir);
+  print('==========');
+  print(empid);
+  final response = await http.get(
+      globals.path_ubiattendance + 'getChartDataCDate?refno=$orgdir&date=$date&empid=$empid');
+  print('==========');
+  print(date);
+  final data = json.decode(response.body);
+  print('==========');
+  print(data.toString());
+  List<Map<String, String>> val = [
+    {
+      "present": data['present'].toString(),
+      "absent": data['absent'].toString(),
+      "late": data['late'].toString(),
+      "early": data['early'].toString()
+    }
+  ];
+  print('==========');
+  print(val);
+  return val;
+}
+
 Future<List<Map<String, String>>> getChartDataYes() async {
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('orgdir') ?? '';
@@ -1177,28 +1205,6 @@ Future<List<Map<String, String>>> getChartDataYes() async {
   ];
   // print('==========');
   //print(val);
-  return val;
-}
-
-Future<List<Map<String, String>>> getChartDataCDate(date) async {
-  final prefs = await SharedPreferences.getInstance();
-  String orgdir = prefs.getString('orgdir') ?? '';
-  String empid = prefs.getString('employeeid') ?? "";
-
-  final response = await http.get(
-      globals.path_ubiattendance + 'getChartDataCDate?refno=$orgdir&date=$date&empid=$empid');
-  final data = json.decode(response.body);
-  //print(response);
-  List<Map<String, String>> val = [
-    {
-      "present": data['present'].toString(),
-      "absent": data['absent'].toString(),
-      "late": data['late'].toString(),
-      "early": data['early'].toString()
-    }
-  ];
-  // print('==========');
-  // print(val);
   return val;
 }
 
