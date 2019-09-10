@@ -286,7 +286,7 @@ class _RequestExpenceState extends State<RequestExpence> {
               child: Column(children: <Widget>[
                 SizedBox(height: 10.0),
                 //   mainAxisAlignment: MainAxisAlignment.start,
-                Text('Submit Expenses',
+                Text(' Expense Request',
                     style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                 new Divider(color: Colors.black54,height: 1.5,),
                 new Expanded(child: ListView(
@@ -431,62 +431,98 @@ class _RequestExpenceState extends State<RequestExpence> {
                           ],
                         ),
 
-                        SizedBox(height: 10.0),
+                        SizedBox(height: 15.0),
 
-                        new Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+
+                        Container(
+                          //width: MediaQuery.of(context).size.width*0.9,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              new Icon(
-                                Icons.file_upload,
-                                color: Colors.grey,
-                              ),
                               MaterialButton(
-                                child: Text("Select Image", style: TextStyle(color:_image!=null ? Colors.green[500]:Colors.grey[500],),textAlign: TextAlign.start,),
+                                child: FlatButton.icon(
+                                  //color: Colors.red,
+                                  icon: Padding(
+                                    padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
+                                    child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],),
+                                  ), //`Icon` to display
+                                  label: Container(
+                                    padding: EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 10.0),
+                                    //margin: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                                    child:showImage(_image),), //`Text` to display
+                                  onPressed: () async {
+                                    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                    print("---------------------------->>>>>>>>>>>"+image.toString());
+                                    //  ExpenseDoc=image;
+                                    setState(() {
+                                      _image = image;
+                                    });
+                                  },
+                                  splashColor: Colors.grey,
+                                ),
+                                shape: UnderlineInputBorder(),
+                                minWidth: 371,
+                                //height: 40,
+                              ),
+
+                            ],
+                          ),
+                        ),
+
+                          /*new Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                *//*new Icon(
+                                  Icons.file_upload,
+                                  color: Colors.grey,
+                                ),
+                                MaterialButton(
+                                  child: Text("Select Image", style: TextStyle(color:_image!=null ? Colors.green[500]:Colors.grey[500],),textAlign: TextAlign.start,),
+                                  onPressed: () async {
+                                    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                    //  ExpenseDoc=image;
+                                    setState(() {
+                                      _image = image;
+                                    });
+                                  },
+                                  splashColor: Colors.grey,
+                                  height: 55,
+                                  minWidth: 345,
+                                  shape: UnderlineInputBorder(),
+                                ),*//*
+                             //showImage(_image)
+
+                             ButtonTheme(
+                              //minWidth: 100.0,
+                             // height: 40.0,
+                              child: RaisedButton(
+                              //shape: Border.all(color: Colors.black54),
+                                shape: new CircleBorder(),
+                                color:_image!=null ? Colors.green[500]:Colors.grey[500],
                                 onPressed: () async {
                                   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                  //  ExpenseDoc=image;
+                                // ExpenseDoc=image;
                                   setState(() {
                                     _image = image;
                                   });
                                 },
-                                splashColor: Colors.grey,
-                                height: 55,
-                                minWidth: 345,
-                                shape: UnderlineInputBorder(),
-                              ),
-                           //showImage(_image)
-
-                           /*ButtonTheme(
-                            //minWidth: 100.0,
-                            //height: 40.0,
-                            child: RaisedButton(
-                            //shape: Border.all(color: Colors.black54),
-                              shape: new CircleBorder(),
-                              color:_image!=null ? Colors.green[500]:Colors.grey[500],
-                              onPressed: () async {
-                                var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                              // ExpenseDoc=image;
-                                setState(() {
-                                  _image = image;
-                                });
-                              },
-                          child:
-                             new Icon(
-                                Icons.file_upload,
-                                color: Colors.white,
-                              ),*//*new Text(
-                            "Supporting docs", textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 14.0, color: Colors.grey[800]),
-                          ),*//*
-                        ),
+                            child:
+                               new Icon(
+                                  Icons.file_upload,
+                                  color: Colors.white,
+                                ),*//*new Text(
+                              "Supporting docs", textAlign: TextAlign.left,
+                              style: TextStyle(fontSize: 14.0, color: Colors.grey[800]),
+                            ),*//*
+                          ),
 
                      ),
                      Container(
                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                        margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                        child:showImage(_image),
-                     ),*/
-                            ]),
+                     ),
+                              ]),*/
                         SizedBox(height: 5.0),
                        ButtonBar(
 
@@ -775,10 +811,12 @@ class _RequestExpenceState extends State<RequestExpence> {
         if(_image!=null ) {
           return new Row(
              children: <Widget>[
-             Icon(
-            Icons.check,
-            color: Colors.green,
-          ),
+               Text(_image,style: TextStyle(fontSize: 16.0, color: Colors.green),
+                 textAlign: TextAlign.start, ),
+               /*Icon(
+                Icons.check,
+                color: Colors.green,
+                ),*/
      /* Container(
            child:new IconButton(
              icon: new Icon(Icons.close, color: Colors.redAccent,),
@@ -799,12 +837,14 @@ class _RequestExpenceState extends State<RequestExpence> {
         else if (snapshot.error != null) {
           return const Text(
             'Error Picking Image',
-            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.0, color: Colors.grey),
+            textAlign: TextAlign.start,
           );
         } else {
           return const Text(
-            'Select Iamge',
-            textAlign: TextAlign.center,
+            'Image is not selected',
+            style: TextStyle(fontSize: 16.0, color: Colors.grey),
+            textAlign: TextAlign.start,
           );
         }
       },

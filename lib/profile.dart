@@ -6,6 +6,7 @@ import 'services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rounded_modal/rounded_modal.dart';
 import 'b_navigationbar.dart';
+import 'home.dart';
 
 
 class CollapsingTab extends StatefulWidget {
@@ -339,365 +340,380 @@ var profilepic;
         ),
       ],*/
     );
+    Future<bool> sendToHome() async{
+      /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+      print("-------> back button pressed");
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+      );
+      return false;
+    }
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: ()=> sendToHome(),
+      child: Scaffold(
   key: _scaffoldKey,
-      body: new DefaultTabController(
-       length: 2,
-        child: NestedScrollView(
-          controller: scrollController,
-           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              flexibleSpaceWidget,
-               SliverPersistentHeader(
-                delegate: _SliverAppBarDelegate(
-                  TabBar(
-                    labelColor: Colors.black87,
-                    unselectedLabelColor: Colors.black26,
-                    tabs: [
-                      Tab(
-                          icon: Icon(Icons.person),
-                          text: "Profile"
-                         ),
-                      Tab(icon: Icon(Icons.group), text: "Team"),
-                    ],
+        body: new DefaultTabController(
+         length: 2,
+          child: NestedScrollView(
+            controller: scrollController,
+             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                flexibleSpaceWidget,
+                 SliverPersistentHeader(
+                  delegate: _SliverAppBarDelegate(
+                    TabBar(
+                      labelColor: Colors.black87,
+                      unselectedLabelColor: Colors.black26,
+                      tabs: [
+                        Tab(
+                            icon: Icon(Icons.person),
+                            text: "Profile"
+                           ),
+                        Tab(icon: Icon(Icons.group), text: "Team"),
+                      ],
+                    ),
+
                   ),
-
+                  pinned: true,
                 ),
-                pinned: true,
-              ),
 
-            ];
-          },
-          body: new TabBarView(
-            children: <Widget>[
-              Column(children: <Widget>[
-                SizedBox(height: height),
-          new Expanded(
-            child:Container(
-                  height: insideContainerHeight,
-                  width: 400.0,
-                  //color: Colors.green[50],
-                  child: ListView(children: <Widget>[
-                    Container(
-                      //height: MediaQuery.of(context).size.height,
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      //width: MediaQuery.of(context).size.width*0.9,
-                      decoration: new ShapeDecoration(
-                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
-                        color: Colors.grey[100],
-                      ),
-                      child:
-                      StickyHeader(
-                        header: new Container(
-                          height: 50.0,
+              ];
+            },
+            body: new TabBarView(
+              children: <Widget>[
+                Column(children: <Widget>[
+                  SizedBox(height: height),
+            new Expanded(
+              child:Container(
+                    height: insideContainerHeight,
+                    width: 400.0,
+                    //color: Colors.green[50],
+                    child: ListView(children: <Widget>[
+                      Container(
+                        //height: MediaQuery.of(context).size.height,
+                        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                        //width: MediaQuery.of(context).size.width*0.9,
+                        decoration: new ShapeDecoration(
+                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
                           color: Colors.grey[100],
-                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
-                          alignment: Alignment.centerLeft,
-                          child: new Text(
-                            'About',
-                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                          ),
                         ),
-                        content: new Container(
-                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
-                          child: Column(
-                            children: <Widget>[
-                             // SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                Container(child:Text("Name:",style: TextStyle(color: Colors.grey[600]),) ,
-                                width: 100.0,),
-                                Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"]),
-                              ],),
-
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                Container(child:Text("DOB:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
-                                Text(globalpersnalinfomap["DOB"]),
-                              ],),
-
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                  Container(child:Text("Emp Code:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),
-
-                                Text(globalcompanyinfomap["EmpCode"]),
-                              ],),
-                              /* SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                new Expanded(
-                                  child:Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
-                                Text(globalcompanyinfomap["CompanyEmail"]),
-                              ],),*/
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                //new Expanded(
-                                 Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),
-                                //),
-                                Text(globalcompanyinfomap["Designation"]),
-                              ],),
-                              /*  SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                new Expanded(
-                                  child:Container(child:Text("Reporting To:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
-                                Text(globalcompanyinfomap["ReportingTo"]),
-                              ],),*/
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-
-                                  Container(child:Text("Department:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),
-                                Text(globalcompanyinfomap["Department"]),
-                              ],),
-                            /*  SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                Container(child:Text("Blood Group:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
-                                Text(globalpersnalinfomap["BloodGroup"]),
-                              ],),
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                Container(child:Text("Nationality:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
-                                Text(globalpersnalinfomap["Nationality"]),
-                              ],),
-                              SizedBox(height: 10.0,),*/
-
-                            ],
+                        child:
+                        StickyHeader(
+                          header: new Container(
+                            height: 50.0,
+                            color: Colors.grey[100],
+                            padding: new EdgeInsets.symmetric(horizontal: 9.0),
+                            alignment: Alignment.centerLeft,
+                            child: new Text(
+                              'About',
+                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-
-                    Container(
-                      //height: MediaQuery.of(context).size.height,
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      //width: MediaQuery.of(context).size.width*0.9,
-                      decoration: new ShapeDecoration(
-                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
-                        color: Colors.grey[100],
-                      ),
-                      child:
-                      StickyHeader(
-                        header: new Container(
-                          height: 50.0,
-                          color: Colors.grey[100],
-                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
-                          alignment: Alignment.centerLeft,
-                          child: new Text(
-                            'Reporting to',
-                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        content: new Container(
-                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
-                          child: Column(
-                            children: <Widget>[
-                              // SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                Container(child:Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                        //  image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
-                                          image: _checkLoaded ? AssetImage('assets/avatar.png') : reporttoprofileimage,
-                                        )
-                                    ))
-                                ),SizedBox(width: 20.0,),
-                                Text(globalcompanyinfomap["ReportingTo"]),
-                                Text("-"),
-                                Text(globalcompanyinfomap["ReportingToDesignation"]),
-                              ],),
-
-                              SizedBox(height: 10.0,),
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-
-
-                    Container(
-                      //height: MediaQuery.of(context).size.height,
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      //width: MediaQuery.of(context).size.width*0.9,
-                      decoration: new ShapeDecoration(
-                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
-                        color: Colors.grey[100],
-                      ),
-                      child:
-                      StickyHeader(
-                        header: new Container(
-                          height: 50.0,
-                          color: Colors.grey[100],
-                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
-                          alignment: Alignment.centerLeft,
-                          child: new Text(
-                            'Contact Info',
-                            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        content: new Container(
-                          padding: new EdgeInsets.symmetric(horizontal: 9.0),
-                          child: Column(
-                            children: <Widget>[
-                              // SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                               // new Expanded(
-                                    Container(child:Text("Phone:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
-                               // ),
-                                Text(globalcontactusinfomap["Phone"]),
-                              ],),
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                              //  new Expanded(child:
-                                Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
-                                  //),
-                                Text(globalcontactusinfomap["Email"]),
-                              ],),
-                         /*     SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                new Expanded(
-                                  child: Container(child:Text("Address:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
-                                Text(globalcontactusinfomap["Address"]),
-                              ],),
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                                new Expanded(
-                                  child: Container(child:Text("Postal Code:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),),
-                                Text(globalcontactusinfomap["PostalCode"]),
-                              ],),*/
-
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                               // new Expanded( child:
-                                  Container(child:Text("City:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),
-                                //),
-                                Text(globalcontactusinfomap["City"]),
-                              ],),
-                              SizedBox(height: 10.0,),
-                              Row(children: <Widget>[
-                               // new Expanded(child:
-                                Container(child:Text("Country:",style: TextStyle(color: Colors.grey[600]),) ,
-                                  width: 100.0,),
-                                //),
-                                Text(globalcontactusinfomap["Country"]),
-                              ],),
-                              SizedBox(height: 10.0,),
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-
-
-                  ],),
-                ),
-          ),  ],),
-              /////////
-
-              //////// Team /////////
-
-              Column(children: <Widget>[
-
-                SizedBox(height: height),
-                new Expanded(
-                  child: Container(
-                  height: insideContainerHeight,
-                  width: 400.0,
-                  //color: Colors.green[50],
-                  child: FutureBuilder<List<Team>>(
-                    future: getTeamList(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if(snapshot.data.length>0) {
-                          return new ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: snapshot.data.length,
-
-                          itemBuilder: (BuildContext context, int index) {toreportprofileimage = new NetworkImage( snapshot.data[index].ProfilePic);
-                                /*toreportprofileimage.resolve(new ImageConfiguration()).addListener((_, __) {
-                                  if (mounted) {
-                                    setState(() {
-                                      _checkLoadedr = false;
-                                    });
-                                  }
-                                });*/
-
-
-
-                            return new Row(
+                          content: new Container(
+                            padding: new EdgeInsets.symmetric(horizontal: 9.0),
+                            child: Column(
                               children: <Widget>[
-                                 new Container(child:Container(
+                               // SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  Container(child:Text("Name:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  width: 100.0,),
+                                  Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"]),
+                                ],),
+
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  Container(child:Text("DOB:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+                                  Text(globalpersnalinfomap["DOB"]),
+                                ],),
+
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                    Container(child:Text("Emp Code:",style: TextStyle(color: Colors.grey[600]),) ,
+                                      width: 100.0,),
+
+                                  Text(globalcompanyinfomap["EmpCode"]),
+                                ],),
+                                /* SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  new Expanded(
+                                    child:Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),),
+                                  Text(globalcompanyinfomap["CompanyEmail"]),
+                                ],),*/
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  //new Expanded(
+                                   Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600]),) ,
+                                      width: 100.0,),
+                                  //),
+                                  Text(globalcompanyinfomap["Designation"]),
+                                ],),
+                                /*  SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  new Expanded(
+                                    child:Container(child:Text("Reporting To:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),),
+                                  Text(globalcompanyinfomap["ReportingTo"]),
+                                ],),*/
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+
+                                    Container(child:Text("Department:",style: TextStyle(color: Colors.grey[600]),) ,
+                                      width: 100.0,),
+                                  Text(globalcompanyinfomap["Department"]),
+                                ],),
+                              /*  SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  Container(child:Text("Blood Group:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+                                  Text(globalpersnalinfomap["BloodGroup"]),
+                                ],),
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  Container(child:Text("Nationality:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+                                  Text(globalpersnalinfomap["Nationality"]),
+                                ],),
+                                SizedBox(height: 10.0,),*/
+
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      Container(
+                        //height: MediaQuery.of(context).size.height,
+                        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                        //width: MediaQuery.of(context).size.width*0.9,
+                        decoration: new ShapeDecoration(
+                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
+                          color: Colors.grey[100],
+                        ),
+                        child:
+                        StickyHeader(
+                          header: new Container(
+                            height: 50.0,
+                            color: Colors.grey[100],
+                            padding: new EdgeInsets.symmetric(horizontal: 9.0),
+                            alignment: Alignment.centerLeft,
+                            child: new Text(
+                              'Reporting to',
+                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          content: new Container(
+                            padding: new EdgeInsets.symmetric(horizontal: 9.0),
+                            child: Column(
+                              children: <Widget>[
+                                // SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  Container(child:Container(
                                       width: 50.0,
                                       height: 50.0,
                                       decoration: new BoxDecoration(
-                                        color:Colors.grey[300],
                                           shape: BoxShape.circle,
                                           image: new DecorationImage(
                                             fit: BoxFit.fill,
-
-                                          // image: NetworkImage(snapshot.data[index].ProfilePic) ,
-
-                                         image:  toreportprofileimage,
-                                   //      image: _checkLoadedr ? AssetImage('assets/avatar.png') : toreportprofileimage,
+                                          //  image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
+                                            image: _checkLoaded ? AssetImage('assets/avatar.png') : reporttoprofileimage,
                                           )
                                       ))
                                   ),SizedBox(width: 20.0,),
-                                  Text(snapshot.data[index].FirstName+" "+snapshot.data[index].LastName),
-                                  //Text("-"),
-                                 // Text(snapshot.data[index].Designation),
+                                  Text(globalcompanyinfomap["ReportingTo"]),
+                                  Text("-"),
+                                  Text(globalcompanyinfomap["ReportingToDesignation"]),
+                                ],),
 
+                                SizedBox(height: 10.0,),
 
-                                ],
-
-                            );
-
-                              }
-                          );
-                        }else{
-                          return new Center(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width*1,
-                              color: Colors.teal.withOpacity(0.1),
-                              padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                              child:Text("No Team Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                              ],
                             ),
-                          );
-                        }
-                      }
-                      else if (snapshot.hasError) {
-                        return new Text("Unable to connect server");
-                      }
+                          ),
+                        ),
+                      ),
 
-                      // By default, show a loading spinner
-                      return new Center( child: CircularProgressIndicator());
-                    },
-                  )
-                ),
-                ),],)
-                ],
+
+                      Container(
+                        //height: MediaQuery.of(context).size.height,
+                        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                        //width: MediaQuery.of(context).size.width*0.9,
+                        decoration: new ShapeDecoration(
+                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
+                          color: Colors.grey[100],
+                        ),
+                        child:
+                        StickyHeader(
+                          header: new Container(
+                            height: 50.0,
+                            color: Colors.grey[100],
+                            padding: new EdgeInsets.symmetric(horizontal: 9.0),
+                            alignment: Alignment.centerLeft,
+                            child: new Text(
+                              'Contact Info',
+                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          content: new Container(
+                            padding: new EdgeInsets.symmetric(horizontal: 9.0),
+                            child: Column(
+                              children: <Widget>[
+                                // SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                 // new Expanded(
+                                      Container(child:Text("Phone:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+                                 // ),
+                                  Text(globalcontactusinfomap["Phone"]),
+                                ],),
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                //  new Expanded(child:
+                                  Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+                                    //),
+                                  Text(globalcontactusinfomap["Email"]),
+                                ],),
+                           /*     SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  new Expanded(
+                                    child: Container(child:Text("Address:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),),
+                                  Text(globalcontactusinfomap["Address"]),
+                                ],),
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  new Expanded(
+                                    child: Container(child:Text("Postal Code:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),),
+                                  Text(globalcontactusinfomap["PostalCode"]),
+                                ],),*/
+
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                 // new Expanded( child:
+                                    Container(child:Text("City:",style: TextStyle(color: Colors.grey[600]),) ,
+                                      width: 100.0,),
+                                  //),
+                                  Text(globalcontactusinfomap["City"]),
+                                ],),
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                 // new Expanded(child:
+                                  Container(child:Text("Country:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+                                  //),
+                                  Text(globalcontactusinfomap["Country"]),
+                                ],),
+                                SizedBox(height: 10.0,),
+
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+
+
+                    ],),
+                  ),
+            ),  ],),
+                /////////
+
+                //////// Team /////////
+
+                Column(children: <Widget>[
+
+                  SizedBox(height: height),
+                  new Expanded(
+                    child: Container(
+                    height: insideContainerHeight,
+                    width: 400.0,
+                    //color: Colors.green[50],
+                    child: FutureBuilder<List<Team>>(
+                      future: getTeamList(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if(snapshot.data.length>0) {
+                            return new ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: snapshot.data.length,
+
+                            itemBuilder: (BuildContext context, int index) {toreportprofileimage = new NetworkImage( snapshot.data[index].ProfilePic);
+                                  /*toreportprofileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+                                    if (mounted) {
+                                      setState(() {
+                                        _checkLoadedr = false;
+                                      });
+                                    }
+                                  });*/
+
+
+
+                              return new Row(
+                                children: <Widget>[
+                                   new Container(child:Container(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        decoration: new BoxDecoration(
+                                          color:Colors.grey[300],
+                                            shape: BoxShape.circle,
+                                            image: new DecorationImage(
+                                              fit: BoxFit.fill,
+
+                                            // image: NetworkImage(snapshot.data[index].ProfilePic) ,
+
+                                           image:  toreportprofileimage,
+                                     //      image: _checkLoadedr ? AssetImage('assets/avatar.png') : toreportprofileimage,
+                                            )
+                                        ))
+                                    ),SizedBox(width: 20.0,),
+                                    Text(snapshot.data[index].FirstName+" "+snapshot.data[index].LastName),
+                                    //Text("-"),
+                                   // Text(snapshot.data[index].Designation),
+
+
+                                  ],
+
+                              );
+
+                                }
+                            );
+                          }else{
+                            return new Center(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width*1,
+                                color: Colors.teal.withOpacity(0.1),
+                                padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                child:Text("No Team Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                              ),
+                            );
+                          }
+                        }
+                        else if (snapshot.hasError) {
+                          return new Text("Unable to connect server");
+                        }
+
+                        // By default, show a loading spinner
+                        return new Center( child: CircularProgressIndicator());
+                      },
+                    )
+                  ),
+                  ),],)
+                  ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar:new HomeNavigation(),);
+        bottomNavigationBar:new HomeNavigation(),),
+    );
   }
 
   showProfile() {

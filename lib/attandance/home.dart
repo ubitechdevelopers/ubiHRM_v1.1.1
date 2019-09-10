@@ -28,6 +28,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import '../appbar.dart';
 import 'team_attendance_summary.dart';
+import '../home.dart';
+
 
 
 // This app is a stateful, it tracks the user's current choice.
@@ -267,11 +269,24 @@ class _HomePageState extends State<HomePage> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
+  Future<bool> sendToHome() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
+
   getmainhomewidget() {
     return new WillPopScope(
-        onWillPop: () async => true,
+        onWillPop: () => sendToHome(),
 
-      child: Scaffold(
+        child: Scaffold(
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new AppHeader(profileimage,showtabbar,orgName),

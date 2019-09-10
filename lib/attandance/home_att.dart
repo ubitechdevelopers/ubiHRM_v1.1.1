@@ -35,6 +35,7 @@ import 'package:ubihrm/services/attandance_newservices.dart';
 import 'package:camera/camera.dart';*/
 import 'package:connectivity/connectivity.dart';
 import 'package:ubihrm/global.dart';
+import '../home.dart';
 
 
 // This app is a stateful, it tracks the user's current choice.
@@ -239,9 +240,22 @@ class _HomePageState extends State<HomePage> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
+  Future<bool> sendToHome() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
+
   getmainhomewidget() {
     return new WillPopScope(
-        onWillPop: () async => true,
+        onWillPop: ()=> sendToHome(),
         child: new Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(

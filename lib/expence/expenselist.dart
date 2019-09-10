@@ -512,11 +512,12 @@ class _MyExpenceState extends State<MyExpence> {
                                                           MaterialPageRoute(builder: (context) => ExpenseDetailView(expenseid: snapshot.data[index].Id.toString())),
                                                         );
                                                       },
-                                                      child: Icon(
+                                                      child: Text("view", style: TextStyle(color: Colors.blueAccent, fontSize: 15.0, decoration: TextDecoration.underline),),
+                                                      /*child: Icon(
                                                         Icons.remove_red_eye,
                                                         size: 20.0,
                                                         color:appStartColor(),
-                                                      ),
+                                                      ),*/
                                                     ),
                                                     /*child: new FlatButton(
                                                       onPressed: () {

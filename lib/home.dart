@@ -23,7 +23,7 @@ import 'services/attandance_fetch_location.dart';
 import 'salary/mysalary_list.dart';
 import 'package:intl/intl.dart';
 import 'dashboard.dart';
-import 'home_appbar.dart';
+//import 'home_appbar.dart';
 import 'attandance/flexi_time.dart';
 //import 'settings.dart';
 import 'package:connectivity/connectivity.dart';
@@ -1027,6 +1027,89 @@ class _HomePageStatemain extends State<HomePageMain> {
       ),
     ]);
   }
+}
+
+class HomeAppHeader extends StatelessWidget implements PreferredSizeWidget {
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+  HomeAppHeader(profileimage1,showtabbar1,orgname1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    // print("--------->");
+    // print(profileimage);
+    //  print("--------->");
+    //   print(_checkLoadedprofile);
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+      //    print(_checkLoadedprofile);
+    };
+    showtabbar= showtabbar1;
+  }
+  /*void initState() {
+    super.initState();
+ //   initPlatformState();
+  }
+*/
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Container(
+                padding: const EdgeInsets.all(8.0), child: Text(orgname)
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+
+              //   unselectedLabelColor: Colors.white70,
+              //   indicatorColor: Colors.white,
+              //   icon: Icon(choice.icon),
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
+
 }
 
 

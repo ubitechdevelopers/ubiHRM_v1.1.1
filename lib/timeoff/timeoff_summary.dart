@@ -217,66 +217,82 @@ class _TimeoffSummary extends State<TimeoffSummary> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
+  Future<bool> sendToHome() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
+
   getmainhomewidget() {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
+    return WillPopScope(
+      onWillPop: ()=> sendToHome(),
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        endDrawer: new AppDrawer(),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
 
-      /*appBar: GradientAppBar(
-        automaticallyImplyLeading: false,
-        *//*    title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
+        /*appBar: GradientAppBar(
+          automaticallyImplyLeading: false,
+          *//*    title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
 
-            new Text(org_name, style: new TextStyle(fontSize: 20.0)),
+              new Text(org_name, style: new TextStyle(fontSize: 20.0)),
 
-          ],
+            ],
+          ),
+          leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },),
+          backgroundColor: Colors.teal,*//*
+          backgroundColorStart: appStartColor(),
+          backgroundColorEnd: appEndColor(),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              new Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        image: AssetImage('assets/avatar.png'),
+                      )
+                  )),
+              Container(
+                  padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
+              )
+            ],
+
+          ),
+
+        ),*/
+        bottomNavigationBar:  new HomeNavigation(),
+
+        body:getMarkAttendanceWidgit(),
+        floatingActionButton: new FloatingActionButton(
+          backgroundColor: Colors.orange[800],
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TimeOffPage()),
+            );
+          },
+          tooltip: 'Request TimeOff',
+          child: new Icon(Icons.add),
         ),
-        leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()),
-          );
-        },),
-        backgroundColor: Colors.teal,*//*
-        backgroundColorStart: appStartColor(),
-        backgroundColorEnd: appEndColor(),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            new Container(
-                width: 40.0,
-                height: 40.0,
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage('assets/avatar.png'),
-                    )
-                )),
-            Container(
-                padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-            )
-          ],
-
-        ),
-
-      ),*/
-      bottomNavigationBar:  new HomeNavigation(),
-
-      body:getMarkAttendanceWidgit(),
-      floatingActionButton: new FloatingActionButton(
-        backgroundColor: Colors.orange[800],
-        onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TimeOffPage()),
-          );
-        },
-        tooltip: 'Request TimeOff',
-        child: new Icon(Icons.add),
       ),
     );
   }

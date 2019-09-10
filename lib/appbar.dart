@@ -49,13 +49,14 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         backgroundColorStart: appStartColor(),
        backgroundColorEnd: appEndColor(),
        automaticallyImplyLeading: false,
-        leading: IconButton(icon:Icon(Icons.arrow_back),
-          onPressed:(){
-          Navigator.pop(context,true);
-        },),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+             IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+               print("ICON PRESSED");
+                Navigator.pop(context,false);
+              },),
             GestureDetector(
               // When the child is tapped, show a snackbar
               onTap: () {
@@ -65,7 +66,6 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                 );
               },
               child:Container(
-
                   width: 40.0,
                   height: 40.0,
                   decoration: new BoxDecoration(
@@ -80,7 +80,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             Container(
-                padding: const EdgeInsets.all(8.0), child: Text(orgname)
+                padding: const EdgeInsets.all(8.0),
+                child: Text(orgname)
             )
           ],
         ),
