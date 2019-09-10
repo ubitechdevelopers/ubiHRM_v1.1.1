@@ -23,7 +23,6 @@ import 'services/attandance_fetch_location.dart';
 import 'salary/mysalary_list.dart';
 import 'package:intl/intl.dart';
 import 'dashboard.dart';
-//import 'home_appbar.dart';
 import 'attandance/flexi_time.dart';
 //import 'settings.dart';
 import 'package:connectivity/connectivity.dart';
