@@ -822,7 +822,7 @@ class _RequestExpenceState extends State<RequestExpence> {
         if(_image!=null ) {
           return new Row(
              children: <Widget>[
-               Text("Attechment selected                               ",style: TextStyle(fontSize: 16.0, color: Colors.green),
+               Text("Attachment selected                               ",style: TextStyle(fontSize: 16.0, color: Colors.green),
                  textAlign: TextAlign.start, ),
                /*Icon(
                 Icons.check,

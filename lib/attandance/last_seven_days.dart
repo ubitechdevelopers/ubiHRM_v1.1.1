@@ -9,7 +9,6 @@ import '../drawer.dart';
 import '../appbar.dart';
 import '../global.dart';
 import '../b_navigationbar.dart';
-
 // This app is a stateful, it tracks the user's current choice.
 class LastSeven extends StatefulWidget {
   @override

@@ -1103,7 +1103,7 @@ if (act1 == 'TimeIn') {
                children: <Widget>[
                  Container(
                      padding: EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
-        child: Text("Doing overtime? Punch your Time Out now.",style: TextStyle(fontSize: 16.0),)
+                      child: Text("Doing overtime? Punch your Time Out now.",style: TextStyle(fontSize: 16.0),)
                  ),
 
                ],
