@@ -142,7 +142,7 @@ class _Settings extends State<Settings> {
             ),
             leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
               Navigator.pop(context);}),
-            backgroundColor: Colors.teal,
+            backgroundColor:appStartColor(),
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
@@ -201,7 +201,7 @@ class _Settings extends State<Settings> {
             children: <Widget>[
               SizedBox(height: 8.0),
               Text('Settings',
-                  style: new TextStyle(fontSize: 22.0, color: Colors.teal,),),
+                  style: new TextStyle(fontSize: 22.0, color:appStartColor(),),),
               SizedBox(height: 5.0),
               new Expanded(
               child: getSettingsWidget(),

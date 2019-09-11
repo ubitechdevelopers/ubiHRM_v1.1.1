@@ -599,8 +599,7 @@ class _HomePageState extends State<HomePage> {
                   Text("Hi " + globalpersnalinfomap['FirstName'], style: new TextStyle(fontSize: 16.0)),
                   SizedBox(height: MediaQuery.of(context).size.height * .001),
                   // SizedBox(height: MediaQuery.of(context).size.height*.01),
-                  (act1 == 'TimeIn' && Otimests !='null') ? HomePageTimeOut() : getMarkAttendanceWidgit(),
-                  //getMarkAttendanceWidgit(),
+                  (act1 == 'TimeIn' && Otimests !='null') ? _showAlertwidget() : getMarkAttendanceWidgit(),
 
 
                 ],
@@ -706,7 +705,8 @@ class _HomePageState extends State<HomePage> {
         ),
         SizedBox(height: MediaQuery.of(context).size.height * .04),
         Container(
-            color: Colors.teal.withOpacity(0.1),
+            //color: Colors.teal.withOpacity(0.1),
+            color: appStartColor().withOpacity(0.1),
             height: MediaQuery.of(context).size.height * .15,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -817,8 +817,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   getTimeInOutButton() {
-if (act1 == 'TimeIn') {
-
+    if (act1 == 'TimeIn') {
      return RaisedButton(
         child: Text('TIME IN',
             style: new TextStyle(fontSize: 22.0, color: Colors.white)),
@@ -1046,7 +1045,7 @@ if (act1 == 'TimeIn') {
     );
   }
 
- /*_showAlertwidget() {
+ _showAlertwidget() {
  return  new
  Column(
        children: <Widget>[
@@ -1104,7 +1103,7 @@ if (act1 == 'TimeIn') {
                children: <Widget>[
                  Container(
                      padding: EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
-                      child: Text("Doing overtime? Punch your Time Out now.",style: TextStyle(fontSize: 16.0),)
+        child: Text("Doing overtime? Punch your Time Out now.",style: TextStyle(fontSize: 16.0),)
                  ),
 
                ],
@@ -1174,14 +1173,14 @@ if (act1 == 'TimeIn') {
      ),
    ),
        ]);
-   *//* showDialog(
+   /* showDialog(
         context: context,
         builder: (context) => AlertDialog(
          // title: Text("Wifi"),
           content: new Text("you have not mark time out yesterday \n Are you doing overtime ? and you forgot to mark timeout?"),
         )
-    );*//*
+    );*/
   }
-*/
+
 
 }

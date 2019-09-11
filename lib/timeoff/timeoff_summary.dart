@@ -507,17 +507,20 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                           children: <Widget>[
 
                                             new Expanded(
-                                              child: Container(
-                                                  height: MediaQuery .of(context).size.height * 0.04,
-                                                  width: MediaQuery .of(context).size.width * 0.50,
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    new Text(
-                                                      snapshot.data[index].TimeofDate.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,0.0),
+                                                child: Container(
+                                                    height: MediaQuery .of(context).size.height * 0.04,
+                                                    width: MediaQuery .of(context).size.width * 0.50,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      new Text(
+                                                        snapshot.data[index].TimeofDate.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
 
-                                                  ],
-                                                )),),
+                                                    ],
+                                                  )),
+                                              ),),
 
 
 
@@ -529,26 +532,29 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                           //                        new Text(snapshot.data[index].ApprovalSts.toString(), style: TextStyle(color: snapshot.data[index].ApprovalSts.toString()=='Approved'?Colors.green.withOpacity(0.75):snapshot.data[index].ApprovalSts.toString()=='Rejected' || snapshot.data[index].ApprovalSts.toString()=='Cancel' ?Colors.red.withOpacity(0.65):snapshot.data[index].ApprovalSts.toString().startsWith('Pending')?Colors.orange[800]:Colors.black54, fontSize: 14.0,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
 
                                                   (snapshot.data[index].withdrawlsts && snapshot.data[index].ApprovalSts.toString()!='Withdrawn' && snapshot.data[index].ApprovalSts.toString()!="Rejected")?InkWell(
-                                                    child: Container(
-                                                      height: MediaQuery .of(context).size.height * 0.04,
-                                                      margin: EdgeInsets.only(left:32.0),
-                                                      padding: EdgeInsets.only(left:32.0),
-                                                      width: MediaQuery .of(context).size.width * 0.50,
-                                                      child: new OutlineButton(
-                                                      child:new Icon(Icons.replay, size: 16.0,color:appStartColor(), ),
-                                                      borderSide: BorderSide(color: appStartColor()),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.fromLTRB(0.0,3.0,0.0,0.0),
+                                                      child: Container(
+                                                        height: MediaQuery .of(context).size.height * 0.04,
+                                                        margin: EdgeInsets.only(left:52.0),
+                                                        padding: EdgeInsets.only(left:52.0),
+                                                        width: MediaQuery .of(context).size.width * 0.50,
+                                                        child: new OutlineButton(
+                                                        child:new Icon(Icons.replay, size: 16.0,color:appStartColor(), ),
+                                                        borderSide: BorderSide(color: appStartColor()),
 
-                                                      //  color: Colors.orangeAccent,
-                                                      onPressed: () {
-                                                      if(_isButtonDisabled)
-                                                      return null;
-                                                      setState(() {
-                                                      _isButtonDisabled=true;
-                                                      checkProcessing = index;
-                                                      });
-                                                      confirmWithdrawl(snapshot.data[index].TimeOffId.toString());
-                                                      },
-                                                      shape: new CircleBorder(),
+                                                        //  color: Colors.orangeAccent,
+                                                        onPressed: () {
+                                                        if(_isButtonDisabled)
+                                                        return null;
+                                                        setState(() {
+                                                        _isButtonDisabled=true;
+                                                        checkProcessing = index;
+                                                        });
+                                                        confirmWithdrawl(snapshot.data[index].TimeOffId.toString());
+                                                        },
+                                                        shape: new CircleBorder(),
+                                                        ),
                                                       ),
                                                     ),
                                                   ):Center(),

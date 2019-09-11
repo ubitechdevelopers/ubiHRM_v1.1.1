@@ -407,42 +407,48 @@ class _MyLeaveState extends State<MyLeave> {
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: <Widget>[
                                             new Expanded(
-                                              child: Container(
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(0.0,5.0,0.0,0.0),
+                                                child: Container(
                                             //     color:Colors.red,
-                                                  height: MediaQuery .of(context).size.height * 0.04,
-                                                  width: MediaQuery .of(context).size.width * 0.50,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                 //     new SizedBox(width: 5.0,),
-                                                      new Text(snapshot.data[index].attendancedate.toString(), style: TextStyle(fontWeight: FontWeight.bold),)
-                                                    ],
-                                                  )
+                                                    height: MediaQuery .of(context).size.height * 0.04,
+                                                    width: MediaQuery .of(context).size.width * 0.50,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                   //     new SizedBox(width: 5.0,),
+                                                        new Text(snapshot.data[index].attendancedate.toString(), style: TextStyle(fontWeight: FontWeight.bold),)
+                                                      ],
+                                                    )
+                                                ),
                                               ),
                                             ),
 
                                             (snapshot.data[index].withdrawlsts && snapshot.data[index].approverstatus.toString() !='Withdrawn' && snapshot.data[index].approverstatus.toString() !="Rejected")?
                                               new Expanded(
-                                                child: Container (
+                                                child: Padding(
+                                                  padding: const EdgeInsets.fromLTRB(0.0,3.0,0.0,0.0),
+                                                  child: Container (
                             //                   color:Colors.yellow,
-                                                 height: MediaQuery .of(context).size.height * 0.04,
-                                                 margin: EdgeInsets.only(left:100.0),
-                                                 //padding: EdgeInsets.only(left:32.0),
-                                                 width: MediaQuery .of(context).size.width * 0.50,
-                                                 child: new OutlineButton(
-                                                    onPressed: () {
-                                                      confirmWithdrawl(snapshot.data[index].leaveid.toString());
-                                                    },
-                                                     child:new Icon(
-                                                       Icons.replay,
-                                                       size: 18.0,
-                                                       color:appStartColor(),
-                                                 //      textDirection: TextDirection.rtl,
-                                                     ),
-                                                     borderSide: BorderSide(color:appStartColor()),
-                                                     shape: new CircleBorder(),
+                                                   height: MediaQuery .of(context).size.height * 0.04,
+                                                   margin: EdgeInsets.only(left:52.0),
+                                                   padding: EdgeInsets.only(left:52.0),
+                                                   width: MediaQuery .of(context).size.width * 0.50,
+                                                   child: new OutlineButton(
+                                                      onPressed: () {
+                                                        confirmWithdrawl(snapshot.data[index].leaveid.toString());
+                                                      },
+                                                       child:new Icon(
+                                                         Icons.replay,
+                                                         size: 18.0,
+                                                         color:appStartColor(),
+                                                   //      textDirection: TextDirection.rtl,
+                                                       ),
+                                                       borderSide: BorderSide(color:appStartColor()),
+                                                       shape: new CircleBorder(),
                                             //         padding:EdgeInsets.all(5.0),
-                                                  )
+                                                    )
+                                                  ),
                                                 ),
                                               ):Center(),
                                           ],

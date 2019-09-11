@@ -1007,7 +1007,7 @@ class _HomePageTimeInState extends State<HomePageTimeIn> {
         ),
         SizedBox(height: MediaQuery.of(context).size.height * .04),
         Container(
-            color: Colors.teal.withOpacity(0.1),
+            color:appStartColor().withOpacity(0.1),
             height: MediaQuery.of(context).size.height * .15,
             child:
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [

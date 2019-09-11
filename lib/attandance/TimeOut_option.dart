@@ -701,7 +701,7 @@ class _HomePageTimeOutState extends State<HomePageTimeOut> {
 
   Widget quickLinkList1() {
     return Container(
-      color: Colors.green.withOpacity(0.9),
+      color: appStartColor().withOpacity(0.9),
 
       width: MediaQuery.of(context).size.width * 0.95,
       height:MediaQuery.of(context).size.height * 0.10,
@@ -1006,7 +1006,7 @@ class _HomePageTimeOutState extends State<HomePageTimeOut> {
         ),
         SizedBox(height: MediaQuery.of(context).size.height * .04),
         Container(
-            color:  Colors.teal.withOpacity(0.1),
+            color:appStartColor().withOpacity(0.1),
             height: MediaQuery.of(context).size.height * .15,
             child:
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
