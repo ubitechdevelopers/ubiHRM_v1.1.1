@@ -258,7 +258,7 @@ class _HomePageStatemain extends State<HomePageMain> {
 
   Card makeDashboardItem(String title, functionname, Imagename) {
     return Card(
-        elevation: 2.0,
+        elevation: 1.0,
         margin: new EdgeInsets.all(8.0),
         child: Container(
 
@@ -275,20 +275,17 @@ class _HomePageStatemain extends State<HomePageMain> {
               mainAxisSize: MainAxisSize.min,
               verticalDirection: VerticalDirection.down,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: new Container(
-                      width: 60.0,
-                      height: 60.0,
-                      decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            image: AssetImage(
-                                Imagename),
-                          ),
-                          color: circleIconBackgroundColor())),
-                ),
+                new Container(
+                    width: 60.0,
+                    height: 60.0,
+                    decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage(
+                              Imagename),
+                        ),
+                        color: circleIconBackgroundColor())),
                 Text(title,
                     textAlign: TextAlign.center,
                     style: new TextStyle(
