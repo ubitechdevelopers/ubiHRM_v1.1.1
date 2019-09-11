@@ -6,6 +6,7 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/services/services.dart';
 //import 'login.dart';
 import 'dart:convert';
 //import 'package:ubihrm/services/att_services.dart';
@@ -13,6 +14,7 @@ import 'dart:convert';
 import '../home.dart';
 import 'dart:async';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
+import '../profile.dart';
 import 'timeoff.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
 import 'package:ubihrm/model/model.dart';
@@ -20,7 +22,6 @@ import 'teamtimeoffsummary.dart';
 import '../b_navigationbar.dart';
 import '../global.dart';
 import '../drawer.dart';
-import '../appbar.dart';
 
 
 // This app is a stateful, it tracks the user's current choice.
@@ -237,7 +238,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
         key: _scaffoldKey,
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
+        appBar: new TimeOffAppHeader(profileimage,showtabbar,orgName),
 
         /*appBar: GradientAppBar(
           automaticallyImplyLeading: false,
@@ -653,6 +654,95 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 /////////////////////futere method dor getting today's punched liist-start
 
 /////////////////////futere method dor getting today's punched liist-close
+
+}
+
+class TimeOffAppHeader extends StatelessWidget implements PreferredSizeWidget {
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+  TimeOffAppHeader(profileimage1,showtabbar1,orgname1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    // print("--------->");
+    // print(profileimage);
+    //  print("--------->");
+    //   print(_checkLoadedprofile);
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+      //    print(_checkLoadedprofile);
+    };
+    showtabbar= showtabbar1;
+  }
+  /*void initState() {
+    super.initState();
+ //   initPlatformState();
+  }
+*/
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+                print("ICON PRESSED");
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+                );
+              },),
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(orgname)
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+              //   unselectedLabelColor: Colors.white70,
+              //   indicatorColor: Colors.white,
+              //   icon: Icon(choice.icon),
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
 
 }
 

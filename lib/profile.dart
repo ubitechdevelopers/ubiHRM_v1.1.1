@@ -217,7 +217,7 @@ var profilepic;
   Widget build(BuildContext context) {
 
     var flexibleSpaceWidget = new SliverAppBar(
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: true,
     //  key: _scaffoldKey,
       expandedHeight: 200.0,
       pinned: true,

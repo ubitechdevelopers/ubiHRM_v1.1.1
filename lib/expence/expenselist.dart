@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ubihrm/services/services.dart';
 import '../drawer.dart';
 import '../graphs.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import '../global.dart';
+import '../profile.dart';
 import '../services/leave_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../login_page.dart';
@@ -13,7 +15,6 @@ import '../home.dart';
 import '../services/expense_services.dart';
 //import 'bottom_navigationbar.dart';
 import '../b_navigationbar.dart';
-import '../appbar.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 
@@ -210,7 +211,7 @@ class _MyExpenceState extends State<MyExpence> {
       child: Scaffold(
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
+        appBar: new ExpenseAppHeader(profileimage,showtabbar,orgName),
         bottomNavigationBar:new HomeNavigation(),
         body:  ModalProgressHUD(
             inAsyncCall: _checkwithdrawnleave,
@@ -586,5 +587,95 @@ class _MyExpenceState extends State<MyExpence> {
         ] ) );
 
   }
+
+}
+
+class ExpenseAppHeader extends StatelessWidget implements PreferredSizeWidget {
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+  ExpenseAppHeader(profileimage1,showtabbar1,orgname1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    // print("--------->");
+    // print(profileimage);
+    //  print("--------->");
+    //   print(_checkLoadedprofile);
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+      //    print(_checkLoadedprofile);
+    };
+    showtabbar= showtabbar1;
+  }
+  /*void initState() {
+    super.initState();
+ //   initPlatformState();
+  }
+*/
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+                print("ICON PRESSED");
+                //Navigator.pop(context,false);
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+                );
+              },),
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(orgname)
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+              //   unselectedLabelColor: Colors.white70,
+              //   indicatorColor: Colors.white,
+              //   icon: Icon(choice.icon),
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
 
 }

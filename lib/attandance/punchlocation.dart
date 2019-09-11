@@ -238,9 +238,22 @@ class _PunchLocation extends State<PunchLocation> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
+  Future<bool> sendToPunchVisitList() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => PunchLocationSummary()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
+
   getmainhomewidget() {
     return new WillPopScope(
-        onWillPop: () async => true,
+        onWillPop: ()=> sendToPunchVisitList(),
         child: new Scaffold(
           key: _scaffoldKey,
           backgroundColor:scaffoldBackColor(),
@@ -545,6 +558,7 @@ class _PunchLocation extends State<PunchLocation> {
     );
 
   }
+
   getwidget(String addrloc) {
     if (addrloc != "PermissionStatus.deniedNeverAsk") {
       return Column(children: [

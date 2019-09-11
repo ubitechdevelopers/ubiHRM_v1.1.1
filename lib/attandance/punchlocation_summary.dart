@@ -3,10 +3,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/home.dart';
+import 'package:ubihrm/services/services.dart';
 import '../drawer.dart';
+import '../profile.dart';
 import 'home.dart';
 import 'package:ubihrm/global.dart';
-
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import '../services/attandance_services.dart';
 import '../services/attandance_newservices.dart';
 import 'punchlocation.dart';
@@ -14,7 +17,6 @@ import 'reports.dart';
 import 'profile.dart';
 import 'settings.dart';
 import '../services/attandance_saveimage.dart';
-import '../appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'teampunchlocatio_summary.dart';
 import 'Image_view.dart';
@@ -135,6 +137,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
         content: Text(value, textAlign: TextAlign.center,));
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
+
   Future<bool> sendToHome() async{
     /*Navigator.push(
       context,
@@ -144,7 +147,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
     //  return false;
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()), (Route<dynamic> route) => false,
+      MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
     );
     return false;
   }
@@ -155,7 +158,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
       child: new Scaffold(
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
+        appBar: new PunchVisitAppHeader(profileimage,showtabbar,orgName),
         bottomNavigationBar:new HomeNavigation(),
 
         floatingActionButton: new FloatingActionButton(
@@ -239,6 +242,11 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => PunchLocationSummary()),
+                  );
+                  showDialog(context: context, child:
+                  new AlertDialog(
+                    content: new Text("Visit punched successfully!"),
+                  )
                   );
                 }).catchError((ett){
                   showInSnackBar('Unable to punch visit');
@@ -645,13 +653,98 @@ print('visit out called for visit id:'+visit_id);
         ]
     )
     );
-
-
-
-
-
   }
 }
+
+class PunchVisitAppHeader extends StatelessWidget implements PreferredSizeWidget {
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+  PunchVisitAppHeader(profileimage1,showtabbar1,orgname1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    // print("--------->");
+    // print(profileimage);
+    //  print("--------->");
+    //   print(_checkLoadedprofile);
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+      //    print(_checkLoadedprofile);
+    };
+    showtabbar= showtabbar1;
+  }
+  /*void initState() {
+    super.initState();
+ //   initPlatformState();
+  }
+*/
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+                print("ICON PRESSED");
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+                );
+              },),
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(orgname)
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+              //   unselectedLabelColor: Colors.white70,
+              //   indicatorColor: Colors.white,
+              //   icon: Icon(choice.icon),
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
+
+}
+
 
 class User {
   String AttendanceDate;
@@ -678,3 +771,5 @@ String dateFormatter(String date_) {
   var date = date_.split("-");
   return(date[2]+""+dy[int.parse(date[2])-1]+" "+months[int.parse(date[1])-1]);
 }
+
+

@@ -8,6 +8,7 @@ import '../drawer.dart';
 import '../appbar.dart';
 import '../global.dart';
 import '../b_navigationbar.dart';
+import 'leave_reports.dart';
 import 'myleave.dart';
 
 class EmployeeLeaveList extends StatefulWidget {
@@ -62,7 +63,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
     return getmainhomewidget();
   }
 
-  Future<bool> sendToLeaveList() async{
+  Future<bool> sendToLeaveReport() async{
     /*Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => HomePage()),
@@ -70,14 +71,14 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
     print("-------> back button pressed");
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => MyLeave()), (Route<dynamic> route) => false,
+      MaterialPageRoute(builder: (context) => LeaveReports()), (Route<dynamic> route) => true,
     );
     return false;
   }
 
   getmainhomewidget() {
     return WillPopScope(
-      onWillPop: ()=> sendToLeaveList(),
+      onWillPop: ()=> sendToLeaveReport(),
       child: new Scaffold(
         key: _scaffoldKey,
         backgroundColor:scaffoldBackColor(),

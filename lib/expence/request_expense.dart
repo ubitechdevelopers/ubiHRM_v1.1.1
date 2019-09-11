@@ -431,10 +431,10 @@ class _RequestExpenceState extends State<RequestExpence> {
                           ],
                         ),
 
-                        SizedBox(height: 15.0),
+                        SizedBox(height: 20.0),
 
 
-                        Container(
+                       /* Container(
                           //width: MediaQuery.of(context).size.width*0.9,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -468,16 +468,26 @@ class _RequestExpenceState extends State<RequestExpence> {
                             ],
                           ),
                         ),
-
-                          /*new Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+*/
+                          new Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                *//*new Icon(
+                                /*new Icon(
                                   Icons.file_upload,
                                   color: Colors.grey,
-                                ),
+                                ),*/
                                 MaterialButton(
-                                  child: Text("Select Image", style: TextStyle(color:_image!=null ? Colors.green[500]:Colors.grey[500],),textAlign: TextAlign.start,),
+                                    child: FlatButton.icon(
+                                      //color: Colors.red,
+                                      icon: Padding(
+                                        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
+                                        child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],size: 27,),
+                                      ), //
+                                  label: Container(
+                                    padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
+                                    //margin: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                                    child:showImage(_image),),
+                                  //child: Text("Select Image", style: TextStyle(color:_image!=null ? Colors.green[500]:Colors.grey[500],),textAlign: TextAlign.start,),
                                   onPressed: () async {
                                     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
                                     //  ExpenseDoc=image;
@@ -486,18 +496,19 @@ class _RequestExpenceState extends State<RequestExpence> {
                                     });
                                   },
                                   splashColor: Colors.grey,
-                                  height: 55,
-                                  minWidth: 345,
+                                  //height: 55,
+                                  //minWidth: 350,
                                   shape: UnderlineInputBorder(),
-                                ),*//*
+                                  ),
+                                )
                              //showImage(_image)
 
-                             ButtonTheme(
+                             /*ButtonTheme(
                               //minWidth: 100.0,
                              // height: 40.0,
                               child: RaisedButton(
                               //shape: Border.all(color: Colors.black54),
-                                shape: new CircleBorder(),
+                                shape: CircleBorder(),
                                 color:_image!=null ? Colors.green[500]:Colors.grey[500],
                                 onPressed: () async {
                                   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -515,14 +526,14 @@ class _RequestExpenceState extends State<RequestExpence> {
                               style: TextStyle(fontSize: 14.0, color: Colors.grey[800]),
                             ),*//*
                           ),
-
                      ),
-                     Container(
+*/
+                    /* Container(
                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                        margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                        child:showImage(_image),
-                     ),
-                              ]),*/
+                     ),*/
+                              ]),
                         SizedBox(height: 5.0),
                        ButtonBar(
 
@@ -811,7 +822,7 @@ class _RequestExpenceState extends State<RequestExpence> {
         if(_image!=null ) {
           return new Row(
              children: <Widget>[
-               Text(_image,style: TextStyle(fontSize: 16.0, color: Colors.green),
+               Text("Attechment selected                               ",style: TextStyle(fontSize: 16.0, color: Colors.green),
                  textAlign: TextAlign.start, ),
                /*Icon(
                 Icons.check,
@@ -836,13 +847,13 @@ class _RequestExpenceState extends State<RequestExpence> {
         }
         else if (snapshot.error != null) {
           return const Text(
-            'Error Picking Image',
+            'Error Picking Attachment                                 ',
             style: TextStyle(fontSize: 16.0, color: Colors.grey),
             textAlign: TextAlign.start,
           );
         } else {
           return const Text(
-            'Image is not selected',
+            'Attachment                                               ',
             style: TextStyle(fontSize: 16.0, color: Colors.grey),
             textAlign: TextAlign.start,
           );

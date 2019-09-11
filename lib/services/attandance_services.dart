@@ -1213,7 +1213,7 @@ Future<List<Map<String, String>>> getChartDataLast(dys) async {
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? "";
-
+  print("orgid and empid and days"+orgdir+empid+dys);
   List<Map<String, String>> val = [];
   if (dys.toString() == 'l7') {
     final response = await http.get(

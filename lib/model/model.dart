@@ -158,6 +158,8 @@ class Salary{
   Salary({this.id,this.name, this.month, this.paid_days,this.EmployeeCTC,this.Currency});
 }
 
+
+
 /*class Profile{
   String uid;
   String orgid;

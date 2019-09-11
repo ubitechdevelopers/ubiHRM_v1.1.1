@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import '../all_reports.dart';
 import '../global.dart';
 import '../drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,18 +50,35 @@ class _TimeoffReports extends State<TimeoffReports> {
         content: Text(value,textAlign: TextAlign.center,));
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
+
+  Future<bool> sendToAllReportsList() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => AllReports()), (Route<dynamic> route) => true,
+    );
+    return false;
+  }
+
   getmainhomewidget(){
     //  print('99999999999999' + _orgName.toString());
-    return new Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
+    return WillPopScope(
+      onWillPop: ()=> sendToAllReportsList(),
+      child: new Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        endDrawer: new AppDrawer(),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
 
-      bottomNavigationBar: HomeNavigation(),
+        bottomNavigationBar: HomeNavigation(),
 
-      body:getReportsWidget(),
+        body:getReportsWidget(),
 
+      ),
     );
 
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import '../all_reports.dart';
 import '../global.dart';
 import '../drawer.dart';
 import 'today_attendance_report.dart';
@@ -65,99 +66,116 @@ class _Reports extends State<Reports> {
         content: Text(value,textAlign: TextAlign.center,));
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
+
+  Future<bool> sendToAllReportsList() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => AllReports()), (Route<dynamic> route) => true,
+    );
+    return false;
+  }
+
   getmainhomewidget(){
   //  print('99999999999999' + _orgName.toString());
-    return new Scaffold(
-          key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
+    return WillPopScope(
+      onWillPop: ()=> sendToAllReportsList(),
+      child: new Scaffold(
+            key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        endDrawer: new AppDrawer(),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
 
-      /*appBar: GradientAppBar(
-        automaticallyImplyLeading: false,
+        /*appBar: GradientAppBar(
+          automaticallyImplyLeading: false,
 
-        backgroundColorStart: appStartColor(),
-        backgroundColorEnd: appEndColor(),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            new Container(
-                width: 40.0,
-                height: 40.0,
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage('assets/avatar.png'),
-                    )
-                )),
-            Container(
-                padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-            )
-          ],
+          backgroundColorStart: appStartColor(),
+          backgroundColorEnd: appEndColor(),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              new Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        image: AssetImage('assets/avatar.png'),
+                      )
+                  )),
+              Container(
+                  padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
+              )
+            ],
 
-        ),
-      ),*/
+          ),
+        ),*/
 
-      bottomNavigationBar: HomeNavigation(),
-       /*     currentIndex: _currentIndex,
-            onTap: (newIndex) {
-              if(newIndex==2){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Settings()),
-                );
-                return;
-              } if (newIndex == 0) {
+        bottomNavigationBar: HomeNavigation(),
+         /*     currentIndex: _currentIndex,
+              onTap: (newIndex) {
+                if(newIndex==2){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Settings()),
+                  );
+                  return;
+                } if (newIndex == 0) {
+                  (admin_sts == '1')
+                      ? Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Reports()),
+                  )
+                      : Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                  );
+                  return;
+                }
+                if(newIndex==1){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                  return;
+                }
+                setState((){_currentIndex = newIndex;});
+
+              }, // this will be set when a new tab is tapped
+              items: [
                 (admin_sts == '1')
-                    ? Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Reports()),
+                    ? BottomNavigationBarItem(
+                  icon: new Icon(
+                    Icons.library_books,color: Colors.orangeAccent
+                  ),
+                  title: new Text('Reports',style: TextStyle(color: Colors.orangeAccent),),
                 )
-                    : Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
-                );
-                return;
-              }
-              if(newIndex==1){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-                return;
-              }
-              setState((){_currentIndex = newIndex;});
-
-            }, // this will be set when a new tab is tapped
-            items: [
-              (admin_sts == '1')
-                  ? BottomNavigationBarItem(
-                icon: new Icon(
-                  Icons.library_books,color: Colors.orangeAccent
+                    : BottomNavigationBarItem(
+                  icon: new Icon(
+                    Icons.person,color: Colors.orangeAccent
+                  ),
+                  title: new Text('Profile',style: TextStyle(color: Colors.orangeAccent),),
                 ),
-                title: new Text('Reports',style: TextStyle(color: Colors.orangeAccent),),
-              )
-                  : BottomNavigationBarItem(
-                icon: new Icon(
-                  Icons.person,color: Colors.orangeAccent
+                BottomNavigationBarItem(
+                  icon: new Icon(Icons.home,color: Colors.black54,),
+                  title: new Text('Home',style: TextStyle(color: Colors.black54),),
                 ),
-                title: new Text('Profile',style: TextStyle(color: Colors.orangeAccent),),
-              ),
-              BottomNavigationBarItem(
-                icon: new Icon(Icons.home,color: Colors.black54,),
-                title: new Text('Home',style: TextStyle(color: Colors.black54),),
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.settings),
-                  title: Text('Settings')
-              )
-            ],*/
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.settings),
+                    title: Text('Settings')
+                )
+              ],*/
 
 
-          body:getReportsWidget(),
+            body:getReportsWidget(),
 
-        );
+          ),
+    );
 
   }
 

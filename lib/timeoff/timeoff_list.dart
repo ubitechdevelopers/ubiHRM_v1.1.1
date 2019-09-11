@@ -3,6 +3,7 @@ import 'package:ubihrm/services/attandance_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:ubihrm/timeoff/timeoff_reports.dart';
 import '../drawer.dart';
 import '../appbar.dart';
 import '../global.dart';
@@ -58,14 +59,30 @@ class _TimeOffList extends State<TimeOffList> {
     return getmainhomewidget();
   }
 
+  Future<bool> sendTotimeOffReport() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => TimeoffReports()), (Route<dynamic> route) => true,
+    );
+    return false;
+  }
+
   getmainhomewidget() {
-    return new Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar,orgName),
-      endDrawer: new AppDrawer(),
-      bottomNavigationBar: HomeNavigation(),
-      body: getReportsWidget(),
+    return WillPopScope(
+      onWillPop: ()=> sendTotimeOffReport(),
+      child: new Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        appBar: new AppHeader(profileimage, showtabbar,orgName),
+        endDrawer: new AppDrawer(),
+        bottomNavigationBar: HomeNavigation(),
+        body: getReportsWidget(),
+      ),
     );
   }
 
@@ -92,7 +109,7 @@ class _TimeOffList extends State<TimeOffList> {
                 'Time Off History',
                 style: new TextStyle(
                   fontSize: 20.0,
-                  color: Colors.black54,
+                  color:appStartColor(),
                 ),
               ),
             ),
