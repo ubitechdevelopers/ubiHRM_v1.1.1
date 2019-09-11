@@ -599,7 +599,7 @@ class _HomePageState extends State<HomePage> {
                   Text("Hi " + globalpersnalinfomap['FirstName'], style: new TextStyle(fontSize: 16.0)),
                   SizedBox(height: MediaQuery.of(context).size.height * .001),
                   // SizedBox(height: MediaQuery.of(context).size.height*.01),
-                  (act1 == 'TimeIn' && Otimests !='null') ? _showAlertwidget() : getMarkAttendanceWidgit(),
+                  (act1 == '') ? loader() : getMarkAttendanceWidgit(),
 
 
                 ],
@@ -1045,7 +1045,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- _showAlertwidget() {
+ /*_showAlertwidget() {
  return  new
  Column(
        children: <Widget>[
@@ -1173,14 +1173,14 @@ class _HomePageState extends State<HomePage> {
      ),
    ),
        ]);
-   /* showDialog(
+   *//* showDialog(
         context: context,
         builder: (context) => AlertDialog(
          // title: Text("Wifi"),
           content: new Text("you have not mark time out yesterday \n Are you doing overtime ? and you forgot to mark timeout?"),
         )
-    );*/
-  }
+    );*//*
+  }*/
 
 
 }
