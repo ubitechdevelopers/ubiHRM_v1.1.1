@@ -2000,7 +2000,7 @@ print("ff"+sts);
                                   builder: (_) =>
                                   new AlertDialog(
                                     //title: new Text("Dialog Title"),
-                                    content: new Text("Approved succesfully"),
+                                    content: new Text("Leave has been approved successfully."),
                                   )
                               );
                             }
@@ -2010,7 +2010,7 @@ print("ff"+sts);
                                   builder: (_) =>
                                   new AlertDialog(
                                     //title: new Text("Dialog Title"),
-                                    content: new Text("Could not be approved. Try again. "),
+                                    content: new Text("Leave could not be approved. Try again!"),
                                   )
                               );
                             }
@@ -2092,7 +2092,7 @@ print("ff"+sts);
                                   builder: (_) =>
                                   new AlertDialog(
                                     //title: new Text("Dialog Title"),
-                                    content: new Text("Leave rejected"),
+                                    content: new Text("Leave has been rejected successfully."),
                                   )
                               );
                             }
@@ -2102,7 +2102,7 @@ print("ff"+sts);
                                   builder: (_) =>
                                   new AlertDialog(
                                     //title: new Text("Dialog Title"),
-                                    content: new Text("Could not be rejected. Try again."),
+                                    content: new Text("Leave could not be rejected. Try again!"),
                                   )
                               );
                             }

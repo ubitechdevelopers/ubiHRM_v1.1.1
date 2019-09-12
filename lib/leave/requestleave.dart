@@ -196,7 +196,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     else if(islogin1=="alreadyApply"){
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('You already applied for same date'),
+        content: new Text('You have already applied for same date'),
       )
       );
       setState(() {

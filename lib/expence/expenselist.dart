@@ -115,14 +115,14 @@ class _MyExpenceState extends State<MyExpence> {
       showDialog(context: context, child:
       new AlertDialog(
         //  title: new Text("Congrats!"),
-        content: new Text("Your leave is withdrawn successfully!"),
+        content: new Text("Expense has been withdrawn successfully."),
       )
       );
     }else if(islogin=="failure"){
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Sorry!"),
-        content: new Text("Leave could not be withdrawn."),
+        content: new Text("Expense could not be withdrawn."),
       )
       );
     }else{
@@ -138,7 +138,7 @@ class _MyExpenceState extends State<MyExpence> {
   confirmWithdrawl(String leaveid) async{
     showDialog(context: context, child:
     new AlertDialog(
-      title: new Text("Withdraw  leave?"),
+      title: new Text("Withdraw Expense?"),
       content:  ButtonBar(
         children: <Widget>[
           FlatButton(
@@ -233,7 +233,7 @@ class _MyExpenceState extends State<MyExpence> {
              MaterialPageRoute(builder: (context) => RequestExpence()),
            );
           },
-          tooltip: 'Submit Expenses',
+          tooltip: 'Request Expense',
           child: new Icon(Icons.add),
         ),
 

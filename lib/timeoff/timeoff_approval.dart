@@ -1071,7 +1071,7 @@ maxLines: 3,
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Approved"),
+                                  content: new Text("TimeOff has been approved successfully."),
                                 )
                             );
                           }
@@ -1081,7 +1081,7 @@ maxLines: 3,
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Could not be approved. Try again."),
+                                  content: new Text("TimeOff Could not be approved. Try again!"),
                                 )
                             );
                           }
@@ -1117,7 +1117,7 @@ maxLines: 3,
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Application for timeoff is rejected"),
+                                  content: new Text("TimeOff has been rejected successfully."),
                                 )
                             );
                           }
@@ -1127,7 +1127,7 @@ maxLines: 3,
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Could not be rejected"),
+                                  content: new Text("TimeOff Could not be rejected. Try again!"),
                                 )
                             );
                           }

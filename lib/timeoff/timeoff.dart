@@ -504,7 +504,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       );
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('Your application for Time off has been sent successfully'),
+        content: new Text('TimeOff has been applied successfully.'),
       )
       );
       setState(() {
@@ -515,7 +515,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       //showInSnackBar("There is some problem while applying for Timeoff.");
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('There is some problem while applying for Timeoff.'),
+        content: new Text('There is some problem while applying Timeoff.'),
       )
       );
       setState(() {

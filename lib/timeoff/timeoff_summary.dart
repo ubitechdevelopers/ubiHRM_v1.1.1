@@ -149,8 +149,8 @@ class _TimeoffSummary extends State<TimeoffSummary> {
       );
       showDialog(context: context, child:
       new AlertDialog(
-        title: new Text("Withdrawl"),
-        content: new Text("Timeoff withdrawn successfully."),
+        //title: new Text("Withdrawl"),
+        content: new Text("Timeoff has been withdrawn successfully."),
       )
       );
     }else if(islogin=="failure"){
@@ -159,8 +159,8 @@ class _TimeoffSummary extends State<TimeoffSummary> {
       });
       showDialog(context: context, child:
       new AlertDialog(
-        title: new Text("Sorry!"),
-        content: new Text("Timeoff withdrawl failed."),
+        //title: new Text("Sorry!"),
+        content: new Text("Timeoff could not be withdrawn."),
       )
       );
     }else{
@@ -179,7 +179,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
   confirmWithdrawl(String timeoffid) async{
     showDialog(context: context, child:
     new AlertDialog(
-      title: new Text("Are you sure?",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18.0),),
+      title: new Text("Withdraw TimeOff?",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18.0),),
       content:  ButtonBar(
         children: <Widget>[
           FlatButton(

@@ -115,8 +115,9 @@ class _MyLeaveState extends State<MyLeave> {
       );
       showDialog(context: context, child:
       new AlertDialog(
+        //backgroundColor: appEndColor(),
       //  title: new Text("Congrats!"),
-        content: new Text("Your leave is withdrawn successfully!"),
+        content: new Text("Leave has been withdrawn successfully."/*, style: TextStyle(color: appStartColor()),*/),
       )
       );
     }else if(islogin=="failure"){
@@ -139,7 +140,7 @@ class _MyLeaveState extends State<MyLeave> {
   confirmWithdrawl(String leaveid) async{
     showDialog(context: context, child:
     new AlertDialog(
-      title: new Text("Withdraw  leave?"),
+      title: new Text("Withdraw Leave?"),
       content:  ButtonBar(
         children: <Widget>[
           FlatButton(
