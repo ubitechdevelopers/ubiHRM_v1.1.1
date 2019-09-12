@@ -3,6 +3,9 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:ubihrm/services/services.dart';
+import '../profile.dart';
 import '../services/attandance_fetch_location.dart';
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -259,7 +262,7 @@ class _PunchLocation extends State<PunchLocation> {
           backgroundColor:scaffoldBackColor(),
 
           endDrawer: new AppDrawer(),
-          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          appBar: new PunchVisitAppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:new HomeNavigation(),
 
 /*          appBar: AppBar(
@@ -374,11 +377,11 @@ class _PunchLocation extends State<PunchLocation> {
                     SizedBox(width: 20.0,),
                     Icon(
                       Icons.all_inclusive,
-                      color: Colors.teal,
+                      color:appStartColor(),
                     ),
                     Text(
-                      " Fetching location, please wait..",
-                      style: new TextStyle(fontSize: 20.0, color: Colors.teal),
+                      "Fetching location, please wait..",
+                      style: new TextStyle(fontSize: 20.0, color:appStartColor()),
                     )
                   ]),
               SizedBox(height: 15.0),
@@ -395,7 +398,7 @@ class _PunchLocation extends State<PunchLocation> {
                       textAlign: TextAlign.right,
                     ),
                     Text(
-                      " If Location not being fetched automatically?",
+                      "If Location not being fetched automatically?",
                       style: new TextStyle(fontSize: 12.0, color: Colors.black),
                       textAlign: TextAlign.left,
                     ),
@@ -406,7 +409,7 @@ class _PunchLocation extends State<PunchLocation> {
                 child: new Text(
                   "Fetch Location now",
                   style: new TextStyle(
-                      color: Colors.teal, decoration: TextDecoration.underline),
+                      color:appStartColor(), decoration: TextDecoration.underline),
                 ),
                 onPressed: () {
                   sl.startStreaming(5);
@@ -459,11 +462,11 @@ class _PunchLocation extends State<PunchLocation> {
             children: <Widget>[
               Icon(
                 Icons.android,
-                color: Colors.teal,
+                color:appStartColor(),
               ),
               Text(
                 "Under development",
-                style: new TextStyle(fontSize: 30.0, color: Colors.teal),
+                style: new TextStyle(fontSize: 30.0, color:appStartColor()),
               )
             ]),
       ),
@@ -481,11 +484,11 @@ class _PunchLocation extends State<PunchLocation> {
                   children: <Widget>[
                     Icon(
                       Icons.error,
-                      color: Colors.teal,
+                      color: appStartColor(),
                     ),
                     Text(
                       "Poor network connection.",
-                      style: new TextStyle(fontSize: 20.0, color: Colors.teal),
+                      style: new TextStyle(fontSize: 20.0, color:appStartColor()),
                     ),
                   ]),
               SizedBox(height: 5.0),
@@ -493,7 +496,7 @@ class _PunchLocation extends State<PunchLocation> {
                 child: new Text(
                   "Refresh location",
                   style: new TextStyle(
-                      color: Colors.teal, decoration: TextDecoration.underline),
+                      color: appStartColor(), decoration: TextDecoration.underline),
                 ),
                 onPressed: () {
                   sl.startStreaming(5);
@@ -569,7 +572,7 @@ class _PunchLocation extends State<PunchLocation> {
         ),
         SizedBox(height: MediaQuery.of(context).size.height * .04),
         Container(
-            color: Colors.teal.withOpacity(0.1),
+            color:appStartColor().withOpacity(0.1),
             height: MediaQuery.of(context).size.height * .15,
             child:
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -586,13 +589,13 @@ class _PunchLocation extends State<PunchLocation> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    new Text('Location not correct? ',style: TextStyle(color: Colors.teal),),
+                    new Text('Location not correct? ',style: TextStyle(color:appStartColor()),),
                     SizedBox(width: 5.0,),
                     new InkWell(
                       child: new Text(
                         "Refresh location",
                         style: new TextStyle(
-                            color: Colors.teal,
+                            color:appStartColor(),
                             decoration: TextDecoration.underline),
                       ),
                       onTap: () {
@@ -600,7 +603,7 @@ class _PunchLocation extends State<PunchLocation> {
                         sl.startStreaming(5);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
+                          MaterialPageRoute(builder: (context) => PunchLocation()),
                         );
                       },
                     )
@@ -780,3 +783,93 @@ class _PunchLocation extends State<PunchLocation> {
   }
 ////////////////////////////////////////////////////////////
 }
+
+class PunchVisitAppHeader extends StatelessWidget implements PreferredSizeWidget {
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+  PunchVisitAppHeader(profileimage1,showtabbar1,orgname1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    // print("--------->");
+    // print(profileimage);
+    //  print("--------->");
+    //   print(_checkLoadedprofile);
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+      //    print(_checkLoadedprofile);
+    };
+    showtabbar= showtabbar1;
+  }
+  /*void initState() {
+    super.initState();
+ //   initPlatformState();
+  }
+*/
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+                print("ICON PRESSED");
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => PunchLocationSummary()), (Route<dynamic> route) => false,
+                );
+              },),
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(orgname)
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+              //   unselectedLabelColor: Colors.white70,
+              //   indicatorColor: Colors.white,
+              //   icon: Icon(choice.icon),
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
+
+}
+
