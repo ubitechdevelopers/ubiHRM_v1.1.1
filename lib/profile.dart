@@ -691,7 +691,7 @@ var profilepic;
                             return new Center(
                               child: Container(
                                 width: MediaQuery.of(context).size.width*1,
-                                color: Colors.teal.withOpacity(0.1),
+                                color: appStartColor().withOpacity(0.1),
                                 padding:EdgeInsets.only(top:5.0,bottom: 5.0),
                                 child:Text("No Team Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                               ),
@@ -765,7 +765,7 @@ var profilepic;
                           ),
                           shape: new CircleBorder(),
                           elevation: 0.5,
-                          fillColor: Colors.teal[100],
+                          fillColor: appEndColor(),
                           padding: const EdgeInsets.all(1.0),
                         ),
                         Text("Gallery\n")
@@ -785,7 +785,7 @@ var profilepic;
                           ),
                           shape: new CircleBorder(),
                           elevation: 0.5,
-                          fillColor: Colors.teal[100],
+                          fillColor: appEndColor(),
                           padding: const EdgeInsets.all(1.0),
                         ),
                         Text("Camera\n")
@@ -805,7 +805,7 @@ var profilepic;
                           ),
                           shape: new CircleBorder(),
                           elevation: 0.5,
-                          fillColor: Colors.teal[100],
+                          fillColor: appEndColor(),
                           padding: const EdgeInsets.all(1.0),
                         ),
                         Text("Remove\n photo")
@@ -816,7 +816,7 @@ var profilepic;
               SizedBox(height: 20.0,),
               Divider(color: Colors.black,height: 3.0,),
               Container(
-                  color: Colors.teal.withOpacity(0.15),
+                  color: appStartColor().withOpacity(0.15),
                   child:Column(
                     children: <Widget>[
                       Center(

@@ -98,7 +98,6 @@ class _RequestExpenceState extends State<RequestExpence> {
     });
   }
 
-
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
@@ -286,7 +285,7 @@ class _RequestExpenceState extends State<RequestExpence> {
               child: Column(children: <Widget>[
                 SizedBox(height: 10.0),
                 //   mainAxisAlignment: MainAxisAlignment.start,
-                Text(' Expense Request',
+                Text('Expense Request',
                     style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                 new Divider(color: Colors.black54,height: 1.5,),
                 new Expanded(child: ListView(
@@ -843,7 +842,7 @@ class _RequestExpenceState extends State<RequestExpence> {
            )
 
       ),*/
-     ]   );
+           ]);
         }
         else if (snapshot.error != null) {
           return const Text(
@@ -861,15 +860,6 @@ class _RequestExpenceState extends State<RequestExpence> {
       },
     );
   }
-
-
-
-
-
-
-
-
-
 }
 
 

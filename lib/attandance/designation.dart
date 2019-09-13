@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../global.dart';
 import 'drawer.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,7 +60,7 @@ class _Designation extends State<Designation> {
             ),
             leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
               Navigator.pop(context);}),
-            backgroundColor: Colors.teal,
+            backgroundColor:appStartColor(),
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,

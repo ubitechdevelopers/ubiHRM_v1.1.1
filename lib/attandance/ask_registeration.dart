@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart' as globals;
+import '../global.dart';
 import 'askregister.dart';
 import 'package:ubihrm/services/checkLogin.dart';
 import 'package:ubihrm/services/attandance_services.dart';
@@ -66,7 +67,7 @@ class _AskRegisteration extends State<AskRegisteration> {
             );
           },
         ),
-        backgroundColor: Colors.teal,
+        backgroundColor:appStartColor(),
       ),
       body: new SafeArea(
           top: false,
@@ -90,7 +91,7 @@ class _AskRegisteration extends State<AskRegisteration> {
                           new Row(
                             children: <Widget>[
                               new Radio(
-                                activeColor: Colors.teal,
+                                activeColor:appStartColor(),
                                 value: 2,
                                 groupValue: val,
                                 onChanged: (newValue) {
@@ -152,7 +153,7 @@ class _AskRegisteration extends State<AskRegisteration> {
                           new Row(
                             children: <Widget>[
                               new Radio(
-                                activeColor: Colors.teal,
+                                activeColor:appStartColor(),
                                 value: 1,
                                 groupValue: val,
                                 onChanged: (newValue) {

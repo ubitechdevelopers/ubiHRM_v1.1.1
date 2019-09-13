@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:ubihrm/attandance/drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'employee_list.dart';
@@ -112,7 +113,7 @@ class _AddEmployee extends State<AddEmployee> {
            MaterialPageRoute(builder: (context) => TimeoffSummary()),
           );*/
         },),
-        backgroundColor: Colors.teal,
+        backgroundColor:appStartColor(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -211,7 +212,7 @@ class _AddEmployee extends State<AddEmployee> {
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Icon(Icons.android,color: Colors.teal,),Text("Under development",style: new TextStyle(fontSize: 30.0,color: Colors.teal),)
+              Icon(Icons.android,color:appStartColor(),),Text("Under development",style: new TextStyle(fontSize: 30.0,color: Colors.teal),)
             ]),
       ),
     );

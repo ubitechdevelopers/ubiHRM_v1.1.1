@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_html_view/flutter_html_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../global.dart';
 import 'drawer.dart';
 import 'home.dart';
 void main() => runApp(new MyAppPolicy());
@@ -59,7 +60,7 @@ class _MyAppPolicy extends State<MyAppPolicy> {
               MaterialPageRoute(builder: (context) => HomePage()),
             );
           },),
-          backgroundColor: Colors.teal,
+          backgroundColor: appStartColor(),
 
         ),
         endDrawer: new AppDrawer(),

@@ -7,6 +7,7 @@ import 'package:ubihrm/services/attandance_fetch_location.dart';
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../global.dart';
 import 'login.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/attandance_saveimage.dart';
@@ -148,7 +149,7 @@ class _PaymentPageState extends State<PaymentPage> {
         leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
           Navigator.of(context).pop();
         },),
-        backgroundColor: Colors.teal,
+        backgroundColor: appStartColor(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -244,7 +245,7 @@ class _PaymentPageState extends State<PaymentPage> {
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Icon(Icons.android,color: Colors.teal,),Text("Under development",style: new TextStyle(fontSize: 30.0,color: Colors.teal),)
+              Icon(Icons.android,color: appStartColor(),),Text("Under development",style: new TextStyle(fontSize: 30.0,color: appStartColor()),)
             ]),
       ),
     );
@@ -266,7 +267,7 @@ class _PaymentPageState extends State<PaymentPage> {
             child: Column( children: <Widget>[
               SizedBox(height: 20.0),
               Text('Pricing',
-                  style: new TextStyle(fontSize: 22.0, color: Colors.teal)),
+                  style: new TextStyle(fontSize: 22.0, color: appStartColor())),
               new Divider(color: Colors.black54,height: 1.5,),
               new Expanded(child: ListView(
                 padding: EdgeInsets.symmetric(horizontal: 24.0),

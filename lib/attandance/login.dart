@@ -15,6 +15,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
+import '../global.dart';
 import 'home.dart';
 import 'package:ubihrm/model/user.dart';
 import 'package:ubihrm/services/checkloginn.dart';
@@ -198,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       InkWell(
                         child: new Text("Forgot Password?", style: new TextStyle(
-                            color: Colors.teal,
+                            color: appStartColor(),
                             fontWeight: FontWeight.bold,
                             fontSize: 13.0,
                             decoration: TextDecoration.underline),),

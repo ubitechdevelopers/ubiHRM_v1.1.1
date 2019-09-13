@@ -428,7 +428,7 @@ class _MyLeaveState extends State<MyLeave> {
                                             (snapshot.data[index].withdrawlsts && snapshot.data[index].approverstatus.toString() !='Withdrawn' && snapshot.data[index].approverstatus.toString() !="Rejected")?
                                               new Expanded(
                                                 child: Padding(
-                                                  padding: const EdgeInsets.fromLTRB(0.0,3.0,0.0,0.0),
+                                                  padding: const EdgeInsets.fromLTRB(12.0,3.0,0.0,0.0),
                                                   child: Container (
                             //                   color:Colors.yellow,
                                                    height: MediaQuery .of(context).size.height * 0.04,

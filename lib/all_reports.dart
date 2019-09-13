@@ -74,44 +74,59 @@ class _AllReports extends State<AllReports> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
+  Future<bool> sendToHome() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
 
   getmainhomewidget() {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
+    return WillPopScope(
+      onWillPop: ()=> sendToHome(),
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        endDrawer: new AppDrawer(),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
 /*      appBar: GradientAppBar(
 
-        automaticallyImplyLeading: false,
+          automaticallyImplyLeading: false,
 
-        backgroundColorStart: appStartColor(),
-        backgroundColorEnd: appEndColor(),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            new Container(
-                width: 40.0,
-                height: 40.0,
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage('assets/avatar.png'),
-                    )
-                )),
-            Container(
-                padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-            )
-          ],
+          backgroundColorStart: appStartColor(),
+          backgroundColorEnd: appEndColor(),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              new Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        image: AssetImage('assets/avatar.png'),
+                      )
+                  )),
+              Container(
+                  padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
+              )
+            ],
 
-        ),
+          ),
 
-      ),*/
-      bottomNavigationBar:  new HomeNavigation(),
+        ),*/
+        bottomNavigationBar:  new HomeNavigation(),
 
-      body:getReportsWidget(),
+        body:getReportsWidget(),
 
+      ),
     );
   }
 

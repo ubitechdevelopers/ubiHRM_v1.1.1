@@ -154,7 +154,7 @@ class _AppDrawerState extends State<AppDrawer> {
       child:new ListView(
         children: <Widget>[
           new Container(
-            color: Colors.teal,
+            color:appStartColor(),
             height: sstatus==''?160.0:172.0,
             child: new DrawerHeader(
               child: Row(

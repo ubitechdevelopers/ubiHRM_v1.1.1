@@ -550,9 +550,9 @@ class _Settings extends State<Settings> {
           ],
         ),
       ),
-      color: Colors.teal[300],
+      color: appStartColor()[300],
       elevation: 4.0,
-      splashColor: Colors.tealAccent,
+      splashColor: appEndColor(),
       textColor: Colors.white,
       onPressed: () {
         Navigator.push(

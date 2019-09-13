@@ -75,7 +75,7 @@ class _SelfRegister extends State<SelfRegister> {
             MaterialPageRoute(builder: (context) => AskRegisterationPage()),
           );
         },),
-        backgroundColor: Colors.teal,
+        backgroundColor: appStartColor(),
       ),
       body: new SafeArea(
           top: false,

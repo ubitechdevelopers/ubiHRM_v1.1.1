@@ -404,7 +404,7 @@ class _DashboardStatemain extends State<DashboardMain> {
                                     return new Center(
                                       child: Container(
                                         width: MediaQuery.of(context).size.width*1,
-                                        color: Colors.teal.withOpacity(0.1),
+                                        color: appStartColor().withOpacity(0.1),
                                         padding:EdgeInsets.only(top:5.0,bottom: 5.0),
                                         child:Text("No Holidays this month ",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                                       ),

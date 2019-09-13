@@ -319,11 +319,11 @@ class _Flexitime extends State<Flexitime> {
                     SizedBox(width: 20.0,),
                     Icon(
                       Icons.all_inclusive,
-                      color: Colors.teal,
+                      color: appStartColor(),
                     ),
                     Text(
                       " Fetching location, please wait..",
-                      style: new TextStyle(fontSize: 20.0, color: Colors.teal),
+                      style: new TextStyle(fontSize: 20.0, color: appStartColor()),
                     )
                   ]),
               SizedBox(height: 15.0),
@@ -351,7 +351,7 @@ class _Flexitime extends State<Flexitime> {
                 child: new Text(
                   "Fetch Location now",
                   style: new TextStyle(
-                      color: Colors.teal, decoration: TextDecoration.underline),
+                      color: appStartColor(), decoration: TextDecoration.underline),
                 ),
                 onPressed: () {
                   sl.startStreaming(5);
@@ -404,11 +404,11 @@ class _Flexitime extends State<Flexitime> {
             children: <Widget>[
               Icon(
                 Icons.android,
-                color: Colors.teal,
+                color: appStartColor(),
               ),
               Text(
                 "Under development",
-                style: new TextStyle(fontSize: 30.0, color: Colors.teal),
+                style: new TextStyle(fontSize: 30.0, color: appStartColor()),
               )
             ]),
       ),
@@ -426,11 +426,11 @@ class _Flexitime extends State<Flexitime> {
                   children: <Widget>[
                     Icon(
                       Icons.error,
-                      color: Colors.teal,
+                      color: appStartColor(),
                     ),
                     Text(
                       "Poor network connection.",
-                      style: new TextStyle(fontSize: 20.0, color: Colors.teal),
+                      style: new TextStyle(fontSize: 20.0, color: appStartColor()),
                     ),
                   ]),
               SizedBox(height: 5.0),
@@ -438,7 +438,7 @@ class _Flexitime extends State<Flexitime> {
                 child: new Text(
                   "Refresh location",
                   style: new TextStyle(
-                      color: Colors.teal, decoration: TextDecoration.underline),
+                      color: appStartColor(), decoration: TextDecoration.underline),
                 ),
                 onPressed: () {
                   sl.startStreaming(5);
@@ -478,7 +478,7 @@ class _Flexitime extends State<Flexitime> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: MediaQuery.of(context).size.height * .01),
-                Text("Flexi Time", style: new TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold,color: Colors.teal)),
+                Text("Flexi Time", style: new TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold,color: appStartColor())),
                 SizedBox(height: MediaQuery.of(context).size.height * .02),
                 new GestureDetector(
                 onTap: () {
@@ -568,7 +568,7 @@ class _Flexitime extends State<Flexitime> {
         ),
         SizedBox(height: MediaQuery.of(context).size.height * .03),
         Container(
-            color: Colors.teal.withOpacity(0.1),
+            color: appStartColor().withOpacity(0.1),
             height: MediaQuery.of(context).size.height * .15,
             child:
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -585,13 +585,13 @@ class _Flexitime extends State<Flexitime> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    new Text('Location not correct? ',style: TextStyle(color: Colors.teal),),
+                    new Text('Location not correct? ',style: TextStyle(color: appStartColor()),),
                     SizedBox(width: 5.0,),
                     new InkWell(
                       child: new Text(
                         "Refresh location",
                         style: new TextStyle(
-                            color: Colors.teal,
+                            color: appStartColor(),
                             decoration: TextDecoration.underline),
                       ),
                       onTap: () {

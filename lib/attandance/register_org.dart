@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart' as globals;
+import '../global.dart';
 import 'askregister.dart';
 import 'package:ubihrm/services/checkloginn.dart';
 import 'home.dart';
@@ -82,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
               MaterialPageRoute(builder: (context) => AskRegisterationPage()),
             );
           },),
-          backgroundColor: Colors.teal,
+          backgroundColor: appStartColor(),
         ),
       body: new SafeArea(
           top: false,
@@ -96,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: <Widget>[
                   new Text('Register Your Company',
                     textAlign: TextAlign.center,
-                    style: new TextStyle(fontWeight: FontWeight.bold, fontSize:20.0, color: Colors.teal ),
+                    style: new TextStyle(fontWeight: FontWeight.bold, fontSize:20.0, color: appStartColor() ),
                   ),
                   new TextFormField(
                     /*   validator: (value) {

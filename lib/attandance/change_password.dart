@@ -8,6 +8,7 @@ import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import '../global.dart';
 import 'home.dart';
 import 'settings.dart';
 import 'reports.dart';
@@ -91,7 +92,7 @@ class _changePassword extends State<changePassword> {
            MaterialPageRoute(builder: (context) => TimeoffSummary()),
           );*/
         },),
-        backgroundColor: Colors.teal,
+        backgroundColor:appStartColor(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -188,7 +189,7 @@ class _changePassword extends State<changePassword> {
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Icon(Icons.android,color: Colors.teal,),Text("Under development",style: new TextStyle(fontSize: 30.0,color: Colors.teal),)
+              Icon(Icons.android,color:appStartColor(),),Text("Under development",style: new TextStyle(fontSize: 30.0,color:appStartColor()),)
             ]),
       ),
     );

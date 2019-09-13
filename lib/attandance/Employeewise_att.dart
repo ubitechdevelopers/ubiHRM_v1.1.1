@@ -303,7 +303,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                   child:Center(
                                     child: Container(
                                       width: MediaQuery.of(context).size.width*1,
-                                      color: Colors.teal.withOpacity(0.1),
+                                      color: appStartColor().withOpacity(0.1),
                                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
                                       child:Text("No Employees found.",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                     ),
@@ -408,7 +408,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                   child:Center(
                                     child: Container(
                                       width: MediaQuery.of(context).size.width*1,
-                                      color: Colors.teal.withOpacity(0.1),
+                                      color: appStartColor().withOpacity(0.1),
                                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
                                       child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                     ),
@@ -609,7 +609,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                   child:Center(
                                     child: Container(
                                       width: MediaQuery.of(context).size.width*1,
-                                      color: Colors.teal.withOpacity(0.1),
+                                      color: appStartColor().withOpacity(0.1),
                                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
                                       child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                     ),
@@ -804,7 +804,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                   child:Center(
                                     child: Container(
                                       width: MediaQuery.of(context).size.width*1,
-                                      color: Colors.teal.withOpacity(0.1),
+                                      color: appStartColor().withOpacity(0.1),
                                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
                                       child:Text("No Employees found.",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                     ),

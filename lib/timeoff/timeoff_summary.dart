@@ -533,7 +533,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
                                                   (snapshot.data[index].withdrawlsts && snapshot.data[index].ApprovalSts.toString()!='Withdrawn' && snapshot.data[index].ApprovalSts.toString()!="Rejected")?InkWell(
                                                     child: Padding(
-                                                      padding: const EdgeInsets.fromLTRB(0.0,3.0,0.0,0.0),
+                                                      padding: const EdgeInsets.fromLTRB(12.0,3.0,0.0,0.0),
                                                       child: Container(
                                                         height: MediaQuery .of(context).size.height * 0.04,
                                                         margin: EdgeInsets.only(left:52.0),

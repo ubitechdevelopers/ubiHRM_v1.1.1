@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -124,7 +125,7 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
     controller = _scaffoldKey.currentState
         .showBottomSheet<Null>((BuildContext context) {
       return new Container(
-          color: Colors.teal.withOpacity(0.1),
+          color: appStartColor().withOpacity(0.1),
           child: new Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -152,7 +153,7 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
                           ),
                           shape: new CircleBorder(),
                           elevation: 0.5,
-                          fillColor: Colors.teal[100],
+                          fillColor: appEndColor(),
                           padding: const EdgeInsets.all(1.0),
                         ),
                         Text("Gallery\n")
@@ -172,7 +173,7 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
                           ),
                           shape: new CircleBorder(),
                           elevation: 0.5,
-                          fillColor: Colors.teal[100],
+                          fillColor: appEndColor(),
                           padding: const EdgeInsets.all(1.0),
                         ),
                         Text("Camera\n")
@@ -192,7 +193,7 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
                           ),
                           shape: new CircleBorder(),
                           elevation: 0.5,
-                          fillColor: Colors.teal[100],
+                          fillColor: appEndColor(),
                           padding: const EdgeInsets.all(1.0),
                         ),
                         Text("Remove\n photo")
@@ -203,7 +204,7 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
               SizedBox(height: 20.0,),
               Divider(color: Colors.black,height: 3.0,),
               Container(
-                  color: Colors.teal.withOpacity(0.15),
+                  color: appStartColor().withOpacity(0.15),
                   child:Column(
                     children: <Widget>[
                       Center(
@@ -232,7 +233,7 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
         ),
         leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
           Navigator.pop(context);}),
-        backgroundColor: Colors.teal,
+        backgroundColor: appStartColor(),
       ),
       bottomNavigationBar: new HomeNavigation(),
 
@@ -277,7 +278,7 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Icon(Icons.android,color: Colors.teal,),Text("Under development",style: new TextStyle(fontSize: 30.0,color: Colors.teal),)
+              Icon(Icons.android,color: appStartColor(),),Text("Under development",style: new TextStyle(fontSize: 30.0,color: appStartColor()),)
             ]),
       ),
     );
@@ -292,8 +293,8 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Icon(Icons.error,color: Colors.teal,),
-                    Text("Poor network connection.",style: new TextStyle(fontSize: 20.0,color: Colors.teal),),
+                    Icon(Icons.error,color: appStartColor(),),
+                    Text("Poor network connection.",style: new TextStyle(fontSize: 20.0,color: appStartColor()),),
                   ]),
               SizedBox(height: 5.0),
               FlatButton(
@@ -363,7 +364,7 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
                           ),
                           shape: new CircleBorder(),
                           elevation: 0.5,
-                          fillColor: Colors.teal,
+                          fillColor: appStartColor(),
                           padding: const EdgeInsets.all(1.0),
                         ),
                       ),

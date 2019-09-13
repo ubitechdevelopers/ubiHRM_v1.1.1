@@ -1154,8 +1154,8 @@ Future<List<Map<String, String>>> getChartDataToday() async {
       "early": data['early'].toString()
     }
   ];
-  // print('==========');
-  // print(val);
+  print('==========');
+  print(val);
   return val;
 }
 
@@ -1218,15 +1218,18 @@ Future<List<Map<String, String>>> getChartDataLast(dys) async {
   if (dys.toString() == 'l7') {
     final response = await http.get(
         globals.path_ubiattendance + 'getChartDataLast_7?refno=$orgdir&limit=$dys&empid=$empid');
+    print(globals.path_ubiattendance + 'getChartDataLast_7?refno=$orgdir&limit=$dys&empid=$empid');
     final data = json.decode(response.body);
     for (int i = 0; i < data.length; i++)
       val.add({
         "date": data[i]['event'].toString(),
         "total": data[i]['total'].toString()
       });
+    print("---------------------"+val.toString());
   } else if (dys.toString() == 'l30') {
     final response = await http.get(
         globals.path_ubiattendance + 'getChartDataLast_30?refno=$orgdir&limit=$dys&empid=$empid');
+    print(globals.path_ubiattendance + 'getChartDataLast_30?refno=$orgdir&limit=$dys&empid=$empid');
     final data = json.decode(response.body);
     for (int i = 0; i < data.length; i++)
       val.add({
@@ -1260,7 +1263,8 @@ Future<List<EmpList>> getLateEmpDataList(date) async {
       globals.path_ubiattendance + 'getlateComings?refno=$orgid&cdate=$date&empid=$empid');
   List responseJson = json.decode(response.body.toString());
   List<EmpList> list = createListLateComings(responseJson);
-  //print(list);
+  print("----------------");
+  print(list);
   return list;
 }
 

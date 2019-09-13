@@ -382,7 +382,7 @@ class ChoiceCard1 extends StatelessWidget {
                         new Expanded(
                           child: Container(
                             width: MediaQuery.of(context).size.width*0.30,
-                            child:Text('Applied on',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                            child:Text('        Applied on',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                           ), ),
 
                       ],
@@ -461,7 +461,7 @@ class ChoiceCard1 extends StatelessWidget {
                                         child: Column(
                                         crossAxisAlignment: CrossAxisAlignment .center,
                                         children: <Widget>[
-                                         Text("          "+snapshot.data[index].applydate
+                                         Text("                      "+snapshot.data[index].applydate
                                           .toString()),
                                                 ],
                                               )
@@ -577,33 +577,40 @@ class ChoiceCard1 extends StatelessWidget {
                                                         && snapshot.data[index].Psts.toString() == ""  ?
 
                                                     new Expanded(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.fromLTRB(0.0,0.0,16.0,0.0),
+                                                        child: Container(
+                                                          width: MediaQuery.of(context) .size .width * 0.30,
+                                                          //height: MediaQuery.of(context) .size .height * 0.03,
+                                                          //height: 28.0,
+                                                          child: new OutlineButton(
+                                                            onPressed: () {
+                                                              //  confirmApprove(context,snapshot.data[index].Id.toString());
+                                                              if(snapshot.data[index].HRSts.toString()=='1') {
+                                                                showDialog(context: context, child:
+                                                                new AlertDialog(
+                                                                  //title: new Text("Sorry!"),
+                                                                  content: new Text("Kindly approve leave from portal."),
+                                                                )
+                                                                );
+                                                                /*_modalBottomSheetHR(
+                                                                    context, snapshot.data[index].Id.toString(),snapshot.data[index].Ldays.toString(),snapshot.data[index].LeaveTypeId.toString());
+                                 */                             getleavehistory(snapshot.data[index].LeaveTypeId.toString());
+                                                              }else{
+                                                                _modalBottomSheet(
+                                                                    context, snapshot.data[index].Id.toString(), snapshot.data[index].Ldays.toString());
+                                                              }
+                                                            },
+                                                            child: new Icon(
+                                                              Icons.thumb_up,
+                                                              size: 16.0,
+                                                              color:appStartColor(),
 
-                                                      child: Container(
-
-                                                        width: MediaQuery.of(context) .size .width * 0.30,
-                                                        //height: MediaQuery.of(context) .size .height * 0.03,
-                                                        //height: 28.0,
-                                                        child: new OutlineButton(
-                                                          onPressed: () {
-                                                            //  confirmApprove(context,snapshot.data[index].Id.toString());
-                                                            if(snapshot.data[index].HRSts.toString()=='1') {
-                                                              _modalBottomSheetHR(
-                                                                  context, snapshot.data[index].Id.toString(),snapshot.data[index].Ldays.toString(),snapshot.data[index].LeaveTypeId.toString());
-                                                              getleavehistory(snapshot.data[index].LeaveTypeId.toString());
-                                                            }else{
-                                                              _modalBottomSheet(
-                                                                  context, snapshot.data[index].Id.toString(), snapshot.data[index].Ldays.toString());
-                                                            }
-                                                          },
-                                                          child: new Icon(
-                                                            Icons.thumb_up,
-                                                            size: 17.0,
-                                                            color:appStartColor(),
-
+                                                            ),
+                                                            borderSide: BorderSide(color:  appStartColor()),
+                                                            shape: new CircleBorder(),
+                                                            padding:EdgeInsets.all(3.0),
                                                           ),
-                                                          borderSide: BorderSide(color:  appStartColor()),
-                                                          shape: new CircleBorder(),
-                                                          padding:EdgeInsets.all(3.0),
                                                         ),
                                                       ),
                                                     ): Center(),
@@ -709,7 +716,7 @@ class ChoiceCard1 extends StatelessWidget {
 
 
 
-  _modalBottomSheetHR(context,String leaveid,days,leavetypeid) async{
+ /* _modalBottomSheetHR(context,String leaveid,days,leavetypeid) async{
 
     final FocusNode myFocusNodeComment = FocusNode();
     final FocusNode myFocusNodeEntitle = FocusNode();
@@ -846,7 +853,7 @@ class ChoiceCard1 extends StatelessWidget {
 
                                                   ),),
 
-                                                /*  new Expanded(
+                                                *//*  new Expanded(
                                   child:Container(
                                       width: MediaQuery
                                           .of(context)
@@ -876,7 +883,7 @@ class ChoiceCard1 extends StatelessWidget {
                                         ],
                                       )
 
-                                  ),),*/
+                                  ),),*//*
                                                 Divider(color: Colors.black26,),
                                               ],
 
@@ -918,29 +925,29 @@ class ChoiceCard1 extends StatelessWidget {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         fillColor: Colors.white, filled: true,
-                        /* icon: Icon(
+                        *//* icon: Icon(
                           Icons.edit,
                           color: Colors.black,
                           size: 22.0,
-                        ),*/
+                        ),*//*
                         hintText: "Comment",
                         hintStyle: TextStyle(
                             fontFamily: "WorkSansSemiBold", fontSize: 15.0),
-                        /*  suffixIcon: GestureDetector(
+                        *//*  suffixIcon: GestureDetector(
                           //onTap: _toggleLogin,
                           child: Icon(
                             Icons.edit,
                             size: 15.0,
                             color: Colors.black,
                           ),
-                        ),*/
+                        ),*//*
                       ),
 
-                      /*validator: (value) {
+                      *//*validator: (value) {
                             if (value.isEmpty) {
                               return 'Please enter Email or Phone no.';
                             }
-                          },*/
+                          },*//*
                       maxLines: 3,
                     ),
                   ),
@@ -1071,7 +1078,7 @@ class ChoiceCard1 extends StatelessWidget {
                                   shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
                               ),
                               //      height: 20.0,
-/*                              child: RaisedGradientButton(
+*//*                              child: RaisedGradientButton(
                                 onPressed: () async {
                                   if(EntitleController.text==""){
                                     EntitleController.text="0";
@@ -1119,7 +1126,7 @@ class ChoiceCard1 extends StatelessWidget {
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold,
                                     )),
-                              ),*/
+                              ),*//*
                             ),),),
                         new Expanded(
                           child:Container(
@@ -1168,7 +1175,7 @@ class ChoiceCard1 extends StatelessWidget {
                                   },
                                   shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
                               ),
-/*                             child: RaisedGradientButton(
+*//*                             child: RaisedGradientButton(
                                 onPressed: () async
                                 {
                                   //getApprovals(choice.title);
@@ -1208,7 +1215,7 @@ class ChoiceCard1 extends StatelessWidget {
                                         color: Colors.white,
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.bold)),
-                              ),*/
+                              ),*//*
                             ),
                           ),),
                       ]),
@@ -1220,7 +1227,7 @@ class ChoiceCard1 extends StatelessWidget {
         }
     );
   }
-
+*/
 
 
 
@@ -1866,7 +1873,7 @@ print("ff"+sts);
             height: 200.0,
             child: new Container(
               decoration: new BoxDecoration(
-                  color: Colors.teal.withOpacity(0.1),
+                  color: appStartColor().withOpacity(0.1),
                   borderRadius: new BorderRadius.only(
                       topLeft: const Radius.circular(0.0),
                       topRight: const Radius.circular(0.0))),

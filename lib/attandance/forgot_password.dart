@@ -214,7 +214,7 @@ class _ForgotPassword extends State<ForgotPassword> {
                   err==true?Text('Invalid Email/Phone.',style: TextStyle(color: Colors.red,fontSize: 16.0),):Center(),
                   succ==true?Text('Please check your mail for the Password reset link. After you have reset the password, please click below link to login.',style: TextStyle(fontSize: 16.0),):Center(),
                   login==true?InkWell(
-                    child: Text('\nClick here to Login',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0,color: Colors.teal),),
+                    child: Text('\nClick here to Login',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0,color: appStartColor()),),
                     onTap:() async{
                       final prefs = await SharedPreferences.getInstance();
                       prefs.setString('username', username);

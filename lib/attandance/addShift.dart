@@ -8,6 +8,7 @@ import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import '../global.dart';
 import 'home.dart';
 import 'settings.dart';
 import 'shift_list.dart';
@@ -101,7 +102,7 @@ class _addShift extends State<addShift> {
            MaterialPageRoute(builder: (context) => TimeoffSummary()),
           );*/
         },),
-        backgroundColor: Colors.teal,
+        backgroundColor:appStartColor(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -198,7 +199,7 @@ class _addShift extends State<addShift> {
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Icon(Icons.android,color: Colors.teal,),Text("Under development",style: new TextStyle(fontSize: 30.0,color: Colors.teal),)
+              Icon(Icons.android,color:appStartColor(),),Text("Under development",style: new TextStyle(fontSize: 30.0,color:appStartColor()),)
             ]),
       ),
     );
@@ -218,7 +219,7 @@ class _addShift extends State<addShift> {
                 children: <Widget>[
                   SizedBox(height: 20.0),
                   Center(
-                    child:Text("Add Shift",style: new TextStyle(fontSize: 22.0,color: Colors.teal)),
+                    child:Text("Add Shift",style: new TextStyle(fontSize: 22.0,color:appStartColor())),
                   ),
                   SizedBox(height: 30.0),
                   Text('Shift Details',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),),

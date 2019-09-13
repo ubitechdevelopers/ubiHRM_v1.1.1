@@ -512,7 +512,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
             height: 200.0,
             child: new Container(
               decoration: new BoxDecoration(
-                  color: Colors.teal.withOpacity(0.1),
+                  color: appStartColor().withOpacity(0.1),
                   borderRadius: new BorderRadius.only(
                       topLeft: const Radius.circular(0.0),
                       topRight: const Radius.circular(0.0))),
@@ -817,7 +817,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
          //   height: 550.0,
             child: new Container(
               decoration: new BoxDecoration(
-                  color: Colors.teal.withOpacity(0.05),
+                  color: appStartColor().withOpacity(0.05),
                   borderRadius: new BorderRadius.only(
                       topLeft: const Radius.circular(0.0),
                       topRight: const Radius.circular(0.0))),

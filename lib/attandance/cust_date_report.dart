@@ -109,14 +109,14 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                 ), // icon is 48px widget.
                 labelText: 'Select Date',
               ),
-              /*onChanged: (date) {
+              onChanged: (date) {
                 setState(() {
                   if (date != null && date.toString()!='')
                     res = true; //showInSnackBar(date.toString());
                   else
                     res = false;
                 });
-              },*/
+              },
               validator: (date) {
                 if (date == null) {
                   return 'Please select date';
@@ -135,6 +135,8 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                     future: getChartDataCDate(today.text),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
+                        print("--------------->>>>>>>>");
+                        print(today);
                         if (snapshot.data.length > 0) {
                           return new PieOutsideLabelChart.withRandomData(snapshot.data);
                         }
@@ -380,7 +382,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                 child:Center(
                                   child: Container(
                                     width: MediaQuery.of(context).size.width*1,
-                                    color: Colors.teal.withOpacity(0.1),
+                                    color:appStartColor().withOpacity(0.1),
                                     padding:EdgeInsets.only(top:5.0,bottom: 5.0),
                                     child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                   ),
@@ -485,7 +487,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                   child:Center(
                                     child: Container(
                                       width: MediaQuery.of(context).size.width*1,
-                                      color: Colors.teal.withOpacity(0.1),
+                                      color:appStartColor().withOpacity(0.1),
                                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
                                       child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                     ),
@@ -683,7 +685,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                   child:Center(
                                     child: Container(
                                       width: MediaQuery.of(context).size.width*1,
-                                      color: Colors.teal.withOpacity(0.1),
+                                      color:appStartColor().withOpacity(0.1),
                                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
                                       child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                     ),
@@ -878,7 +880,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                   child:Center(
                                     child: Container(
                                       width: MediaQuery.of(context).size.width*1,
-                                      color: Colors.teal.withOpacity(0.1),
+                                      color:appStartColor().withOpacity(0.1),
                                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
                                       child:Text("No Employees found.",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
                                     ),

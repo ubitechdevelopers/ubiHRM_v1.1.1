@@ -11,12 +11,11 @@ class PieOutsideLabelChart extends StatelessWidget {
   }
   static List<charts.Series<LinearSales, String>> _createRandomData(info) {
    // print('------->>>>');
-   // print('------->>>>');
-  //  print(info);
+   //print('------->>>>');
+  //print(info);
     int total=int.parse(info[0]['absent'])+int.parse(info[0]['present']);
     int set=(total/10).round();
     final data = [
-
       new LinearSales('EL', int.parse(info[0]['early'])),
       new LinearSales('P', int.parse(info[0]['present'])),
       new LinearSales('A', int.parse(info[0]['absent'])),

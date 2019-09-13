@@ -134,7 +134,7 @@ class _changePassword extends State<changePassword> {
         child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Icon(Icons.android,color: Colors.teal,),Text("Under development",style: new TextStyle(fontSize: 30.0,color: Colors.teal),)
+              Icon(Icons.android,color: appStartColor(),),Text("Under development",style: new TextStyle(fontSize: 30.0,color: appStartColor()),)
             ]),
       ),
     );
@@ -259,13 +259,6 @@ class _changePassword extends State<changePassword> {
 
                   ButtonBar(
                     children: <Widget>[
-                      FlatButton(
-                        shape: Border.all(color: Colors.black54),
-                        child: Text('CANCEL'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
                       RaisedButton(
                         child: Text('SUBMIT',style: TextStyle(color: Colors.white),),
                         color: Colors.orange[800],
@@ -295,6 +288,13 @@ class _changePassword extends State<changePassword> {
                               });
                             }
                           }
+                        },
+                      ),
+                      FlatButton(
+                        shape: Border.all(color: Colors.black54),
+                        child: Text('CANCEL'),
+                        onPressed: () {
+                          Navigator.pop(context);
                         },
                       ),
                     ],
