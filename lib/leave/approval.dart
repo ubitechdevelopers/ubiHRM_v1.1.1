@@ -382,7 +382,7 @@ class ChoiceCard1 extends StatelessWidget {
                         new Expanded(
                           child: Container(
                             width: MediaQuery.of(context).size.width*0.30,
-                            child:Text('        Applied on',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                            child:Text('  Applied on',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                           ), ),
 
                       ],
@@ -461,7 +461,7 @@ class ChoiceCard1 extends StatelessWidget {
                                         child: Column(
                                         crossAxisAlignment: CrossAxisAlignment .center,
                                         children: <Widget>[
-                                         Text("                      "+snapshot.data[index].applydate
+                                         Text("          "+snapshot.data[index].applydate
                                           .toString()),
                                                 ],
                                               )
@@ -570,15 +570,13 @@ class ChoiceCard1 extends StatelessWidget {
                                                             ],
                                                           ),
                                                         )
-
-
                                                     ),
                                                     snapshot.data[index].Leavests.toString() == 'Pending'
                                                         && snapshot.data[index].Psts.toString() == ""  ?
 
                                                     new Expanded(
                                                       child: Padding(
-                                                        padding: const EdgeInsets.fromLTRB(0.0,0.0,16.0,0.0),
+                                                        padding: const EdgeInsets.fromLTRB(0.0,0.0,20.0,0.0),
                                                         child: Container(
                                                           width: MediaQuery.of(context) .size .width * 0.30,
                                                           //height: MediaQuery.of(context) .size .height * 0.03,
@@ -605,7 +603,6 @@ class ChoiceCard1 extends StatelessWidget {
                                                               Icons.thumb_up,
                                                               size: 16.0,
                                                               color:appStartColor(),
-
                                                             ),
                                                             borderSide: BorderSide(color:  appStartColor()),
                                                             shape: new CircleBorder(),

@@ -628,8 +628,6 @@ class _RequestLeaveState extends State<RequestLeave> {
               child: InputDecorator(
                 decoration: InputDecoration(
                   labelText: 'Leave Type',
-
-
                   // icon is 48px widget.
 
                 ),

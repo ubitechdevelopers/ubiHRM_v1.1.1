@@ -127,7 +127,7 @@ class _ForgotPassword extends State<ForgotPassword> {
                               focusNode: __username,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
-                                  labelText: 'Email/Phone',
+                                  labelText: 'Email',
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.all(0.0),
                                     child: Icon(
@@ -139,7 +139,7 @@ class _ForgotPassword extends State<ForgotPassword> {
                               validator: (value) {
                                 if (value.isEmpty || value==null) {
 //                                  FocusScope.of(context).requestFocus(__oldPass);
-                                  return 'Please enter valid Email or Phone';
+                                  return 'Please enter valid Email';
                                 }
                               },
 

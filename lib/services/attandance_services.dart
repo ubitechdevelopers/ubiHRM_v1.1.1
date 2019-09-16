@@ -1050,11 +1050,13 @@ Future<List<Attn>> getAttnDataLast(days, listType) async {
   // print(globals.path + 'getAttnDataLast?refno=$orgdir&datafor=$listType&limit=$days');
   final response = await http.get(
       globals.path_ubiattendance + 'getAttnDataLast?refno=$orgdir&datafor=$listType&limit=$days&empid=$empid');
+  //print("hello");
+  //print(globals.path_ubiattendance + 'getAttnDataLast?refno=$orgdir&datafor=$listType&limit=$days&empid=$empid');
   final res = json.decode(response.body);
   //print("-------------->"+res);
   List responseJson;
   responseJson = res['elist'];
-  print("-------------->"+responseJson.toString());
+ // print("-------------->"+responseJson.toString());
 
   /* if (listType == 'present')
     responseJson = res['elist'];

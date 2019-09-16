@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ubihrm/services/services.dart';
 import '../drawer.dart';
 import '../graphs.dart';
@@ -16,6 +17,7 @@ import '../profile.dart';
 //import 'bottom_navigationbar.dart';
 import '../b_navigationbar.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:date_format/date_format.dart';
 
 
 class MyLeave extends StatefulWidget {
@@ -34,13 +36,13 @@ class _MyLeaveState extends State<MyLeave> {
   bool _checkwithdrawnleave = false;
   var PerLeave;
   var PerApprovalLeave;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-
 
 
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
   @override
+
   void initState() {
     super.initState();
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
@@ -79,6 +81,7 @@ class _MyLeaveState extends State<MyLeave> {
       });
     });
   }
+
   void showInSnackBar(String value) {
     FocusScope.of(context).requestFocus(new FocusNode());
     _scaffoldKey.currentState?.removeCurrentSnackBar();
@@ -397,6 +400,7 @@ class _MyLeaveState extends State<MyLeave> {
                             return new ListView.builder(
                                 scrollDirection: Axis.vertical,
                                 itemCount: snapshot.data.length,
+
                                 itemBuilder: (BuildContext context, int index) {
                                   return new Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -428,7 +432,7 @@ class _MyLeaveState extends State<MyLeave> {
                                             (snapshot.data[index].withdrawlsts && snapshot.data[index].approverstatus.toString() !='Withdrawn' && snapshot.data[index].approverstatus.toString() !="Rejected")?
                                               new Expanded(
                                                 child: Padding(
-                                                  padding: const EdgeInsets.fromLTRB(12.0,3.0,0.0,0.0),
+                                                  padding: const EdgeInsets.fromLTRB(4.0,3.0,0.0,0.0),
                                                   child: Container (
                             //                   color:Colors.yellow,
                                                    height: MediaQuery .of(context).size.height * 0.04,
@@ -1009,5 +1013,6 @@ class LeaveAppHeader extends StatelessWidget implements PreferredSizeWidget {
   }
   @override
   Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
+
 
 }

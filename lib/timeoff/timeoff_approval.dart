@@ -278,7 +278,7 @@ class ChoiceCard extends StatelessWidget {
                           child: Container(
 
                             width: MediaQuery.of(context).size.width*0.30,
-                            child:Text('                Applied on',style: TextStyle(color:  appStartColor(), fontWeight:FontWeight.bold,fontSize: 16.0),textAlign: TextAlign.center,),
+                            child:Text('      Applied on',style: TextStyle(color:  appStartColor(), fontWeight:FontWeight.bold,fontSize: 16.0),textAlign: TextAlign.center,),
                           ), ),
 
                       ],
@@ -352,7 +352,7 @@ class ChoiceCard extends StatelessWidget {
                                                           child: Column(
                                                             crossAxisAlignment: CrossAxisAlignment .center,
                                                             children: <Widget>[
-                                                              Text("                    "+snapshot.data[index].applydate
+                                                              Text("          "+snapshot.data[index].applydate
                                                                   .toString()),
                                                             ],
                                                           )
@@ -399,7 +399,7 @@ class ChoiceCard extends StatelessWidget {
 
                                                    new Expanded(
                                                    child: Padding(
-                                                     padding: const EdgeInsets.fromLTRB(0.0,0.0,16.0,0.0),
+                                                     padding: const EdgeInsets.fromLTRB(0.0,0.0,20.0,0.0),
                                                      child: Container(
                                                       width: MediaQuery.of(context) .size .width * 0.30, height: 28.0,
                                                        child: new OutlineButton(

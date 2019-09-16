@@ -186,8 +186,8 @@ Future<List<Map>> getleavetype(int label) async{
   //print("leavetype11----------->");
   // print(response);
   List data = json.decode(response.data.toString());
-  // print("leavetype----------->");
-//  print(data);
+  print("leavetype----------->");
+print(data);
   List<Map> leavetype = createList(data,label);
   return leavetype;
 }
