@@ -352,9 +352,11 @@ class _DashboardStatemain extends State<DashboardMain> {
                       SizedBox(height: height),
                       new Expanded(
                         child:   Container(
-
+                           //height: MediaQuery.of(context).size.height*.55,
+                          height: insideContainerHeight,
+                            width: MediaQuery.of(context).size.width*.99,
                           //   height: insideContainerHeight,
-                            width: 400.0,
+                            //width: 400.0,
                             //  padding: new EdgeInsets.all(2.0),
                             //color: Colors.green[50],
 

@@ -588,7 +588,7 @@ class ChoiceCard1 extends StatelessWidget {
                                                                 showDialog(context: context, child:
                                                                 new AlertDialog(
                                                                   //title: new Text("Sorry!"),
-                                                                  content: new Text("Kindly approve leave from portal."),
+                                                                  content: new Text("Kindly check from the portal."),
                                                                 )
                                                                 );
                                                                 /*_modalBottomSheetHR(

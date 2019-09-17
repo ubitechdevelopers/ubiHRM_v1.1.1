@@ -399,7 +399,7 @@ class ChoiceCard extends StatelessWidget {
 
                                                    new Expanded(
                                                    child: Padding(
-                                                     padding: const EdgeInsets.fromLTRB(0.0,0.0,20.0,0.0),
+                                                     padding: const EdgeInsets.fromLTRB(0.0,0.0,0.0,0.0),
                                                      child: Container(
                                                       width: MediaQuery.of(context) .size .width * 0.30, height: 28.0,
                                                        child: new OutlineButton(

@@ -597,7 +597,8 @@ Future<List<Holi>> getHolidays() async {
  // print(path + "getHolidays" + empid);
   Response<String> response =
   await dio.post(path+"getHolidays?&employeeid="+empid+"&organization="+orgdir);
- // print("1777.---------  "+response.toString());
+  print(await dio.post(path+"getHolidays?&employeeid="+empid+"&organization="+orgdir));
+  print("1777.---------  "+response.toString());
   List responseJson = json.decode(response.data.toString());
  // print("1.---------  "+responseJson.toString());
   List<Holi> holilist = createHolidayList(responseJson);

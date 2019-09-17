@@ -265,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           if(_isButtonDisabled)
                             return null;
 
-                          if(_name.text=='') {
+                          if(_name.text.trim()=='') {
                             showDialog(context: context, child:
                             new AlertDialog(
                               title: new Text("Alert"),
@@ -273,7 +273,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ));
                             FocusScope.of(context).requestFocus(__name);
                           }
-                          else if(_cname.text=='') {
+                          else if(_cname.text.trim()=='') {
                             showDialog(context: context, child:
                             new AlertDialog(
                               title: new Text("Alert"),
@@ -289,7 +289,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ));
                             FocusScope.of(context).requestFocus(__email);
                           }*/
-                          else if(!(validateEmail(_email.text))) {
+                          else if(!(validateEmail(_email.text.trim()))) {
                             //print((validateEmail(_email.text)).toString());
 
                             showDialog(context: context, child:
@@ -332,14 +332,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             });
                             var url = globals.path+"register_org";
                             http.post(url, body: {
-                              "org_name": _name.text,
-                              "name": _cname.text,
-                              "phone": _phone.text,
-                              "email": _email.text,
+                              "org_name": _name.text.trim(),
+                              "name": _cname.text.trim(),
+                              "phone": _phone.text.trim(),
+                              "email": _email.text.trim(),
                               "password": _pass.text,
                               "country": _country,
                               "countrycode": '',
-                              "address": _city.text
+                              "address": _city.text.trim()
                             }) .then((response) {
                               if (response.statusCode == 200) {
 

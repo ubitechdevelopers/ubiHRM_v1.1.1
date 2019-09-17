@@ -90,13 +90,13 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
         print(profile);
         profileimage = new NetworkImage(profile);
         //print("1-"+profile);
-        profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
           if (mounted) {
             setState(() {
               _checkLoaded = false;
             });
           }
-        });
+        }));
         //print("2-"+_checkLoaded.toString());
         act1=act;
         department = profileMap["dept"]??'';

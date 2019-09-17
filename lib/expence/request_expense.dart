@@ -554,10 +554,18 @@ class _RequestExpenceState extends State<RequestExpence> {
                               color: Colors.orange[800],
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
-
-                                  saveExpense (_dateController.text, headtype, _descController.text.trim(), amountController.text.trim() ,_image,context);
+                                  if (headtype == '0') {
+                                    showDialog(context: context, child:
+                                    new AlertDialog(
+                                      //title: new Text("Sorry!"),
+                                      content: new Text(
+                                          "Please select headtype!"),
+                                    )
+                                    );
+                                  }else {
+                                    saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
+                                  }
                                 }
-
                                 //tempvar="1";
 
                                 // requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,
@@ -714,18 +722,30 @@ class _RequestExpenceState extends State<RequestExpence> {
           return true;
         }
         else if((response1.toString().contains("false1"))){
-          print('------false1  in img');
-          showInSnackBar("Expence already applied on this date");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyExpence()),
+          );
+          showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text('Expense already applied on this date.'),
+          ));
+
+          //print('------false1  in img');
+          //showInSnackBar("Expence already applied on this date");
         }
         else {
         //  print('------false  in img');
-          showInSnackBar("There is some problem while applying for Expense.");
+          showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text('There is some problem while applying for Expense.'),
+          ));
+          //showInSnackBar("There is some problem while applying for Expense.");
           return false;
         }
       }
 
     else{
-
       FormData formData = new FormData.from({
           "empid": empid,
           "orgid": orgid,
@@ -751,7 +771,6 @@ class _RequestExpenceState extends State<RequestExpence> {
           print(e.toString());
           print('------------*');
         }
-
         /*getTempImageDirectory();*/
         Map expensemap = json.decode(response1.data);
       //  print('------------1*');

@@ -534,7 +534,7 @@ class _LoginPageState extends State<LoginPage>
                               onPressed: () {
                                 if (loginEmailController.text.trim().isNotEmpty && loginPasswordController.text.trim().isNotEmpty) {
 
-                                  checklogin(loginEmailController.text,loginPasswordController.text,);
+                                  checklogin(loginEmailController.text.trim(),loginPasswordController.text.trim(),);
                                 }else{
 
                                   if(loginEmailController.text.trim().isEmpty) {
@@ -946,7 +946,7 @@ fontSize: 14.0),
          // child:
           Padding(
             padding: EdgeInsets.only(
-                top: 10.0, bottom: 0.0, left: 22.0, right: 0.0),
+                top: 10.0, bottom: 0.0, left: 25.0, right: 0.0),
                         child: TextField(
                           focusNode: myFocusNodecity,
                           controller: signupcityController,
@@ -985,7 +985,7 @@ fontSize: 14.0),
                       width: 220,
               margin: EdgeInsets.only(top: 400.0),
                       padding: EdgeInsets.only(
-                          top: 0.0, bottom: 0.0, left: 70.0, right: 10.0),
+                          top: 0.0, bottom: 0.0, left: 45.0, right: 20.0),
                 decoration: new BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   /* boxShadow: <BoxShadow>[
@@ -1037,7 +1037,7 @@ fontSize: 14.0),
                       if(_isButtonDisabled)
                         return null;
                       //  showInSnackBar("SignUp button pressed");
-                      if(signupNameController.text=='') {
+                      if(signupNameController.text.trim()=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
                          // title: new Text("Alert"),
@@ -1045,7 +1045,7 @@ fontSize: 14.0),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodeName);
                       }
-                      else if(CPNController.text=='') {
+                      else if(CPNController.text.trim()=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
                          // title: new Text("Alert"),
@@ -1053,7 +1053,7 @@ fontSize: 14.0),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodeCPN);
                       }
-                      else if(signupEmailController.text=='') {
+                      else if(signupEmailController.text.trim()=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
                          // title: new Text("Alert"),
@@ -1069,7 +1069,7 @@ fontSize: 14.0),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodePassword);
                       }*/
-                      else if(signupPhoneController.text=='') {
+                      else if(signupPhoneController.text.trim()=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
                           //title: new Text("Alert"),
@@ -1085,7 +1085,7 @@ fontSize: 14.0),
                         ));
                         FocusScope.of(context).requestFocus(myFocusNodePassword);
                       }*/
-                      else if(signupcityController.text=='') {
+                      else if(signupcityController.text.trim()=='') {
                         showDialog(context: context, child:
                         new AlertDialog(
                           //title: new Text("Alert"),
@@ -1117,12 +1117,12 @@ fontSize: 14.0),
                         var url = path+"register_org";
 
                         http.post(url, body: {
-                          "org_name": signupNameController.text,
-                          "name": CPNController.text,
-                          "phone": signupPhoneController.text,
-                          "email": signupEmailController.text,
+                          "org_name": signupNameController.text.trim(),
+                          "name": CPNController.text.trim(),
+                          "phone": signupPhoneController.text.trim(),
+                          "email": signupEmailController.text.trim(),
                           //"password": signupPasswordController.text,
-                          "city": signupcityController.text,
+                          "city": signupcityController.text.trim(),
                           "country": _country,
                           "countrycode": '',
                           "address": _country,
@@ -1241,7 +1241,7 @@ fontSize: 14.0),
                     Expanded(child:  Container(
                   margin: EdgeInsets.only(top: 400.0),
                  padding: EdgeInsets.only(
-                     top: 0.0, bottom: 0.0, left: 0.0, right: 20.0),
+                     top: 0.0, bottom: 0.0, left: 0.0, right: 45.0),
                     decoration: new BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                       /*  boxShadow: <BoxShadow>[
@@ -1268,7 +1268,7 @@ fontSize: 14.0),
                     ),
 
                      child: ButtonTheme(
-                          minWidth: 200.0,
+                          minWidth: 100.0,
                          // height: 100.0,
                     child: new OutlineButton(
 

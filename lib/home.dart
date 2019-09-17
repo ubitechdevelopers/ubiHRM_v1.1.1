@@ -26,6 +26,7 @@ import 'dashboard.dart';
 import 'attandance/flexi_time.dart';
 //import 'settings.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 
