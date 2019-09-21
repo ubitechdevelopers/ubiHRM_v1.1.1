@@ -657,8 +657,7 @@ class _PunchLocation extends State<PunchLocation> {
   saveVisitImage() async {
     sl.startStreaming(5);
     client = _clientname.text.trim();
-    MarkVisit mk = new MarkVisit(
-        empid,client, streamlocationaddr, orgdir, lat, long);
+    MarkVisit mk = new MarkVisit(empid, client, streamlocationaddr, orgdir, lat, long);
     /* mk1 = mk;*/
 
     var connectivityResult = await (new Connectivity().checkConnectivity());

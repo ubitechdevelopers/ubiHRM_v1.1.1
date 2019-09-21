@@ -159,8 +159,8 @@ class _HomePageStatemain extends State<HomePageMain> {
 
       await getReportingTeam(emp);
 
-      Loc lock = new Loc();
-      location_addr = await lock.initPlatformState();
+      /*Loc lock = new Loc();
+      location_addr = await lock.initPlatformState();*/
 
       showtabbar = false;
       profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);

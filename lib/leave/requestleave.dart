@@ -295,19 +295,19 @@ class _RequestLeaveState extends State<RequestLeave> {
               color: Colors.white,
             ),
             child:Form(
-    key: _formKey,
-    child: SafeArea(
-    child: Column( children: <Widget>[
-    SizedBox(height: 10.0),
-    Text('Request Leave',
-    style: new TextStyle(fontSize: 22.0, color: appStartColor())),
-    new Divider(color: Colors.black54,height: 1.5,),
-    new Expanded(child: ListView(
-    //padding: EdgeInsets.symmetric(horizontal: 15.0),
-    children: <Widget>[
-    Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: <Widget>[
+              key: _formKey,
+              child: SafeArea(
+              child: Column( children: <Widget>[
+              SizedBox(height: 10.0),
+              Text('Request Leave',
+              style: new TextStyle(fontSize: 22.0, color: appStartColor())),
+              new Divider(color: Colors.black54,height: 1.5,),
+              new Expanded(child: ListView(
+              //padding: EdgeInsets.symmetric(horizontal: 15.0),
+              children: <Widget>[
+              Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
 
 
       getLeaveType_DD(),
@@ -329,7 +329,7 @@ class _RequestLeaveState extends State<RequestLeave> {
         onShowPicker: (context, currentValue) {
           return showDatePicker(
               context: context,
-              firstDate: DateTime(1900),
+              firstDate: DateTime.now().subtract(Duration(days: 8)),
               initialDate: currentValue ?? DateTime.now(),
               lastDate: DateTime(2100));
         },
@@ -447,9 +447,10 @@ class _RequestLeaveState extends State<RequestLeave> {
        onShowPicker: (context, currentValue) {
          return showDatePicker(
              context: context,
-             firstDate: DateTime(1900),
+             firstDate: DateTime.now().subtract(Duration(days: 8)),
              initialDate: currentValue ?? DateTime.now(),
              lastDate: DateTime(2100));
+
        },
     decoration: InputDecoration(
     prefixIcon: Padding(

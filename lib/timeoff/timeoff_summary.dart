@@ -117,13 +117,13 @@ class _TimeoffSummary extends State<TimeoffSummary> {
     //    act= lid!='0'?'PunchOut':'PunchIn';
         showtabbar=false;
         profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-        profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
           if (mounted) {
             setState(() {
               _checkLoaded = false;
             });
           }
-        });
+        }));
    //     latit = prefs.getString('latit') ?? '';
   //      longi = prefs.getString('longi') ?? '';
   //      shiftId = prefs.getString('shiftId') ?? "";
@@ -534,11 +534,11 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                                   (snapshot.data[index].withdrawlsts && snapshot.data[index].ApprovalSts.toString()!='Withdrawn' && snapshot.data[index].ApprovalSts.toString()!="Rejected")?
                                                   InkWell(
                                                     child: Padding(
-                                                      padding: const EdgeInsets.fromLTRB(12.0,3.0,0.0,0.0),
+                                                      padding: const EdgeInsets.fromLTRB(0.0,3.0,12.0,0.0),
                                                       child: Container(
                                                         height: MediaQuery .of(context).size.height * 0.04,
-                                                        margin: EdgeInsets.only(left:52.0),
-                                                        padding: EdgeInsets.only(left:52.0),
+                                                        margin: EdgeInsets.only(left:50.0),
+                                                        padding: EdgeInsets.only(left:50.0),
                                                         width: MediaQuery .of(context).size.width * 0.50,
                                                         child: new OutlineButton(
                                                         child:new Icon(Icons.replay, size: 16.0,color:appStartColor(), ),

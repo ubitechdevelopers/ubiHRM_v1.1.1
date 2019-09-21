@@ -461,7 +461,7 @@ class ChoiceCard1 extends StatelessWidget {
                                         child: Column(
                                         crossAxisAlignment: CrossAxisAlignment .center,
                                         children: <Widget>[
-                                         Text("          "+snapshot.data[index].applydate
+                                         Text("            "+snapshot.data[index].applydate
                                           .toString()),
                                                 ],
                                               )
@@ -576,7 +576,7 @@ class ChoiceCard1 extends StatelessWidget {
 
                                                     new Expanded(
                                                       child: Padding(
-                                                        padding: const EdgeInsets.fromLTRB(0.0,0.0,20.0,0.0),
+                                                        padding: const EdgeInsets.fromLTRB(0.0,0.0,10.0,0.0),
                                                         child: Container(
                                                           width: MediaQuery.of(context) .size .width * 0.30,
                                                           //height: MediaQuery.of(context) .size .height * 0.03,

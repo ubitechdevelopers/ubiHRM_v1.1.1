@@ -54,6 +54,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
   final _comments=TextEditingController();
   String latit,longi,location_addr1;
   Timer timer;
+
   @override
   void initState() {
 
@@ -86,7 +87,6 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
     });
 
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-
     //      print("ABCDEFGHI-"+profile);
     profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
@@ -225,7 +225,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
           new RaisedButton(
               child: const Text('PUNCH',style: TextStyle(color: Colors.white),),
               color: Colors.orange[800],
-              onPressed: () {
+              onPressed: () async{
                 sl.startStreaming(5);
                 SaveImage saveImage = new SaveImage();
                /* print('****************************>>');
@@ -238,16 +238,26 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                 print('22222222222222');
                 print('<<****************************');*/
                 Navigator.of(context, rootNavigator: true).pop();
-                saveImage.saveVisitOut(empid,streamlocationaddr.toString(),visit_id.toString(),latit,longi,_comments.text,orgid).then((res){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PunchLocationSummary()),
-                  );
-                  showDialog(context: context, child:
-                  new AlertDialog(
-                    content: new Text("Visit punched successfully!"),
-                  )
-                  );
+                saveImage.saveVisitOut(empid,streamlocationaddr.toString(),visit_id.toString(),latit,longi,_comments.text,orgid).then((res){print("------------------------------>>>>");
+                 print(res);
+                 if(res){
+                   Navigator.push(
+                     context,
+                     MaterialPageRoute(builder: (context) => PunchLocationSummary()),
+                   );
+                   showDialog(context: context, child:
+                   new AlertDialog(
+                     content: new Text("Visit punched successfully!"),
+                   )
+                   );
+                 }else{
+                   _comments.text='';
+                   showDialog(context: context, child:
+                   new AlertDialog(
+                     content: new Text("Problem while punching visit, try again."),
+                   )
+                   );
+                 }
                 }).catchError((ett){
                   showInSnackBar('Unable to punch visit');
                 });

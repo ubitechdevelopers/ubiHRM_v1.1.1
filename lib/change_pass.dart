@@ -236,7 +236,7 @@ class _changePassword extends State<changePassword> {
                                 if (value.isEmpty || value==null || value.length<6 ) {
                                   __oldPass.notifyListeners();
                                   //                                 FocusScope.of(context).requestFocus(__newPass);
-                                  return 'Password must be at least 8 characters';
+                                  return 'Password must be at least 6 characters';
                                 }
                               },
                             ),

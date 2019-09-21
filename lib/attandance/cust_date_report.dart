@@ -219,7 +219,8 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.40,
+                    Container(
+                      height: MediaQuery.of(context).size.height*.40,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------

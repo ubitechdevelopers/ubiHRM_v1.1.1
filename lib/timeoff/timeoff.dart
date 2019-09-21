@@ -293,7 +293,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
                         onShowPicker: (context, currentValue) {
                           return showDatePicker(
                               context: context,
-                              firstDate: DateTime(1900),
+                              firstDate: DateTime.now().subtract(Duration(days: 1)),
                               initialDate: currentValue ?? DateTime.now(),
                               lastDate: DateTime(2100));
                         },

@@ -377,11 +377,16 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                                     child: new OutlineButton(
                                                       onPressed: () {
                                                         if(snapshot.data[index].HRSts.toString()=='1') {
-                                                          _modalBottomSheetHR(
+                                                          /*_modalBottomSheetHR(
                                                               context, snapshot.data[index].Id.toString(),snapshot.data[index].Ldays.toString(),snapshot.data[index].LeaveTypeId.toString());
                                                           getleavehistory(snapshot.data[index].LeaveTypeId.toString());
-
-
+*/
+                                                          showDialog(context: context, child:
+                                                          new AlertDialog(
+                                                            //title: new Text("Sorry!"),
+                                                            content: new Text("Kindly check from the portal."),
+                                                          )
+                                                          );
                                                         }else{
                                                           _modalBottomSheet(
                                                               context, snapshot.data[index].Id.toString(), snapshot.data[index].Ldays.toString());

@@ -375,6 +375,7 @@ class _HomePageState extends State<HomePage> {
   refreshPageWidgit() {
 
     if (location_addr1 != "PermissionStatus.deniedNeverAsk") {
+      print("--------------------SHAIFALI--------------------------");
       return new Container(
         child: Center(
           child: new Column(
@@ -449,7 +450,8 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else {
-      return Column(
+      print("--------------------SHAIFALI1111111111111111--------------------------");
+    return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
         Text(
@@ -472,7 +474,8 @@ class _HomePageState extends State<HomePage> {
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+              Text("Loading...")
+              //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
             ]),
       ),
     );
@@ -810,6 +813,7 @@ class _HomePageState extends State<HomePage> {
           child: Text('Open Settings'),
           onPressed: () {
             PermissionHandler().openAppSettings();
+            print("hello-------------");
           },
         ),
       ]);
