@@ -53,7 +53,7 @@ class _FlexiReport extends State<FlexiReport> {
       orgName = prefs.getString('orgname') ?? '';
       admin_sts = prefs.getString('sstatus') ?? '0';
       profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
-      profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __)
+      profileimage.resolve(new ImageConfiguration()).addListener((_, __)
       {
         if (mounted) {
           setState(()
@@ -61,7 +61,7 @@ class _FlexiReport extends State<FlexiReport> {
             _checkLoaded = false;
           });
         }
-      }));
+      });
       showtabbar=false;
     });
   }

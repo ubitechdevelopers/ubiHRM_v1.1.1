@@ -142,13 +142,13 @@ class _DashboardStatemain extends State<DashboardMain> {
       // profileimage = new NetworkImage(pic);
 //print("ABCDEFGHI");
 //print(profileimage);
-      profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
+      profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
         if (mounted) {
           setState(() {
             _checkLoadedprofile = false;
           });
         }
-      }));
+      });
       return mainScafoldWidget();
     }else{
       return new LoginPage();

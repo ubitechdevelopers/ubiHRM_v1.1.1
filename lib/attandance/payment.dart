@@ -106,13 +106,13 @@ class _PaymentPageState extends State<PaymentPage> {
 
         profileimage = new NetworkImage(profile);
         print("1-"+profile);
-        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
+        profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
           if (mounted) {
             setState(() {
               _checkLoaded = false;
             });
           }
-        }));
+        });
         print("2-"+_checkLoaded.toString());
         latit = prefs.getString('latit') ?? '';
         longi = prefs.getString('longi') ?? '';

@@ -19,7 +19,7 @@ import 'settings.dart';
 import '../services/attandance_saveimage.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'teampunchlocatio_summary.dart';
-import 'Image_view.dart';
+import 'image_view.dart';
 
 //import 'package:intl/intl.dart';
 
