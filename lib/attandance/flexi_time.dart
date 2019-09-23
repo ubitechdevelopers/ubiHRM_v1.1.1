@@ -226,13 +226,13 @@ class _Flexitime extends State<Flexitime> {
         profile = prefs.getString('profile') ?? '';
         profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
         // //print("1-"+profile);
-        profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
           if (mounted) {
             setState(() {
               _checkLoaded = false;
             });
           }
-        });
+        }));
         showtabbar=false;
         // //print("2-"+_checkLoaded.toString());
         latit = prefs.getString('latit') ?? '';

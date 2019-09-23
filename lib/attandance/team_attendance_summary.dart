@@ -74,13 +74,13 @@ class _MyTeamAtt extends State<MyTeamAtt> {
     // //print("1-"+profile);
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
 
-    profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+    profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
           _checkLoaded = false;
         });
       }
-    });
+    }));
     showtabbar=false;
     setState(() {
       fname = prefs.getString('fname') ?? '';

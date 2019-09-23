@@ -581,7 +581,8 @@ var profilepic;
                                   Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
                                     width: 100.0,),
                                     //),
-                                  Text(globalcontactusinfomap["Email"]),
+                                  //Text(globalcontactusinfomap["Email"]),
+                                  Text(globalcompanyinfomap["CompanyEmail"])
                                 ],),
                            /*     SizedBox(height: 10.0,),
                                 Row(children: <Widget>[

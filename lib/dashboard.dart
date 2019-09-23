@@ -339,7 +339,8 @@ class _DashboardStatemain extends State<DashboardMain> {
                 Row(children: <Widget>[
                   SizedBox(width: 20.0,),
 
-                  Text("Monthly Holidays ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
+                 // Text("Monthly Holidays ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
+                  Text("Upcoming Holidays",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ]
                 ),
                 Divider(height: 10.0,),

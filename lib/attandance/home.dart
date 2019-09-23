@@ -474,8 +474,8 @@ class _HomePageState extends State<HomePage> {
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Text("Loading...")
-              //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+              //Text("Loading...")
+              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
             ]),
       ),
     );

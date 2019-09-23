@@ -67,14 +67,14 @@ class _RequestLeaveState extends State<RequestLeave> {
     super.initState();
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     showtabbar=false;
-  /*  profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+  /*  profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
           _checkLoadedprofile = false;
         });
 
       }
-    });*/
+    }));*/
     initPlatformState();
     getOrgName();
   }

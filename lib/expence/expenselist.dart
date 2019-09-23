@@ -486,7 +486,7 @@ class _MyExpenceState extends State<MyExpence> {
                                                       children: <Widget>[
                                                         new SizedBox(width: 5.0,),
                                                         new Text(
-                                                         snapshot.data[index].amt.toString()+ "  "+snapshot.data[index].currency.toString(),textAlign: TextAlign.right,
+                                                         snapshot.data[index].amt.toString()+" "+snapshot.data[index].currency.toString(),textAlign: TextAlign.right,
 
                                                          //   snapshot.data[index].amt.toString() ,textAlign: TextAlign.right,
 
