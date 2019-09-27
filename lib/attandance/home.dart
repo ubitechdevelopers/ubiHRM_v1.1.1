@@ -374,8 +374,8 @@ class _HomePageState extends State<HomePage> {
 
   refreshPageWidgit() {
 
-    if (location_addr1 != "PermissionStatus.deniedNeverAsk") {
-      print("--------------------SHAIFALI--------------------------");
+    if (location_addr1 != "PermissionStatus.granted"||location_addr1 != "PermissionStatus.diabled") {
+
       return new Container(
         child: Center(
           child: new Column(
@@ -450,7 +450,6 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else {
-      print("--------------------SHAIFALI1111111111111111--------------------------");
     return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

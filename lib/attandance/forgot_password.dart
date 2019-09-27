@@ -152,13 +152,6 @@ class _ForgotPassword extends State<ForgotPassword> {
 
                   succ==false?ButtonBar(
                     children: <Widget>[
-                      FlatButton(
-                        shape: Border.all(color: Colors.black54),
-                        child: Text('CANCEL'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
                       RaisedButton(
                         child: _isButtonDisabled==false?Text('SUBMIT',style: TextStyle(color: Colors.white),):Text('WAIT...',style: TextStyle(color: Colors.white),),
                         color: Colors.orangeAccent,
@@ -207,6 +200,13 @@ class _ForgotPassword extends State<ForgotPassword> {
                               });
                             }
                           }
+                        },
+                      ),
+                      FlatButton(
+                        shape: Border.all(color: Colors.black54),
+                        child: Text('CANCEL'),
+                        onPressed: () {
+                          Navigator.pop(context);
                         },
                       ),
                     ],

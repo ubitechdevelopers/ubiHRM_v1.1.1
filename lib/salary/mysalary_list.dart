@@ -119,13 +119,13 @@ class _SalarySummary extends State<SalarySummary> {
     //    act= lid!='0'?'PunchOut':'PunchIn';
         showtabbar=false;
         profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-        profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __){
           if (mounted) {
             setState(() {
               _checkLoaded = false;
             });
           }
-        });
+        }));
    //     latit = prefs.getString('latit') ?? '';
   //      longi = prefs.getString('longi') ?? '';
   //      shiftId = prefs.getString('shiftId') ?? "";

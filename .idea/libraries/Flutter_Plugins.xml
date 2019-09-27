@@ -2,6 +2,8 @@
   <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
     <CLASSES>
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-0.4.1" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/camera-0.5.4+2" />
+      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-5.1.6" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/launch_review-1.0.1" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.3.2" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.3" />
@@ -12,8 +14,6 @@
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/share-0.5.3" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/location-2.3.5" />
       <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-3.2.2" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/camera-0.5.4+2" />
-      <root url="file://C:/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-5.1.6" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
