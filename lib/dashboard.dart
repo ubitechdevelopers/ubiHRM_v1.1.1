@@ -252,7 +252,6 @@ class _DashboardStatemain extends State<DashboardMain> {
             child: ListView(
 
               children: <Widget>[
-
                 overtime!=null?Divider(height: 10.0,):undertime!=null?Divider(height: 10.0,):Center(),
                 SizedBox(height: 20.0,),
                 overtime!=null?getimg():undertime!=null?getimg1():Center(),
@@ -326,7 +325,6 @@ class _DashboardStatemain extends State<DashboardMain> {
                           }
                           return new Center( child: Text("No data found"), );
                         }
-
                         return new Center( child: Text("No data found"), );
                       }
                   ),
@@ -574,7 +572,7 @@ class _DashboardStatemain extends State<DashboardMain> {
           child: new
 
           Text(
-            "Undertime \n     "+undertime,
+            "Undertime \n    "+undertime,
             style: TextStyle(
                 fontSize: 16.0,
                 color: undertime!=''? Colors.redAccent:appStartColor()),

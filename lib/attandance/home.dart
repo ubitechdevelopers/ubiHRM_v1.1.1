@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
-//import 'package:simple_permissions/simple_permissions.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../profile.dart';
@@ -14,21 +13,14 @@ import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/attandance_saveimage.dart';
 import 'package:ubihrm/model/timeinout.dart';
 import 'attendance_summary.dart';
-import 'punchlocation_summary.dart';
-import 'flexi_time.dart';
-import 'TimeOut_option.dart';
-import 'TimeIn_cont.dart';
-import 'punchlocation.dart';
 import '../drawer.dart';
 import 'package:ubihrm/services/services.dart';
-import '../leave/myleave.dart';
 import 'package:ubihrm/services/attandance_newservices.dart';
 import '../global.dart';
 import 'dart:async';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:ubihrm/b_navigationbar.dart';
-import 'team_attendance_summary.dart';
 import '../home.dart';
 
 
@@ -329,7 +321,7 @@ class _HomePageState extends State<HomePage> {
           ),*/
           bottomNavigationBar:new HomeNavigation(),
        // endDrawer: new AppDrawer(),
-        body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
+        body: (act1 == '') ? Center(child: refreshPageWidgit()) : checkalreadylogin(),
         //bottomSheet: getQuickLinksWidget(),
 
 
@@ -373,9 +365,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   refreshPageWidgit() {
-
-    if (location_addr1 != "PermissionStatus.granted"||location_addr1 != "PermissionStatus.diabled") {
-
+    if (location_addr1 != "PermissionStatus.granted"||location_addr1 == "PermissionStatus.disabled") {
       return new Container(
         child: Center(
           child: new Column(
@@ -438,6 +428,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onPressed: () {
                   sl.startStreaming(5);
+                  print("shaifali-----------");
                   startTimer();
                   Navigator.push(
                     context,
@@ -895,9 +886,9 @@ class _HomePageState extends State<HomePage> {
     }
       try {
         issave = await saveImage.saveTimeInOutImagePicker(mk);
-       print('------------------>');
-       print(issave);
-       print('------------------>');
+       //print('------------------>');
+       //print(issave);
+       //print('------------------>');
         if (issave) {
           showDialog(context: context, child:
           new AlertDialog(

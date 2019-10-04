@@ -45,16 +45,14 @@ requestLeave(Leave leave) async{
     });
 
     Response response1 = await dio.post(path_hrm_india+"reqForLeave", data: formData);
-    print("------------------------");
-    print(path_hrm_india+"reqForLeave");
-    print("xxxxxxxxxx"+response1.toString());
-  //  print("******************");
-  //  print(response1.statusCode);
-    // final leaveMap = json.decode(response1.toString());
+    //print("------------------------");
+    //print(path_hrm_india+"reqForLeave");
+    //print("xxxxxxxxxx"+response1.toString());
+    //print("******************");
+    //print(response1.statusCode);
+    //final leaveMap = json.decode(response1.toString());
     final leaveMap = response1.data.toString();
     // print("-------ddddddddd"+leaveMap["status"]);
-
-
     // if (response1.statusCode == 200) {
     // print("yyyyyyyyy"+leaveMap);
     //  print("yyyyyyyyy"+response1.toString());
@@ -75,7 +73,7 @@ requestLeave(Leave leave) async{
       return "alreadyApply";
     }
     else {
-      // print("true---" + response1.data.toString());
+      //print("true---" + response1.data.toString());
       return "true";
     }
   }
@@ -184,11 +182,13 @@ Future<List<Map>> getleavetype(int label) async{
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
+  //print("leavetype----------->");
+  //print(path + "getEmployeeAllLeaveType?orgid=$orgdir&eid=$empid");
   final response = await dio.post(path + "getEmployeeAllLeaveType?orgid=$orgdir&eid=$empid");
   //print("leavetype11----------->");
   // print(response);
   List data = json.decode(response.data.toString());
-  print("leavetype----------->");
+
 print(data);
   List<Map> leavetype = createList(data,label);
   return leavetype;
@@ -235,7 +235,7 @@ List<Map> createsubstituteempList(List data,int label) {
   // print(data);
   for (int i = 0; i < data.length; i++) {
     //  if(data[i]["archive"].toString()=='1') {
-    // print("kkkkkkk"+data[i]["name"].toString());
+    //print("kkkkkkk"+data[i]["name"].toString());
     Map tos={"Name":data[i]["name"].toString(),"Id":data[i]["id"].toString()};
     list.add(tos);
 

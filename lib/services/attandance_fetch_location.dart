@@ -25,9 +25,9 @@ class Loc{
       // setState to update our non-existent appearance.
       PermissionStatus permission = await PermissionHandler().checkPermissionStatus(this.permission);
       //bool res = await PermissionHandler().shouldShowRequestPermissionRationale(PermissionGroup.contacts);
-    //  print("deeksha");
+      print("deeksha");
       print(permission);
-  //    print("deeksha");
+      //print("deeksha");
 
       if (permission.toString()=='PermissionStatus.granted') {
         return fetchlocation();

@@ -7,12 +7,9 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'login.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/attandance_saveimage.dart';
 import 'package:ubihrm/model/timeinout.dart';
-//import 'attendance_summary.dart';
-//import 'punchlocation.dart';
 import '../drawer.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -802,11 +799,21 @@ class _RequestExpenceState extends State<RequestExpence> {
         return true;
       }
       else if((response1.toString().contains("false1"))){
-        showInSnackBar("Expence already applied on this date");
+        showDialog(context: context, child:
+        new AlertDialog(
+          content: new Text('Expense already applied on this date.'),
+        )
+        );
+        //showInSnackBar("Expence already applied on this date");
       }
       else {
      //   print('------false');
-        showInSnackBar("There is some problem while applying for Expense.");
+        showDialog(context: context, child:
+        new AlertDialog(
+          content: new Text("There is some problem while applying for Expense."),
+        )
+        );
+        //showInSnackBar("There is some problem while applying for Expense.");
         return false;
       }
 

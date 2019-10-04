@@ -478,8 +478,8 @@ class StreamLocation{
           _currentLocation = result;
           list.add(result);
           getAddress(list[list.length - 1]);
-          //print("counter"+counter.toString());
-          //print("List length  ->>>>>> "+list.length.toString());
+          print("counter"+counter.toString());
+          print("List length  ->>>>>> "+list.length.toString());
           if(counter>listlength) {
             list.removeAt(0);
             stopstreamingstatus = true;
@@ -513,8 +513,6 @@ class StreamLocation{
 
     }
   }
-
-
 }
 
 

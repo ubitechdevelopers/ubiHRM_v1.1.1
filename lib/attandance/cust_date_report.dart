@@ -135,8 +135,8 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                     future: getChartDataCDate(today.text),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        print("--------------->>>>>>>>");
-                        print(today);
+                        //print("--------------->>>>>>>>");
+                       // print(today);
                         if (snapshot.data.length > 0) {
                           return new PieOutsideLabelChart.withRandomData(snapshot.data);
                         }

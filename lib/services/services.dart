@@ -176,24 +176,26 @@ getovertime(Employee emp) async{
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
   try {
-    FormData formData = new FormData.from({
+    /*FormData formData = new FormData.from({
       "employeeid": emp.employeeid,
       "organization": emp.organization
-    });
+    });*/
 
     Response<String> response =
-    await dio.post(path + "getovertime", data: formData);
-    // print(response.toString());
+    await dio.post(path + "getovertime?employeeid=$empid&organization=$orgdir");
+    print("result");
+    print(path + "getovertime?employeeid=$empid&organization=$orgdir");
     Map responseJson = json.decode(response.data.toString());
-    /*print('------------->');
+    print('------------->');
     print(responseJson['utime']);
-    print(responseJson['otime']);*/
+    print(responseJson['otime']);
 
-      overtime = responseJson['otime'];
-    print(overtime);
+    overtime = responseJson['otime'];
+    print("OVERTIME---"+overtime.toString());
 
-   undertime = responseJson['utime'];
-    print(undertime);
+    undertime = responseJson['utime'];
+    print("UNDERTIME---"+undertime.toString());
+
     if(responseJson['utime']==null){
       undertime ='00:00';
     }
@@ -456,7 +458,7 @@ Future<List<Map<String, String>>> getChartDataYes() async {
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
-
+  print(path+"getLeaveChartData?refno=$organization&eid=$empid");
   final response = await dio.post(
       path+"getLeaveChartData?refno=$organization&eid=$empid"
   );

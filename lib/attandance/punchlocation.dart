@@ -338,7 +338,7 @@ class _PunchLocation extends State<PunchLocation> {
           ),
 
           endDrawer: new AppDrawer(),*/
-          body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
+          body: (act1 == '') ? Center(child: refreshPageWidgit()) : checkalreadylogin(),
         ));
   }
 
@@ -365,7 +365,7 @@ class _PunchLocation extends State<PunchLocation> {
   }
 
   refreshPageWidgit() {
-    if (location_addr1 != "PermissionStatus.deniedNeverAsk") {
+    if (location_addr1 != "PermissionStatus.granted" || location_addr1 == "PermissionStatus.disabled") {
       return new Container(
         child: Center(
           child: new Column(

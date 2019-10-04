@@ -476,9 +476,9 @@ class SaveImage{
               .length - 1];
           String lat = _currentLocation.latitude.toString();
           String long = _currentLocation.longitude.toString();
-    /*print('-------------------------------');
-        print("****** empid "+empid+"-->  orgid"+refid+" *********");
-        print('-------------------------------');*/
+          /*print('-------------------------------');
+          print("****** empid "+empid+"-->  orgid"+refid+" *********");
+          print('-------------------------------');*/
           FormData formData = new FormData.from({
             "empid": empid,
             "visit_id": visit_id,
@@ -490,6 +490,7 @@ class SaveImage{
             "file": new UploadFileInfo(imagei, "image.png"),
           });
           print("5");
+
           Response<String> response1;
           try {
             print('------------visit out----11');

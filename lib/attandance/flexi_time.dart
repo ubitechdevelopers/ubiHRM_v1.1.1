@@ -281,7 +281,7 @@ class _Flexitime extends State<Flexitime> {
           bottomNavigationBar:new HomeNavigation(),
 
         //  endDrawer: new AppDrawer(),
-          body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
+          body: (act1 == '') ? Center(child: refreshPageWidgit()) : checkalreadylogin(),
         ));
   }
 
@@ -307,7 +307,7 @@ class _Flexitime extends State<Flexitime> {
   }
 
   refreshPageWidgit() {
-    if (location_addr1 != "PermissionStatus.deniedNeverAsk") {
+    if (location_addr1 != "PermissionStatus.granted" || location_addr1 == "PermissionStatus.disabled") {
       return new Container(
         child: Center(
           child: new Column(

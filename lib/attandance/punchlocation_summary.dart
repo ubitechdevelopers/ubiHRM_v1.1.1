@@ -238,8 +238,9 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                 print('22222222222222');
                 print('<<****************************');*/
                 Navigator.of(context, rootNavigator: true).pop();
-                saveImage.saveVisitOut(empid,streamlocationaddr.toString(),visit_id.toString(),latit,longi,_comments.text,orgid).then((res){print("------------------------------>>>>");
-                 print(res);
+                saveImage.saveVisitOut(empid,streamlocationaddr.toString(),visit_id.toString(),latit,longi,_comments.text,orgid).then((res){
+                  print("------------------------------>>>>");
+                  print(res);
                  if(res){
                    Navigator.push(
                      context,

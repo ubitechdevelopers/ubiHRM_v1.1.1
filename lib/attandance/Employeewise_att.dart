@@ -878,8 +878,8 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                         value: map["Id"].toString(),
                         child: new SizedBox(
                             width: 200.0,
-                            child: map["Code"]!=''?new Text(map["Name"]+' ('+map["Code"]+')'):
-                              new Text(map["Name"],)),
+                            child: map["Code"]!=''&&map["Code"]!='null'?new Text(map["Name"]+' ('+map["Code"]+')'): new Text(map["Name"],)
+                        ),
                       );
                     }).toList(),
 

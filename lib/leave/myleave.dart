@@ -146,13 +146,6 @@ class _MyLeaveState extends State<MyLeave> {
       title: new Text("Withdraw Leave?"),
       content:  ButtonBar(
         children: <Widget>[
-          FlatButton(
-            shape: Border.all(),
-            child: Text('CANCEL'),
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-            },
-          ),
           RaisedButton(
             child: Text('Withdraw',style: TextStyle(color: Colors.white),),
             color: Colors.orange[800],
@@ -162,7 +155,13 @@ class _MyLeaveState extends State<MyLeave> {
               });
               Navigator.of(context, rootNavigator: true).pop();
               withdrawlLeave(leaveid);
-
+            },
+          ),
+          FlatButton(
+            shape: Border.all(),
+            child: Text('CANCEL'),
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
             },
           ),
         ],

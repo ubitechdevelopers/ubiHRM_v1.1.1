@@ -182,6 +182,14 @@ class _TimeoffSummary extends State<TimeoffSummary> {
       title: new Text("Withdraw TimeOff?",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18.0),),
       content:  ButtonBar(
         children: <Widget>[
+          RaisedButton(
+            child: Text('Withdraw',style: TextStyle(color: Colors.white),),
+            color: Colors.orange[800],
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              withdrawlTimeOff(timeoffid);
+            },
+          ),
           FlatButton(
             child: Text('CANCEL'),
             shape: Border.all(color: Colors.black54),
@@ -190,14 +198,6 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                 _isButtonDisabled=false;
               });
               Navigator.of(context, rootNavigator: true).pop();
-            },
-          ),
-          RaisedButton(
-            child: Text('Withdraw',style: TextStyle(color: Colors.white),),
-            color: Colors.orange[800],
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-              withdrawlTimeOff(timeoffid);
             },
           ),
         ],

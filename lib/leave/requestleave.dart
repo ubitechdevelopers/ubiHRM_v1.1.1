@@ -147,7 +147,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     String orgid = prefs.getString("organization")??"";
     Leave leave =new Leave(uid: uid, leavefrom: leavefrom, leaveto: leaveto, orgid: orgid, reason: reason, leavetypeid: leavetype, leavetypefrom: leavetypefrom, leavetypeto: leavetypeto, halfdayfromtype: halfdayfromtype, halfdaytotype: halfdaytotype, substituteemp: substituteemp);
     var islogin1 = await requestLeave(leave);
-    print("---ss>"+islogin1);
+    //print("---ss>"+islogin1);
     if(islogin1=="true"){
       //showInSnackBar("Leave has been applied successfully.");
       Navigator.pushAndRemoveUntil(
