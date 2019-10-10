@@ -130,7 +130,7 @@ class _EmployeeList extends State<EmployeeList> {
                 SizedBox(height: 8.0),
                 Center(
                   child: Text('Employees',
-                    style: new TextStyle(fontSize: 22.0, color: Colors.orangeAccent,),),
+                    style: new TextStyle(fontSize: 22.0, color: Colors.orange[800],),),
                 ),
                 Divider(height: 10.0,),
                 SizedBox(height: 2.0),
@@ -143,19 +143,19 @@ class _EmployeeList extends State<EmployeeList> {
                     children: <Widget>[
                       Container(
                         width: MediaQuery.of(context).size.width*0.30,
-                        child: Text('Employees', style: TextStyle(color: Colors.orange),textAlign: TextAlign.left,),
+                        child: Text('Employees', style: TextStyle(color: Colors.orange[800]),textAlign: TextAlign.left,),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width*0.22,
-                        child: Text('Department', style: TextStyle(color: Colors.orange),textAlign: TextAlign.left,),
+                        child: Text('Department', style: TextStyle(color: Colors.orange[800]),textAlign: TextAlign.left,),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width*0.22,
-                        child: Text('Designation', style: TextStyle( color: Colors.orange),textAlign: TextAlign.left),
+                        child: Text('Designation', style: TextStyle( color: Colors.orange[800]),textAlign: TextAlign.left),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width*0.16,
-                        child: Text('Status', style: TextStyle(color: Colors.orange),textAlign: TextAlign.left),
+                        child: Text('Status', style: TextStyle(color: Colors.orange[800]),textAlign: TextAlign.left),
                       ),
 
                     ],
@@ -229,7 +229,7 @@ class _EmployeeList extends State<EmployeeList> {
                               ),
                               new Container(
                                 width: MediaQuery.of(context).size.width*0.16,
-                                child: new Text(snapshot.data[index].Status.toString(),style: TextStyle(color: snapshot.data[index].Status.toString()!='Active'?Colors.deepOrange:Colors.green),),
+                                child: new Text(snapshot.data[index].Status.toString(),style: TextStyle(color: snapshot.data[index].Status.toString()!='Active'?Colors.orange[800]:Colors.green),),
                               ),
                             ],
                           ),

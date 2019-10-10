@@ -14,6 +14,9 @@ class Loc{
   Location _location = new Location();
   String error;
   PermissionGroup permission;
+
+  var result;
+  
   @override
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -24,14 +27,20 @@ class Loc{
       // message was in flight, we want to discard the reply rather than calling
       // setState to update our non-existent appearance.
       PermissionStatus permission = await PermissionHandler().checkPermissionStatus(this.permission);
-      //bool res = await PermissionHandler().shouldShowRequestPermissionRationale(PermissionGroup.contacts);
+      /*bool res = await PermissionHandler().shouldShowRequestPermissionRationale(this.permission);
+      print("shaifali");
+      print(res);*/
       print("deeksha");
       print(permission);
       //print("deeksha");
 
       if (permission.toString()=='PermissionStatus.granted') {
+        print("sohan");
         return fetchlocation();
-      } else {
+      }/*else if(!res){
+        return "PermissionStatus.deniedNeverAsk";
+      }*/else {
+        print("sohan-------------->>>");
         return requestPermission();
       }
     }catch(e){
@@ -55,24 +64,42 @@ class Loc{
       return requestPermission();
     }
   }*/
+  loginrequestPermission() async {
+    PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.location);
+    print("prakarsh@@@@@@@@@@@@");
+    print(permission);
+    if(permission.toString()=='PermissionStatus.granted'){
+      print("prakarsh------------>>>");
+      return;
+    }else{
+      print("prakarsh");
+      final permissions = await PermissionHandler().requestPermissions([PermissionGroup.location]);
+      return;
+    }
+  }
 
   requestPermission() async {
     final permissions = await PermissionHandler().requestPermissions([this.permission]);
+    print("Shaifali***************");
+    print(permissions);
+    bool isShown = await PermissionHandler().shouldShowRequestPermissionRationale(this.permission);
+    print("shaifali---------->>>>>");
+    print(isShown);
     PermissionStatus permission = await PermissionHandler().checkPermissionStatus(this.permission);
-    //ServiceStatus serviceStatus = await PermissionHandler().checkServiceStatus(this.permission);
+    print("Shaifali+++++++++++++++");
+    print(permission);
 
     //print("permission status is " + res.toString());
     /*print('location permission....');
     print(permissions);
     print(permission);
     print('location permission....');*/
-    if(permission.toString()=="PermissionStatus.granted"){
+    if (permission.toString() == "PermissionStatus.granted" || permission.toString() == "PermissionStatus.disabled") {
       return fetchlocation();
-    }else if(permission.toString()=="PermissionStatus.denied"){
-      //bool opensett = await SimplePermissions.openSettings();
-      //print("this is open settings "+ opensett.toString());
+    } else if (!isShown) {
+      print("Shaifali Rathore");
       return "PermissionStatus.deniedNeverAsk";
-    }else{
+    } else {
       return requestPermission();
     }
   }
@@ -87,12 +114,14 @@ class Loc{
     print("permission is " + permission.toString());
     return permission.toString();
   }
+
   fetchlatilongi() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       LocationData location;
       // Platform messages may fail, so we use a try/catch PlatformException.
       try {
+        print("Ruchi=================");
         location = await _location.getLocation();
         error = null;
         return location;
@@ -100,9 +129,9 @@ class Loc{
         if (e.code == 'PERMISSION_DENIED') {
           error = 'Permission denied';
         } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-          error =
-          'Permission denied - please ask the user to enable it from the app settings';
+          error = 'Permission denied - please ask the user to enable it from the app settings';
         }
+        print("Hellllllllllllllllllllo");
         location = null;
         return location;
       }
@@ -125,6 +154,7 @@ class Loc{
       var first = addresses.first;
       return "${first.featureName} : ${first.addressLine}";
     }catch(e){
+      print("HIIIIIIIIIIIIIIIIIIIIIIII");
       print(e.toString());
       return null;
     }

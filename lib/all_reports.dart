@@ -193,7 +193,7 @@ class _AllReports extends State<AllReports> {
             RaisedButton(
               child: Text(
                 'Pay Now', style: TextStyle(color: Colors.white,fontSize: 13.0),),
-              color: Colors.orangeAccent,
+              color: Colors.orange[800],
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).pop();
                 /*       Navigator.push(

@@ -131,7 +131,7 @@ class _Department extends State<Department> {
                 SizedBox(height: 8.0),
                 Center(
                   child: Text('Departments',
-                    style: new TextStyle(fontSize: 22.0, color: Colors.orangeAccent,),),
+                    style: new TextStyle(fontSize: 22.0, color: Colors.orange[800],),),
                 ),
                 Divider(height: 10.0,),
                 SizedBox(height: 2.0),
@@ -142,9 +142,9 @@ class _Department extends State<Department> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text('Departments', style: TextStyle(
-                          color: Colors.orange),),
+                          color: Colors.orange[800]),),
                       Text('Status', style: TextStyle(
-                          color: Colors.orange),),
+                          color: Colors.orange[800]),),
                     ],
                   ),
                 ),
@@ -215,7 +215,7 @@ class _Department extends State<Department> {
                         // color: Colors.amber.shade400,
                       //  padding: EdgeInsets.only(top:7.0,bottom: 7.0),
                         alignment: FractionalOffset.center,
-                        child: new Text(snapshot.data[index].status.toString(),style: TextStyle(color: snapshot.data[index].status.toString()!='Active'?Colors.deepOrange:Colors.green),),
+                        child: new Text(snapshot.data[index].status.toString(),style: TextStyle(color: snapshot.data[index].status.toString()!='Active'?Colors.orange[800]:Colors.green),),
                       ),
                     ],
                   ),
@@ -287,8 +287,8 @@ class _Department extends State<Department> {
         ),
         actions: <Widget>[
           new FlatButton(
-              shape: Border.all(color: Colors.black54),
-              child: const Text('CANCEL',style: TextStyle(color: Colors.black),),
+              shape: Border.all(color: Colors.orange[800]),
+              child: const Text('CANCEL',style: TextStyle(color: Colors.black87),),
               onPressed: () {
                       dept.text='';
                       _sts='Active';
@@ -296,7 +296,7 @@ class _Department extends State<Department> {
                       Navigator.of(context, rootNavigator: true).pop('dialog');
               }),
           new RaisedButton(
-              color: Colors.orangeAccent,
+              color: Colors.orange[800],
               child: (_isButtonDisabled)?Text('WAIT...'):Text('SAVE',style: TextStyle(color: Colors.white),),
               onPressed: ()
               {
@@ -400,13 +400,13 @@ class _Department extends State<Department> {
         ),
         actions: <Widget>[
           new FlatButton(
-		  shape: Border.all(color: Colors.black54),
-              child: const Text('CANCEL',style: TextStyle(color: Colors.black),),
+		  shape: Border.all(color: Colors.orange[800]),
+              child: const Text('CANCEL',style: TextStyle(color: Colors.black87),),
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).pop('dialog');
               }),
           new RaisedButton(
-              color: Colors.orangeAccent,
+              color: Colors.orange[800],
               child: const Text('UPDATE',style: TextStyle(color: Colors.white),),
               onPressed: ()
               {

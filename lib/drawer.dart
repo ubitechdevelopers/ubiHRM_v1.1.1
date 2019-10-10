@@ -161,7 +161,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     height: 30.0,
                     child:RaisedButton(
                       child: Row(children:<Widget>[Text("Buy Now")]),
-                      color: Colors.orangeAccent,
+                      color: Colors.orange[800],
                       onPressed: (){
 
                       },

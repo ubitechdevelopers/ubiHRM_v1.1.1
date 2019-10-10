@@ -319,10 +319,10 @@ class _HomePageState extends State<HomePage> {
               BottomNavigationBarItem(
                 icon: new Icon(
                   Icons.home,
-                  color: Colors.orangeAccent,
+                  color: Colors.orange,
                 ),
                 title: new Text('Home',
-                    style: TextStyle(color: Colors.orangeAccent)),
+                    style: TextStyle(color: Colors.orange)),
               ),
               BottomNavigationBarItem(
                   icon: Icon(
@@ -1000,7 +1000,7 @@ class _HomePageState extends State<HomePage> {
       return RaisedButton(
         child: Text('TIME IN',
             style: new TextStyle(fontSize: 22.0, color: Colors.white)),
-        color: Colors.orangeAccent,
+        color: Colors.orange[800],
         onPressed: () {
           // //print("Time out button pressed");
           saveImage();
@@ -1011,7 +1011,7 @@ class _HomePageState extends State<HomePage> {
       return RaisedButton(
         child: Text('TIME OUT',
             style: new TextStyle(fontSize: 22.0, color: Colors.white)),
-        color: Colors.orangeAccent,
+        color: Colors.orange[800],
         onPressed: () {
           // //print("Time out button pressed");
           saveImage();
@@ -1170,7 +1170,7 @@ class _HomePageState extends State<HomePage> {
                                       color: Colors.white,
                                     ),
                                   ),
-                                  color: Colors.orangeAccent,
+                                  color: Colors.orange[800],
                                   onPressed: () {
                                     Navigator.of(context, rootNavigator: true).pop();
                                     resendVarification();

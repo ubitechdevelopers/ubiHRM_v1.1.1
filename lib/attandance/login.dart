@@ -149,8 +149,8 @@ class _LoginPageState extends State<LoginPage> {
                       ButtonBar(
                         children: <Widget>[
                           FlatButton(
-                            shape: Border.all(color: Colors.black54),
-                            child: Text('CANCEL'),
+                            shape: Border.all(color: Colors.orange),
+                            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -162,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                             minWidth: MediaQuery.of(context).size.width*0.25,
                             child:RaisedButton(
                               child: Text('LOGIN',style: TextStyle(color: Colors.white),),
-                              color: Colors.orangeAccent,
+                              color: Colors.orange,
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
                                   login(_usernameController.text,_passwordController.text,context);

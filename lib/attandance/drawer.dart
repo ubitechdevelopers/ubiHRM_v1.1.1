@@ -99,7 +99,7 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
             RaisedButton(
               child: Text('Pay Now', style: TextStyle(color: Colors.white),),
-              color: Colors.orangeAccent,
+              color: Colors.orange,
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).pop();
                 Navigator.push(
@@ -132,7 +132,7 @@ class _AppDrawerState extends State<AppDrawer> {
               RaisedButton(
                 child: Text(
                   'Login Now', style: TextStyle(color: Colors.white,fontSize: 13.0),),
-                color: Colors.orangeAccent,
+                color: Colors.orange,
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).pop();
                   launchMap("https://ubiattendance.ubihrm.com/");
@@ -188,7 +188,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     ),
                     shape: new CircleBorder(),
                     elevation: 0.5,
-                    fillColor: Colors.orangeAccent,
+                    fillColor: Colors.orange,
                     padding: const EdgeInsets.all(1.0),
                   ),
                 ),
@@ -209,7 +209,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     height: 30.0,
                     child:RaisedButton(
                       child: Row(children:<Widget>[Text("Buy Now")]),
-                      color: Colors.orangeAccent,
+                      color: Colors.orange,
                       onPressed: (){
                         Navigator.push(
                         context,

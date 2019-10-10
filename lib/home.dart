@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:simple_permissions/simple_permissions.dart';
 import 'drawer.dart';
-import 'piegraph.dart';
-import 'graphs.dart';
 import 'global.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'b_navigationbar.dart';
@@ -18,13 +15,11 @@ import 'dart:async';
 import 'profile.dart';
 import 'attandance/home.dart';
 import 'all_reports.dart';
-import 'appbar.dart';
 import 'services/attandance_fetch_location.dart';
 import 'salary/mysalary_list.dart';
 import 'package:intl/intl.dart';
 import 'dashboard.dart';
 import 'attandance/flexi_time.dart';
-//import 'settings.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -75,7 +70,10 @@ class _HomePageStatemain extends State<HomePageMain> {
   }
 
   initPlatformState() async {
+
+
     final prefs = await SharedPreferences.getInstance();
+
 
     /*empid = prefs.getString('employeeid')??"";
     organization =prefs.getString('organization')??"";
@@ -145,7 +143,11 @@ class _HomePageStatemain extends State<HomePageMain> {
       await getAllPermission(emp);
       await getProfileInfo(emp);
       await getfiscalyear(emp);
-      await getovertime(emp);
+      //await getovertime(emp);
+
+      Loc lock = new Loc();
+      location_addr = await lock.loginrequestPermission();
+      print(location_addr);
 
       perEmployeeLeave = getModulePermission("18", "view");
       //print(perEmployeeLeave);
@@ -158,9 +160,6 @@ class _HomePageStatemain extends State<HomePageMain> {
       perPunchLocation = getModulePermission("305", "view");
 
       await getReportingTeam(emp);
-
-      Loc lock = new Loc();
-      location_addr = await lock.initPlatformState();
 
       showtabbar = false;
       profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);

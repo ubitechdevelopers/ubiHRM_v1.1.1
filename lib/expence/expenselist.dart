@@ -142,8 +142,8 @@ class _MyExpenceState extends State<MyExpence> {
       content:  ButtonBar(
         children: <Widget>[
           FlatButton(
-            shape: Border.all(),
-            child: Text('CANCEL'),
+            shape: Border.all(color: Colors.orange[800]),
+            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
             },

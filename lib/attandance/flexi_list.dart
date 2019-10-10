@@ -57,13 +57,13 @@ class _FlexiList extends State<FlexiList> {
       profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
 
       //      print("ABCDEFGHI-"+profile);
-      profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+      profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
         if (mounted) {
           setState(() {
             _checkLoaded = false;
           });
         }
-      });
+      }));
       showtabbar=false;
 
     });

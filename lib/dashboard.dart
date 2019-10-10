@@ -18,7 +18,7 @@ import 'profile.dart';
 import 'attandance/home.dart';
 import 'all_reports.dart';
 import 'appbar.dart';
-import 'services/attandance_fetch_location.dart';
+//import 'services/attandance_fetch_location.dart';
 import 'salary/mysalary_list.dart';
 import 'package:intl/intl.dart';
 import 'settings.dart';
@@ -132,8 +132,8 @@ class _DashboardStatemain extends State<DashboardMain> {
       perFlexi= getModulePermission("448","view");
       await getReportingTeam(emp);
 
-      Loc lock = new Loc();
-      location_addr = await lock.initPlatformState();
+      /*Loc lock = new Loc();
+      location_addr = await lock.initPlatformState();*/
 
 
 

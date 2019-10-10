@@ -821,8 +821,11 @@ var profilepic;
                   child:Column(
                     children: <Widget>[
                       Center(
-                          child:FlatButton(child:Text("Cancel"),onPressed: (){
-                            controller.close();
+                          child:FlatButton(
+                            shape: Border.all(color: Colors.orange[800]),
+                            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
+                            onPressed: (){
+                                  controller.close();
                           },)
                       )
                     ],

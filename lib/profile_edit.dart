@@ -208,7 +208,10 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
                   child:Column(
                     children: <Widget>[
                       Center(
-                          child:FlatButton(child:Text("Cancel"),onPressed: (){
+                          child:FlatButton(
+                            shape: Border.all(color: Colors.orange[800]),
+                            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
+                            onPressed: (){
                             controller.close();
                           },)
                       )
@@ -437,8 +440,8 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
                       ButtonBar(
                         children: <Widget>[
                           FlatButton(
-                            shape: Border.all(color: Colors.black54),
-                            child: Text('CANCEL'),
+                            shape: Border.all(color: Colors.orange[800]),
+                            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
                             onPressed: () {
                              /* Navigator.push(
                                 context,
@@ -448,7 +451,7 @@ class _ProfilePageState_edit extends State<ProfilePage_edit> {
                           ),
                           RaisedButton(
                             child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('SAVE',style: TextStyle(color: Colors.white),),
-                            color: Colors.orangeAccent,
+                            color: Colors.orange[800],
                             onPressed: () {
                               if(_isButtonDisabled)
                                 return null;

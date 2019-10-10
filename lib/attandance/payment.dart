@@ -308,7 +308,7 @@ class _PaymentPageState extends State<PaymentPage> {
               new Divider(color: Colors.black54,height: 1.5,),
               RaisedButton(
                 child: Text("Buy"),
-                color: Colors.orangeAccent,
+                color: Colors.orange,
                 onPressed: (){
                   if(buystatus=="1" && trialstatus=="2") {
                     launchMap("https://ubiattendance.ubihrm.com/");

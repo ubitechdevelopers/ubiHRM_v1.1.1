@@ -229,7 +229,7 @@ class _AddEmployee extends State<AddEmployee> {
             child: Column( children: <Widget>[
               SizedBox(height: 20.0),
               Text('Add Employee',
-                  style: new TextStyle(fontSize: 22.0, color: Colors.orangeAccent)),
+                  style: new TextStyle(fontSize: 22.0, color: Colors.orange[800])),
               new Divider(color: Colors.black54,height: 1.5,),
 
               new Expanded(
@@ -486,15 +486,15 @@ class _AddEmployee extends State<AddEmployee> {
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           FlatButton(
-                            shape: Border.all(color: Colors.black54),
-                            child: Text('CANCEL'),
+                            shape: Border.all(color: Colors.orange[800]),
+                            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
                             onPressed: () {
                               Navigator.pop(context);
                             },
                           ),
                           RaisedButton(
                             child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('ADD',style: TextStyle(color: Colors.white),),
-                            color: Colors.orangeAccent,
+                            color: Colors.orange[800],
                             onPressed: () {
                               if(dept=='0') {
                                 showInSnackBar("Please select the department");
@@ -526,11 +526,11 @@ class _AddEmployee extends State<AddEmployee> {
                                     );
                                     }
                                   else if(res==3)
-                                    showInSnackBar('Contact Already Exist');
+                                    showInSnackBar('Contact Already Exists.');
                                   else if(res==2)
-                                    showInSnackBar('Email Already Exist');
+                                    showInSnackBar('Email Already Exists.');
                                   else
-                                    showInSnackBar('Unable to Add Employee');
+                                    showInSnackBar('Unable to Add Employee.');
                                     setState(() {
                                       _isButtonDisabled=false;
                                     });

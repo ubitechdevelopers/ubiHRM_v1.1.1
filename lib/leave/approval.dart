@@ -396,7 +396,7 @@ class ChoiceCard1 extends StatelessWidget {
                         // margin: const EdgeInsets.only(top: 55.0),
                         //  margin: EdgeInsets.fromLTRB(0.0, 55.0, 0.0, 0.0),
                         height: MediaQuery.of(context).size.height*0.6,
-                        //   shape: Border.all(color: Colors.deepOrange),
+                        //   shape: Border.all(color: Colors.deepOrangeAccent),
                         child: new ListTile(
                           title:
                           Container( height: MediaQuery.of(context).size.height*.6,

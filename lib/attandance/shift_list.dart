@@ -132,7 +132,7 @@ class _ShiftList extends State<ShiftList> {
                 SizedBox(height: 8.0),
                 Center(
                   child: Text('Shifts',
-                    style: new TextStyle(fontSize: 22.0, color: Colors.orangeAccent,),),
+                    style: new TextStyle(fontSize: 22.0, color: Colors.orange[800],),),
                 ),
                 Divider(height: 10.0,),
                 SizedBox(height: 2.0),
@@ -145,19 +145,19 @@ class _ShiftList extends State<ShiftList> {
                     children: <Widget>[
                       Container(
                         width: MediaQuery.of(context).size.width*0.30,
-                        child: Text('Shifts', style: TextStyle(color: Colors.orange),textAlign: TextAlign.left,),
+                        child: Text('Shifts', style: TextStyle(color: Colors.orange[800]),textAlign: TextAlign.left,),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width*0.22,
-                        child: Text('Time in', style: TextStyle(color: Colors.orange),textAlign: TextAlign.left,),
+                        child: Text('Time in', style: TextStyle(color: Colors.orange[800]),textAlign: TextAlign.left,),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width*0.22,
-                        child: Text('Time out', style: TextStyle( color: Colors.orange),textAlign: TextAlign.left),
+                        child: Text('Time out', style: TextStyle( color: Colors.orange[800]),textAlign: TextAlign.left),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width*0.16,
-                        child: Text('Status', style: TextStyle(color: Colors.orange),textAlign: TextAlign.left),
+                        child: Text('Status', style: TextStyle(color: Colors.orange[800]),textAlign: TextAlign.left),
                       ),
 
                     ],
@@ -238,7 +238,7 @@ class _ShiftList extends State<ShiftList> {
                               ),
                               new Container(
                                 width: MediaQuery.of(context).size.width*0.16,
-                                child: new Text(snapshot.data[index].Status.toString(),style: TextStyle(color: snapshot.data[index].Status.toString()!='Active'?Colors.deepOrange:Colors.green),),
+                                child: new Text(snapshot.data[index].Status.toString(),style: TextStyle(color: snapshot.data[index].Status.toString()!='Active'?Colors.orange[800]:Colors.green),),
                               ),
                             ],
                           ),
@@ -313,13 +313,13 @@ class _ShiftList extends State<ShiftList> {
         ),
         actions: <Widget>[
           new FlatButton(
-              shape: Border.all(color: Colors.black54),
-              child: const Text('CANCEL',style: TextStyle(color: Colors.black),),
+              shape: Border.all(color: Colors.orange[800]),
+              child: const Text('CANCEL',style: TextStyle(color: Colors.black87),),
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).pop('dialog');
               }),
           new RaisedButton(
-              color: Colors.orangeAccent,
+              color: Colors.orange[800],
               child: const Text('UPDATE',style: TextStyle(color: Colors.white),),
               onPressed: ()
               {

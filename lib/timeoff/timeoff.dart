@@ -458,8 +458,8 @@ class _TimeOffPageState extends State<TimeOffPage> {
                       },
                     ),
                     FlatButton(
-                      shape: Border.all(color: Colors.black54),
-                      child: Text('CANCEL'),
+                      shape: Border.all(color: Colors.orange[800]),
+                      child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
                       onPressed: () {
                         Navigator.push(
                           context,

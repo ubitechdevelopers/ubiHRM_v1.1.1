@@ -180,8 +180,8 @@ class _SalarySummary extends State<SalarySummary> {
       content:  ButtonBar(
         children: <Widget>[
           FlatButton(
-            child: Text('CANCEL'),
-            shape: Border.all(color: Colors.black54),
+            shape: Border.all(color: Colors.orange[800]),
+            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
             onPressed: () {
               setState(() {
                 _isButtonDisabled=false;
@@ -439,7 +439,7 @@ class _SalarySummary extends State<SalarySummary> {
                       new Expanded(
                         child:  Container(
                         width: MediaQuery.of(context).size.width*0.20,
-                        child:Text('Month',style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        child:Text('Month',style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
 
                   //    SizedBox(height: 50.0,),
@@ -447,7 +447,7 @@ class _SalarySummary extends State<SalarySummary> {
                         child:  Container(
                         width: MediaQuery.of(context).size.width*0.20,
                         margin: EdgeInsets.fromLTRB(2.0, 0.0, 0.0, 0.0),
-                        child:Text('Amount',  textAlign: TextAlign.right,style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        child:Text('Amount',  textAlign: TextAlign.right,style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
 
                   //    SizedBox(height: 50.0,),
@@ -455,14 +455,14 @@ class _SalarySummary extends State<SalarySummary> {
                         child:  Container(
                         width: MediaQuery.of(context).size.width*0.30,
                           margin: EdgeInsets.only(left:11.0),
-                        child:Text('Paid Days',  textAlign: TextAlign.right,style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        child:Text('Paid Days',  textAlign: TextAlign.right,style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
 
                       new Expanded(
                         child:  Container(
                         width: MediaQuery.of(context).size.width*0.20,
                         margin: EdgeInsets.only(left:25.0),
-                        child:Text('Action',style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        child:Text('Action',style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
                     ],
                   ),

@@ -99,9 +99,8 @@ class _Flexitime extends State<Flexitime> {
     setLocationAddress();
     startTimer();
     getOrgName();
-
-
   }
+
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -109,11 +108,6 @@ class _Flexitime extends State<Flexitime> {
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    timer.cancel();
-  }
   startTimer() {
     const fiveSec = const Duration(seconds: 5);
     int count = 0;
@@ -158,6 +152,12 @@ class _Flexitime extends State<Flexitime> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+  }
+
   launchMap(String lat, String long) async {
     String url = "https://maps.google.com/?q=" + lat + "," + long;
     if (await canLaunch(url)) {
@@ -185,7 +185,7 @@ class _Flexitime extends State<Flexitime> {
     checkTimeinflexi().then((EmpList) {
       setState(() {
         flexiidsts = EmpList;
-          fid = flexiidsts[0].fid;
+        fid = flexiidsts[0].fid;
         flexitimein = flexiidsts[0].sts;
 
         print("id and sts");
@@ -226,13 +226,13 @@ class _Flexitime extends State<Flexitime> {
         profile = prefs.getString('profile') ?? '';
         profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
         // //print("1-"+profile);
-        profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __){
           if (mounted) {
             setState(() {
               _checkLoaded = false;
             });
           }
-        });
+        }));
         showtabbar=false;
         // //print("2-"+_checkLoaded.toString());
         latit = prefs.getString('latit') ?? '';
@@ -281,7 +281,7 @@ class _Flexitime extends State<Flexitime> {
           bottomNavigationBar:new HomeNavigation(),
 
         //  endDrawer: new AppDrawer(),
-          body: (act1 == '') ? Center(child: refreshPageWidgit()) : checkalreadylogin(),
+          body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
         ));
   }
 
@@ -307,7 +307,7 @@ class _Flexitime extends State<Flexitime> {
   }
 
   refreshPageWidgit() {
-    if (location_addr1 != "PermissionStatus.granted" || location_addr1 == "PermissionStatus.disabled") {
+    if (location_addr1 != "PermissionStatus.deniedNeverAsk") {
       return new Container(
         child: Center(
           child: new Column(
@@ -466,9 +466,9 @@ class _Flexitime extends State<Flexitime> {
           children: <Widget>[
             Container(
               // foregroundDecoration: BoxDecoration(color:Colors.red ),
-              height: MediaQuery.of(context).size.height * 0.76,
+              height: MediaQuery.of(context).size.height * 0.80,
 
-              margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0,8.0),
+              margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
               padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
               decoration: new ShapeDecoration(
                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
@@ -477,7 +477,7 @@ class _Flexitime extends State<Flexitime> {
               child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height * .01),
+                //SizedBox(height: MediaQuery.of(context).size.height * .01),
                 Text("Flexi Time", style: new TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold,color: appStartColor())),
                 SizedBox(height: MediaQuery.of(context).size.height * .02),
                 new GestureDetector(
@@ -612,9 +612,9 @@ class _Flexitime extends State<Flexitime> {
         SizedBox(height:MediaQuery.of(context).size.height *0.05,),
 
     Row(
-    mainAxisAlignment: MainAxisAlignment.end,
+    mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
-      SizedBox(width: 30.0,),
+      //SizedBox(width: 30.0,),
         new InkWell(
           onTap: () {
             Navigator.push(
@@ -626,7 +626,7 @@ class _Flexitime extends State<Flexitime> {
             "Check Flexi Log",
             style: new TextStyle(
               // color: appStartColor(),
-                color: Colors.orange,
+                color: Colors.orange[800],
                 decoration: TextDecoration.underline,
                 fontSize: 17.0,
                 fontWeight: FontWeight.bold

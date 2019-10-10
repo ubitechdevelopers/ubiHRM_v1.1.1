@@ -158,8 +158,8 @@ class _MyLeaveState extends State<MyLeave> {
             },
           ),
           FlatButton(
-            shape: Border.all(),
-            child: Text('CANCEL'),
+            shape: Border.all(color: Colors.orange[800]),
+            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
             },
@@ -275,31 +275,31 @@ class _MyLeaveState extends State<MyLeave> {
                                   children: <Widget>[
                                     Icon(
                                         Icons.person,
-                                        color: Colors.orange,
+                                        color: Colors.orange[800],
                                         size: 22.0 ),
                                     GestureDetector(
                                       onTap: () {
                                         false;
                                       },
 
-                                      child: const Text(
+                                      child: Text(
                                           'Self',
-                                          style: TextStyle(fontSize: 18,color: Colors.orange,fontWeight:FontWeight.bold)
+                                          style: TextStyle(fontSize: 18,color: Colors.orange[800],fontWeight:FontWeight.bold)
                                       ),
                                     ),
                                   ]),
 
                               SizedBox(height:MediaQuery.of(context).size.width*.036),
                               Divider(
-                                color: Colors.orange,
+                                color: Colors.orange[800],
                                 height: 0.4,
                               ),
                               Divider(
-                                color: Colors.orange,
+                                color: Colors.orange[800],
                                 height: 0.4,
                               ),
                               Divider(
-                                color: Colors.orange,
+                                color: Colors.orange[800],
                                 height: 0.4,
                               ),
                             ]
@@ -324,13 +324,13 @@ class _MyLeaveState extends State<MyLeave> {
                                   children: <Widget>[
                                     Icon(
                                         Icons.group,
-                                        color: Colors.orange,
+                                        color: Colors.orange[800],
                                         size: 22.0 ),
                                     GestureDetector(
 
-                                      child: const Text(
+                                      child: Text(
                                           'Team',
-                                          style: TextStyle(fontSize: 18,color: Colors.orange)
+                                          style: TextStyle(fontSize: 18,color: Colors.orange[800])
                                       ),
                                     ),
                                   ]),

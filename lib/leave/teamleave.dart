@@ -185,13 +185,13 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                     children: <Widget>[
                                       Icon(
                                           Icons.person,
-                                          color: Colors.orange,
+                                          color: Colors.orange[800],
                                           size: 22.0 ),
 
                                       GestureDetector(
-                                        child: const Text(
+                                        child: Text(
                                             'Self',
-                                            style: TextStyle(fontSize: 18,color: Colors.orange,)
+                                            style: TextStyle(fontSize: 18.0,color: Colors.orange[800],)
                                         ),
                                         // color: Colors.teal[50],
                                         /* splashColor: Colors.white,
@@ -217,7 +217,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                     children: <Widget>[
                                       Icon(
                                           Icons.group,
-                                          color: Colors.orange,
+                                          color: Colors.orange[800],
                                           size: 22.0 ),
                                       GestureDetector(
                                         onTap: () {
@@ -227,23 +227,23 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                   );*/
                                           false;
                                         },
-                                        child: const Text(
+                                        child: Text(
                                             'Team',
-                                            style: TextStyle(fontSize: 18,color: Colors.orange,fontWeight:FontWeight.bold)
+                                            style: TextStyle(fontSize: 18,color: Colors.orange[800],fontWeight:FontWeight.bold)
                                         ),
                                       ),
                                     ]),
                                 SizedBox(height:MediaQuery.of(context).size.width*.03),
                                 Divider(
-                                  color: Colors.orange,
+                                  color: Colors.orange[800],
                                   height: 0.4,
                                 ),
                                 Divider(
-                                  color: Colors.orange,
+                                  color: Colors.orange[800],
                                   height: 0.4,
                                 ),
                                 Divider(
-                                  color: Colors.orange,
+                                  color: Colors.orange[800],
                                   height: 0.4,
                                 ),
                               ]

@@ -121,13 +121,13 @@ class _allSalarySummary extends State<allSalarySummary> {
     //    act= lid!='0'?'PunchOut':'PunchIn';
         showtabbar=false;
         profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-        profileimage.resolve(new ImageConfiguration()).addListener((_, __) {
+        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __){
           if (mounted) {
             setState(() {
               _checkLoaded = false;
             });
           }
-        });
+        }));
    //     latit = prefs.getString('latit') ?? '';
   //      longi = prefs.getString('longi') ?? '';
   //      shiftId = prefs.getString('shiftId') ?? "";
@@ -182,8 +182,8 @@ class _allSalarySummary extends State<allSalarySummary> {
       content:  ButtonBar(
         children: <Widget>[
           FlatButton(
-            child: Text('CANCEL'),
-            shape: Border.all(color: Colors.black54),
+            shape: Border.all(color: Colors.orange[800]),
+            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
             onPressed: () {
               setState(() {
                 _isButtonDisabled=false;
@@ -440,14 +440,14 @@ class _allSalarySummary extends State<allSalarySummary> {
                       new Expanded(
                         child:  Container(
                           width: MediaQuery.of(context).size.width*0.40,
-                          child:Text('Name',style: TextStyle(color:Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                          child:Text('Name',style: TextStyle(color:Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
                         ),),
                  //     SizedBox(width: MediaQuery.of(context).size.width*0.02),
                       new Expanded(
                         child:  Container(
                         width: MediaQuery.of(context).size.width*0.25,
                           margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                        child:Text('Month',style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        child:Text('Month',style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
 
                   //    SizedBox(height: 50.0,),
@@ -455,7 +455,7 @@ class _allSalarySummary extends State<allSalarySummary> {
                         child:  Container(
                         width: MediaQuery.of(context).size.width*0.17,
                         margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                        child:Text('Amount',style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),textAlign: TextAlign.right),
+                        child:Text('Amount',style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),textAlign: TextAlign.right),
                       ),),
 
                   //    SizedBox(height: 50.0,),
@@ -470,7 +470,7 @@ class _allSalarySummary extends State<allSalarySummary> {
                         child:  Container(
                         width: MediaQuery.of(context).size.width*0.20,
                         margin: EdgeInsets.only(left:30.0),
-                        child:Text('Action',style: TextStyle(color:Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        child:Text('Action',style: TextStyle(color:Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),),
                     ],
                   ),

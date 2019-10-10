@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'home.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/services/checkLogin.dart';
@@ -60,6 +61,7 @@ class _LoginPageState extends State<LoginPage>
   bool _obscureText_new = true;
   String barcode = "";
   bool loader = false;
+  String location_addr = "";
 
   void _toggle_new() {
     setState(() {
@@ -352,7 +354,7 @@ class _LoginPageState extends State<LoginPage>
                 children: <Widget>[
 
                   Padding(
-                    padding: EdgeInsets.only(top: 30.0),
+                    padding: EdgeInsets.only(top: 50.0),
                     child: new Container(
                       width: 135.0,
                       height: 132.0,
@@ -443,7 +445,7 @@ class _LoginPageState extends State<LoginPage>
   String tokenn="";
 
   @override
-  void initState() {
+  void initState(){
     signupEmailController = new TextEditingController();
     signupNameController = new TextEditingController();
     _contcode = new TextEditingController();
@@ -451,6 +453,7 @@ class _LoginPageState extends State<LoginPage>
     CPNController = new TextEditingController();
     signupcityController = new TextEditingController();
     super.initState();
+    initPlatformState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -481,6 +484,12 @@ class _LoginPageState extends State<LoginPage>
       // print(token1);
 
     });
+  }
+
+  initPlatformState() async {
+    Loc lock = new Loc();
+    location_addr = await lock.loginrequestPermission();
+    print(location_addr);
   }
 
   /*void showInSnackBar(String value) {
@@ -572,7 +581,7 @@ class _LoginPageState extends State<LoginPage>
                       children: <Widget>[
                         Padding(
                             padding: EdgeInsets.only(
-                                top: 20.0, bottom: 0.0, left: 230.0, right: 10.0), child:GestureDetector(
+                                top: 20.0, bottom: 0.0, left: 300.0, right: 10.0), child:GestureDetector(
                           onTap: () {
                             scan().then((onValue){
                               //print("******************** QR value **************************");
@@ -697,7 +706,7 @@ class _LoginPageState extends State<LoginPage>
                                 );
                               },
                               child: Text(
-                                "Forgot Password ?",
+                                "Forgot Password?",
                                 style: TextStyle(
                                   color:appStartColor(),
                                   fontSize: 14,
@@ -788,7 +797,7 @@ class _LoginPageState extends State<LoginPage>
                               Expanded(child: Container(
                                 margin: EdgeInsets.only(left: 75.0,right:0.0,top: 10.0),
 
-                                child:Text("Not registered ?", style: TextStyle(
+                                child:Text("Not registered?", style: TextStyle(
                                   color: appStartColor(),fontSize: 14,),),
                               ),),
                               Expanded(child: Container(
@@ -824,7 +833,7 @@ class _LoginPageState extends State<LoginPage>
 
                                   child: new RaisedButton(
                                     // color:appStartColor(),
-                                    color:Colors.orange,
+                                    color: Colors.orange[800],
 
                                     child: new Text("Sign up", style: TextStyle(
                                       color:  Colors.white,
@@ -1188,6 +1197,42 @@ class _LoginPageState extends State<LoginPage>
                             ),*/
                           Row(
                             children: <Widget>[
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
+                                  child: TextFormField(
+                                    focusNode: myFocusNodecity,
+                                    controller: signupcityController,
+                                    //keyboardType: TextInputType.text,
+                                    textCapitalization: TextCapitalization.words,
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.black),
+                                    decoration: InputDecoration(
+                                      //border: InputBorder.none,
+                                      icon: Icon(
+                                        FontAwesomeIcons.city,
+                                        color: Colors.black,
+
+                                      ),
+                                      hintText: "City ",
+                                      hintStyle: TextStyle(
+                                          fontSize: 14.0),
+                                    ),
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Please enter city name';
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          Row(
+                            children: <Widget>[
                               new Expanded(
                                 flex: 27,
                                 child:Padding(
@@ -1258,41 +1303,7 @@ class _LoginPageState extends State<LoginPage>
 
                           // Expanded(
                           // child:
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
-                                  child: TextFormField(
-                                    focusNode: myFocusNodecity,
-                                    controller: signupcityController,
-                                    //keyboardType: TextInputType.text,
-                                    textCapitalization: TextCapitalization.words,
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.black),
-                                    decoration: InputDecoration(
-                                      //border: InputBorder.none,
-                                      icon: Icon(
-                                        FontAwesomeIcons.city,
-                                        color: Colors.black,
 
-                                      ),
-                                      hintText: "City ",
-                                      hintStyle: TextStyle(
-                                          fontSize: 14.0),
-                                    ),
-                                    validator: (value) {
-                                      if (value.isEmpty) {
-                                        return 'Please enter city name';
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                           //),
                           /*SizedBox(height: 10,),
                             *//*Container(
@@ -1458,21 +1469,21 @@ class _LoginPageState extends State<LoginPage>
                                                     new AlertDialog(
                                                       title: new Text("ubihrm"),
                                                       content: new Text(
-                                                          "Oops! Email already exist. Try later"),
+                                                          "Email already exists."),
                                                     ));
                                                   } else if(response.body.toString().contains("3")){
                                                     showDialog(context: context, child:
                                                     new AlertDialog(
                                                       title: new Text("ubihrm"),
                                                       content: new Text(
-                                                          "Oops! Phone no already exist. Try later"),
+                                                          "Phone no. already exists."),
                                                     ));
                                                   }else if(response.body.toString().contains("4")){
                                                     showDialog(context: context, child:
                                                     new AlertDialog(
                                                       title: new Text("ubihrm"),
                                                       content: new Text(
-                                                          "Oops! Email or Phone no already exist. Try later"),
+                                                          "Email or Phone no already exists."),
                                                     ));
                                                   }
                                                   else {

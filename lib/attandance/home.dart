@@ -182,6 +182,7 @@ class _HomePageState extends State<HomePage> {
     Loc lock = new Loc();
     location_addr = await lock.initPlatformState();
     print(location_addr);
+
     Home ho = new Home();
     act = await ho.checkTimeIn(empid, orgdir);
     print(act);
@@ -321,7 +322,7 @@ class _HomePageState extends State<HomePage> {
           ),*/
           bottomNavigationBar:new HomeNavigation(),
        // endDrawer: new AppDrawer(),
-        body: (act1 == '') ? Center(child: refreshPageWidgit()) : checkalreadylogin(),
+        body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
         //bottomSheet: getQuickLinksWidget(),
 
 
@@ -365,7 +366,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   refreshPageWidgit() {
-    if (location_addr1 != "PermissionStatus.granted"||location_addr1 == "PermissionStatus.disabled") {
+    if (location_addr1 != "PermissionStatus.deniedNeverAsk") {
       return new Container(
         child: Center(
           child: new Column(
@@ -541,16 +542,17 @@ class _HomePageState extends State<HomePage> {
             Container(
               margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
               padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+
               decoration: new ShapeDecoration(
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
               color: Colors.white,
             ),
               // foregroundDecoration: BoxDecoration(color:Colors.red ),
-              height: MediaQuery.of(context).size.height * 0.76,
+              height: MediaQuery.of(context).size.height * 0.80,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(height: MediaQuery.of(context).size.height * .06),
+                  SizedBox(height: MediaQuery.of(context).size.height * .02),
                   new GestureDetector(
                     onTap: () {
                       // profile navigation
@@ -587,12 +589,12 @@ class _HomePageState extends State<HomePage> {
                   ),*/
                     ]),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * .001),
+                  SizedBox(height: MediaQuery.of(context).size.height * .02),
                   //Image.asset('assets/logo.png',height: 150.0,width: 150.0),
                   // SizedBox(height: 5.0),
                   Text("Hi " + globalpersnalinfomap['FirstName'], style: new TextStyle(fontSize: 16.0)),
-                  SizedBox(height: MediaQuery.of(context).size.height * .001),
-                  // SizedBox(height: MediaQuery.of(context).size.height*.01),
+                  //SizedBox(height: MediaQuery.of(context).size.height * .001),
+                  SizedBox(height: MediaQuery.of(context).size.height*.02),
                   (act1 == '') ? loader() : getMarkAttendanceWidgit(),
 
 
@@ -657,7 +659,7 @@ class _HomePageState extends State<HomePage> {
               "Check Attendance Log",
               style: new TextStyle(
                  // color: appStartColor(),
-                  color: Colors.orange,
+                  color: Colors.orange[800],
                   decoration: TextDecoration.underline,
                   fontSize: 17.0,
                   fontWeight: FontWeight.bold
@@ -697,7 +699,7 @@ class _HomePageState extends State<HomePage> {
           height: 45.0,
           child: getTimeInOutButton(),
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * .04),
+        SizedBox(height: MediaQuery.of(context).size.height * .03),
         Container(
             //color: Colors.teal.withOpacity(0.1),
             color: appStartColor().withOpacity(0.1),
@@ -743,7 +745,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ])),
 
-        const SizedBox(height: 30),
+        SizedBox(height:MediaQuery.of(context).size.height *0.05,),
 
     /*new SizedBox(
     width: double.infinity,
@@ -775,9 +777,10 @@ class _HomePageState extends State<HomePage> {
               child: new Text(
                 "Check Attendance Log",
                 style: new TextStyle(
-                    color: Colors.orange,
+                    color: Colors.orange[800],
                     decoration: TextDecoration.underline,
-                    fontSize: 17.0
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold
                 ),
               ),
               onTap: () {

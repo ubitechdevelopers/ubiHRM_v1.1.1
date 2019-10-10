@@ -219,7 +219,7 @@ class _addShift extends State<addShift> {
                 children: <Widget>[
                   SizedBox(height: 20.0),
                   Center(
-                    child:Text("Add Shift",style: new TextStyle(fontSize: 22.0,color:appStartColor())),
+                    child:Text("Add Shift",style: new TextStyle(fontSize: 22.0, color: Colors.orange[800])),
                   ),
                   SizedBox(height: 30.0),
                   Text('Shift Details',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0),),
@@ -421,15 +421,15 @@ class _addShift extends State<addShift> {
                   ButtonBar(
                     children: <Widget>[
                       FlatButton(
-                        shape: Border.all(color: Colors.black54),
-                        child: Text('CANCEL'),
+                        shape: Border.all(color: Colors.orange[800]),
+                        child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
                         onPressed: () {
                           Navigator.pop(context);
                         },
                       ),
                       RaisedButton(
                         child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('ADD',style: TextStyle(color: Colors.white),),
-                        color: Colors.orangeAccent,
+                        color: Colors.orange[800],
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             if(_isButtonDisabled)

@@ -209,7 +209,10 @@ class _ProfilePageState extends State<ProfilePage> {
               child:Column(
                 children: <Widget>[
                   Center(
-                  child:FlatButton(child:Text("Cancel"),onPressed: (){
+
+                  child:FlatButton(
+                    shape: Border.all(color: Colors.orangeAccent),
+                    child:Text("CANCEL",style: TextStyle(color: Colors.black87),),onPressed: (){
                     controller.close();
                   },)
                   )
@@ -492,8 +495,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       ButtonBar(
                         children: <Widget>[
                           FlatButton(
-                            shape: Border.all(color: Colors.black54),
-                            child: Text('CANCEL'),
+                            shape: Border.all(color: Colors.orangeAccent),
+                            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
                             onPressed: () {
                               Navigator.push(
                                 context,

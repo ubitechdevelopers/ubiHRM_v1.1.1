@@ -216,15 +216,15 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
         ),
         actions: <Widget>[
           new FlatButton(
-              shape: Border.all(color: Colors.black54),
-              child: const Text('CANCEL',style: TextStyle(color: Colors.black),),
+              shape: Border.all(color: Colors.orange),
+              child: const Text('CANCEL',style: TextStyle(color: Colors.black87),),
               onPressed: () {
                 _comments.text='';
                 Navigator.of(context, rootNavigator: true).pop();
               }),
           new RaisedButton(
               child: const Text('PUNCH',style: TextStyle(color: Colors.white),),
-              color: Colors.orange[800],
+              color: Colors.orange,
               onPressed: () async{
                 sl.startStreaming(5);
                 SaveImage saveImage = new SaveImage();

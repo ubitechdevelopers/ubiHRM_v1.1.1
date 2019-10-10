@@ -131,8 +131,8 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
       content:  ButtonBar(
         children: <Widget>[
           FlatButton(
-            shape: Border.all(),
-            child: Text('CANCEL'),
+            shape: Border.all(color: Colors.orange[800]),
+            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
             },
@@ -262,7 +262,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                             width: MediaQuery.of(context).size.width*.90,
                                             padding: EdgeInsets.only(top:1.5,bottom: .5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            child: Text(snapshot.data[index].category.toString()+"  ",style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 20.0),textAlign: TextAlign.center,),
+                                            child: Text(snapshot.data[index].category.toString()+"  ",style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 20.0),textAlign: TextAlign.center,),
                                           ),
 
                                           /*snapshot.data[index].category.toString()!='-'?Container(
@@ -522,8 +522,8 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                               ButtonBar(
                                                 children: <Widget>[
                                                   FlatButton(
-                                                    shape: Border.all(color: Colors.black54),
-                                                    child: Text('CANCEL'),
+                                                    shape: Border.all(color: Colors.orange[800]),
+                                                    child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
                                                     onPressed: () {
                                                       Navigator.push(
                                                         context,

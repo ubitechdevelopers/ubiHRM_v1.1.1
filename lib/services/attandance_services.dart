@@ -1539,15 +1539,14 @@ List<FlexiAtt> createUserListFlexi(List data) {
 class Flexi{
   String fid;
   String sts;
-
-
   Flexi({this.fid,this.sts});
 }
+
 Future checkTimeinflexi() async {
   final prefs = await SharedPreferences.getInstance();
   String empid = prefs.getString('employeeid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
-  print('*--*-*-*-*-*-*-*-*-*-');
+  print(globals.path_ubiattendance+'getAttendanceesFlexi?empid=$empid');
   final res = await http.get(globals.path_ubiattendance+'getAttendanceesFlexi?empid=$empid');
   print("99999");
   print(res.body.toString());
@@ -1562,8 +1561,6 @@ Future checkTimeinflexi() async {
   print(list);
 //return ((json.decode(res.body.toString()))['sts']).toString();
   return list;
-
-
 }
 
 Future<List<FlexiAtt>> getFlexiDataListReport(date,emp) async {

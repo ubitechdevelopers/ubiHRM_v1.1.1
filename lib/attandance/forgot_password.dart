@@ -114,7 +114,7 @@ class _ForgotPassword extends State<ForgotPassword> {
                 children: <Widget>[
                   SizedBox(height: MediaQuery.of(context).size.height*0.1),
             Center(child:
-            Text("Reset Password",style: new TextStyle(fontSize: 22.0,color: Colors.black54)),
+            Text("Forgot Password",style: new TextStyle(fontSize: 22.0,color: Colors.black54)),
             ),
                   SizedBox(height: 10.0),
                   succ==false?Container(
@@ -154,7 +154,7 @@ class _ForgotPassword extends State<ForgotPassword> {
                     children: <Widget>[
                       RaisedButton(
                         child: _isButtonDisabled==false?Text('SUBMIT',style: TextStyle(color: Colors.white),):Text('WAIT...',style: TextStyle(color: Colors.white),),
-                        color: Colors.orangeAccent,
+                        color: Colors.orange[800],
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             if (_username.text == ''||_username.text == null) {
@@ -203,8 +203,8 @@ class _ForgotPassword extends State<ForgotPassword> {
                         },
                       ),
                       FlatButton(
-                        shape: Border.all(color: Colors.black54),
-                        child: Text('CANCEL'),
+                        shape: Border.all(color: Colors.orange[800]),
+                        child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
                         onPressed: () {
                           Navigator.pop(context);
                         },
