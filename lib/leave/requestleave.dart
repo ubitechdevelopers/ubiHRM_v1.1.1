@@ -265,15 +265,15 @@ class _RequestLeaveState extends State<RequestLeave> {
           endDrawer: new AppDrawer(),
           appBar: new AppHeader(profileimage,showtabbar,orgName),
          bottomNavigationBar:  new HomeNavigation(),
-         body:  ModalProgressHUD(
+         body: ModalProgressHUD(
       inAsyncCall: isServiceCalling,
       opacity: 0.15,
       progressIndicator: SizedBox(
       child:new CircularProgressIndicator(
       valueColor: new AlwaysStoppedAnimation(Colors.green),
       strokeWidth: 5.0),
-      height: 50.0,
-      width: 50.0,
+      height: 40.0,
+      width: 40.0,
       ),
       child: homewidget()
           )
@@ -312,7 +312,7 @@ class _RequestLeaveState extends State<RequestLeave> {
 
       getLeaveType_DD(),
 
-    SizedBox(height: 20.0),
+    SizedBox(height: 10.0),
     //Enter date
     Row(
     children: <Widget>[
@@ -430,7 +430,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     Text("Second Half",style: TextStyle(fontSize: 16.0),)
     ],
     ):Container(),
-    SizedBox(height: 10.0,),
+    //SizedBox(height: 10.0,),
     Row(
     children: <Widget>[
       new Expanded(
@@ -583,7 +583,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     children: <Widget>[
 
       RaisedButton(
-        child: isServiceCalling?Text('Processing',style: TextStyle(color: Colors.white),):Text('APPLY',style: TextStyle(color: Colors.white),),
+        child: isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('APPLY',style: TextStyle(color: Colors.white),),
         color: Colors.orange[800],
         onPressed: () {
           if (_formKey.currentState.validate()) {

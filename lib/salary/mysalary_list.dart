@@ -426,7 +426,7 @@ class _SalarySummary extends State<SalarySummary> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text('My Salary',
-                      style: new TextStyle(fontSize: 22.0, color: Colors.grey[700])),
+                      style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                   //SizedBox(height: 10.0),
 
                   new Divider(color: Colors.black54,height: 1.5,),
@@ -569,10 +569,17 @@ class _SalarySummary extends State<SalarySummary> {
                         } else if (snapshot.hasError) {
                           return new Text("Unable to connect server");
                         }
-
+                        return new Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width*1,
+                            color: appStartColor().withOpacity(0.1),
+                            padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                            child:Text("No Records ",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                          ),
+                        );
                         // By default, show a loading spinner
                        // return new Center(child: CircularProgressIndicator());
-                        return new Center(child: Text("No data found"),);
+                        //return new Center(child: Text("No data found"),);
                       },
                     ),
                     //////////////////////////////////////////////////////////////////////---------------------------------

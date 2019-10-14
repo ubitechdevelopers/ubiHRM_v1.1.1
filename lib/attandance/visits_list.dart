@@ -287,8 +287,16 @@ class _VisitList extends State<VisitList> {
                   });
             } else {
               return new Center(
-                child: Text("No Visits found", style: TextStyle(color: appStartColor(),fontSize: 18.0),),
+                child: Container(
+                  width: MediaQuery.of(context).size.width*1,
+                  color: appStartColor().withOpacity(0.1),
+                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                  child:Text("No Visits found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                ),
               );
+              /*return new Center(
+                child: Text("No Visits found", style: TextStyle(color: appStartColor(),fontSize: 18.0),),
+              );*/
             }
           } else if (snapshot.hasError) {
 		   return new Text("Unable to connect server");

@@ -368,8 +368,8 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                   Container(
                     padding: EdgeInsets.only(top:12.0),
                     child:Center(
-                      child:Text("Team's Time Off ",
-                          style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                      child:Text("Team's Time Off",
+                          style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                     ),
                   ),
 
@@ -571,8 +571,16 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                               );
                             }else{
                               return new Center(
-                                child:Text("No Records"),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*1,
+                                  color: appStartColor().withOpacity(0.1),
+                                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                  child:Text("No Records",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                                ),
                               );
+                             /* return new Center(
+                                child:Text("No Records"),
+                              );*/
                             }
                           }
                           else if (snapshot.hasError) {

@@ -127,25 +127,25 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
   confirmWithdrawl(String Id) async{
     showDialog(context: context, child:
     new AlertDialog(
-      title: new Text("Withdraw  Expense?"),
+      title: new Text("Withdraw expense?"),
       content:  ButtonBar(
         children: <Widget>[
+          RaisedButton(
+            child: _checkwithdrawnexpense?Text('Processing..',style: TextStyle(color: Colors.white),):Text('Withdraw',style: TextStyle(color: Colors.white),),
+            color: Colors.orange[800],
+            onPressed: () {
+              /*setState(() {
+                _checkwithdrawnexpense = true;
+              });*/
+              Navigator.of(context, rootNavigator: true).pop();
+              withdrawlExpense(widget.expenseid);
+            },
+          ),
           FlatButton(
             shape: Border.all(color: Colors.orange[800]),
             child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
-            },
-          ),
-          RaisedButton(
-            child: Text('Withdraw',style: TextStyle(color: Colors.white),),
-            color: Colors.orange[800],
-            onPressed: () {
-              setState(() {
-                _checkwithdrawnexpense = true;
-              });
-              Navigator.of(context, rootNavigator: true).pop();
-              withdrawlExpense(widget.expenseid);
             },
           ),
         ],

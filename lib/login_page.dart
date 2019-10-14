@@ -348,8 +348,8 @@ class _LoginPageState extends State<LoginPage>
                 new CircularProgressIndicator(
                     valueColor: new AlwaysStoppedAnimation(Colors.green),
                     strokeWidth: 5.0),
-                height: 50.0,
-                width: 50.0,),child: Column(
+                height: 40.0,
+                width: 40.0,),child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
 

@@ -381,7 +381,7 @@ class _HomePageState extends State<HomePage> {
                       color: appStartColor(),
                     ),
                     Text(
-                      " Fetching location, please wait..",
+                      "Fetching location, please wait..",
                       style: new TextStyle(fontSize: 20.0, color: appStartColor()),
                     )
                   ]),
@@ -399,7 +399,7 @@ class _HomePageState extends State<HomePage> {
                       textAlign: TextAlign.right,
                     ),
                     Text(
-                      " Location not fetched automatically? Click Refresh Location",
+                      "If location not being fetched automatically?",
                       style: new TextStyle(fontSize: 12.0, color: Colors.black),
                       textAlign: TextAlign.left,
                     ),
@@ -456,6 +456,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ]);
+
     }
   }
 
@@ -640,7 +641,7 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: new BorderRadius.circular(0.0)),
             color: Colors.green[50]),
         child: Text(
-          '\nToday\'s attendance is marked successfully',
+          '\nToday\'s attendance is marked successfully.',
           textAlign: TextAlign.center,
           style: new TextStyle(color: Colors.black87, fontSize: 15.0),
         ),
@@ -806,7 +807,7 @@ class _HomePageState extends State<HomePage> {
           child: Text('Open Settings'),
           onPressed: () {
             PermissionHandler().openAppSettings();
-            print("hello-------------");
+            //print("hello-------------");
           },
         ),
       ]);
@@ -895,7 +896,7 @@ class _HomePageState extends State<HomePage> {
         if (issave) {
           showDialog(context: context, child:
           new AlertDialog(
-            content: new Text("Attendance marked successfully"),
+            content: new Text("Attendance marked successfully."),
           )
           );
          // if(mounted) {
@@ -937,7 +938,7 @@ class _HomePageState extends State<HomePage> {
       showDialog(context: context, child:
       new AlertDialog(
 
-        content: new Text("Internet connection not found!."),
+        content: new Text("Internet connection not found."),
       )
       );
     }

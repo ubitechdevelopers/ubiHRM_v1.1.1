@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,6 +40,7 @@ class TimeOffPage extends StatefulWidget {
 
 class _TimeOffPageState extends State<TimeOffPage> {
   bool isloading = false;
+  bool isServiceCalling = false;
   final _dateController = TextEditingController();
   final _starttimeController = TextEditingController();
   final _endtimeController = TextEditingController();
@@ -176,7 +178,19 @@ class _TimeOffPageState extends State<TimeOffPage> {
 
         endDrawer: new AppDrawer(),
         // body: (act1=='') ? Center(child : loader()) : checkalreadylogin(),
-        body:  getTimeoffWidgit(),
+        //body:  getTimeoffWidgit(),
+          body: ModalProgressHUD(
+              inAsyncCall: isServiceCalling,
+              opacity: 0.15,
+              progressIndicator: SizedBox(
+                child:new CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation(Colors.green),
+                    strokeWidth: 5.0),
+                height: 40.0,
+                width: 40.0,
+              ),
+              child: getTimeoffWidgit()
+          )
       ),
     );
 
@@ -409,7 +423,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
                 ],
               ),
 
-           //   SizedBox(height: 5.0),
+              SizedBox(height: 10.0),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -435,7 +449,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
                           requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
                         }*/
                       },
-                      maxLines: 2,
+                      maxLines: null,
                     ),
                   ),
                 ],
@@ -445,16 +459,13 @@ class _TimeOffPageState extends State<TimeOffPage> {
                   children: <Widget>[
                     RaisedButton(
                       /* child: _isButtonDisabled?Row(children: <Widget>[Text('Processing ',style: TextStyle(color: Colors.white),),SizedBox(width: 10.0,), SizedBox(child:CircularProgressIndicator(),height: 20.0,width: 20.0,),],):Text('SAVE',style: TextStyle(color: Colors.white),),*/
-                      child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('APPLY',style: TextStyle(color: Colors.white),),
+                      child:isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('APPLY',style: TextStyle(color: Colors.white),),
                       color: Colors.orange[800],
                       onPressed: () {
-
                         if (_formKey.currentState.validate()) {
                           requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text.trim(), context);
                         }
-
                         //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
-
                       },
                     ),
                     FlatButton(
@@ -486,6 +497,10 @@ class _TimeOffPageState extends State<TimeOffPage> {
 
 
   requesttimeoff(var timeoffdate,var starttime,var endtime,var reason, BuildContext context) async{
+    setState(() {
+      isServiceCalling = true;
+    });
+    print("----> service calling "+isServiceCalling.toString());
     final prefs = await SharedPreferences.getInstance();
     String empid = prefs.getString("empid");
     String orgid = prefs.getString("orgdir");
@@ -508,7 +523,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       )
       );
       setState(() {
-        _isButtonDisabled=false;
+        isServiceCalling=false;
       });
     }else if(islogin=="1"){
       //print("####################");
@@ -519,7 +534,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       )
       );
       setState(() {
-        _isButtonDisabled=false;
+        isServiceCalling=false;
       });
     }else if(islogin=="2"){
       //print("@@@@@@@@@@@@@@@@@@@");
@@ -530,7 +545,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       )
       );
       setState(() {
-        _isButtonDisabled=false;
+        isServiceCalling=false;
       });
     }else if(islogin=="3"){
       //print("%%%%%%%%%%%%%%%%%%");
@@ -541,7 +556,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       )
       );
       setState(() {
-        _isButtonDisabled=false;
+        isServiceCalling=false;
       });
     }else if(islogin=="false"){
       //print("!!!!!!!!!!!!!!!!!!!!!!");
@@ -552,12 +567,12 @@ class _TimeOffPageState extends State<TimeOffPage> {
       )
       );
       setState(() {
-        _isButtonDisabled=false;
+        isServiceCalling=false;
       });
     }else {
       showInSnackBar(islogin);
       setState(() {
-        _isButtonDisabled=false;
+        isServiceCalling=false;
       });
     }
   }

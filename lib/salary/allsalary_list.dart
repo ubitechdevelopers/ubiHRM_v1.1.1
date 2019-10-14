@@ -428,7 +428,7 @@ class _allSalarySummary extends State<allSalarySummary> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text('Salary',
-                      style: new TextStyle(fontSize: 22.0, color: Colors.grey[700])),
+                      style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                   //SizedBox(height: 10.0),
 
                   new Divider(color: Colors.black54,height: 1.5,),
@@ -578,7 +578,7 @@ class _allSalarySummary extends State<allSalarySummary> {
                                 width: MediaQuery.of(context).size.width*1,
                                 color: appStartColor().withOpacity(0.1),
                                 padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                child:Text("No Records  ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                child:Text("No Records",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                               ),
                             );
                         } else if (snapshot.hasError) {

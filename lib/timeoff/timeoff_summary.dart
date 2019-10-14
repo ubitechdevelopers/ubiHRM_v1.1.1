@@ -37,7 +37,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
   String orgName="";
 
 
-
+  bool _checkwithdrawntimeoff = false;
   bool _checkLoaded = true;
   int checkProcessing = 0;
   int _currentIndex = 1;
@@ -134,6 +134,9 @@ class _TimeoffSummary extends State<TimeoffSummary> {
   }
 
   withdrawlTimeOff(String timeoffid) async{
+    setState(() {
+      _checkwithdrawntimeoff = true;
+    });
     RequestTimeOffService ns = new RequestTimeOffService();
 
     var timeoff = TimeOff(TimeOffId: timeoffid, OrgId: orgid, EmpId: empid, ApprovalSts: '5');
@@ -179,11 +182,11 @@ class _TimeoffSummary extends State<TimeoffSummary> {
   confirmWithdrawl(String timeoffid) async{
     showDialog(context: context, child:
     new AlertDialog(
-      title: new Text("Withdraw TimeOff?",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18.0),),
+      title: new Text("Withdraw timeoff?",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18.0),),
       content:  ButtonBar(
         children: <Widget>[
           RaisedButton(
-            child: Text('Withdraw',style: TextStyle(color: Colors.white),),
+            child:_checkwithdrawntimeoff?Text('Processing..',style: TextStyle(color: Colors.white),):Text('Withdraw',style: TextStyle(color: Colors.white),),
             color: Colors.orange[800],
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
@@ -454,7 +457,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                     padding: EdgeInsets.only(top:12.0),
                     child:Center(
                       child:Text('My Time Off',
-                          style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                          style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                     ),
                   ),
 
@@ -625,7 +628,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                 width: MediaQuery.of(context).size.width*1,
                                 color: appStartColor().withOpacity(0.1),
                                 padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                child:Text("you have not taken any time off  ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                child:Text("You have not taken any time off",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                               ),
                             );
                         } else if (snapshot.hasError) {

@@ -206,7 +206,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                   autofocus: true,
                   controller: _comments,
                   decoration: new InputDecoration(
-                      labelText: 'Visit Feedback ', hintText: 'Visit Feedback (Optional)'),
+                      labelText: 'Visit Feedback', hintText: 'Visit Feedback (Optional)'),
                 ),
               ),
               SizedBox(height: 4.0,),
@@ -216,7 +216,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
         ),
         actions: <Widget>[
           new FlatButton(
-              shape: Border.all(color: Colors.orange),
+              shape: Border.all(color: Colors.orange[800]),
               child: const Text('CANCEL',style: TextStyle(color: Colors.black87),),
               onPressed: () {
                 _comments.text='';
@@ -224,7 +224,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
               }),
           new RaisedButton(
               child: const Text('PUNCH',style: TextStyle(color: Colors.white),),
-              color: Colors.orange,
+              color: Colors.orange[800],
               onPressed: () async{
                 sl.startStreaming(5);
                 SaveImage saveImage = new SaveImage();
@@ -239,8 +239,8 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                 print('<<****************************');*/
                 Navigator.of(context, rootNavigator: true).pop();
                 saveImage.saveVisitOut(empid,streamlocationaddr.toString(),visit_id.toString(),latit,longi,_comments.text,orgid).then((res){
-                  print("------------------------------>>>>");
-                  print(res);
+                 // print("------------------------------>>>>");
+                  //print(res);
                  if(res){
                    Navigator.push(
                      context,
@@ -248,7 +248,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                    );
                    showDialog(context: context, child:
                    new AlertDialog(
-                     content: new Text("Visit punched successfully!"),
+                     content: new Text("Visit punched successfully."),
                    )
                    );
                  }else{
@@ -323,31 +323,31 @@ print('visit out called for visit id:'+visit_id);
                             children: <Widget>[
                               Icon(
                                   Icons.person,
-                                  color: Colors.orange,
+                                  color: Colors.orange[800],
                                   size: 22.0 ),
                               GestureDetector(
                                 onTap: () {
                                   false;
                                 },
 
-                                child: const Text(
+                                child: Text(
                                     'Self',
-                                    style: TextStyle(fontSize: 18,color: Colors.orange,fontWeight:FontWeight.bold)
+                                    style: TextStyle(fontSize: 18,color: Colors.orange[800],fontWeight:FontWeight.bold)
                                 ),
                               ),
                             ]),
 
                         SizedBox(height:MediaQuery.of(context).size.width*.036),
                         Divider(
-                          color: Colors.orange,
+                          color: Colors.orange[800],
                           height: 0.4,
                         ),
                         Divider(
-                          color: Colors.orange,
+                          color: Colors.orange[800],
                           height: 0.4,
                         ),
                         Divider(
-                          color: Colors.orange,
+                          color: Colors.orange[800],
                           height: 0.4,
                         ),
                       ]
@@ -372,13 +372,13 @@ print('visit out called for visit id:'+visit_id);
                               children: <Widget>[
                                 Icon(
                                     Icons.group,
-                                    color: Colors.orange,
+                                    color: Colors.orange[800],
                                     size: 22.0 ),
                                 GestureDetector(
 
-                                  child: const Text(
+                                  child: Text(
                                       'Team',
-                                      style: TextStyle(fontSize: 18,color: Colors.orange)
+                                      style: TextStyle(fontSize: 18,color: Colors.orange[800])
                                   ),
                                 ),
                               ]),
@@ -393,7 +393,7 @@ print('visit out called for visit id:'+visit_id);
             padding: EdgeInsets.only(top:12.0),
             child:Center(
               child:Text("My Visits Today",
-                  style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                  style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
             ),
           ),
          // Divider(color: Colors.black54,height: 1.5,),
@@ -648,7 +648,7 @@ print('visit out called for visit id:'+visit_id);
                       width: MediaQuery.of(context).size.width*1,
                       color: appStartColor().withOpacity(0.1),
                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                      child:Text("No Visits Today ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                      child:Text("No Visits Today",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                       ),
                       );
                       }

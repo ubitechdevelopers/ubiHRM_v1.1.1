@@ -398,7 +398,7 @@ class _PunchLocation extends State<PunchLocation> {
                       textAlign: TextAlign.right,
                     ),
                     Text(
-                      "If Location not being fetched automatically?",
+                      "If location not being fetched automatically?",
                       style: new TextStyle(fontSize: 12.0, color: Colors.black),
                       textAlign: TextAlign.left,
                     ),
@@ -416,7 +416,7 @@ class _PunchLocation extends State<PunchLocation> {
                   startTimer();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => PunchLocation()),
                   );
                 },
               ),
@@ -503,7 +503,7 @@ class _PunchLocation extends State<PunchLocation> {
                   startTimer();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => PunchLocation()),
                   );
                 },
               ),
@@ -680,7 +680,7 @@ class _PunchLocation extends State<PunchLocation> {
         );
         showDialog(context: context, child:
           new AlertDialog(
-            content: new Text("Visit punched successfully!"),
+            content: new Text("Visit punched successfully."),
           )
         );
         setState(() {
@@ -701,7 +701,7 @@ class _PunchLocation extends State<PunchLocation> {
       showDialog(context: context, child:
         new AlertDialog(
 
-          content: new Text("Internet connection not found!."),
+          content: new Text("Internet connection not found."),
         )
       );
     }

@@ -340,7 +340,7 @@ class _Flexitime extends State<Flexitime> {
                           textAlign: TextAlign.right,
                     ),
                     Text(
-                      " If Location not being fetched automatically?",
+                      "If location not being fetched automatically?",
                       style: new TextStyle(fontSize: 12.0, color: Colors.black),
                       textAlign: TextAlign.left,
                     ),
@@ -358,7 +358,7 @@ class _Flexitime extends State<Flexitime> {
                   startTimer();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => Flexitime()),
                   );
                 },
               ),
@@ -744,7 +744,7 @@ class _Flexitime extends State<Flexitime> {
       });*/
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text("Attendance punched successfully!"),
+        content: new Text("Attendance punched successfully."),
       )
       );
       await new Future.delayed(const Duration(seconds: 2));
@@ -756,7 +756,12 @@ class _Flexitime extends State<Flexitime> {
         act1 = act;
       });
     }else{
-      showInSnackBar('Unable to punch attendance');
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('Unable to punch attendance.'),
+      )
+      );
+      //showInSnackBar('Unable to punch attendance');
       setState(() {
         act1 = act;
       });
@@ -814,7 +819,7 @@ class _Flexitime extends State<Flexitime> {
         });*/
         showDialog(context: context, child:
         new AlertDialog(
-          content: new Text("Attendance punched successfully!"),
+          content: new Text("Attendance punched successfully."),
         )
         );
         await new Future.delayed(const Duration(seconds: 2));
@@ -840,7 +845,7 @@ class _Flexitime extends State<Flexitime> {
     }else {
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text("Internet connection not found!."),
+        content: new Text("Internet connection not found."),
       )
       );
     }

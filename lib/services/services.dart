@@ -98,11 +98,11 @@ List<Permission> createUserPermList(List data) {
 getModuleUserPermission(String moduleid, String permission_type){
   List<Permission> list = new List();
   list = globalpermissionlist1;
-print("--------<<<<<<<LIST");
-print(list);
-print("dfdghgdf");
-print(globalpermissionlist1);
-print('globalpermissionlist1');
+  print("--------<<<<<<<LIST");
+  print(list);
+  print("dfdghgdf");
+  print(globalpermissionlist1);
+  print('globalpermissionlist1');
   for (int i = 0; i < list.length; i++) {
     //  print("permisstion list "+list[i].permissionlist.toString());
     if(list[i].moduleid==moduleid){
@@ -139,7 +139,7 @@ getProfileInfo(Employee emp) async{
     globalcompanyinfomap = responseJson['Company'];
     globalprofileinfomap = responseJson['ProfilePic'];
     prefs.setString("profilepic", responseJson['ProfilePic']);
-  //  print("vvvvvvvvvvvvv"+globalcompanyinfomap['Division']);
+    //  print("vvvvvvvvvvvvv"+globalcompanyinfomap['Division']);
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
@@ -202,11 +202,11 @@ getovertime(Employee emp) async{
     if(responseJson['otime']==null && responseJson['utime']==null ){
       overtime = '00:00';
     }
-   // undertime ='00:00';
+    // undertime ='00:00';
     // overtime='';
-  //  }
+    //  }
 
-   /* print('**********');
+    /* print('**********');
     print(overtime);
     print(undertime);
     print('**********');*/
@@ -230,7 +230,7 @@ getCountAproval() async{
 
   var response =  await dio.post(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
   Map responseJson = json.decode(response.data.toString());
- /* print('AAAAAA');
+  /* print('AAAAAA');
   print(responseJson['total']);
   print('AAAAAA');*/
   if(responseJson['total']>0) {
@@ -249,17 +249,17 @@ getReportingTeam(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
 //print("-------------------->"+emp.employeeid);
- // print(emp.organization);
+  // print(emp.organization);
   try {
     FormData formData = new FormData.from({
       "employeeid": emp.employeeid,
       "organization": emp.organization
     });
-  Response<String> response =
-  await dio.post(path + "getReportingTeam", data: formData);
- // print("---------> response"+response.toString());
-  List responseJson = json.decode(response.data.toString());
- // print(responseJson);
+    Response<String> response =
+    await dio.post(path + "getReportingTeam", data: formData);
+    // print("---------> response"+response.toString());
+    List responseJson = json.decode(response.data.toString());
+    // print(responseJson);
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
@@ -504,7 +504,7 @@ Future<List<Map<String, String>>> getChartDataYes() async {
     }
   }
 //  print('==========');
- // print(val);
+  // print(val);
   return val;
 }
 
@@ -521,7 +521,7 @@ Future<List<Map<String, String>>> getChartData() async {
 
   final data = json.decode(response.data);
   //print(response);
- // print(data['leavesummary']['data'][0]['name']);
+  // print(data['leavesummary']['data'][0]['name']);
 
 
   List<Map<String, String>> val = [
@@ -558,14 +558,14 @@ Future<List<Map<String, String>>> getAttsummaryChart() async {
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
- // ?eid=$empid&refno=$organization
+  // ?eid=$empid&refno=$organization
   final response = await dio.post(
       path+"getAttSummaryChart?eid=$empid&refno=$organization"
   );
 // print(response.toString());
   final data = json.decode(response.data.toString());
 //print("fdgdgdfgd"+data.toString());
- //print(data['att']['month']);
+  //print(data['att']['month']);
   prefs.setString("attmonth", data['att']['month'].toString());
 
   List<Map<String, String>> val = [
@@ -589,20 +589,20 @@ Future<List<Holi>> getHolidays() async {
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
 //try {
- // print("-------------------->"+emp.employeeid);
+  // print("-------------------->"+emp.employeeid);
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
- /* FormData formData = new FormData.from({
+  /* FormData formData = new FormData.from({
     "employeeid": emp.employeeid,
     "organization": emp.organization
   });*/
- // print(path + "getHolidays" + empid);
+  // print(path + "getHolidays" + empid);
   Response<String> response =
   await dio.post(path+"getHolidays?&employeeid="+empid+"&organization="+orgdir);
   print(await dio.post(path+"getHolidays?&employeeid="+empid+"&organization="+orgdir));
   print("1777.---------  "+response.toString());
   List responseJson = json.decode(response.data.toString());
- // print("1.---------  "+responseJson.toString());
+  // print("1.---------  "+responseJson.toString());
   List<Holi> holilist = createHolidayList(responseJson);
   return holilist;
 
@@ -616,7 +616,7 @@ List<Holi> createHolidayList(List data) {
     String date = data[i]["date"];
     String message = data[i]["message"];
 
-   Holi holi = new Holi(name: name, date: date, message: message);
+    Holi holi = new Holi(name: name, date: date, message: message);
     list.add(holi);
   }
   return list;
@@ -970,7 +970,7 @@ class profileup {
       }); //print('##############################################################');
       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
       Response response = await dio.post(
-         path + "getProfile",
+          path + "getProfile",
           data: formData);
       //  print('##############################################################');
       // print(response.toString());
@@ -999,19 +999,19 @@ class profileup {
       final prefs = await SharedPreferences.getInstance();
 
 
-        String empid = prefs.getString('employeeid')??"";
-        String organization =prefs.getString('organization')??"";
-        Employee emp = new Employee(employeeid: empid, organization: organization);
+      String empid = prefs.getString('employeeid')??"";
+      String organization =prefs.getString('organization')??"";
+      Employee emp = new Employee(employeeid: empid, organization: organization);
 
 
-       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
+      //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
       Response response = await dio.post(
           path + "updateProfile",
           data: formData);
       //print(response.toString());
       if (response.statusCode == 200) {
         Map profileMap = json.decode(response.data);
-      // getProfileInfo(emp);
+        // getProfileInfo(emp);
         //print("**********))))))))");
         //print(profileMap["res"]);
         if (profileMap["res"] == 1) {
@@ -1090,7 +1090,7 @@ class profileup {
     }
   }
 
-  /*Future<bool> updateProfilePhoto(int uploadtype, String empid, String orgid) async {
+/*Future<bool> updateProfilePhoto(int uploadtype, String empid, String orgid) async {
     Dio dio = new Dio();
     try {
       File imagei = null;
@@ -1218,6 +1218,5 @@ const List<Choice> choices = const <Choice>[
   // const Choice(title: 'REJECTED', icon: Icons.directions_boat),
 
 ];
-
 
 

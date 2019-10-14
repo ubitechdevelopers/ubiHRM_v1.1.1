@@ -114,10 +114,7 @@ class _FlexiList extends State<FlexiList> {
             Center(
               child: Text(
                 'Flexi Log',
-                style: new TextStyle(
-                  fontSize: 22.0,
-                  color: Colors.black54,
-                ),
+                  style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center
               ),
             ),
             Divider(
@@ -306,7 +303,6 @@ class _FlexiList extends State<FlexiList> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(snapshot.data[index].pi_time
-                                        .toString()+"|"+snapshot.data[index].timeindate
                                         .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
                                     Container(
                                       width: 62.0,
@@ -328,7 +324,7 @@ class _FlexiList extends State<FlexiList> {
                                         },
                                       ),
                                     ),
-                                    //Text(snapshot.data[index].timeindate.toString(),style: TextStyle(color: Colors.grey),),
+                                    Text(snapshot.data[index].timeindate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
                                   ],
                                 )
                               ),
@@ -342,8 +338,7 @@ class _FlexiList extends State<FlexiList> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(snapshot.data[index].po_time
-                                    .toString()+"|"+ snapshot.data[index].timeoutdate
-                                        .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
+                                    .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
                                     Container(
                                       width: 62.0,
                                       height: 62.0,
@@ -368,7 +363,8 @@ class _FlexiList extends State<FlexiList> {
                                         },
                                       ),
                                     ),
-                                    //Text(snapshot.data[index].timeoutdate.toString(),style: TextStyle(color: Colors.grey),),
+                                    Text(snapshot.data[index].timeoutdate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
+
                                   ],
                                 )
                                ),

@@ -45,7 +45,7 @@ class _MyLeaveState extends State<MyLeave> {
 
   void initState() {
     super.initState();
-    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+    profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
 
     profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
@@ -143,16 +143,16 @@ class _MyLeaveState extends State<MyLeave> {
   confirmWithdrawl(String leaveid) async{
     showDialog(context: context, child:
     new AlertDialog(
-      title: new Text("Withdraw Leave?"),
+      title: new Text("Withdraw leave?"),
       content:  ButtonBar(
         children: <Widget>[
           RaisedButton(
-            child: Text('Withdraw',style: TextStyle(color: Colors.white),),
+            child: _checkwithdrawnleave?Text('Processing',style: TextStyle(color: Colors.white),):Text('Withdraw',style: TextStyle(color: Colors.white),),
             color: Colors.orange[800],
             onPressed: () {
-              setState(() {
+              /*setState(() {
                 _checkwithdrawnleave = true;
-              });
+              });*/
               Navigator.of(context, rootNavigator: true).pop();
               withdrawlLeave(leaveid);
             },
@@ -167,6 +167,12 @@ class _MyLeaveState extends State<MyLeave> {
         ],
       ),
     )
+    );
+    return new Center(child: SizedBox(
+      child: CircularProgressIndicator(strokeWidth: 2.2,),
+      height: 20.0,
+      width: 20.0,
+    ),
     );
   }
 
@@ -346,7 +352,7 @@ class _MyLeaveState extends State<MyLeave> {
                   padding: EdgeInsets.only(top:12.0),
                   child:Center(
                     child:Text('My Leave',
-                        style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                        style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                   ),
                 ),
 
@@ -506,7 +512,15 @@ class _MyLeaveState extends State<MyLeave> {
                                 }
                             );
                           }else
-                            return new Center( child: Text('No Leave History'), );
+                            return new Center(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width*1,
+                                color: appStartColor().withOpacity(0.1),
+                                padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                child:Text("No Leave History",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                              ),
+                            );
+                            //return new Center( child: Text('No Leave History'), );
                         } else if (snapshot.hasError) {
                           return new Text("Unable to connect server");
                         }

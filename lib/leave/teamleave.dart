@@ -256,7 +256,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                     padding: EdgeInsets.only(top:12.0),
                     child:Center(
                       child:Text("Team's Leave",
-                          style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                          style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                     ),
                   ),
 
@@ -465,7 +465,15 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                   }
                               );
                             }else
-                              return new Center( child: Text('No Leave History'), );
+                              return new Center(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*1,
+                                  color: appStartColor().withOpacity(0.1),
+                                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                  child:Text("No Leave History",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                                ),
+                              );
+                              //return new Center( child: Text('No Leave History'), );
                           } else if (snapshot.hasError) {
                             return new Text("Unable to connect server");
                           }
@@ -965,8 +973,16 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                 );
                               }else{
                                 return new Center(
-                                  child:Text("No Records"),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width*1,
+                                    color: appStartColor().withOpacity(0.1),
+                                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                    child:Text("No Records",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                                  ),
                                 );
+                                /*return new Center(
+                                  child:Text("No Records"),
+                                );*/
                               }
                             }
                             else if (snapshot.hasError) {

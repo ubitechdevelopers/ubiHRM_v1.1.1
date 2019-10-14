@@ -202,7 +202,7 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
                   autofocus: true,
                   controller: _comments,
                   decoration: new InputDecoration(
-                      labelText: 'Visit Feedback ', hintText: 'Visit Feedback (Optional)'),
+                      labelText: 'Visit Feedback', hintText: 'Visit Feedback (Optional)'),
                 ),
               ),
               SizedBox(height: 4.0,),
@@ -393,7 +393,7 @@ print('visit out called for visit id:'+visit_id);
                     padding: EdgeInsets.only(top:12.0,),
                     child:Center(
                       child:Text("Today's Visits",
-                          style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                          style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                     ),
                   ),
 
@@ -538,7 +538,7 @@ print('visit out called for visit id:'+visit_id);
                                     width: MediaQuery.of(context).size.width*1,
                                     color: appStartColor().withOpacity(0.1),
                                     padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                    child:Text("Team data not found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                    child:Text("Team data not found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                                   ),
                                 );
                               }

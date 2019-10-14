@@ -31,7 +31,7 @@ class _MyExpenceState extends State<MyExpence> {
   String orgName="";
 
   bool _checkLoadedprofile = true;
-  bool _checkwithdrawnleave = false;
+  bool _checkwithdrawnexpense = false;
   var PerLeave;
   var PerApprovalLeave;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -95,7 +95,7 @@ class _MyExpenceState extends State<MyExpence> {
     ));
   }
 
-  withdrawlLeave(String leaveid) async{
+  /*withdrawlLeave(String leaveid) async{
     setState(() {
       _checkwithdrawnleave = true;
     });
@@ -108,10 +108,10 @@ class _MyExpenceState extends State<MyExpence> {
     var islogin = await withdrawLeave(leave);
     print(islogin);
     if(islogin=="success"){
-     /* Navigator.push(
+     *//* Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => MyLeave()),
-      );*/
+      );*//*
       showDialog(context: context, child:
       new AlertDialog(
         //  title: new Text("Congrats!"),
@@ -133,21 +133,14 @@ class _MyExpenceState extends State<MyExpence> {
       )
       );
     }
-  }
+  }*/
 
-  confirmWithdrawl(String leaveid) async{
+  /*confirmWithdrawl(String leaveid) async{
     showDialog(context: context, child:
     new AlertDialog(
       title: new Text("Withdraw Expense?"),
       content:  ButtonBar(
         children: <Widget>[
-          FlatButton(
-            shape: Border.all(color: Colors.orange[800]),
-            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-            },
-          ),
           RaisedButton(
             child: Text('Withdraw',style: TextStyle(color: Colors.white),),
             color: Colors.orange[800],
@@ -160,11 +153,18 @@ class _MyExpenceState extends State<MyExpence> {
 
             },
           ),
+          FlatButton(
+            shape: Border.all(color: Colors.orange[800]),
+            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
         ],
       ),
     )
     );
-  }
+  }*/
 
 
   Future<Widget> islogin() async{
@@ -214,7 +214,7 @@ class _MyExpenceState extends State<MyExpence> {
         appBar: new ExpenseAppHeader(profileimage,showtabbar,orgName),
         bottomNavigationBar:new HomeNavigation(),
         body:  ModalProgressHUD(
-            inAsyncCall: _checkwithdrawnleave,
+            inAsyncCall: _checkwithdrawnexpense,
             opacity: 0.15,
             progressIndicator: SizedBox(
               child:new CircularProgressIndicator(
@@ -257,11 +257,8 @@ class _MyExpenceState extends State<MyExpence> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text('My Expenses',
-                      style: new TextStyle(fontSize: 22.0, color: appStartColor())),
+                      style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center,),
                   //SizedBox(height: 10.0),
-
-
-
                   new Divider(),
                   new Expanded(
                     child: Container(
@@ -331,8 +328,16 @@ class _MyExpenceState extends State<MyExpence> {
                               );
                             }else
                               return new Center(
-                                child: Text('No Expense History'),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*1,
+                                  color: appStartColor().withOpacity(0.1),
+                                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                  child:Text("No Expense History",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                                ),
                               );
+                              /*return new Center(
+                                child: Text('No Expense History'),
+                              );*/
                           } else if (snapshot.hasError) {
                             return new Text("Unable to connect server");
                           }

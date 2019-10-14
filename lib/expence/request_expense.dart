@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,6 +43,7 @@ class RequestExpence extends StatefulWidget {
 
 class _RequestExpenceState extends State<RequestExpence> {
   bool isloading = false;
+  bool isServiceCalling = false;
   final _dateController = TextEditingController();
   final _starttimeController = TextEditingController();
   final _endtimeController = TextEditingController();
@@ -187,12 +189,22 @@ class _RequestExpenceState extends State<RequestExpence> {
         key: _scaffoldKey,
         backgroundColor:scaffoldBackColor(),
         appBar: new AppHeader(profileimage,showtabbar,orgName),
-
         bottomNavigationBar:  new HomeNavigation(),
-
         endDrawer: new AppDrawer(),
         // body: (act1=='') ? Center(child : loader()) : checkalreadylogin(),
-        body:  getExpenseWidgit(),
+        //body:  getExpenseWidgit(),
+          body: ModalProgressHUD(
+              inAsyncCall: isServiceCalling,
+              opacity: 0.15,
+              progressIndicator: SizedBox(
+                child:new CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation(Colors.green),
+                    strokeWidth: 5.0),
+                height: 40.0,
+                width: 40.0,
+              ),
+              child: getExpenseWidgit()
+          )
       ),
     );
 
@@ -283,7 +295,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                 SizedBox(height: 10.0),
                 //   mainAxisAlignment: MainAxisAlignment.start,
                 Text('Expense Request',
-                    style: new TextStyle(fontSize: 22.0, color: appStartColor())),
+                    style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center,),
                 new Divider(color: Colors.black54,height: 1.5,),
                 new Expanded(child: ListView(
                   children: <Widget>[
@@ -486,6 +498,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                                   //child: Text("Select Image", style: TextStyle(color:_image!=null ? Colors.green[500]:Colors.grey[500],),textAlign: TextAlign.start,),
                                   onPressed: () async {
                                     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                    print(image);
                                     //  ExpenseDoc=image;
                                     setState(() {
                                       _image = image;
@@ -547,7 +560,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                             ),*/
                             RaisedButton(
                               /* child: _isButtonDisabled?Row(children: <Widget>[Text('Processing ',style: TextStyle(color: Colors.white),),SizedBox(width: 10.0,), SizedBox(child:CircularProgressIndicator(),height: 20.0,width: 20.0,),],):Text('SAVE',style: TextStyle(color: Colors.white),),*/
-                              child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('SAVE',style: TextStyle(color: Colors.white),),
+                              child: isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('SAVE',style: TextStyle(color: Colors.white),),
                               color: Colors.orange[800],
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
@@ -659,8 +672,13 @@ class _RequestExpenceState extends State<RequestExpence> {
 
 
   Future<bool> saveExpense(var expensedate, var category, var desc, var amount, File doc, BuildContext context) async { // visit in function
+
     try {
       Dio dio = new Dio();
+      setState(() {
+        isServiceCalling = true;
+      });
+      print("----> service calling "+isServiceCalling.toString());
       final prefs = await SharedPreferences.getInstance();
       String orgid = prefs.getString('organization') ?? '';
       String empid = prefs.getString('employeeid') ?? "";
@@ -680,8 +698,7 @@ class _RequestExpenceState extends State<RequestExpence> {
         Response<String> response1;
         try {
           // print(globals.path +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
-          response1 =
-          await dio.post(globals.path + "saveExpense", data: formData);
+          response1 = await dio.post(globals.path + "saveExpense", data: formData);
           print("----->save Expense* --->" + response1.toString());
         } catch (e) {
           print('------------*');
@@ -720,15 +737,17 @@ class _RequestExpenceState extends State<RequestExpence> {
           return true;
         }
         else if((response1.toString().contains("false1"))){
-          Navigator.push(
+          /*Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyExpence()),
-          );
+          );*/
           showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense already applied on this date.'),
           ));
-
+          setState(() {
+            isServiceCalling = false;
+          });
           //print('------false1  in img');
           //showInSnackBar("Expence already applied on this date");
         }
@@ -739,7 +758,10 @@ class _RequestExpenceState extends State<RequestExpence> {
             content: new Text('There is some problem while applying for Expense.'),
           ));
           //showInSnackBar("There is some problem while applying for Expense.");
-          return false;
+          //return false;
+          setState(() {
+            isServiceCalling = false;
+          });
         }
       }
 
@@ -804,6 +826,9 @@ class _RequestExpenceState extends State<RequestExpence> {
           content: new Text('Expense already applied on this date.'),
         )
         );
+        setState(() {
+          isServiceCalling = false;
+        });
         //showInSnackBar("Expence already applied on this date");
       }
       else {
@@ -814,7 +839,10 @@ class _RequestExpenceState extends State<RequestExpence> {
         )
         );
         //showInSnackBar("There is some problem while applying for Expense.");
-        return false;
+        //return false;
+        setState(() {
+          isServiceCalling = false;
+        });
       }
 
       }

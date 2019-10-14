@@ -330,7 +330,7 @@ getWidgets(context){
                 padding: EdgeInsets.only(top:12.0),
                 child:Center(
                   child:Text('My Attendance Log',
-                      style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                      style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                 ),
               ),
 

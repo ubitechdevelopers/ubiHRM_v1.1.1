@@ -837,6 +837,8 @@ Future<int> resetMyPassword(username) async {
   print('Forgot password rew sbmit'+ username);
   final response = await http.get(globals.path_ubiattendance +
       'resetPasswordLink?una=$username');
+  print("Reset Password");
+  print(globals.path_ubiattendance + 'resetPasswordLink?una=$username');
   print("response for forgot pass::::"+response.body.toString());
   return int.parse(response.body);
 }//'https://ubiattendance.ubihrm.com/index.php/services/resetPasswordLink?una='+una+'&refno='+refno,
