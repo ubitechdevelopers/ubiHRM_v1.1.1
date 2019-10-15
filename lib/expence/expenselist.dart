@@ -572,8 +572,16 @@ class _MyExpenceState extends State<MyExpence> {
                             );
                           }else
                             return new Center(
-                              child: Text('No Expense History'),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width*1,
+                                color: appStartColor().withOpacity(0.1),
+                                padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                child:Text("No Expense History",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                              ),
                             );
+                            /*return new Center(
+                              child: Text('No Expense History'),
+                            );*/
                         } else if (snapshot.hasError) {
                           return new Text("Unable to connect server");
                         }

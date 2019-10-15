@@ -206,7 +206,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                   autofocus: true,
                   controller: _comments,
                   decoration: new InputDecoration(
-                      labelText: 'Visit Feedback', hintText: 'Visit Feedback (Optional)'),
+                      labelText: 'Visit Feedback', hintText: 'Visit Feedback(Optional)'),
                 ),
               ),
               SizedBox(height: 4.0,),

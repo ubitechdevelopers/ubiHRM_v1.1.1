@@ -324,7 +324,7 @@ class _FlexiList extends State<FlexiList> {
                                         },
                                       ),
                                     ),
-                                    Text(snapshot.data[index].timeindate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
+                                   // Text(snapshot.data[index].timeindate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
                                   ],
                                 )
                               ),
@@ -363,7 +363,7 @@ class _FlexiList extends State<FlexiList> {
                                         },
                                       ),
                                     ),
-                                    Text(snapshot.data[index].timeoutdate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
+                                    //Text(snapshot.data[index].timeoutdate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
 
                                   ],
                                 )
@@ -386,7 +386,7 @@ class _FlexiList extends State<FlexiList> {
                   width: MediaQuery.of(context).size.width*1,
                   color: appStartColor().withOpacity(0.1),
                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                  child:Text("No Flexi Log Found ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                  child:Text("No Flexi Log Found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                 ),
               );
             }

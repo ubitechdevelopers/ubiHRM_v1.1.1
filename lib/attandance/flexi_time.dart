@@ -380,7 +380,8 @@ class _Flexitime extends State<Flexitime> {
                 PermissionHandler().openAppSettings();
               },
             ),
-          ]);
+          ]
+      );
     }
   }
 

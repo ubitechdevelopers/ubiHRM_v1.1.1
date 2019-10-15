@@ -463,10 +463,10 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-//            crossAxisAlignment: CrossAxisAlignment.start,
+                    //crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(height: 20.0,),
-                 //     SizedBox(width: MediaQuery.of(context).size.width*0.02),
+                    //SizedBox(width: MediaQuery.of(context).size.width*0.02),
                       new Expanded(
                         child:  Container(
                         width: MediaQuery.of(context).size.width*0.50,

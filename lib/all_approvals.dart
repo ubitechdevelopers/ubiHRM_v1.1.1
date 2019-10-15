@@ -433,8 +433,17 @@ class _AllApprovals extends State<AllApprovals> {
                     },
                   ):Center(),
 
-                  ( perLeaveApproval!='1' &&  perTimeoffApproval!='1' ) ?
-                  Text('No Approvals found for you.',style: TextStyle(fontSize: 18.0),) : Center()
+                  ( perLeaveApproval!='1' &&  perTimeoffApproval!='1' ) ?new Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top:240.0,bottom: 5.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width*1,
+                        color: appStartColor().withOpacity(0.1),
+                        padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                        child:Text("No Approvals found for you",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                      ),
+                    ),
+                  ) : Center()
          /*         new Divider(height: 5.5,),
                   new Row(
 

@@ -261,7 +261,7 @@ class _DashboardStatemain extends State<DashboardMain> {
                 SizedBox(height: 20.0,),
                 perAttendance=='1'?  Row(children: <Widget>[
                   SizedBox(width: 20.0,),
-                  Text("Monthly summary  ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
+                  Text("Monthly summary ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ]
                 ):Center(),
 
@@ -288,7 +288,15 @@ class _DashboardStatemain extends State<DashboardMain> {
                           );
 
                         }
-                        return new Center( child: Text("No data found"), );
+                        //return new Center( child: Text("No data found"), );
+                        return new Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width*1,
+                            color: appStartColor().withOpacity(0.1),
+                            padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                            child:Text("No data found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                          ),
+                        );
                         // return new Center( child: CircularProgressIndicator());
                       }
 
@@ -297,9 +305,8 @@ class _DashboardStatemain extends State<DashboardMain> {
                   //child: new DonutAutoLabelChart .withSampleData(),
                 ):Center(),
 
-
-                SizedBox(width: 40.0,),
-                Divider(height: 10.0,),
+                SizedBox(height: 40.0,),
+                //SizedBox(width: 40.0,),
                 perEmployeeLeave =='1' ?
 
                 Row(children: <Widget>[
@@ -307,6 +314,7 @@ class _DashboardStatemain extends State<DashboardMain> {
                   Text("Leave Data ["+fiscalyear+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ]
                 ):Center(),
+                Divider(height: 10.0,),
 
                 //   perEmployeeLeave =='1' ? Divider(height: 0.0,):Center(),
                 /*SimpleBarChart.withSampleData(),*/
@@ -323,9 +331,25 @@ class _DashboardStatemain extends State<DashboardMain> {
                           if (snapshot.data.length > 0) {
                             return new StackedHorizontalBarChart.withSampleData(snapshot.data);
                           }
-                          return new Center( child: Text("No data found"), );
+                          //return new Center( child: Text("No data found"), );
+                          return new Center(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*1,
+                              color: appStartColor().withOpacity(0.1),
+                              padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                              child:Text("No data found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                            ),
+                          );
                         }
-                        return new Center( child: Text("No data found"), );
+                        //return new Center( child: Text("No data found"), );
+                        return new Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width*1,
+                            color: appStartColor().withOpacity(0.1),
+                            padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                            child:Text("No data found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                          ),
+                        );
                       }
                   ),
                   // child: new StackedHorizontalBarChart .withSampleData()
@@ -336,7 +360,6 @@ class _DashboardStatemain extends State<DashboardMain> {
                 SizedBox(height: 40.0,),
                 Row(children: <Widget>[
                   SizedBox(width: 20.0,),
-
                  // Text("Monthly Holidays ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                   Text("Upcoming Holidays",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ]
@@ -407,7 +430,7 @@ class _DashboardStatemain extends State<DashboardMain> {
                                         width: MediaQuery.of(context).size.width*1,
                                         color: appStartColor().withOpacity(0.1),
                                         padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                        child:Text("No Holidays this month ",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                                        child:Text("No Holidays this month",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                                       ),
                                     );
                                   }
@@ -521,7 +544,7 @@ class _DashboardStatemain extends State<DashboardMain> {
     return  new  Column(children: <Widget>[
       // SizedBox(width: 20.0,),
       Row(children: <Widget>[
-        new  Text("    "+month+"",textAlign: TextAlign.left,style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold,)),
+        new  Text("    "+month+"",textAlign: TextAlign.left,style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold,)),
 
       ]),
       Container(

@@ -689,7 +689,7 @@ class _PunchLocation extends State<PunchLocation> {
       } else {
         showDialog(context: context, child:
           new AlertDialog(
-            title: new Text("Warning!"),
+            //title: new Text("Warning!"),
             content: new Text("Problem while punching visit, try again."),
           )
         );

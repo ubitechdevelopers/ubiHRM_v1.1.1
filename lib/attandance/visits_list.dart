@@ -155,7 +155,7 @@ class _VisitList extends State<VisitList> {
                   //SizedBox(width: MediaQuery.of(context).size.width*0.02),
                   Expanded(
                     flex: 50,
-                    child:Text(' Name',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child:Text('Name',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
                   SizedBox(height: 20.0,),
                   Expanded(
