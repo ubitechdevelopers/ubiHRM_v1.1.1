@@ -208,7 +208,7 @@ class _AppDrawerState extends State<AppDrawer> {
             title: Row(
               children: <Widget>[
                 Icon(Icons.monetization_on,size: 20.0),SizedBox(width: 5.0),
-                new Text("Salary", style: new TextStyle(fontSize: 15.0)),
+                new Text("Team Salary", style: new TextStyle(fontSize: 15.0)),
               ],
             ),
             onTap: () {

@@ -220,11 +220,12 @@ class _MyExpenceState extends State<MyExpence> {
               child:new CircularProgressIndicator(
                   valueColor: new AlwaysStoppedAnimation(Colors.green),
                   strokeWidth: 5.0),
-              height: 50.0,
-              width: 50.0,
+              height: 40.0,
+              width: 40.0,
             ),
             child: homewidget()
         ),
+        //body: homewidget(),
         floatingActionButton: new FloatingActionButton(
           backgroundColor: Colors.orange[800],
           onPressed: (){
@@ -409,7 +410,7 @@ class _MyExpenceState extends State<MyExpence> {
               new Expanded(
                 child: Container(
                   width: MediaQuery.of(context).size.width*0.35,
-                  margin: EdgeInsets.only(left:45.0),
+                  margin: EdgeInsets.only(left:40.0),
                   child:Text('Action',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
                 ),
               ),
@@ -485,7 +486,8 @@ class _MyExpenceState extends State<MyExpence> {
                                               new Expanded(
                                                 child: Container(
                                                     width: MediaQuery .of(context).size .width * 0.10,
-                                                    margin: EdgeInsets.only(left:39.0),
+                                                    margin: EdgeInsets.only(left:20.0),
+                                                    padding: EdgeInsets.only(left:15.0),
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
@@ -506,8 +508,8 @@ class _MyExpenceState extends State<MyExpence> {
                                                 child: Container (
                                                   //                   color:Colors.yellow,
                                                    height: MediaQuery .of(context).size.height * 0.03,
-                                                   margin: EdgeInsets.only(left:7.0),
-                                                    //padding: EdgeInsets.only(left:32.0),
+                                                   margin: EdgeInsets.only(left:12.0),
+                                                    padding: EdgeInsets.only(left:12.0),
                                                     width: MediaQuery .of(context).size.width * 0.50,
                                                     child: FlatButton(
                                                       onPressed: () {
@@ -644,7 +646,7 @@ class ExpenseAppHeader extends StatelessWidget implements PreferredSizeWidget {
                   MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
                 );
               },),
-            GestureDetector(
+            /*GestureDetector(
               // When the child is tapped, show a snackbar
               onTap: () {
                 Navigator.push(
@@ -665,10 +667,10 @@ class ExpenseAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       )
                   )
               ),
-            ),
+            ),*/
             Container(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(orgname)
+                child: Text(orgname, overflow: TextOverflow.ellipsis,)
             )
           ],
         ),

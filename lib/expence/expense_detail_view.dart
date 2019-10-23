@@ -26,16 +26,16 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
   var profileimage;
   bool showtabbar ;
   String orgName="";
+  int checkProcessing = 0;
   bool isServiceCalling = false;
+  bool _isButtonDisabled = false;
   bool _checkwithdrawnexpense = false;
 
 
 
   bool _checkLoadedprofile = true;
-
-  @override
-
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
+
   @override
   void initState() {
     super.initState();
@@ -62,7 +62,6 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
 
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
-
     setState(() {
       mainWidget = loadingWidget();
     });
@@ -96,6 +95,9 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
     var islogin = await withdrawExpense(expense);
     print(islogin);
     if(islogin=="success"){
+      setState(() {
+        _isButtonDisabled=false;
+      });
        Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => MyExpence()),
@@ -103,10 +105,13 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
       showDialog(context: context, child:
       new AlertDialog(
         //  title: new Text("Congrats!"),
-        content: new Text("Your expense is withdrawn successfully."),
+        content: new Text("Your expense is withdrawn successfully!"),
       )
       );
     }else if(islogin=="failure"){
+      setState(() {
+        _isButtonDisabled=false;
+      });
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Sorry!"),
@@ -114,6 +119,9 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
       )
       );
     }else{
+      setState(() {
+        _isButtonDisabled=false;
+      });
       showDialog(context: context, child:
       new AlertDialog(
         // title: new Text("Sorry!"),
@@ -134,9 +142,6 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
             child: _checkwithdrawnexpense?Text('Processing..',style: TextStyle(color: Colors.white),):Text('Withdraw',style: TextStyle(color: Colors.white),),
             color: Colors.orange[800],
             onPressed: () {
-              /*setState(() {
-                _checkwithdrawnexpense = true;
-              });*/
               Navigator.of(context, rootNavigator: true).pop();
               withdrawlExpense(widget.expenseid);
             },
@@ -145,6 +150,9 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
             shape: Border.all(color: Colors.orange[800]),
             child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
             onPressed: () {
+              setState(() {
+                _isButtonDisabled=false;
+              });
               Navigator.of(context, rootNavigator: true).pop();
             },
           ),
@@ -163,6 +171,11 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
     return false;
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return mainScafoldWidget();
+  }
+
   Future<Widget> islogin() async{
     final prefs = await SharedPreferences.getInstance();
     int response = prefs.getInt('response')??0;
@@ -173,12 +186,6 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
     }
 
   }
-
-  Widget build(BuildContext context) {
-    return mainWidget;
-  }
-
-
 
   Widget mainScafoldWidget(){
     return  WillPopScope(
@@ -195,23 +202,11 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
               child:new CircularProgressIndicator(
                   valueColor: new AlwaysStoppedAnimation(Colors.green),
                   strokeWidth: 5.0),
-              height: 50.0,
-              width: 50.0,
+              height: 40.0,
+              width: 40.0,
             ),
             child: homewidget()
         ),
-        /*floatingActionButton: new FloatingActionButton(
-          backgroundColor: Colors.orange[800],
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => RequestExpence()),
-            );
-          },
-          tooltip: 'Submit Expenses',
-          child: new Icon(Icons.add),
-        ),*/
-
       ),
     );
   }
@@ -316,7 +311,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                               snapshot.data[index].doc.toString()!='null'?Container(
                                                 //width: MediaQuery.of(context).size.width*.30,
                                                 padding: EdgeInsets.only(top:.5,bottom: 1.5),
-                                                margin: EdgeInsets.only(top: 1.0),
+                                                margin: EdgeInsets.only(top: 1.0 ),
                                                 child: Container(
                                                   width: MediaQuery.of(context) .size .width * 0.30,
                                                   //margin: EdgeInsets.only(left:0.0),
@@ -419,7 +414,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                                 ),
                                                 children: <TextSpan>[
                                                   new TextSpan(text: 'Amount: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
-                                                  new TextSpan(text: snapshot.data[index].amt.toString()+ "  "+snapshot.data[index].currency.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
+                                                  new TextSpan(text: snapshot.data[index].amt.toString()+ " "+snapshot.data[index].currency.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
 
                                                   //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
                                                 ],
@@ -510,9 +505,15 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                               ButtonBar(
                                                 children: <Widget>[
                                                   RaisedButton(
-                                                    child: isServiceCalling?Text('Processing',style: TextStyle(color: Colors.white),):Text('Withdraw',style: TextStyle(color: Colors.white),),
+                                                    child: isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('Withdraw',style: TextStyle(color: Colors.white),),
                                                     color: Colors.orange[800],
                                                     onPressed: () {
+                                                      if(_isButtonDisabled)
+                                                        return null;
+                                                      setState(() {
+                                                        _isButtonDisabled=true;
+                                                        checkProcessing = index;
+                                                      });
                                                       confirmWithdrawl(widget.expenseid);
                                                     },
                                                   ),

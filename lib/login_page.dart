@@ -354,7 +354,7 @@ class _LoginPageState extends State<LoginPage>
                 children: <Widget>[
 
                   Padding(
-                    padding: EdgeInsets.only(top: 50.0),
+                    padding: EdgeInsets.only(top: 45.0),
                     child: new Container(
                       width: 135.0,
                       height: 132.0,
@@ -389,7 +389,7 @@ class _LoginPageState extends State<LoginPage>
                   ),
 
                   Padding(
-                    padding: EdgeInsets.only(top: 5.0),
+                    padding: EdgeInsets.only(top: 0.0),
                     //  child: _buildMenuBar(context),
                   ),
                   Expanded(
@@ -581,7 +581,7 @@ class _LoginPageState extends State<LoginPage>
                       children: <Widget>[
                         Padding(
                             padding: EdgeInsets.only(
-                                top: 20.0, bottom: 0.0, left: 300.0, right: 10.0), child:GestureDetector(
+                                top: 20.0, bottom: 0.0, left: 220.0, right: 10.0), child:GestureDetector(
                           onTap: () {
                             scan().then((onValue){
                               //print("******************** QR value **************************");
@@ -613,7 +613,7 @@ class _LoginPageState extends State<LoginPage>
                                 color: Colors.black,
                                 size: 22.0,
                               ),
-                              hintText: "Email / Phone",
+                              hintText: "Email/Phone",
                               hintStyle: TextStyle(
                                   fontSize: 14.0),
                             ),
@@ -697,7 +697,7 @@ class _LoginPageState extends State<LoginPage>
                         Container(
                           //   margin: EdgeInsets.only(top: 170.0),
                           width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.only(top: 0.0, bottom: 0.0, left: 170.0, right: 10.0),
+                          padding: EdgeInsets.only(top: 0.0, bottom: 0.0, left: 150.0, right: 10.0),
                           child: FlatButton(
                               onPressed: () {
                                 Navigator.push(
@@ -795,7 +795,7 @@ class _LoginPageState extends State<LoginPage>
                           //mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
                               Expanded(child: Container(
-                                margin: EdgeInsets.only(left: 75.0,right:0.0,top: 10.0),
+                                margin: EdgeInsets.only(left: 60.0,right:0.0,top: 10.0),
 
                                 child:Text("Not registered?", style: TextStyle(
                                   color: appStartColor(),fontSize: 14,),),
@@ -949,7 +949,7 @@ class _LoginPageState extends State<LoginPage>
 
   Widget _buildSignUp(BuildContext context) {
     return Container(
-      //padding: EdgeInsets.only(top: 0.0),
+      padding: EdgeInsets.only(top: 0.0),
       child: Form(
         key: _formKeyKey,
         child: SafeArea(
@@ -968,43 +968,45 @@ class _LoginPageState extends State<LoginPage>
                     child: Container(
                       //width: 370.0,
                       width: MediaQuery.of(context).size.width,
-                      // height: MediaQuery.of(context).size.height*0.5,
-                      //height: 500.0,
+                      height: MediaQuery.of(context).size.height*0.9,
+                      //height: 600.0,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 14.0, bottom: 7.0, left: 25.0, right: 25.0),
-                                  child: TextFormField(
-                                    focusNode: myFocusNodeName,
-                                    controller: signupNameController,
-                                    keyboardType: TextInputType.text,
-                                    textCapitalization: TextCapitalization.words,
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.black),
-                                    decoration: InputDecoration(
-                                      // border: InputBorder.none,
-                                      icon: Icon(
-                                        FontAwesomeIcons.solidBuilding,
-                                        color: Colors.black,
+                          Expanded(
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 14.0, bottom: 7.0, left: 25.0, right: 25.0),
+                                    child: TextFormField(
+                                      focusNode: myFocusNodeName,
+                                      controller: signupNameController,
+                                      keyboardType: TextInputType.text,
+                                      textCapitalization: TextCapitalization.words,
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.black),
+                                      decoration: InputDecoration(
+                                        // border: InputBorder.none,
+                                        icon: Icon(
+                                          FontAwesomeIcons.solidBuilding,
+                                          color: Colors.black,
+                                        ),
+                                        hintText: "Company ",
+                                        hintStyle: TextStyle(
+                                            fontSize: 14.0),
                                       ),
-                                      hintText: "Company ",
-                                      hintStyle: TextStyle(
-                                          fontSize: 14.0),
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'Please enter company name';
+                                        }
+                                      },
                                     ),
-                                    validator: (value) {
-                                      if (value.isEmpty) {
-                                        return 'Please enter company name';
-                                      }
-                                    },
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           /*Container(
                               width: 250.0,
@@ -1137,7 +1139,7 @@ class _LoginPageState extends State<LoginPage>
                               Expanded(
                                 child: Container(
                                   //width: 300.0,
-                                  // width: MediaQuery.of(context).size.width,
+                                  width: MediaQuery.of(context).size.width*.2,
                                   padding: EdgeInsets.only(
                                       top: 0.0, bottom: 7.0, left: 25.0, right: 25.0),
                                   child:new InputDecorator(
@@ -1153,35 +1155,39 @@ class _LoginPageState extends State<LoginPage>
                                     ),
                                     //   isEmpty: _color == '',
                                     //child: DropdownButtonHideUnderline(
-                                      child:  new DropdownButton<String>(
-                                        isDense: true,
-                                        //    hint: new Text("Select"),
-                                        value: _country,
-                                        onChanged: (String newValue) {
-                                          setState(() {
-                                            _country = newValue;
-                                            //print("*************************");
-                                            //print("@@@@@@@@@@"+newValue);
-                                            //print(_myJson[int.parse(newValue)]['countrycode']);
-                                            //print(_myJson[int.parse(newValue)]['name']);
-                                            _contcode.text = _myJson[int.parse(newValue)]['countrycode'];
-                                            _tempcontry = _myJson[int.parse(newValue)]['id'];
-                                            //print(_tempcontry);
-                                            //print(_myJson);
+                                      child:  Padding(
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: new DropdownButton<String>(
+                                          isDense: true,
+                                          //    hint: new Text("Select"),
+                                          value: _country,
+                                          onChanged: (String newValue) {
+                                            setState(() {
+                                              _country = newValue;
+                                              //print("*************************");
+                                              //print("@@@@@@@@@@"+newValue);
+                                              //print(_myJson[int.parse(newValue)]['countrycode']);
+                                              //print(_myJson[int.parse(newValue)]['name']);
+                                              _contcode.text = _myJson[int.parse(newValue)]['countrycode'];
+                                              _tempcontry = _myJson[int.parse(newValue)]['id'];
+                                              //print(_tempcontry);
+                                              //print(_myJson);
 
-                                          });
-                                          /*setState(() {
-                                            _country = newValue;
-                                          });*/
-                                        },
-                                        items: _myJson.map((Map map) {
-                                          return new DropdownMenuItem<String>(
-                                            value: map["ind"].toString(),
-                                            child: new Text(
-                                              map["name"],
-                                            ),
-                                          );
-                                        }).toList(),
+                                            });
+                                            /*setState(() {
+                                              _country = newValue;
+                                            });*/
+                                          },
+                                          items: _myJson.map((Map map) {
+                                            return new DropdownMenuItem<String>(
+                                              value: map["ind"].toString(),
+                                              child: new Text(
+                                                map["name"],
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
                                       ),
                                     //),
 
@@ -1234,7 +1240,7 @@ class _LoginPageState extends State<LoginPage>
                           Row(
                             children: <Widget>[
                               new Expanded(
-                                flex: 27,
+                                flex: 37,
                                 child:Padding(
                                   padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 20.0, right: 0.0),
                                   child:  new TextFormField(

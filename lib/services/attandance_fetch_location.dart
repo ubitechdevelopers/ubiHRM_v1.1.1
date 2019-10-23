@@ -16,7 +16,7 @@ class Loc{
   PermissionGroup permission;
 
   var result;
-  
+
   @override
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -30,17 +30,17 @@ class Loc{
       /*bool res = await PermissionHandler().shouldShowRequestPermissionRationale(this.permission);
       print("shaifali");
       print(res);*/
-      print("deeksha");
+      //print("deeksha");
       print(permission);
       //print("deeksha");
 
       if (permission.toString()=='PermissionStatus.granted') {
-        print("sohan");
+        //print("sohan");
         return fetchlocation();
       }/*else if(!res){
         return "PermissionStatus.deniedNeverAsk";
       }*/else {
-        print("sohan-------------->>>");
+       // print("sohan-------------->>>");
         return requestPermission();
       }
     }catch(e){
@@ -66,13 +66,13 @@ class Loc{
   }*/
   loginrequestPermission() async {
     PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.location);
-    print("prakarsh@@@@@@@@@@@@");
+    //print("prakarsh@@@@@@@@@@@@");
     print(permission);
     if(permission.toString()=='PermissionStatus.granted'){
-      print("prakarsh------------>>>");
+      //print("prakarsh------------>>>");
       return;
     }else{
-      print("prakarsh");
+      //print("prakarsh");
       final permissions = await PermissionHandler().requestPermissions([PermissionGroup.location]);
       return;
     }
@@ -80,13 +80,13 @@ class Loc{
 
   requestPermission() async {
     final permissions = await PermissionHandler().requestPermissions([this.permission]);
-    print("Shaifali***************");
+    //print("Shaifali***************");
     print(permissions);
     bool isShown = await PermissionHandler().shouldShowRequestPermissionRationale(this.permission);
-    print("shaifali---------->>>>>");
+    //print("shaifali---------->>>>>");
     print(isShown);
     PermissionStatus permission = await PermissionHandler().checkPermissionStatus(this.permission);
-    print("Shaifali+++++++++++++++");
+    //print("Shaifali+++++++++++++++");
     print(permission);
 
     //print("permission status is " + res.toString());
@@ -97,7 +97,7 @@ class Loc{
     if (permission.toString() == "PermissionStatus.granted" || permission.toString() == "PermissionStatus.disabled") {
       return fetchlocation();
     } else if (!isShown) {
-      print("Shaifali Rathore");
+      //print("Shaifali Rathore");
       return "PermissionStatus.deniedNeverAsk";
     } else {
       return requestPermission();
@@ -121,7 +121,7 @@ class Loc{
       LocationData location;
       // Platform messages may fail, so we use a try/catch PlatformException.
       try {
-        print("Ruchi=================");
+        //print("Ruchi=================");
         location = await _location.getLocation();
         error = null;
         return location;
@@ -131,7 +131,7 @@ class Loc{
         } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
           error = 'Permission denied - please ask the user to enable it from the app settings';
         }
-        print("Hellllllllllllllllllllo");
+        //print("Hellllllllllllllllllllo");
         location = null;
         return location;
       }
@@ -139,7 +139,7 @@ class Loc{
       // message was in flight, we want to discard the reply rather than calling
       // setState to update our non-existent appearance.
       //if (!mounted) return;
-     // _startLocation = location;
+      // _startLocation = location;
       double latitude = _startLocation["latitude"];
       double longitude = _startLocation["longitude"];
       prefs.setString('latit', latitude.toString());
@@ -154,7 +154,7 @@ class Loc{
       var first = addresses.first;
       return "${first.featureName} : ${first.addressLine}";
     }catch(e){
-      print("HIIIIIIIIIIIIIIIIIIIIIIII");
+      //print("HIIIIIIIIIIIIIIIIIIIIIIII");
       print(e.toString());
       return null;
     }

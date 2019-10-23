@@ -745,7 +745,7 @@ class _Flexitime extends State<Flexitime> {
       });*/
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text("Attendance punched successfully."),
+        content: new Text("Attendance punched successfully!"),
       )
       );
       await new Future.delayed(const Duration(seconds: 2));
@@ -820,7 +820,7 @@ class _Flexitime extends State<Flexitime> {
         });*/
         showDialog(context: context, child:
         new AlertDialog(
-          content: new Text("Attendance punched successfully."),
+          content: new Text("Attendance punched successfully!"),
         )
         );
         await new Future.delayed(const Duration(seconds: 2));

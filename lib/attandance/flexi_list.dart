@@ -324,7 +324,7 @@ class _FlexiList extends State<FlexiList> {
                                         },
                                       ),
                                     ),
-                                   // Text(snapshot.data[index].timeindate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
+                                   Text(snapshot.data[index].timeindate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
                                   ],
                                 )
                               ),
@@ -363,7 +363,7 @@ class _FlexiList extends State<FlexiList> {
                                         },
                                       ),
                                     ),
-                                    //Text(snapshot.data[index].timeoutdate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
+                                    Text(snapshot.data[index].timeoutdate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
 
                                   ],
                                 )

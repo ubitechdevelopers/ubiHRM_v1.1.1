@@ -680,7 +680,7 @@ class _PunchLocation extends State<PunchLocation> {
         );
         showDialog(context: context, child:
           new AlertDialog(
-            content: new Text("Visit punched successfully."),
+            content: new Text("Visit punched successfully!"),
           )
         );
         setState(() {
@@ -689,7 +689,7 @@ class _PunchLocation extends State<PunchLocation> {
       } else {
         showDialog(context: context, child:
           new AlertDialog(
-            //title: new Text("Warning!"),
+            title: new Text("Warning!"),
             content: new Text("Problem while punching visit, try again."),
           )
         );
@@ -823,7 +823,7 @@ class PunchVisitAppHeader extends StatelessWidget implements PreferredSizeWidget
                   MaterialPageRoute(builder: (context) => PunchLocationSummary()), (Route<dynamic> route) => false,
                 );
               },),
-            GestureDetector(
+           /* GestureDetector(
               // When the child is tapped, show a snackbar
               onTap: () {
                 Navigator.push(
@@ -844,10 +844,10 @@ class PunchVisitAppHeader extends StatelessWidget implements PreferredSizeWidget
                       )
                   )
               ),
-            ),
+            ),*/
             Container(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(orgname)
+                child: Text(orgname, overflow: TextOverflow.ellipsis,)
             )
           ],
         ),

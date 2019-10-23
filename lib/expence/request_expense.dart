@@ -719,7 +719,7 @@ class _RequestExpenceState extends State<RequestExpence> {
           );
           showDialog(context: context, child:
             new AlertDialog(
-              content: new Text('Expense has been applied successfully.'),
+              content: new Text('Expense has been applied successfully!'),
             )
           );
           //showInSnackBar("Expense has been applied successfully.");
@@ -876,7 +876,8 @@ class _RequestExpenceState extends State<RequestExpence> {
         if(_image!=null ) {
           return new Row(
              children: <Widget>[
-               Text("Attachment selected                               ",style: TextStyle(fontSize: 16.0, color: Colors.green),
+               Text("Attachment selected         ",style: TextStyle(fontSize: 16.0, color: Colors.green),
+                 overflow: TextOverflow.ellipsis,
                  textAlign: TextAlign.start, ),
                /*Icon(
                 Icons.check,
@@ -901,13 +902,15 @@ class _RequestExpenceState extends State<RequestExpence> {
         }
         else if (snapshot.error != null) {
           return const Text(
-            'Error Picking Attachment                                 ',
+            'Error Picking Attachment           ',
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(fontSize: 16.0, color: Colors.grey),
             textAlign: TextAlign.start,
           );
         } else {
           return const Text(
-            'Attachment                                               ',
+            'Attachment                         ',
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(fontSize: 16.0, color: Colors.grey),
             textAlign: TextAlign.start,
           );

@@ -6,7 +6,7 @@ import 'model/timeinout.dart';
 
 appStartColor() {
   return Color.fromRGBO(0, 166, 90,1.0);
- // return Colors.yellowAccent[200];
+  // return Colors.yellowAccent[200];
 }
 
 appEndColor()
@@ -25,7 +25,7 @@ headingColor()
 }
 
 bottomNavigationColor(){
- // return Color.fromRGBO(0, 166, 90,1.0);
+  // return Color.fromRGBO(0, 166, 90,1.0);
   return Color.fromRGBO(51,51,51,1.0);
 }
 
@@ -33,14 +33,14 @@ circleIconBackgroundColor(){
   return Colors.green[50];
 }
 
-String path="http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/";
+/*String path="http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/";
 //String path_ubiattendance="http://192.168.0.200/ubiattendance/index.php/Att_services/";
 String path_ubiattendance="http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/";
-String path_hrm_india="http://192.168.0.200/UBIHRM/HRMINDIA/services/";
+String path_hrm_india="http://192.168.0.200/UBIHRM/HRMINDIA/services/";*/
 
-/*String path="https://ubitech.ubihrm.com/ubiapp/";
+String path="https://ubitech.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/";
-String path_hrm_india="https://ubitech.ubihrm.com/services/";*/
+String path_hrm_india="https://ubitech.ubihrm.com/services/";
 
 /*String path="https://sandbox.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://sandbox.ubihrm.com/HRMAPP/index.php/Att_services/";

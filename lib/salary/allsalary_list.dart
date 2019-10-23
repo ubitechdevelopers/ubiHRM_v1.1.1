@@ -427,7 +427,7 @@ class _allSalarySummary extends State<allSalarySummary> {
             child:Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text('Salary',
+                  Text('Team Salary',
                       style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                   //SizedBox(height: 10.0),
 

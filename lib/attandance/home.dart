@@ -896,7 +896,7 @@ class _HomePageState extends State<HomePage> {
         if (issave) {
           showDialog(context: context, child:
           new AlertDialog(
-            content: new Text("Attendance marked successfully."),
+            content: new Text("Attendance marked successfully!"),
           )
           );
          // if(mounted) {
@@ -919,7 +919,7 @@ class _HomePageState extends State<HomePage> {
           print('------------------<<<<<<<<<<<');
           showDialog(context: context, child:
           new AlertDialog(
-            title: new Text("Warning"),
+            title: new Text("Warning!"),
             content: new Text("Problem while marking attendance, try again."),
           )
           );
@@ -1248,7 +1248,7 @@ class AttendanceHomeAppHeader extends StatelessWidget implements PreferredSizeWi
             ),
             Container(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(orgname)
+                child: Text(orgname, overflow: TextOverflow.ellipsis,)
             )
           ],
         ),

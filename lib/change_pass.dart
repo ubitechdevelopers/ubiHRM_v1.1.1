@@ -170,7 +170,7 @@ class _changePassword extends State<changePassword> {
                       child: Row(
                         children: <Widget>[
                           Container(
-                            width: MediaQuery.of(context).size.width*.7,
+                            width: MediaQuery.of(context).size.width*.6,
                             child: TextFormField(
                               controller: _oldPass,
                               onFieldSubmitted: (String value) {
@@ -215,7 +215,7 @@ class _changePassword extends State<changePassword> {
                       child: Row(
                         children: <Widget>[
                           Container(
-                            width: MediaQuery.of(context).size.width*.7,
+                            width: MediaQuery.of(context).size.width*.6,
                             child: TextFormField(
                               controller: _newPass,
                               focusNode: __newPass,

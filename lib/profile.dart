@@ -450,10 +450,10 @@ var profilepic;
                                 SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
                                   //new Expanded(
-                                   Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600]),) ,
+                                   Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600])) ,
                                       width: 100.0,),
                                   //),
-                                  Text(globalcompanyinfomap["Designation"]),
+                                  Text(globalcompanyinfomap["Designation"],overflow: TextOverflow.ellipsis),
                                 ],),
                                 /*  SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
@@ -530,7 +530,7 @@ var profilepic;
                                   ),SizedBox(width: 20.0,),
                                   Text(globalcompanyinfomap["ReportingTo"]),
                                   Text("-"),
-                                  Text(globalcompanyinfomap["ReportingToDesignation"]),
+                                  Text(globalcompanyinfomap["ReportingToDesignation"],overflow: TextOverflow.ellipsis),
                                 ],),
 
                                 SizedBox(height: 10.0,),
@@ -578,11 +578,11 @@ var profilepic;
                                 SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
                                 //  new Expanded(child:
-                                  Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600])) ,
                                     width: 100.0,),
                                     //),
                                   //Text(globalcontactusinfomap["Email"]),
-                                  Text(globalcompanyinfomap["CompanyEmail"])
+                                  Text(globalcompanyinfomap["CompanyEmail"],overflow: TextOverflow.ellipsis)
                                 ],),
                            /*     SizedBox(height: 10.0,),
                                 Row(children: <Widget>[

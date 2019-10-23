@@ -519,7 +519,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       );
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('TimeOff has been applied successfully.'),
+        content: new Text('TimeOff has been applied successfully!'),
       )
       );
       setState(() {

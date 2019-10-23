@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +15,7 @@ import 'dart:convert';
 import '../home.dart';
 import 'dart:async';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
+import '../login_page.dart';
 import '../profile.dart';
 import 'timeoff.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
@@ -85,8 +87,29 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
   @override
 
+  initPlatformState() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      mainWidget = loadingWidget();
+    });
+    String id = prefs.getString('expenseid')??"";
+    //String empid = prefs.getString('employeeid')??"";
+    //String organization =prefs.getString('organization')??"";
+    islogin().then((Widget configuredWidget) {
+      setState(() {
+        mainWidget = configuredWidget;
+      });
+    });
+  }
+
+  Widget loadingWidget(){
+    return Center(child:SizedBox(
+      child:
+      Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
+    ));
+  }
   // Platform messages are asynchronous, so we initialize in an async method.
-  initPlatformState() async {
+/*  initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('empid') ?? '';
     orgdir = prefs.getString('orgdir') ?? '';
@@ -131,17 +154,17 @@ class _TimeoffSummary extends State<TimeoffSummary> {
    //     act1 = act;
       });
 //    }
-  }
+  }*/
 
   withdrawlTimeOff(String timeoffid) async{
     setState(() {
       _checkwithdrawntimeoff = true;
     });
+    print("----> withdrawn service calling "+_checkwithdrawntimeoff.toString());
     RequestTimeOffService ns = new RequestTimeOffService();
-
     var timeoff = TimeOff(TimeOffId: timeoffid, OrgId: orgid, EmpId: empid, ApprovalSts: '5');
     var islogin = await ns.withdrawTimeOff(timeoff);
-   // print(islogin);
+    print(islogin);
     if(islogin=="success"){
       setState(() {
         _isButtonDisabled=false;
@@ -153,7 +176,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Withdrawl"),
-        content: new Text("Timeoff has been withdrawn successfully."),
+        content: new Text("Timeoff has been withdrawn successfully!"),
       )
       );
     }else if(islogin=="failure"){
@@ -172,7 +195,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
       });
       showDialog(context: context, child:
       new AlertDialog(
-        title: new Text("Sorry!"),
+        //title: new Text("Sorry!"),
         content: new Text("Poor network connection."),
       )
       );
@@ -209,16 +232,26 @@ class _TimeoffSummary extends State<TimeoffSummary> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-//    return (response == 0) ? new LoginPage() : getmainhomewidget();
-    return  getmainhomewidget();
-  }
-
   void showInSnackBar(String value) {
     final snackBar = SnackBar(
         content: Text(value, textAlign: TextAlign.center,));
     _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return  getmainhomewidget();
+  }
+
+  Future<Widget> islogin() async{
+    final prefs = await SharedPreferences.getInstance();
+    int response = prefs.getInt('response')??0;
+    if(response==1){
+      return getmainhomewidget();
+    }else{
+      return new LoginPage();
+    }
+
   }
 
   Future<bool> sendToHome() async{
@@ -242,50 +275,20 @@ class _TimeoffSummary extends State<TimeoffSummary> {
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
         appBar: new TimeOffAppHeader(profileimage,showtabbar,orgName),
-
-        /*appBar: GradientAppBar(
-          automaticallyImplyLeading: false,
-          *//*    title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-
-              new Text(org_name, style: new TextStyle(fontSize: 20.0)),
-
-            ],
-          ),
-          leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },),
-          backgroundColor: Colors.teal,*//*
-          backgroundColorStart: appStartColor(),
-          backgroundColorEnd: appEndColor(),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              new Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: AssetImage('assets/avatar.png'),
-                      )
-                  )),
-              Container(
-                  padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-              )
-            ],
-
-          ),
-
-        ),*/
         bottomNavigationBar:  new HomeNavigation(),
-
-        body:getMarkAttendanceWidgit(),
+        body: ModalProgressHUD(
+            inAsyncCall: _checkwithdrawntimeoff,
+            opacity: 0.15,
+            progressIndicator: SizedBox(
+              child:new CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation(Colors.green),
+                  strokeWidth: 5.0),
+              height: 40.0,
+              width: 40.0,
+            ),
+            child: getMarkAttendanceWidgit()
+        ),
+        //body:getMarkAttendanceWidgit(),
         floatingActionButton: new FloatingActionButton(
           backgroundColor: Colors.orange[800],
           onPressed: (){
@@ -540,8 +543,8 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                                       padding: const EdgeInsets.fromLTRB(0.0,3.0,12.0,0.0),
                                                       child: Container(
                                                         height: MediaQuery .of(context).size.height * 0.04,
-                                                        margin: EdgeInsets.only(left:50.0),
-                                                        padding: EdgeInsets.only(left:50.0),
+                                                        margin: EdgeInsets.only(left:40.0),
+                                                        padding: EdgeInsets.only(left:40.0),
                                                         width: MediaQuery .of(context).size.width * 0.50,
                                                         child: new OutlineButton(
                                                         child:new Icon(Icons.replay, size: 16.0,color:appStartColor(), ),
@@ -707,7 +710,7 @@ class TimeOffAppHeader extends StatelessWidget implements PreferredSizeWidget {
                   MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
                 );
               },),
-            GestureDetector(
+            /*GestureDetector(
               // When the child is tapped, show a snackbar
               onTap: () {
                 Navigator.push(
@@ -728,10 +731,10 @@ class TimeOffAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       )
                   )
               ),
-            ),
+            ),*/
             Container(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(orgname)
+                child: Text(orgname,overflow: TextOverflow.ellipsis,)
             )
           ],
         ),

@@ -156,7 +156,7 @@ class _RequestLeaveState extends State<RequestLeave> {
       );
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('Leave has been applied successfully.'),
+        content: new Text('Leave has been applied successfully!'),
       )
       );
     }
@@ -266,16 +266,16 @@ class _RequestLeaveState extends State<RequestLeave> {
           appBar: new AppHeader(profileimage,showtabbar,orgName),
          bottomNavigationBar:  new HomeNavigation(),
          body: ModalProgressHUD(
-      inAsyncCall: isServiceCalling,
-      opacity: 0.15,
-      progressIndicator: SizedBox(
-      child:new CircularProgressIndicator(
-      valueColor: new AlwaysStoppedAnimation(Colors.green),
-      strokeWidth: 5.0),
-      height: 40.0,
-      width: 40.0,
-      ),
-      child: homewidget()
+            inAsyncCall: isServiceCalling,
+            opacity: 0.15,
+            progressIndicator: SizedBox(
+            child:new CircularProgressIndicator(
+            valueColor: new AlwaysStoppedAnimation(Colors.green),
+            strokeWidth: 5.0),
+            height: 40.0,
+            width: 40.0,
+            ),
+            child: homewidget()
           )
 
       ),
@@ -329,8 +329,8 @@ class _RequestLeaveState extends State<RequestLeave> {
         onShowPicker: (context, currentValue) {
           return showDatePicker(
               context: context,
-              firstDate: DateTime.now().subtract(Duration(days: 8)),
               initialDate: currentValue ?? DateTime.now(),
+              firstDate: DateTime.now().subtract(Duration(days: 8)),
               lastDate: DateTime(2100));
         },
     format: dateFormat,
@@ -447,8 +447,8 @@ class _RequestLeaveState extends State<RequestLeave> {
        onShowPicker: (context, currentValue) {
          return showDatePicker(
              context: context,
-             firstDate: DateTime.now().subtract(Duration(days: 8)),
              initialDate: currentValue ?? DateTime.now(),
+             firstDate: DateTime.now().subtract(Duration(days: 8)),
              lastDate: DateTime(2100));
 
        },

@@ -1,31 +1,17 @@
 import 'package:flutter/material.dart';
-//import 'package:simple_permissions/simple_permissions.dart';
 import 'drawer.dart';
 import 'piegraph.dart';
 import 'graphs.dart';
 import 'global.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'b_navigationbar.dart';
 import 'services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 import 'model/model.dart';
-import 'leave/myleave.dart';
-import 'expence/expenselist.dart';
-import 'timeoff/timeoff_summary.dart';
 import 'dart:async';
-import 'profile.dart';
-import 'attandance/home.dart';
-import 'all_reports.dart';
 import 'appbar.dart';
-//import 'services/attandance_fetch_location.dart';
-import 'salary/mysalary_list.dart';
 import 'package:intl/intl.dart';
-import 'settings.dart';
-
-
 import 'package:connectivity/connectivity.dart';
-
 
 class DashboardMain extends StatefulWidget {
   @override
@@ -34,7 +20,6 @@ class DashboardMain extends StatefulWidget {
 
 class _DashboardStatemain extends State<DashboardMain> {
   // StreamLocation sl = new StreamLocation();
-
   double height = 0.0;
   double insideContainerHeight=300.0;
   int _currentIndex = 0;
@@ -47,13 +32,8 @@ class _DashboardStatemain extends State<DashboardMain> {
   var profileimage;
   bool showtabbar;
   String orgName="";
-
-
-
   bool _checkLoadedprofile = true;
-
   String location_addr = "";
-
 
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
   @override
@@ -73,22 +53,18 @@ class _DashboardStatemain extends State<DashboardMain> {
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
 
-
     var now = new DateTime.now();
     print("---------------->"+now.toString());
     var formatter = new DateFormat('MMMM yyyy');
     month = formatter.format(now);
     print("---------------->>>>"+month);
 
-
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       setState(() {
-        //    print("HIIIIIIIIIIIIII");
+        // print("HIIIIIIIIIIIIII");
         mainWidget = loadingWidget();
       });
-
-
       islogin().then((Widget configuredWidget) {
         setState(() {
           mainWidget = configuredWidget;
@@ -110,38 +86,17 @@ class _DashboardStatemain extends State<DashboardMain> {
     final prefs = await SharedPreferences.getInstance();
     int response = prefs.getInt('response')??0;
     if(response==1){
-      //   print("AAAAAAAAA");
+      //print("AAAAAAAAA");
       String empid = prefs.getString('employeeid')??"";
       String organization =prefs.getString('organization')??"";
       String userprofileid =prefs.getString('userprofileid')??"";
       Employee emp = new Employee(employeeid: empid, organization: organization,userprofileid:userprofileid);
 
-      //  await getProfileInfo(emp);
-      await getAllPermission(emp);
-      await getProfileInfo(emp);
       await getfiscalyear(emp);
       await getovertime(emp);
 
-      perEmployeeLeave= getModulePermission("18","view");
-      //print(perEmployeeLeave);
-      perLeaveApproval=  getModuleUserPermission("124","view");
-      perAttendance=  getModulePermission("5","view");
-      perTimeoff=  getModulePermission("179","view");
-      perSalary=  getModulePermission("66","view");
-      perExpense=  getModulePermission("170","view");
-      perFlexi= getModulePermission("448","view");
-      await getReportingTeam(emp);
-
-      /*Loc lock = new Loc();
-      location_addr = await lock.initPlatformState();*/
-
-
-
       showtabbar =false;
       profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-      // profileimage = new NetworkImage(pic);
-//print("ABCDEFGHI");
-//print(profileimage);
       profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
         if (mounted) {
           setState(() {
@@ -153,41 +108,32 @@ class _DashboardStatemain extends State<DashboardMain> {
     }else{
       return new LoginPage();
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return mainWidget;
   }
 
-
   Widget loadingWidget(){
     return Container(
-
         decoration: new BoxDecoration(color: Colors.green[100]),
         child: Center(
             child:SizedBox(
-
               //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
               child: new CircularProgressIndicator(),
             )
         ));
-
   }
 
   Widget plateformstatee(){
-
     return new Container(
       decoration: new BoxDecoration(color: Colors.white),
       child: new Center(
         child: new Text("UBIHRM", style: TextStyle(fontSize: 30.0,color: Colors.green),),
       ),
     );
-
   }
-
 
   Widget mainScafoldWidget(){
     //print("BBBBBB");
@@ -195,43 +141,7 @@ class _DashboardStatemain extends State<DashboardMain> {
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
         appBar: new AppHeader(profileimage,showtabbar,orgName),
-
-/*        appBar: GradientAppBar(
-          backgroundColorStart: appStartColor(),
-          backgroundColorEnd: appEndColor(),
-          automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-
-    GestureDetector(
-    // When the child is tapped, show a snackbar
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CollapsingTab()),
-      );
-        },
-              child:Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                     // image: AssetImage('assets/avatar.png'),
-                      image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
-                      )
-                  )),),
-              Container(
-                  padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-              )
-            ],
-
-          ),
-        ),*/
         bottomNavigationBar:new HomeNavigation(),
-
         body: homewidget()
     );
   }
@@ -250,13 +160,10 @@ class _DashboardStatemain extends State<DashboardMain> {
               color: Colors.white,
             ),
             child: ListView(
-
               children: <Widget>[
                 overtime!=null?Divider(height: 10.0,):undertime!=null?Divider(height: 10.0,):Center(),
                 SizedBox(height: 20.0,),
                 overtime!=null?getimg():undertime!=null?getimg1():Center(),
-
-
 
                 SizedBox(height: 20.0,),
                 perAttendance=='1'?  Row(children: <Widget>[
@@ -299,7 +206,6 @@ class _DashboardStatemain extends State<DashboardMain> {
                         );
                         // return new Center( child: CircularProgressIndicator());
                       }
-
                   ),
 
                   //child: new DonutAutoLabelChart .withSampleData(),

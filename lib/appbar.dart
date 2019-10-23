@@ -25,6 +25,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   var profileimage;
   bool showtabbar;
   var orgname;
+
   AppHeader(profileimage1,showtabbar1,orgname1){
     profileimage = profileimage1;
     orgname = orgname1;
@@ -57,7 +58,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                print("ICON PRESSED");
                 Navigator.pop(context,false);
               },),
-            GestureDetector(
+            /*GestureDetector(
               // When the child is tapped, show a snackbar
               onTap: () {
                 Navigator.push(
@@ -78,10 +79,10 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       )
                   )
               ),
-            ),
+            ),*/
             Container(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(orgname)
+                child: Text(orgname,overflow: TextOverflow.ellipsis,)
             )
           ],
         ),

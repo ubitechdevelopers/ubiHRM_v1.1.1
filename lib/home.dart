@@ -142,8 +142,8 @@ class _HomePageStatemain extends State<HomePageMain> {
       //  await getProfileInfo(emp);
       await getAllPermission(emp);
       await getProfileInfo(emp);
-      await getfiscalyear(emp);
-      await getovertime(emp);
+      //await getfiscalyear(emp);
+      //await getovertime(emp);
 
       Loc lock = new Loc();
       location_addr = await lock.loginrequestPermission();
@@ -190,9 +190,9 @@ class _HomePageStatemain extends State<HomePageMain> {
         decoration: new BoxDecoration(color: Colors.green[100]),
         child: Center(
             child: SizedBox(
-          //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
-          child: new CircularProgressIndicator(),
-        )));
+              //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
+              child: new CircularProgressIndicator(),
+            )));
   }
 
   Widget plateformstatee() {
@@ -271,7 +271,7 @@ class _HomePageStatemain extends State<HomePageMain> {
               );
             },
             child: Column(
-           //   crossAxisAlignment: CrossAxisAlignment.stretch,
+              //   crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               verticalDirection: VerticalDirection.down,
               children: [
@@ -324,7 +324,7 @@ class _HomePageStatemain extends State<HomePageMain> {
               if(perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1') makeDashboardItem("Reports", AllReports(), 'assets/icons/graph_icon.png'),
               makeDashboardItem("Profile", CollapsingTab(), 'assets/icons/profile_icon.png')
 
-    ],
+            ],
           ),
         ),
       ],
@@ -336,7 +336,7 @@ class _HomePageStatemain extends State<HomePageMain> {
     return Stack(
       children: <Widget>[
         Container(
-            //height: MediaQuery.of(context).size.height,
+          //height: MediaQuery.of(context).size.height,
             margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
             padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
             // width: MediaQuery.of(context).size.width*0.9,
@@ -350,124 +350,124 @@ class _HomePageStatemain extends State<HomePageMain> {
                 SizedBox(
                   height: 60.0,
                 ),
-             //   Row(
-               //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //      children: [
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DashboardMain()),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage(
-                                            'assets/Attendanc_icon.png'),
-                                      ),
-                                      color: circleIconBackgroundColor())),
-                              Text('Dashboard',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(
-                                      fontSize: 15.0, color: Colors.black)),
-                            ],
-                          )),
-                      GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CollapsingTab()),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage(
-                                            'assets/icons/profile_icon.png'),
-                                      ),
-                                      color: circleIconBackgroundColor())),
-                              Text('Profile',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(
-                                      fontSize: 15.0, color: Colors.black)),
-                            ],
-                          )),
-                    if( perAttendance == '1')
-                           GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomePage()),
-                                );
-                              },
-                              child: Column(
-                                children: [
-                                  new Container(
-                                      width: 60.0,
-                                      height: 60.0,
-                                      decoration: new BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: new DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: AssetImage(
-                                                'assets/Attendanc_icon.png'),
-                                          ),
-                                          color: circleIconBackgroundColor())),
-                                  Text('Attendance',
-                                      textAlign: TextAlign.center,
-                                      style: new TextStyle(
-                                          fontSize: 15.0, color: Colors.black)),
-                                ],
-                              )),
+                //   Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //      children: [
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DashboardMain()),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        new Container(
+                            width: 60.0,
+                            height: 60.0,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                      'assets/Attendanc_icon.png'),
+                                ),
+                                color: circleIconBackgroundColor())),
+                        Text('Dashboard',
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(
+                                fontSize: 15.0, color: Colors.black)),
+                      ],
+                    )),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CollapsingTab()),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        new Container(
+                            width: 60.0,
+                            height: 60.0,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                      'assets/icons/profile_icon.png'),
+                                ),
+                                color: circleIconBackgroundColor())),
+                        Text('Profile',
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(
+                                fontSize: 15.0, color: Colors.black)),
+                      ],
+                    )),
+                if( perAttendance == '1')
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePage()),
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          new Container(
+                              width: 60.0,
+                              height: 60.0,
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: AssetImage(
+                                        'assets/Attendanc_icon.png'),
+                                  ),
+                                  color: circleIconBackgroundColor())),
+                          Text('Attendance',
+                              textAlign: TextAlign.center,
+                              style: new TextStyle(
+                                  fontSize: 15.0, color: Colors.black)),
+                        ],
+                      )),
 
-                           if(perEmployeeLeave == '1')
-                             GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MyLeave()),
-                                    );
-                                  },
-                                  child: Column(
-                                    children: [
-                                      new Container(
-                                          width: 60.0,
-                                          height: 60.0,
-                                          decoration: new BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: new DecorationImage(
-                                                fit: BoxFit.fill,
-                                                image: AssetImage(
-                                                    'assets/icons/leave_icon.png'),
-                                              ),
-                                              color:
-                                                  circleIconBackgroundColor())),
-                                      Text('Leave',
-                                          textAlign: TextAlign.center,
-                                          style: new TextStyle(
-                                              fontSize: 15.0,
-                                              color: Colors.black)),
-                                    ],
-                                  )),
+                if(perEmployeeLeave == '1')
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyLeave()),
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          new Container(
+                              width: 60.0,
+                              height: 60.0,
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: AssetImage(
+                                        'assets/icons/leave_icon.png'),
+                                  ),
+                                  color:
+                                  circleIconBackgroundColor())),
+                          Text('Leave',
+                              textAlign: TextAlign.center,
+                              style: new TextStyle(
+                                  fontSize: 15.0,
+                                  color: Colors.black)),
+                        ],
+                      )),
                 //    ]
-               //   ),
+                //   ),
 
                 SizedBox(
                   height: 60.0,
@@ -479,63 +479,63 @@ class _HomePageStatemain extends State<HomePageMain> {
 
                     perTimeoff == '1'
                         ? GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => TimeoffSummary()),
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                new Container(
-                                    width: 60.0,
-                                    height: 60.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: AssetImage(
-                                              'assets/icons/Timeoff_icon.png'),
-                                        ),
-                                        color: circleIconBackgroundColor())),
-                                Text(' Time off  ',
-                                    textAlign: TextAlign.center,
-                                    style: new TextStyle(
-                                        fontSize: 15.0, color: Colors.black)),
-                              ],
-                            ))
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TimeoffSummary()),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            new Container(
+                                width: 60.0,
+                                height: 60.0,
+                                decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: AssetImage(
+                                          'assets/icons/Timeoff_icon.png'),
+                                    ),
+                                    color: circleIconBackgroundColor())),
+                            Text(' Time off  ',
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(
+                                    fontSize: 15.0, color: Colors.black)),
+                          ],
+                        ))
                         : Center(),
 
                     perPunchLocation == '1'
                         ? GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        PunchLocationSummary()),
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                new Container(
-                                    width: 60.0,
-                                    height: 60.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: new DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: AssetImage(
-                                              'assets/icons/Timeoff_icon.png'),
-                                        ),
-                                        color: circleIconBackgroundColor())),
-                                Text('Visits',
-                                    textAlign: TextAlign.center,
-                                    style: new TextStyle(
-                                        fontSize: 15.0, color: Colors.black)),
-                              ],
-                            ))
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    PunchLocationSummary()),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            new Container(
+                                width: 60.0,
+                                height: 60.0,
+                                decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: AssetImage(
+                                          'assets/icons/Timeoff_icon.png'),
+                                    ),
+                                    color: circleIconBackgroundColor())),
+                            Text('Visits',
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(
+                                    fontSize: 15.0, color: Colors.black)),
+                          ],
+                        ))
                         : Center(),
 
                     /*GestureDetector(
@@ -576,93 +576,93 @@ class _HomePageStatemain extends State<HomePageMain> {
                     children: [
                       (perExpense == '1')
                           ? GestureDetector(
-                              //   GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MyExpence()),
-                                );
-                              },
-                              child: Column(
-                                children: [
-                                  new Container(
-                                      width: 60.0,
-                                      height: 60.0,
-                                      decoration: new BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: new DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: AssetImage(
-                                                'assets/icons/Expense_icon.png'),
-                                          ),
-                                          color: circleIconBackgroundColor())),
-                                  Text(' Expense  ',
-                                      textAlign: TextAlign.center,
-                                      style: new TextStyle(
-                                          fontSize: 15.0, color: Colors.black)),
-                                ],
-                              ))
+                        //   GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyExpence()),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              new Container(
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: new DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            'assets/icons/Expense_icon.png'),
+                                      ),
+                                      color: circleIconBackgroundColor())),
+                              Text(' Expense  ',
+                                  textAlign: TextAlign.center,
+                                  style: new TextStyle(
+                                      fontSize: 15.0, color: Colors.black)),
+                            ],
+                          ))
                           : Center(),
                       (perSalary == '1')
                           ? GestureDetector(
-                              //   GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SalarySummary()),
-                                );
-                              },
-                              child: Column(
-                                children: [
-                                  new Container(
-                                      width: 60.0,
-                                      height: 60.0,
-                                      decoration: new BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: new DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: AssetImage(
-                                                'assets/icons/Salary_icon.png'),
-                                          ),
-                                          color: circleIconBackgroundColor())),
-                                  Text('Payroll',
-                                      textAlign: TextAlign.center,
-                                      style: new TextStyle(
-                                          fontSize: 15.0, color: Colors.black)),
-                                ],
-                              ))
+                        //   GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SalarySummary()),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              new Container(
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: new DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            'assets/icons/Salary_icon.png'),
+                                      ),
+                                      color: circleIconBackgroundColor())),
+                              Text('Payroll',
+                                  textAlign: TextAlign.center,
+                                  style: new TextStyle(
+                                      fontSize: 15.0, color: Colors.black)),
+                            ],
+                          ))
                           : Center(),
                       (perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1')
                           ? GestureDetector(
-                              //   GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AllReports()),
-                                );
-                              },
-                              child: Column(
-                                children: [
-                                  new Container(
-                                      width: 60.0,
-                                      height: 60.0,
-                                      decoration: new BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: new DecorationImage(
-                                            fit: BoxFit.fill,
-                                            image: AssetImage(
-                                                'assets/icons/graph_icon.png'),
-                                          ),
-                                          color: circleIconBackgroundColor())),
-                                  Text(' Reports',
-                                      textAlign: TextAlign.center,
-                                      style: new TextStyle(
-                                          fontSize: 15.0, color: Colors.black)),
-                                ],
-                              ))
+                        //   GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AllReports()),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              new Container(
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: new DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            'assets/icons/graph_icon.png'),
+                                      ),
+                                      color: circleIconBackgroundColor())),
+                              Text(' Reports',
+                                  textAlign: TextAlign.center,
+                                  style: new TextStyle(
+                                      fontSize: 15.0, color: Colors.black)),
+                            ],
+                          ))
                           : Center(),
                     ]),
                 /*    Row(children: <Widget>[

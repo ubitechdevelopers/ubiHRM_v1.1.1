@@ -32,8 +32,10 @@ class _MyLeaveState extends State<MyLeave> {
   bool showtabbar ;
   String orgName="";
 
-  bool _checkLoadedprofile = true;
   bool _checkwithdrawnleave = false;
+  bool _checkLoadedprofile = true;
+  bool _isButtonDisabled=false;
+  int checkProcessing = 0;
   var PerLeave;
   var PerApprovalLeave;
 
@@ -82,6 +84,91 @@ class _MyLeaveState extends State<MyLeave> {
     });
   }
 
+  withdrawlLeave(String leaveid) async{
+    setState(() {
+      _checkwithdrawnleave = true;
+    });
+    print("----> withdrawn service calling "+_checkwithdrawnleave.toString());
+    final prefs = await SharedPreferences.getInstance();
+    String empid = prefs.getString('employeeid')??"";
+    String orgid =prefs.getString('organization')??"";
+    var leave = Leave(leaveid: leaveid, orgid: orgid, uid: empid, approverstatus: '5');
+    var islogin = await withdrawLeave(leave);
+    print(islogin);
+    if(islogin=="success"){
+      setState(() {
+        _isButtonDisabled=false;
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyLeave()),
+      );
+      showDialog(context: context, child:
+      new AlertDialog(
+        //backgroundColor: appEndColor(),
+      //  title: new Text("Congrats!"),
+        content: new Text("Leave has been withdrawn successfully!"/*, style: TextStyle(color: appStartColor()),*/),
+      )
+      );
+    }else if(islogin=="failure"){
+      setState(() {
+        _isButtonDisabled=false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+        //title: new Text("Sorry!"),
+        content: new Text("Leave could not be withdrawn."),
+      )
+      );
+    }else{
+      setState(() {
+        _isButtonDisabled=false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+       // title: new Text("Sorry!"),
+        content: new Text("Poor network connection."),
+      )
+      );
+    }
+  }
+
+  confirmWithdrawl(String leaveid) async{
+    showDialog(context: context, child:
+    new AlertDialog(
+      title: new Text("Withdraw leave?"),
+      content:  ButtonBar(
+        children: <Widget>[
+          RaisedButton(
+            child: _checkwithdrawnleave?Text('Processing..',style: TextStyle(color: Colors.white),):Text('Withdraw',style: TextStyle(color: Colors.white),),
+            color: Colors.orange[800],
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              withdrawlLeave(leaveid);
+            },
+          ),
+          FlatButton(
+            shape: Border.all(color: Colors.orange[800]),
+            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
+            onPressed: () {
+              setState(() {
+                _isButtonDisabled=false;
+              });
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
+        ],
+      ),
+    )
+    );
+    /*return new Center(child: SizedBox(
+      child: CircularProgressIndicator(strokeWidth: 2.2,),
+      height: 20.0,
+      width: 20.0,
+    ),
+    );*/
+  }
+
   void showInSnackBar(String value) {
     FocusScope.of(context).requestFocus(new FocusNode());
     _scaffoldKey.currentState?.removeCurrentSnackBar();
@@ -99,84 +186,6 @@ class _MyLeaveState extends State<MyLeave> {
     ));
   }
 
-  withdrawlLeave(String leaveid) async{
-    setState(() {
-      _checkwithdrawnleave = true;
-    });
-    print("----> withdrawn service calling "+_checkwithdrawnleave.toString());
-    final prefs = await SharedPreferences.getInstance();
-
-    String empid = prefs.getString('employeeid')??"";
-    String orgid =prefs.getString('organization')??"";
-    var leave = Leave(leaveid: leaveid, orgid: orgid, uid: empid, approverstatus: '5');
-    var islogin = await withdrawLeave(leave);
-    print(islogin);
-    if(islogin=="success"){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MyLeave()),
-      );
-      showDialog(context: context, child:
-      new AlertDialog(
-        //backgroundColor: appEndColor(),
-      //  title: new Text("Congrats!"),
-        content: new Text("Leave has been withdrawn successfully."/*, style: TextStyle(color: appStartColor()),*/),
-      )
-      );
-    }else if(islogin=="failure"){
-      showDialog(context: context, child:
-      new AlertDialog(
-        //title: new Text("Sorry!"),
-        content: new Text("Leave could not be withdrawn."),
-      )
-      );
-    }else{
-      showDialog(context: context, child:
-      new AlertDialog(
-       // title: new Text("Sorry!"),
-        content: new Text("Poor network connection."),
-      )
-      );
-    }
-  }
-
-  confirmWithdrawl(String leaveid) async{
-    showDialog(context: context, child:
-    new AlertDialog(
-      title: new Text("Withdraw leave?"),
-      content:  ButtonBar(
-        children: <Widget>[
-          RaisedButton(
-            child: _checkwithdrawnleave?Text('Processing',style: TextStyle(color: Colors.white),):Text('Withdraw',style: TextStyle(color: Colors.white),),
-            color: Colors.orange[800],
-            onPressed: () {
-              /*setState(() {
-                _checkwithdrawnleave = true;
-              });*/
-              Navigator.of(context, rootNavigator: true).pop();
-              withdrawlLeave(leaveid);
-            },
-          ),
-          FlatButton(
-            shape: Border.all(color: Colors.orange[800]),
-            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-            },
-          ),
-        ],
-      ),
-    )
-    );
-    return new Center(child: SizedBox(
-      child: CircularProgressIndicator(strokeWidth: 2.2,),
-      height: 20.0,
-      width: 20.0,
-    ),
-    );
-  }
-
-
   Future<Widget> islogin() async{
     final prefs = await SharedPreferences.getInstance();
     int response = prefs.getInt('response')??0;
@@ -190,7 +199,7 @@ class _MyLeaveState extends State<MyLeave> {
 
   @override
   Widget build(BuildContext context) {
-    return mainWidget;
+    return mainScafoldWidget();
   }
 
   Widget loadingWidget(){
@@ -221,18 +230,19 @@ class _MyLeaveState extends State<MyLeave> {
           endDrawer: new AppDrawer(),
           appBar: new LeaveAppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:new HomeNavigation(),
-        body:  ModalProgressHUD(
-            inAsyncCall: _checkwithdrawnleave,
-            opacity: 0.15,
-            progressIndicator: SizedBox(
-              child:new CircularProgressIndicator(
-                  valueColor: new AlwaysStoppedAnimation(Colors.green),
-                  strokeWidth: 5.0),
-              height: 50.0,
-              width: 50.0,
-            ),
-            child: homewidget()
-        ),
+          body:  ModalProgressHUD(
+              inAsyncCall: _checkwithdrawnleave,
+              opacity: 0.15,
+              progressIndicator: SizedBox(
+                child:new CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation(Colors.green),
+                    strokeWidth: 5.0),
+                height: 40.0,
+                width: 40.0,
+              ),
+              child: homewidget()
+          ),
+          //body: homewidget(),
            floatingActionButton: new FloatingActionButton(
             backgroundColor: Colors.orange[800],
             onPressed: (){
@@ -441,11 +451,17 @@ class _MyLeaveState extends State<MyLeave> {
                                                   child: Container (
                             //                   color:Colors.yellow,
                                                    height: MediaQuery .of(context).size.height * 0.04,
-                                                   margin: EdgeInsets.only(left:48.0),
-                                                   padding: EdgeInsets.only(left:48.0),
+                                                   margin: EdgeInsets.only(left:40.0),
+                                                   padding: EdgeInsets.only(left:40.0),
                                                    width: MediaQuery .of(context).size.width * 0.50,
                                                    child: new OutlineButton(
                                                       onPressed: () {
+                                                        if(_isButtonDisabled)
+                                                          return null;
+                                                        setState(() {
+                                                          _isButtonDisabled=true;
+                                                          checkProcessing = index;
+                                                        });
                                                         confirmWithdrawl(snapshot.data[index].leaveid.toString());
                                                       },
                                                        child:new Icon(
@@ -980,7 +996,7 @@ class LeaveAppHeader extends StatelessWidget implements PreferredSizeWidget {
                   MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
                 );
               },),
-            GestureDetector(
+            /*GestureDetector(
               // When the child is tapped, show a snackbar
               onTap: () {
                 Navigator.push(
@@ -1001,10 +1017,10 @@ class LeaveAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       )
                   )
               ),
-            ),
+            ),*/
             Container(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(orgname)
+                child: Text(orgname, overflow: TextOverflow.ellipsis,)
             )
           ],
         ),

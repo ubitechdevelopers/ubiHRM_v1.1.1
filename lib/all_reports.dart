@@ -442,15 +442,12 @@ class _AllReports extends State<AllReports> {
                     },
                   ):Center(),
                   ( perLeaveReport!='1' &&  perAttReport!='1' && perFlexi!='1' ) ? new Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(top:240.0,bottom: 5.0),
                       child: Container(
                       width: MediaQuery.of(context).size.width*1,
                       color: appStartColor().withOpacity(0.1),
                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
                       child:Text("No Reports found for you",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                       ),
-                    ),
                     ) : Center()
                 ])
         ),

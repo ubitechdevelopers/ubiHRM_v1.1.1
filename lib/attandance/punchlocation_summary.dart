@@ -215,13 +215,6 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
           ),
         ),
         actions: <Widget>[
-          new FlatButton(
-              shape: Border.all(color: Colors.orange[800]),
-              child: const Text('CANCEL',style: TextStyle(color: Colors.black87),),
-              onPressed: () {
-                _comments.text='';
-                Navigator.of(context, rootNavigator: true).pop();
-              }),
           new RaisedButton(
               child: const Text('PUNCH',style: TextStyle(color: Colors.white),),
               color: Colors.orange[800],
@@ -248,13 +241,14 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                    );
                    showDialog(context: context, child:
                    new AlertDialog(
-                     content: new Text("Visit punched successfully."),
+                     content: new Text("Visit punched successfully!"),
                    )
                    );
                  }else{
                    _comments.text='';
                    showDialog(context: context, child:
                    new AlertDialog(
+                     title: new Text("Warning!"),
                      content: new Text("Problem while punching visit, try again."),
                    )
                    );
@@ -287,7 +281,14 @@ print('visit out called for visit id:'+visit_id);
                   showInSnackBar('Unable to punch visit');
                 });
 */
-              })
+              }),
+              new FlatButton(
+              shape: Border.all(color: Colors.orange[800]),
+              child: const Text('CANCEL',style: TextStyle(color: Colors.black87),),
+              onPressed: () {
+                _comments.text='';
+                Navigator.of(context, rootNavigator: true).pop();
+              }),
         ],
       ),
     );
@@ -707,7 +708,7 @@ class PunchVisitAppHeader extends StatelessWidget implements PreferredSizeWidget
                   MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
                 );
               },),
-            GestureDetector(
+            /*GestureDetector(
               // When the child is tapped, show a snackbar
               onTap: () {
                 Navigator.push(
@@ -728,10 +729,10 @@ class PunchVisitAppHeader extends StatelessWidget implements PreferredSizeWidget
                       )
                   )
               ),
-            ),
+            ),*/
             Container(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(orgname)
+                child: Text(orgname, overflow: TextOverflow.ellipsis,)
             )
           ],
         ),

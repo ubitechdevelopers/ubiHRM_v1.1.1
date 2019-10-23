@@ -661,7 +661,7 @@ class AttendanceAppHeader extends StatelessWidget implements PreferredSizeWidget
             ),
             Container(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(orgname)
+                child: Text(orgname, overflow: TextOverflow.ellipsis,)
             )
           ],
         ),
