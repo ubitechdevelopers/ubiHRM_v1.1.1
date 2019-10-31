@@ -996,7 +996,7 @@ class LeaveAppHeader extends StatelessWidget implements PreferredSizeWidget {
                   MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
                 );
               },),
-            /*GestureDetector(
+            GestureDetector(
               // When the child is tapped, show a snackbar
               onTap: () {
                 Navigator.push(
@@ -1017,10 +1017,12 @@ class LeaveAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       )
                   )
               ),
-            ),*/
-            Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(orgname, overflow: TextOverflow.ellipsis,)
+            ),
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(orgname, overflow: TextOverflow.ellipsis,)
+              ),
             )
           ],
         ),

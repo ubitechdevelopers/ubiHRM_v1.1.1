@@ -252,44 +252,46 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                   )
 
                                               ),
-                                              Container(
-                                                  width: MediaQuery
-                                                      .of(context)
-                                                      .size
-                                                      .width * 0.20,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment
-                                                        .center,
-                                                    children: <Widget>[
-                                                      Text(snapshot.data[index].TimeOut
-                                                          .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      GestureDetector(
-                                                        onTap: (){
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          width: 62.0,
-                                                          height: 62.0,
+                                              Flexible(
+                                                child: Container(
+                                                    width: MediaQuery
+                                                        .of(context)
+                                                        .size
+                                                        .width * 0.20,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .center,
+                                                      children: <Widget>[
+                                                        Text(snapshot.data[index].TimeOut
+                                                            .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        GestureDetector(
+                                                          onTap: (){
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
+                                                            );
+                                                          },
                                                           child: Container(
-                                                              decoration: new BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  image: new DecorationImage(
-                                                                      fit: BoxFit.fill,
-                                                                      image: new NetworkImage(
-                                                                          snapshot
-                                                                              .data[index]
-                                                                              .ExitImage)
-                                                                  )
-                                                              )),),
-                                                      ),
+                                                            width: 62.0,
+                                                            height: 62.0,
+                                                            child: Container(
+                                                                decoration: new BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    image: new DecorationImage(
+                                                                        fit: BoxFit.fill,
+                                                                        image: new NetworkImage(
+                                                                            snapshot
+                                                                                .data[index]
+                                                                                .ExitImage)
+                                                                    )
+                                                                )),),
+                                                        ),
 
-                                                    ],
-                                                  )
+                                                      ],
+                                                    )
 
+                                                ),
                                               ),
                                             ],
 
@@ -382,7 +384,8 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                             )
 
                                         ),
-                                        Container(
+                                        Flexible(
+                                          child:Container(
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
@@ -395,7 +398,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                     .toString()),
                                               ],
                                             )
-
+                                          ),
                                         ),
                                       ],
 
@@ -557,45 +560,47 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                   )
                                               ),
 
-                                              Container(
-                                                  width: MediaQuery
-                                                      .of(context)
-                                                      .size
-                                                      .width * 0.20,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment
-                                                        .center,
-                                                    children: <Widget>[
-                                                      Text(snapshot.data[index].TimeOut
-                                                          .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      Container(
-                                                          width: 62.0,
-                                                          height: 62.0,
-                                                          child: InkWell(
-                                                            child: Container(
-                                                                decoration: new BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                    image: new DecorationImage(
-                                                                        fit: BoxFit.fill,
-                                                                        image: new NetworkImage(
-                                                                            snapshot
-                                                                                .data[index]
-                                                                                .ExitImage)
-                                                                    )
-                                                                )),
-                                                            onTap: (){
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
-                                                              );
-                                                            },
-                                                          ),),
+                                              Flexible(
+                                                child: Container(
+                                                    width: MediaQuery
+                                                        .of(context)
+                                                        .size
+                                                        .width * 0.20,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .center,
+                                                      children: <Widget>[
+                                                        Text(snapshot.data[index].TimeOut
+                                                            .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        Container(
+                                                            width: 62.0,
+                                                            height: 62.0,
+                                                            child: InkWell(
+                                                              child: Container(
+                                                                  decoration: new BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                      image: new DecorationImage(
+                                                                          fit: BoxFit.fill,
+                                                                          image: new NetworkImage(
+                                                                              snapshot
+                                                                                  .data[index]
+                                                                                  .ExitImage)
+                                                                      )
+                                                                  )),
+                                                              onTap: (){
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
+                                                                );
+                                                              },
+                                                            ),),
 
 
-                                                    ],
-                                                  )
+                                                      ],
+                                                    )
 
+                                                ),
                                               ),
                                             ],
 
@@ -753,7 +758,8 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                   )
 
                                               ),
-                                              Container(
+                                              Flexible(
+                                                child: Container(
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
@@ -790,7 +796,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
 
                                                     ],
                                                   )
-
+                                                ),
                                               ),
                                             ],
 

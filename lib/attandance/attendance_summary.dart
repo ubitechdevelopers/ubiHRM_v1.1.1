@@ -260,31 +260,31 @@ getWidgets(context){
                                 children: <Widget>[
                                   Icon(
                                       Icons.person,
-                                      color: Colors.orange,
+                                      color: Colors.orange[800],
                                       size: 22.0 ),
                                   GestureDetector(
                                     onTap: () {
                                       false;
                                     },
 
-                                    child: const Text(
+                                    child: Text(
                                         'Self',
-                                        style: TextStyle(fontSize: 18,color: Colors.orange,fontWeight:FontWeight.bold)
+                                        style: TextStyle(fontSize: 18,color: Colors.orange[800],fontWeight:FontWeight.bold)
                                     ),
                                   ),
                                 ]),
 
                             SizedBox(height:MediaQuery.of(context).size.width*.036),
                             Divider(
-                              color: Colors.orange,
+                              color: Colors.orange[800],
                               height: 0.4,
                             ),
                             Divider(
-                              color: Colors.orange,
+                              color: Colors.orange[800],
                               height: 0.4,
                             ),
                             Divider(
-                              color: Colors.orange,
+                              color: Colors.orange[800],
                               height: 0.4,
                             ),
                           ]
@@ -309,13 +309,13 @@ getWidgets(context){
                                 children: <Widget>[
                                   Icon(
                                       Icons.group,
-                                      color: Colors.orange,
+                                      color: Colors.orange[800],
                                       size: 22.0 ),
                                   GestureDetector(
 
-                                    child: const Text(
+                                    child: Text(
                                         'Team',
-                                        style: TextStyle(fontSize: 18,color: Colors.orange)
+                                        style: TextStyle(fontSize: 18,color: Colors.orange[800])
                                     ),
                                   ),
                                 ]),
@@ -449,7 +449,7 @@ getWidgets(context){
 
                                               snapshot.data[index]
                                                   .bhour.toString()!=''?Container(
-                                                color:Colors.orangeAccent,
+                                                color:Colors.orange[800],
                                                 child:Text(""+snapshot.data[index]
                                                     .bhour.toString()+" Hr(s)",style: TextStyle(),),
                                               ):SizedBox(height: 10.0,),
@@ -659,9 +659,11 @@ class AttendanceAppHeader extends StatelessWidget implements PreferredSizeWidget
                   )
               ),
             ),
-            Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(orgname, overflow: TextOverflow.ellipsis,)
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(orgname, overflow: TextOverflow.ellipsis,)
+              ),
             )
           ],
         ),

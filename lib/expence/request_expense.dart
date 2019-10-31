@@ -478,38 +478,43 @@ class _RequestExpenceState extends State<RequestExpence> {
                         ),
 */
                           new Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 /*new Icon(
                                   Icons.file_upload,
                                   color: Colors.grey,
                                 ),*/
-                                MaterialButton(
+
+                                Flexible(
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width*0.90,
                                     child: FlatButton.icon(
-                                      //color: Colors.red,
-                                      icon: Padding(
-                                        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
-                                        child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],size: 27,),
-                                      ), //
-                                  label: Container(
-                                    padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
-                                    //margin: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
-                                    child:showImage(_image),),
-                                  //child: Text("Select Image", style: TextStyle(color:_image!=null ? Colors.green[500]:Colors.grey[500],),textAlign: TextAlign.start,),
-                                  onPressed: () async {
-                                    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                    print(image);
-                                    //  ExpenseDoc=image;
-                                    setState(() {
-                                      _image = image;
-                                    });
-                                  },
-                                  splashColor: Colors.grey,
-                                  //height: 55,
-                                  //minWidth: 350,
-                                  shape: UnderlineInputBorder(),
+                                          icon: Padding(
+                                            padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 15.0),
+                                            child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],size: 27,),
+                                          ), //
+                                          label: Container(
+                                              width: MediaQuery.of(context).size.width*0.6,
+                                              padding: EdgeInsets.fromLTRB(0.0,0.0, 0.0, 15.0),
+                                              //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                                              child:showImage(_image),
+                                          ),
+                                          //child: Text("Select Image", style: TextStyle(color:_image!=null ? Colors.green[500]:Colors.grey[500],),textAlign: TextAlign.start,),
+                                          onPressed: () async {
+                                            var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                            print(image);
+                                            setState(() {
+                                              _image = image;
+                                            });
+                                          },
+                                          splashColor: Colors.grey,
+                                          //height: 55,
+                                          //minWidth: 350,
+                                          shape: UnderlineInputBorder(),
+                                      ),
                                   ),
-                                )
+                                ),
+
                              //showImage(_image)
 
                              /*ButtonTheme(
@@ -865,51 +870,49 @@ class _RequestExpenceState extends State<RequestExpence> {
   return FutureBuilder<File>(
    //  future: ExpenseDoc,
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
-        /*   if (snapshot.connectionState == ConnectionState.done &&
+        /*if (snapshot.connectionState == ConnectionState.done &&
             snapshot.data != null) {
-        return Image.file(
-            snapshot.data,
-            width: 50,
-            height: 50,
-          );
+            return Image.file(
+                snapshot.data,
+                width: 50,
+                height: 50,
+              );
         } */
         if(_image!=null ) {
           return new Row(
+              mainAxisAlignment: MainAxisAlignment.start,
              children: <Widget>[
-               Text("Attachment selected         ",style: TextStyle(fontSize: 16.0, color: Colors.green),
-                 overflow: TextOverflow.ellipsis,
-                 textAlign: TextAlign.start, ),
+               Text("Attachment selected",style: TextStyle(fontSize: 16.0, color: Colors.green),
+                 overflow: TextOverflow.ellipsis, ),
                /*Icon(
                 Icons.check,
                 color: Colors.green,
                 ),*/
-     /* Container(
-           child:new IconButton(
-             icon: new Icon(Icons.close, color: Colors.redAccent,),
-             onPressed: () {
-              setState(() {
-                 print("onpressiconclose");
-                 close='1';
-                 _image=null;
-                 print(_image);
-               });
-
-                },
-           )
-
-      ),*/
+               /* Container(
+                     child:new IconButton(
+                       icon: new Icon(Icons.close, color: Colors.redAccent,),
+                       onPressed: () {
+                        setState(() {
+                           print("onpressiconclose");
+                           close='1';
+                           _image=null;
+                           print(_image);
+                         });
+                       },
+                     )
+                ),*/
            ]);
         }
         else if (snapshot.error != null) {
           return const Text(
-            'Error Picking Attachment           ',
+            'Error Picking Attachment',
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontSize: 16.0, color: Colors.grey),
             textAlign: TextAlign.start,
           );
         } else {
           return const Text(
-            'Attachment                         ',
+            'Select Attachment',
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontSize: 16.0, color: Colors.grey),
             textAlign: TextAlign.start,

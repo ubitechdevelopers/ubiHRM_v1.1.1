@@ -167,7 +167,7 @@ class _TimeOffList extends State<TimeOffList> {
 
                     width: MediaQuery.of(context).size.width * 0.35,
                     child: Text(
-                      '   Name',
+                      ' Name',
                       style: TextStyle(color: appStartColor(),
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0),
@@ -245,7 +245,7 @@ class _TimeOffList extends State<TimeOffList> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             new Container(
-                                width: MediaQuery.of(context).size.width * 0.32,
+                                width: MediaQuery.of(context).size.width * 0.30,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -266,12 +266,14 @@ class _TimeOffList extends State<TimeOffList> {
                                 snapshot.data[index].to.toString(),
                               ),
                             ),
-                            new Container(
-                              width: MediaQuery.of(context).size.width * 0.10,
-                              child: new Text(
-                                snapshot.data[index].diff.toString(),
-                                style: TextStyle(
-                                    color:appStartColor()),
+                            Flexible(
+                              child: new Container(
+                                width: MediaQuery.of(context).size.width * 0.10,
+                                child: new Text(
+                                  snapshot.data[index].diff.toString(),
+                                  style: TextStyle(
+                                      color:appStartColor()),
+                                ),
                               ),
                             ),
                           ],

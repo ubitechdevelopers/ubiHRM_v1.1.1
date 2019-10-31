@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:ubihrm/profile.dart';
+import 'package:ubihrm/services/services.dart';
 import '../drawer.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +9,7 @@ import 'package:flutter/services.dart';
 //import 'package:Shrine/addShift.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import '../home.dart';
 import 'home.dart';
 import 'settings.dart';
 import 'profile.dart';
@@ -97,7 +101,7 @@ class _FlexiList extends State<FlexiList> {
       child: new Scaffold(
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
+      appBar: new FlexiAppHeader(profileimage,showtabbar,orgName),
       bottomNavigationBar: new HomeNavigation(),
       endDrawer: new AppDrawer(),
       body: Container(
@@ -398,3 +402,94 @@ class _FlexiList extends State<FlexiList> {
         });
   }
 } /////////mail class close
+
+class FlexiAppHeader extends StatelessWidget implements PreferredSizeWidget {
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+
+  FlexiAppHeader(profileimage1,showtabbar1,orgname1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    // print("--------->");
+    // print(profileimage);
+    //  print("--------->");
+    //   print(_checkLoadedprofile);
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+      //    print(_checkLoadedprofile);
+    };
+    showtabbar= showtabbar1;
+  }
+  /*void initState() {
+    super.initState();
+ //   initPlatformState();
+  }
+*/
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePageMain()),
+                );
+              },),
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                  shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(orgname,overflow: TextOverflow.ellipsis,)
+              ),
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+              //   unselectedLabelColor: Colors.white70,
+              //   indicatorColor: Colors.white,
+              //   icon: Icon(choice.icon),
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
+
+}

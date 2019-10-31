@@ -1246,9 +1246,11 @@ class AttendanceHomeAppHeader extends StatelessWidget implements PreferredSizeWi
                   )
               ),
             ),
-            Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(orgname, overflow: TextOverflow.ellipsis,)
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(orgname, overflow: TextOverflow.ellipsis,)
+              ),
             )
           ],
         ),

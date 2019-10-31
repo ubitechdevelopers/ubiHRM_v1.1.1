@@ -391,7 +391,8 @@ var profilepic;
             new Expanded(
               child:Container(
                     height: insideContainerHeight,
-                    width: 400.0,
+                    //width: 400.0,
+                    width: MediaQuery.of(context).size.width*1,
                     //color: Colors.green[50],
                     child: ListView(children: <Widget>[
                       Container(
@@ -423,7 +424,7 @@ var profilepic;
                                 Row(children: <Widget>[
                                   Container(child:Text("Name:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
-                                  Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"]),
+                                  Flexible(child: Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"])),
                                 ],),
 
                                 SizedBox(height: 10.0,),
@@ -440,6 +441,22 @@ var profilepic;
 
                                   Text(globalcompanyinfomap["EmpCode"]),
                                 ],),
+
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  Container(child:Text("Division:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+
+                                  Flexible(child: Text(globalcompanyinfomap["Division"])),
+                                ],),
+
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  Container(child:Text("Location",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+
+                                  Flexible(child: Text(globalcompanyinfomap["Location"])),
+                                ],),
                                 /* SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
                                   new Expanded(
@@ -453,7 +470,7 @@ var profilepic;
                                    Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600])) ,
                                       width: 100.0,),
                                   //),
-                                  Text(globalcompanyinfomap["Designation"],overflow: TextOverflow.ellipsis),
+                                  Flexible(child: Text(globalcompanyinfomap["Designation"])),
                                 ],),
                                 /*  SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
@@ -467,7 +484,7 @@ var profilepic;
 
                                     Container(child:Text("Department:",style: TextStyle(color: Colors.grey[600]),) ,
                                       width: 100.0,),
-                                  Text(globalcompanyinfomap["Department"]),
+                                  Flexible(child: Text(globalcompanyinfomap["Department"])),
                                 ],),
                               /*  SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
@@ -528,13 +545,11 @@ var profilepic;
                                           )
                                       ))
                                   ),SizedBox(width: 20.0,),
-                                  Text(globalcompanyinfomap["ReportingTo"]),
-                                  Text("-"),
-                                  Text(globalcompanyinfomap["ReportingToDesignation"],overflow: TextOverflow.ellipsis),
+                                  Flexible(child: Text(globalcompanyinfomap["ReportingTo"]+"\n("+globalcompanyinfomap["ReportingToDesignation"]+")")),
+                                  //Text("-"),
+                                 //Text(globalcompanyinfomap["ReportingToDesignation"],overflow: TextOverflow.ellipsis),
                                 ],),
-
                                 SizedBox(height: 10.0,),
-
                               ],
                             ),
                           ),
@@ -582,7 +597,7 @@ var profilepic;
                                     width: 100.0,),
                                     //),
                                   //Text(globalcontactusinfomap["Email"]),
-                                  Text(globalcompanyinfomap["CompanyEmail"],overflow: TextOverflow.ellipsis)
+                                  Flexible(child: Text(globalcompanyinfomap["CompanyEmail"]))
                                 ],),
                            /*     SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
@@ -856,7 +871,7 @@ var profilepic;
           _checkLoaded = true;
         });
       }
-      print("Profile image has been changed.");
+      print("Profile image has been changed successfully.");
       // ignore: deprecated_member_use
       Navigator.push(
         context,
@@ -864,13 +879,17 @@ var profilepic;
       );
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text("Profile image has been changed."),
+        content: new Text("Profile image has been changed successfully."),
       )
       );
     }else{
       setState(() {
         _isProfileUploading = false;
       });
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CollapsingTab()),
+      );
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Congrats!"),

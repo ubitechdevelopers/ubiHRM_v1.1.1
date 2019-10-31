@@ -435,7 +435,7 @@ class _AllApprovals extends State<AllApprovals> {
 
                   ( perLeaveApproval!='1' &&  perTimeoffApproval!='1' ) ?new Center(
                     child: Padding(
-                      padding: EdgeInsets.only(top:240.0,bottom: 5.0),
+                      padding: EdgeInsets.only(top:100.0),
                       child: Container(
                         width: MediaQuery.of(context).size.width*1,
                         color: appStartColor().withOpacity(0.1),

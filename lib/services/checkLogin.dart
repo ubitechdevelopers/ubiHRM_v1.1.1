@@ -6,6 +6,7 @@ import 'package:ubihrm/global.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'services.dart';
+
 class Login{
 
   var dio = new Dio();
@@ -16,7 +17,6 @@ class Login{
     // var empid;
     // var organization;
     // Employee emp;
-
 
     FormData formData = new FormData.from({
       "user_name": user.username,
@@ -38,6 +38,29 @@ class Login{
         prefs.setString("employeeid", employeeMap['employeeid']);
         prefs.setString("organization", employeeMap['organization']);
         prefs.setString("userprofileid", employeeMap['userprofileid']);
+        prefs.setString("countryid", employeeMap['countryid']);
+        print("countryid");
+        print(employeeMap['countryid']);
+        if(employeeMap['countryid']=="93"){
+          //print("Hello");
+          path="http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/";
+          path_ubiattendance="http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/";
+          path_hrm_india="http://192.168.0.200/UBIHRM/HRMINDIA/services/";
+
+          /*path="https://ubitech.ubihrm.com/ubiapp/";
+          path_ubiattendance="https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/";
+          path_hrm_india="https://ubitech.ubihrm.com/services/";*/
+
+        }else{
+          //print("Hiii");
+          path="http://192.168.0.200/UBIHRM/HRMALL/ubiapp/";
+          path_ubiattendance="http://192.168.0.200/UBIHRM/HRMALL/HRMAPP/index.php/Att_services/";
+          path_hrm_india="http://192.168.0.200/UBIHRM/HRMALL/services/";
+
+          /*path="https://brightenv.ubihrm.com/ubiapp/";
+          path_ubiattendance="https://brightenv.ubihrm.com/HRMAPP/index.php/Att_services/";
+          path_hrm_india="https://brightenv.ubihrm.com/services/";*/
+        }
         prefs.setString("empid", employeeMap['employeeid']);
         prefs.setString("orgdir", employeeMap['organization']);
         prefs.setString("orgname", employeeMap['organizationname']);
@@ -52,12 +75,12 @@ class Login{
         print("----------->");
         Employee emp = new Employee(employeeid: empid, organization: organization, userprofileid: userprofileid);
 
-        //  await getProfileInfo(emp);
+        //await getProfileInfo(emp);
         await getAllPermission(emp);
         await getProfileInfo(emp);
         perEmployeeLeave= getModulePermission("18","view");
 
-        //  perLeaveApproval=  getModulePermission("124","view");
+        //perLeaveApproval=  getModulePermission("124","view");
         perAttendance=  getModulePermission("5","view");
         perTimeoff=  getModulePermission("179","view");
         await getReportingTeam(emp);

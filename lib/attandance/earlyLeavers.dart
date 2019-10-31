@@ -252,11 +252,13 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                                 snapshot.data[index].timeAct.toString(),
                               ),
                             ),
-                            new Container(
-                              width: MediaQuery.of(context).size.width * 0.11,
-                              child: new Text(
-                                snapshot.data[index].diff.toString(),
-                                style: TextStyle(color: appStartColor()),
+                            Flexible(
+                              child: new Container(
+                                width: MediaQuery.of(context).size.width * 0.11,
+                                child: new Text(
+                                  snapshot.data[index].diff.toString(),
+                                  style: TextStyle(color: appStartColor()),
+                                ),
                               ),
                             ),
                           ],

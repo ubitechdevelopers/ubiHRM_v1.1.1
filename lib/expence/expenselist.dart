@@ -180,7 +180,6 @@ class _MyExpenceState extends State<MyExpence> {
 
   @override
   Widget build(BuildContext context) {
-
     return mainWidget;
   }
 
@@ -213,7 +212,7 @@ class _MyExpenceState extends State<MyExpence> {
         endDrawer: new AppDrawer(),
         appBar: new ExpenseAppHeader(profileimage,showtabbar,orgName),
         bottomNavigationBar:new HomeNavigation(),
-        body:  ModalProgressHUD(
+        /*body:  ModalProgressHUD(
             inAsyncCall: _checkwithdrawnexpense,
             opacity: 0.15,
             progressIndicator: SizedBox(
@@ -224,8 +223,8 @@ class _MyExpenceState extends State<MyExpence> {
               width: 40.0,
             ),
             child: homewidget()
-        ),
-        //body: homewidget(),
+        ),*/
+        body: homewidget(),
         floatingActionButton: new FloatingActionButton(
           backgroundColor: Colors.orange[800],
           onPressed: (){
@@ -646,7 +645,7 @@ class ExpenseAppHeader extends StatelessWidget implements PreferredSizeWidget {
                   MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
                 );
               },),
-            /*GestureDetector(
+            GestureDetector(
               // When the child is tapped, show a snackbar
               onTap: () {
                 Navigator.push(
@@ -667,10 +666,12 @@ class ExpenseAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       )
                   )
               ),
-            ),*/
-            Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(orgname, overflow: TextOverflow.ellipsis,)
+            ),
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(orgname, overflow: TextOverflow.ellipsis,)
+              ),
             )
           ],
         ),

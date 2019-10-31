@@ -562,10 +562,10 @@ Future<List<Map<String, String>>> getAttsummaryChart() async {
   final response = await dio.post(
       path+"getAttSummaryChart?eid=$empid&refno=$organization"
   );
-// print(response.toString());
+  print(path+"getAttSummaryChart?eid=$empid&refno=$organization");
   final data = json.decode(response.data.toString());
 //print("fdgdgdfgd"+data.toString());
-  //print(data['att']['month']);
+
   prefs.setString("attmonth", data['att']['month'].toString());
 
   List<Map<String, String>> val = [

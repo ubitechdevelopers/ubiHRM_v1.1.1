@@ -522,9 +522,6 @@ class _TimeOffPageState extends State<TimeOffPage> {
         content: new Text('TimeOff has been applied successfully!'),
       )
       );
-      setState(() {
-        isServiceCalling=false;
-      });
     }else if(islogin=="1"){
       //print("####################");
       //showInSnackBar("There is some problem while applying for Timeoff.");

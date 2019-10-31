@@ -106,10 +106,10 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text('Early Leavers(EL)',style: TextStyle(color:Colors.black87,fontSize: 12.0),),
-              Text('Late Comers(LC)',style: TextStyle(color:Colors.black87,fontSize: 12.0),),
-              Text('Absent(A)',style: TextStyle(color:Colors.black87,fontSize: 12.0),),
-              Text('Present(P)',style: TextStyle(color:Colors.black87,fontSize: 12.0),),
+              Flexible(child: Text('Early Leavers(EL)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
+              Flexible(child: Text('Late Comers(LC)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
+              Flexible(child: Text('Absent(A)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
+              Flexible(child: Text('Present(P)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
             ],
           ),
           Divider(),
@@ -227,15 +227,17 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                               color: Colors.black87,
                                               fontSize: 16.0),),
                                         ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.16,
-                                          child:  Text(snapshot.data[index].TimeOut
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),textAlign: TextAlign.center,),
+                                        Flexible(
+                                          child: Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.16,
+                                            child:  Text(snapshot.data[index].TimeOut
+                                                .toString(), style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16.0),textAlign: TextAlign.center,),
+                                          ),
                                         ),
                                       ],
 
@@ -330,17 +332,18 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                               color: Colors.black87,
                                               fontSize: 16.0),textAlign: TextAlign.center,),
                                         ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.16,
-                                          child:  Text(snapshot.data[index].TimeOut
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),textAlign: TextAlign.center,),
+                                        Flexible(
+                                          child: Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.16,
+                                            child:  Text(snapshot.data[index].TimeOut
+                                                .toString(), style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16.0),textAlign: TextAlign.center,),
+                                          ),
                                         ),
-
                                       ],
 
                                     );
@@ -440,15 +443,17 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                               color: Colors.black87,
                                               fontSize: 16.0),textAlign: TextAlign.center,),
                                         ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.16,
-                                          child:  Text(snapshot.data[index].TimeOut
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),textAlign: TextAlign.center,),
+                                        Flexible(
+                                          child: Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.16,
+                                            child:  Text(snapshot.data[index].TimeOut
+                                                .toString(), style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16.0),textAlign: TextAlign.center,),
+                                          ),
                                         ),
 
                                       ],
@@ -547,17 +552,18 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                               color: Colors.black87,
                                               fontSize: 16.0),textAlign: TextAlign.center,),
                                         ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.16,
-                                          child:  Text(snapshot.data[index].TimeOut
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),textAlign: TextAlign.center,),
+                                        Flexible(
+                                          child: Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.16,
+                                            child:  Text(snapshot.data[index].TimeOut
+                                                .toString(), style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16.0),textAlign: TextAlign.center,),
+                                          ),
                                         ),
-
                                       ],
 
                                     );

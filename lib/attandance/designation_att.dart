@@ -327,44 +327,46 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                                                   )
 
                                               ),
-                                              Container(
-                                                  width: MediaQuery
-                                                      .of(context)
-                                                      .size
-                                                      .width * 0.20,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment
-                                                        .center,
-                                                    children: <Widget>[
-                                                      Text(snapshot.data[index].TimeOut
-                                                          .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      GestureDetector(
-                                                        onTap: (){
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          width: 62.0,
-                                                          height: 62.0,
+                                              Flexible(
+                                                child: Container(
+                                                    width: MediaQuery
+                                                        .of(context)
+                                                        .size
+                                                        .width * 0.20,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .center,
+                                                      children: <Widget>[
+                                                        Text(snapshot.data[index].TimeOut
+                                                            .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        GestureDetector(
+                                                          onTap: (){
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
+                                                            );
+                                                          },
                                                           child: Container(
-                                                              decoration: new BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  image: new DecorationImage(
-                                                                      fit: BoxFit.fill,
-                                                                      image: new NetworkImage(
-                                                                          snapshot
-                                                                              .data[index]
-                                                                              .ExitImage)
-                                                                  )
-                                                              )),),
-                                                      ),
+                                                            width: 62.0,
+                                                            height: 62.0,
+                                                            child: Container(
+                                                                decoration: new BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    image: new DecorationImage(
+                                                                        fit: BoxFit.fill,
+                                                                        image: new NetworkImage(
+                                                                            snapshot
+                                                                                .data[index]
+                                                                                .ExitImage)
+                                                                    )
+                                                                )),),
+                                                        ),
 
-                                                    ],
-                                                  )
+                                                      ],
+                                                    )
 
+                                                ),
                                               ),
                                             ],
 
@@ -457,7 +459,8 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                                             )
 
                                         ),
-                                        Container(
+                                        Flexible(
+                                          child: Container(
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
@@ -470,7 +473,7 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                                                     .toString()),
                                               ],
                                             )
-
+                                          ),
                                         ),
                                       ],
 
@@ -630,44 +633,46 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                                                   )
 
                                               ),
-                                              Container(
-                                                  width: MediaQuery
-                                                      .of(context)
-                                                      .size
-                                                      .width * 0.20,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment
-                                                        .center,
-                                                    children: <Widget>[
-                                                      Text(snapshot.data[index].TimeOut
-                                                          .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                                      GestureDetector(
-                                                        onTap: (){
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          width: 62.0,
-                                                          height: 62.0,
+                                              Flexible(
+                                                child: Container(
+                                                    width: MediaQuery
+                                                        .of(context)
+                                                        .size
+                                                        .width * 0.20,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .center,
+                                                      children: <Widget>[
+                                                        Text(snapshot.data[index].TimeOut
+                                                            .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                                        GestureDetector(
+                                                          onTap: (){
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
+                                                            );
+                                                          },
                                                           child: Container(
-                                                              decoration: new BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  image: new DecorationImage(
-                                                                      fit: BoxFit.fill,
-                                                                      image: new NetworkImage(
-                                                                          snapshot
-                                                                              .data[index]
-                                                                              .ExitImage)
-                                                                  )
-                                                              )),),
-                                                      ),
+                                                            width: 62.0,
+                                                            height: 62.0,
+                                                            child: Container(
+                                                                decoration: new BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    image: new DecorationImage(
+                                                                        fit: BoxFit.fill,
+                                                                        image: new NetworkImage(
+                                                                            snapshot
+                                                                                .data[index]
+                                                                                .ExitImage)
+                                                                    )
+                                                                )),),
+                                                        ),
 
-                                                    ],
-                                                  )
+                                                      ],
+                                                    )
 
+                                                ),
                                               ),
                                             ],
 
@@ -825,7 +830,8 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                                                   )
 
                                               ),
-                                              Container(
+                                              Flexible(
+                                                child: Container(
                                                   width: MediaQuery
                                                       .of(context)
                                                       .size
@@ -862,7 +868,7 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
 
                                                     ],
                                                   )
-
+                                                ),
                                               ),
                                             ],
 

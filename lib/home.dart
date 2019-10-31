@@ -150,7 +150,6 @@ class _HomePageStatemain extends State<HomePageMain> {
       print(location_addr);
 
       perEmployeeLeave = getModulePermission("18", "view");
-      //print(perEmployeeLeave);
       perLeaveApproval = getModuleUserPermission("124", "view");
       perAttendance = getModulePermission("5", "view");
       perTimeoff = getModulePermission("179", "view");
@@ -164,8 +163,8 @@ class _HomePageStatemain extends State<HomePageMain> {
       showtabbar = false;
       profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
       // profileimage = new NetworkImage(pic);
-//print("ABCDEFGHI");
-//print(profileimage);
+      //print("ABCDEFGHI");
+      //print(profileimage);
 
       profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
         if (mounted) {

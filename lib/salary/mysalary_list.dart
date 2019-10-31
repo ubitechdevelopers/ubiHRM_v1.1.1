@@ -92,46 +92,46 @@ class _SalarySummary extends State<SalarySummary> {
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('empid') ?? '';
     orgdir = prefs.getString('orgdir') ?? '';
- //   response = prefs.getInt('response') ?? 0;
+    //   response = prefs.getInt('response') ?? 0;
     admin_sts = prefs.getString('sstatus') ?? 0.toString();
-  //  if (response == 1) {
-  //    Loc lock = new Loc();
-  //    location_addr = await lock.initPlatformState();
-      //act =await checkPunch(empid, orgdir);
+    //  if (response == 1) {
+    //    Loc lock = new Loc();
+    //    location_addr = await lock.initPlatformState();
+    //act =await checkPunch(empid, orgdir);
 
-      //act= 'PunchOut';
+    //act= 'PunchOut';
 
-      setState(() {
-  //      location_addr1 = location_addr;
-   //    response = prefs.getInt('response') ?? 0;
-        fname = prefs.getString('fname') ?? '';
-        lname = prefs.getString('lname') ?? '';
-        empid = prefs.getString('empid') ?? '';
-        email = prefs.getString('email') ?? '';
-        status = prefs.getString('status') ?? '';
-        orgid = prefs.getString('orgid') ?? '';
-        orgdir = prefs.getString('orgdir') ?? '';
-        sstatus = prefs.getString('sstatus') ?? '';
-        org_name = prefs.getString('org_name') ?? '';
-        desination = prefs.getString('desination') ?? '';
-        profile = prefs.getString('profile') ?? '';
-        lid = prefs.getString('lid') ?? "0";
-    //    act= lid!='0'?'PunchOut':'PunchIn';
-        showtabbar=false;
-        profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __){
-          if (mounted) {
-            setState(() {
-              _checkLoaded = false;
-            });
-          }
-        }));
-   //     latit = prefs.getString('latit') ?? '';
-  //      longi = prefs.getString('longi') ?? '';
-  //      shiftId = prefs.getString('shiftId') ?? "";
-  //      print("this is set state " + lid);
-   //     act1 = act;
-      });
+    setState(() {
+      //      location_addr1 = location_addr;
+      //    response = prefs.getInt('response') ?? 0;
+      fname = prefs.getString('fname') ?? '';
+      lname = prefs.getString('lname') ?? '';
+      empid = prefs.getString('empid') ?? '';
+      email = prefs.getString('email') ?? '';
+      status = prefs.getString('status') ?? '';
+      orgid = prefs.getString('orgid') ?? '';
+      orgdir = prefs.getString('orgdir') ?? '';
+      sstatus = prefs.getString('sstatus') ?? '';
+      org_name = prefs.getString('org_name') ?? '';
+      desination = prefs.getString('desination') ?? '';
+      profile = prefs.getString('profile') ?? '';
+      lid = prefs.getString('lid') ?? "0";
+      //    act= lid!='0'?'PunchOut':'PunchIn';
+      showtabbar=false;
+      profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+      profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __){
+        if (mounted) {
+          setState(() {
+            _checkLoaded = false;
+          });
+        }
+      }));
+      //     latit = prefs.getString('latit') ?? '';
+      //      longi = prefs.getString('longi') ?? '';
+      //      shiftId = prefs.getString('shiftId') ?? "";
+      //      print("this is set state " + lid);
+      //     act1 = act;
+    });
 //    }
   }
 
@@ -140,7 +140,7 @@ class _SalarySummary extends State<SalarySummary> {
 
     var timeoff = TimeOff(TimeOffId: timeoffid, OrgId: orgid, EmpId: empid, ApprovalSts: '5');
     var islogin = await ns.withdrawTimeOff(timeoff);
-   // print(islogin);
+    // print(islogin);
     if(islogin=="success"){
       setState(() {
         _isButtonDisabled=false;
@@ -321,9 +321,9 @@ class _SalarySummary extends State<SalarySummary> {
       ),*/
 
       // endDrawer: new AppDrawer(),
-    //  body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
+      //  body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
       body:getMarkAttendanceWidgit(),
-     /* floatingActionButton: new FloatingActionButton(
+      /* floatingActionButton: new FloatingActionButton(
         backgroundColor: Colors.orange[800],
         onPressed: (){
           Navigator.push(
@@ -340,16 +340,16 @@ class _SalarySummary extends State<SalarySummary> {
   checkalreadylogin() {
 
 
- //   if (response == 1) {
-      return new IndexedStack(
-        index: _currentIndex,
-        children: <Widget>[
-    //      underdevelopment(),
-      //    mainbodyWidget(),
-     //     underdevelopment()
-        ],
-      );
-  /*  } else {
+    //   if (response == 1) {
+    return new IndexedStack(
+      index: _currentIndex,
+      children: <Widget>[
+        //      underdevelopment(),
+        //    mainbodyWidget(),
+        //     underdevelopment()
+      ],
+    );
+    /*  } else {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),
@@ -358,7 +358,7 @@ class _SalarySummary extends State<SalarySummary> {
   }
 
   loader() {
-   /* return new Container(
+    /* return new Container(
       child: Center(
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -435,73 +435,73 @@ class _SalarySummary extends State<SalarySummary> {
 //            crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(height: 50.0,),
-                 //     SizedBox(width: MediaQuery.of(context).size.width*0.02),
+                      //     SizedBox(width: MediaQuery.of(context).size.width*0.02),
                       new Expanded(
                         child:  Container(
-                        width: MediaQuery.of(context).size.width*0.20,
-                        child:Text('Month',style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
-                      ),),
+                          width: MediaQuery.of(context).size.width*0.20,
+                          child:Text('Month',style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        ),),
 
-                  //    SizedBox(height: 50.0,),
+                      //    SizedBox(height: 50.0,),
                       new Expanded(
                         child:  Container(
-                        width: MediaQuery.of(context).size.width*0.20,
-                        margin: EdgeInsets.fromLTRB(2.0, 0.0, 0.0, 0.0),
-                        child:Text('Amount',  textAlign: TextAlign.right,style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
-                      ),),
+                          width: MediaQuery.of(context).size.width*0.20,
+                          margin: EdgeInsets.fromLTRB(2.0, 0.0, 0.0, 0.0),
+                          child:Text('Amount',  textAlign: TextAlign.right,style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        ),),
 
-                  //    SizedBox(height: 50.0,),
+                      //    SizedBox(height: 50.0,),
                       new Expanded(
                         child:  Container(
-                        width: MediaQuery.of(context).size.width*0.30,
+                          width: MediaQuery.of(context).size.width*0.30,
                           margin: EdgeInsets.only(left:11.0),
-                        child:Text('Paid Days',  textAlign: TextAlign.right,style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
-                      ),),
+                          child:Text('Paid Days',  textAlign: TextAlign.right,style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        ),),
 
                       new Expanded(
                         child:  Container(
-                        width: MediaQuery.of(context).size.width*0.20,
-                        margin: EdgeInsets.only(left:25.0),
-                        child:Text('Action',style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
-                      ),),
+                          width: MediaQuery.of(context).size.width*0.20,
+                          margin: EdgeInsets.only(left:25.0),
+                          child:Text('Action',style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
+                        ),),
                     ],
                   ),
                   new Divider(),
 
                   new Expanded(
                     child:  Container(
-                    height: MediaQuery.of(context).size.height*.55,
-                    width: MediaQuery.of(context).size.width*.99,
-                    //padding: EdgeInsets.only(bottom: 15.0),
-                    color: Colors.white,
-                    //////////////////////////////////////////////////////////////////////---------------------------------
-                    child: new FutureBuilder<List<Salary>>(
-                      future: getsalarySummary(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          if(snapshot.data.length>0){
-                            return new ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (BuildContext context, int index) {
+                      height: MediaQuery.of(context).size.height*.55,
+                      width: MediaQuery.of(context).size.width*.99,
+                      //padding: EdgeInsets.only(bottom: 15.0),
+                      color: Colors.white,
+                      //////////////////////////////////////////////////////////////////////---------------------------------
+                      child: new FutureBuilder<List<Salary>>(
+                        future: getsalarySummary(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            if(snapshot.data.length>0){
+                              return new ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (BuildContext context, int index) {
 
-                                  return new Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        new Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: <Widget>[
+                                    return new Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          new Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: <Widget>[
 
-                                            new Expanded(
-                                              child: Container(
-                                                width: MediaQuery.of(context).size.width * 0.30,
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    new Text(
-                                                      snapshot.data[index].month.toString(),style: TextStyle(),),
-                                                    /*  (snapshot.data[index].withdrawlsts && snapshot.data[index].ApprovalSts.toString()!='Withdrawn' && snapshot.data[index].ApprovalSts.toString()!="Rejected")?new Container(
+                                              new Expanded(
+                                                child: Container(
+                                                    width: MediaQuery.of(context).size.width * 0.30,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                        new Text(
+                                                          snapshot.data[index].month.toString(),style: TextStyle(),),
+                                                        /*  (snapshot.data[index].withdrawlsts && snapshot.data[index].ApprovalSts.toString()!='Withdrawn' && snapshot.data[index].ApprovalSts.toString()!="Rejected")?new Container(
                                               height:18.5,
                                               child:new  FlatButton(
                                                 shape: Border.all(color: Colors.blue),
@@ -512,78 +512,78 @@ class _SalarySummary extends State<SalarySummary> {
                                                 child: Text("Withdraw",style: TextStyle(color: Colors.blue),),
                                               )
                                       ):Center(),*/
-                                                  ],
-                                                )),),
+                                                      ],
+                                                    )),),
 
-                                            new Expanded(
-                                              child: Container(
-                                              width: MediaQuery.of(context).size.width * 0.25,
-                                                margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                                              child:  Text(
-                                                  snapshot.data[index].EmployeeCTC.toString()+" "+snapshot.data[index].Currency.toString(),style:TextStyle(),  textAlign: TextAlign.right,),
-                                            ),),
+                                              new Expanded(
+                                                child: Container(
+                                                  width: MediaQuery.of(context).size.width * 0.25,
+                                                  margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                                                  child:  Text(
+                                                    snapshot.data[index].EmployeeCTC.toString()+" "+snapshot.data[index].Currency.toString(),style:TextStyle(),  textAlign: TextAlign.right,),
+                                                ),),
 
-                                            new Expanded(
-                                              child: Container(
-                                              width: MediaQuery.of(context).size.width * 0.17, margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                                              child:  Text(
-                                                  snapshot.data[index].paid_days.toString(),style:TextStyle(),  textAlign: TextAlign.right,),
-                                            ),),
-                                            new Expanded(
-                                            child: Container(
-                                            width: MediaQuery.of(context) .size .width * 0.30,margin: EdgeInsets.only(left:30.0),
-                                             height: 28.0,
-                                            child: new OutlineButton(
-                                              onPressed: () {
-                                              print(path+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
-                                                 launchMap(path+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
-                                                 //   launchMap(" https://ubiattendance.ubihrm.com/");
-                                                  },
-                                                  child: new Icon(
-                                                    Icons.print,
-                                                    size: 17.0,
-                                                    color: appStartColor(),
+                                              new Expanded(
+                                                child: Container(
+                                                  width: MediaQuery.of(context).size.width * 0.17, margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                                                  child:  Text(
+                                                    snapshot.data[index].paid_days.toString(),style:TextStyle(),  textAlign: TextAlign.right,),
+                                                ),),
+                                              new Expanded(
+                                                child: Container(
+                                                  width: MediaQuery.of(context) .size .width * 0.30,margin: EdgeInsets.only(left:30.0),
+                                                  height: 28.0,
+                                                  child: new OutlineButton(
+                                                    onPressed: () {
+                                                      print(path+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
+                                                      launchMap(path+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
+                                                      //   launchMap(" https://ubiattendance.ubihrm.com/");
+                                                    },
+                                                    child: new Icon(
+                                                      Icons.print,
+                                                      size: 17.0,
+                                                      color: appStartColor(),
+                                                    ),
+                                                    borderSide: BorderSide(color:  appStartColor()),
+                                                    padding:EdgeInsets.all(3.0),
+                                                    shape: new CircleBorder(),
                                                   ),
-                                           borderSide: BorderSide(color:  appStartColor()),
-                                           padding:EdgeInsets.all(3.0),
-                                           shape: new CircleBorder(),
-                                             ),
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                         )
-                                        ],
-                                      ),
-                                   //SizedBox(width: 30.0,),
-                                 Divider(color: Colors.black45,),
-                               ]);
-                             }
-                            );
-                          }else
-                            return new Center(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width*1,
-                                color: appStartColor().withOpacity(0.1),
-                                padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                child:Text("No Records",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
-                              ),
-                            );
-                        } else if (snapshot.hasError) {
-                          return new Text("Unable to connect server");
-                        }
-                        return new Center(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width*1,
-                            color: appStartColor().withOpacity(0.1),
-                            padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                            child:Text("No Records",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
-                          ),
-                        );
-                        // By default, show a loading spinner
-                       // return new Center(child: CircularProgressIndicator());
-                        //return new Center(child: Text("No data found"),);
-                      },
-                    ),
-                    //////////////////////////////////////////////////////////////////////---------------------------------
-                  ),),
+                                          //SizedBox(width: 30.0,),
+                                          Divider(color: Colors.black45,),
+                                        ]);
+                                  }
+                              );
+                            }else
+                              return new Center(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*1,
+                                  color: appStartColor().withOpacity(0.1),
+                                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                  child:Text("No Records",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                                ),
+                              );
+                          } else if (snapshot.hasError) {
+                            return new Text("Unable to connect server");
+                          }
+                          return new Center(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*1,
+                              color: appStartColor().withOpacity(0.1),
+                              padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                              child:Text("No Records",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                            ),
+                          );
+                          // By default, show a loading spinner
+                          // return new Center(child: CircularProgressIndicator());
+                          //return new Center(child: Text("No data found"),);
+                        },
+                      ),
+                      //////////////////////////////////////////////////////////////////////---------------------------------
+                    ),),
 
                 ])
         ),

@@ -117,14 +117,22 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Text('Early Leavers(EL)',
+                    Flexible(
+                      child: Text('Early Leavers(EL)',
+                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                    ),
+                    Flexible(
+                      child: Text('Late Comers(LC)',
                       style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                    Text('Late Comers(LC)',
+                    ),
+                    Flexible(
+                      child: Text('Absent(A)',
                       style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                    Text('Absent(A)',
+                    ),
+                    Flexible(
+                      child: Text('Present(P)',
                       style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                    Text('Present(P)',
-                      style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                    ),
                   ],
                 ),
                 Divider(),
@@ -348,50 +356,52 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                                         )
 
                                                     ),
-                                                    Container(
-                                                        width: MediaQuery
-                                                            .of(context)
-                                                            .size
-                                                            .width * 0.20,
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment
-                                                              .center,
-                                                          children: <Widget>[
-                                                            Text(snapshot
-                                                                .data[index]
-                                                                .TimeOut
-                                                                .toString(),
-                                                              style: TextStyle(
-                                                                  fontWeight: FontWeight
-                                                                      .bold),),
-                                                            GestureDetector(
-                                                              onTap: (){
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
-                                                                );
-                                                              },
-                                                              child: Container(
-                                                                width: 62.0,
-                                                                height: 62.0,
+                                                    Flexible(
+                                                      child: Container(
+                                                          width: MediaQuery
+                                                              .of(context)
+                                                              .size
+                                                              .width * 0.20,
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment
+                                                                .center,
+                                                            children: <Widget>[
+                                                              Text(snapshot
+                                                                  .data[index]
+                                                                  .TimeOut
+                                                                  .toString(),
+                                                                style: TextStyle(
+                                                                    fontWeight: FontWeight
+                                                                        .bold),),
+                                                              GestureDetector(
+                                                                onTap: (){
+                                                                  Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
+                                                                  );
+                                                                },
                                                                 child: Container(
-                                                                    decoration: new BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        image: new DecorationImage(
-                                                                            fit: BoxFit
-                                                                                .fill,
-                                                                            image: new NetworkImage(
-                                                                                snapshot
-                                                                                    .data[index]
-                                                                                    .ExitImage)
-                                                                        )
-                                                                    )),),
-                                                            ),
+                                                                  width: 62.0,
+                                                                  height: 62.0,
+                                                                  child: Container(
+                                                                      decoration: new BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          image: new DecorationImage(
+                                                                              fit: BoxFit
+                                                                                  .fill,
+                                                                              image: new NetworkImage(
+                                                                                  snapshot
+                                                                                      .data[index]
+                                                                                      .ExitImage)
+                                                                          )
+                                                                      )),),
+                                                              ),
 
-                                                          ],
-                                                        )
+                                                            ],
+                                                          )
 
+                                                      ),
                                                     ),
                                                   ],
 
@@ -489,21 +499,23 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                                   )
 
                                               ),
-                                              Container(
-                                                  width: MediaQuery
-                                                      .of(context)
-                                                      .size
-                                                      .width * 0.20,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment
-                                                        .center,
-                                                    children: <Widget>[
-                                                      Text(snapshot.data[index]
-                                                          .TimeOut
-                                                          .toString()),
-                                                    ],
-                                                  )
+                                              Flexible(
+                                                child: Container(
+                                                    width: MediaQuery
+                                                        .of(context)
+                                                        .size
+                                                        .width * 0.20,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .center,
+                                                      children: <Widget>[
+                                                        Text(snapshot.data[index]
+                                                            .TimeOut
+                                                            .toString()),
+                                                      ],
+                                                    )
 
+                                                ),
                                               ),
                                               Divider(color: Colors.black26,),
                                             ],
@@ -686,7 +698,8 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                                         )
 
                                                     ),
-                                                    Container(
+                                                    Flexible(
+                                                      child: Container(
                                                         width: MediaQuery
                                                             .of(context)
                                                             .size
@@ -730,7 +743,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                                           ],
                                                         )
 
-                                                    ),
+                                                    ),),
                                                   ],
 
                                                 ),
@@ -912,50 +925,52 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                                         )
 
                                                     ),
-                                                    Container(
-                                                        width: MediaQuery
-                                                            .of(context)
-                                                            .size
-                                                            .width * 0.20,
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment
-                                                              .center,
-                                                          children: <Widget>[
-                                                            Text(snapshot
-                                                                .data[index]
-                                                                .TimeOut
-                                                                .toString(),
-                                                              style: TextStyle(
-                                                                  fontWeight: FontWeight
-                                                                      .bold),),
-                                                            GestureDetector(
-                                                              onTap: (){
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
-                                                                );
-                                                              },
-                                                              child: Container(
-                                                                width: 62.0,
-                                                                height: 62.0,
+                                                    Flexible(
+                                                      child: Container(
+                                                          width: MediaQuery
+                                                              .of(context)
+                                                              .size
+                                                              .width * 0.20,
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment
+                                                                .center,
+                                                            children: <Widget>[
+                                                              Text(snapshot
+                                                                  .data[index]
+                                                                  .TimeOut
+                                                                  .toString(),
+                                                                style: TextStyle(
+                                                                    fontWeight: FontWeight
+                                                                        .bold),),
+                                                              GestureDetector(
+                                                                onTap: (){
+                                                                  Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "Ubitech Solutions")),
+                                                                  );
+                                                                },
                                                                 child: Container(
-                                                                    decoration: new BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        image: new DecorationImage(
-                                                                            fit: BoxFit
-                                                                                .fill,
-                                                                            image: new NetworkImage(
-                                                                                snapshot
-                                                                                    .data[index]
-                                                                                    .ExitImage)
-                                                                        )
-                                                                    )),),
-                                                            ),
+                                                                  width: 62.0,
+                                                                  height: 62.0,
+                                                                  child: Container(
+                                                                      decoration: new BoxDecoration(
+                                                                          shape: BoxShape
+                                                                              .circle,
+                                                                          image: new DecorationImage(
+                                                                              fit: BoxFit
+                                                                                  .fill,
+                                                                              image: new NetworkImage(
+                                                                                  snapshot
+                                                                                      .data[index]
+                                                                                      .ExitImage)
+                                                                          )
+                                                                      )),),
+                                                              ),
 
-                                                          ],
-                                                        )
+                                                            ],
+                                                          )
 
+                                                      ),
                                                     ),
                                                   ],
 
