@@ -316,7 +316,7 @@ class _Flexitime extends State<Flexitime> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(width: 20.0,),
                     Icon(
@@ -324,7 +324,7 @@ class _Flexitime extends State<Flexitime> {
                       color: appStartColor(),
                     ),
                     Text(
-                      " Fetching location, please wait..",
+                      "Fetching location, please wait..",
                       style: new TextStyle(fontSize: 20.0, color: appStartColor()),
                     )
                   ]),

@@ -1134,7 +1134,7 @@ class _LoginPageState extends State<LoginPage>
                           // child:
                           Row(
                             children: <Widget>[
-                              Flexible(
+                              Expanded(
                                 child: Container(
                                   //width: 250.0,
                                   width: MediaQuery.of(context).size.width,
@@ -1155,7 +1155,7 @@ class _LoginPageState extends State<LoginPage>
                                     //child: DropdownButtonHideUnderline(
                                     child:  new DropdownButton<String>(
                                       isDense: true,
-                                      //    hint: new Text("Select"),
+                                      //hint: new Text("--Select--"),
                                       value: _country,
                                       onChanged: (String newValue) {
                                         setState(() {
@@ -1233,7 +1233,7 @@ class _LoginPageState extends State<LoginPage>
 
                           Row(
                             children: <Widget>[
-                              new Flexible(
+                              new Expanded(
                                 flex: 37,
                                 child:Padding(
                                   padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 20.0, right: 0.0),

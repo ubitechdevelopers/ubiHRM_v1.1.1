@@ -372,7 +372,7 @@ class _PunchLocation extends State<PunchLocation> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(width: 20.0,),
                     Icon(
