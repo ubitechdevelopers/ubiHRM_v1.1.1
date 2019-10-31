@@ -1233,8 +1233,8 @@ class _LoginPageState extends State<LoginPage>
 
                           Row(
                             children: <Widget>[
-                              new Expanded(
-                                flex: 30,
+                              new Flexible(
+                                flex: 37,
                                 child:Padding(
                                   padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 20.0, right: 0.0),
                                   child:  new TextFormField(
