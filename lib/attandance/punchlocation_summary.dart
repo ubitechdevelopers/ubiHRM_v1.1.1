@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,6 +44,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
   String admin_sts='0';
   int _currentIndex = 1;
   String streamlocationaddr = "";
+  bool isServiceCalling = false;
 
   String orgName="";
   var profileimage;
@@ -160,7 +162,20 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
         endDrawer: new AppDrawer(),
         appBar: new PunchVisitAppHeader(profileimage,showtabbar,orgName),
         bottomNavigationBar:new HomeNavigation(),
+        body:  ModalProgressHUD(
+            inAsyncCall: isServiceCalling,
+            opacity: 0.15,
+            progressIndicator: SizedBox(
+              child:new CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation(Colors.green),
+                  strokeWidth: 5.0),
+              height: 40.0,
+              width: 40.0,
+            ),
+            child: getWidgets(context)
+        ),
 
+        //body: getWidgets(context),
         floatingActionButton: new FloatingActionButton(
           backgroundColor: Colors.orange[800],
           onPressed: (){
@@ -172,8 +187,6 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
           tooltip: 'Punch Visit',
           child: new Icon(Icons.add),
         ),
-
-        body: getWidgets(context),
       ),
     );
 
@@ -219,6 +232,10 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
               child: const Text('PUNCH',style: TextStyle(color: Colors.white),),
               color: Colors.orange[800],
               onPressed: () async{
+                setState(() {
+                  isServiceCalling = true;
+                });
+                print("----> service calling "+isServiceCalling.toString());
                 sl.startStreaming(5);
                 SaveImage saveImage = new SaveImage();
                /* print('****************************>>');
@@ -252,6 +269,9 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                      content: new Text("Problem while punching visit, try again."),
                    )
                    );
+                   setState(() {
+                     isServiceCalling = false;
+                   });
                  }
                 }).catchError((ett){
                   showInSnackBar('Unable to punch visit');

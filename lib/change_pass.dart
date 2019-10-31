@@ -169,31 +169,33 @@ class _changePassword extends State<changePassword> {
                   Container(
                       child: Row(
                         children: <Widget>[
-                          Container(
-                            width: MediaQuery.of(context).size.width*.7,
-                            child: TextFormField(
-                              controller: _oldPass,
-                              onFieldSubmitted: (String value) {
-                                FocusScope.of(context).requestFocus(__newPass);
-                              },
-                              keyboardType: TextInputType.text,
-                              obscureText: _obscureText_old,
-                              decoration: InputDecoration(
-                                  labelText: 'Old Password',
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.all(0.0),
-                                    child: Icon(
-                                      Icons.lock,
-                                      color: Colors.grey,
-                                    ), // icon is 48px widget.
-                                  )
-                              ),
-                              validator: (value) {
-                                if (value.isEmpty || value==null) {
+                          Flexible(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*.7,
+                              child: TextFormField(
+                                controller: _oldPass,
+                                onFieldSubmitted: (String value) {
+                                  FocusScope.of(context).requestFocus(__newPass);
+                                },
+                                keyboardType: TextInputType.text,
+                                obscureText: _obscureText_old,
+                                decoration: InputDecoration(
+                                    labelText: 'Old Password',
+                                    prefixIcon: Padding(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Icon(
+                                        Icons.lock,
+                                        color: Colors.grey,
+                                      ), // icon is 48px widget.
+                                    )
+                                ),
+                                validator: (value) {
+                                  if (value.isEmpty || value==null) {
 //                                  FocusScope.of(context).requestFocus(__oldPass);
-                                  return 'Please enter old password';
-                                }
-                              },
+                                    return 'Please enter old password';
+                                  }
+                                },
+                              ),
                             ),
                           ),
                           Container(
@@ -214,7 +216,8 @@ class _changePassword extends State<changePassword> {
                   Container(
                       child: Row(
                         children: <Widget>[
-                          Container(
+                          Flexible(
+                           child:Container(
                             width: MediaQuery.of(context).size.width*.7,
                             child: TextFormField(
                               controller: _newPass,
@@ -240,6 +243,7 @@ class _changePassword extends State<changePassword> {
                                 }
                               },
                             ),
+                          ),
                           ),
 
                           Container(
