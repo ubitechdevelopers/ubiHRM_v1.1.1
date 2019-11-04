@@ -212,7 +212,7 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
         ),
         actions: <Widget>[
           new FlatButton(
-              shape: Border.all(color: Colors.orange),
+              shape: Border.all(color: Colors.orange[800]),
               child: const Text('CANCEL',style: TextStyle(color: Colors.black87),),
               onPressed: () {
                 _comments.text='';
@@ -309,13 +309,13 @@ print('visit out called for visit id:'+visit_id);
                                       children: <Widget>[
                                         Icon(
                                             Icons.person,
-                                            color: Colors.orange,
+                                            color: Colors.orange[800],
                                             size: 22.0 ),
 
                                         GestureDetector(
-                                          child: const Text(
+                                          child: Text(
                                               'Self',
-                                              style: TextStyle(fontSize: 18,color: Colors.orange,)
+                                              style: TextStyle(fontSize: 18,color: Colors.orange[800],)
                                           ),
                                           // color: Colors.teal[50],
                                           /* splashColor: Colors.white,
@@ -341,7 +341,7 @@ print('visit out called for visit id:'+visit_id);
                                     children: <Widget>[
                                       Icon(
                                           Icons.group,
-                                          color: Colors.orange,
+                                          color: Colors.orange[800],
                                           size: 22.0 ),
                                       GestureDetector(
                                         onTap: () {
@@ -351,9 +351,9 @@ print('visit out called for visit id:'+visit_id);
                                   );*/
                                           false;
                                         },
-                                        child: const Text(
+                                        child: Text(
                                             'Team',
-                                            style: TextStyle(fontSize: 18,color: Colors.orange,fontWeight:FontWeight.bold)
+                                            style: TextStyle(fontSize: 18,color: Colors.orange[800],fontWeight:FontWeight.bold)
                                         ),
                                         //color: Colors.teal[50],
 
@@ -372,15 +372,15 @@ print('visit out called for visit id:'+visit_id);
                                     ]),
                                 SizedBox(height:MediaQuery.of(context).size.width*.03),
                                 Divider(
-                                  color: Colors.orange,
+                                  color: Colors.orange[800],
                                   height: 0.4,
                                 ),
                                 Divider(
-                                  color: Colors.orange,
+                                  color: Colors.orange[800],
                                   height: 0.4,
                                 ),
                                 Divider(
-                                  color: Colors.orange,
+                                  color: Colors.orange[800],
                                   height: 0.4,
                                 ),
                               ]

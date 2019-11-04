@@ -73,11 +73,11 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
       color: Colors.white,
       ),
       child: ListView(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           SizedBox(height: 1.0),
           new Container(
-            child: Center(child:Text("Attendance snap- Last 30 days",style: TextStyle(fontSize: 20.0,color: Colors.black54,),),),
+            child: Center(child:Text("Attendance snap - Last 30 days",style: TextStyle(fontSize: 20.0,color: appStartColor()),),),
           ),
           new Container(
             padding: EdgeInsets.all(0.1),
@@ -138,23 +138,23 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 50.0,),
+              SizedBox(height: 40.0,),
               SizedBox(width: MediaQuery.of(context).size.width*0.02),
               Container(
                 width: MediaQuery.of(context).size.width*0.20,
                 child:Text('Date',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
-              SizedBox(height: 50.0,),
+              SizedBox(height: 40.0,),
               Container(
                 width: MediaQuery.of(context).size.width*0.35,
                 child:Text('Name',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
-              SizedBox(height: 50.0,),
+              SizedBox(height: 40.0,),
               Container(
                 width: MediaQuery.of(context).size.width*0.14,
                 child:Text('Time In',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
-              SizedBox(height: 50.0,),
+              SizedBox(height: 40.0,),
               Container(
                 width: MediaQuery.of(context).size.width*0.16,
                 child:Text('Time Out',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
@@ -250,7 +250,7 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width*1,
                                   color: appStartColor().withOpacity(0.1),
                                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                                 ),
                               );
                             }
@@ -356,7 +356,7 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width*1,
                                   color: appStartColor().withOpacity(0.1),
                                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                                 ),
                               );
                             }
@@ -467,7 +467,7 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width*1,
                                   color:appStartColor().withOpacity(0.1),
                                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No Employees found.",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                                 ),
                               );
                             }
@@ -575,7 +575,7 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width*1,
                                   color: appStartColor().withOpacity(0.1),
                                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                                 ),
                               );
                             }

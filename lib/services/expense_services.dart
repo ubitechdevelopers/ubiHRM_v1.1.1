@@ -41,7 +41,7 @@ class Expense {
         this.amt,
         this.currency,
         this.doc,
-       });
+      });
 }
 
 Future<List<Expense>> getExpenseDetailById(Id) async{
@@ -60,13 +60,13 @@ Future<List<Expense>> getExpenseDetailById(Id) async{
     Response response = await dio.post(
         path_hrm_india+"showExpenseDetail",
         data: formData
-        );
+    );
     //print(response.data.toString());
     //print('--------------------getLeaveSummary Called-----------------------');
     List responseJson = json.decode(response.data.toString());
     print("***************"+responseJson.toString());
-      //print("LEAVE LIST");
-  //  print(userList);
+    //print("LEAVE LIST");
+    //  print(userList);
     //print("---#####################----->"+response.data.toString());
     //print("LEAVE LIST");
     List<Expense> expenseDetail = viewExpenseDetail(responseJson);
@@ -145,7 +145,7 @@ List<Expense> createExpenselist(List data) {
   for (int i = 0; i < data.length; i++) {
 
     String Id = data[i]["id"].toString();
-     String name = data[i]["employee"].toString();
+    String name = data[i]["employee"].toString();
     String category = data[i]["ClaimHeadname"].toString();
     String desc = data[i]["purpose"].toString();
     String applydate = data[i]["fromdate"].toString();
@@ -178,10 +178,10 @@ Future<List<Map>> getheadtype(int label) async{
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   final response = await dio.post(path + "getheadtype?orgid=$orgdir&eid=$empid");
- // print("leavetype11----------->");
- //  print(response);
+  // print("leavetype11----------->");
+  //  print(response);
   List data = json.decode(response.data.toString());
- //  print("headtype----------->");
+  //  print("headtype----------->");
 //print(data);
   List<Map> leavetype = createList(data,label);
   return leavetype;
@@ -207,10 +207,10 @@ List<Map> createList(List data,int label) {
 
 
 class Expensedate {
- String dates;
- String Fdate;
+  String dates;
+  String Fdate;
 
- Expensedate(
+  Expensedate(
       {
         this.dates,
         this.Fdate,
@@ -228,7 +228,7 @@ Future<List<Expensedate>> getExpenselistbydate() async {
   final res = json.decode(response.data.toString());
   //print(res);
 
- List<Expensedate> userList = createExpenselistbydate(res);
+  List<Expensedate> userList = createExpenselistbydate(res);
 
   return userList;
 }
@@ -236,12 +236,12 @@ Future<List<Expensedate>> getExpenselistbydate() async {
 withdrawExpense(Expense expense) async{
   Dio dio = new Dio();
   try {
-   FormData formData = new FormData.from({
+    FormData formData = new FormData.from({
       "id": expense.Id,
       "status": expense.ests
     });
-   print("---------------"+expense.Id);
-   print("---------------"+expense.ests);
+    print("---------------"+expense.Id);
+    print("---------------"+expense.ests);
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
         path_hrm_india+"changeExpenseSts",
@@ -269,13 +269,13 @@ List<Expensedate> createExpenselistbydate(List data) {
 
   for (int i = 0; i < data.length; i++) {
 
-  String dates = data[i]["fromdate"].toString();
-  String Fdate = data[i]["Fdate"].toString();
+    String dates = data[i]["fromdate"].toString();
+    String Fdate = data[i]["Fdate"].toString();
 
-  Expensedate tos = new Expensedate(
-    dates: dates,
-    Fdate: Fdate,
-  );
+    Expensedate tos = new Expensedate(
+      dates: dates,
+      Fdate: Fdate,
+    );
     list.add(tos);
   }
   return list;

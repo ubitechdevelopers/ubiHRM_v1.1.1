@@ -319,7 +319,7 @@ class _RequestLeaveState extends State<RequestLeave> {
    new Expanded(
     child: Container(
      // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
-      height: 80.0,
+      height: 70.0,
       child:DateTimeField(
 
     //firstDate: new DateTime.now(),
@@ -363,7 +363,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     SizedBox(width: 10.0),
     Expanded(
     child: Container(
-      height: 58.0,
+      height: 48.0,
       child: new InputDecorator(
       decoration: InputDecoration(
    // labelText: 'Leave Type',
@@ -436,7 +436,7 @@ class _RequestLeaveState extends State<RequestLeave> {
       new Expanded(
       child: Container(
           // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
-      height: 80.0,
+      height: 70.0,
      child:DateTimeField(
     //firstDate: new DateTime.now(),
     //initialDate: new DateTime.now(),
@@ -486,7 +486,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     SizedBox(width: 10.0),
     Expanded(
     child:Container(
-      height: 58.0,
+      height: 48.0,
       child: new InputDecorator(
       decoration: InputDecoration(
    // labelText: 'Leave Type',
@@ -638,8 +638,8 @@ class _RequestLeaveState extends State<RequestLeave> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return new Container(
-              //    width: MediaQuery.of(context).size.width*.45,
-              padding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+              //width: MediaQuery.of(context).size.width*.45,
+              //padding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
               child: InputDecorator(
                 decoration: InputDecoration(
                   labelText: 'Leave Type',
@@ -694,8 +694,9 @@ class _RequestLeaveState extends State<RequestLeave> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return new Container(
-              //    width: MediaQuery.of(context).size.width*.45,
-              padding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+              //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
               child: InputDecorator(
                 decoration: InputDecoration(
                   labelText: 'Suggest Substitute',
@@ -718,7 +719,7 @@ class _RequestLeaveState extends State<RequestLeave> {
                     return new DropdownMenuItem<String>(
                       value: map["Id"].toString(),
                       child:  new SizedBox(
-                    //      width: 200.0,
+                        width: MediaQuery.of(context).size.width*.8,
                           child: new Text(
                             map["Name"],
                           )

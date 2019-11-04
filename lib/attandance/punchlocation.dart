@@ -372,15 +372,15 @@ class _PunchLocation extends State<PunchLocation> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(width: 20.0,),
+                    //SizedBox(width: 20.0,),
                     Icon(
                       Icons.all_inclusive,
                       color:appStartColor(),
                     ),
                     Text(
-                      "Fetching location, please wait..",
+                      "Fetching location, please wait...",
                       style: new TextStyle(fontSize: 20.0, color:appStartColor()),
                     )
                   ]),
@@ -388,7 +388,7 @@ class _PunchLocation extends State<PunchLocation> {
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(width: 20.0,),
+                    //SizedBox(width: 20.0,),
                     Text(
                       "Note: ",
                       style: new TextStyle(

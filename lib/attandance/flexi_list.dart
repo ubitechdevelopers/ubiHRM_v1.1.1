@@ -440,7 +440,7 @@ class FlexiAppHeader extends StatelessWidget implements PreferredSizeWidget {
               onPressed:(){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePageMain()),
+                  MaterialPageRoute(builder: (context) => Flexitime()),
                 );
               },),
             GestureDetector(

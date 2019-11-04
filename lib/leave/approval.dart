@@ -668,7 +668,13 @@ class ChoiceCard1 extends StatelessWidget {
                                     );
                                   }else{
                                     return new Center(
-                                      child:Text("No Records"),
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width*2,
+                                        color: appStartColor().withOpacity(0.1),
+                                        padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                        child:Text("No Records",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                                      ),
+                                      //child:Text("No Records"),
                                     );
                                   }
                                 }
@@ -2352,8 +2358,10 @@ class ApprovalAppHeader extends StatelessWidget implements PreferredSizeWidget {
                   )
               ),
             ),
-            Container(
-                padding: const EdgeInsets.all(8.0), child: Text(orgname)
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0), child: Text(orgname,overflow: TextOverflow.ellipsis)
+              ),
             )
           ],
         ),

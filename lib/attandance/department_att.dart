@@ -79,11 +79,11 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
       color: Colors.white,
       ),
       child: ListView(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           SizedBox(height:1.0),
           new Container(
-            child: Center(child:Text("Department Wise Attendance",style: TextStyle(fontSize: 20.0,color: Colors.black54,),),),
+            child: Center(child:Text("Department Wise Attendance",style: TextStyle(fontSize: 20.0,color: appStartColor()),),),
           ),
           Container(
             child: DateTimeField(
@@ -151,17 +151,17 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 //            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 50.0,),
+              SizedBox(height: 40.0,),
               Container(
                 width: MediaQuery.of(context).size.width*0.42,
                 child:Text('  Name',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
-              SizedBox(height: 50.0,),
+              SizedBox(height: 40.0,),
               Container(
                 width: MediaQuery.of(context).size.width*0.20,
                 child:Text('Time In',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
-              SizedBox(height: 50.0,),
+              SizedBox(height: 40.0,),
               Container(
                 width: MediaQuery.of(context).size.width*0.20,
                 child:Text('Time Out',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
@@ -170,16 +170,16 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
           ),
           new Divider(height: 1.0,),
           res==true?new Container(
-            height: MediaQuery.of(context).size.height*1,
+            height: MediaQuery.of(context).size.height*0.50,
             child: new TabBarView(
               controller: _controller,
               children: <Widget>[
                 new Container(
-                  height: MediaQuery.of(context).size.height*0.30,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.45,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
@@ -339,16 +339,13 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                         ]);}
                               );
                             }else{
-                              return new Container(
-                                  height: MediaQuery.of(context).size.height*0.30,
-                                  child:Center(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width*1,
-                                      color:appStartColor().withOpacity(0.1),
-                                      padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                      child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
-                                    ),
-                                  )
+                              return new Center(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*1,
+                                  color:appStartColor().withOpacity(0.1),
+                                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                  child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                                ),
                               );
                             }
                           }
@@ -445,16 +442,13 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                   }
                               );
                             }else{
-                              return new Container(
-                                  height: MediaQuery.of(context).size.height*0.30,
-                                  child:Center(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width*1,
-                                      color:appStartColor().withOpacity(0.1),
-                                      padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                      child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
-                                    ),
-                                  )
+                              return new Center(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*1,
+                                  color:appStartColor().withOpacity(0.1),
+                                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                  child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                                ),
                               );
                             }
                           }
@@ -645,16 +639,13 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                         ]);}
                               );
                             }else{
-                              return new Container(
-                                  height: MediaQuery.of(context).size.height*0.30,
-                                  child:Center(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width*1,
-                                      color:appStartColor().withOpacity(0.1),
-                                      padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                      child:Text("No Employees found. ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
-                                    ),
-                                  )
+                              return new Center(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*1,
+                                  color:appStartColor().withOpacity(0.1),
+                                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                  child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                                ),
                               );
                             }
                           }
@@ -841,16 +832,13 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                         ]);}
                               );
                             }else{
-                              return new Container(
-                                  height: MediaQuery.of(context).size.height*0.25,
-                                  child:Center(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width*1,
-                                      color:appStartColor().withOpacity(0.1),
-                                      padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                      child:Text("No Employees found.",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
-                                    ),
-                                  )
+                              return new Center(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*1,
+                                  color:appStartColor().withOpacity(0.1),
+                                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                  child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                                ),
                               );
                             }
                           }

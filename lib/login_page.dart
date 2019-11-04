@@ -580,19 +580,37 @@ class _LoginPageState extends State<LoginPage>
                     child: Column(
                       children: <Widget>[
                         Padding(
-                            padding: EdgeInsets.only(
-                                top: 20.0, bottom: 0.0, left: 220.0, right: 10.0), child:GestureDetector(
-                          onTap: () {
-                            scan().then((onValue){
-                              //print("******************** QR value **************************");
-                              //print(onValue);
-                              markAttByQR(onValue,context,token1);
-                            });
-                          },
-                          child:  Image.asset(
-                            'assets/qr.png', height: 35.0, width: 35.0, alignment: Alignment.bottomRight,
+                          padding: const EdgeInsets.only(top: 20.0, bottom: 0.0, left: 20.0, right: 0.0),
+                          child: Row(
+                            children: <Widget>[
+                              Flexible(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*0.55,
+                                ),
+                              ),
+                              Flexible(
+                                child: Container(
+                                    width: MediaQuery.of(context).size.width*0.35,
+                                  /*child: Padding(
+                                    padding: EdgeInsets.only(top: 20.0, bottom: 0.0, left: 100.0, right: 10.0),*/
+                                      child:GestureDetector(
+                                  onTap: () {
+                                    scan().then((onValue){
+                                      //print("******************** QR value **************************");
+                                      //print(onValue);
+                                      markAttByQR(onValue,context,token1);
+                                    });
+                                  },
+                                  child:  Image.asset(
+                                    'assets/qr.png', height: 35.0, width: 35.0, alignment: Alignment.bottomRight,
+                                  ),
+                            )
+                                  //),
+                                ),
+                              ),
+                            ]
                           ),
-                        )),
+                        ),
                         Padding(
                           padding: EdgeInsets.only(
                               top: 0.0, bottom: 10.0, left: 25.0, right: 25.0),
@@ -625,14 +643,16 @@ class _LoginPageState extends State<LoginPage>
 
                           ),
                         ),
-                        Container(
-                          width: 250.0,
-                          height: 1.0,
-                          color: Colors.grey[400],
+                        Flexible(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width*0.75,
+                            height: 1.0,
+                            color: Colors.grey[400],
+                          ),
                         ),
                         Container(
                           padding: EdgeInsets.only(
-                              top: 10.0, bottom: 0.0, left: 25.0, right: 25.0),
+                              top: 10.0, bottom: 5.0, left: 25.0, right: 25.0),
                           child: TextFormField(
                             focusNode: myFocusNodePasswordLogin,
                             controller: loginPasswordController,
@@ -643,10 +663,14 @@ class _LoginPageState extends State<LoginPage>
                                 color: Colors.black),
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              icon: Icon(
-                                FontAwesomeIcons.lock,
-                                size: 22.0,
-                                color: Colors.black,
+                              icon: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 0.0, bottom: 5.0, left: 0.0, right: 0.0),
+                                child: Icon(
+                                  FontAwesomeIcons.lock,
+                                  size: 22.0,
+                                  color: Colors.black,
+                                ),
                               ),
                               hintText: "Password",
                               hintStyle: TextStyle(
@@ -688,16 +712,18 @@ class _LoginPageState extends State<LoginPage>
                           ),
                         ),
 
-                        Container(
-                          width: 250.0,
-                          height: 1.0,
-                          color: Colors.grey[400],
+                        Flexible(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width*0.75,
+                            height: 1.0,
+                            color: Colors.grey[400],
+                          ),
                         ),
 
                         Container(
                           //   margin: EdgeInsets.only(top: 170.0),
                           width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.only(top: 0.0, bottom: 0.0, left: 150.0, right: 10.0),
+                          padding: EdgeInsets.only(top: 5.0, bottom: 4.0, left: 150.0, right: 10.0),
                           child: FlatButton(
                               onPressed: () {
                                 Navigator.push(
@@ -1177,8 +1203,11 @@ class _LoginPageState extends State<LoginPage>
                                       items: _myJson.map((Map map) {
                                         return new DropdownMenuItem<String>(
                                           value: map["ind"].toString(),
-                                          child: new Text(
-                                            map["name"],
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context).size.width*0.6,
+                                            child: new Text(
+                                              map["name"],
+                                            ),
                                           ),
                                         );
                                       }).toList(),

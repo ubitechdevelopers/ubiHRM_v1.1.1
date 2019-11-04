@@ -72,11 +72,11 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
       color: Colors.white,
       ),
       child: ListView(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           SizedBox(height: 1.0),
           new Container(
-            child: Center(child:Text("Attendance Snap - Last Seven Days",style: TextStyle(fontSize: 20.0,color: Colors.black54,),),),
+            child: Center(child:Text("Attendance Snap - Last 7 Days",style: TextStyle(fontSize: 20.0,color: appStartColor()),),),
           ),
           new Container(
             padding: EdgeInsets.all(0.1),
@@ -137,26 +137,26 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
         //    mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 50.0,),
+              SizedBox(height: 40.0,),
               SizedBox(width: MediaQuery.of(context).size.width*0.02),
               Container(
 
                 width: MediaQuery.of(context).size.width*0.20,
                 child:Text('Date',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
-              SizedBox(height: 50.0,),
+              SizedBox(height: 40.0,),
               Container(
 
                 width: MediaQuery.of(context).size.width*0.35,
                 child:Text('Name',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
-              SizedBox(height: 50.0,),
+              SizedBox(height: 40.0,),
               Container(
 
                 width: MediaQuery.of(context).size.width*0.14,
                 child:Text('Time In',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
-              SizedBox(height: 50.0,),
+              SizedBox(height: 40.0,),
               Container(
 
                 width: MediaQuery.of(context).size.width*0.16,
@@ -255,7 +255,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width*1,
                                   color: appStartColor().withOpacity(0.1),
                                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No Employees found.",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  child:Text("No one was present in the last 7 days",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                                 ),
                               );
                             }
@@ -359,7 +359,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width*1,
                                   color: appStartColor().withOpacity(0.1),
                                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No one was absent in the last 7 days ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  child:Text("No one was absent in the last 7 days",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                                 ),
                               );
                             }
@@ -470,7 +470,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width*1,
                                   color: appStartColor().withOpacity(0.1),
                                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No late comers in the last 7 days  ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  child:Text("No late comers in the last 7 days",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                                 ),
                               );
                             }
@@ -578,7 +578,7 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width*1,
                                   color: appStartColor().withOpacity(0.1),
                                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No early leavers in the last 7 days",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                                  child:Text("No early leavers in the last 7 days",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                                 ),
                               );
                             }

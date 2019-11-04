@@ -5,8 +5,8 @@ import 'services/services.dart';
 
 void main(){
   runApp(
-        new MaterialApp(
-          home: new HomePageMain(),
-        )
+      new MaterialApp(
+        home: new HomePageMain(),
+      )
   );
 }

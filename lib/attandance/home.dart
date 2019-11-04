@@ -373,15 +373,15 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(width: 20.0,),
+                    //SizedBox(width: 20.0,),
                     Icon(
                       Icons.all_inclusive,
                       color: appStartColor(),
                     ),
                     Text(
-                      "Fetching location, please wait..",
+                      "Fetching location, please wait...",
                       style: new TextStyle(fontSize: 20.0, color: appStartColor()),
                     )
                   ]),

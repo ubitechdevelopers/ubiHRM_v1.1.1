@@ -25,6 +25,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
   double insideContainerHeight=300.0;
   String empid;
   String organization;
+  String countryid;
   Employee emp;
   var reporttoprofileimage;
   bool _checkLoaded = true;
@@ -121,6 +122,7 @@ var profilepic;
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('employeeid')??"";
    organization =prefs.getString('organization')??"";
+   countryid =prefs.getString('countryid')??"";
 
      emp = new Employee(employeeid: empid, organization: organization);
 //print("-1111111111111"+emp.employeeid);
@@ -420,7 +422,16 @@ var profilepic;
                             padding: new EdgeInsets.symmetric(horizontal: 9.0),
                             child: Column(
                               children: <Widget>[
-                               // SizedBox(height: 10.0,),
+
+                                //SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  Container(child:Text("Emp Code:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+
+                                  Text(globalcompanyinfomap["EmpCode"]),
+                                ],),
+
+                                SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
                                   Container(child:Text("Name:",style: TextStyle(color: Colors.grey[600]),) ,
                                   width: 100.0,),
@@ -434,29 +445,39 @@ var profilepic;
                                   Text(globalpersnalinfomap["DOB"]),
                                 ],),
 
-                                SizedBox(height: 10.0,),
-                                Row(children: <Widget>[
-                                    Container(child:Text("Emp Code:",style: TextStyle(color: Colors.grey[600]),) ,
-                                      width: 100.0,),
+                               SizedBox(height: 10.0,),
+                               countryid=='93'?
+                               //SizedBox(height: 10.0,),
+                               Row(children: <Widget>[
+                                 Container(child: Text("Location:",
+                                   style: TextStyle(color: Colors.grey[600]),),
+                                   width: 100.0,),
 
-                                  Text(globalcompanyinfomap["EmpCode"]),
-                                ],),
+                                 Flexible(child: Text(
+                                     globalcompanyinfomap["Division"])),
+                               ],) :
 
-                                SizedBox(height: 10.0,),
-                                Row(children: <Widget>[
-                                  Container(child:Text("Division:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),
+                               //SizedBox(height: 10.0,),
+                               Row(children: <Widget>[
+                                 Container(child: Text("Division:",
+                                   style: TextStyle(color: Colors.grey[600]),),
+                                   width: 100.0,),
 
-                                  Flexible(child: Text(globalcompanyinfomap["Division"])),
-                                ],),
+                                 Flexible(child: Text(
+                                     globalcompanyinfomap["Division"])),
+                               ],),
 
-                                SizedBox(height: 10.0,),
+                                countryid!='93'?
+                                SizedBox(height: 10.0,):Center(),
+
+                                countryid!='93'?
+                            //    SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
                                   Container(child:Text("Location",style: TextStyle(color: Colors.grey[600]),) ,
                                     width: 100.0,),
 
                                   Flexible(child: Text(globalcompanyinfomap["Location"])),
-                                ],),
+                                ],):Center(),
                                 /* SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
                                   new Expanded(

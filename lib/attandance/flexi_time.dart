@@ -9,6 +9,7 @@ import 'package:ubihrm/services/attandance_fetch_location.dart';
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../profile.dart';
 import 'askregister.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/attandance_saveimage.dart';
@@ -266,14 +267,27 @@ class _Flexitime extends State<Flexitime> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
+  Future<bool> sendToHome() async{
+    /*Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );*/
+    print("-------> back button pressed");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
+
   getmainhomewidget() {
     return new WillPopScope(
-        onWillPop: () async => true,
+        onWillPop: ()=> sendToHome(),
         child: new Scaffold(
           key: _scaffoldKey,
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
-          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          appBar: new FlexiAppHeader(profileimage,showtabbar,orgName),
 
            /*
           persistentFooterButtons: <Widget>[
@@ -316,15 +330,15 @@ class _Flexitime extends State<Flexitime> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(width: 20.0,),
+                    //SizedBox(width: 20.0,),
                     Icon(
                       Icons.all_inclusive,
                       color: appStartColor(),
                     ),
                     Text(
-                      "Fetching location, please wait..",
+                      "Fetching location, please wait...",
                       style: new TextStyle(fontSize: 20.0, color: appStartColor()),
                     )
                   ]),
@@ -332,7 +346,7 @@ class _Flexitime extends State<Flexitime> {
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(width: 20.0,),
+                    //SizedBox(width: 20.0,),
                     Text(
                       "Note: ",
                       style: new TextStyle(
@@ -712,7 +726,7 @@ class _Flexitime extends State<Flexitime> {
 
   getFlexioutButton() {
     return  RaisedButton(
-        child: const Text('TIME OUT',style: TextStyle(color: Colors.white,fontSize: 18),),
+        child: const Text('TIME OUT',style: TextStyle(color: Colors.white,fontSize: 22),),
         color: Colors.orange[800],
         onPressed: () {
 
@@ -935,5 +949,96 @@ class _Flexitime extends State<Flexitime> {
 */
 
 ////////////////////////////////////////////////////////////
+}
+
+class FlexiAppHeader extends StatelessWidget implements PreferredSizeWidget {
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+
+  FlexiAppHeader(profileimage1,showtabbar1,orgname1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    // print("--------->");
+    // print(profileimage);
+    //  print("--------->");
+    //   print(_checkLoadedprofile);
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+      //    print(_checkLoadedprofile);
+    };
+    showtabbar= showtabbar1;
+  }
+  /*void initState() {
+    super.initState();
+ //   initPlatformState();
+  }
+*/
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePageMain()),
+                );
+              },),
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(orgname,overflow: TextOverflow.ellipsis,)
+              ),
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+              //   unselectedLabelColor: Colors.white70,
+              //   indicatorColor: Colors.white,
+              //   icon: Icon(choice.icon),
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
+
 }
 

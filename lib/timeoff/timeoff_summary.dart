@@ -73,6 +73,15 @@ class _TimeoffSummary extends State<TimeoffSummary> {
     client_name = new TextEditingController();
     comments = new TextEditingController();
     super.initState();
+    showtabbar=false;
+    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+    profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
+      if (mounted) {
+        setState(() {
+          _checkLoaded = false;
+        });
+      }
+    }));
     initPlatformState();
     getOrgName();
 

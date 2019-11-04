@@ -94,13 +94,13 @@ class _LateComers extends State<LateComers> {
               'Late Comers',
               style: new TextStyle(
                 fontSize: 20.0,
-                color: Colors.black54,
+                color: appStartColor(),
               ),
             ),
           ),
-          Divider(
+          /*Divider(
             height: 10.0,
-          ),
+          ),*/
           SizedBox(height: 2.0),
           Container(
             child: DateTimeField(
@@ -291,7 +291,13 @@ class _LateComers extends State<LateComers> {
                 });
           } else {
               return new Center(
-                child: Text("No Employees found."),
+                child: Container(
+                  width: MediaQuery.of(context).size.width*1,
+                  color: appStartColor().withOpacity(0.1),
+                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                  child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                ),
+                //child: Text("No Employees found."),
               );
             }
           } else if (snapshot.hasError) {

@@ -74,13 +74,13 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
               color: Colors.white,
             ),
             child: ListView(
-              physics: NeverScrollableScrollPhysics(),
+              //physics: NeverScrollableScrollPhysics(),
               children: <Widget>[
                 SizedBox(height: 1.0),
                 new Container(
                   child: Center(child: Text("Today's Attendance",
                     style: TextStyle(
-                      fontSize: 20.0, color: Colors.black54,),),),
+                      fontSize: 20.0, color: appStartColor(),),),),
                 ),
                 new Container(
                   padding: EdgeInsets.all(0.1),
@@ -412,7 +412,13 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                     );
                                   } else {
                                     return new Center(
-                                      child: Text("No Employees found. "),
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width*1,
+                                        color: appStartColor().withOpacity(0.1),
+                                        padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                        child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                                      ),
+                                      //child: Text("No Employees found. "),
                                     );
                                   }
                                 }
@@ -525,7 +531,13 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                     );
                                   } else {
                                     return new Center(
-                                      child: Text("No Employees found."),
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width*1,
+                                        color: appStartColor().withOpacity(0.1),
+                                        padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                        child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                                      ),
+                                      //child: Text("No Employees found."),
                                     );
                                   }
                                 }
@@ -753,7 +765,13 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                     );
                                   } else {
                                     return new Center(
-                                      child: Text("No Employees found."),
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width*1,
+                                        color: appStartColor().withOpacity(0.1),
+                                        padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                        child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                                      ),
+                                      //child: Text("No Employees found."),
                                     );
                                   }
                                 }
@@ -981,7 +999,13 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                     );
                                   } else {
                                     return new Center(
-                                      child: Text("No Employees found."),
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width*1,
+                                        color: appStartColor().withOpacity(0.1),
+                                        padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                        child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                                      ),
+                                      //child: Text("No Employees found."),
                                     );
                                   }
                                 }

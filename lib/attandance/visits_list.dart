@@ -96,13 +96,13 @@ class _VisitList extends State<VisitList> {
                 'Visits',
                 style: new TextStyle(
                   fontSize: 20.0,
-                  color: Colors.black54,
+                  color: appStartColor(),
                 ),
               ),
             ),
-            Divider(
+            /*Divider(
               height: 10.0,
-            ),
+            ),*/
             SizedBox(height: 2.0),
             Container(
               child: DateTimeField(

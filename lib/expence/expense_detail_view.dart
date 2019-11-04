@@ -414,7 +414,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                                 ),
                                                 children: <TextSpan>[
                                                   new TextSpan(text: 'Amount: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
-                                                  new TextSpan(text: snapshot.data[index].amt.toString()+ " "+snapshot.data[index].currency.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
+                                                  new TextSpan(text: snapshot.data[index].amt.toString()+" "+snapshot.data[index].currency.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
 
                                                   //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
                                                 ],
