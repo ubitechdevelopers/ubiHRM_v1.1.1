@@ -354,30 +354,33 @@ class _RequestExpenceState extends State<RequestExpence> {
                         Row(
                           children: <Widget>[
                             Expanded(
-                              child:  TextFormField(
-                                controller: _descController,
-                                decoration: InputDecoration(
-                                    labelText: 'Description',
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.all(0.0),
-                                      child: Icon(
-                                        Icons.event_note,
-                                        color: Colors.grey,
-                                      ), // icon is 48px widget.
-                                    )
-                                ),
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Please enter description';
-                                  }
-                                },
+                              child:  Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: TextFormField(
+                                  controller: _descController,
+                                  decoration: InputDecoration(
+                                      labelText: 'Description',
+                                      prefixIcon: Padding(
+                                        padding: EdgeInsets.all(0.0),
+                                        child: Icon(
+                                          Icons.event_note,
+                                          color: Colors.grey,
+                                        ), // icon is 48px widget.
+                                      )
+                                  ),
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return 'Please enter description';
+                                    }
+                                  },
                            onFieldSubmitted: (String value) {
                            /*if (_formKey.currentState.validate()) {
 
                             saveExpense (_dateController.text, headtype, _descController.text, amountController.text ,_image,context);
-                                  }*/
-                                },
-                                maxLines: null,
+                                    }*/
+                                  },
+                                  maxLines: null,
+                                ),
                               ),
                             ),
                           ],
@@ -486,32 +489,39 @@ class _RequestExpenceState extends State<RequestExpence> {
                                 ),*/
 
                                 Flexible(
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width*0.90,
-                                    child: FlatButton.icon(
-                                          icon: Padding(
-                                            padding: const EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 15.0),
-                                            child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],size: 27,),
-                                          ), //
-                                          label: Container(
-                                              width: MediaQuery.of(context).size.width*0.6,
-                                              padding: EdgeInsets.fromLTRB(0.0,0.0, 0.0, 15.0),
-                                              //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                                              child:showImage(_image),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children:<Widget>[ Container(
+                                      width: MediaQuery.of(context).size.width*0.90,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: FlatButton.icon(
+                                              icon: Padding(
+                                                padding: const EdgeInsets.only(bottom:15.0),
+                                                child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],size: 27,),
+                                              ), //
+                                              label: Container(
+                                                  width: MediaQuery.of(context).size.width*0.6,
+                                                  padding: EdgeInsets.fromLTRB(0.0,0.0, 0.0, 15.0),
+                                                  //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                                                  child:showImage(_image),
+                                              ),
+                                              //child: Text("Select Image", style: TextStyle(color:_image!=null ? Colors.green[500]:Colors.grey[500],),textAlign: TextAlign.start,),
+                                              onPressed: () async {
+                                                var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                                print(image);
+                                                setState(() {
+                                                  _image = image;
+                                                });
+                                              },
+                                              splashColor: Colors.grey,
+                                              //height: 55,
+                                              //minWidth: 350,
+                                              shape: UnderlineInputBorder(),
                                           ),
-                                          //child: Text("Select Image", style: TextStyle(color:_image!=null ? Colors.green[500]:Colors.grey[500],),textAlign: TextAlign.start,),
-                                          onPressed: () async {
-                                            var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                            print(image);
-                                            setState(() {
-                                              _image = image;
-                                            });
-                                          },
-                                          splashColor: Colors.grey,
-                                          //height: 55,
-                                          //minWidth: 350,
-                                          shape: UnderlineInputBorder(),
                                       ),
+                                    ),
+              ]
                                   ),
                                 ),
 
@@ -624,7 +634,7 @@ class _RequestExpenceState extends State<RequestExpence> {
           if (snapshot.hasData) {
             return new Container(
               //    width: MediaQuery.of(context).size.width*.45,
-              padding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
               child: InputDecorator(
                 decoration: InputDecoration(
                   labelText: 'Category',

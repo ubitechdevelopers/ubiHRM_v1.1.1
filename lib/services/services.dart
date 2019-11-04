@@ -229,8 +229,8 @@ getCountAproval() async{
   // await dio.post(path+"getapprovalCount?datafor=Pending"'&empid='+empid+'&orgid='+orgdir);
 
   var response =  await dio.post(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
-  print("getapprovalCount");
-  print(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
+  //print("getapprovalCount");
+  //print(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
   Map responseJson = json.decode(response.data.toString());
   /* print('AAAAAA');
   print(responseJson['total']);

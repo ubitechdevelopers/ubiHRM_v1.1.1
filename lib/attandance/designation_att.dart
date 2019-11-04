@@ -215,7 +215,7 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.30,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
