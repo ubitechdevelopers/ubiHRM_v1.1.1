@@ -18,6 +18,8 @@ class RequestTimeOffService{
    // print("abcd");
     try {
    //   print("efgh");
+      final prefs = await SharedPreferences.getInstance();
+      String path_hrm_india1 = prefs.getString('path_hrm_india');
       FormData formData = new FormData.from({
         "orgid": timeoff.OrgId,
         "uid": timeoff.EmpId,
@@ -27,7 +29,7 @@ class RequestTimeOffService{
         "reason": timeoff.Reason
       });
      //print("ORGANIZATIONID"+timeoff.OrgId);
-      Response response1 = await dio.post(path_hrm_india+"reqForTimeOff", data: formData);
+      Response response1 = await dio.post(path_hrm_india1+"reqForTimeOff", data: formData);
    //   print("mnop"+response1.toString());
    //   print(response1.toString());
 
@@ -57,6 +59,8 @@ class RequestTimeOffService{
 
   withdrawTimeOff(TimeOff timeoff) async{
     try {
+      final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       FormData formData = new FormData.from({
         "timeoffid": timeoff.TimeOffId,
         "uid": timeoff.EmpId,
@@ -64,7 +68,7 @@ class RequestTimeOffService{
         "timeoffsts": timeoff.ApprovalSts
       });
       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
-      Response response = await dio.post(path_ubiattendance+"changetimeoffsts", data: formData);
+      Response response = await dio.post(path_ubiattendance1+"changetimeoffsts", data: formData);
       //print('withdraw timeoff');
       //print(response.toString());
       final timeoffMap = response.data.toString();
@@ -96,6 +100,7 @@ class RequestTimeOffService{
 Future<List<TimeOff>> getTimeOffSummary() async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path_ubiattendance1 = prefs.getString('path_ubiattendance');
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   try {
@@ -104,7 +109,7 @@ Future<List<TimeOff>> getTimeOffSummary() async{
     });
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
-        path_ubiattendance+"fetchTimeOffList",
+        path_ubiattendance1+"fetchTimeOffList",
         data: formData);
     //print('--------------------getLeaveSummary Called-----------------------');
     List responseJson = json.decode(response.data.toString());
@@ -178,11 +183,12 @@ class TIMEOFFA {
 Future<List<TIMEOFFA>> getTimeoffapproval(listType) async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid =  prefs.getString('employeeid')??"";
 
   Response<String>response =
-  await dio.post(path+"getTimeoffapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  await dio.post(path1+"getTimeoffapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
   print(res);
   List<TIMEOFFA> userList = createtimeoffapporval(res);
@@ -241,11 +247,12 @@ List<TIMEOFFA> createtimeoffapporval(List data) {
 Future<List<TIMEOFFA>> getTeamTimeoffapproval() async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid =  prefs.getString('employeeid')??"";
  // print(path+"getTeamTimeoffapproval?&empid="+empid+'&orgid='+orgdir);
   Response<String>response =
-  await dio.post(path+"getTeamTimeoffapproval?&empid="+empid+'&orgid='+orgdir);
+  await dio.post(path1+"getTeamTimeoffapproval?&empid="+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
 
 
@@ -301,7 +308,7 @@ ApproveTimeoff(timeoffid,comment,sts) async{
   // Employee emp;
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-
+  String path1 = prefs.getString('path');
   empid = prefs.getString('employeeid')??"";
   organization =prefs.getString('organization')??"";
   //emp = new Employee(employeeid: empid, organization: organization);
@@ -316,7 +323,7 @@ ApproveTimeoff(timeoffid,comment,sts) async{
     });
 
     Response response = await dio.post(
-        path+"approvetimeoffapproval",
+        path1+"approvetimeoffapproval",
         data: formData);
     final timeoffMap = response.data.toString();
     if (timeoffMap.contains("false"))

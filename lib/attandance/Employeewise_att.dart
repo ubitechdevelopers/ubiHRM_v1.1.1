@@ -131,16 +131,16 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
           ),
           new Divider(height: 1.0,),
           res==true?new Container(
-            height: MediaQuery.of(context).size.height*.30,
+            height: MediaQuery.of(context).size.height*.50,
             child: new TabBarView(
               controller: _controller,
               children: <Widget>[
                 new Container(
-                  height: MediaQuery.of(context).size.height*0.3,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.30,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
@@ -326,11 +326,11 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                 //////////////TABB 2 Start
                 new Container(
 
-                  height: MediaQuery.of(context).size.height*0.30,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.55,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
@@ -436,11 +436,11 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
 
                 new Container(
 
-                  height: MediaQuery.of(context).size.height*0.30,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.55,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
@@ -633,11 +633,11 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                 new Container(
 
 
-                  height: MediaQuery.of(context).size.height*0.30,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.55,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------

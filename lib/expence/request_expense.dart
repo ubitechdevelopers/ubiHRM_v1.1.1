@@ -481,7 +481,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                         ),
 */
                           new Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 /*new Icon(
                                   Icons.file_upload,
@@ -489,9 +489,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                                 ),*/
 
                                 Flexible(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children:<Widget>[ Container(
+                                  child: Container(
                                       width: MediaQuery.of(context).size.width*0.90,
                                       child: Padding(
                                         padding: const EdgeInsets.all(0.0),
@@ -521,8 +519,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                                           ),
                                       ),
                                     ),
-              ]
-                                  ),
+
                                 ),
 
                              //showImage(_image)
@@ -712,8 +709,10 @@ class _RequestExpenceState extends State<RequestExpence> {
         //  print("5" +expensedate+"---"+category+"---"+desc+"---"+amount+"---"+empid+"--"+orgid+"--");
         Response<String> response1;
         try {
+          final prefs = await SharedPreferences.getInstance();
+          String path1 = prefs.getString('path');
           // print(globals.path +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
-          response1 = await dio.post(globals.path + "saveExpense", data: formData);
+          response1 = await dio.post(path1 + "saveExpense", data: formData);
           print("----->save Expense* --->" + response1.toString());
         } catch (e) {
           print('------------*');
@@ -797,9 +796,11 @@ class _RequestExpenceState extends State<RequestExpence> {
         //  print("5" +expensedate+"---"+category+"---"+desc+"---"+amount+"---"+empid+"--"+orgid+"--");
         Response<String> response1;
         try {
-         print(globals.path +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
+          final prefs = await SharedPreferences.getInstance();
+          String path1 = prefs.getString('path');
+          print(path1 +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
           response1 =
-          await dio.post(globals.path + "saveExpense", data: formData);
+          await dio.post(path1 + "saveExpense", data: formData);
           print("----->save Expense* --->" + response1.toString());
         } catch (e) {
           print('------------*');

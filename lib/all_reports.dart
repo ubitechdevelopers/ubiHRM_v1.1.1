@@ -59,10 +59,10 @@ class _AllReports extends State<AllReports> {
       setState(() {
         perAttReport=  getModuleUserPermission("68","view");
         perLeaveReport=  getModuleUserPermission("69","view");
-        perFlexi=  getModuleUserPermission("448","view");
+        perFlexiReport=  getModuleUserPermission("448","view");
         print("attendance "+perAttReport);
         print("leave "+perLeaveReport);
-        print("flexi "+perFlexi);
+        print("flexi "+perFlexiReport);
       });
     });
   }
@@ -391,7 +391,7 @@ class _AllReports extends State<AllReports> {
                   ):Center(),
 
                   SizedBox(height: 6.0),
-                  perFlexi=='1' ?
+                  perFlexiReport=='1' ?
                   new RaisedButton(
                     //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
                     //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
@@ -444,7 +444,7 @@ class _AllReports extends State<AllReports> {
                     },
                   ):Center(),
 
-                  (perLeaveReport!='1' &&  perAttReport!='1' && perFlexi!='1' ) ?
+                  (perLeaveReport!='1' &&  perAttReport!='1' && perFlexiReport!='1' ) ?
                   new Center(
                     child: Padding(
                       padding: const EdgeInsets.only(top:100.0),

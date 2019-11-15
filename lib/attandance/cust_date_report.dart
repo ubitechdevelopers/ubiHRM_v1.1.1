@@ -210,17 +210,17 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
           ),
           new Divider(height: 1.0,),
     res==true?new Container(
-            height: MediaQuery.of(context).size.height*0.30,
+            height: MediaQuery.of(context).size.height*0.50,
             child: new TabBarView(
               controller: _controller,
               children: <Widget>[
                 new Container(
-                  height: MediaQuery.of(context).size.height*0.30,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
                     Container(
-                      height: MediaQuery.of(context).size.height*.40,
+                      height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
@@ -410,11 +410,11 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                 //////////////TABB 2 Start
                 new Container(
 
-                  height: MediaQuery.of(context).size.height*0.30,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.28,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
@@ -524,11 +524,11 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
 
                 new Container(
 
-                  height: MediaQuery.of(context).size.height*0.30,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.30,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
@@ -720,11 +720,11 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                 new Container(
 
 
-                  height: MediaQuery.of(context).size.height*0.30,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.30,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------

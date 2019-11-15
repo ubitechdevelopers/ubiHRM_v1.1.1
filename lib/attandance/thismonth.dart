@@ -173,7 +173,7 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                   child: new ListTile(
                     title:
                     Container( height: MediaQuery.of(context).size.height*30,
-                      width: MediaQuery.of(context).size.width*.99,
+                      //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<Attn>>(

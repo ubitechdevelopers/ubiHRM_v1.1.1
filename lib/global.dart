@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'model/model.dart';
 import 'model/timeinout.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+
 //import 'package:ubihrm/model/timeinout.dart';
 
 appStartColor() {
@@ -53,6 +56,14 @@ String path_hrm_india="https://sandbox.ubihrm.com/services/";*/
 String path_ubiattendance="https://ubihrm.ubipayroll.com/HRMAPP/index.php/Att_services/";
 String path_hrm_india="https://ubihrm.ubipayroll.com/services/";*/
 
+/*
+String path = "";
+String path_ubiattendance = "";
+String path_hrm_india = "";
+*/
+
+
+
 
 
 int home_load_num = 0;
@@ -81,6 +92,7 @@ var perLeaveApproval;
 var perTimeoffApproval;
 var perAttendance;
 var perAttReport;
+var perFlexiReport;
 var perLeaveReport;
 var perTimeoff;
 var perReport;

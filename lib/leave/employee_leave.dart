@@ -303,7 +303,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                   width: MediaQuery.of(context).size.width*1,
                   color: appStartColor().withOpacity(0.1),
                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                  child:Text("No one is on Leave ",style: TextStyle(fontSize: 18.0),textAlign: TextAlign.center,),
+                  child:Text("No one is on Leave ",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                 ),
               );
             }

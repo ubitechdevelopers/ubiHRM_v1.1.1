@@ -28,6 +28,7 @@ class Login{
 
     Response<String> response =
     await dio.post(path + "checklogin", data: formData);
+    print(path);
     print("login response_______"+response.toString());
     print(response.statusCode);
 
@@ -41,25 +42,30 @@ class Login{
         prefs.setString("countryid", employeeMap['countryid']);
         print("countryid");
         print(employeeMap['countryid']);
-        if(employeeMap['countryid']=="93"){
-          //print("Hello");
-          path="http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/";
-          path_ubiattendance="http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/";
-          path_hrm_india="http://192.168.0.200/UBIHRM/HRMINDIA/services/";
 
-          /*path="https://ubitech.ubihrm.com/ubiapp/";
-          path_ubiattendance="https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/";
-          path_hrm_india="https://ubitech.ubihrm.com/services/";*/
+        print("*********PRATIBHA***********");
+        if(employeeMap['countryid']=="93"){
+         //print("Helloindia");
+
+          prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/');
+          prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/');
+          prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMINDIA/services/');
+
+          /*prefs.setString("path", 'https://ubitech.ubihrm.com/ubiapp/');
+          prefs.setString("path_ubiattendance", 'https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/');
+          prefs.setString("path_hrm_india", 'https://ubitech.ubihrm.com/services/');*/
 
         }else{
-          //print("Hiii");
-          path="http://192.168.0.200/UBIHRM/HRMALL/ubiapp/";
-          path_ubiattendance="http://192.168.0.200/UBIHRM/HRMALL/HRMAPP/index.php/Att_services/";
-          path_hrm_india="http://192.168.0.200/UBIHRM/HRMALL/services/";
+         //print("Hiiiall");
 
-          /*path="https://brightenv.ubihrm.com/ubiapp/";
-          path_ubiattendance="https://brightenv.ubihrm.com/HRMAPP/index.php/Att_services/";
-          path_hrm_india="https://brightenv.ubihrm.com/services/";*/
+          prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMALL/ubiapp/');
+          prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMALL/HRMAPP/index.php/Att_services/');
+          prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMALL/services/');
+
+          /*prefs.setString("path", 'https://ubitechdigital.ubihrm.com/ubiapp/');
+          prefs.setString("path_ubiattendance", 'https://ubitechdigital.ubihrm.com/HRMAPP/index.php/Att_services/');
+          prefs.setString("path_hrm_india", 'https://ubitechdigital.ubihrm.com/services/');*/
+
         }
         prefs.setString("empid", employeeMap['employeeid']);
         prefs.setString("orgdir", employeeMap['organization']);
@@ -126,6 +132,34 @@ class Login{
           prefs.setString("employeeid", employeeMap['employeeid']);
           prefs.setString("organization", employeeMap['organization']);
           prefs.setString("userprofileid", employeeMap['userprofileid']);
+          prefs.setString("countryid", employeeMap['countryid']);
+          print("countryid");
+          print(employeeMap['countryid']);
+
+          print("*********PRATIBHA123***********");
+          if(employeeMap['countryid']=="93"){
+            //print("Helloindia");
+
+            prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/');
+            prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/');
+            prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMINDIA/services/');
+
+            /*prefs.setString("path", 'https://ubitech.ubihrm.com/ubiapp/');
+            prefs.setString("path_ubiattendance", 'https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/');
+            prefs.setString("path_hrm_india", 'https://ubitech.ubihrm.com/services/');*/
+
+          }else{
+            //print("Hiiiall");
+
+            prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMALL/ubiapp/');
+            prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMALL/HRMAPP/index.php/Att_services/');
+            prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMALL/services/');
+
+            /*prefs.setString("path", 'https://ubitechdigital.ubihrm.com/ubiapp/');
+            prefs.setString("path_ubiattendance", 'https://ubitechdigital.ubihrm.com/HRMAPP/index.php/Att_services/');
+            prefs.setString("path_hrm_india", 'https://ubitechdigital.ubihrm.com/services/');*/
+
+          }
           prefs.setString("empid", employeeMap['employeeid']);
           prefs.setString("orgdir", employeeMap['organization']);
           prefs.setString("orgname", employeeMap['organizationname']);
@@ -142,7 +176,7 @@ class Login{
           await getAllPermission(emp);
           await getProfileInfo(emp);
           perEmployeeLeave= getModulePermission("18","view");
-
+          perTimeoffApproval = getModuleUserPermission("180", "view");
           perLeaveApproval=  getModuleUserPermission("124","view");
           perAttendance=  getModulePermission("5","view");
           perTimeoff=  getModulePermission("179","view");

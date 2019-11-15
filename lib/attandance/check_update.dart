@@ -21,6 +21,7 @@ import 'login.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/services/attandance_services.dart';
+
 class CheckUpdate extends StatefulWidget {
   @override
   _CheckUpdate createState() => _CheckUpdate();
@@ -64,7 +65,7 @@ class _CheckUpdate extends State<CheckUpdate> {
                     SizedBox(height: MediaQuery.of(context).size.height*0.4,),
                     Container(
                       width:MediaQuery.of(context).size.width*0.9,
-                      child:Text('New version found, for better user experience please update the application. ',textAlign: TextAlign.center,),
+                      child:Text('New version found, for better user experience please update the application.',textAlign: TextAlign.center,),
                       ),
                     SizedBox(height: MediaQuery.of(context).size.height*0.02,),
                     Container(

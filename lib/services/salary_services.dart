@@ -20,6 +20,7 @@ class RequestsalaryService{
 Future<List<Salary>> getsalarySummary() async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   try {
@@ -29,7 +30,7 @@ Future<List<Salary>> getsalarySummary() async{
     });
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
-        path+"getSalarysummary",
+        path1+"getSalarysummary",
         data: formData);
    // print('--------------------salarySummary Called-----------------------');
    // print(response.data.toString());
@@ -48,6 +49,7 @@ Future<List<Salary>> getsalarySummary() async{
 Future<List<Salary>> getsalarySummaryAll() async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   try {
@@ -57,7 +59,7 @@ Future<List<Salary>> getsalarySummaryAll() async{
     });
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index .php/services/getInfo", data: formData);
     Response response = await dio.post(
-        path+"getSalarysummary?all=all",
+        path1+"getSalarysummary?all=all",
         data: formData);
    print('--------------------salarySummary Called-----------------------');
    print(response.data.toString());

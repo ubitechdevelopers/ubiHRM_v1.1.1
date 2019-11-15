@@ -295,16 +295,19 @@ class _TimeOffPageState extends State<TimeOffPage> {
 
                     new Expanded(
 
-                      child:  DateTimeField(
+                      child: DateTimeField(
 
                       //firstDate: new DateTime.now(),
                       //initialDate: new DateTime.now(),
                 //     dateOnly: true,
                       //inputType: InputType.date,
-                      format: dateFormat,
-                      controller: _dateController,
+                        format: dateFormat,
+                        controller: _dateController,
                         readOnly: true,
                         onShowPicker: (context, currentValue) {
+                          print("current value1");
+                          print(currentValue);
+                          print(DateTime.now());
                           return showDatePicker(
                               context: context,
                               firstDate: DateTime.now().subtract(Duration(days: 1)),

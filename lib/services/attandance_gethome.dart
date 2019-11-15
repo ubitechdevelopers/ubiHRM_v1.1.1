@@ -14,13 +14,14 @@ class Home{
   checkTimeIn(String empid, String orgid) async{
     try {
       final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       FormData formData = new FormData.from({
         "uid": empid,
         "refno": orgid,
       });
       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
       Response response = await dio.post(
-          globals.path_ubiattendance+"getInfo",
+          path_ubiattendance1+"getInfo",
           data: formData);
       //print("<<------------------GET HOME-------------------->>");
       //print(response.toString());
@@ -125,13 +126,14 @@ class Home{
   checkTimeInQR(String empid, String orgid) async{
     try {
       final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       FormData formData = new FormData.from({
         "uid": empid,
         "refid": orgid,
       });
       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
       Response response = await dio.post(
-          globals.path_ubiattendance+"getInfo",
+          path_ubiattendance1+"getInfo",
           data: formData);
       //Response response = await dio.post("http://192.168.0.20 0/UBIHRM/HRMINDIA/services/getInfo", data: formData);
       //Response response = await dio.post("https://ubitech.ubihrm.com/services/getInfo", data: formData);

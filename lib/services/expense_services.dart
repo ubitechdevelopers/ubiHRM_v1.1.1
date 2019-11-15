@@ -47,6 +47,7 @@ class Expense {
 Future<List<Expense>> getExpenseDetailById(Id) async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path_hrm_india1 = prefs.getString('path_hrm_india');
   //String id = prefs.getString('expenseid') ?? '';
   String orgid = prefs.getString('organization') ?? '';
   //String empid = prefs.getString('employeeid')??"";
@@ -58,7 +59,7 @@ Future<List<Expense>> getExpenseDetailById(Id) async{
     });
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
-        path_hrm_india+"showExpenseDetail",
+        path_hrm_india1+"showExpenseDetail",
         data: formData
     );
     //print(response.data.toString());
@@ -114,12 +115,13 @@ List<Expense> viewExpenseDetail(List data) {
 Future<List<Expense>> getExpenselist(date) async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid =  prefs.getString('employeeid')??"";
 //print(date);
 // print("888");
   Response<String>response =
-  await dio.post(path+"getExpenseDetail?empid="+empid+'&orgid='+orgdir+'&date='+date);
+  await dio.post(path1+"getExpenseDetail?empid="+empid+'&orgid='+orgdir+'&date='+date);
   final res = json.decode(response.data.toString());
   //print(res);
 
@@ -174,10 +176,11 @@ List<Expense> createExpenselist(List data) {
 
 Future<List<Map>> getheadtype(int label) async{
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-  final response = await dio.post(path + "getheadtype?orgid=$orgdir&eid=$empid");
+  final response = await dio.post(path1 + "getheadtype?orgid=$orgdir&eid=$empid");
   // print("leavetype11----------->");
   //  print(response);
   List data = json.decode(response.data.toString());
@@ -220,11 +223,12 @@ class Expensedate {
 Future<List<Expensedate>> getExpenselistbydate() async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid =  prefs.getString('employeeid')??"";
 
   Response<String>response =
-  await dio.post(path+"getExpenseDetailbydate?empid="+empid+'&orgid='+orgdir);
+  await dio.post(path1+"getExpenseDetailbydate?empid="+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
   //print(res);
 
@@ -236,6 +240,8 @@ Future<List<Expensedate>> getExpenselistbydate() async {
 withdrawExpense(Expense expense) async{
   Dio dio = new Dio();
   try {
+    final prefs = await SharedPreferences.getInstance();
+    String path_hrm_india1 = prefs.getString('path_hrm_india');
     FormData formData = new FormData.from({
       "id": expense.Id,
       "status": expense.ests
@@ -244,7 +250,7 @@ withdrawExpense(Expense expense) async{
     print("---------------"+expense.ests);
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
-        path_hrm_india+"changeExpenseSts",
+        path_hrm_india1+"changeExpenseSts",
         data: formData);
     //print(response.toString());
     if (response.statusCode == 200) {

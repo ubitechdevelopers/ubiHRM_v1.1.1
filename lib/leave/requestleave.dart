@@ -25,7 +25,7 @@ class RequestLeave extends StatefulWidget {
 class _RequestLeaveState extends State<RequestLeave> {
   bool isServiceCalling = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
- // String leavetypeid="32";
+  // String leavetypeid="32";
   List<Map> leavetimeList = [{"id":"2","name":"Half Day"},{"id":"1","name":"Full Day"}];
   List<Map> leavetypeList = [];
 
@@ -46,7 +46,7 @@ class _RequestLeaveState extends State<RequestLeave> {
   FocusNode textSecondFocusNode = new FocusNode();
   FocusNode textthirdFocusNode = new FocusNode();
   FocusNode textfourthFocusNode = new FocusNode();
-  final dateFormat = DateFormat("d MMMM");
+  final dateFormat = DateFormat("d MMMM yyyy");
   final timeFormat = DateFormat("h:mm a");
   final _formKey = GlobalKey<FormState>();
   String _radioValue = "1"; // half day from type
@@ -67,7 +67,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     super.initState();
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     showtabbar=false;
-  /*  profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
+    /*  profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
           _checkLoadedprofile = false;
@@ -95,7 +95,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     Employee emp = new Employee(employeeid: empid, organization: organization);
 
     //if(empid!='')
-      //bool ish = await getAllPermission(emp);
+    //bool ish = await getAllPermission(emp);
 
     //getModulePermission("178","view");
     //getProfileInfo();
@@ -182,7 +182,7 @@ class _RequestLeaveState extends State<RequestLeave> {
       });
       //showInSnackBar("Leave format is wrong");
     }
-   /* else if(islogin1=="wrong1"){
+    /* else if(islogin1=="wrong1"){
       showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Leave can not be applied for this format'),
@@ -264,18 +264,18 @@ class _RequestLeaveState extends State<RequestLeave> {
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new AppHeader(profileimage,showtabbar,orgName),
-         bottomNavigationBar:  new HomeNavigation(),
-         body: ModalProgressHUD(
-            inAsyncCall: isServiceCalling,
-            opacity: 0.15,
-            progressIndicator: SizedBox(
-            child:new CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation(Colors.green),
-            strokeWidth: 5.0),
-            height: 40.0,
-            width: 40.0,
-            ),
-            child: homewidget()
+          bottomNavigationBar:  new HomeNavigation(),
+          body: ModalProgressHUD(
+              inAsyncCall: isServiceCalling,
+              opacity: 0.15,
+              progressIndicator: SizedBox(
+                child:new CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation(Colors.green),
+                    strokeWidth: 5.0),
+                height: 40.0,
+                width: 40.0,
+              ),
+              child: homewidget()
           )
 
       ),
@@ -287,344 +287,351 @@ class _RequestLeaveState extends State<RequestLeave> {
       children: <Widget>[
         Container(
           //height: MediaQuery.of(context).size.height,
-            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-            padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-            //width: MediaQuery.of(context).size.width*0.9,
-            decoration: new ShapeDecoration(
-              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
-              color: Colors.white,
-            ),
-            child:Form(
-              key: _formKey,
-              child: SafeArea(
-              child: Column( children: <Widget>[
-              SizedBox(height: 10.0),
-              Text('Request Leave',
-              style: new TextStyle(fontSize: 22.0, color: appStartColor())),
-              new Divider(color: Colors.black54,height: 1.5,),
-              new Expanded(child: ListView(
-              //padding: EdgeInsets.symmetric(horizontal: 15.0),
-              children: <Widget>[
-              Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
+          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+          //width: MediaQuery.of(context).size.width*0.9,
+          decoration: new ShapeDecoration(
+            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+            color: Colors.white,
+          ),
+          child:Form(
+            key: _formKey,
+            child: SafeArea(
+                child: Column( children: <Widget>[
+                  SizedBox(height: 10.0),
+                  Text('Request Leave',
+                      style: new TextStyle(fontSize: 22.0, color: appStartColor())),
+                  new Divider(color: Colors.black54,height: 1.5,),
+                  new Expanded(child: ListView(
+                    //padding: EdgeInsets.symmetric(horizontal: 15.0),
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
 
 
-      getLeaveType_DD(),
+                          getLeaveType_DD(),
 
-    SizedBox(height: 10.0),
-    //Enter date
-    Row(
-    children: <Widget>[
-   new Expanded(
-    child: Container(
-     // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
-      height: 70.0,
-      child:DateTimeField(
+                          SizedBox(height: 10.0),
+                          //Enter date
+                          Row(
+                            children: <Widget>[
+                              new Expanded(
+                                child: Container(
+                                  // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
+                                  height: 80.0,
+                                  child:DateTimeField(
+                                    //firstDate: new DateTime.now(),
+                                    //initialDate: new DateTime.now(),
+                                    //dateOnly: true,
+                                    format: dateFormat,
+                                    controller: _dateController,
+                                    readOnly: true,
+                                    onShowPicker: (context, currentValue) {
+                                      print("current value1");
+                                      print(currentValue);
+                                      print(DateTime.now());
+                                      return showDatePicker(
+                                          context: context,
+                                          firstDate: DateTime.now().subtract(Duration(days: 8)),
+                                          initialDate: currentValue ?? DateTime.now(),
+                                          lastDate: DateTime(2100)
+                                      );
+                                    },
 
-    //firstDate: new DateTime.now(),
-    //initialDate: new DateTime.now(),
-    //dateOnly: true,
-        readOnly: true,
-        onShowPicker: (context, currentValue) {
-          return showDatePicker(
-              context: context,
-              initialDate: currentValue ?? DateTime.now(),
-              firstDate: DateTime.now().subtract(Duration(days: 8)),
-              lastDate: DateTime(2100));
-        },
-    format: dateFormat,
-    controller: _dateController,
-    decoration: InputDecoration(
-    prefixIcon: Padding(
-    padding: EdgeInsets.all(0.0),
-    child: Icon(
-    Icons.date_range,
-    color: Colors.grey,
-    ), // icon is 48px widget.
-    ), // icon is 48px widget.
-    labelText: 'From Date',
-    ),
-    validator: (date) {
-    if (date==null){
-    return 'Please enter Leave From date';
-    }
-    },
-    onChanged: (dt) {
-    setState(() {
-    Date1 = dt;
-    });
-   // print("----->Changed date------> "+Date1.toString());
-    },
-    ),
-    ),
+                                    decoration: InputDecoration(
+                                      prefixIcon: Padding(
+                                        padding: EdgeInsets.all(0.0),
+                                        child: Icon(
+                                          Icons.date_range,
+                                          color: Colors.grey,
+                                        ), // icon is 48px widget.
+                                      ), // icon is 48px widget.
+                                      labelText: 'From Date',
+                                    ),
+                                    onChanged: (date) {
+                                      setState(() {
+                                        Date1 = date;
+                                      });
+                                      print("----->Changed date------> "+Date1.toString());
+                                    },
+                                    validator: (date) {
+                                      if (date==null){
+                                        return 'Please enter Leave From date';
+                                      }
+                                    },
 
-            ),
-    SizedBox(width: 10.0),
-    Expanded(
-    child: Container(
-      height: 48.0,
-      child: new InputDecorator(
-      decoration: InputDecoration(
-   // labelText: 'Leave Type',
+                                  ),
+                                ),
 
-      prefixIcon: Padding(
-      padding: EdgeInsets.all(0.0),
-      child: Icon(
-      Icons.tonality,
-      color: Colors.grey,
-      ), // icon is 48px widget.
-      ),
-        border: new UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.white,
-              width: 0.0, style: BorderStyle.none ),),
-      ),
-      //   isEmpty: _color == '',
-      child:  new DropdownButton<String>(
-      isDense: true,
-      style: new TextStyle(
-      fontSize: 15.0,
-      color: Colors.black
-      ),
-      value: leavetimevalue,
-      onChanged: (String newValue) {
-      setState(() {
-      leavetimevalue = newValue;
-      if(leavetimevalue=="2"){
-      visibilityFromHalf = true;
-      }else{
-      visibilityFromHalf = false;
-      }
-      });
-      },
-      items: leavetimeList.map((Map map) {
-      return new DropdownMenuItem<String>(
-      value: map["id"].toString(),
+                              ),
+                              SizedBox(width: 10.0),
+                              Expanded(
+                                child: Container(
+                                  height: 58.0,
+                                  child: new InputDecorator(
+                                    decoration: InputDecoration(
+                                      // labelText: 'Leave Type',
 
-      child: new Text(
-      map["name"],
-      ),
-      );
-      }).toList(),
-      ),
-      ),
-    ),
-    ),
-    ],
-    ),
-    (visibilityFromHalf)?Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: <Widget>[
-    new Radio(
-    value: "1",
-    groupValue: _radioValue,
-    onChanged: _handleRadioValueChange,
-    ),
-    Text("First Half",style: TextStyle(fontSize: 16.0),),
-    SizedBox(width: 30.0,),
-    new Radio(
-    value: "2",
-    groupValue: _radioValue,
-    onChanged: _handleRadioValueChange,
-    ),
-    Text("Second Half",style: TextStyle(fontSize: 16.0),)
-    ],
-    ):Container(),
-    //SizedBox(height: 10.0,),
-    Row(
-    children: <Widget>[
-      new Expanded(
-      child: Container(
-          // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
-      height: 70.0,
-     child:DateTimeField(
-    //firstDate: new DateTime.now(),
-    //initialDate: new DateTime.now(),
-    //dateOnly: true,
-    format: dateFormat,
-    controller: _dateController1,
-       readOnly: true,
-       onShowPicker: (context, currentValue) {
-         return showDatePicker(
-             context: context,
-             initialDate: currentValue ?? DateTime.now(),
-             firstDate: DateTime.now().subtract(Duration(days: 8)),
-             lastDate: DateTime(2100));
+                                      prefixIcon: Padding(
+                                        padding: EdgeInsets.all(0.0),
+                                        child: Icon(
+                                          Icons.tonality,
+                                          color: Colors.grey,
+                                        ), // icon is 48px widget.
+                                      ),
+                                      border: new UnderlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.white,
+                                            width: 0.0, style: BorderStyle.none ),),
+                                    ),
+                                    //   isEmpty: _color == '',
+                                    child:  new DropdownButton<String>(
+                                      isDense: true,
+                                      style: new TextStyle(
+                                          fontSize: 15.0,
+                                          color: Colors.black
+                                      ),
+                                      value: leavetimevalue,
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          leavetimevalue = newValue;
+                                          if(leavetimevalue=="2"){
+                                            visibilityFromHalf = true;
+                                          }else{
+                                            visibilityFromHalf = false;
+                                          }
+                                        });
+                                      },
+                                      items: leavetimeList.map((Map map) {
+                                        return new DropdownMenuItem<String>(
+                                          value: map["id"].toString(),
 
-       },
-    decoration: InputDecoration(
-    prefixIcon: Padding(
-    padding: EdgeInsets.all(0.0),
-    child: Icon(
-    Icons.date_range,
-    color: Colors.grey,
-    ), // icon is 48px widget.
-    ), // icon is 48px widget.
+                                          child: new Text(
+                                            map["name"],
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          (visibilityFromHalf)?Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              new Radio(
+                                value: "1",
+                                groupValue: _radioValue,
+                                onChanged: _handleRadioValueChange,
+                              ),
+                              Text("First Half",style: TextStyle(fontSize: 16.0),),
+                              SizedBox(width: 30.0,),
+                              new Radio(
+                                value: "2",
+                                groupValue: _radioValue,
+                                onChanged: _handleRadioValueChange,
+                              ),
+                              Text("Second Half",style: TextStyle(fontSize: 16.0),)
+                            ],
+                          ):Container(),
+                          //SizedBox(height: 10.0,),
+                          Row(
+                            children: <Widget>[
+                              new Expanded(
+                                child: Container(
+                                  // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
+                                  height: 80.0,
+                                  child:DateTimeField(
+                                    //firstDate: new DateTime.now(),
+                                    //initialDate: new DateTime.now(),
+                                    //dateOnly: true,
+                                    format: dateFormat,
+                                    controller: _dateController1,
+                                    readOnly: true,
+                                    onShowPicker: (context, currentValue) {
+                                      print("current value");
+                                      print(currentValue);
+                                      return showDatePicker(
+                                          context: context,
+                                          initialDate: currentValue ?? DateTime.now(),
+                                          firstDate: DateTime.now().subtract(Duration(days: 8)),
+                                          lastDate: DateTime(2100));
 
-    labelText: 'To Date',
-    ),
-    onChanged: (dt) {
-    setState(() {
-    Date2 = dt;
-    });
-    print("----->Changed date------> "+Date1.toString());
-    },
-    validator: (dt) {
-    if (dt==null){
-    return 'Please enter Leave to date';
-    }
-    if(Date2.isBefore(Date1)){
-    print("Dat1 ---->"+Date1.toString());
-    print("Date2---->"+Date2.toString());
-    return '\"To Date\" can\'t be smaller.';
-    }
+                                    },
+                                    decoration: InputDecoration(
+                                      prefixIcon: Padding(
+                                        padding: EdgeInsets.all(0.0),
+                                        child: Icon(
+                                          Icons.date_range,
+                                          color: Colors.grey,
+                                        ), // icon is 48px widget.
+                                      ), // icon is 48px widget.
 
-    },
-    ),
-    ),
-            ),
-    SizedBox(width: 10.0),
-    Expanded(
-    child:Container(
-      height: 48.0,
-      child: new InputDecorator(
-      decoration: InputDecoration(
-   // labelText: 'Leave Type',
-      prefixIcon: Padding(
-      padding: EdgeInsets.all(0.0),
-      child: Icon(
-      Icons.tonality,
-      color: Colors.grey,
-      ), // icon is 48px widget.
-      ),
-      ),
-      //   isEmpty: _color == '',
-      child:  new DropdownButton<String>(
-      isDense: true,
-      style: new TextStyle(
-      fontSize: 15.0,
-      color: Colors.black
-      ),
-      value: leavetimevalue1,
-      onChanged: (String newValue) {
-      setState(() {
-      leavetimevalue1 = newValue;
-      if(leavetimevalue1=="2"){
-      visibilityToHalf = true;
-      }else{
-      visibilityToHalf = false;
-      }
-      });
-      },
-      items: leavetimeList.map((Map map) {
-      return new DropdownMenuItem<String>(
-      value: map["id"].toString(),
-      child: new Text(
-      map["name"],
-      ),
-      );
-      }).toList(),
-      ),
-      ),
-    )
-    ),
+                                      labelText: 'To Date',
+                                    ),
+                                    onChanged: (dt) {
+                                      setState(() {
+                                        Date2 = dt;
+                                      });
+                                      print("----->Changed date------> "+Date2.toString());
+                                    },
+                                    validator: (dt) {
+                                      if (dt==null){
+                                        return 'Please enter Leave to date';
+                                      }
+                                      if(Date2.isBefore(Date1)){
+                                        print("Date1 ---->"+Date1.toString());
+                                        print("Date2---->"+Date2.toString());
+                                        return '\"To Date\" can\'t be smaller.';
+                                      }
+
+                                    },
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10.0),
+                              Expanded(
+                                  child:Container(
+                                    height: 58.0,
+                                    child: new InputDecorator(
+                                      decoration: InputDecoration(
+                                        // labelText: 'Leave Type',
+                                        prefixIcon: Padding(
+                                          padding: EdgeInsets.all(0.0),
+                                          child: Icon(
+                                            Icons.tonality,
+                                            color: Colors.grey,
+                                          ), // icon is 48px widget.
+                                        ),
+                                      ),
+                                      //   isEmpty: _color == '',
+                                      child:  new DropdownButton<String>(
+                                        isDense: true,
+                                        style: new TextStyle(
+                                            fontSize: 15.0,
+                                            color: Colors.black
+                                        ),
+                                        value: leavetimevalue1,
+                                        onChanged: (String newValue) {
+                                          setState(() {
+                                            leavetimevalue1 = newValue;
+                                            if(leavetimevalue1=="2"){
+                                              visibilityToHalf = true;
+                                            }else{
+                                              visibilityToHalf = false;
+                                            }
+                                          });
+                                        },
+                                        items: leavetimeList.map((Map map) {
+                                          return new DropdownMenuItem<String>(
+                                            value: map["id"].toString(),
+                                            child: new Text(
+                                              map["name"],
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  )
+                              ),
 
 
-    ],
-    ),
+                            ],
+                          ),
 
-    (visibilityToHalf)?Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: <Widget>[
-    new Radio(
-    value: "1",
-    groupValue: _radioValue1,
-    onChanged: _handleRadioValueChange1,
-    ),
-    Text("First Half",style: TextStyle(fontSize: 16.0),),
-    SizedBox(width: 30.0,),
-    new Radio(
-    value: "2",
-    groupValue: _radioValue1,
-    onChanged: _handleRadioValueChange1,
-    ),
-    Text("Second Half",style: TextStyle(fontSize: 16.0),)
-    ],
-    ):Container(),
+                          (visibilityToHalf)?Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              new Radio(
+                                value: "1",
+                                groupValue: _radioValue1,
+                                onChanged: _handleRadioValueChange1,
+                              ),
+                              Text("First Half",style: TextStyle(fontSize: 16.0),),
+                              SizedBox(width: 30.0,),
+                              new Radio(
+                                value: "2",
+                                groupValue: _radioValue1,
+                                onChanged: _handleRadioValueChange1,
+                              ),
+                              Text("Second Half",style: TextStyle(fontSize: 16.0),)
+                            ],
+                          ):Container(),
 
-    TextFormField(
-    controller: _reasonController,
-    decoration: InputDecoration(
-    labelText: 'Reason',
-    prefixIcon: Padding(
-    padding: EdgeInsets.all(0.0),
-    child: Icon(
-    Icons.event_note,
-    color: Colors.grey,
-    ), // icon is 48px widget.
-    )
-    ),
-    validator: (value) {
-    if (value.isEmpty) {
-    return 'Please enter reason';
-    }
-    },
-    onFieldSubmitted: (String value) {
-    /*if (_formKey.currentState.validate()) {
+                          TextFormField(
+                            controller: _reasonController,
+                            decoration: InputDecoration(
+                                labelText: 'Reason',
+                                prefixIcon: Padding(
+                                  padding: EdgeInsets.all(0.0),
+                                  child: Icon(
+                                    Icons.event_note,
+                                    color: Colors.grey,
+                                  ), // icon is 48px widget.
+                                )
+                            ),
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter reason';
+                              }
+                            },
+                            onFieldSubmitted: (String value) {
+                              /*if (_formKey.currentState.validate()) {
     //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
     }*/
-    },
-    maxLines: 1,
-    ),
+                            },
+                            maxLines: 1,
+                          ),
 
-    getSubstituteEmp_DD(),
+                          getSubstituteEmp_DD(),
 
-    ButtonBar(
-    children: <Widget>[
+                          ButtonBar(
+                            children: <Widget>[
 
-      RaisedButton(
-        child: isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('APPLY',style: TextStyle(color: Colors.white),),
-        color: Colors.orange[800],
-        onPressed: () {
-          if (_formKey.currentState.validate()) {
-            if (leavetype == '0') {
-              showDialog(context: context, child:
-              new AlertDialog(
-                //title: new Text("Sorry!"),
-                content: new Text("Please select leave type!"),
-              )
-              );
-            }else{
-              requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text.trim(), substituteemp);
-            }
-          }
-        },
-      ),
-    FlatButton(
-      shape: Border.all(color: Colors.orange[800]),
-      child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
-    onPressed: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MyLeave()),
-      );
-    },
-    ),
+                              RaisedButton(
+                                child: isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('APPLY',style: TextStyle(color: Colors.white),),
+                                color: Colors.orange[800],
+                                onPressed: () {
+                                  if (_formKey.currentState.validate()) {
+                                    if (leavetype == '0') {
+                                      showDialog(context: context, child:
+                                      new AlertDialog(
+                                        //title: new Text("Sorry!"),
+                                        content: new Text("Please select leave type!"),
+                                      )
+                                      );
+                                    }else{
+                                      requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text.trim(), substituteemp);
+                                    }
+                                  }
+                                },
+                              ),
+                              FlatButton(
+                                shape: Border.all(color: Colors.orange[800]),
+                                child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => MyLeave()),
+                                  );
+                                },
+                              ),
 
-    ],
-    ),
-    ],
-    ),
+                            ],
+                          ),
+                        ],
+                      ),
 
-    ],
-    ),
-    )
-    ]
-    )
-    ),
-    ),
+                    ],
+                  ),
+                  )
+                ]
+                )
+            ),
+          ),
 
-    ),
+        ),
 
       ],
     );
@@ -661,7 +668,7 @@ class _RequestLeaveState extends State<RequestLeave> {
                     return new DropdownMenuItem<String>(
                       value: map["Id"].toString(),
                       child:  new SizedBox(
-                   //     width: MediaQuery.of(context).size.width * 10,
+                        //     width: MediaQuery.of(context).size.width * 10,
                           child: new Text(
                             map["Name"],
                           )
@@ -700,15 +707,15 @@ class _RequestLeaveState extends State<RequestLeave> {
               child: InputDecorator(
                 decoration: InputDecoration(
                   labelText: 'Suggest Substitute',
-                 // icon is 48px widget.
+                  // icon is 48px widget.
                 ),
 
                 child:  new DropdownButton<String>(
-                isDense: true,
-                style: new TextStyle(
-                fontSize: 15.0,
-                color: Colors.black
-                ),
+                  isDense: true,
+                  style: new TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.black
+                  ),
                   value: substituteemp,
                   onChanged: (String newValue) {
                     setState(() {
@@ -719,7 +726,7 @@ class _RequestLeaveState extends State<RequestLeave> {
                     return new DropdownMenuItem<String>(
                       value: map["Id"].toString(),
                       child:  new SizedBox(
-                        width: MediaQuery.of(context).size.width*.8,
+                          width: MediaQuery.of(context).size.width*.8,
                           child: new Text(
                             map["Name"],
                           )

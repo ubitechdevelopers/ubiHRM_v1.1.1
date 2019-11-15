@@ -165,6 +165,7 @@ class _DashboardStatemain extends State<DashboardMain> {
                 SizedBox(height: 20.0,),
                 overtime!=null?getimg():undertime!=null?getimg1():Center(),
 
+
                 SizedBox(height: 20.0,),
                 perAttendance=='1'?  Row(children: <Widget>[
                   SizedBox(width: 20.0,),
@@ -477,6 +478,7 @@ class _DashboardStatemain extends State<DashboardMain> {
         ),
       ), ]);
   }
+
   Widget getimg1() {
     return  new
     Column(children: <Widget>[

@@ -18,6 +18,8 @@ import 'dart:io';
 requestLeave(Leave leave) async{
   Dio dio = new Dio();
   try {
+    final prefs = await SharedPreferences.getInstance();
+    String path_hrm_india1 = prefs.getString('path_hrm_india');
     //print(leave.orgid);
     //print(leave.uid);
     //print(leave.leavefrom);
@@ -44,12 +46,12 @@ requestLeave(Leave leave) async{
       "substituteemp": leave.substituteemp
     });
 
-    Response response1 = await dio.post(path_hrm_india+"reqForLeave", data: formData);
-    //print("------------------------");
-    //print(path_hrm_india+"reqForLeave");
-    //print("xxxxxxxxxx"+response1.toString());
-    //print("******************");
-    //print(response1.statusCode);
+    Response response1 = await dio.post(path_hrm_india1+"reqForLeave", data: formData);
+    print("------------------------");
+    print(path_hrm_india1+"reqForLeave");
+    print("xxxxxxxxxx"+response1.toString());
+    print("******************");
+    print(response1.statusCode);
     //final leaveMap = json.decode(response1.toString());
     final leaveMap = response1.data.toString();
     // print("-------ddddddddd"+leaveMap["status"]);
@@ -87,6 +89,7 @@ requestLeave(Leave leave) async{
 Future<List<Leave>> getLeaveSummary() async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   try {
@@ -95,7 +98,7 @@ Future<List<Leave>> getLeaveSummary() async{
     });
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
-        path+"getLeaveList",
+        path1+"getLeaveList",
         data: formData);
     //print(response.data.toString());
     //print('--------------------getLeaveSummary Called-----------------------');
@@ -148,6 +151,8 @@ List<Leave> createLeaveList(List data){
 withdrawLeave(Leave leave) async{
   Dio dio = new Dio();
   try {
+    final prefs = await SharedPreferences.getInstance();
+    String path_hrm_india1 = prefs.getString('path_hrm_india');
     FormData formData = new FormData.from({
       "leaveid": leave.leaveid,
       "uid": leave.uid,
@@ -156,7 +161,7 @@ withdrawLeave(Leave leave) async{
     });
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
-        path_hrm_india+"changeleavests",
+        path_hrm_india1+"changeleavests",
         data: formData);
     //print(response.toString());
     if (response.statusCode == 200) {
@@ -179,12 +184,13 @@ withdrawLeave(Leave leave) async{
 
 Future<List<Map>> getleavetype(int label) async{
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-  //print("leavetype----------->");
-  //print(path + "getEmployeeAllLeaveType?orgid=$orgdir&eid=$empid");
-  final response = await dio.post(path + "getEmployeeAllLeaveType?orgid=$orgdir&eid=$empid");
+  print("leavetype----------->");
+  print(path1 + "getEmployeeAllLeaveType?orgid=$orgdir&eid=$empid");
+  final response = await dio.post(path1+"getEmployeeAllLeaveType?orgid=$orgdir&eid=$empid");
   //print("leavetype11----------->");
   // print(response);
   List data = json.decode(response.data.toString());
@@ -213,10 +219,11 @@ List<Map> createList(List data,int label) {
 /////////Substitute Employee dropdowns///////
 Future<List<Map>> getsubstitueemp(int label) async{
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-  final response = await dio.post(path + "getEmployeeHierarchy?orgid=$orgdir&eid=$empid");
+  final response = await dio.post(path1 + "getEmployeeHierarchy?orgid=$orgdir&eid=$empid");
   //print("leavetype11----------->");
   // print(response);
   List data = json.decode(response.data.toString());
@@ -262,10 +269,11 @@ class LeaveH {
 }
 Future<List<LeaveH>> getleavehistory(LeaveTypeId) async{
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-  final response = await dio.post(path + 'getEmployeeAllLeaveTypeForMail?orgid=$orgdir&empid=$empid&leavetypeid=$LeaveTypeId');
+  final response = await dio.post(path1 + 'getEmployeeAllLeaveTypeForMail?orgid=$orgdir&empid=$empid&leavetypeid=$LeaveTypeId');
   // print("leavetype22----------->");
   // print(response);
   List data = json.decode(response.data.toString());
@@ -341,11 +349,12 @@ class LeaveA {
 Future<List<LeaveA>> getApprovals(listType) async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
 
   Response<String> response =
-  await dio.post(path+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  await dio.post(path1+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
 //  print(res);
   // print(path+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
@@ -417,7 +426,7 @@ ApproveLeave(Leaveid,comment,sts) async{
   // Employee emp;
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-
+  String path1 = prefs.getString('path');
   empid = prefs.getString('employeeid')??"";
   organization =prefs.getString('organization')??"";
   //emp = new Employee(employeeid: empid, organization: organization);
@@ -438,7 +447,7 @@ ApproveLeave(Leaveid,comment,sts) async{
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
 //Response response = await dio.post(  path_hrm_india+"ApproveLeave",data: formData);
     Response response = await dio.post(
-        path+"Approvedleave",
+        path1+"Approvedleave",
         data: formData);
     final leaveMap = response.data.toString();
     print("-------------------");
@@ -477,7 +486,7 @@ ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
   // Employee emp;
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-
+  String path1 = prefs.getString('path');
   empid = prefs.getString('employeeid')??"";
   organization =prefs.getString('organization')??"";
   //emp = new Employee(employeeid: empid, organization: organization);
@@ -502,7 +511,7 @@ ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
 //Response response = await dio.post(  path_hrm_india+"ApproveLeave",data: formData);
     Response response = await dio.post(
-        path+"ApprovedleaveBYHr",
+        path1+"ApprovedleaveBYHr",
         data: formData);
     //print(response.toString());
     final leaveMap = response.data.toString();
@@ -526,11 +535,12 @@ ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
 Future<List<LeaveA>> getTeamApprovals() async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   //print(path+"getteamapproval?empid="+empid+'&orgid='+orgdir);
   Response<String> response =
-  await dio.post(path+"getteamapproval?empid="+empid+'&orgid='+orgdir);
+  await dio.post(path1+"getteamapproval?empid="+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
 
 print(res);
@@ -891,10 +901,11 @@ class EmpListLeave {
 Future<List<Map>> getEmployeesList(int label) async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
+  String path_hrm_india1 = prefs.getString('path_hrm_india');
   String orgid = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? "";
 
-  final response = await dio.post(path_hrm_india + 'getReportingTeam?organization=$orgid&employeeid=$empid');
+  final response = await dio.post(path_hrm_india1 + 'getReportingTeam?organization=$orgid&employeeid=$empid');
   List data = json.decode(response.data.toString());
   List<Map> depts = createEMpListDD(data,label);
   print(depts);
@@ -932,6 +943,7 @@ Future<List<EmpListLeave>> getEmployeeLeaveList(date,emp) async {
 
 
     final prefs = await SharedPreferences.getInstance();
+    String path_hrm_india1 = prefs.getString('path_hrm_india');
     String orgid = prefs.getString('orgdir') ?? '';
     String empid = prefs.getString('employeeid') ?? "";
     /* print("-------->");
@@ -939,7 +951,7 @@ Future<List<EmpListLeave>> getEmployeeLeaveList(date,emp) async {
     print(date);
     print("-------->");*/
 
-    final response = await dio.post(path_hrm_india +
+    final response = await dio.post(path_hrm_india1 +
         'getEmployeeLeaveList?fd=$date&orgid=$orgid&empid=$empid&emp=$emp');
 
     List responseJson = json.decode(response.data.toString());

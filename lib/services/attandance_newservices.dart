@@ -69,12 +69,14 @@ class NewServices{
   getProfile(String empid) async{
     //  print('---------------------------------------------------------');
     try {
+      final prefs = await SharedPreferences.getInstance();
+      String path1 = prefs.getString('path');
       FormData formData = new FormData.from({
         "uid": empid,
       });//print('##############################################################');
       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
       Response response = await dio.post(
-          globals.path+"getProfile",
+          path1+"getProfile",
           data: formData);
       //  print('##############################################################');
       // print(response.toString());
@@ -94,6 +96,8 @@ class NewServices{
   updateProfile(Profile profile) async{
 
     try {
+      final prefs = await SharedPreferences.getInstance();
+      String path1 = prefs.getString('path');
       FormData formData = new FormData.from({
         "uid": profile.uid,
         "refno": profile.orgid,
@@ -102,7 +106,7 @@ class NewServices{
       });
       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
       Response response = await dio.post(
-          globals.path+"updateProfile",
+          path1+"updateProfile",
           data: formData);
       //print(response.toString());
       if (response.statusCode == 200) {
@@ -126,7 +130,8 @@ class NewServices{
 
   Future<bool> updateProfilePhoto(int uploadtype, String empid, String orgid) async {
     try{
-
+      final prefs = await SharedPreferences.getInstance();
+      String path_hrm_india1 = prefs.getString('path_hrm_india');
       File imagei = null;
       imageCache.clear();
       //for gallery
@@ -151,7 +156,7 @@ class NewServices{
           "file": new UploadFileInfo(imagei, "sample.png"),
         });
         //print("5");
-        Response<String> response1=await dio.post(globals.path_hrm_india+"updateProfilePhoto",data:formData);
+        Response<String> response1=await dio.post(path_hrm_india1+"updateProfilePhoto",data:formData);
 
         //imagei.deleteSync();
         imageCache.clear();
@@ -167,7 +172,7 @@ class NewServices{
           "uid": empid,
           "refno": orgid,
         });
-        Response<String> response1=await dio.post(globals.path_hrm_india+"updateProfilePhoto",data:formData);
+        Response<String> response1=await dio.post(path_hrm_india1+"updateProfilePhoto",data:formData);
         //print(response1.toString());
         Map MarkAttMap = json.decode(response1.data);
         //print(MarkAttMap["status"].toString());
@@ -189,10 +194,12 @@ class NewServices{
   resendVerificationMail(String orgid) async{
     print("this is our resendVerificationMail");
     try{
+      final prefs = await SharedPreferences.getInstance();
+      String path1 = prefs.getString('path');
       FormData formData = new FormData.from({
         "orgid": orgid,
       });
-      Response response1 = await dio.post(globals.path+"resend_verification_mail", data: formData);
+      Response response1 = await dio.post(path1+"resend_verification_mail", data: formData);
       print("*****************resend verification response ******************");
       print(response1.toString());
       if (response1.statusCode == 200) {
@@ -384,13 +391,15 @@ class NewServices{
 
   Future<List<Desg>> getAllDesgPermission(String orgid, String desinationId) async{
     try {
+      final prefs = await SharedPreferences.getInstance();
+      String path1 = prefs.getString('path');
       FormData formData = new FormData.from({
         "orgid": orgid,
         "roleid": desinationId
       });
       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
       Response response = await dio.post(
-          globals.path+"getAllDesgPermission",
+          path1+"getAllDesgPermission",
           data: formData
       );
       //print(response.data.toString());
@@ -437,13 +446,15 @@ class NewServices{
     jsonlist = json.encode(list);
     //print(jsonlist);
     try {
+      final prefs = await SharedPreferences.getInstance();
+      String path1 = prefs.getString('path');
       FormData formData = new FormData.from({
         "jsondata": jsonlist,
         "orgid": orgid,
         "userid": empid
       });
       Response response = await dio.post(
-      globals.path+"saveAllDesgPermission/",data: formData, options: new Options   (contentType:ContentType.parse("application/json"))
+      path1+"saveAllDesgPermission/",data: formData, options: new Options   (contentType:ContentType.parse("application/json"))
       );
       //print(response.data.toString());
       // Map permissionMap = json.decode(response.data.toString());
@@ -518,12 +529,13 @@ class StreamLocation{
 
 getLastTimeout() async{
   final prefs = await SharedPreferences.getInstance();
+  String path_ubiattendance1 = prefs.getString('path_ubiattendance');
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   // await dio.post(path+"getapprovalCount?datafor=Pending"'&empid='+empid+'&orgid='+orgdir);
 
-  var response =  await dio.post(path_ubiattendance+"getEmplolyeeTimeout?empid="+empid+"&orgid="+orgdir);
+  var response =  await dio.post(path_ubiattendance1+"getEmplolyeeTimeout?empid="+empid+"&orgid="+orgdir);
   Map responseJson = json.decode(response.data.toString());
    print('AAAAAA');
   print(responseJson['sts']);

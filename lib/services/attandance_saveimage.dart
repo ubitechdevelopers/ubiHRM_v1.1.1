@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/timeinout.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:flutter/painting.dart';
@@ -18,7 +19,8 @@ class SaveImage{
   String base64Image1;
   Future<bool> saveTimeInOut(File imagefile,MarkTime mk) async {
     try{
-
+      final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       File imagei = imagefile;
       imageCache.clear();
       //imagei = await ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 200.0,maxHeight: 200.0);
@@ -54,7 +56,7 @@ class SaveImage{
           "file": new UploadFileInfo(imagei, "image.png"),
         });
  //       print("5");
-        Response<String> response1=await dio.post(globals.path_ubiattendance+"saveImage",data:formData);
+        Response<String> response1=await dio.post(path_ubiattendance1+"saveImage",data:formData);
         //Response<String> response1=await dio.post("https://ubiattendance.ubihrm.com/index.php/services/saveImage",data:formData);
         //Response<String> response1=await dio.post("http://192.168.0.200/ubiattendance/index.php/services/saveImage",data:formData);
         //Response<String> response1 = await dio.post("https://ubitech.ubihrm.com/services/saveImage", data: formData);
@@ -80,7 +82,8 @@ class SaveImage{
 
   Future<bool> saveTimeInOutImagePicker(MarkTime mk) async {
     try{
-
+      final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       File imagei = null;
       imageCache.clear();
       imagei = await ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 200.0,maxHeight: 200.0);
@@ -116,7 +119,7 @@ class SaveImage{
           "file": new UploadFileInfo(imagei, "image.png"),
         });
     //    print("5");
-        Response<String> response1=await dio.post(globals.path_ubiattendance+"saveImage",data:formData);
+        Response<String> response1=await dio.post(path_ubiattendance1+"saveImage",data:formData);
         //Response<String> response1=await dio.post("https://ubiattendance.ubihrm.com/index.php/services/saveImage",data:formData);
         //Response<String> response1=await dio.post("http://192.168.0.200/ubiattendance/index.php/services/saveImage",data:formData);
         //Response<String> response1 = await dio.post("https://ubitech.ubihrm.com/services/saveImage", data: formData);
@@ -147,7 +150,8 @@ class SaveImage{
 
   Future<bool> saveTimeOutOpt(MarkTime mk,Attid) async {
     try{
-
+      final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       File imagei = null;
       imageCache.clear();
       imagei = await ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 200.0,maxHeight: 200.0);
@@ -186,7 +190,7 @@ class SaveImage{
           "file": new UploadFileInfo(imagei, "image.png"),
         });
         //    print("5");
-        Response<String> response1=await dio.post(globals.path_ubiattendance+"saveImagenew?Attid=$Attid",data:formData);
+        Response<String> response1=await dio.post(path_ubiattendance1+"saveImagenew?Attid=$Attid",data:formData);
       //  print(await dio.post(globals.path_ubiattendance+"saveImagenew?Attid=$Attid",data:formData));
 
         //Response<String> response1=await dio.post("https://ubiattendance.ubihrm.com/index.php/services/saveImage",data:formData);
@@ -219,7 +223,8 @@ class SaveImage{
   }
   Future<bool> saveTimeInOut1(File imagefile, ) async {
     try{
-
+      final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       File imagei = imagefile;
       imageCache.clear();
       //imagei = await ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 200.0,maxHeight: 200.0);
@@ -245,7 +250,7 @@ class SaveImage{
           "file": new UploadFileInfo(imagei, "image.png"),
         });
         print("5");
-        Response<String> response1=await dio.post(globals.path_ubiattendance+"saveImage",data:formData);
+        Response<String> response1=await dio.post(path_ubiattendance1+"saveImage",data:formData);
         //Response<String> response1=await dio.post("https://ubiattendance.ubihrm.com/index.php/services/saveImage",data:formData);
         //Response<String> response1=await dio.post("http://192.168.0.200/ubiattendance/index.php/services/saveImage",data:formData);
         //Response<String> response1 = await dio.post("https://ubitech.ubihrm.com/services/saveImage", data: formData);
@@ -272,6 +277,8 @@ class SaveImage{
 
   Future<bool> saveTimeInOutQR(MarkTime mk) async {
     try{
+      final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       File imagei = null;
       imageCache.clear();
 
@@ -310,8 +317,8 @@ class SaveImage{
           "file": new UploadFileInfo(imagei, "image.png"),
         });
         print("5");
-        print(globals.path_ubiattendance+"saveImage");
-        Response<String> response1=await dio.post(globals.path_ubiattendance+"saveImage",data:formData);
+        print(path_ubiattendance1+"saveImage");
+        Response<String> response1=await dio.post(path_ubiattendance1+"saveImage",data:formData);
         //Response<String> response1=await dio.post("https://ubiattendance.ubihrm.com/index.php/services/saveImage",data:formData);
         //Response<String> response1=await dio.post("http://192.168.0.200/ubiattendance/index.php/services/saveImage",data:formData);
         //Response<String> response1 = await dio.post("https://ubitech.ubihrm.com/services/saveImage", data: formData);
@@ -352,6 +359,8 @@ class SaveImage{
 
   Future<bool> saveVisit(MarkVisit mk) async { // visit in function
     try{
+      final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       File imagei = null;
       imageCache.clear();
       if(globals.visitImage==1) {
@@ -383,7 +392,7 @@ class SaveImage{
           try {
             print('------------**');
             response1 = await dio.post(
-                globals.path_ubiattendance + "saveVisit", data: formData);
+                path_ubiattendance1 + "saveVisit", data: formData);
             print("----->save visit image* --->" + response1.toString());
           } catch (e) {
             print('------------*');
@@ -431,7 +440,7 @@ class SaveImage{
         try {
           print('------------');
           response1 = await dio.post(
-              globals.path_ubiattendance + "saveVisit", data: formData);
+              path_ubiattendance1 + "saveVisit", data: formData);
           print("----->save visit image --->" + response1.toString());
         } catch (e) {
           print('------------');
@@ -463,6 +472,8 @@ class SaveImage{
 
   Future<bool> saveVisitOut(empid,addr,visit_id,latit,longi,remark,refid) async { // visit in function
     try{
+      final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       File imagei = null;
       imageCache.clear();
       if(globals.visitImage==1) {
@@ -495,7 +506,7 @@ class SaveImage{
           try {
             print('------------visit out----11');
             response1 = await dio.post(
-                globals.path_ubiattendance + "saveVisitOut", data: formData);
+                path_ubiattendance1 + "saveVisitOut", data: formData);
           } catch (e) {
             print('------------visit out--1');
             print(e.toString());
@@ -537,7 +548,7 @@ class SaveImage{
         try {
           print('------------visit out----11');
           response1 = await dio.post(
-              globals.path_ubiattendance + "saveVisitOut", data: formData);
+              path_ubiattendance1 + "saveVisitOut", data: formData);
         } catch (e) {
           print('------------visit out--1');
           print(e.toString());
@@ -566,6 +577,8 @@ class SaveImage{
     print('------------**v');
     // visit in function
     try {
+      final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       print('------------**vv');
       File imagei = null;
       imageCache.clear();
@@ -598,7 +611,7 @@ class SaveImage{
         try {
           print('------------**');
           response1 =
-          await dio.post(globals.path_ubiattendance + "saveFlexi", data: formData);
+          await dio.post(path_ubiattendance1 + "saveFlexi", data: formData);
           print("----->save visit image* --->" + response1.toString());
         } catch (e) {
           print('------------*');
@@ -636,6 +649,8 @@ class SaveImage{
   {
     // visit in function
     try {
+      final prefs = await SharedPreferences.getInstance();
+      String path_ubiattendance1 = prefs.getString('path_ubiattendance');
       File imagei = null;
       imageCache.clear();
       // if (globals.FlexiImage != 1) {
@@ -669,7 +684,7 @@ class SaveImage{
         try {
           print('------------visit out----11');
           //  print( await dio.post(globals.path + "saveFlexiOut", data: formData));
-          response1 = await dio.post(globals.path_ubiattendance+"saveFlexiOut", data: formData);
+          response1 = await dio.post(path_ubiattendance1+"saveFlexiOut", data: formData);
           print(response1);
         } catch (e) {
           print('------------visit out--11');

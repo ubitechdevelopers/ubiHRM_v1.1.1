@@ -13,18 +13,23 @@ import 'dart:io';
 
 
 getAllPermission(Employee emp) async{
-
+print("*********GET ALL PERMISSION**********");
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   Dio dio = new Dio();
   FormData formData = new FormData.from({
     "employeeid": emp.employeeid,
     "organization": emp.organization,
     "userprofileid": emp.userprofileid,
   });
+print(path1 + "getAllPermission");
+print(emp.employeeid);
+print(emp.organization);
+print(emp.userprofileid);
 
   Response<String> response =
-  await dio.post(path + "getAllPermission", data: formData);
-  // print(response.toString());
+  await dio.post(path1 + "getAllPermission", data: formData);
+  //print(path + "getAllPermission");
   Map responseJson = json.decode(response.data.toString());
 // print("1.  "+responseJson.toString());
   List<Permission> permlist = createPermList(responseJson['orgperm']);
@@ -121,6 +126,7 @@ getModuleUserPermission(String moduleid, String permission_type){
 
 getProfileInfo(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
@@ -130,13 +136,14 @@ getProfileInfo(Employee emp) async{
       "organization": emp.organization
     });
     Response<String> response =
-    await dio.post(path + "getProfileInfo", data: formData);
+    await dio.post(path1 + "getProfileInfo", data: formData);
     // print(response.toString());
     Map responseJson = json.decode(response.data.toString());
     //print(responseJson);
     globalcontactusinfomap = responseJson['Contact'];
     globalpersnalinfomap = responseJson['Personal'];
     globalcompanyinfomap = responseJson['Company'];
+    print("vvvvvvvvvvvvv"+globalcompanyinfomap['Company']);
     globalprofileinfomap = responseJson['ProfilePic'];
     prefs.setString("profilepic", responseJson['ProfilePic']);
     //  print("vvvvvvvvvvvvv"+globalcompanyinfomap['Division']);
@@ -148,6 +155,7 @@ getProfileInfo(Employee emp) async{
 
 getfiscalyear(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
@@ -158,7 +166,7 @@ getfiscalyear(Employee emp) async{
     });
 
     Response<String> response =
-    await dio.post(path + "getfiscalyear", data: formData);
+    await dio.post(path1 + "getfiscalyear", data: formData);
     // print(response.toString());
     Map responseJson = json.decode(response.data.toString());
     //print(responseJson);
@@ -172,6 +180,7 @@ getfiscalyear(Employee emp) async{
 
 getovertime(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
@@ -182,9 +191,9 @@ getovertime(Employee emp) async{
     });*/
 
     Response<String> response =
-    await dio.post(path + "getovertime?employeeid=$empid&organization=$orgdir");
+    await dio.post(path1 + "getovertime?employeeid=$empid&organization=$orgdir");
     print("result");
-    print(path + "getovertime?employeeid=$empid&organization=$orgdir");
+    print(path1 + "getovertime?employeeid=$empid&organization=$orgdir");
     Map responseJson = json.decode(response.data.toString());
     print('------------->');
     print(responseJson['utime']);
@@ -223,14 +232,15 @@ getovertime(Employee emp) async{
 
 getCountAproval() async{
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   // await dio.post(path+"getapprovalCount?datafor=Pending"'&empid='+empid+'&orgid='+orgdir);
 
-  var response =  await dio.post(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
-  //print("getapprovalCount");
-  //print(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
+  var response =  await dio.post(path1+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
+  print("getapprovalCount");
+  print(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
   Map responseJson = json.decode(response.data.toString());
   /* print('AAAAAA');
   print(responseJson['total']);
@@ -249,6 +259,7 @@ getCountAproval() async{
 
 getReportingTeam(Employee emp) async{
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   Dio dio = new Dio();
 //print("-------------------->"+emp.employeeid);
   // print(emp.organization);
@@ -258,7 +269,7 @@ getReportingTeam(Employee emp) async{
       "organization": emp.organization
     });
     Response<String> response =
-    await dio.post(path + "getReportingTeam", data: formData);
+    await dio.post(path1 + "getReportingTeam", data: formData);
     // print("---------> response"+response.toString());
     List responseJson = json.decode(response.data.toString());
     // print(responseJson);
@@ -274,13 +285,14 @@ getReportingTeam(Employee emp) async{
 Future<List<Team>> getTeamList() async {
 //print(emp);
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   Dio dio = new Dio();
 
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
 
   Response<String> response =
-  await dio.post(path + "getReportingTeam?&employeeid="+empid+"&organization="+orgdir);
+  await dio.post(path1 + "getReportingTeam?&employeeid="+empid+"&organization="+orgdir);
   List responseJson = json.decode(response.data.toString());
 
 
@@ -457,12 +469,13 @@ withdrawLeave(Leave leave) async{
 
 Future<List<Map<String, String>>> getChartDataYes() async {
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
-  print(path+"getLeaveChartData?refno=$organization&eid=$empid");
+  print(path1+"getLeaveChartData?refno=$organization&eid=$empid");
   final response = await dio.post(
-      path+"getLeaveChartData?refno=$organization&eid=$empid"
+      path1+"getLeaveChartData?refno=$organization&eid=$empid"
   );
 
   final data = json.decode(response.data);
@@ -499,7 +512,7 @@ Future<List<Map<String, String>>> getChartDataYes() async {
       val.add({
         "id": data['leavesummary']['data'][j]['id'].toString(),
         "name": data['leavesummary']['data'][j]['name'].toString(),
-        "total": data['leavesummary']['data'][j]['totalleave'].toString(),
+        "total": data['leavesummary']['data'][j]['days'].toString(),
         "used": data['leavesummary']['data'][j]['usedleave'].toString(),
         "left": data['leavesummary']['data'][j]['leftleave'].toString(),
       });
@@ -513,12 +526,13 @@ Future<List<Map<String, String>>> getChartDataYes() async {
 
 Future<List<Map<String, String>>> getChartData() async {
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
 
   final response = await dio.post(
-      path+"getLeaveChartData?refno=$organization&eid=$empid"
+      path1+"getLeaveChartData?refno=$organization&eid=$empid"
   );
 
   final data = json.decode(response.data);
@@ -557,14 +571,15 @@ Future<List<Map<String, String>>> getChartData() async {
 
 Future<List<Map<String, String>>> getAttsummaryChart() async {
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
   // ?eid=$empid&refno=$organization
   final response = await dio.post(
-      path+"getAttSummaryChart?eid=$empid&refno=$organization"
+      path1+"getAttSummaryChart?eid=$empid&refno=$organization"
   );
-  print(path+"getAttSummaryChart?eid=$empid&refno=$organization");
+  print(path1+"getAttSummaryChart?eid=$empid&refno=$organization");
   final data = json.decode(response.data.toString());
 //print("fdgdgdfgd"+data.toString());
 
@@ -589,6 +604,7 @@ Future<List<Map<String, String>>> getAttsummaryChart() async {
 Future<List<Holi>> getHolidays() async {
   //print("get holiday list called");
   final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
   Dio dio = new Dio();
 //try {
   // print("-------------------->"+emp.employeeid);
@@ -600,8 +616,8 @@ Future<List<Holi>> getHolidays() async {
   });*/
   // print(path + "getHolidays" + empid);
   Response<String> response =
-  await dio.post(path+"getHolidays?&employeeid="+empid+"&organization="+orgdir);
-  print(await dio.post(path+"getHolidays?&employeeid="+empid+"&organization="+orgdir));
+  await dio.post(path1+"getHolidays?&employeeid="+empid+"&organization="+orgdir);
+  print(await dio.post(path1+"getHolidays?&employeeid="+empid+"&organization="+orgdir));
   print("1777.---------  "+response.toString());
   List responseJson = json.decode(response.data.toString());
   // print("1.---------  "+responseJson.toString());
@@ -965,6 +981,8 @@ class profileup {
   var dio = new Dio();
 
   getProfile(String empid) async {
+    final prefs = await SharedPreferences.getInstance();
+    String path1 = prefs.getString('path');
     //  print('---------------------------------------------------------');
     try {
       FormData formData = new FormData.from({
@@ -972,7 +990,7 @@ class profileup {
       }); //print('##############################################################');
       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
       Response response = await dio.post(
-          path + "getProfile",
+          path1 + "getProfile",
           data: formData);
       //  print('##############################################################');
       // print(response.toString());
@@ -999,7 +1017,7 @@ class profileup {
 
 
       final prefs = await SharedPreferences.getInstance();
-
+      String path1 = prefs.getString('path');
 
       String empid = prefs.getString('employeeid')??"";
       String organization =prefs.getString('organization')??"";
@@ -1008,7 +1026,7 @@ class profileup {
 
       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
       Response response = await dio.post(
-          path + "updateProfile",
+          path1 + "updateProfile",
           data: formData);
       //print(response.toString());
       if (response.statusCode == 200) {
@@ -1032,6 +1050,8 @@ class profileup {
   }
 
   Future<bool> updateProfilePhoto(int uploadtype, String empid, String orgid) async {
+    final prefs = await SharedPreferences.getInstance();
+    String path_hrm_india1 = prefs.getString('path_hrm_india');
     try{
 
       File imagei = null;
@@ -1058,7 +1078,7 @@ class profileup {
           "file": new UploadFileInfo(imagei, "sample.png"),
         });
         //print("5");
-        Response<String> response1=await dio.post(path_hrm_india+"updateProfilePhoto",data:formData);
+        Response<String> response1=await dio.post(path_hrm_india1+"updateProfilePhoto",data:formData);
 
         //imagei.deleteSync();
         imageCache.clear();
@@ -1074,7 +1094,7 @@ class profileup {
           "uid": empid,
           "refno": orgid,
         });
-        Response<String> response1=await dio.post(path_hrm_india+"updateProfilePhoto",data:formData);
+        Response<String> response1=await dio.post(path_hrm_india1+"updateProfilePhoto",data:formData);
         print(response1.toString());
         Map MarkAttMap = json.decode(response1.data);
         //print(MarkAttMap["status"].toString());

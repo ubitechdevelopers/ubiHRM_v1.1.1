@@ -130,6 +130,8 @@ class _HomePageStatemain extends State<HomePageMain> {
     final prefs = await SharedPreferences.getInstance();
     int response = prefs.getInt('response') ?? 0;
     if (response == 1) {
+
+      print("*********SOHAN*********");
       //   print("AAAAAAAAA");
       String empid = prefs.getString('employeeid') ?? "";
       String organization = prefs.getString('organization') ?? "";
@@ -151,6 +153,7 @@ class _HomePageStatemain extends State<HomePageMain> {
 
       perEmployeeLeave = getModulePermission("18", "view");
       perLeaveApproval = getModuleUserPermission("124", "view");
+      perTimeoffApproval = getModuleUserPermission("180", "view");
       perAttendance = getModulePermission("5", "view");
       perTimeoff = getModulePermission("179", "view");
       perSalary = getModulePermission("66", "view");
@@ -316,7 +319,7 @@ class _HomePageStatemain extends State<HomePageMain> {
               if(perEmployeeLeave == '1')  makeDashboardItem("Leave",  MyLeave(), 'assets/icons/leave_icon.png'),
               if(perTimeoff == '1') makeDashboardItem("Time off", TimeoffSummary(), 'assets/icons/Timeoff_icon.png'),
               if(perPunchLocation == '1') makeDashboardItem("Visits", PunchLocationSummary(), 'assets/icons/visits_icon.png'),
-              if( perFlexi == '1') makeDashboardItem("Flexi time", Flexitime(), 'assets/icons/Flexi_icon.png'),
+              if(perFlexi == '1') makeDashboardItem("Flexi time", Flexitime(), 'assets/icons/Flexi_icon.png'),
               if(perExpense == '1') makeDashboardItem("Expenses", MyExpence(), 'assets/icons/Expense_icon.png'),
               if(perSalary == '1') makeDashboardItem("Salary", SalarySummary(), 'assets/icons/Salary_icon.png'),
               makeDashboardItem("Dashboard",DashboardMain(), 'assets/icons/Dashboard_icon.png'),
@@ -1069,7 +1072,6 @@ class HomeAppHeader extends StatelessWidget implements PreferredSizeWidget {
                 );
               },
               child:Container(
-
                   width: 40.0,
                   height: 40.0,
                   decoration: new BoxDecoration(
@@ -1083,8 +1085,10 @@ class HomeAppHeader extends StatelessWidget implements PreferredSizeWidget {
                   )
               ),
             ),
-            Container(
-                padding: const EdgeInsets.all(8.0), child: Text(orgname)
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0), child: Text(orgname)
+              ),
             )
           ],
         ),

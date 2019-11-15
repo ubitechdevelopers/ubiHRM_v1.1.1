@@ -401,11 +401,11 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                 //////////////TABB 2 Start
                 new Container(
 
-                  height: MediaQuery.of(context).size.height*0.30,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.45,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
@@ -511,11 +511,11 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
 
                 new Container(
 
-                  height: MediaQuery.of(context).size.height*0.30,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.45,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
@@ -705,11 +705,11 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                 new Container(
 
 
-                  height: MediaQuery.of(context).size.height*0.30,
+                  height: MediaQuery.of(context).size.height*0.35,
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*.45,
+                    Container( height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------

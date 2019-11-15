@@ -521,10 +521,11 @@ String dateFormatter(String date_) {
 
 Future<List<User>> getTeamSummary() async {
   final prefs = await SharedPreferences.getInstance();
+  String path_ubiattendance1 = prefs.getString('path_ubiattendance');
   String empid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
-  final response = await http.get(globals.path_ubiattendance+'getTeamHistory?uid=$empid&refno=$orgdir');
-  print(globals.path_ubiattendance+'getTeamHistory?uid=$empid&refno=$orgdir');
+  final response = await http.get(path_ubiattendance1+'getTeamHistory?uid=$empid&refno=$orgdir');
+  print(path_ubiattendance1+'getTeamHistory?uid=$empid&refno=$orgdir');
   print(response.body);
   List responseJson = json.decode(response.body.toString());
   List<User> userList = createUserList(responseJson);

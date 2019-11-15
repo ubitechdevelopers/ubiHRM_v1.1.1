@@ -534,9 +534,11 @@ class _SalarySummary extends State<SalarySummary> {
                                                   width: MediaQuery.of(context) .size .width * 0.30,margin: EdgeInsets.only(left:30.0),
                                                   height: 28.0,
                                                   child: new OutlineButton(
-                                                    onPressed: () {
-                                                      print(path+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
-                                                      launchMap(path+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
+                                                    onPressed: () async{
+                                                      final prefs = await SharedPreferences.getInstance();
+                                                      String path1 = prefs.getString('path');
+                                                      print(path1+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
+                                                      launchMap(path1+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
                                                       //   launchMap(" https://ubiattendance.ubihrm.com/");
                                                     },
                                                     child: new Icon(

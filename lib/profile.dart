@@ -136,7 +136,6 @@ var profilepic;
         setState(() {
           _checkLoaded = false;
         });
-
       }
     }));
 
@@ -281,7 +280,6 @@ var profilepic;
                   color: Colors.white,
                   image: new DecorationImage(
                     //image: new ExactAssetImage("assets/avatar.png"),
-
                     fit: BoxFit.fill,
                     //image: NetworkImage(globalcompanyinfomap['ProfilePic']),
                     image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
@@ -291,6 +289,7 @@ var profilepic;
                   //Border.all(color: Colors.black, width: 2.0),
 
                 ),
+
               ),
       ),
             /*  new Positioned(
@@ -914,7 +913,7 @@ var profilepic;
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Congrats!"),
-        content: new Text("Couldn't load this photo, Please try again."),
+        content: new Text("No image has been selected, Please try again."),
       )
       );
     }

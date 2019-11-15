@@ -330,6 +330,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               _isButtonDisabled=true;
 
                             });
+
                             var url = globals.path+"register_org";
                             http.post(url, body: {
                               "org_name": _name.text.trim(),

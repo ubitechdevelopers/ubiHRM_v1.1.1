@@ -313,7 +313,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                                 padding: EdgeInsets.only(top:.5,bottom: 1.5),
                                                 margin: EdgeInsets.only(top: 1.0 ),
                                                 child: Container(
-                                                  width: MediaQuery.of(context) .size .width * 0.30,
+                                                  width: MediaQuery.of(context) .size .width * 0.27,
                                                   //margin: EdgeInsets.only(left:0.0),
                                                   height: 28.0,
                                                   child: new OutlineButton(

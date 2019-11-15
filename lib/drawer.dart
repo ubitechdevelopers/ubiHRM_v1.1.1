@@ -393,6 +393,9 @@ class _AppDrawerState extends State<AppDrawer> {
   logout() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('response');
+    prefs.setString("path", '');
+    prefs.setString("path_ubiattendance", '');
+    prefs.setString("path_hrm_india", '');
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
