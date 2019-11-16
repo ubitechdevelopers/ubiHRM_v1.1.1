@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'attandance/image_view.dart';
 import 'global.dart';
 import 'model/model.dart';
 import 'services/services.dart';
@@ -262,8 +263,7 @@ var profilepic;
                     height: 40.0,
                     width: 40.0,
                     child: new CircularProgressIndicator(),
-/*
-                    decoration: new BoxDecoration(
+                    /*decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                        image: new DecorationImage(
                           fit: BoxFit.fill,
@@ -313,10 +313,11 @@ var profilepic;
 
 
         ]),
-
+             SizedBox(height: 10.0,),
              Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"],
                   style: TextStyle(
                     color: Colors.white,
+                    fontWeight: FontWeight.bold,
                     fontSize: 20.0,
                   )),
               SizedBox(height: 5.0,),
@@ -325,6 +326,7 @@ var profilepic;
                     color: Colors.white,
                     fontSize: 16.0,
                   )),
+              SizedBox(height: 5.0,),
               Text(globalcompanyinfomap['Designation'],
                   style: TextStyle(
                     color: Colors.white,
@@ -439,9 +441,9 @@ var profilepic;
 
                                 SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
-                                  Container(child:Text("DOB:",style: TextStyle(color: Colors.grey[600]),) ,
+                                  Container(child:Text("DOJ:",style: TextStyle(color: Colors.grey[600]),) ,
                                     width: 100.0,),
-                                  Text(globalpersnalinfomap["DOB"]),
+                                  Text(globalpersnalinfomap["DOJ"]),
                                 ],),
 
                                SizedBox(height: 10.0,),
@@ -696,7 +698,31 @@ var profilepic;
 
                               return new Row(
                                 children: <Widget>[
-                                   new Container(child:Container(
+                                   new Container(child:GestureDetector(
+                                     onTap: (){
+                                       Navigator.push(
+                                         context,
+                                         MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ProfilePic,org_name: "Ubitech Solutions")),
+                                       );
+                                     },
+                                     child: Container(
+                                       width: 62.0,
+                                       height: 62.0,
+                                       child: Container(
+                                           decoration: new BoxDecoration(
+                                               shape: BoxShape
+                                                   .circle,
+                                               image: new DecorationImage(
+                                                   fit: BoxFit
+                                                       .fill,
+                                                   image: new NetworkImage(
+                                                       snapshot
+                                                           .data[index]
+                                                           .ProfilePic)
+                                               )
+                                           )),),
+                                   ),
+                                     /*Container(
                                         width: 50.0,
                                         height: 50.0,
                                         decoration: new BoxDecoration(
@@ -710,7 +736,7 @@ var profilepic;
                                            image:  toreportprofileimage,
                                      //      image: _checkLoadedr ? AssetImage('assets/avatar.png') : toreportprofileimage,
                                             )
-                                        ))
+                                        ))*/
                                     ),SizedBox(width: 20.0,),
                                     Text(snapshot.data[index].FirstName+" "+snapshot.data[index].LastName),
                                     //Text("-"),
@@ -883,25 +909,41 @@ var profilepic;
     bool isupdate = await ns.updateProfilePhoto(uploadtype,empid,organization);
     // bool isupdate = true;
     if(isupdate){
-      setState(() {
-        _isProfileUploading = false;
-      });
       if(uploadtype==3){
         setState(() {
-          _checkLoaded = true;
+          _checkLoadedprofile = true;
         });
+        print("Profile image has been removed successfully.");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CollapsingTab()),
+        );
+        showDialog(context: context, child:
+        new AlertDialog(
+          content: new Text("Profile image has been removed successfully."),
+        )
+        );
+      }else{
+        setState(() {
+          _isProfileUploading = false;
+        });
+        print("Profile image has been changed successfully.");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CollapsingTab()),
+        );
+        showDialog(context: context, child:
+        new AlertDialog(
+          content: new Text("Profile image has been changed successfully."),
+        )
+        );
       }
-      print("Profile image has been changed successfully.");
       // ignore: deprecated_member_use
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CollapsingTab()),
-      );
-      showDialog(context: context, child:
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Profile image has been changed successfully."),
       )
-      );
+      );*/
     }else{
       setState(() {
         _isProfileUploading = false;

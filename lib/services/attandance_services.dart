@@ -1211,6 +1211,7 @@ Future<List<Map<String, String>>> getChartDataCDate(date) async {
   print(empid);
   final response = await http.get(
       path_ubiattendance1 + 'getChartDataCDate?refno=$orgdir&date=$date&empid=$empid');
+  print(path_ubiattendance1 + 'getChartDataCDate?refno=$orgdir&date=$date&empid=$empid');
   print('==========');
   print(date);
   final data = json.decode(response.body);

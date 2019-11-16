@@ -149,7 +149,7 @@ class _AppDrawerState extends State<AppDrawer> {
 
                   SizedBox(height: 4.0,),
                     Text("Hi "+globalpersnalinfomap['FirstName'],style: new TextStyle(fontSize: 18.0,color: Colors.white)),
-                  // SizedBox(height: 3.0),
+                  SizedBox(height: 3.0),
                   Text(globalcompanyinfomap['Designation'],style: new TextStyle(fontSize: 12.0,color: Colors.white)),
                   sstatus!=''?Text(sstatus,style: new TextStyle(fontSize: 10.0,color: Colors.white)):Center(),
                 ],

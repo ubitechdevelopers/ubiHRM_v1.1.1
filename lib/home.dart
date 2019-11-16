@@ -1040,8 +1040,8 @@ class HomeAppHeader extends StatelessWidget implements PreferredSizeWidget {
     orgname = orgname1;
     // print("--------->");
     // print(profileimage);
-    //  print("--------->");
-    //   print(_checkLoadedprofile);
+    // print("--------->");
+    // print(_checkLoadedprofile);
     if (profileimage!=null) {
       _checkLoadedprofile = false;
       //    print(_checkLoadedprofile);

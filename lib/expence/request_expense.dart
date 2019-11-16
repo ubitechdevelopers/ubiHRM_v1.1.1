@@ -576,7 +576,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                               color: Colors.orange[800],
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
-                                  /*if (headtype == '0') {
+                                  if (headtype == '0') {
                                     showDialog(context: context, child:
                                     new AlertDialog(
                                       //title: new Text("Sorry!"),
@@ -586,8 +586,8 @@ class _RequestExpenceState extends State<RequestExpence> {
                                     );
                                   }else {
                                     saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
-                                  }*/
-                                  saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
+                                  }
+                                  //saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
                                 }
                                 //tempvar="1";
 
