@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-import 'attandance/image_view.dart';
 import 'global.dart';
 import 'model/model.dart';
 import 'services/services.dart';
@@ -698,31 +697,7 @@ var profilepic;
 
                               return new Row(
                                 children: <Widget>[
-                                   new Container(child:GestureDetector(
-                                     onTap: (){
-                                       Navigator.push(
-                                         context,
-                                         MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ProfilePic,org_name: "Ubitech Solutions")),
-                                       );
-                                     },
-                                     child: Container(
-                                       width: 62.0,
-                                       height: 62.0,
-                                       child: Container(
-                                           decoration: new BoxDecoration(
-                                               shape: BoxShape
-                                                   .circle,
-                                               image: new DecorationImage(
-                                                   fit: BoxFit
-                                                       .fill,
-                                                   image: new NetworkImage(
-                                                       snapshot
-                                                           .data[index]
-                                                           .ProfilePic)
-                                               )
-                                           )),),
-                                   ),
-                                     /*Container(
+                                   new Container(child:Container(
                                         width: 50.0,
                                         height: 50.0,
                                         decoration: new BoxDecoration(
@@ -736,7 +711,7 @@ var profilepic;
                                            image:  toreportprofileimage,
                                      //      image: _checkLoadedr ? AssetImage('assets/avatar.png') : toreportprofileimage,
                                             )
-                                        ))*/
+                                        ))
                                     ),SizedBox(width: 20.0,),
                                     Text(snapshot.data[index].FirstName+" "+snapshot.data[index].LastName),
                                     //Text("-"),
