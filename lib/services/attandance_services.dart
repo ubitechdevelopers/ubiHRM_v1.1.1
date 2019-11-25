@@ -1205,10 +1205,10 @@ Future<List<Map<String, String>>> getChartDataCDate(date) async {
   String path_ubiattendance1 = prefs.getString('path_ubiattendance');
   String orgdir = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? "";
-  print('==========');
+  /*print('==========');
   print(orgdir);
   print('==========');
-  print(empid);
+  print(empid);*/
   final response = await http.get(
       path_ubiattendance1 + 'getChartDataCDate?refno=$orgdir&date=$date&empid=$empid');
   print(path_ubiattendance1 + 'getChartDataCDate?refno=$orgdir&date=$date&empid=$empid');
@@ -1289,7 +1289,7 @@ Future<List<Map<String, String>>> getChartDataLast(dys) async {
 //////////////////////////////////////////////////////////////////////
 /////////////////////////Get chart data ends///////////////////////
 //////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
 
 // ////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////

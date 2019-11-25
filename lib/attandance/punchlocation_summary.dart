@@ -274,7 +274,13 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                    });
                  }
                 }).catchError((ett){
-                  showInSnackBar('Unable to punch visit');
+                  //showInSnackBar('Unable to punch visit');
+                  showDialog(context: context, child:
+                  new AlertDialog(
+                    //title: new Text("Warning!"),
+                    content: new Text('Unable to punch visit'),
+                  )
+                  );
                 });
                 /*       //  Loc lock = new Loc();
                 //   location_addr1 = await lock.initPlatformState();

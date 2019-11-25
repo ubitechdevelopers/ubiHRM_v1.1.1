@@ -633,7 +633,13 @@ class _PunchLocation extends State<PunchLocation> {
       color: Colors.orange[800],
       onPressed: () {
         if(_clientname.text.trim()=='') {
-          showInSnackBar('Please insert client name first');
+          //showInSnackBar('Please insert client name first');
+          showDialog(context: context, child:
+          new AlertDialog(
+            //title: new Text("Warning!"),
+            content: new Text('Please insert client name first.'),
+          )
+          );
           return false;
         }else
           saveVisitImage();

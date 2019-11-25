@@ -269,7 +269,13 @@ class _changePassword extends State<changePassword> {
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             if (_oldPass.text == _newPass.text) {
-                              showInSnackBar("New password can't same as old");
+                              //showInSnackBar("New password can't same as old");
+                              showDialog(context: context, child:
+                              new AlertDialog(
+                                // title: new Text("Sorry!"),
+                                content: new Text("New password can't same as old"),
+                              )
+                              );
                               FocusScope.of(context).requestFocus(__newPass);
                             } else {
                               changeMyPassword(_oldPass.text, _newPass.text).then((res){
@@ -277,17 +283,46 @@ class _changePassword extends State<changePassword> {
                                   _newPass.text='';
                                   _oldPass.text='';
 
-                                  showInSnackBar(
-                                      "Password changed successfully");
+                                  //showInSnackBar("Password changed successfully");
+                                  showDialog(context: context, child:
+                                  new AlertDialog(
+                                    // title: new Text("Sorry!"),
+                                    content: new Text("Password changed successfully"),
+                                  )
+                                  );
                                 }
                                 else if(res==2)
-                                  showInSnackBar("Old Password did not match");
+                                  //showInSnackBar("Old Password did not match");
+                                  showDialog(context: context, child:
+                                  new AlertDialog(
+                                    // title: new Text("Sorry!"),
+                                    content: new Text("Old Password did not match"),
+                                  )
+                                  );
                                 else if(res==3)
-                                  showInSnackBar("New password can't be the same as old password");
+                                  //showInSnackBar("New password can't be the same as old password");
+                                  showDialog(context: context, child:
+                                  new AlertDialog(
+                                  // title: new Text("Sorry!"),
+                                  content: new Text("New password can't be the same as old password"),
+                                  )
+                                  );
                                 else
-                                  showInSnackBar("Unable to set password "+res.toString());
+                                  //showInSnackBar("Unable to set password "+res.toString());
+                                  showDialog(context: context, child:
+                                  new AlertDialog(
+                                    // title: new Text("Sorry!"),
+                                    content: new Text("Unable to set password "+res.toString()),
+                                  )
+                                  );
                               }).catchError((onError){
-                                showInSnackBar("Unable to connect server");
+                                //showInSnackBar("Unable to connect server");
+                                showDialog(context: context, child:
+                                new AlertDialog(
+                                  // title: new Text("Sorry!"),
+                                  content: new Text("Unable to connect server"),
+                                )
+                                );
                                 print(onError);
                               });
                             }

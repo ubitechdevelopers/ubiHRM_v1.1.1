@@ -119,7 +119,11 @@ class SaveImage{
           "file": new UploadFileInfo(imagei, "image.png"),
         });
     //    print("5");
+        print("helllllooooo");
+        print(path_ubiattendance1+"saveImage?uid=${mk.uid}&location=$location&aid=${mk.aid}&act=${mk.act}&shiftid=${mk.shiftid}&refid=${mk.refid}&latit=$lat&longi=$long");
         Response<String> response1=await dio.post(path_ubiattendance1+"saveImage",data:formData);
+
+        print(response1.toString());
         //Response<String> response1=await dio.post("https://ubiattendance.ubihrm.com/index.php/services/saveImage",data:formData);
         //Response<String> response1=await dio.post("http://192.168.0.200/ubiattendance/index.php/services/saveImage",data:formData);
         //Response<String> response1 = await dio.post("https://ubitech.ubihrm.com/services/saveImage", data: formData);
@@ -190,6 +194,7 @@ class SaveImage{
           "file": new UploadFileInfo(imagei, "image.png"),
         });
         //    print("5");
+
         Response<String> response1=await dio.post(path_ubiattendance1+"saveImagenew?Attid=$Attid",data:formData);
       //  print(await dio.post(globals.path_ubiattendance+"saveImagenew?Attid=$Attid",data:formData));
 
@@ -317,7 +322,6 @@ class SaveImage{
           "file": new UploadFileInfo(imagei, "image.png"),
         });
         print("5");
-        print(path_ubiattendance1+"saveImage");
         Response<String> response1=await dio.post(path_ubiattendance1+"saveImage",data:formData);
         //Response<String> response1=await dio.post("https://ubiattendance.ubihrm.com/index.php/services/saveImage",data:formData);
         //Response<String> response1=await dio.post("http://192.168.0.200/ubiattendance/index.php/services/saveImage",data:formData);
@@ -685,7 +689,8 @@ class SaveImage{
           print('------------visit out----11');
           //  print( await dio.post(globals.path + "saveFlexiOut", data: formData));
           response1 = await dio.post(path_ubiattendance1+"saveFlexiOut", data: formData);
-          print(response1);
+          print("----->save visit out image* --->" + response1.toString());
+          //print(response1);
         } catch (e) {
           print('------------visit out--11');
           print(e.toString());

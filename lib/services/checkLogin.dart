@@ -85,7 +85,6 @@ class Login{
         await getAllPermission(emp);
         await getProfileInfo(emp);
         perEmployeeLeave= getModulePermission("18","view");
-
         //perLeaveApproval=  getModulePermission("124","view");
         perAttendance=  getModulePermission("5","view");
         perTimeoff=  getModulePermission("179","view");

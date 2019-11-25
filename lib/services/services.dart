@@ -239,8 +239,8 @@ getCountAproval() async{
   // await dio.post(path+"getapprovalCount?datafor=Pending"'&empid='+empid+'&orgid='+orgdir);
 
   var response =  await dio.post(path1+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
-  print("getapprovalCount");
-  print(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
+  //print("getapprovalCount");
+  //print(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
   Map responseJson = json.decode(response.data.toString());
   /* print('AAAAAA');
   print(responseJson['total']);
@@ -473,6 +473,7 @@ Future<List<Map<String, String>>> getChartDataYes() async {
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
+  print("SOHAN LAL PATEL");
   print(path1+"getLeaveChartData?refno=$organization&eid=$empid");
   final response = await dio.post(
       path1+"getLeaveChartData?refno=$organization&eid=$empid"
@@ -512,7 +513,7 @@ Future<List<Map<String, String>>> getChartDataYes() async {
       val.add({
         "id": data['leavesummary']['data'][j]['id'].toString(),
         "name": data['leavesummary']['data'][j]['name'].toString(),
-        "total": data['leavesummary']['data'][j]['days'].toString(),
+        "total": data['leavesummary']['data'][j]['totalleave'].toString(),
         "used": data['leavesummary']['data'][j]['usedleave'].toString(),
         "left": data['leavesummary']['data'][j]['leftleave'].toString(),
       });

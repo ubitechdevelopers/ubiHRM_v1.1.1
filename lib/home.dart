@@ -165,7 +165,7 @@ class _HomePageStatemain extends State<HomePageMain> {
 
       showtabbar = false;
       profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
-      // profileimage = new NetworkImage(pic);
+      //profileimage = new NetworkImage(pic);
       //print("ABCDEFGHI");
       //print(profileimage);
 
