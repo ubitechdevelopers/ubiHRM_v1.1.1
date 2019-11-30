@@ -1813,11 +1813,33 @@ class _LoginPageState extends State<LoginPage>
     });
     Login dologin = Login();
     UserLogin user = new UserLogin(username: username,password: pass,token:token1);
-    dologin.checklogin(user).then((res){
-      if(res){
+    dologin.checklogin(user, context).then((res){
+      print("response");
+      print(res);
+      if(res=='true'){
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+        );
+      }else if(res=='false1'){
+        setState(() {
+          _isServiceCalling = false;
+        });
+        showDialog(context: context, child:
+        new AlertDialog(
+
+          content: new Text("Your trial period has expired!"),
+        )
+        );
+      }else if(res=='false2'){
+        setState(() {
+          _isServiceCalling = false;
+        });
+        showDialog(context: context, child:
+        new AlertDialog(
+
+          content: new Text("Your plan has expired!"),
+        )
         );
       }else{
         setState(() {
@@ -1871,14 +1893,15 @@ class _LoginPageState extends State<LoginPage>
       _obscureTextSignupConfirm = !_obscureTextSignupConfirm;
     });
   }
+
   markAttByQR(var qr, BuildContext context,token1) async{
     Login dologin = Login();
     setState(() {
       loader = true;
     });
-    var islogin = await dologin.markAttByQR(qr,token1);
+    var islogin = await dologin.markAttByQR(qr,token1, context);
     print(islogin);
-    if(islogin=="Success"){
+    if(islogin=='true'){
       setState(() {
         loader = false;
       });
@@ -1895,30 +1918,41 @@ class _LoginPageState extends State<LoginPage>
         context,
         MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
       );
-      /* Scaffold.of(context)
-          .showSnackBar(
-          SnackBar(content: Text("Attendance marked successfully.")));*/
-    }else if(islogin=="failure"){
+    }else if(islogin=='false1'){
       setState(() {
         loader = false;
       });
-      showDialog(
-          context : context,
-          builder: (_) => new
-          AlertDialog(
-            //title: new Text("Dialog Title"),
-            content: new Text("Invalid login."
-            ),
-          )
+      showDialog(context: context, child:
+      new AlertDialog(
+
+        content: new Text("Your trial period has expired!"),
+      )
+      );
+    }else if(islogin=='false2'){
+      setState(() {
+        loader = false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+
+        content: new Text("Your plan has expired!"),
+      )
+      );
+    }else if(islogin=="false"){
+      setState(() {
+        loader = false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+
+        content: new Text("Invalid login!"),
+
+      )
       );
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
       );
-
-      /*  Scaffold.of(context)
-          .showSnackBar(
-          SnackBar(content: Text("Invalid login credentials")));*/
     }else if(islogin=="imposed"){
       setState(() {
         loader = false;
@@ -1941,6 +1975,79 @@ class _LoginPageState extends State<LoginPage>
           SnackBar(content: Text("Attendance is already marked")));*/
     }
   }
+
+
+  /*markAttByQR(var qr, BuildContext context,token1) async{
+    Login dologin = Login();
+    setState(() {
+      loader = true;
+    });
+    var islogin = await dologin.markAttByQR(qr,token1, context);
+    print(islogin);
+    if(islogin=="Success"){
+      setState(() {
+        loader = false;
+      });
+      showDialog(
+          context : context,
+          builder: (_) => new
+          AlertDialog(
+            //title: new Text("Dialog Title"),
+            content: new Text("Successfull"
+            ),
+          )
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+      );
+      *//* Scaffold.of(context)
+          .showSnackBar(
+          SnackBar(content: Text("Attendance marked successfully.")));*//*
+    }else if(islogin=="failure"){
+      setState(() {
+        loader = false;
+      });
+      showDialog(
+          context : context,
+          builder: (_) => new
+          AlertDialog(
+            //title: new Text("Dialog Title"),
+            content: new Text("Invalid login."
+            ),
+          )
+      );
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
+      );
+
+      *//*  Scaffold.of(context)
+          .showSnackBar(
+          SnackBar(content: Text("Invalid login credentials")));*//*
+    }else if(islogin=="imposed"){
+      setState(() {
+        loader = false;
+      });
+      showDialog(
+          context : context,
+          builder: (_) => new
+          AlertDialog(
+            //title: new Text("Dialog Title"),
+            content: new Text("Invalid login."
+            ),
+          )
+      );
+    }else{
+      setState(() {
+        loader = false;
+      });
+      *//*Scaffold.of(context)
+          .showSnackBar(
+          SnackBar(content: Text("Attendance is already marked")));*//*
+    }
+  }*/
+
 
   Future scan() async {
     try {

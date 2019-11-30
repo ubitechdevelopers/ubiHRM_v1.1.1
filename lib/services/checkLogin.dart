@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/model.dart';
 //import 'package:ubihrm/model/user.dart';
@@ -11,7 +12,7 @@ class Login{
 
   var dio = new Dio();
 
-  Future<bool> checklogin(UserLogin user) async{
+  Future<String> checklogin(UserLogin user, BuildContext context) async{
     final prefs = await SharedPreferences.getInstance();
     Dio dio = new Dio();
     // var empid;
@@ -28,7 +29,7 @@ class Login{
 
     Response<String> response =
     await dio.post(path + "checklogin", data: formData);
-    print(path);
+    print(path + "checklogin?user_name=${user.username}&user_password=${user.password}&token=${user.token}");
     print("login response_______"+response.toString());
     print(response.statusCode);
 
@@ -47,24 +48,24 @@ class Login{
         if(employeeMap['countryid']=="93"){
          //print("Helloindia");
 
-          /*prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/');
+          prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/');
           prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/');
-          prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMINDIA/services/');*/
+          prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMINDIA/services/');
 
-          prefs.setString("path", 'https://ubitech.ubihrm.com/ubiapp/');
+          /*prefs.setString("path", 'https://ubitech.ubihrm.com/ubiapp/');
           prefs.setString("path_ubiattendance", 'https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/');
-          prefs.setString("path_hrm_india", 'https://ubitech.ubihrm.com/services/');
+          prefs.setString("path_hrm_india", 'https://ubitech.ubihrm.com/services/');*/
 
         }else{
          //print("Hiiiall");
 
-          /*prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMALL/ubiapp/');
+          prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMALL/ubiapp/');
           prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMALL/HRMAPP/index.php/Att_services/');
-          prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMALL/services/');*/
+          prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMALL/services/');
 
-          prefs.setString("path", 'https://ubitechdigital.ubihrm.com/ubiapp/');
+          /*prefs.setString("path", 'https://ubitechdigital.ubihrm.com/ubiapp/');
           prefs.setString("path_ubiattendance", 'https://ubitechdigital.ubihrm.com/HRMAPP/index.php/Att_services/');
-          prefs.setString("path_hrm_india", 'https://ubitechdigital.ubihrm.com/services/');
+          prefs.setString("path_hrm_india", 'https://ubitechdigital.ubihrm.com/services/');*/
 
         }
         prefs.setString("empid", employeeMap['employeeid']);
@@ -83,23 +84,26 @@ class Login{
 
         //await getProfileInfo(emp);
         await getAllPermission(emp);
-        await getProfileInfo(emp);
+        await getProfileInfo(emp, context);
         perEmployeeLeave= getModulePermission("18","view");
         //perLeaveApproval=  getModulePermission("124","view");
         perAttendance=  getModulePermission("5","view");
         perTimeoff=  getModulePermission("179","view");
         await getReportingTeam(emp);
 
-        return true;
+        return "true";
+      }else if(employeeMap['response']==2){
+        return "false1";
+      }else if(employeeMap['response']==3){
+        return "false2";
       }
-
       else{
-        return false;
+        return "false";
       }
     }
   }
 
-  checkLoginForQr(User user) async{
+  checkLoginForQr(User user, BuildContext context) async{
     try {
       final prefs = await SharedPreferences.getInstance();
       Dio dio = new Dio();
@@ -139,24 +143,24 @@ class Login{
           if(employeeMap['countryid']=="93"){
             //print("Helloindia");
 
-            /*prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/');
+            prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/');
             prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/');
-            prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMINDIA/services/');*/
+            prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMINDIA/services/');
 
-            prefs.setString("path", 'https://ubitech.ubihrm.com/ubiapp/');
+            /*prefs.setString("path", 'https://ubitech.ubihrm.com/ubiapp/');
             prefs.setString("path_ubiattendance", 'https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/');
-            prefs.setString("path_hrm_india", 'https://ubitech.ubihrm.com/services/');
+            prefs.setString("path_hrm_india", 'https://ubitech.ubihrm.com/services/');*/
 
           }else{
             //print("Hiiiall");
 
-            /*prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMALL/ubiapp/');
+            prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMALL/ubiapp/');
             prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMALL/HRMAPP/index.php/Att_services/');
-            prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMALL/services/');*/
+            prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMALL/services/');
 
-            prefs.setString("path", 'https://ubitechdigital.ubihrm.com/ubiapp/');
+           /* prefs.setString("path", 'https://ubitechdigital.ubihrm.com/ubiapp/');
             prefs.setString("path_ubiattendance", 'https://ubitechdigital.ubihrm.com/HRMAPP/index.php/Att_services/');
-            prefs.setString("path_hrm_india", 'https://ubitechdigital.ubihrm.com/services/');
+            prefs.setString("path_hrm_india", 'https://ubitechdigital.ubihrm.com/services/');*/
 
           }
           prefs.setString("empid", employeeMap['employeeid']);
@@ -171,9 +175,9 @@ class Login{
 
           Employee emp = new Employee(employeeid: empid, organization: organization, userprofileid: userprofileid);
 
-          //  await getProfileInfo(emp);
+          //await getProfileInfo(emp);
           await getAllPermission(emp);
-          await getProfileInfo(emp);
+          await getProfileInfo(emp, context);
           perEmployeeLeave= getModulePermission("18","view");
           perTimeoffApproval = getModuleUserPermission("180", "view");
           perLeaveApproval=  getModuleUserPermission("124","view");
@@ -181,7 +185,14 @@ class Login{
           perTimeoff=  getModulePermission("179","view");
           await getReportingTeam(emp);
 
-          return "Success";
+          return "true";
+        }else if(employeeMap['response']==2){
+          return "false1";
+        }else if(employeeMap['response']==3){
+          return "false2";
+        }
+        else{
+          return "false";
         }
         // if (employeeMap["response"] == 1) {
         /*  var user = new Employee.fromJson(employeeMap);
@@ -203,9 +214,9 @@ class Login{
           }else{
             return "imposed";
           }
-        } */else {
+        } else {
           return "failure";
-        }
+        }*/
       } else {
         return "poor network";
       }
@@ -356,10 +367,10 @@ checkLoginForQr(User user) async{
     }
   }*/
 
-markAttByQR(String qr,token1) async{
+markAttByQR(String qr,token1, BuildContext context) async{
   List splitstring = qr.split("ykks==");
   User qruser = new User(splitstring[0], splitstring[1],token1);
-  String result = await checkLoginForQr(qruser);
+  String result = await checkLoginForQr(qruser, context);
   return result;
   print(splitstring[0]);
   print(splitstring[1]);

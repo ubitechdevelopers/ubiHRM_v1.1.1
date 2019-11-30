@@ -141,9 +141,8 @@ class _HomePageStatemain extends State<HomePageMain> {
           organization: organization,
           userprofileid: userprofileid);
 
-      //  await getProfileInfo(emp);
       await getAllPermission(emp);
-      await getProfileInfo(emp);
+      await getProfileInfo(emp, context);
       //await getfiscalyear(emp);
       //await getovertime(emp);
 

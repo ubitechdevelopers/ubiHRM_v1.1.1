@@ -942,7 +942,7 @@ var profilepic;
     var islogin = await ns.updateProfile(profile);
     //print(islogin);
     if(islogin=="success"){
-      getProfileInfo(emp);
+      getProfileInfo(emp, context);
       setState(() {
         _isButtonDisabled=false;
       });

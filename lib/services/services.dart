@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:dio/dio.dart';
@@ -5,9 +6,11 @@ import 'package:ubihrm/global.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:flutter/painting.dart';
 import 'dart:io';
+
+import '../login_page.dart';
+
 
 //import 'package:http/http.dart' as http;
 
@@ -124,7 +127,7 @@ getModuleUserPermission(String moduleid, String permission_type){
 }
 
 
-getProfileInfo(Employee emp) async{
+getProfileInfo(Employee emp, BuildContext context) async{
   final prefs = await SharedPreferences.getInstance();
   String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
@@ -137,16 +140,47 @@ getProfileInfo(Employee emp) async{
     });
     Response<String> response =
     await dio.post(path1 + "getProfileInfo", data: formData);
-    // print(response.toString());
+    print(path1 + "getProfileInfo?employeeid=${emp.employeeid}&organization=${emp.organization}");
+    print(response.toString());
     Map responseJson = json.decode(response.data.toString());
-    //print(responseJson);
-    globalcontactusinfomap = responseJson['Contact'];
-    globalpersnalinfomap = responseJson['Personal'];
-    globalcompanyinfomap = responseJson['Company'];
-    print("vvvvvvvvvvvvv"+globalcompanyinfomap['Company']);
-    globalprofileinfomap = responseJson['ProfilePic'];
-    prefs.setString("profilepic", responseJson['ProfilePic']);
-    //  print("vvvvvvvvvvvvv"+globalcompanyinfomap['Division']);
+    if(responseJson['Status']=='c') {
+      print('vanshika');
+      print(responseJson['Status']);
+      globalcontactusinfomap = responseJson['Contact'];
+      globalpersnalinfomap = responseJson['Personal'];
+      globalcompanyinfomap = responseJson['Company'];
+      print("vvvvvvvvvvvvv" + globalcompanyinfomap['Company']);
+      globalprofileinfomap = responseJson['ProfilePic'];
+      prefs.setString("profilepic", responseJson['ProfilePic']);
+      return "true";
+      //  print("vvvvvvvvvvvvv"+globalcompanyinfomap['Division']);
+    }else if(responseJson['Status']=='b'){
+      print("shaifali =============>>>>");
+      print(responseJson['response']);
+      prefs.remove('response');
+      Navigator.pushAndRemoveUntil(
+        context, MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
+      );
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text("Your plan has expired!"),
+      )
+      );
+      return "false2";
+    }else if(responseJson['Status']=='a'){
+      print("shaifali");
+      print(responseJson['response']);
+      prefs.remove('response');
+      Navigator.pushAndRemoveUntil(
+        context, MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
+      );
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text("Your trial period has expired!"),
+      )
+      );
+      return "false1";
+    }
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
@@ -473,7 +507,7 @@ Future<List<Map<String, String>>> getChartDataYes() async {
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
-  print("SOHAN LAL PATEL");
+  //print("SOHAN LAL PATEL");
   print(path1+"getLeaveChartData?refno=$organization&eid=$empid");
   final response = await dio.post(
       path1+"getLeaveChartData?refno=$organization&eid=$empid"
@@ -1113,6 +1147,7 @@ class profileup {
     }
   }
 
+
 /*Future<bool> updateProfilePhoto(int uploadtype, String empid, String orgid) async {
     Dio dio = new Dio();
     try {
@@ -1177,6 +1212,7 @@ class profileup {
   }
 */
 }
+
 
 /*
 
