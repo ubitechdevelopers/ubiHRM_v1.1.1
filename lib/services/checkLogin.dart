@@ -1,11 +1,12 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/model/model.dart';
-//import 'package:ubihrm/model/user.dart';
 import 'package:ubihrm/global.dart';
-import 'dart:convert';
-import 'dart:async';
+import 'package:ubihrm/model/model.dart';
+
 import 'services.dart';
 
 class Login{
@@ -185,7 +186,9 @@ class Login{
           perTimeoff=  getModulePermission("179","view");
           await getReportingTeam(emp);
 
-          return "true";
+          return "Success";
+        }
+        /*  return "true";
         }else if(employeeMap['response']==2){
           return "false1";
         }else if(employeeMap['response']==3){
@@ -193,7 +196,7 @@ class Login{
         }
         else{
           return "false";
-        }
+        }*/
         // if (employeeMap["response"] == 1) {
         /*  var user = new Employee.fromJson(employeeMap);
           print(user.fname + " " + user.lname);
@@ -214,9 +217,9 @@ class Login{
           }else{
             return "imposed";
           }
-        } else {
+        } */else {
           return "failure";
-        }*/
+        }
       } else {
         return "poor network";
       }
@@ -367,7 +370,7 @@ checkLoginForQr(User user) async{
     }
   }*/
 
-markAttByQR(String qr,token1, BuildContext context) async{
+markAttByQR(String qr, BuildContext context, token1) async{
   List splitstring = qr.split("ykks==");
   User qruser = new User(splitstring[0], splitstring[1],token1);
   String result = await checkLoginForQr(qruser, context);

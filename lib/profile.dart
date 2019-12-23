@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+
+import 'b_navigationbar.dart';
 import 'global.dart';
+import 'home.dart';
 import 'model/model.dart';
 import 'services/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:rounded_modal/rounded_modal.dart';
-import 'b_navigationbar.dart';
-import 'home.dart';
 
 
 class CollapsingTab extends StatefulWidget {
@@ -893,6 +893,7 @@ var profilepic;
           context,
           MaterialPageRoute(builder: (context) => CollapsingTab()),
         );
+        // ignore: deprecated_member_use
         showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Profile image has been removed successfully."),
@@ -907,6 +908,7 @@ var profilepic;
           context,
           MaterialPageRoute(builder: (context) => CollapsingTab()),
         );
+        // ignore: deprecated_member_use
         showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Profile image has been changed successfully."),
@@ -927,6 +929,7 @@ var profilepic;
         context,
         MaterialPageRoute(builder: (context) => CollapsingTab()),
       );
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Congrats!"),
@@ -950,6 +953,7 @@ var profilepic;
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
       );*/
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         title: new Text("Congrats!"),
@@ -960,6 +964,7 @@ var profilepic;
       setState(() {
         _isButtonDisabled=false;
       });
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         title: new Text("Sorry!"),
@@ -970,6 +975,7 @@ var profilepic;
       setState(() {
         _isButtonDisabled=false;
       });
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         title: new Text("Sorry!"),

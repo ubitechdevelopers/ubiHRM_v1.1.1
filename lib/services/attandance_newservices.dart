@@ -1,20 +1,17 @@
 
-import 'package:dio/dio.dart';
+import 'dart:async';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/model/model.dart';
-import 'package:ubihrm/global.dart' as globals;
-import 'dart:async';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/painting.dart';
-import 'package:ubihrm/services/attandance_services.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import 'dart:async';
-//import 'package:ubihrm/attandance/globals.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart';
-import 'services.dart';
+import 'package:ubihrm/model/model.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 
 /*
 class RequestTimeOffService{

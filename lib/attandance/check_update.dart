@@ -13,20 +13,19 @@
 // limitations under the License.
 // this is testing
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
-import 'home.dart';
-import 'login.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/services/attandance_services.dart';
+
+import 'home.dart';
+import 'login.dart';
 
 class CheckUpdate extends StatefulWidget {
   @override
   _CheckUpdate createState() => _CheckUpdate();
 }
 class _CheckUpdate extends State<CheckUpdate> {
+  String mand_update='0';
   final _formKey = GlobalKey<FormState>();
   int response;
   loader() {
@@ -44,7 +43,15 @@ class _CheckUpdate extends State<CheckUpdate> {
   void initState() {
     super.initState();
     getShared();
-    }
+    checkMandUpdate().then((res){
+      if(mounted) {
+        setState(() {
+          print('************************'+res.toString()+'***********************************');
+          mand_update=res;
+        });
+      }
+    });
+  }
   getShared() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -71,9 +78,9 @@ class _CheckUpdate extends State<CheckUpdate> {
                     Container(
                       width:MediaQuery.of(context).size.width*0.7,
                       child:  Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          FlatButton(
+                          mand_update=='0'?FlatButton(
                               shape: Border.all(color: Colors.black54),
                               child:Text('Later',style:TextStyle(color: Colors.black54)),
                             onPressed: (){
@@ -88,13 +95,13 @@ class _CheckUpdate extends State<CheckUpdate> {
                               MaterialPageRoute(builder: (context) => LoginPage()),
                               );
                             },
-                          ),
+                          ):SizedBox(width: 0.0,),
                           RaisedButton(
-                              color: Colors.orangeAccent,
-                              child: Text('Update now',style: TextStyle(color: Colors.white),),
+                            color: Colors.orangeAccent,
+                            child: Text('Update now',style: TextStyle(color: Colors.white),),
                             onPressed: (){
                               LaunchReview.launch(
-                                  androidAppId: "org.ubitech.attendance"
+                                  androidAppId: "com.ubihrm.ubihrm"
                               );
                             },
                           ),

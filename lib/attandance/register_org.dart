@@ -1,15 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart' as globals;
-import '../global.dart';
-import 'askregister.dart';
-import 'package:ubihrm/services/checkloginn.dart';
-import 'home.dart';
 import 'package:ubihrm/model/user.dart';
 import 'package:ubihrm/services/attandance_services.dart';
+import 'package:ubihrm/services/checkloginn.dart';
+
+import '../global.dart';
+import 'askregister.dart';
+import 'home.dart';
 
 void main() => runApp(new MyApp());
 

@@ -1,16 +1,15 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/model/timeinout.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
-import 'package:flutter/painting.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:ubihrm/global.dart' as globals;
+import 'package:ubihrm/model/timeinout.dart';
 
 
 

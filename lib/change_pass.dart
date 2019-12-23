@@ -2,14 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
-import 'package:ubihrm/drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/services/attandance_gethome.dart';
+import 'package:ubihrm/drawer.dart';
 import 'package:ubihrm/services/attandance_services.dart';
-import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+
 import 'appbar.dart';
-import 'settings.dart';
 import 'b_navigationbar.dart';
 import 'global.dart';
 
@@ -270,6 +267,7 @@ class _changePassword extends State<changePassword> {
                           if (_formKey.currentState.validate()) {
                             if (_oldPass.text == _newPass.text) {
                               //showInSnackBar("New password can't same as old");
+                              // ignore: deprecated_member_use
                               showDialog(context: context, child:
                               new AlertDialog(
                                 // title: new Text("Sorry!"),
@@ -284,6 +282,7 @@ class _changePassword extends State<changePassword> {
                                   _oldPass.text='';
 
                                   //showInSnackBar("Password changed successfully");
+                                  // ignore: deprecated_member_use
                                   showDialog(context: context, child:
                                   new AlertDialog(
                                     // title: new Text("Sorry!"),
@@ -293,6 +292,7 @@ class _changePassword extends State<changePassword> {
                                 }
                                 else if(res==2)
                                   //showInSnackBar("Old Password did not match");
+                                  // ignore: deprecated_member_use
                                   showDialog(context: context, child:
                                   new AlertDialog(
                                     // title: new Text("Sorry!"),
@@ -301,6 +301,7 @@ class _changePassword extends State<changePassword> {
                                   );
                                 else if(res==3)
                                   //showInSnackBar("New password can't be the same as old password");
+                                  // ignore: deprecated_member_use
                                   showDialog(context: context, child:
                                   new AlertDialog(
                                   // title: new Text("Sorry!"),
@@ -309,6 +310,7 @@ class _changePassword extends State<changePassword> {
                                   );
                                 else
                                   //showInSnackBar("Unable to set password "+res.toString());
+                                  // ignore: deprecated_member_use
                                   showDialog(context: context, child:
                                   new AlertDialog(
                                     // title: new Text("Sorry!"),
@@ -317,6 +319,7 @@ class _changePassword extends State<changePassword> {
                                   );
                               }).catchError((onError){
                                 //showInSnackBar("Unable to connect server");
+                                // ignore: deprecated_member_use
                                 showDialog(context: context, child:
                                 new AlertDialog(
                                   // title: new Text("Sorry!"),

@@ -12,18 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 // this is testing
+import 'dart:async';
+
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:async';
-import '../global.dart';
-import 'home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/user.dart';
 import 'package:ubihrm/services/checkloginn.dart';
-import 'package:barcode_scan/barcode_scan.dart';
-import 'forgot_password.dart';
+
+import '../global.dart';
 import 'askregister.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:connectivity/connectivity.dart';
+import 'forgot_password.dart';
+import 'home.dart';
 
 class LoginPage extends StatefulWidget {
   @override

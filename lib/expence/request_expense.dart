@@ -2,38 +2,25 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';
-import 'package:ubihrm/services/attandance_saveimage.dart';
-import 'package:ubihrm/model/timeinout.dart';
-import '../drawer.dart';
-import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-//import 'package:datetime_picker_formfield/time_picker_formfield.dart';
-import 'package:ubihrm/model/model.dart' as TimeOffModal;
 import 'package:ubihrm/services/expense_services.dart';
-import 'package:ubihrm/services/timeoff_services.dart';
-import 'expenselist.dart';
-import '../global.dart';
-import '../b_navigationbar.dart';
+
 import '../appbar.dart';
-import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
-import 'package:ubihrm/global.dart' as globals;
-import 'package:image_picker/image_picker.dart';
-import 'package:dio/dio.dart';
-
-
-//import 'settings.dart';
-import '../home.dart';
-//import 'reports.dart';
-import '../profile.dart';
+import '../b_navigationbar.dart';
+import '../drawer.dart';
+import '../global.dart';
+import 'expenselist.dart';
 
 // This app is a stateful, it tracks the user's current choice.
 class RequestExpence extends StatefulWidget {
@@ -732,6 +719,7 @@ class _RequestExpenceState extends State<RequestExpence> {
             context,
             MaterialPageRoute(builder: (context) => MyExpence()),
           );
+          // ignore: deprecated_member_use
           showDialog(context: context, child:
             new AlertDialog(
               content: new Text('Expense has been applied successfully!'),
@@ -756,6 +744,7 @@ class _RequestExpenceState extends State<RequestExpence> {
             context,
             MaterialPageRoute(builder: (context) => MyExpence()),
           );*/
+          // ignore: deprecated_member_use
           showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense already applied on this date.'),
@@ -768,6 +757,7 @@ class _RequestExpenceState extends State<RequestExpence> {
         }
         else {
         //  print('------false  in img');
+          // ignore: deprecated_member_use
           showDialog(context: context, child:
           new AlertDialog(
             content: new Text('There is some problem while applying for Expense.'),
@@ -819,6 +809,7 @@ class _RequestExpenceState extends State<RequestExpence> {
           context,
           MaterialPageRoute(builder: (context) => MyExpence()),
         );
+        // ignore: deprecated_member_use
         showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense has been applied successfully.'),
@@ -838,6 +829,7 @@ class _RequestExpenceState extends State<RequestExpence> {
         return true;
       }
       else if((response1.toString().contains("false1"))){
+        // ignore: deprecated_member_use
         showDialog(context: context, child:
         new AlertDialog(
           content: new Text('Expense already applied on this date.'),
@@ -850,6 +842,7 @@ class _RequestExpenceState extends State<RequestExpence> {
       }
       else {
      //   print('------false');
+        // ignore: deprecated_member_use
         showDialog(context: context, child:
         new AlertDialog(
           content: new Text("There is some problem while applying for Expense."),

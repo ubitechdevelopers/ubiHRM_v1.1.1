@@ -1,20 +1,17 @@
 
 import 'package:flutter/material.dart';
-import '../global.dart';
-import '../gradient_button.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
-import '../home.dart';
-import '../services/services.dart';
-import '../services/leave_services.dart';
-import 'myleave.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../model/model.dart';
 import 'package:rounded_modal/rounded_modal.dart';
-import '../profile.dart';
-//import 'bottom_navigationbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/all_approvals.dart';
+
 import '../b_navigationbar.dart';
 import '../drawer.dart';
-import 'package:ubihrm/all_approvals.dart';
+import '../global.dart';
+import '../model/model.dart';
+import '../profile.dart';
+import '../services/leave_services.dart';
+import '../services/services.dart';
 
 
 class TabbedApp extends StatefulWidget {

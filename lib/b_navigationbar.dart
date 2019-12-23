@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
-import 'drawer.dart';
-import 'piegraph.dart';
-import 'graphs.dart';
-import 'global.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
-
-import 'services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'login_page.dart';
+
+import 'all_approvals.dart';
+import 'global.dart';
+import 'home.dart';
 import 'model/model.dart';
 import 'profile.dart';
-import 'dart:async';
-import 'home.dart';
-import 'leave/approval.dart';
-import 'all_approvals.dart';
+import 'services/services.dart';
 import 'settings.dart';
-
-import 'package:connectivity/connectivity.dart';
 
 void main() => runApp(new TaskyApp());
 

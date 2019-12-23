@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'byte_order.dart';
+
 import 'archive_exception.dart';
+import 'byte_order.dart';
 
 abstract class InputStreamBase {
   /**

@@ -2,40 +2,32 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
-//import 'package:simple_permissions/simple_permissions.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'askregister.dart';
-import 'package:ubihrm/services/attandance_gethome.dart';
-import 'package:ubihrm/services/attandance_saveimage.dart';
-import 'package:ubihrm/model/timeinout.dart';
-import 'attendance_summary.dart';
-import 'punchlocation.dart';
-import 'drawer.dart';
-import 'package:ubihrm/model/model.dart';
-import 'package:ubihrm/services/attandance_services.dart';
-import '../leave/myleave.dart';
-import 'package:ubihrm/services/attandance_newservices.dart';
-//import 'leave_summary.dart';
-import 'package:flutter/services.dart';
-import 'package:geocoder/geocoder.dart';
-//import 'package:location/location.dart';
-import 'dart:async';
-import 'package:url_launcher/url_launcher.dart';
-import '../global.dart';
-import 'punchlocation_summary.dart';
-import 'settings.dart';
-import 'profile.dart';
-import 'reports.dart';
-import 'package:ubihrm/services/attandance_services.dart';
-import 'package:ubihrm/services/attandance_newservices.dart';
-/*import 'openCameraInActivity.dart';
-import 'package:camera/camera.dart';*/
-import 'package:connectivity/connectivity.dart';
 import 'package:ubihrm/global.dart';
+import 'package:ubihrm/model/timeinout.dart';
+import 'package:ubihrm/services/attandance_fetch_location.dart';
+import 'package:ubihrm/services/attandance_gethome.dart';
+import 'package:ubihrm/services/attandance_newservices.dart';
+import 'package:ubihrm/services/attandance_saveimage.dart';
+import 'package:ubihrm/services/attandance_services.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../global.dart';
 import '../home.dart';
+import '../leave/myleave.dart';
+import 'askregister.dart';
+import 'attendance_summary.dart';
+import 'drawer.dart';
+import 'profile.dart';
+import 'punchlocation.dart';
+import 'punchlocation_summary.dart';
+import 'reports.dart';
+import 'settings.dart';
 
 
 // This app is a stateful, it tracks the user's current choice.

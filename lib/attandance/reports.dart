@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
-import '../all_reports.dart';
-import '../global.dart';
-import '../drawer.dart';
-import 'today_attendance_report.dart';
-import 'late_comers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'settings.dart';
-import 'earlyLeavers.dart';
-//import 'timeoff_list.dart';
-import 'cust_date_report.dart';
-import 'attendance_report_yes.dart';
-import 'last_seven_days.dart';
-import 'thismonth.dart';
-import 'visits_list.dart';
-import 'home.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'payment.dart';
-import 'profile.dart';
+
+import '../all_reports.dart';
+import '../appbar.dart';
+import '../b_navigationbar.dart';
+import '../drawer.dart';
+import '../global.dart';
+import 'Employeewise_att.dart';
+import 'attendance_report_yes.dart';
+import 'cust_date_report.dart';
 import 'department_att.dart';
 import 'designation_att.dart';
-import 'Employeewise_att.dart';
-import '../b_navigationbar.dart';
-import '../appbar.dart';
+import 'earlyLeavers.dart';
+import 'last_seven_days.dart';
+import 'late_comers.dart';
+import 'payment.dart';
+import 'thismonth.dart';
+import 'today_attendance_report.dart';
+import 'visits_list.dart';
 
 
 

@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/model/model.dart';
-import 'package:dio/dio.dart';
-import 'package:ubihrm/global.dart';
-import 'dart:convert';
 import 'dart:async';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter/painting.dart';
+import 'dart:convert';
 import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/global.dart';
+import 'package:ubihrm/model/model.dart';
 
 import '../login_page.dart';
 
@@ -25,16 +26,9 @@ print("*********GET ALL PERMISSION**********");
     "organization": emp.organization,
     "userprofileid": emp.userprofileid,
   });
-print(path1 + "getAllPermission");
-print(emp.employeeid);
-print(emp.organization);
-print(emp.userprofileid);
-
-  Response<String> response =
-  await dio.post(path1 + "getAllPermission", data: formData);
-  //print(path + "getAllPermission");
+  print(path1 + "getAllPermission?employeeid=${emp.employeeid}&organization=${emp.organization}&userprofileid=${emp.userprofileid}");
+  Response<String> response = await dio.post(path1 + "getAllPermission", data: formData);
   Map responseJson = json.decode(response.data.toString());
-// print("1.  "+responseJson.toString());
   List<Permission> permlist = createPermList(responseJson['orgperm']);
   List<Permission> permlist1 = createUserPermList(responseJson['userperm']);
 
@@ -83,9 +77,6 @@ getModulePermission(String moduleid, String permission_type){
 }
 
 List<Permission> createUserPermList(List data) {
-
-
-
   List<Permission> list = new List();
   for (int i = 0; i < data.length; i++) {
 

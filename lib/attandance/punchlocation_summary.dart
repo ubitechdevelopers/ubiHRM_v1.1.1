@@ -1,26 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'dart:convert';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/b_navigationbar.dart';
+import 'package:ubihrm/global.dart';
 import 'package:ubihrm/home.dart';
 import 'package:ubihrm/services/services.dart';
+
 import '../drawer.dart';
 import '../profile.dart';
-import 'home.dart';
-import 'package:ubihrm/global.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
-import '../services/attandance_services.dart';
 import '../services/attandance_newservices.dart';
-import 'punchlocation.dart';
-import 'reports.dart';
-import 'profile.dart';
-import 'settings.dart';
 import '../services/attandance_saveimage.dart';
-import 'package:ubihrm/b_navigationbar.dart';
-import 'teampunchlocatio_summary.dart';
+import '../services/attandance_services.dart';
 import 'image_view.dart';
+import 'punchlocation.dart';
+import 'teampunchlocatio_summary.dart';
 
 //import 'package:intl/intl.dart';
 

@@ -1,21 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../drawer.dart';
-import 'home.dart';
+import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
 
-import '../services/attandance_services.dart';
-import '../services/attandance_newservices.dart';
-import 'punchlocation.dart';
-import 'reports.dart';
-import 'profile.dart';
-import 'settings.dart';
-import '../services/attandance_saveimage.dart';
 import '../appbar.dart';
-import 'package:ubihrm/b_navigationbar.dart';
+import '../drawer.dart';
+import '../services/attandance_newservices.dart';
+import '../services/attandance_saveimage.dart';
+import '../services/attandance_services.dart';
+import 'home.dart';
 import 'punchlocation_summary.dart';
 //import 'Image_view.dart';
 

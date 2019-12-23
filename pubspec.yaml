@@ -97,6 +97,7 @@ flutter:
         - assets/repo.ico
         - assets/approval.png
         - assets/spinner.gif
+        - assets/splash.gif
         - assets/icons/Attendance_icon.png
         - assets/icons/graph_icon.png
         - assets/icons/leave_icon.png
@@ -108,11 +109,6 @@ flutter:
         - assets/icons/Dashboard_icon.png
         - assets/icons/Flexi_icon.png
         - assets/icons/visits_icon.png
-
-
-
-
-
 
   fonts:
     - family: WorkSansSemiBold

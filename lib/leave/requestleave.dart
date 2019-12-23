@@ -1,21 +1,16 @@
-import 'package:flutter/material.dart';
-import '../drawer.dart';
-import '../graphs.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
-import '../global.dart';
-import '../services/leave_services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../login_page.dart';
-import '../model/model.dart';
-import 'myleave.dart';
-import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import '../services/services.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import '../home.dart';
-import 'approval.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../appbar.dart';
 import '../b_navigationbar.dart';
+import '../drawer.dart';
+import '../global.dart';
+import '../model/model.dart';
+import '../services/leave_services.dart';
+import 'myleave.dart';
 
 class RequestLeave extends StatefulWidget {
   @override
@@ -154,6 +149,7 @@ class _RequestLeaveState extends State<RequestLeave> {
         context,
         MaterialPageRoute(builder: (context) => MyLeave()), (Route<dynamic> route) => false,
       );
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Leave has been applied successfully!'),
@@ -161,6 +157,7 @@ class _RequestLeaveState extends State<RequestLeave> {
       );
     }
     else if(islogin1=="false"){
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         content: new Text('There is some problem while applying for Leave.'),
@@ -172,6 +169,7 @@ class _RequestLeaveState extends State<RequestLeave> {
       //showInSnackBar("There is some problem while applying for Leave.");
     }
     else if(islogin1=="wrong"){
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Leave format is wrong'),
@@ -194,6 +192,7 @@ class _RequestLeaveState extends State<RequestLeave> {
       //showInSnackBar("Leave format is wrong");
     }*/
     else if(islogin1=="alreadyApply"){
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         content: new Text('You have already applied for same date'),
@@ -205,6 +204,7 @@ class _RequestLeaveState extends State<RequestLeave> {
       //showInSnackBar("You already applied for same date");
     }
     else{
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Poor Network Connection'),

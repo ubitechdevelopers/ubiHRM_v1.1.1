@@ -2,16 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
-import 'package:ubihrm/attandance/drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/attandance/drawer.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/attandance_services.dart';
+
 import 'employee_list.dart';
 import 'home.dart';
-import 'settings.dart';
 import 'profile.dart';
 import 'reports.dart';
+import 'settings.dart';
 
 class AddEmployee extends StatefulWidget {
   @override

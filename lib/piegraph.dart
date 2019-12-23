@@ -1,7 +1,5 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
 
 class DonutAutoLabelChart extends StatelessWidget {
   final List<charts.Series> seriesList;

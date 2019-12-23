@@ -2,14 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
-import 'package:ubihrm/services/attandance_services.dart';
-import 'outside_label.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../drawer.dart';
-import '../appbar.dart';
-import '../global.dart';
-import '../b_navigationbar.dart';
+import 'package:ubihrm/services/attandance_services.dart';
+
 import './image_view.dart';
+import '../appbar.dart';
+import '../b_navigationbar.dart';
+import '../drawer.dart';
+import '../global.dart';
+import 'outside_label.dart';
 
 // This app is a stateful, it tracks the user's current choice.
 class TodayAttendance extends StatefulWidget {

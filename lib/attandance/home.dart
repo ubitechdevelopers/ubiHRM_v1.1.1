@@ -2,26 +2,28 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/b_navigationbar.dart';
+import 'package:ubihrm/model/timeinout.dart';
+import 'package:ubihrm/services/attandance_fetch_location.dart';
+import 'package:ubihrm/services/attandance_gethome.dart';
+import 'package:ubihrm/services/attandance_newservices.dart';
+import 'package:ubihrm/services/attandance_saveimage.dart';
+import 'package:ubihrm/services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../drawer.dart';
+import '../global.dart';
+import '../home.dart';
 import '../profile.dart';
 import 'askregister.dart';
-import 'package:ubihrm/services/attandance_gethome.dart';
-import 'package:ubihrm/services/attandance_saveimage.dart';
-import 'package:ubihrm/model/timeinout.dart';
 import 'attendance_summary.dart';
-import '../drawer.dart';
-import 'package:ubihrm/services/services.dart';
-import 'package:ubihrm/services/attandance_newservices.dart';
-import '../global.dart';
-import 'dart:async';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:ubihrm/b_navigationbar.dart';
-import '../home.dart';
 
 
 

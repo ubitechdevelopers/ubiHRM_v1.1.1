@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'login.dart';
-import 'privacypolicy.dart';
-import 'attendance_summary.dart';
-import 'about.dart';
-import 'package:ubihrm/services/attandance_services.dart';
-import 'home.dart';
-import 'settings.dart';
-import 'reports.dart';
-import 'package:ubihrm/global.dart' ;
-import 'package:share/share.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/global.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'home.dart';
+import 'login.dart';
 import 'payment.dart';
 import 'profile.dart';
+import 'reports.dart';
+import 'settings.dart';
 import 'userGuide.dart';
 
 
@@ -68,7 +66,6 @@ class _AppDrawerState extends State<AppDrawer> {
           setState(() {
             _checkLoaded = false;
           });
-
         }
       }));
     });

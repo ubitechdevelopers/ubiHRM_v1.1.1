@@ -2,18 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
-//import 'package:simple_permissions/simple_permissions.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'timeoff_summary.dart';
-import 'package:ubihrm/services/timeoff_services.dart';
-import 'package:ubihrm/model/model.dart';
-import '../b_navigationbar.dart';
-import '../global.dart';
-import '../drawer.dart';
-import '../appbar.dart';
 import 'package:rounded_modal/rounded_modal.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/services/timeoff_services.dart';
+
+import '../appbar.dart';
+import '../b_navigationbar.dart';
+import '../drawer.dart';
+import '../global.dart';
 import 'timeoff_summary.dart';
 
 // This app is a stateful, it tracks the user's current choice.

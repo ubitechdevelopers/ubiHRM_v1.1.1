@@ -4,26 +4,17 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
-//import 'package:simple_permissions/simple_permissions.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../global.dart';
-import 'login.dart';
-import 'package:ubihrm/services/attandance_gethome.dart';
-import 'package:ubihrm/services/attandance_saveimage.dart';
-import 'package:ubihrm/model/timeinout.dart';
-import 'attendance_summary.dart';
-import 'punchlocation.dart';
-import 'drawer.dart';
 import 'package:ubihrm/model/model.dart';
-import 'package:ubihrm/services/attandance_services.dart';
+import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/attandance_newservices.dart';
+
+import '../global.dart';
+import 'drawer.dart';
 import 'home.dart';
-import 'dart:io';
-import 'dart:async';
-import 'settings.dart';
+import 'login.dart';
 import 'reports.dart';
+import 'settings.dart';
 
 // This app is a stateful, it tracks the user's current choice.
 class ProfilePage extends StatefulWidget {

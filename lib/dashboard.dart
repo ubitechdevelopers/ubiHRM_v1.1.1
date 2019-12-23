@@ -1,17 +1,19 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'drawer.dart';
-import 'piegraph.dart';
-import 'graphs.dart';
-import 'global.dart';
-import 'b_navigationbar.dart';
-import 'services/services.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'appbar.dart';
+import 'b_navigationbar.dart';
+import 'drawer.dart';
+import 'global.dart';
+import 'graphs.dart';
 import 'login_page.dart';
 import 'model/model.dart';
-import 'dart:async';
-import 'appbar.dart';
-import 'package:intl/intl.dart';
-import 'package:connectivity/connectivity.dart';
+import 'piegraph.dart';
+import 'services/services.dart';
 
 class DashboardMain extends StatefulWidget {
   @override

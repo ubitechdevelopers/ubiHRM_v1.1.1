@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'archive_exception.dart';
 import 'byte_order.dart';
 

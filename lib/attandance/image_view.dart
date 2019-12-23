@@ -2,13 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:photo_view/photo_view.dart';
+
 import '../global.dart';
-/*import 'openCameraInActivity.dart';
-import 'package:camera/camera.dart';*/
-import 'package:connectivity/connectivity.dart';
-import '../appbar.dart';
 
 // This app is a stateful, it tracks the user's current choice.
 void main() => runApp(new ImageView());

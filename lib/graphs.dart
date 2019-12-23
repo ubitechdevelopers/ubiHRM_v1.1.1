@@ -1,8 +1,8 @@
+import 'dart:math';
+
+import 'package:charts_flutter/flutter.dart' as charts;
 /// Bar chart example
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'dart:math';
-import 'package:intl/intl.dart';
 
 /// Example of a grouped bar chart with three series, each rendered with GroupedFillColorBarChart
 /// different fill colors.HorizontalBarLabelCustomChart

@@ -1,24 +1,17 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'package:ubihrm/profile.dart';
-import 'package:ubihrm/services/services.dart';
-import '../drawer.dart';
-import 'package:ubihrm/services/attandance_services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
-//import 'package:Shrine/addShift.dart';
 import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import '../home.dart';
-import 'home.dart';
-import 'settings.dart';
-import 'profile.dart';
-import 'reports.dart';
-import 'image_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
+import 'package:ubihrm/profile.dart';
+import 'package:ubihrm/services/attandance_services.dart';
+import 'package:ubihrm/services/services.dart';
+
+import '../drawer.dart';
 import '../global.dart';
-import '../appbar.dart';
 import 'flexi_time.dart';
+import 'image_view.dart';
 
 class FlexiList extends StatefulWidget {
   @override

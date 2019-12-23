@@ -1,17 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:ubihrm/attandance/punchlocation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:ubihrm/global.dart' as globals;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart';
-import 'package:ubihrm/drawer.dart';
-import 'package:ubihrm/model/model.dart';
 import 'package:url_launcher/url_launcher.dart';
-//import 'package:ubihrm/attandance/globals.dart';
-import 'package:validate/validate.dart';
 
 
 
@@ -31,12 +25,33 @@ punch(comments, client_name, empid, location_addr1, lid, act, orgdir, latit,
   print("\nlatit: " + latit);
   print("\nlongi: " + longi);*/
 }
+
+Future checkMandUpdate() async {
+  print(path_ubiattendance+ 'checkMandUpdate?platform=Android');
+  final res = await http.get(path_ubiattendance+ 'checkMandUpdate?platform=Android');
+
+  // print('*****************************'+((json.decode(res.body.toString()))[0]['is_update']).toString()+'*****************************');
+  return ((json.decode(res.body))[0]['is_update']).toString();
+}
+
+Future UpdateStatus() async {
+  try{
+    print(path_ubiattendance+ 'UpdateStatus?platform=Android1');
+    final res = await http.get(path_ubiattendance+ 'UpdateStatus?platform=Android1');
+    return ((json.decode(res.body.toString()))[0]['status']).toString();
+  }
+  catch(e){
+    print("Error finding current version of the app");
+    return"error";
+  }
+}
+
 Future checkNow() async {
-  final prefs = await SharedPreferences.getInstance();
-  String path_ubiattendance1 = prefs.getString('path_ubiattendance');
-  final res = await http.get(path_ubiattendance1+'getAppVersion?platform=Android1');
+  final res = await http.get(path_ubiattendance + 'getAppVersion?platform=Android1');
+  print(path_ubiattendance + 'getAppVersion?platform=Android1');
   return ((json.decode(res.body.toString()))[0]['version']).toString();
 }
+
 Future<String> PunchSkip(lid) async {
   // print('push skip called');
   Map MarkPunchMap = {'status': 'failure'};
@@ -137,6 +152,7 @@ Future<Map> registerEmp(name,email,pass,phone) async {
   print('---------------------------------');
   return data;
 }
+
 Future<String> checkAdminSts() async{
   final prefs = await SharedPreferences.getInstance();
   String path_ubiattendance1 = prefs.getString('path_ubiattendance');
@@ -977,7 +993,7 @@ Future<List<Attn>> getCDateAttn(listType, date) async {
   String path_ubiattendance1 = prefs.getString('path_ubiattendance');
   String orgdir = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? "";
-
+  print(path_ubiattendance1 + 'getCDateAttendances_new?refno=$orgdir&date=$date&datafor=$listType&empid=$empid');
   final response = await http.get(
       path_ubiattendance1 + 'getCDateAttendances_new?refno=$orgdir&date=$date&datafor=$listType&empid=$empid');
   final res = json.decode(response.body);

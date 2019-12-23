@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/global.dart' as globals;
+import 'package:ubihrm/services/attandance_services.dart';
+
 import '../global.dart';
 import 'askregister.dart';
-import 'package:ubihrm/services/checkLogin.dart';
-import 'package:ubihrm/services/attandance_services.dart';
-import 'self_register_emp.dart';
 import 'register_org.dart';
+import 'self_register_emp.dart';
 
 class AskRegisteration extends StatefulWidget {
   AskRegisteration({Key key, this.title}) : super(key: key);

@@ -2,31 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'package:ubihrm/services/services.dart';
-import '../profile.dart';
-import '../services/attandance_fetch_location.dart';
-//import 'package:simple_permissions/simple_permissions.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'askregister.dart';
-import '../services/attandance_gethome.dart';
-import '../services/attandance_saveimage.dart';
-import '../drawer.dart';
-import '../services/attandance_newservices.dart';
-import 'home.dart';
-import 'dart:async';
-import 'package:url_launcher/url_launcher.dart';
-import '../global.dart';
-import 'punchlocation_summary.dart';
-import 'settings.dart';
-import 'profile.dart';
-import 'reports.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:ubihrm/model/timeinout.dart';
-import '../appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
+import 'package:ubihrm/model/timeinout.dart';
+import 'package:ubihrm/services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../drawer.dart';
+import '../global.dart';
+import '../profile.dart';
+import '../services/attandance_fetch_location.dart';
+import '../services/attandance_gethome.dart';
+import '../services/attandance_newservices.dart';
+import '../services/attandance_saveimage.dart';
+import 'askregister.dart';
+import 'punchlocation_summary.dart';
 
 // This app is a stateful, it tracks the user's current choice.
 class PunchLocation extends StatefulWidget {

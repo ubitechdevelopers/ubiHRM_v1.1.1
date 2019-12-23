@@ -2,35 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
-//import 'package:simple_permissions/simple_permissions.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-//import 'login.dart';
-import 'package:ubihrm/services/attandance_gethome.dart';
-import 'package:ubihrm/services/attandance_saveimage.dart';
-import 'package:ubihrm/model/timeinout.dart';
-//import 'attendance_summary.dart';
-//import 'punchlocation.dart';
-import '../drawer.dart';
-import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-//import 'package:datetime_picker_formfield/time_picker_formfield.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/model.dart' as TimeOffModal;
+import 'package:ubihrm/services/attandance_gethome.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
-import 'timeoff_summary.dart';
-import '../global.dart';
-import '../b_navigationbar.dart';
+
 import '../appbar.dart';
+import '../b_navigationbar.dart';
+import '../drawer.dart';
+import '../global.dart';
 import 'timeoff_summary.dart';
-
-
-//import 'settings.dart';
-import '../home.dart';
-//import 'reports.dart';
-import '../profile.dart';
 
 // This app is a stateful, it tracks the user's current choice.
 class TimeOffPage extends StatefulWidget {

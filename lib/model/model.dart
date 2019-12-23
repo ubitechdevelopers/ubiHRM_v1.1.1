@@ -159,6 +159,18 @@ class Salary{
 }
 
 
+class Payroll{
+  String id;
+  String name;
+  String month;
+  String paid_days;
+  String EmployeeCTC;
+  String Currency;
+
+  Payroll({this.id,this.name, this.month, this.paid_days,this.EmployeeCTC,this.Currency});
+}
+
+
 
 /*class Profile{
   String uid;

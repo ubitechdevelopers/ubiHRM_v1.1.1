@@ -1,27 +1,29 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'drawer.dart';
-import 'global.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'b_navigationbar.dart';
-import 'services/services.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'all_reports.dart';
+import 'attandance/flexi_time.dart';
+import 'attandance/home.dart';
+import 'attandance/punchlocation_summary.dart';
+import 'b_navigationbar.dart';
+import 'dashboard.dart';
+import 'drawer.dart';
+import 'expence/expenselist.dart';
+import 'global.dart';
+import 'leave/myleave.dart';
 import 'login_page.dart';
 import 'model/model.dart';
-import 'leave/myleave.dart';
-import 'attandance/punchlocation_summary.dart';
-import 'expence/expenselist.dart';
-import 'timeoff/timeoff_summary.dart';
-import 'dart:async';
+import 'payroll//mypayroll_list.dart';
 import 'profile.dart';
-import 'attandance/home.dart';
-import 'all_reports.dart';
-import 'services/attandance_fetch_location.dart';
 import 'salary/mysalary_list.dart';
-import 'package:intl/intl.dart';
-import 'dashboard.dart';
-import 'attandance/flexi_time.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'services/attandance_fetch_location.dart';
+import 'services/services.dart';
+import 'timeoff/timeoff_summary.dart';
 
 
 
@@ -110,9 +112,11 @@ class _HomePageStatemain extends State<HomePageMain> {
       });
 
       islogin().then((Widget configuredWidget) {
-        setState(() {
-          mainWidget = configuredWidget;
-        });
+        if(mounted) {
+          setState(() {
+            mainWidget=configuredWidget;
+          });
+        }
       });
     } else {
       setState(() {
@@ -156,6 +160,7 @@ class _HomePageStatemain extends State<HomePageMain> {
       perAttendance = getModulePermission("5", "view");
       perTimeoff = getModulePermission("179", "view");
       perSalary = getModulePermission("66", "view");
+      perPayroll = getModulePermission("458", "view");
       perExpense = getModulePermission("170", "view");
       perFlexi = getModulePermission("448", "view");
       perPunchLocation = getModulePermission("305", "view");
@@ -321,6 +326,7 @@ class _HomePageStatemain extends State<HomePageMain> {
               if(perFlexi == '1') makeDashboardItem("Flexi time", Flexitime(), 'assets/icons/Flexi_icon.png'),
               if(perExpense == '1') makeDashboardItem("Expenses", MyExpence(), 'assets/icons/Expense_icon.png'),
               if(perSalary == '1') makeDashboardItem("Salary", SalarySummary(), 'assets/icons/Salary_icon.png'),
+              if(perPayroll == '1') makeDashboardItem("Payroll", PayrollSummary(), 'assets/icons/Salary_icon.png'),
               makeDashboardItem("Dashboard",DashboardMain(), 'assets/icons/Dashboard_icon.png'),
               if(perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1') makeDashboardItem("Reports", AllReports(), 'assets/icons/graph_icon.png'),
               makeDashboardItem("Profile", CollapsingTab(), 'assets/icons/profile_icon.png')
@@ -381,6 +387,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 fontSize: 15.0, color: Colors.black)),
                       ],
                     )),
+
                 GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -408,6 +415,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                                 fontSize: 15.0, color: Colors.black)),
                       ],
                     )),
+
                 if( perAttendance == '1')
                   GestureDetector(
                       onTap: () {
@@ -473,11 +481,11 @@ class _HomePageStatemain extends State<HomePageMain> {
                 SizedBox(
                   height: 60.0,
                 ),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     //    perSet=='1'? GestureDetector(
-
                     perTimeoff == '1'
                         ? GestureDetector(
                         onTap: () {
@@ -605,6 +613,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                             ],
                           ))
                           : Center(),
+
                       (perSalary == '1')
                           ? GestureDetector(
                         //   GestureDetector(
@@ -628,6 +637,37 @@ class _HomePageStatemain extends State<HomePageMain> {
                                             'assets/icons/Salary_icon.png'),
                                       ),
                                       color: circleIconBackgroundColor())),
+                              Text('Salary',
+                                  textAlign: TextAlign.center,
+                                  style: new TextStyle(
+                                      fontSize: 15.0, color: Colors.black)),
+                            ],
+                          ))
+                          : Center(),
+
+                      (perPayroll == '1')
+                          ? GestureDetector(
+                        //   GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PayrollSummary()),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              new Container(
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: new BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: new DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            'assets/icons/Salary_icon.png'),
+                                      ),
+                                      color: circleIconBackgroundColor())),
                               Text('Payroll',
                                   textAlign: TextAlign.center,
                                   style: new TextStyle(
@@ -635,6 +675,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                             ],
                           ))
                           : Center(),
+
                       (perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1')
                           ? GestureDetector(
                         //   GestureDetector(

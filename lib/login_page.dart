@@ -1,17 +1,18 @@
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
-import 'home.dart';
-import 'package:ubihrm/model/model.dart';
-import 'package:ubihrm/services/checkLogin.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'global.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/model/model.dart';
+import 'package:ubihrm/services/attandance_fetch_location.dart';
+import 'package:ubihrm/services/checkLogin.dart';
+
 import 'attandance/forgot_password.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+import 'global.dart';
+import 'home.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -1894,14 +1895,14 @@ class _LoginPageState extends State<LoginPage>
     });
   }
 
-  markAttByQR(var qr, BuildContext context,token1) async{
+  /*markAttByQR(var qr, BuildContext context,token1) async{
     Login dologin = Login();
     setState(() {
       loader = true;
     });
     var islogin = await dologin.markAttByQR(qr,token1, context);
     print(islogin);
-    if(islogin=='true'){
+    if(islogin=='Success'){
       setState(() {
         loader = false;
       });
@@ -1970,19 +1971,19 @@ class _LoginPageState extends State<LoginPage>
       setState(() {
         loader = false;
       });
-      /*Scaffold.of(context)
+      *//*Scaffold.of(context)
           .showSnackBar(
-          SnackBar(content: Text("Attendance is already marked")));*/
+          SnackBar(content: Text("Attendance is already marked")));*//*
     }
-  }
+  }*/
 
 
-  /*markAttByQR(var qr, BuildContext context,token1) async{
+  markAttByQR(var qr, BuildContext context, token1) async{
     Login dologin = Login();
     setState(() {
       loader = true;
     });
-    var islogin = await dologin.markAttByQR(qr,token1, context);
+    var islogin = await dologin.markAttByQR(qr, context, token1);
     print(islogin);
     if(islogin=="Success"){
       setState(() {
@@ -2001,9 +2002,9 @@ class _LoginPageState extends State<LoginPage>
         context,
         MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
       );
-      *//* Scaffold.of(context)
+       Scaffold.of(context)
           .showSnackBar(
-          SnackBar(content: Text("Attendance marked successfully.")));*//*
+          SnackBar(content: Text("Attendance marked successfully.")));
     }else if(islogin=="failure"){
       setState(() {
         loader = false;
@@ -2022,9 +2023,9 @@ class _LoginPageState extends State<LoginPage>
         MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
       );
 
-      *//*  Scaffold.of(context)
+        Scaffold.of(context)
           .showSnackBar(
-          SnackBar(content: Text("Invalid login credentials")));*//*
+          SnackBar(content: Text("Invalid login credentials")));
     }else if(islogin=="imposed"){
       setState(() {
         loader = false;
@@ -2042,11 +2043,11 @@ class _LoginPageState extends State<LoginPage>
       setState(() {
         loader = false;
       });
-      *//*Scaffold.of(context)
+      Scaffold.of(context)
           .showSnackBar(
-          SnackBar(content: Text("Attendance is already marked")));*//*
+          SnackBar(content: Text("Attendance is already marked")));
     }
-  }*/
+  }
 
 
   Future scan() async {

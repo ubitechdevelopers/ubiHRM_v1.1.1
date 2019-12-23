@@ -1,11 +1,9 @@
-import 'package:ubihrm/model/user.dart';
-import 'package:dio/dio.dart';
-import 'package:ubihrm/model/employee.dart';
 import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../global.dart' as globals;
-import 'attandance_fetch_location.dart';
-import 'package:ubihrm/model/timeinout.dart';
 
 
 class Home{

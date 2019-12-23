@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'global.dart';
-import 'drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'home.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'profile.dart';
-import 'b_navigationbar.dart';
+
 import 'appbar.dart';
-import 'attandance/reports.dart';
 import 'attandance/flexi_report.dart';
+import 'attandance/reports.dart';
+import 'b_navigationbar.dart';
+import 'drawer.dart';
+import 'global.dart';
+import 'home.dart';
 import 'leave/leave_reports.dart';
-import 'timeoff/timeoff_reports.dart';
-import 'services/services.dart';
 import 'model/model.dart';
+import 'services/services.dart';
+import 'timeoff/timeoff_reports.dart';
 
 
 class AllReports extends StatefulWidget {

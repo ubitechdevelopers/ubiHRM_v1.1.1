@@ -12,23 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:flutter/material.dart';
-
-
-import 'home.dart';
-import 'login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../global.dart';
-import 'package:flutter/services.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:location/location.dart';
 import 'dart:async';
-import 'check_update.dart';
+
+import 'package:flutter/material.dart';
+import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/home.dart';
+import 'package:ubihrm/login_page.dart';
 import 'package:ubihrm/services/attandance_services.dart';
+
+import 'check_update.dart';
 
 
 class ShrineApp extends StatefulWidget {
-
   @override
   _ShrineAppState createState() => _ShrineAppState();
 }
@@ -41,8 +37,10 @@ class _ShrineAppState extends State<ShrineApp> {
   String long="";
   int response;
   int responsestate;
-  String cur_ver='3.0.6',new_ver='3.0.6';
+  String cur_ver='1.0.5',new_ver='1.0.5';
+  String updatestatus = "0";
   Widget _defaultHome = new LoginPage();
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +48,11 @@ class _ShrineAppState extends State<ShrineApp> {
     checkNow().then((res){
       setState(() {
         new_ver=res;
+      });
+    });
+    UpdateStatus().then((res){
+      setState(() {
+        updatestatus = res;
       });
     });
   }
@@ -67,20 +70,21 @@ class _ShrineAppState extends State<ShrineApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ubiAttendance',
-      home: (cur_ver == new_ver)?HomePage():CheckUpdate(),
-      //home: (true)?HomePage():CheckUpdate(),
-      routes: {
-        // When we navigate to the "/" route, build the FirstScreen Widget
-        '/login': (context) => LoginPage(),
-        // When we navigate to the "/second" route, build the SecondScreen Widget
-        '/home': (context) => HomePage()
+      title: 'ubiHRM',
 
-  },
+      home:((cur_ver == new_ver || new_ver=="error") || updatestatus=='0')?HomePageMain():CheckUpdate(),
+      //home: (true)?HomePage():CheckUpdate(),
+      /*routes: {
+        // When we navigate to the "/" route, build the FirstScreen Widget
+        'ubihrm/login_page': (context) => LoginPage(),
+        // When we navigate to the "/second" route, build the SecondScreen Widget
+        'ubihrm/home': (context) => HomePageMain()
+      },*/
     );
   }
+
   getUpdate(response){
-    return (response==1) ? new HomePage() : new LoginPage();
+    return (response==1) ? new HomePageMain() : new LoginPage();
   }
 }
 

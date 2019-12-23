@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart' ;
-import 'askregister.dart';
-import 'package:ubihrm/services/checkloginn.dart';
-import 'home.dart';
-import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/model/user.dart';
+import 'package:ubihrm/services/attandance_services.dart';
+import 'package:ubihrm/services/checkloginn.dart';
+
+import 'askregister.dart';
+import 'home.dart';
 
 
 class SelfRegister extends StatefulWidget {
@@ -190,6 +189,7 @@ class _SelfRegister extends State<SelfRegister> {
                           if(_isButtonDisabled)
                             return null;
                           if(_name.text=='') {
+                            // ignore: deprecated_member_use
                             showDialog(context: context, child:
                             new AlertDialog(
                               title: new Text("Alert"),
@@ -200,6 +200,7 @@ class _SelfRegister extends State<SelfRegister> {
                           } else if(!(validateEmail(_email.text))) {
                             //print((validateEmail(_email.text)).toString());
 
+                              // ignore: deprecated_member_use
                               showDialog(context: context, child:
                               new AlertDialog(
                                 title: new Text("Alert"),
@@ -209,6 +210,7 @@ class _SelfRegister extends State<SelfRegister> {
                               return null;
 
                           }else if(_pass.text.length<6) {
+                            // ignore: deprecated_member_use
                             showDialog(context: context, child:
                             new AlertDialog(
                               title: new Text("Alert"),
@@ -217,6 +219,7 @@ class _SelfRegister extends State<SelfRegister> {
                             FocusScope.of(context).requestFocus(__pass);
                             return null;
                           }else if(!(validateMobile(_phone.text))) {
+                            // ignore: deprecated_member_use
                             showDialog(context: context, child:
                             new AlertDialog(
                               title: new Text("Alert"),
@@ -237,6 +240,7 @@ class _SelfRegister extends State<SelfRegister> {
                               print(res);
 
                               if (res['sts'] == '1') {
+                                // ignore: deprecated_member_use
                                 showDialog(context: context, child:
                                 new AlertDialog(
                                   title: new Text("ubiAttendance"),
@@ -256,6 +260,7 @@ class _SelfRegister extends State<SelfRegister> {
                                 ));
 
                               } else if (res['sts'] == '2') {
+                                // ignore: deprecated_member_use
                                 showDialog(context: context, child:
                                 new AlertDialog(
                                   title: new Text("ubiAttendance"),
@@ -263,6 +268,7 @@ class _SelfRegister extends State<SelfRegister> {
                                       "Email id is already registered"),
                                 ));
                               } else if (res['sts'] == '3') {
+                                // ignore: deprecated_member_use
                                 showDialog(context: context, child:
                                 new AlertDialog(
                                   title: new Text("ubiAttendance"),
@@ -270,6 +276,7 @@ class _SelfRegister extends State<SelfRegister> {
                                       "Phone No. is already registered"),
                                 ));
                               } else {
+                                // ignore: deprecated_member_use
                                 showDialog(context: context, child:
                                 new AlertDialog(
                                   title: new Text("ubiAttendance"),
@@ -288,6 +295,7 @@ class _SelfRegister extends State<SelfRegister> {
 
                               });
                               print('******************************');
+                              // ignore: deprecated_member_use
                               showDialog(context: context, child:
                               new AlertDialog(
                                 title: new Text("Error"),

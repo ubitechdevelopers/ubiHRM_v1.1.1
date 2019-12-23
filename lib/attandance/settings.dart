@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../global.dart';
+import 'change_password.dart';
 import 'department.dart';
 import 'designation.dart';
+import 'drawer.dart';
 import 'employee_list.dart';
-import 'shift_list.dart';
-import 'change_password.dart';
-import 'permission.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
-import 'profile.dart';
-//import 'package:ubihrm/attandance/globals.dart';
-import '../global.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'payment.dart';
+import 'permission.dart';
+import 'profile.dart';
 import 'reports.dart';
+import 'shift_list.dart';
 
 class Settings extends StatefulWidget {
   @override

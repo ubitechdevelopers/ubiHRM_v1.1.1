@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
-import 'global.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'login_page.dart';
-import 'profile.dart';
-import 'all_reports.dart';
-import 'model/model.dart';
-import 'services/services.dart';
-import 'settings.dart';
-import 'package:ubihrm/salary/allsalary_list.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/payroll/allpayroll_list.dart';
+import 'package:ubihrm/salary/allsalary_list.dart';
+
+import 'all_reports.dart';
+import 'global.dart';
+import 'home.dart';
+import 'login_page.dart';
+import 'profile.dart';
+import 'settings.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -86,9 +86,9 @@ class _AppDrawerState extends State<AppDrawer> {
                   appStartColor(),
                   appStartColor(),
                   //Color.fromRGBO(0,102,153,1.0),
-              //  Color.fromRGBO(7,99,145,1.0),
-              //Color.fromRGBO(12,99,142,1.0),
-              // Color.fromRGBO(34,94,124,1.0),
+                  //Color.fromRGBO(7,99,145,1.0),
+                  //Color.fromRGBO(12,99,142,1.0),
+                  // Color.fromRGBO(34,94,124,1.0),
                 ],
               ),
             ),
@@ -169,7 +169,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     ),
 
                   )]):Center(),
-        ]
+                 ]
               ),
 
             ),
@@ -204,6 +204,7 @@ class _AppDrawerState extends State<AppDrawer> {
               );
             },
           ),
+
           (perSalary=='1') ? new ListTile(
             title: Row(
               children: <Widget>[
@@ -216,7 +217,21 @@ class _AppDrawerState extends State<AppDrawer> {
                 context,
                 MaterialPageRoute(builder: (context) => allSalarySummary()),
               );
+            },
+          ):Center(),
 
+          (perPayroll=='1') ? new ListTile(
+            title: Row(
+              children: <Widget>[
+                Icon(Icons.monetization_on,size: 20.0),SizedBox(width: 5.0),
+                new Text("Team's Payroll", style: new TextStyle(fontSize: 15.0)),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => allPayrollSummary()),
+              );
             },
           ):Center(),
 

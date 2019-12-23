@@ -1,13 +1,15 @@
-import 'package:ubihrm/model/user.dart';
-import 'package:dio/dio.dart';
-import 'package:ubihrm/model/employee.dart';
 import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart' as globals;
-import 'attandance_gethome.dart';
+import 'package:ubihrm/model/employee.dart';
 import 'package:ubihrm/model/timeinout.dart';
-import 'attandance_saveimage.dart';
+import 'package:ubihrm/model/user.dart';
+
+import 'attandance_gethome.dart';
 import 'attandance_newservices.dart';
+import 'attandance_saveimage.dart';
 
 class Login{
 

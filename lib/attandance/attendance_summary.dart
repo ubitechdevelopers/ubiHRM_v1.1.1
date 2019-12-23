@@ -1,23 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/b_navigationbar.dart';
+import 'package:ubihrm/global.dart';
+import 'package:ubihrm/profile.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
+
+import './image_view.dart';
 import '../drawer.dart';
 import 'home.dart';
-import 'package:ubihrm/global.dart' as globals;
-import 'package:ubihrm/services/attandance_services.dart';
-import 'settings.dart';
-import 'profile.dart';
-import 'reports.dart';
-import 'package:ubihrm/global.dart';
-import 'package:ubihrm/b_navigationbar.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'package:ubihrm/profile.dart';
-import '../appbar.dart';
-import 'package:photo_view/photo_view.dart';
-import './image_view.dart';
 import 'team_attendance_summary.dart';
 
 //import 'package:intl/intl.dart';

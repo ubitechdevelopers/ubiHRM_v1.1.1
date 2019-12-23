@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:ubihrm/services/attandance_services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
-import 'package:ubihrm/attandance/addShift.dart';
-import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import '../drawer.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/services/attandance_services.dart';
+
 import '../appbar.dart';
-import '../global.dart';
 import '../b_navigationbar.dart';
+import '../drawer.dart';
+import '../global.dart';
 
 class VisitList extends StatefulWidget {
   @override

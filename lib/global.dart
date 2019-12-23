@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+
 import 'model/model.dart';
 import 'model/timeinout.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
 
 //import 'package:ubihrm/model/timeinout.dart';
 
@@ -62,10 +61,6 @@ String path_ubiattendance = "";
 String path_hrm_india = "";
 */
 
-
-
-
-
 int home_load_num = 0;
 List<Permission> globalpermissionlist =new List();
 List<Permission> globalpermissionlist1 =new List();
@@ -104,6 +99,7 @@ var perPunchLocation;
 var overtime;
 var undertime;
 var perSalary;
+var perPayroll;
 var perExpense;
 var perFlexi;
 var deprtcurrency;

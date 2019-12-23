@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'global.dart';
-import 'drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'home.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'profile.dart';
-import 'b_navigationbar.dart';
+
 import 'appbar.dart';
+import 'b_navigationbar.dart';
 import 'change_pass.dart';
+import 'drawer.dart';
+import 'global.dart';
 
 
 class AllSetting extends StatefulWidget {

@@ -1,29 +1,24 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
-//import 'package:simple_permissions/simple_permissions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/services/services.dart';
-//import 'login.dart';
-import 'dart:convert';
-//import 'package:ubihrm/services/att_services.dart';
-//import 'attendance_summary.dart';
+import 'package:ubihrm/services/timeoff_services.dart';
+
+import '../b_navigationbar.dart';
+import '../drawer.dart';
+import '../global.dart';
 import '../home.dart';
-import 'dart:async';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
 import '../login_page.dart';
 import '../profile.dart';
-import 'timeoff.dart';
-import 'package:ubihrm/services/timeoff_services.dart';
-import 'package:ubihrm/model/model.dart';
 import 'teamtimeoffsummary.dart';
-import '../b_navigationbar.dart';
-import '../global.dart';
-import '../drawer.dart';
+import 'timeoff.dart';
 
 
 // This app is a stateful, it tracks the user's current choice.
@@ -182,6 +177,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
         context,
         MaterialPageRoute(builder: (context) => TimeoffSummary()),
       );
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Withdrawl"),
@@ -192,6 +188,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
       setState(() {
         _isButtonDisabled=false;
       });
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Sorry!"),
@@ -202,6 +199,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
       setState(() {
         _isButtonDisabled=false;
       });
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Sorry!"),
@@ -212,6 +210,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
   }
 
   confirmWithdrawl(String timeoffid) async{
+    // ignore: deprecated_member_use
     showDialog(context: context, child:
     new AlertDialog(
       title: new Text("Withdraw timeoff?",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18.0),),
