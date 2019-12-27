@@ -2007,7 +2007,7 @@ print("ff"+sts);
                                   builder: (_) =>
                                   new AlertDialog(
                                     //title: new Text("Dialog Title"),
-                                    content: new Text("Leave has been approved successfully."),
+                                    content: new Text("Leave application approved successfully."),
                                   )
                               );
                             }
@@ -2017,7 +2017,7 @@ print("ff"+sts);
                                   builder: (_) =>
                                   new AlertDialog(
                                     //title: new Text("Dialog Title"),
-                                    content: new Text("Leave could not be approved. Try again!"),
+                                    content: new Text("Leave application rejected successfully."),
                                   )
                               );
                             }

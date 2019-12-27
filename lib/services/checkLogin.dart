@@ -47,7 +47,7 @@ class Login{
 
         print("*********PRATIBHA***********");
         if(employeeMap['countryid']=="93"){
-         //print("Helloindia");
+          //print("Helloindia");
 
           prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/');
           prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/');
@@ -58,6 +58,7 @@ class Login{
           prefs.setString("path_hrm_india", 'https://ubitech.ubihrm.com/services/');*/
 
         }else{
+
          //print("Hiiiall");
 
           prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMALL/ubiapp/');
@@ -159,12 +160,13 @@ class Login{
             prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMALL/HRMAPP/index.php/Att_services/');
             prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMALL/services/');
 
-           /* prefs.setString("path", 'https://ubitechdigital.ubihrm.com/ubiapp/');
+            /*prefs.setString("path", 'https://ubitechdigital.ubihrm.com/ubiapp/');
             prefs.setString("path_ubiattendance", 'https://ubitechdigital.ubihrm.com/HRMAPP/index.php/Att_services/');
             prefs.setString("path_hrm_india", 'https://ubitechdigital.ubihrm.com/services/');*/
 
           }
-          prefs.setString("empid", employeeMap['employeeid']);
+          prefs.setString("empid", employeeMap['employeeid']
+          );
           prefs.setString("orgdir", employeeMap['organization']);
           prefs.setString("orgname", employeeMap['organizationname']);
           prefs.setString('fname',employeeMap['fname']);

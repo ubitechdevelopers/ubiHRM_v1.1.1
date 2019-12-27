@@ -103,7 +103,7 @@ class _MyLeaveState extends State<MyLeave> {
       new AlertDialog(
         //backgroundColor: appEndColor(),
       //  title: new Text("Congrats!"),
-        content: new Text("Leave has been withdrawn successfully!"/*, style: TextStyle(color: appStartColor()),*/),
+        content: new Text("Leave application withdrawn successfully."),
       )
       );
     }else if(islogin=="failure"){
@@ -440,7 +440,7 @@ class _MyLeaveState extends State<MyLeave> {
                                               ),
                                             ),
 
-                                            (snapshot.data[index].withdrawlsts && snapshot.data[index].approverstatus.toString() !='Withdrawn' && snapshot.data[index].approverstatus.toString() !="Rejected")?
+                                            (snapshot.data[index].withdrawlsts && snapshot.data[index].approverstatus.toString() !='Withdrawn' && snapshot.data[index].approverstatus.toString() !="Rejected" && snapshot.data[index].approverstatus.toString()!="Approved")?
                                               new Expanded(
                                                 child: Padding(
                                                   padding: const EdgeInsets.fromLTRB(0.0,3.0,5.0,0.0),

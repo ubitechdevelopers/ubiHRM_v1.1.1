@@ -27,7 +27,7 @@ class _AppDrawerState extends State<AppDrawer> {
   bool _checkLoaded = true;
   String fname="";
   String lname="";
-  String store="";
+  String store="http://play.google.com/store/apps/details?id=com.ubihrm.ubihrm";
   String sstatus="";
   String desination="";
   String profile="";
@@ -51,7 +51,7 @@ class _AppDrawerState extends State<AppDrawer> {
       admin_sts=prefs.getString('sstatus').toString();
       fname = prefs.getString('fname') ?? '';
       lname = prefs.getString('lname') ?? '';
-      store = prefs.getString('store') ?? '';
+      store = 'http://play.google.com/store/apps/details?id=com.ubihrm.ubihrm';
       sstatus = (int.parse(prefs.getString('sstatus')))==1 ? 'You have logged in as Admin':'';
       desination = prefs.getString('desination') ?? '';
       profile = prefs.getString('profile') ?? '';

@@ -24,7 +24,7 @@ class _AppDrawerState extends State<AppDrawer> {
   bool _checkLoaded = true;
   String fname="";
   String lname="";
-  String store="";
+  String store="http://play.google.com/store/apps/details?id=com.ubihrm.ubihrm";
   String sstatus="";
   String desination="";
   String profile="";
@@ -46,6 +46,7 @@ class _AppDrawerState extends State<AppDrawer> {
     setState(() {
      fname = prefs.getString('fname') ?? '';
      profile = prefs.getString('profile') ?? '';
+     store = 'http://play.google.com/store/apps/details?id=com.ubihrm.ubihrm';
      //print("-------555555->"+globalcompanyinfomap['ProfilePic']);
      profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
      //print("-------555555->"+profileimage);

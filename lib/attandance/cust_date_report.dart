@@ -50,7 +50,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
     showtabbar =false;
-    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+    profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
 
   }
   @override

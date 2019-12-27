@@ -27,7 +27,7 @@ punch(comments, client_name, empid, location_addr1, lid, act, orgdir, latit,
 }
 
 Future checkMandUpdate() async {
-  print(path_ubiattendance+ 'checkMandUpdate?platform=Android');
+  print(path_ubiattendance + 'checkMandUpdate?platform=Android');
   final res = await http.get(path_ubiattendance+ 'checkMandUpdate?platform=Android');
 
   // print('*****************************'+((json.decode(res.body.toString()))[0]['is_update']).toString()+'*****************************');

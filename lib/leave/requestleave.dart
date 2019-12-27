@@ -152,7 +152,7 @@ class _RequestLeaveState extends State<RequestLeave> {
       // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('Leave has been applied successfully!'),
+        content: new Text('Leave application applied successfully.'),
       )
       );
     }

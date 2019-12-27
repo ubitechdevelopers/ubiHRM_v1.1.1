@@ -97,7 +97,7 @@ flutter:
         - assets/repo.ico
         - assets/approval.png
         - assets/spinner.gif
-        - assets/splash.gif
+        - assets/splash_hrm.gif
         - assets/icons/Attendance_icon.png
         - assets/icons/graph_icon.png
         - assets/icons/leave_icon.png

@@ -104,7 +104,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
       showDialog(context: context, child:
       new AlertDialog(
         //  title: new Text("Congrats!"),
-        content: new Text("Your expense is withdrawn successfully!"),
+        content: new Text("Submitted expenses withdrawn successfully."),
       )
       );
     }else if(islogin=="failure"){

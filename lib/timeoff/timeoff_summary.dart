@@ -181,7 +181,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Withdrawl"),
-        content: new Text("Timeoff has been withdrawn successfully!"),
+        content: new Text("Time Off application withdrawn successfully."),
       )
       );
     }else if(islogin=="failure"){
@@ -545,7 +545,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                                 children: <Widget>[
                           //                        new Text(snapshot.data[index].ApprovalSts.toString(), style: TextStyle(color: snapshot.data[index].ApprovalSts.toString()=='Approved'?Colors.green.withOpacity(0.75):snapshot.data[index].ApprovalSts.toString()=='Rejected' || snapshot.data[index].ApprovalSts.toString()=='Cancel' ?Colors.red.withOpacity(0.65):snapshot.data[index].ApprovalSts.toString().startsWith('Pending')?Colors.orange[800]:Colors.black54, fontSize: 14.0,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
 
-                                                  (snapshot.data[index].withdrawlsts && snapshot.data[index].ApprovalSts.toString()!='Withdrawn' && snapshot.data[index].ApprovalSts.toString()!="Rejected")?
+                                                  (snapshot.data[index].withdrawlsts)?
                                                   InkWell(
                                                     child: Padding(
                                                       padding: const EdgeInsets.fromLTRB(0.0,3.0,12.0,0.0),

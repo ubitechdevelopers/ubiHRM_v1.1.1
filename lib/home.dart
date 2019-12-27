@@ -73,14 +73,10 @@ class _HomePageStatemain extends State<HomePageMain> {
 
   initPlatformState() async {
 
-
-    final prefs = await SharedPreferences.getInstance();
-
-
-    /*empid = prefs.getString('employeeid')??"";
+    /*final prefs = await SharedPreferences.getInstance();
+    empid = prefs.getString('employeeid')??"";
     organization =prefs.getString('organization')??"";
-    emp = new Employee(employeeid: empid, organization: organization);
-  */
+    emp = new Employee(employeeid: empid, organization: organization);*/
     //  PLeave= "1";
     /*empid = prefs.getString('employeeid')??"";
     organization =prefs.getString('organization')??"";
@@ -107,7 +103,7 @@ class _HomePageStatemain extends State<HomePageMain> {
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
       setState(() {
-        //    print("HIIIIIIIIIIIIII");
+        //print("HIIIIIIIIIIIIII");
         mainWidget = loadingWidget();
       });
 

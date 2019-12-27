@@ -134,9 +134,10 @@ getProfileInfo(Employee emp, BuildContext context) async{
     print(path1 + "getProfileInfo?employeeid=${emp.employeeid}&organization=${emp.organization}");
     print(response.toString());
     Map responseJson = json.decode(response.data.toString());
+    //print(responseJson['Status']);
     if(responseJson['Status']=='c') {
-      print('vanshika');
-      print(responseJson['Status']);
+      //print('vanshika');
+      //print(responseJson['Status']);
       globalcontactusinfomap = responseJson['Contact'];
       globalpersnalinfomap = responseJson['Personal'];
       globalcompanyinfomap = responseJson['Company'];

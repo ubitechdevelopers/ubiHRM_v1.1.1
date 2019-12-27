@@ -722,7 +722,7 @@ class _RequestExpenceState extends State<RequestExpence> {
           // ignore: deprecated_member_use
           showDialog(context: context, child:
             new AlertDialog(
-              content: new Text('Expense has been applied successfully!'),
+              content: new Text('Expenses submitted successfully.'),
             )
           );
           //showInSnackBar("Expense has been applied successfully.");
