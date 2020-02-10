@@ -364,7 +364,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                   Container(
                     padding: EdgeInsets.only(top:12.0),
                     child:Center(
-                      child:Text("Team's Time Off",
+                      child:Text("Team's Timeoff",
                           style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                     ),
                   ),
@@ -452,12 +452,10 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
 
                                           Container(
                                             width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                            //padding: EdgeInsets.only(top:1.5,bottom: .5),
                                             margin: EdgeInsets.only(top: 4.0),
                                             child: Text('Date: '+snapshot.data[index].TimeofDate.toString(), style: TextStyle(color: Colors.black54),),
                                           ),
-
-
 
                                           new Row(
                                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -468,6 +466,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                                   //     color:Colors.red,
                                                   //     height: MediaQuery .of(context).size.height * 0.06,
                                                     width: MediaQuery .of(context).size.width * 0.70,
+                                                    margin: EdgeInsets.only(top: 4.0),
                                                     padding: EdgeInsets.only(top:1.5,bottom: .5),
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -509,7 +508,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
 
                                           snapshot.data[index].Reason.toString()!='-'?Container(
                                             width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                            //padding: EdgeInsets.only(top:1.5,bottom: .5),
                                             margin: EdgeInsets.only(top: 4.0),
                                             child: Text('Reason: '+snapshot.data[index].Reason.toString(), style: TextStyle(color: Colors.black54),),
                                           ):Center(),
@@ -517,8 +516,8 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
 
                                           (snapshot.data[index].Timeoffsts.toString()!='Pending' ) ?Container(
                                             width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:.5,bottom: 1.5),
-                                            margin: EdgeInsets.only(top: 1.0),
+                                            //padding: EdgeInsets.only(top:.5,bottom: 1.5),
+                                            margin: EdgeInsets.only(top: 4.0),
                                             child: RichText(
                                               text: new TextSpan(
                                                 // Note: Styles for TextSpans must be explicitly defined.
@@ -540,8 +539,8 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
 
                                           (snapshot.data[index].Timeoffsts.toString()=='Pending' && snapshot.data[index].Psts.toString()!='') ?Container(
                                             width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:.5,bottom: 1.5),
-                                            margin: EdgeInsets.only(top: 1.0),
+                                            //padding: EdgeInsets.only(top:.5,bottom: 1.5),
+                                            margin: EdgeInsets.only(top: 4.0),
                                             child: RichText(
                                               text: new TextSpan(
                                                 // Note: Styles for TextSpans must be explicitly defined.

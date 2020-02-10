@@ -252,10 +252,11 @@ class _MyExpenceState extends State<MyExpence> {
             child:Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
+                  //SizedBox(height: 5.0),
                   Text('My Expenses',
                       style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center,),
                   //SizedBox(height: 10.0),
-                  new Divider(),
+                  //new Divider(color: Colors.black54,height: 1.5,),
                   new Expanded(
                     child: Container(
                       height: MediaQuery.of(context).size.height*.55,
@@ -263,7 +264,6 @@ class _MyExpenceState extends State<MyExpence> {
                       //padding: EdgeInsets.only(bottom: 15.0),
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
-
 
                       child: new FutureBuilder<List<Expensedate>>(
                         future: getExpenselistbydate(),
@@ -355,247 +355,222 @@ class _MyExpenceState extends State<MyExpence> {
   }
 
   Widget expensebydatewidget(Fdate){
-    return
- Container(
-     color: Colors.green[100],
+    return Container(
+      color: Colors.green[100],
      // height: MediaQuery.of(context).size.height*0.2,
-     child:  Column(
-
-    mainAxisAlignment: MainAxisAlignment.start,
+      child:  Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
 
-          new Row(
+        new Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          //crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 40.0),
+            //SizedBox(width: MediaQuery.of(context).size.width*0.10),
+            new Expanded(
+              child: Container(
+                width: MediaQuery.of(context).size.width*0.35,
+                //margin: EdgeInsets.only(left:10.0),
+                child:Text('  Category',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
+              ),
+            ),
+
+            new Expanded(
+              child: Container(
+                width: MediaQuery.of(context).size.width*0.35,
+                margin: EdgeInsets.only(left:35.0),
+                child:Text('Amount',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
+              ),
+            ),
+
+            new Expanded(
+              child: Container(
+                width: MediaQuery.of(context).size.width*0.35,
+                margin: EdgeInsets.only(left:50.0),
+                child:Text('Action',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
+              ),
+            ),
+          ] ,
+        ),
+
+        new Row(
             mainAxisAlignment: MainAxisAlignment.start,
-//            crossAxisAlignment: CrossAxisAlignment.start,
+            //crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 40.0),
-              //SizedBox(width: MediaQuery.of(context).size.width*0.10),
-
               new Expanded(
                 child: Container(
-                  width: MediaQuery.of(context).size.width*0.35,
-                  //margin: EdgeInsets.only(left:10.0),
-                  child:Text('  Category',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
-                ),),
-              /*  new Expanded(
-                        child: Container(
-                        width: MediaQuery.of(context).size.width*0.35,),),
-                    SizedBox(height: 50.0,),
-                      Container(
-                        width: MediaQuery.of(context).size.width*0.25,
-                        child:Text('From',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
-                      ),*/
-              //SizedBox(height: 50.0,),
-              /*new Expanded(
-                child: Container(
-                  width: MediaQuery.of(context).size.width*0.35,
-                  //margin: EdgeInsets.only(left:5.0),
-                  child:Text('Description',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
-                ),
-              ),*/
+                 height: MediaQuery.of(context).size.height*0.10,
+                  //width: MediaQuery.of(context).size.width*.99,
+                  //padding: EdgeInsets.only(bottom: 15.0),
+                  color: Colors.green[50],
+                  child: new FutureBuilder<List<Expense>>(
+                    future: getExpenselist(Fdate),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data.length>0) {
+                          return new ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return new Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                     new Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            new Expanded(
+                                              child: Container(
+                                                  width: MediaQuery .of(context).size .width * 0.10,
+                                                  margin: EdgeInsets.only(top:2.0,left:6.0),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      new SizedBox(width: 5.0,),
+                                                      new Text(snapshot.data[index].category.toString(),
+                                                        style: TextStyle(
+                                                            fontWeight: FontWeight.bold),)
 
-              new Expanded(
-                child: Container(
-                  width: MediaQuery.of(context).size.width*0.35,
-                  margin: EdgeInsets.only(left:40.0),
-                  child:Text('Amount',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
-                ),
-              ),
-
-              new Expanded(
-                child: Container(
-                  width: MediaQuery.of(context).size.width*0.35,
-                  margin: EdgeInsets.only(left:40.0),
-                  child:Text('Action',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
-                ),
-              ),
-
-
-            ] , ),
-
-          new Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-//            crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-
-
-                new Expanded(
-                  child: Container(
-                   height: MediaQuery.of(context).size.height*0.10,
-                    //width: MediaQuery.of(context).size.width*.99,
-                    //padding: EdgeInsets.only(bottom: 15.0),
-                    color: Colors.green[50],
-                    //////////////////////////////////////////////////////////////////////---------------------------------
-
-
-                    child: new FutureBuilder<List<Expense>>(
-                      future: getExpenselist(Fdate),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          if (snapshot.data.length>0) {
-                            return new ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return new Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                       new Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              new Expanded(
-                                                child: Container(
-                                                    width: MediaQuery .of(context).size .width * 0.10,
-                                                    margin: EdgeInsets.only(top:2.0,left:6.0),
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: <Widget>[
-                                                        new SizedBox(width: 5.0,),
-                                                        new Text(snapshot.data[index].category.toString(),
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight.bold),)
-
-                                                      ],
-                                                    )
-                                                ),
+                                                    ],
+                                                  )
                                               ),
+                                            ),
 
-                                             /* new Expanded(
-                                                child: Container(
-                                                    width: MediaQuery .of(context).size .width * 0.10,
-                                                    //margin: EdgeInsets.only(left:20.0),
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: <Widget>[
-                                                        new SizedBox(width: 5.0,),
-                                                        new Text(
-                                                          snapshot.data[index].desc.toString(),
-                                                          style: TextStyle(
-                                                              ),)
+                                           /* new Expanded(
+                                              child: Container(
+                                                  width: MediaQuery .of(context).size .width * 0.10,
+                                                  //margin: EdgeInsets.only(left:20.0),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      new SizedBox(width: 5.0,),
+                                                      new Text(
+                                                        snapshot.data[index].desc.toString(),
+                                                        style: TextStyle(
+                                                            ),)
 
-                                                      ],
-                                                    )
-                                                ),
-                                              ),*/
-                                              new Expanded(
-                                                child: Container(
-                                                    width: MediaQuery .of(context).size .width * 0.10,
-                                                    margin: EdgeInsets.only(left:20.0),
-                                                    padding: EdgeInsets.only(left:15.0),
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: <Widget>[
-                                                        new SizedBox(width: 5.0,),
-                                                        new Text(
-                                                         snapshot.data[index].amt.toString()+" "+snapshot.data[index].currency.toString(),textAlign: TextAlign.right,
-
-                                                         //   snapshot.data[index].amt.toString() ,textAlign: TextAlign.right,
-
-                                                        )
-
-                                                      ],
-                                                    )
-                                                ),
+                                                    ],
+                                                  )
                                               ),
+                                            ),*/
+                                            new Expanded(
+                                              child: Container(
+                                                  width: MediaQuery .of(context).size .width * 0.10,
+                                                  margin: EdgeInsets.only(left:20.0),
+                                                  padding: EdgeInsets.only(left:15.0),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      new SizedBox(width: 5.0,),
+                                                      new Text(
+                                                       snapshot.data[index].amt.toString()+" "+snapshot.data[index].currency.toString(),textAlign: TextAlign.right,
 
-                                              new Expanded(
-                                                child: Container (
-                                                  //                   color:Colors.yellow,
-                                                   height: MediaQuery .of(context).size.height * 0.03,
-                                                   margin: EdgeInsets.only(left:12.0),
-                                                    padding: EdgeInsets.only(left:12.0),
-                                                    width: MediaQuery .of(context).size.width * 0.50,
-                                                    child: FlatButton(
-                                                      onPressed: () {
-                                                        print("Button pressed");
-                                                        //getExpenseDetailById(snapshot.data[index].Id.toString());
-                                                        Navigator.push(
+                                                       //   snapshot.data[index].amt.toString() ,textAlign: TextAlign.right,
+
+                                                      )
+
+                                                    ],
+                                                  )
+                                              ),
+                                            ),
+
+                                            new Expanded(
+                                              child: Container (
+                                                //                   color:Colors.yellow,
+                                                 height: MediaQuery .of(context).size.height * 0.03,
+                                                 margin: EdgeInsets.only(left:12.0),
+                                                  padding: EdgeInsets.only(left:12.0),
+                                                  width: MediaQuery .of(context).size.width * 0.50,
+                                                  child: FlatButton(
+                                                    onPressed: () {
+                                                      print("Button pressed");
+                                                      //getExpenseDetailById(snapshot.data[index].Id.toString());
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(builder: (context) => ExpenseDetailView(expenseid: snapshot.data[index].Id.toString())),
+                                                      );
+                                                    },
+                                                    child: Text("view", style: TextStyle(color: Colors.blueAccent, fontSize: 15.0, decoration: TextDecoration.underline),),
+                                                    /*child: Icon(
+                                                      Icons.remove_red_eye,
+                                                      size: 20.0,
+                                                      color:appStartColor(),
+                                                    ),*/
+                                                  ),
+                                                  /*child: new FlatButton(
+                                                    onPressed: () {
+                                                      print("icon pressed");
+                                                        *//*Navigator.push(
                                                           context,
-                                                          MaterialPageRoute(builder: (context) => ExpenseDetailView(expenseid: snapshot.data[index].Id.toString())),
-                                                        );
-                                                      },
-                                                      child: Text("view", style: TextStyle(color: Colors.blueAccent, fontSize: 15.0, decoration: TextDecoration.underline),),
-                                                      /*child: Icon(
-                                                        Icons.remove_red_eye,
-                                                        size: 20.0,
-                                                        color:appStartColor(),
-                                                      ),*/
+                                                          MaterialPageRoute(builder: (context) => ExpenseDetailView()),
+                                                        );*//*
+                                                    },
+                                                    child:new Icon(
+                                                      Icons.remove_red_eye,
+                                                      size: 24.0,
+                                                      color:appStartColor(),
+                                                      //      textDirection: TextDirection.rtl,
                                                     ),
-                                                    /*child: new FlatButton(
-                                                      onPressed: () {
-                                                        print("icon pressed");
-                                                          *//*Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(builder: (context) => ExpenseDetailView()),
-                                                          );*//*
-                                                      },
-                                                      child:new Icon(
-                                                        Icons.remove_red_eye,
-                                                        size: 24.0,
-                                                        color:appStartColor(),
-                                                        //      textDirection: TextDirection.rtl,
-                                                      ),
-                                                      //         padding:EdgeInsets.all(5.0),
-                                                    )*/
-                                                ),
-                                              )
+                                                    //         padding:EdgeInsets.all(5.0),
+                                                  )*/
+                                              ),
+                                            )
 
-                                            ],
-                                          ),
+                                          ],
+                                        ),
 
 
 
-                                        ////
+                                      ////
 
-                                        /*   snapshot.data[index].desc.toString()!='-'?Container(
-                                            width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:1.5,bottom: .5),
-                                            margin: EdgeInsets.only(top: 4.0),
-                                            child: Text(snapshot.data[index].category.toString(), style: TextStyle(color: Colors.black54),),
-                                          ):Center(),*/
+                                      /*   snapshot.data[index].desc.toString()!='-'?Container(
+                                          width: MediaQuery.of(context).size.width*.90,
+                                          padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                          margin: EdgeInsets.only(top: 4.0),
+                                          child: Text(snapshot.data[index].category.toString(), style: TextStyle(color: Colors.black54),),
+                                        ):Center(),*/
 
-                                        /*  snapshot.data[index].desc.toString()!='-'?Container(
-                                            width: MediaQuery.of(context).size.width*.90,
-                                            padding: EdgeInsets.only(top:1.5,bottom: 1.5),
-                                            margin: EdgeInsets.only(top: 4.0,bottom: 1.5),
-                                            child: Text('Description: '+snapshot.data[index].desc.toString(), style: TextStyle(color: Colors.black54),),
-                                          ):Center(),*/
+                                      /*  snapshot.data[index].desc.toString()!='-'?Container(
+                                          width: MediaQuery.of(context).size.width*.90,
+                                          padding: EdgeInsets.only(top:1.5,bottom: 1.5),
+                                          margin: EdgeInsets.only(top: 4.0,bottom: 1.5),
+                                          child: Text('Description: '+snapshot.data[index].desc.toString(), style: TextStyle(color: Colors.black54),),
+                                        ):Center(),*/
 
 
 
-                                      ]);
-                                }
-                            );
-                          }else
-                            return new Center(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width*1,
-                                color: appStartColor().withOpacity(0.1),
-                                padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                child:Text("No Expense History",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
-                              ),
-                            );
-                            /*return new Center(
-                              child: Text('No Expense History'),
-                            );*/
-                        } else if (snapshot.hasError) {
-                          return new Text("Unable to connect server");
-                        }
+                                    ]);
+                              }
+                          );
+                        }else
+                          return new Center(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*1,
+                              color: appStartColor().withOpacity(0.1),
+                              padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                              child:Text("No Expense History",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                            ),
+                          );
+                          /*return new Center(
+                            child: Text('No Expense History'),
+                          );*/
+                      } else if (snapshot.hasError) {
+                        return new Text("Unable to connect server");
+                      }
 
-                        // By default, show a loading spinner
-                        return new Center( child: CircularProgressIndicator());
-                      },
-                    ),
-                    //////////////////////////////////////////////////////////////////////---------------------------------
+                      // By default, show a loading spinner
+                      return new Center( child: CircularProgressIndicator());
+                    },
                   ),
+                  //////////////////////////////////////////////////////////////////////---------------------------------
                 ),
-
-              ]),
-
-
-        ] ) );
-
+              ),
+            ]
+          ),
+        ]
+      )
+    );
   }
 
 }

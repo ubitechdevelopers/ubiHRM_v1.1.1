@@ -107,7 +107,7 @@ class _TimeOffList extends State<TimeOffList> {
             SizedBox(height: 1.0),
             Center(
               child: Text(
-                'Time Off History',
+                'Timeoff History',
                 style: new TextStyle(
                   fontSize: 20.0,
                   color:appStartColor(),
@@ -176,7 +176,7 @@ class _TimeOffList extends State<TimeOffList> {
                     ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.2,
+                    width: MediaQuery.of(context).size.width * 0.22,
                     child: Text(
                       'From',
                       style: TextStyle(color: appStartColor(),
@@ -209,7 +209,17 @@ class _TimeOffList extends State<TimeOffList> {
               height: 5.2,
             ),
             new Expanded(
-              child: res == true ? getEmpDataList(today.text) : Center(),
+              child: res == true ? getEmpDataList(today.text) : Container(
+                height: MediaQuery.of(context).size.height*0.25,
+                child:Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width*1,
+                    color:appStartColor().withOpacity(0.1),
+                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                    child:Text("Please select the date",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -240,50 +250,79 @@ class _TimeOffList extends State<TimeOffList> {
                   //    padding: EdgeInsets.only(left: 15.0,right: 15.0),
                   itemBuilder: (BuildContext context, int index) {
                     return new Column(children: <Widget>[
-                      new FlatButton(
-                        child: new Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            new Container(
-                                width: MediaQuery.of(context).size.width * 0.30,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    new Text(
-                                        snapshot.data[index].name.toString()),
+                      SizedBox(height: 5,),
+                        Padding(
+                          padding: const EdgeInsets.only(left:8.0),
+                          child: new Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              new Container(
+                                  width: MediaQuery.of(context).size.width * 0.34,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      new Text(
+                                          snapshot.data[index].name.toString()),
 
-                                  ],
-                                )),
-                            new Container(
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              child: new Text(
-                                snapshot.data[index].from.toString(),
-                              ),
-                            ),
-                            new Container(
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              child: new Text(
-                                snapshot.data[index].to.toString(),
-                              ),
-                            ),
-                            Flexible(
-                              child: new Container(
-                                width: MediaQuery.of(context).size.width * 0.10,
+                                    ],
+                                  )),
+                              new Container(
+                                width: MediaQuery.of(context).size.width * 0.2,
                                 child: new Text(
-                                  snapshot.data[index].diff.toString(),
-                                  style: TextStyle(
-                                      color:appStartColor()),
+                                  snapshot.data[index].from.toString(),
                                 ),
                               ),
-                            ),
+                              new Container(
+                                width: MediaQuery.of(context).size.width * 0.2,
+                                child: new Text(
+                                  snapshot.data[index].to.toString(),
+                                ),
+                              ),
+                              Flexible(
+                                child: new Container(
+                                  width: MediaQuery.of(context).size.width * 0.10,
+                                  child: new Text(
+                                    snapshot.data[index].diff.toString(),
+                                    style: TextStyle(
+                                        color:appStartColor()),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      SizedBox(height: 5,),
+                      Padding(
+                        padding: const EdgeInsets.only(left:8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  //width: MediaQuery.of(context).size.width * 0.10,
+                                  child: new Text("Approval Status: ",
+                                    style: TextStyle(
+                                        color:Colors.black),
+                                  ),
+                                ),
+                                Container(
+                                  //width: MediaQuery.of(context).size.width * 0.10,
+                                  child: new Text(
+                                    snapshot.data[index].sts.toString(),
+                                    style: TextStyle(
+                                        color: snapshot.data[index].sts=='Approved'?appStartColor():
+                                                snapshot.data[index].sts=='Rejected'?Colors.red:
+                                                snapshot.data[index].sts=='Pending'?Colors.orange[800]:Colors.orange[800]
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
-                        onPressed: () {
-                          null;
-                          //    editDept(context,snapshot.data[index].dept.toString(),snapshot.data[index].status.toString(),snapshot.data[index].id.toString());
-                        },
                       ),
+                      SizedBox(height: 5,),
                       Divider(
                         color: Colors.blueGrey.withOpacity(0.25),
                         height: 0.2,
@@ -296,7 +335,7 @@ class _TimeOffList extends State<TimeOffList> {
                   width: MediaQuery.of(context).size.width*1,
                   color: appStartColor().withOpacity(0.1),
                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                  child:Text("No one is on Time Off",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                  child:Text("No one is on Timeoff",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                 ),
               );
             }

@@ -158,6 +158,7 @@ class _TimeoffReports extends State<TimeoffReports> {
               padding: EdgeInsets.all(0.0),
 
               children: <Widget>[
+                //SizedBox(height: 5.0),
                 Text('Timeoff Reports',
                     style: new TextStyle(fontSize: 22.0, color: appStartColor(),),textAlign: TextAlign.center),
 
@@ -176,54 +177,41 @@ class _TimeoffReports extends State<TimeoffReports> {
 
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-
-
-                        Container(
-
-
+                        Icon(const IconData(0xe801, fontFamily: "CustomIcon"),size: 30.0,),
+                        /*Container(
                           decoration: new BoxDecoration(
                             shape: BoxShape.circle,
                             color: appStartColor(),
                           ),
                           child: Icon(Icons.access_alarms,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                           padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                        ),
-
+                        ),*/
                         SizedBox(width: 15.0),
                         Expanded(
-
                           child:Column(
-
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
 
-                                  child: Text("Employees on Timeoff",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                  child: Text("Employees on Timeoff",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
                               ),
                               /*Container(
                                 //    width: MediaQuery.of(context).size.width*0.5,
-
                                   child: Text("Show Today's Attendance ",style: TextStyle(fontSize: 15.0,),)
                               ),*/
                             ],
                           ),
                         ),
-
-
                         Container(
-
                           child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-
                         ),
-
-
                       ],
                     ),
                   ),
                   color: Colors.white,
                   elevation: 4.0,
                   //  splashColor: Colors.orangeAccent,
-                  textColor: Colors.black,
+                  textColor: Colors.black54,
                   onPressed: () {
                     Navigator.push(
                       context,

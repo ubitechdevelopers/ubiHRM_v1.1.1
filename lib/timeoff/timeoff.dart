@@ -263,9 +263,9 @@ class _TimeOffPageState extends State<TimeOffPage> {
             key: _formKey,
             child: SafeArea(
             child: Column( children: <Widget>[
-              SizedBox(height: 10.0),
+              //SizedBox(height: 5.0),
            //   mainAxisAlignment: MainAxisAlignment.start,
-              Text('Request Time off',
+              Text('Request Timeoff',
                   style: new TextStyle(fontSize: 22.0, color: appStartColor())),
               new Divider(color: Colors.black54,height: 1.5,),
               new Expanded(child: ListView(
@@ -507,7 +507,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       );
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('Time Off application applied successfully.'),
+        content: new Text('Timeoff applied successfully.'),
       )
       );
     }else if(islogin=="1"){

@@ -354,7 +354,7 @@ class ChoiceCard1 extends StatelessWidget {
                   children: <Widget>[
                     Text('Leave Applications',
                         style: new TextStyle(fontSize: 22.0, color: appStartColor())),
-                    new Divider(color: Colors.black54,height: 1.5,),
+                    new Divider(height: 2,),
                     new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 //            crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,7 +421,7 @@ class ChoiceCard1 extends StatelessWidget {
                         new Row(
                           mainAxisAlignment: MainAxisAlignment .spaceAround,
                           children: <Widget>[
-                           SizedBox(height: 40.0,),
+                           //SizedBox(height: 40.0,),
                              new Expanded(
 
                                  child: Container(
@@ -435,30 +435,30 @@ class ChoiceCard1 extends StatelessWidget {
                                                                 //  final snackBar = SnackBar(content: Text("Tap"));
 
                                                                 //Scaffold.of(context).showSnackBar(snackBar);
-                             /*  showDialog(
-                               context: context,
-                               builder: (_) => new AlertDialog(
-                               //title: new Text("Dialog Title"),
-                               content: new Text(snapshot.data[index].Reason.toString()),
-                               )
-                              );*/
+                                         /*  showDialog(
+                                           context: context,
+                                           builder: (_) => new AlertDialog(
+                                           //title: new Text("Dialog Title"),
+                                           content: new Text(snapshot.data[index].Reason.toString()),
+                                           )
+                                          );*/
 
-                             },
-                    child:   Text(snapshot.data[index].name.toString(), style: TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0),),
-                                       ), ],
+                                         },
+                                   child:   Text(snapshot.data[index].name.toString(), style: TextStyle(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0),),
+                                                   ), ],
                                           ),
                                          ),  ),
 
                                       new Expanded(
                                     child:Container(
-                                      width: MediaQuery .of(context)  .size.width * 0.50,
+                                      width: MediaQuery .of(context)  .size.width * 0.20,
                                         child: Column(
                                         crossAxisAlignment: CrossAxisAlignment .center,
                                         children: <Widget>[
-                                         Text("          "+snapshot.data[index].applydate
+                                         Text("         "+snapshot.data[index].applydate
                                           .toString()),
                                                 ],
                                               )
@@ -550,7 +550,8 @@ class ChoiceCard1 extends StatelessWidget {
                                                     Container(
                                                         width: MediaQuery.of(context) .size .width * 0.70,
                                                         height: MediaQuery.of(context) .size .height * 0.03,
-                                                        padding: const EdgeInsets.all(0.0),
+                                                        //padding: EdgeInsets.only(top: 1.5, bottom: .0),
+                                                        margin: EdgeInsets.only(top: 0.5),
                                                         child: RichText(
                                                           text: new TextSpan(
                                                             style: new TextStyle(
@@ -568,6 +569,7 @@ class ChoiceCard1 extends StatelessWidget {
                                                           ),
                                                         )
                                                     ),
+
                                                     snapshot.data[index].Leavests.toString() == 'Pending'
                                                         && snapshot.data[index].Psts.toString() == ""  ?
 
@@ -611,11 +613,34 @@ class ChoiceCard1 extends StatelessWidget {
 
                                                   ],),
 
+                                                 Container(
+                                                     width: MediaQuery.of(context) .size .width * 0.70,
+                                                     height: MediaQuery.of(context) .size .height * 0.03,
+                                                     //padding: EdgeInsets.only(top: 1.5, bottom: .0),
+                                                     margin: EdgeInsets.only(top: 0.5),
+                                                     child: RichText(
+                                                       text: new TextSpan(
+                                                         style: new TextStyle(
+                                                           fontSize: 14.0,
+                                                           color: Colors.black,
+                                                         ),
+                                                         children: <TextSpan>[
+                                                           new TextSpan(
+                                                               text: 'Leave Type: ',
+                                                               style: new TextStyle()),
+                                                           new TextSpan(
+                                                             text: snapshot.data[index].LeaveType.toString(),style: TextStyle(color: Colors.grey[600]), ),
+                                                           /*   new TextSpan(text: " Days: "+snapshot.data[index].Ldays.toString(),style: TextStyle(color: Colors.black), ),*/
+                                                         ],
+                                                       ),
+                                                     )
+                                                 ),
+
                                                 snapshot.data[index].Reason.toString() != '-'
                                                     ? Container(
-                                                    width: MediaQuery.of(context).size.width * .90,                                padding: EdgeInsets.only(
-                                                    top: 1.5, bottom: .0),
-                                                    margin: EdgeInsets.only(top: 4.0),
+                                                    width: MediaQuery.of(context).size.width * .90,
+                                                    //padding: EdgeInsets.only(top:1.0,bottom: .5),
+                                                    margin: EdgeInsets.only(top: 0.5),
                                                     child: RichText(
                                                       text: new TextSpan(
                                                         // Note: Styles for TextSpans must be explicitly defined.
@@ -628,7 +653,7 @@ class ChoiceCard1 extends StatelessWidget {
                                                           new TextSpan(text: 'Reason: ' ,style: new TextStyle()),
                                                           new TextSpan(text: snapshot.data[index].Reason.toString(),style: TextStyle(color: Colors.grey[600])),
 
-                                                /*          snapshot.data[index].Psts.toString() != ''
+                                                /*snapshot.data[index].Psts.toString() != ''
                                                               ? new TextSpan(text: "\n"+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold
                                                           ), ): new TextSpan(text: ""+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold), ),*/
 
@@ -639,8 +664,8 @@ class ChoiceCard1 extends StatelessWidget {
 
                                                 snapshot.data[index].Psts.toString()!=''?Container(
                                                   width: MediaQuery.of(context).size.width*.90,
-                                                  padding: EdgeInsets.only(top:1.0,bottom: .5),
-                                                  margin: EdgeInsets.only(top: .5),
+                                                  //padding: EdgeInsets.only(top:1.0,bottom: .5),
+                                                  margin: EdgeInsets.only(top: 1.5),
                                                   child: RichText(
                                                     text: new TextSpan(
                                                       // Note: Styles for TextSpans must be explicitly defined.
@@ -1914,7 +1939,7 @@ print("ff"+sts);
                           color: Colors.black,
                           size: 22.0,
                         ),*/
-                        hintText: "Comment",
+                        hintText: "Remarks",
                         hintStyle: TextStyle(
                             fontFamily: "WorkSansSemiBold", fontSize: 15.0 ),
                         /*suffixIcon: GestureDetector(
@@ -1935,195 +1960,201 @@ print("ff"+sts);
                       maxLines: 3,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: 10.0, bottom: 0.0, left: 60.0, right: 7.0),
-                    child:  ButtonTheme(
-                        minWidth: 50.0,
-                        height: 40.0,
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 10.0, bottom: 0.0, left: 60.0, right: 15.0),
+                        child:  ButtonTheme(
+                            minWidth: 50.0,
+                            height: 40.0,
 /*                      child: RaisedGradientButton(
-                        onPressed: () async  {
-                          //getApprovals(choice.title);
-                          final sts= await ApproveLeave(leaveid,CommentController.text,2);
-                          //  print("kk");
-                          // print("kk"+sts);
-                          if(sts=="true") {
-                            showDialog(
-                                context: context,
-                                builder: (_) =>
-                                new AlertDialog(
-                                  //title: new Text("Dialog Title"),
-                                  content: new Text("Approved succesfully"),
-                                )
-                            );
-                          }
-                          else{
-                            showDialog(
-                                context: context,
-                                builder: (_) =>
-                                new AlertDialog(
-                                  //title: new Text("Dialog Title"),
-                                  content: new Text("Could not be approved. Try again. "),
-                                )
-                            );
-                          }
+                            onPressed: () async  {
+                              //getApprovals(choice.title);
+                              final sts= await ApproveLeave(leaveid,CommentController.text,2);
+                              //  print("kk");
+                              // print("kk"+sts);
+                              if(sts=="true") {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) =>
+                                    new AlertDialog(
+                                      //title: new Text("Dialog Title"),
+                                      content: new Text("Approved succesfully"),
+                                    )
+                                );
+                              }
+                              else{
+                                showDialog(
+                                    context: context,
+                                    builder: (_) =>
+                                    new AlertDialog(
+                                      //title: new Text("Dialog Title"),
+                                      content: new Text("Could not be approved. Try again. "),
+                                    )
+                                );
+                              }
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => TabbedApp()),
-                          ); },
-                        // color: Colors.green[400],
-                        //shape: new RoundedRectangleBorder(
-                        //  borderRadius: new BorderRadius.circular(30.0)),
-                        gradient: LinearGradient(
-                          colors: <Color>[Colors.green[700], Colors.green[700]],
-                        ),
-                        child: new Text('Approve',
-                            style: new TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                            )),
-                      ),*/
-
-                        child: new OutlineButton(
-                          child: new Text('Approve',
-                              style: new TextStyle(
-                                color: Colors.green[700],
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-
-                              )),
-                          borderSide: BorderSide(color: Colors.green[700],
-                          ),
-                          onPressed: () async  {
-                            //getApprovals(choice.title);
-                            final sts= await ApproveLeave(leaveid,CommentController.text,2);
-                            //  print("kk");
-                            // print("kk"+sts);
-                            if(sts=="true") {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) =>
-                                  new AlertDialog(
-                                    //title: new Text("Dialog Title"),
-                                    content: new Text("Leave application approved successfully."),
-                                  )
-                              );
-                            }
-                            else{
-                              showDialog(
-                                  context: context,
-                                  builder: (_) =>
-                                  new AlertDialog(
-                                    //title: new Text("Dialog Title"),
-                                    content: new Text("Leave application rejected successfully."),
-                                  )
-                              );
-                            }
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => TabbedApp()),
-                            ); },
-                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0),),
-
-                        )
-
-
-                    ),),
-
-
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: 10.0, bottom: 0.0, left: 7.0, right: 60.0),
-                    child:  ButtonTheme(
-                      minWidth: 50.0,
-                      height: 40.0,
-/*                      child: RaisedGradientButton(
-                        onPressed: () async {
-                          //getApprovals(choice.title);
-                          var sts = await ApproveLeave(leaveid,CommentController.text,1);
-                          print("ff"+sts);
-                          if(sts=="true") {
-                            showDialog(
-                                context: context,
-                                builder: (_) =>
-                                new AlertDialog(
-                                  //title: new Text("Dialog Title"),
-                                  content: new Text("Leave rejected"),
-                                )
-                            );
-                          }
-                          else{
-                            showDialog(
-                                context: context,
-                                builder: (_) =>
-                                new AlertDialog(
-                                  //title: new Text("Dialog Title"),
-                                  content: new Text("Could not be rejected. Try again."),
-                                )
-                            );
-                          }
-
-
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => TabbedApp()),
-                          ); },
-                        // color: Colors.red[400],
-                        gradient: LinearGradient(
-                          colors: <Color>[Colors.red[700], Colors.red[700]],
-                        ),
-                        child: new Text('Reject',
-                            style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold)),
-                      ),*/
-
-                      child: new OutlineButton(
-                          child: new Text('Reject',
-                              style: new TextStyle(
-                                  color: Colors.red[700],
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => TabbedApp()),
+                              ); },
+                            // color: Colors.green[400],
+                            //shape: new RoundedRectangleBorder(
+                            //  borderRadius: new BorderRadius.circular(30.0)),
+                            gradient: LinearGradient(
+                              colors: <Color>[Colors.green[700], Colors.green[700]],
+                            ),
+                            child: new Text('Approve',
+                                style: new TextStyle(
+                                  color: Colors.white,
                                   fontSize: 16.0,
-                                  fontWeight: FontWeight.bold)),borderSide: BorderSide(color: Colors.red[700]),
-                          onPressed: () async {
-                            //getApprovals(choice.title);
-                            var sts = await ApproveLeave(leaveid,CommentController.text,1);
-                            print("ff"+sts);
-                            if(sts=="true") {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) =>
-                                  new AlertDialog(
-                                    //title: new Text("Dialog Title"),
-                                    content: new Text("Leave has been rejected successfully."),
-                                  )
-                              );
-                            }
-                            else{
-                              showDialog(
-                                  context: context,
-                                  builder: (_) =>
-                                  new AlertDialog(
-                                    //title: new Text("Dialog Title"),
-                                    content: new Text("Leave could not be rejected. Try again!"),
-                                  )
-                              );
-                            }
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ),*/
 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => TabbedApp()),
-                            ); },
-                          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
+                            child: new OutlineButton(
+                              child: new Text('Approve',
+                                  style: new TextStyle(
+                                    color: Colors.green[700],
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+
+                                  )),
+                              borderSide: BorderSide(color: Colors.green[700],
+                              ),
+                              onPressed: () async  {
+                                //getApprovals(choice.title);
+                                final sts= await ApproveLeave(leaveid,CommentController.text,2);
+                                //  print("kk");
+                                // print("kk"+sts);
+                                if(sts=="true") {
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) =>
+                                      new AlertDialog(
+                                        //title: new Text("Dialog Title"),
+                                        content: new Text("Leave application approved successfully."),
+                                      )
+                                  );
+                                }
+                                else{
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) =>
+                                      new AlertDialog(
+                                        //title: new Text("Dialog Title"),
+                                        content: new Text("Leave application rejected successfully."),
+                                      )
+                                  );
+                                }
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => TabbedApp()),
+                                ); },
+                              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0),),
+
+                            )
+
+
+                        ),),
+
+
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 10.0, bottom: 0.0, left: 15.0, right: 60.0),
+                        child:  ButtonTheme(
+                          minWidth: 50.0,
+                          height: 40.0,
+/*                      child: RaisedGradientButton(
+                            onPressed: () async {
+                              //getApprovals(choice.title);
+                              var sts = await ApproveLeave(leaveid,CommentController.text,1);
+                              print("ff"+sts);
+                              if(sts=="true") {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) =>
+                                    new AlertDialog(
+                                      //title: new Text("Dialog Title"),
+                                      content: new Text("Leave rejected"),
+                                    )
+                                );
+                              }
+                              else{
+                                showDialog(
+                                    context: context,
+                                    builder: (_) =>
+                                    new AlertDialog(
+                                      //title: new Text("Dialog Title"),
+                                      content: new Text("Could not be rejected. Try again."),
+                                    )
+                                );
+                              }
+
+
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => TabbedApp()),
+                              ); },
+                            // color: Colors.red[400],
+                            gradient: LinearGradient(
+                              colors: <Color>[Colors.red[700], Colors.red[700]],
+                            ),
+                            child: new Text('Reject',
+                                style: new TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold)),
+                          ),*/
+
+                          child: new OutlineButton(
+                              child: new Text('Reject',
+                                  style: new TextStyle(
+                                      color: Colors.red[700],
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold)),borderSide: BorderSide(color: Colors.red[700]),
+                              onPressed: () async {
+                                //getApprovals(choice.title);
+                                var sts = await ApproveLeave(leaveid,CommentController.text,1);
+                                print("ff"+sts);
+                                if(sts=="true") {
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) =>
+                                      new AlertDialog(
+                                        //title: new Text("Dialog Title"),
+                                        content: new Text("Leave has been rejected successfully."),
+                                      )
+                                  );
+                                }
+                                else{
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) =>
+                                      new AlertDialog(
+                                        //title: new Text("Dialog Title"),
+                                        content: new Text("Leave could not be rejected. Try again!"),
+                                      )
+                                  );
+                                }
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => TabbedApp()),
+                                ); },
+                              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
+                          ),
+
+                        ),
                       ),
-
-
-                    ),
+                    ],
                   ),
+
                 ],
               ),
             ),
@@ -2341,7 +2372,6 @@ class ApprovalAppHeader extends StatelessWidget implements PreferredSizeWidget {
                 );
               },
               child:Container(
-
                   width: 40.0,
                   height: 40.0,
                   decoration: new BoxDecoration(

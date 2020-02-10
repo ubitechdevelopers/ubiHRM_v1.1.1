@@ -26,10 +26,8 @@ class TaskyApp extends StatelessWidget {
 //Home Page
 class HomeNavigation extends StatefulWidget {
   // code removed for brevity
-
   _BootomNavigationState createState() => _BootomNavigationState();
 }
-
 
 // Home Page state
 class _BootomNavigationState extends State<HomeNavigation> {
@@ -46,22 +44,16 @@ class _BootomNavigationState extends State<HomeNavigation> {
 
   void initState() {
     super.initState();
-
     initPlatformState();
-
   }
 
   initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
-
     empid = prefs.getString('employeeid') ?? "";
     organization = prefs.getString('organization') ?? "";
     userprofileid = prefs.getString('userprofileid') ?? "";
-
-
     // PerLeave =prefs.getString('PerLeave')??"";
     // PerApprovalLeave =prefs.getString('PerApprovalLeave')??"";
-
     //  print("22222222222"+perA);
     // print("22222222222"+PerApprovalLeave);
 
@@ -79,18 +71,10 @@ class _BootomNavigationState extends State<HomeNavigation> {
     print('------>123');
     print(approval_count);
     print('------>123');
-
-
     //  PLeave= "1";
-
-
-
     //  emp = new Employee(employeeid: empid, organization: organization);
-
     //setState(() {
-
     // });
-
   }
 
   Widget build(BuildContext context) {
@@ -103,19 +87,14 @@ class _BootomNavigationState extends State<HomeNavigation> {
         type: BottomNavigationBarType.fixed,
         fixedColor: const Color(0xFF2845E7),
         items: [
-
           /* BottomNavigationBarItem(
               icon: new Icon(
                   Icons.description,
-
                   color: Colors.white,
                   size: 25.0 ),
               //  icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
-
               title: new Text('Reports', style: TextStyle(color: Colors.white)),
-
             ),*/
-
 
           /*   BottomNavigationBarItem(
               /*  icon:  new Image.asset("assets/approval.png",
@@ -142,7 +121,6 @@ class _BootomNavigationState extends State<HomeNavigation> {
                 new Positioned(
                     right: 0,
                     top:0,
-
                     child:
                     new Container(
                       padding: EdgeInsets.all(1),
@@ -153,7 +131,6 @@ class _BootomNavigationState extends State<HomeNavigation> {
                       ),
                       constraints: BoxConstraints(
                         minWidth: 12,
-
                         minHeight: 12,
                       ),
                       child: new Text(
@@ -161,8 +138,6 @@ class _BootomNavigationState extends State<HomeNavigation> {
                         style: new TextStyle(
                           color: Colors.white,
                           fontSize: 8,
-
-
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -180,16 +155,13 @@ class _BootomNavigationState extends State<HomeNavigation> {
                   size: 25.0 ),
               title: Text('Profile',style: TextStyle(color: Colors.white))),
 
-
           BottomNavigationBarItem(
             icon: new Icon(
                 Icons.home,
                 color: Colors.white,
                 size: 25.0 ),
             //  icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
-
             title: new Text('Home', style: TextStyle(color: Colors.white)),
-
           ),
 
           BottomNavigationBarItem(
@@ -213,17 +185,14 @@ class _BootomNavigationState extends State<HomeNavigation> {
               MaterialPageRoute(builder: (context) => CollapsingTab()),
             );
             return;
-
-
-          }
-          else if  (newIndex == 1) {
-
+          } else if  (newIndex == 1) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => HomePageMain()),
             );
             return;
           }
+
           if (newIndex == 2) {
             Navigator.push(
               context,
@@ -231,6 +200,7 @@ class _BootomNavigationState extends State<HomeNavigation> {
             );
             return;
           }
+
           if (newIndex == 3) {
             /*Navigator.push(
                 context,
@@ -255,7 +225,6 @@ class _BootomNavigationState extends State<HomeNavigation> {
 
             // return;
           }
-
           setState(() {
             _currentIndex = newIndex;
           });

@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/home.dart';
-import 'package:ubihrm/login_page.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 
 import 'check_update.dart';
@@ -28,18 +25,19 @@ class ShrineApp extends StatefulWidget {
   @override
   _ShrineAppState createState() => _ShrineAppState();
 }
+
 class _ShrineAppState extends State<ShrineApp> {
-  Map<String, double> _currentLocation;
-  StreamSubscription<Map<String, double>> _locationSubscription;
+  //Map<String, double> _currentLocation;
+  //StreamSubscription<Map<String, double>> _locationSubscription;
   Location _location = new Location();
   String streamlocationaddr="";
   String lat="";
   String long="";
   int response;
   int responsestate;
-  String cur_ver='1.0.6',new_ver='1.0.6';
-  String updatestatus = "0";
-  Widget _defaultHome = new LoginPage();
+  String cur_ver='1.0.7',new_ver='1.0.7';
+  String updatestatus;
+  //Widget _defaultHome = new LoginPage();
 
   @override
   void initState() {
@@ -48,11 +46,15 @@ class _ShrineAppState extends State<ShrineApp> {
     checkNow().then((res){
       setState(() {
         new_ver=res;
+        /*print("new_ver");
+        print(new_ver);*/
       });
     });
     UpdateStatus().then((res){
       setState(() {
         updatestatus = res;
+        /*print("updatestatus");
+        print(updatestatus);*/
       });
     });
   }
@@ -71,7 +73,6 @@ class _ShrineAppState extends State<ShrineApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ubiHRM',
-
       home:((cur_ver == new_ver || new_ver=="error") || updatestatus=='0')?HomePageMain():CheckUpdate(),
       //home: (true)?HomePage():CheckUpdate(),
       /*routes: {
@@ -83,9 +84,9 @@ class _ShrineAppState extends State<ShrineApp> {
     );
   }
 
-  getUpdate(response){
+  /*getUpdate(response){
     return (response==1) ? new HomePageMain() : new LoginPage();
-  }
+  }*/
 }
 
 

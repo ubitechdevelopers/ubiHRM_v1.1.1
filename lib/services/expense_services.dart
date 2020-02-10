@@ -5,39 +5,212 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart';
 
-
 class RequestExpenceService{
-
   var dio = new Dio();
-
 }
 
 class Expense {
   String Id;
   String name;
   String category;
+  String categoryid;
   String desc;
   String applydate;
   String deprt;
   String ests;
   String amt;
+  String Psts;
   String currency;
   String doc;
 
-
-  Expense(
-      { this.Id,
-        this.name,
-        this.category,
-        this.desc,
-        this.applydate,
-        this.deprt,
-        this.ests,
-        this.amt,
-        this.currency,
-        this.doc,
-      });
+  Expense({
+    this.Id,
+    this.name,
+    this.category,
+    this.categoryid,
+    this.desc,
+    this.applydate,
+    this.deprt,
+    this.ests,
+    this.amt,
+    this.Psts,
+    this.currency,
+    this.doc,
+  });
 }
+
+Future<List<Expense>> getExpenseApprovals(listType) async {
+  Dio dio = new Dio();
+  final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+  Response<String> response = await dio.post(path1+"getExpenseApproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  print('path1+"getExpenseApproval?datafor');
+  print(path1+"getExpenseApproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  final res = json.decode(response.data.toString());
+  List<Expense> userList = createExpenseApporval(res);
+  return userList;
+}
+
+List<Expense> createExpenseApporval(List data) {
+  List<Expense> list = new List();
+  for (int i = 0; i < data.length; i++) {
+    String Id = data[i]["Id"].toString();
+    String name = data[i]["Name"].toString();
+    String categoryid = data[i]["ClaimHeadId"].toString();
+    String category = data[i]["ClaimHead"].toString();
+    String ests = data[i]["ApproverSts"].toString();
+    String desc = data[i]["Purpose"].toString();
+    String applydate = data[i]["FromDate"].toString();
+    String doc = data[i]["Doc"].toString();
+    String amt = data[i]["TotalAmt"].toString();
+    String currency = data[i]["EmpCurrency"].toString();
+    String Pstatus = data[i]["Pstatus"].toString();
+    String Psts="";
+    if(data[i]["Pstatus"].contains("Pending at")) {
+      Psts = data[i]["Pstatus"].toString();
+    }
+    Expense tos = new Expense(
+      Id: Id,
+      name: name,
+      categoryid: categoryid,
+      category: category,
+      ests: ests,
+      desc: desc,
+      applydate: applydate,
+      doc: doc,
+      amt: amt,
+      currency: currency,
+      Psts: Psts,
+    );
+    list.add(tos);
+  }
+  return list;
+}
+
+ApproveExpense(expenseid,comment,sts) async{
+  String empid;
+  String organization;
+  Dio dio = new Dio();
+  final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
+  empid = prefs.getString('employeeid')??"";
+  organization =prefs.getString('organization')??"";
+  try {
+    FormData formData = new FormData.from({
+      "eid": empid,
+      "orgid": organization,
+      "expenseid": expenseid,
+      "comment": comment,
+      "sts": sts,
+    });
+    Response response = await dio.post(path1+"ApprovedExpense", data: formData);
+    print(path1+"ApprovedExpense?eid=$empid&orgid=$organization&expenseid=$expenseid&comment=$comment&sts=$sts");
+    final expenseMap = response.data.toString();
+    print("-------------------");
+    print(response.toString());
+    if (expenseMap.contains("false"))
+    {
+      print("false approve expense function--->" + response.data.toString());
+      return "false";
+    } else {
+      print("true  approve expense function---" + response.data.toString());
+      return "true";
+    }
+  }catch(e){
+    //print(e.toString());
+    return "Poor network connection";
+  }
+}
+//////////////////////////////////////SALARY EXPENSE APPROVAL TAB ID 4 AND MODULT ID 170 ENDS HERE///////////////////////////////////////
+
+//////////////////////////////////////////////PAYROLL EXPENSE APPROVAL TAB ID 8 AND MODULT ID 473/////////////////////////////////////////////////
+Future<List<Expense>> getPayrollExpenseApprovals(listType) async {
+  Dio dio = new Dio();
+  final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+  Response<String> response = await dio.post(path1+"getPayrollExpenseApproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  print('path1+"getExpenseApproval?datafor');
+  print(path1+"getExpenseApproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  final res = json.decode(response.data.toString());
+  List<Expense> userList = createPayrollExpenseApporval(res);
+  return userList;
+}
+
+List<Expense> createPayrollExpenseApporval(List data) {
+  List<Expense> list = new List();
+  for (int i = 0; i < data.length; i++) {
+    String Id = data[i]["Id"].toString();
+    String name = data[i]["Name"].toString();
+    String categoryid = data[i]["ClaimHeadId"].toString();
+    String category = data[i]["ClaimHead"].toString();
+    String ests = data[i]["ApproverSts"].toString();
+    String desc = data[i]["Purpose"].toString();
+    String applydate = data[i]["FromDate"].toString();
+    String doc = data[i]["Doc"].toString();
+    String amt = data[i]["TotalAmt"].toString();
+    String currency = data[i]["EmpCurrency"].toString();
+    String Pstatus = data[i]["Pstatus"].toString();
+    String Psts="";
+    if(data[i]["Pstatus"].contains("Pending at")) {
+      Psts = data[i]["Pstatus"].toString();
+    }
+    Expense tos = new Expense(
+      Id: Id,
+      name: name,
+      categoryid: categoryid,
+      category: category,
+      ests: ests,
+      desc: desc,
+      applydate: applydate,
+      doc: doc,
+      amt: amt,
+      currency: currency,
+      Psts: Psts,
+    );
+    list.add(tos);
+  }
+  return list;
+}
+
+ApprovePayrollExpense(expenseid,comment,sts) async{
+  String empid;
+  String organization;
+  Dio dio = new Dio();
+  final prefs = await SharedPreferences.getInstance();
+  String path1 = prefs.getString('path');
+  empid = prefs.getString('employeeid')??"";
+  organization =prefs.getString('organization')??"";
+  try {
+    FormData formData = new FormData.from({
+      "eid": empid,
+      "orgid": organization,
+      "expenseid": expenseid,
+      "comment": comment,
+      "sts": sts,
+    });
+    Response response = await dio.post(path1+"ApprovedPayrollExpense", data: formData);
+    print(path1+"ApprovedExpense?eid=$empid&orgid=$organization&expenseid=$expenseid&comment=$comment&sts=$sts");
+    final expenseMap = response.data.toString();
+    print("-------------------");
+    print(response.toString());
+    if (expenseMap.contains("false"))
+    {
+      print("false approve expense function--->" + response.data.toString());
+      return "false";
+    } else {
+      print("true  approve expense function---" + response.data.toString());
+      return "true";
+    }
+  }catch(e){
+    //print(e.toString());
+    return "Poor network connection";
+  }
+}
+////////////////////////////////////PAYROLL EXPENSE APPROVAL TAB ID 8 AND MODULT ID 473 ENDS HERE//////////////////////////////////////
 
 Future<List<Expense>> getExpenseDetailById(Id) async{
   Dio dio = new Dio();
@@ -202,17 +375,13 @@ List<Map> createList(List data,int label) {
   return list;
 }
 
-
-
 class Expensedate {
   String dates;
   String Fdate;
-
-  Expensedate(
-      {
-        this.dates,
-        this.Fdate,
-      });
+  Expensedate({
+    this.dates,
+    this.Fdate,
+  });
 }
 
 Future<List<Expensedate>> getExpenselistbydate() async {
@@ -230,6 +399,24 @@ Future<List<Expensedate>> getExpenselistbydate() async {
   List<Expensedate> userList = createExpenselistbydate(res);
 
   return userList;
+}
+
+List<Expensedate> createExpenselistbydate(List data) {
+
+  List<Expensedate> list = new List();
+
+  for (int i = 0; i < data.length; i++) {
+
+    String dates = data[i]["fromdate"].toString();
+    String Fdate = data[i]["Fdate"].toString();
+
+    Expensedate tos = new Expensedate(
+      dates: dates,
+      Fdate: Fdate,
+    );
+    list.add(tos);
+  }
+  return list;
 }
 
 withdrawExpense(Expense expense) async{
@@ -264,20 +451,5 @@ withdrawExpense(Expense expense) async{
   }
 }
 
-List<Expensedate> createExpenselistbydate(List data) {
 
-  List<Expensedate> list = new List();
 
-  for (int i = 0; i < data.length; i++) {
-
-    String dates = data[i]["fromdate"].toString();
-    String Fdate = data[i]["Fdate"].toString();
-
-    Expensedate tos = new Expensedate(
-      dates: dates,
-      Fdate: Fdate,
-    );
-    list.add(tos);
-  }
-  return list;
-}

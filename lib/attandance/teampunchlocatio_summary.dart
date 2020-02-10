@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
@@ -23,7 +25,7 @@ class TeamPunchLocationSummary extends StatefulWidget {
   @override
   _TeamPunchLocationSummary createState() => _TeamPunchLocationSummary();
 }
-
+TextEditingController today;
 class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String lat="";
@@ -42,6 +44,9 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
   bool showtabbar ;
   bool _checkLoaded = true;
 
+  bool res = true;
+  var formatter = new DateFormat('dd-MMM-yyyy');
+
   StreamLocation sl = new StreamLocation();
   bool _isButtonDisabled= false;
   final _comments=TextEditingController();
@@ -53,6 +58,8 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
     initPlatformState();
     getOrgName();
     setLocationAddress();
+    today = new TextEditingController();
+    today.text = formatter.format(DateTime.now());
   }
 
   getOrgName() async{
@@ -387,23 +394,63 @@ print('visit out called for visit id:'+visit_id);
                   Container(
                     padding: EdgeInsets.only(top:12.0,),
                     child:Center(
-                      child:Text("Today's Visits",
+                      child:Text("Team's Visits",
                           style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                     ),
                   ),
-
+                  Container(
+                    child: DateTimeField(
+                      //dateOnly: true,
+                      format: formatter,
+                      controller: today,
+                      onShowPicker: (context, currentValue) {
+                        return showDatePicker(
+                            context: context,
+                            firstDate: DateTime(1900),
+                            initialDate: currentValue ?? DateTime.now(),
+                            lastDate: DateTime(2100));
+                      },
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.all(0.0),
+                          child: Icon(
+                            Icons.date_range,
+                            color: Colors.grey,
+                          ), // icon is 48px widget.
+                        ), // icon is 48px widget.
+                        labelText: 'Select Date',
+                      ),
+                      onChanged: (date) {
+                        setState(() {
+                          if (date != null && date.toString() != '')
+                            res = true; //showInSnackBar(date.toString());
+                          else
+                            res = false;
+                        });
+                      },
+                      validator: (date) {
+                        if (date == null) {
+                          return 'Please select date';
+                        }
+                      },
+                    ),
+                  ),
+                  Divider(height: 1,),
+                  SizedBox(height: 8,),
                   //Divider(color: Colors.black54,height: 1.5,),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-//            crossAxisAlignment: CrossAxisAlignment.start,
+                    //crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height: 30.0,),
+                      SizedBox(height: 10.0,),
                       //SizedBox(width: MediaQuery.of(context).size.width*0.02),
                       Expanded(
                         flex: 50,
                         child:Text('Name',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                       ),
-                      SizedBox(height: 30.0,),
+                      SizedBox(height: 10.0,),
                       Expanded(
                         flex: 50,
                        // width: MediaQuery.of(context).size.width*0.2,
@@ -416,7 +463,7 @@ print('visit out called for visit id:'+visit_id);
                   Expanded(
                     //        height: MediaQuery.of(context).size.height*0.60,
                     child: new FutureBuilder<List<Punch>>(
-                      future: getTeamSummaryPunch(),
+                      future: getTeamSummaryPunch(today.text),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           if(snapshot.data.length>0) {
@@ -520,6 +567,31 @@ print('visit out called for visit id:'+visit_id);
 
                                           ],
                                         ),
+
+                                        snapshot.data[index].desc == ''
+                                            ? Container()
+                                            : snapshot.data[index].desc !=
+                                            'Visit out not punched' ?
+                                        Row(
+                                          children: <Widget>[
+                                            // SizedBox(width: 16.0,),
+                                            Text('Remark: ', style: TextStyle(
+                                              fontWeight: FontWeight.bold,),),
+                                            Text(snapshot.data[index].desc)
+                                          ],
+
+                                        ) :
+                                        Row(
+                                          children: <Widget>[
+                                            // SizedBox(width: 16.0,),
+                                            Text('Remark: ', style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.red),),
+                                            Text(snapshot.data[index].desc,
+                                              style: TextStyle(color: Colors.red),)
+                                          ],
+
+                                        ),
                                         Divider(color: Colors.black26,),
                                       ]);
 
@@ -533,7 +605,7 @@ print('visit out called for visit id:'+visit_id);
                                     width: MediaQuery.of(context).size.width*1,
                                     color: appStartColor().withOpacity(0.1),
                                     padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                    child:Text("Team data not found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                                    child:Text("Team's visit not found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                                   ),
                                 );
                               }

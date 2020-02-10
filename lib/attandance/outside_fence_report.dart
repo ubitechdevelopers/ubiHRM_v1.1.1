@@ -10,49 +10,50 @@ import '../b_navigationbar.dart';
 import '../drawer.dart';
 import '../global.dart';
 
-class LateComers extends StatefulWidget {
+class OutSideGeoFence extends StatefulWidget {
   @override
-  _LateComers createState() => _LateComers();
+  _OutSideGeoFence createState() => _OutSideGeoFence();
 }
 TextEditingController today;
 
 //FocusNode f_dept ;
-class _LateComers extends State<LateComers> {
-  final GlobalKey<ScaffoldState> _scaffoldKey=new GlobalKey<ScaffoldState>();
-  int _currentIndex=1;
+class _OutSideGeoFence extends State<OutSideGeoFence> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  int _currentIndex = 1;
   String _orgName;
   String admin_sts='0';
-  bool res=true;
+  bool res = true;
   var profileimage;
   bool showtabbar;
   String orgName="";
-  String countL='0';
+  String count='0';
   bool filests=false;
-  Future<List<EmpList>> _listFuture;
+  Future<List<OutsideAttendance>> _listFuture;
 
-  var formatter=new DateFormat('dd-MMM-yyyy');
+  String emp='0';
 
+  var formatter = new DateFormat('dd-MMM-yyyy');
   @override
   void initState() {
     super.initState();
-    today=new TextEditingController();
-    today.text=formatter.format(DateTime.now());
-    showtabbar=false;
-    profileimage=new NetworkImage(globalcompanyinfomap['ProfilePic']);
+    today = new TextEditingController();
+    today.text = formatter.format(DateTime.now());
+    showtabbar =false;
+    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     // f_dept = FocusNode();
     getOrgName();
-    _listFuture=getLateEmpDataList(today.text);
+    _listFuture = getOutsidegeoReport(today.text,emp);
   }
 
   getOrgName() async {
-    final prefs=await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     setState(() {
-      orgName=prefs.getString('orgname') ?? '';
+      orgName= prefs.getString('orgname') ?? '';
     });
   }
 
   void showInSnackBar(String value) {
-    final snackBar=SnackBar(
+    final snackBar = SnackBar(
         content: Text(
           value,
           textAlign: TextAlign.center,
@@ -68,8 +69,8 @@ class _LateComers extends State<LateComers> {
   getmainhomewidget() {
     return new Scaffold(
       key: _scaffoldKey,
-      backgroundColor: scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar, orgName),
+      backgroundColor:scaffoldBackColor(),
+      appBar: new AppHeader(profileimage, showtabbar,orgName),
       endDrawer: new AppDrawer(),
       bottomNavigationBar: HomeNavigation(),
 
@@ -95,10 +96,10 @@ class _LateComers extends State<LateComers> {
             //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
             child: Column(
               children: <Widget>[
-                SizedBox(height: 1.0),
+                //SizedBox(height: 1.0),
                 Center(
                   child: Text(
-                    'Late Comers',
+                    'Outside Geo Fence',
                     style: new TextStyle(
                       fontSize: 20.0,
                       color: appStartColor(),
@@ -106,9 +107,9 @@ class _LateComers extends State<LateComers> {
                   ),
                 ),
                 /*Divider(
-            height: 10.0,
-          ),*/
-                SizedBox(height: 2.0),
+                  height: 10.0,
+                ),*/
+                //SizedBox(height: 2.0),
                 Row(
                   children: <Widget>[
                     Expanded(
@@ -140,10 +141,9 @@ class _LateComers extends State<LateComers> {
                             setState(() {
                               if (date != null && date.toString() != '') {
                                 res=true; //showInSnackBar(date.toString());
-                                _listFuture=getLateEmpDataList(today.text);
+                                _listFuture=getOutsidegeoReport(today.text, emp);
                               } else {
                                 res=false;
-                                countL='0';
                               }
                             });
                           },
@@ -155,21 +155,16 @@ class _LateComers extends State<LateComers> {
                         ),
                       ),
                     ),
-                    Divider(
-                      height: 5.0,
-                    ),
-                   /* Padding(
+
+                    /*Padding(
                       padding: const EdgeInsets.only(left: 4.0),
-                      child: (res == false) ?
+                      child:(res == false)?
                       Center()
-                          : Container(
+                          :Container(
                           color: Colors.white,
                           height: 60,
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.35,
-                          child: new FutureBuilder<List<EmpList>>(
+                          width: MediaQuery.of(context).size.width * 0.35,
+                          child: new FutureBuilder<List<OutsideAttendance>>(
                               future: _listFuture,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
@@ -177,19 +172,16 @@ class _LateComers extends State<LateComers> {
                                     return new ListView.builder(
                                         scrollDirection: Axis.vertical,
                                         itemCount: snapshot.data.length,
-                                        itemBuilder: (BuildContext context,
-                                            int index) {
+                                        itemBuilder:(BuildContext context, int index) {
                                           return new Column(
-                                              mainAxisAlignment: MainAxisAlignment
-                                                  .spaceAround,
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                                               children: <Widget>[
                                                 (index == 0)
                                                     ? Row(
-                                                  mainAxisAlignment: MainAxisAlignment
-                                                      .center,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
                                                   children: <Widget>[
                                                     SizedBox(
-                                                      height: 60,
+                                                      height:  60,
                                                     ),
                                                     Container(
                                                       //padding: EdgeInsets.only(left: 5.0),
@@ -210,31 +202,36 @@ class _LateComers extends State<LateComers> {
                                                           //openFile(filepath);
                                                           if (mounted) {
                                                             setState(() {
-                                                              filests=true;
+                                                              filests = true;
                                                             });
                                                           }
                                                           getCsv(
                                                               snapshot.data,
-                                                              'Late_Comers_Report_' +
-                                                                  today.text,
-                                                              'lateComers')
+                                                              'Outside_Geo_Fence_Report_' + today.text,
+                                                              'outside')
                                                               .then((res) {
-                                                            if (mounted) {
+                                                            if(mounted){
                                                               setState(() {
-                                                                filests=false;
+                                                                filests = false;
                                                               });
                                                             }
+                                                            // showInSnackBar('CSV has been saved in file storage in ubiattendance_files/Department_Report_'+today.text+'.csv');
                                                             dialogwidget(
-                                                                "CSV has been saved in internal storage in ubihrm_files/Late_Comers_Report_" +
+                                                                "CSV has been saved in internal storage in ubihrm_files/Early_Leavers_Report_" +
                                                                     today.text +
                                                                     ".csv",
                                                                 res);
+                                                            *//*showDialog(context: context, child:
+                                                        new AlertDialog(
+                                                          content: new Text("CSV has been saved in file storage in ubiattendance_files/Early_Leavers_Report_"+today.text+".csv"),
+                                                        )
+                                                        );*//*
                                                           });
                                                         },
                                                       ),
                                                     ),
                                                     SizedBox(
-                                                      width: 8,
+                                                      width:8,
                                                     ),
                                                     Container(
                                                       padding: EdgeInsets.only(
@@ -251,36 +248,40 @@ class _LateComers extends State<LateComers> {
                                                             fontSize: 16,),
                                                         ),
                                                         onTap: () {
+                                                          *//* final uri = Uri.file('/storage/emulated/0/ubiattendance_files/Early_Leavers_Report_14-Jun-2019.pdf');
+                                                      SimpleShare.share(
+                                                          uri: uri.toString(),
+                                                          title: "Share my file",
+                                                          msg: "My message");*//*
                                                           if (mounted) {
                                                             setState(() {
-                                                              filests=true;
+                                                              filests = true;
                                                             });
                                                           }
                                                           CreatePDF(
                                                               snapshot.data,
-                                                              'Late Comers Report ('+today.text+')',
+                                                              'Outside Geo Fence Report ('+today.text+')',
                                                               snapshot.data.length.toString(),
-                                                              'Late_Comers_Report_' + today.text,
-                                                              'lateComers'
+                                                              'Outside_Geo_Fence_Report_' + today.text,
+                                                              'outside'
                                                           ).then((res) {
-                                                            if (mounted) {
+                                                            if(mounted) {
                                                               setState(() {
-                                                                filests=false;
+                                                                filests =false;
+                                                                // OpenFile.open("/sdcard/example.txt");
                                                               });
                                                             }
                                                             dialogwidget(
                                                                 'PDF has been saved in internal storage in ubihrm_files/' +
-                                                                    'Late_Comers_Report_' +
-                                                                    today.text +
-                                                                    '.pdf',
+                                                                    'Outside_Geo_Fence_Report_' + today.text + '.pdf',
                                                                 res);
+                                                            // showInSnackBar('PDF has been saved in file storage in ubiattendance_files/'+'Department_Report_'+today.text+'.pdf');
                                                           });
-
                                                         },
                                                       ),
                                                     ),
                                                   ],
-                                                ) : new Center(),
+                                                ):new Center(),
                                               ]
                                           );
                                         }
@@ -288,7 +289,7 @@ class _LateComers extends State<LateComers> {
                                   }
                                 }
                                 return new Center(
-                                 //child: Text("No CSV/PDF generated", textAlign: TextAlign.center,),
+                                  //child: Text("No CSV/PDF generated", textAlign: TextAlign.center,),
                                 );
                               }
                           )
@@ -299,13 +300,17 @@ class _LateComers extends State<LateComers> {
                 Divider(
                   height: 5,
                 ),
-                SizedBox(height: 5.0),
+                getEmployee_DD(),
+                Divider(
+                  height: 5,
+                ),
+                //SizedBox(height: 5.0),
                 Container(
                   //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
                   width: MediaQuery
                       .of(context)
                       .size
-                      .width * 1,
+                      .width *1,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -314,22 +319,22 @@ class _LateComers extends State<LateComers> {
                         width: MediaQuery
                             .of(context)
                             .size
+                            .width * 0.28,
+                        child: Text(
+                          '  Name',
+                          style: TextStyle(color: appStartColor(),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
                             .width * 0.35,
                         child: Text(
-                          '   Name',
-                          style: TextStyle(color: appStartColor(),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.16,
-                        child: Text(
-                          'Shift',
+                          'Time In',
                           style: TextStyle(color: appStartColor(),
                               fontWeight: FontWeight.bold,
                               fontSize: 16.0),
@@ -341,18 +346,7 @@ class _LateComers extends State<LateComers> {
                             .of(context)
                             .size
                             .width * 0.20,
-                        child: Text('Time In',
-                            style: TextStyle(color: appStartColor(),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16.0),
-                            textAlign: TextAlign.left),
-                      ),
-                      Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.20,
-                        child: Text('Late By',
+                        child: Text('Time Out',
                             style: TextStyle(color: appStartColor(),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16.0),
@@ -361,7 +355,7 @@ class _LateComers extends State<LateComers> {
                     ],
                   ),
                 ),
-                SizedBox(height: 5.0),
+                //SizedBox(height: 5.0),
                 Divider(
                   height: 5.2,
                 ),
@@ -382,7 +376,7 @@ class _LateComers extends State<LateComers> {
             ),
 
           ),
-        ]);
+        ] );
   }
 
   loader() {
@@ -398,127 +392,266 @@ class _LateComers extends State<LateComers> {
   }
 
   getEmpDataList(date) {
-    return new FutureBuilder<List<EmpList>>(
+    return new FutureBuilder<List<OutsideAttendance>>(
         future: _listFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            countL=snapshot.data.length.toString();
+            count=snapshot.data.length.toString();
             if (snapshot.data.length > 0) {
               return new ListView.builder(
                   itemCount: snapshot.data.length,
                   //    padding: EdgeInsets.only(left: 15.0,right: 15.0),
                   itemBuilder: (BuildContext context, int index) {
-                    return new Column(
+                    return new Container(
+                      //          width: MediaQuery.of(context).size.width * .9,
+                      child:Column(
                         children: <Widget>[
                           SizedBox(height: 5.0,),
-                          (index == 0) ?
+                          (index == 0)?
                           Row(
                               children: <Widget>[
                                 //SizedBox(height: 25.0,),
                                 Container(
                                   padding: EdgeInsets.only(left: 5.0),
-                                  child: Text(
-                                    "  Total Late Comers: ${countL}",
-                                    style: TextStyle(color: Colors.orange,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.0,),),
+                                  child: Text("Total: ${count}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
                                 ),
                               ]
-                          ) : new Center(),
-                          (index == 0) ?
-                          Divider(color: Colors.black26,) : new Center(),
-                          new FlatButton(
-                            child: new Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                new Container(
-                                    width: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width * 0.31,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: <Widget>[
-                                        new Text(
-                                            snapshot.data[index].name
-                                                .toString(),
-                                            style: TextStyle(
-                                                color: Colors
-                                                    .black87,
-                                                fontWeight: FontWeight
-                                                    .bold,
-                                                fontSize: 16.0)
-                                        ),
-
-                                      ],
-                                    )),
-                                new Container(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.2,
-                                  child: new Text(
-                                    snapshot.data[index].shift.toString(),
-                                  ),
-                                ),
-                                new Container(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.2,
-                                  child: new Text(
-                                    snapshot.data[index].timeAct.toString(),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: new Container(
-                                    width: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width * 0.2,
-                                    child: new Text(
-                                      snapshot.data[index].diff.toString(),
-                                      style: TextStyle(
-                                          color: appStartColor()),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          ):new Center(),
+                          (index == 0)?
+                          Divider(color: Colors.black26,):new Center(),
+                        new Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            SizedBox(width: 8.0,),
+                            Expanded(
+                              flex: 20,
+                              child:  new Container(
+                                  width: MediaQuery.of(context).size.width * 0.18,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      new Text(
+                                        snapshot.data[index].empname.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 13.0),textAlign: TextAlign.left,),
+                                    ],
+                                  )),
                             ),
-                            onPressed: () {
-                              null;
-                              //    editDept(context,snapshot.data[index].dept.toString(),snapshot.data[index].status.toString(),snapshot.data[index].id.toString());
-                            },
-                          ),
-                          Divider(
-                            color: Colors.blueGrey.withOpacity(0.25),
-                            height: 0.2,
-                          ),
-                        ]);
+                            Expanded(
+                              flex: 2,
+                              child: Text(""),
+                            ),
+                            Expanded(
+                              flex: 37,
+                              child:  new Container(
+                                //width: MediaQuery.of(context).size.width * 0.37,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    /* new Text(
+                                    snapshot.data[index].client.toString(),style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.left,
+                                  ),*/
+                                    InkWell(
+                                      child:Text(
+                                        snapshot.data[index].locationin.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
+                                      onTap: () {
+                                        goToMap(snapshot.data[index].latin,snapshot.data[index].lonin.toString());
+                                      },
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(2.0),
+                                      color: snapshot.data[index].incolor.toString()=='0'?Colors.red:Colors.green,
+
+                                      child: Text(snapshot.data[index].instatus,
+                                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(""),
+                            ),
+                            Expanded(
+                              flex: 37,
+                              child:  new Container(
+                                // width: MediaQuery.of(context).size.width * 0.37,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+
+
+                                    InkWell(
+                                      child:Text(
+                                        snapshot.data[index].locationout.toString(),
+                                        style: TextStyle
+                                          (
+                                            color: Colors.black54,fontSize: 12.0
+                                        ),
+                                      ),
+                                      onTap: ()
+                                      {
+                                        goToMap(
+                                            snapshot.data[index].latout.toString(),
+                                            snapshot.data[index].lonout.toString()
+                                        );
+                                      },
+                                    ),
+                                    snapshot.data[index].outstatus!=''?
+                                    new Container(
+                                      padding: EdgeInsets.all(2.0),
+
+                                      color: snapshot.data[index].outcolor.toString()=='0'?Colors.red:Colors.green,
+                                      child: Text(snapshot.data[index].outstatus,
+                                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.white),
+                                      ),
+                                    ):Center(child: Text("-"),),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            /*
+                            Container(
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width * 0.19,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .center,
+                                  children: <Widget>[
+                                    Text(snapshot.data[index].timein
+                                        .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+
+                                    Text(snapshot.data[index].attdate
+                                        .toString(),style: TextStyle(color: Colors.grey),),
+                                  ],
+                                )
+
+                            ),
+                            Container(
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width * 0.22,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .center,
+                                  children: <Widget>[
+                                    Text(snapshot.data[index].timein
+                                        .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+
+                                    Text(snapshot.data[index].attdate .toString(),style: TextStyle(color: Colors.grey
+                                    ),),
+                                  ],
+                                )
+
+                            ),*/
+                          ],
+                        ),
+
+                        Divider
+                          (
+                          color: Colors.blueGrey.withOpacity(0.25),
+                          height: 10.2,
+                        ),
+                      ]),
+                    );
                   });
-            } else {
+            }
+            else
+            {
               return new Center(
                 child: Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 1,
+                  width: MediaQuery.of(context).size.width*1,
                   color: appStartColor().withOpacity(0.1),
-                  padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                  child: Text(
-                    "No Employees found", style: TextStyle(fontSize: 14.0),
-                    textAlign: TextAlign.center,),
+                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                  child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                 ),
-                //child: Text("No Employees found."),
               );
             }
-          } else if (snapshot.hasError) {
+          }
+          else if (snapshot.hasError)
+          {
             return new Text("Unable to connect server");
           }
           // return loader();
           return new Center(child: CircularProgressIndicator());
+        });
+  }
+
+  Widget getEmployee_DD() {
+    String dc = "0";
+    return new FutureBuilder<List<Map>>(
+        future: getEmployeesList(1),// with -select- label
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            try {
+              return new Container(
+                //width: MediaQuery.of(context).size.width*.45,
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    labelText: 'Select Employee',
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(1.0),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.grey,
+                      ), // icon is 48px widget.
+                    ),
+                  ),
+
+                  child: DropdownButtonHideUnderline(
+                    child: new DropdownButton<String>(
+                      isDense: true,
+                      style: new TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black
+                      ),
+                      value: emp,
+                      onChanged: (String newValue) {
+                        setState(() {
+                          emp = newValue;
+                          if(res = true){
+                            _listFuture = getOutsidegeoReport(today.text,emp);
+                          }else {
+                            print('state set----');
+                            count='0';
+                          }
+                        });
+                      },
+                      items: snapshot.data.map((Map map) {
+                        return new DropdownMenuItem<String>(
+                          value: map["Id"].toString(),
+                          child: new SizedBox(
+                              width: 250.0,
+                              child: map["Code"]!=''&&map["Code"]!='null'?new Text(map["Code"]+' - '+map["Name"]): new Text(map["Name"],)
+                          ),
+                        );
+                      }).toList(),
+
+                    ),
+                  ),
+                ),
+              );
+            }
+            catch(e){
+              return Text("EX: Unable to fetch employees");
+            }
+          } else if (snapshot.hasError) {
+            print(snapshot.error);
+            return new Text("ER: Unable to fetch employees");
+          }
+          // return loader();
+          return new Center(child: SizedBox(
+            child: CircularProgressIndicator(strokeWidth: 2.2,),
+            height: 20.0,
+            width: 20.0,
+          ),);
         });
   }
 
@@ -554,5 +687,4 @@ class _LateComers extends State<LateComers> {
           ],
         ));
   }
-
 } /////////mail class close

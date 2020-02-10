@@ -72,7 +72,6 @@ getModulePermission(String moduleid, String permission_type){
       }
     }
   }
-
   return "0";
 }
 
@@ -251,8 +250,6 @@ getovertime(Employee emp) async{
     return "Poor network connection";
   }
 
-
-
 }
 
 
@@ -265,6 +262,8 @@ getCountAproval() async{
   // await dio.post(path+"getapprovalCount?datafor=Pending"'&empid='+empid+'&orgid='+orgdir);
 
   var response =  await dio.post(path1+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
+  print("getapprovalcount");
+  print(path1+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
   //print("getapprovalCount");
   //print(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
   Map responseJson = json.decode(response.data.toString());
@@ -318,7 +317,9 @@ Future<List<Team>> getTeamList() async {
   String empid = prefs.getString('employeeid')??"";
 
   Response<String> response =
+
   await dio.post(path1 + "getReportingTeam?&employeeid="+empid+"&organization="+orgdir);
+  print(path1 + "getReportingTeam?&employeeid="+empid+"&organization="+orgdir);
   List responseJson = json.decode(response.data.toString());
 
 
@@ -513,10 +514,6 @@ Future<List<Map<String, String>>> getChartDataYes() async {
   /*  List<Map<String, String>> val = [
        {
 
-
-
-
-
           // "present": data['present'].toString(),
   "totalleaveC": data['leavesummary']['data'][0]['totalleave'].toString(),
   "usedleaveC" : data['leavesummary']['data'][0]['usedleave'].toString(),
@@ -541,7 +538,7 @@ Future<List<Map<String, String>>> getChartDataYes() async {
         "name": data['leavesummary']['data'][j]['name'].toString(),
         "total": data['leavesummary']['data'][j]['totalleave'].toString(),
         "used": data['leavesummary']['data'][j]['usedleave'].toString(),
-        "left": data['leavesummary']['data'][j]['leftleave'].toString(),
+        "left": data['leavesummary']['data'][j]['allocatedleftleaves'].toString(),
       });
     }
   }
@@ -614,13 +611,17 @@ Future<List<Map<String, String>>> getAttsummaryChart() async {
 
   List<Map<String, String>> val = [
     {
-
       // "present": data['present'].toString(),
       "present": data['att']['present'] .toString(),
       "absent" : data['att']['absent'].toString(),
+      /*"weekoff"  : data['att']['weekoff'].toString(),
+      "halfday"  : data['att']['halfday'].toString(),
+      "holiday"  : data['att']['holiday'].toString(),*/
       "leave"  : data['att']['leave'].toString(),
-
-
+      /*"compoff"  : data['att']['compoff'].toString(),
+      "workfromhome"  : data['att']['workfromhome'].toString(),
+      "unpaidleave"  : data['att']['unpaidleave'].toString(),
+      "unpaidhalfday"  : data['att']['unpaidhalfday'].toString(),*/
     }
   ];
   // print('==========');
@@ -642,9 +643,10 @@ Future<List<Holi>> getHolidays() async {
     "organization": emp.organization
   });*/
   // print(path + "getHolidays" + empid);
+  print(await dio.post(path1+"getHolidays?&employeeid="+empid+"&organization="+orgdir));
   Response<String> response =
   await dio.post(path1+"getHolidays?&employeeid="+empid+"&organization="+orgdir);
-  print(await dio.post(path1+"getHolidays?&employeeid="+empid+"&organization="+orgdir));
+
   print("1777.---------  "+response.toString());
   List responseJson = json.decode(response.data.toString());
   // print("1.---------  "+responseJson.toString());

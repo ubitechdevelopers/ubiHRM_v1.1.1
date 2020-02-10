@@ -15,7 +15,6 @@
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:ubihrm/attandance/app.dart';
-import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_newservices.dart';
 
 void main(){
@@ -46,7 +45,7 @@ class _MyAppState extends State<MyApp> {
             seconds: 2,
             navigateAfterSeconds: new ShrineApp(),
             title: new Text('',style: TextStyle(fontSize: 32.0),),
-            loaderColor: appStartColor(),
+            //loaderColor: appStartColor(),
             image:Image.asset('assets/splash.gif'),
             backgroundColor: Colors.white,
             styleTextUnderTheLoader: new TextStyle(color: Colors.grey[500]),

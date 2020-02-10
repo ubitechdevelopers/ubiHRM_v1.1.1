@@ -5,6 +5,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_share/simple_share.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 
 import './image_view.dart';
@@ -23,11 +24,15 @@ TextEditingController today;
 class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTickerProviderStateMixin {
   TabController _controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  String countP='0',countA='0',countL='0',countE='0';
+  Future<List<Attn>> _listFuture1,_listFuture2,_listFuture3,_listFuture4;
+  List presentlist= new List(), absentlist= new List(), latecommerlist= new List(),earlyleaverlist= new List();
   String _orgName;
   var formatter = new DateFormat('dd-MMM-yyyy');
   var profileimage;
   bool showtabbar;
   String orgName="";
+  bool filests=false;
 
   bool res = true;
   List<Map<String,String>> chartData;
@@ -36,12 +41,14 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
         content: Text(value,textAlign: TextAlign.center,));
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
+
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -51,8 +58,44 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
     today.text = formatter.format(DateTime.now());
     showtabbar =false;
     profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
-
+    setAlldata();
   }
+
+  setAlldata(){
+    _listFuture1 = getCDateAttn('present',today.text);
+    _listFuture2 = getCDateAttn('absent',today.text);
+    _listFuture3 = getCDateAttn('latecomings',today.text);
+    _listFuture4 = getCDateAttn('earlyleavings',today.text);
+
+    _listFuture1.then((data) async{
+      setState(() {
+        presentlist = data;
+        countP = data.length.toString();
+      });
+    });
+
+    _listFuture2.then((data) async{
+      setState(() {
+        absentlist = data;
+        countA = data.length.toString();
+      });
+    });
+
+    _listFuture3.then((data) async{
+      setState(() {
+        latecommerlist = data;
+        countL = data.length.toString();
+      });
+    });
+
+    _listFuture4.then((data) async{
+      setState(() {
+        earlyleaverlist = data;
+        countE= data.length.toString();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -87,44 +130,183 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
           new Container(
             child: Center(child:Text("Custom Date Attendance",style: TextStyle(fontSize: 20.0,color: appStartColor()),),),
           ),
-          Container(
-            child: DateTimeField(
-              //dateOnly: true,
-              format: formatter,
-              controller: today,
-              readOnly: true,
-              onShowPicker: (context, currentValue) {
-                return showDatePicker(
-                    context: context,
-                    firstDate: DateTime(1900),
-                    initialDate: currentValue ?? DateTime.now(),
-                    lastDate: DateTime(2100));
-              },
-              decoration: InputDecoration(
-                prefixIcon: Padding(
-                  padding: EdgeInsets.all(0.0),
-                  child: Icon(
-                    Icons.date_range,
-                    color: Colors.grey,
-                  ), // icon is 48px widget.
-                ), // icon is 48px widget.
-                labelText: 'Select Date',
-              ),
-              onChanged: (date) {
-                setState(() {
-                  if (date != null && date.toString()!='')
-                    res = true; //showInSnackBar(date.toString());
-                  else
-                    res = false;
-                });
-              },
-              validator: (date) {
-                if (date == null) {
-                  return 'Please select date';
-                }
-              },
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  child: DateTimeField(
+                    //dateOnly: true,
+                    format: formatter,
+                    controller: today,
+                    readOnly: true,
+                    onShowPicker: (context, currentValue) {
+                      return showDatePicker(
+                        context: context,
+                        firstDate: DateTime(1900),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime(2100));
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(
+                          Icons.date_range,
+                          color: Colors.grey,
+                        ), // icon is 48px widget.
+                      ), // icon is 48px widget.
+                      labelText: 'Select Date',
+                    ),
+                    onChanged: (date) {
+                      setState(() {
+                        if (date != null && date.toString()!='') {
+                          res=true; //showInSnackBar(date.toString());
+                          setAlldata();
+                        }
+                        else {
+                          res=false;
+                          countP='0';
+                          countA='0';
+                          countE='0';
+                          countL='0';
+                        }
+                      });
+                    },
+                    validator: (date) {
+                      if (date == null) {
+                        return 'Please select date';
+                      }
+                    },
 
-            ),
+                  ),
+                ),
+              ),
+              /*Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child:(res == false)?
+                Center():Container(
+                    color: Colors.white,
+                    height: 60,
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    child: new Column(
+                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          (presentlist.length > 0 || absentlist.length > 0 || latecommerlist.length > 0 || earlyleaverlist.length > 0)
+                              ?Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              SizedBox(
+                                height:  60,
+                              ),
+                              Container(
+                                //padding: EdgeInsets.only(left: 5.0),
+                                child: InkWell(
+                                  child: Text('CSV',
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: Colors.blueAccent,
+                                      fontSize: 16,
+                                      //fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    //openFile(filepath);
+                                    if (mounted) {
+                                      setState(() {
+                                        filests = true;
+                                      });
+                                    }
+                                    getCsvAll(
+                                        presentlist,
+                                        absentlist,
+                                        latecommerlist,
+                                        earlyleaverlist,
+                                        'Custom_date_Report_' + today.text,
+                                        'cust').then((res) {
+                                      print('snapshot.data');
+
+                                      if(mounted){
+                                        setState(() {
+                                          filests = false;
+                                        });
+                                      }
+                                      // showInSnackBar('CSV has been saved in file storage in ubiattendance_files/Department_Report_'+today.text+'.csv');
+                                      dialogwidget(
+                                          "CSV has been saved in internal storage in ubihrm_files/Custom_date_Report_" +
+                                              today.text + ".csv", res);
+
+                                    });
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width:8,
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(
+                                    left: 5.0),
+                                child: InkWell(
+                                  child: Text('PDF',
+                                    style: TextStyle(
+                                      decoration:
+                                      TextDecoration
+                                          .underline,
+                                      color: Colors
+                                          .blueAccent,
+                                      fontSize: 16,),
+                                  ),
+                                  onTap: () {
+                                    *//*final uri = Uri.file('/storage/emulated/0/ubiattendance_files/Designation_Wise_Report_14-Jun-2019.pdf');
+                                    SimpleShare.share(
+                                        uri: uri.toString(),
+                                        title: "Share my file",
+                                        msg: "My message");*//*
+                                    if (mounted) {
+                                      setState(() {
+                                        filests = true;
+                                      });
+                                    }
+                                    CreatePDFAll(
+                                        presentlist,
+                                        absentlist,
+                                        latecommerlist,
+                                        earlyleaverlist,
+                                        'Custom Date Report ('+today.text+')',
+                                        'Custom_date_Report_' + today.text,
+                                        'cust')
+                                        .then((res) {
+                                      if(mounted) {
+                                        setState(() {
+                                          filests =
+                                          false;
+                                          // OpenFile.open("/sdcard/example.txt");
+                                        });
+                                      }
+                                      dialogwidget(
+                                          'PDF has been saved in internal storage in ubihrm_files/' +
+                                              'Custom_date_Report_' + today.text + '.pdf',
+                                          res);
+                                      // showInSnackBar('PDF has been saved in file storage in ubiattendance_files/'+'Department_Report_'+today.text+'.pdf');
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ):Center(
+                              *//*child: Padding(
+                                padding: const EdgeInsets.only(top:12.0),
+                                child: Text("No CSV/PDF generated", textAlign: TextAlign.center,),
+                              )*//*
+                          ),
+                        ]
+                    )
+                ),
+              )*/
+            ],
+          ),
+          Divider(
+            height: 5,
+            color: Colors.black,
           ),
           res==true?new Container(
             padding: EdgeInsets.all(0.1),
@@ -152,18 +334,35 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
             ),
           ):Container(
             height: MediaQuery.of(context).size.height*0.25,
-            child: Center(
-              child:Text('No Chart Available'),
+            child:Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width*1,
+                color:appStartColor().withOpacity(0.1),
+                padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                child:Text("No chart available",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+              ),
             ),
           ),
           res==true?new Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Flexible(child: Text('Early Leavers(EL)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Late Comers(LC)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Absent(A)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Present(P)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
+              Flexible(
+                child: Text('Present(P)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Absent(A)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Late Comers(LC)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Early Leavers(EL)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
             ],
           ):Center(),
           Divider(),
@@ -226,7 +425,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<Attn>>(
-                        future: getCDateAttn('present',today.text),
+                        future: _listFuture1,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if(snapshot.data.length>0) {
@@ -236,6 +435,18 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                   itemBuilder: (BuildContext context, int index) {
                                     return new Column(
                                         children: <Widget>[
+                                          /*(index == 0)?
+                                          Row(
+                                              children: <Widget>[
+                                                //SizedBox(height: 25.0,),
+                                                Container(
+                                                  padding: EdgeInsets.only(left: 5.0),
+                                                  child: Text("Total Present: ${countP}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
+                                                ),
+                                              ]
+                                          ):new Center(),
+                                          (index == 0)?
+                                          Divider(color: Colors.black26,):new Center(),*/
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment
                                                 .spaceAround,
@@ -396,7 +607,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                             }
                           }
                           else if (snapshot.hasError) {
-						   return new Text("Unable to connect server");
+						                return new Text("Unable to connect server");
                           //  return new Text("${snapshot.error}");
                           }
 
@@ -420,7 +631,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<Attn>>(
-                        future: getCDateAttn('absent',today.text),
+                        future: _listFuture2,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if(snapshot.data.length>0) {
@@ -428,46 +639,44 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                   scrollDirection: Axis.vertical,
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (BuildContext context, int index) {
-                                    return new Row(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .spaceAround,
+                                    return Column(
                                       children: <Widget>[
-                                        SizedBox(height: 40.0,),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.42,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .start,
+                                        /*(index == 0)?
+                                        Row(
                                             children: <Widget>[
-                                              Text(snapshot.data[index].Name
-                                                  .toString(), style: TextStyle(
-                                                  color: Colors.black87,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16.0),),
-                                            ],
-                                          ),
-                                        ),
-
-                                        Container(
+                                              //SizedBox(height: 25.0,),
+                                              Container(
+                                                padding: EdgeInsets.only(left: 5.0),
+                                                child: Text("Total Absent: ${countA}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
+                                              ),
+                                            ]
+                                        ):new Center(),
+                                        (index == 0)?
+                                        Divider(color: Colors.black26,):new Center(),*/
+                                        Row(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceAround,
+                                        children: <Widget>[
+                                          SizedBox(height: 40.0,),
+                                          Container(
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
-                                                .width * 0.20,
+                                                .width * 0.42,
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment
-                                                  .center,
+                                                  .start,
                                               children: <Widget>[
-                                                Text(snapshot.data[index].TimeIn
-                                                    .toString()),
+                                                Text(snapshot.data[index].Name
+                                                    .toString(), style: TextStyle(
+                                                    color: Colors.black87,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16.0),),
                                               ],
-                                            )
+                                            ),
+                                          ),
 
-                                        ),
-                                        Flexible(
-                                          child: Container(
+                                          Container(
                                               width: MediaQuery
                                                   .of(context)
                                                   .size
@@ -476,15 +685,33 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                                 crossAxisAlignment: CrossAxisAlignment
                                                     .center,
                                                 children: <Widget>[
-                                                  Text(snapshot.data[index].TimeOut
+                                                  Text(snapshot.data[index].TimeIn
                                                       .toString()),
                                                 ],
                                               )
 
                                           ),
-                                        ),
-                                      ],
+                                          Flexible(
+                                            child: Container(
+                                                width: MediaQuery
+                                                    .of(context)
+                                                    .size
+                                                    .width * 0.20,
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment
+                                                      .center,
+                                                  children: <Widget>[
+                                                    Text(snapshot.data[index].TimeOut
+                                                        .toString()),
+                                                  ],
+                                                )
 
+                                            ),
+                                          ),
+                                        ],
+
+                                      ),
+                                      ]
                                     );
                                   }
                               );
@@ -534,7 +761,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<Attn>>(
-                        future: getCDateAttn('latecomings',today.text),
+                        future: _listFuture3,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if(snapshot.data.length>0) {
@@ -544,6 +771,18 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                   itemBuilder: (BuildContext context, int index) {
                                     return new Column(
                                         children: <Widget>[
+                                          /*(index == 0)?
+                                          Row(
+                                              children: <Widget>[
+                                                //SizedBox(height: 25.0,),
+                                                Container(
+                                                  padding: EdgeInsets.only(left: 5.0),
+                                                  child: Text("Total Late Comers: ${countL}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
+                                                ),
+                                              ]
+                                          ):new Center(),
+                                          (index == 0)?
+                                          Divider(color: Colors.black26,):new Center(),*/
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment
                                                 .spaceAround,
@@ -730,7 +969,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<Attn>>(
-                        future: getCDateAttn('earlyleavings',today.text),
+                        future: _listFuture4,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if(snapshot.data.length>0) {
@@ -740,6 +979,18 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                   itemBuilder: (BuildContext context, int index) {
                                     return new Column(
                                         children: <Widget>[
+                                          /*(index == 0)?
+                                          Row(
+                                              children: <Widget>[
+                                                //SizedBox(height: 25.0,),
+                                                Container(
+                                                  padding: EdgeInsets.only(left: 5.0),
+                                                  child: Text("Total Early Leavers: ${countE}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
+                                                ),
+                                              ]
+                                          ):new Center(),
+                                          (index == 0)?
+                                          Divider(color: Colors.black26,):new Center(),*/
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment
                                                 .spaceAround,
@@ -916,7 +1167,12 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
           ):Container(
             height: MediaQuery.of(context).size.height*0.25,
             child:Center(
-              child: Text('No Data Available'),
+              child: Container(
+                width: MediaQuery.of(context).size.width*1,
+                color:appStartColor().withOpacity(0.1),
+                padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                child:Text("Please select the date",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+              ),
             ),
           ),
         ],
@@ -924,4 +1180,38 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
       ),
       ]);
   }
+
+  dialogwidget(msg, filename) {
+    showDialog(
+        context: context,
+        // ignore: deprecated_member_use
+        child: new AlertDialog(
+          content: new Text(msg),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Later'),
+              shape: Border.all(),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+            RaisedButton(
+              child: Text(
+                'Share File',
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.orange[800],
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+                final uri=Uri.file(filename);
+                SimpleShare.share(
+                    uri: uri.toString(),
+                    title: "UBIHRM Report",
+                    msg: "UBIHRM Report");
+              },
+            ),
+          ],
+        ));
+  }
+
 }

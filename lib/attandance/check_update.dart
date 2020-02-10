@@ -24,34 +24,37 @@ class CheckUpdate extends StatefulWidget {
   @override
   _CheckUpdate createState() => _CheckUpdate();
 }
+
 class _CheckUpdate extends State<CheckUpdate> {
-  String mand_update='0';
-  final _formKey = GlobalKey<FormState>();
+  String mand_update;
+  //final _formKey = GlobalKey<FormState>();
   int response;
+
   loader() {
     return new Container(
       child: Center(
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Image.asset(
-                  'assets/spinner.gif', height: 50.0, width: 50.0),
+              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
             ]),
       ),
     );
   }
+
   void initState() {
     super.initState();
     getShared();
     checkMandUpdate().then((res){
       if(mounted) {
         setState(() {
-          print('************************'+res.toString()+'***********************************');
+          //print('**********************************'+res.toString()+'***********************************');
           mand_update=res;
         });
       }
     });
   }
+
   getShared() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -59,6 +62,7 @@ class _CheckUpdate extends State<CheckUpdate> {
       //print("Response "+response.toString());
     });
   }
+
   @override
   Widget build(BuildContext context) {
     try {
@@ -72,27 +76,27 @@ class _CheckUpdate extends State<CheckUpdate> {
                     SizedBox(height: MediaQuery.of(context).size.height*0.4,),
                     Container(
                       width:MediaQuery.of(context).size.width*0.9,
-                      child:Text('New version found, for better user experience please update the application.',textAlign: TextAlign.center,),
+                      child:Text('For better experience, please update the latest version.',textAlign: TextAlign.center,),
                       ),
                     SizedBox(height: MediaQuery.of(context).size.height*0.02,),
                     Container(
                       width:MediaQuery.of(context).size.width*0.7,
-                      child:  Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           mand_update=='0'?FlatButton(
-                              shape: Border.all(color: Colors.black54),
-                              child:Text('Later',style:TextStyle(color: Colors.black54)),
+                            shape: Border.all(color: Colors.black54),
+                            child:Text('Later',style:TextStyle(color: Colors.black54)),
                             onPressed: (){
-                                print('clicked');
+                              print('clicked');
                               (response == 1) ?
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => HomePage()),
                               ) :
                               Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => LoginPage()),
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginPage()),
                               );
                             },
                           ):SizedBox(width: 0.0,),
@@ -114,7 +118,6 @@ class _CheckUpdate extends State<CheckUpdate> {
             },
           ),
         );
-
     }catch(EXP){
       return new Scaffold(
         body:new Builder(
@@ -138,8 +141,5 @@ class _CheckUpdate extends State<CheckUpdate> {
     );*/
 
   }
-
-
-
 
 }

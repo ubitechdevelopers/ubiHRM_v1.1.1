@@ -85,6 +85,8 @@ int visitImage = 1;
 var perEmployeeLeave;
 var perLeaveApproval;
 var perTimeoffApproval;
+var perSalaryExpenseApproval;
+var perPayrollExpenseApproval;
 var perAttendance;
 var perAttReport;
 var perFlexiReport;
@@ -100,7 +102,8 @@ var overtime;
 var undertime;
 var perSalary;
 var perPayroll;
-var perExpense;
+var perSalaryExpense;
+var perPayrollExpense;
 var perFlexi;
 var deprtcurrency;
 

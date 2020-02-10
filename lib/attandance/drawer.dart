@@ -357,7 +357,7 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
             onTap: () {
               final RenderBox box = context.findRenderObject();
-              Share.share("Hi! I have had a great experience with ubiAttendance App!  I highly recommend it to monitor Attendance & Location of  your employees. Download via the following link\n"+store,
+              Share.share("Hi! I have had a great experience with ubiHRM App!  I highly recommend it to manage your Human resource. Download via the following link\n"+store,
                   sharePositionOrigin:
                   box.localToGlobal(Offset.zero) &
                   box.size);
@@ -373,7 +373,7 @@ class _AppDrawerState extends State<AppDrawer> {
             onTap: () {
               LaunchReview.launch(
                   androidAppId: "org.ubitech.attendance"
-                  );
+              );
             },
           ),
 

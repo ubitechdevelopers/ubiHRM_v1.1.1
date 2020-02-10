@@ -81,8 +81,7 @@ class _HomePageState extends State<HomePage> {
   String shiftId = "";
   List<Widget> widgets;
   String orgName="";
-
-
+  int approval_count;
 
   @override
   void initState() {
@@ -103,7 +102,6 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
-
 
  /* @override
   void dispose() {
@@ -192,8 +190,10 @@ class _HomePageState extends State<HomePage> {
     // //print(act);
     ////print("this is-----> "+act);
     ////print("this is main "+location_addr);
+    await getCountAproval();
     if(mounted) {
     setState(() {
+      approval_count = prefs.getInt('approvalcount') ?? 0;
       Is_Delete = prefs.getInt('Is_Delete') ?? 0;
       newpwd = prefs.getString('newpwd') ?? "";
       userpwd = prefs.getString('usrpwd') ?? "";
@@ -555,6 +555,8 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
+                  //SizedBox(height: 5.0),
+                  Text("Punch Attendance", style: new TextStyle(fontSize: 22.0,color: appStartColor())),
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
                   new GestureDetector(
                     onTap: () {
@@ -896,7 +898,7 @@ class _HomePageState extends State<HomePage> {
        //print(issave);
        //print('------------------>');
         if (issave) {
-          showDialog(context: context, child:
+          showDialog(context: context, barrierDismissible: true, child:
           new AlertDialog(
             content: new Text("Attendance marked successfully!"),
           )

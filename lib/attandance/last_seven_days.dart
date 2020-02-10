@@ -106,10 +106,22 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Flexible(child: Text('Early Leavers(EL)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Late Comers(LC)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Absent(A)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Present(P)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
+              Flexible(
+                child: Text('Present(P)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Absent(A)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Late Comers(LC)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Early Leavers(EL)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
             ],
           ),
           Divider(),
@@ -217,7 +229,10 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Text(snapshot.data[index].Name
                                                   .toString(), style: TextStyle(
-                                                  color: Colors.black87,
+                                                  color: Colors
+                                                      .black87,
+                                                  fontWeight: FontWeight
+                                                      .bold,
                                                   fontSize: 16.0),),
                                             ],
                                           ),
@@ -320,9 +335,11 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Text(snapshot.data[index].Name
                                                   .toString(), style: TextStyle(
-                                                  color: Colors.black87,
-
-                                                  fontSize: 16.0),),
+                                                  color: Colors
+                                                      .black87,
+                                                  fontWeight: FontWeight
+                                                      .bold,
+                                                  fontSize: 16.0)),
                                             ],
                                           ),
                                         ),
@@ -431,9 +448,11 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Text(snapshot.data[index].Name
                                                   .toString(), style: TextStyle(
-                                                  color: Colors.black87,
-
-                                                  fontSize: 16.0),),
+                                                  color: Colors
+                                                      .black87,
+                                                  fontWeight: FontWeight
+                                                      .bold,
+                                                  fontSize: 16.0)),
                                             ],
                                           ),
                                         ),
@@ -540,9 +559,11 @@ class _LastSeven extends State<LastSeven> with SingleTickerProviderStateMixin {
                                             children: <Widget>[
                                               Text(snapshot.data[index].Name
                                                   .toString(), style: TextStyle(
-                                                  color: Colors.black87,
-
-                                                  fontSize: 16.0),),
+                                                  color: Colors
+                                                      .black87,
+                                                  fontWeight: FontWeight
+                                                      .bold,
+                                                  fontSize: 16.0)),
                                             ],
                                           ),
                                         ),

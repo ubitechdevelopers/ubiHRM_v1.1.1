@@ -486,8 +486,10 @@ class _Flexitime extends State<Flexitime> {
               child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                SizedBox(height: 5.0),
                 //SizedBox(height: MediaQuery.of(context).size.height * .01),
-                Text("Flexi Time", style: new TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold,color: appStartColor())),
+                Text("Flexi Attendance", style: new TextStyle(fontSize: 22.0,color: appStartColor())),
+                //new Divider(color: Colors.black54,height: 1.5,),
                 SizedBox(height: MediaQuery.of(context).size.height * .02),
                 new GestureDetector(
                 onTap: () {

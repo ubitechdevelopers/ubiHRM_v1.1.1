@@ -63,6 +63,7 @@ class RequestTimeOffService{
         "orgid": timeoff.OrgId,
         "timeoffsts": timeoff.ApprovalSts
       });
+      print(path_ubiattendance1+"changetimeoffsts?timeoffid=${timeoff.TimeOffId}&uid=${timeoff.EmpId}&orgid=${timeoff.OrgId}&timeoffsts=${timeoff.ApprovalSts}");
       //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
       Response response = await dio.post(path_ubiattendance1+"changetimeoffsts", data: formData);
       //print('withdraw timeoff');
@@ -185,6 +186,8 @@ Future<List<TIMEOFFA>> getTimeoffapproval(listType) async {
 
   Response<String>response =
   await dio.post(path1+"getTimeoffapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  print("getTimeoffapproval");
+  print(path1+"getTimeoffapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
   print(res);
   List<TIMEOFFA> userList = createtimeoffapporval(res);

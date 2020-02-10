@@ -210,7 +210,7 @@ class _AppDrawerState extends State<AppDrawer> {
             title: Row(
               children: <Widget>[
                 Icon(Icons.monetization_on,size: 20.0),SizedBox(width: 5.0),
-                new Text("Team Salary", style: new TextStyle(fontSize: 15.0)),
+                new Text("Team's Salary", style: new TextStyle(fontSize: 15.0)),
               ],
             ),
             onTap: () {
@@ -328,7 +328,7 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
             onTap: () {
               final RenderBox box = context.findRenderObject();
-              Share.share("Hi! I have had a great experience with UBIHRM App!  I highly recommend it to monitor Attendance & Location of  your employees. Download via the following link\n"+store,
+              Share.share("Hi! I have had a great experience with ubiHRM App!  I highly recommend it to manage your Human resource. Download via the following link\n"+store,
                   sharePositionOrigin:
                   box.localToGlobal(Offset.zero) &
                   box.size);
@@ -366,14 +366,14 @@ class _AppDrawerState extends State<AppDrawer> {
               );
             },
           ), */
-          new ListTile(
+         /* new ListTile(
             title: Row(
               children: <Widget>[
                 Icon(Icons.security,size: 20.0),SizedBox(width: 5.0),
                 new Text("User Guide", style: new TextStyle(fontSize: 14.0)),
               ],
             ),
-          ),
+          ),*/
 
 
         /*  new ListTile(

@@ -182,10 +182,21 @@ class Login{
           await getAllPermission(emp);
           await getProfileInfo(emp, context);
           perEmployeeLeave= getModulePermission("18","view");
-          perTimeoffApproval = getModuleUserPermission("180", "view");
-          perLeaveApproval=  getModuleUserPermission("124","view");
           perAttendance=  getModulePermission("5","view");
           perTimeoff=  getModulePermission("179","view");
+          perSalary = getModulePermission("66", "view");
+          perPayroll = getModulePermission("458", "view");
+          perSalaryExpense = getModulePermission("170", "view");
+          perPayrollExpense = getModulePermission("473", "view");
+          perFlexi = getModulePermission("448", "view");
+          perPunchLocation = getModulePermission("305", "view");
+          perLeaveApproval=  getModuleUserPermission("124","view");
+          perTimeoffApproval = getModuleUserPermission("180", "view");
+          perSalaryExpenseApproval=  getModuleUserPermission("170","view");
+          perPayrollExpenseApproval=  getModuleUserPermission("473","view");
+          perAttReport=getModuleUserPermission("68", "view");
+          perLeaveReport=getModuleUserPermission("69", "view");
+          perFlexiReport=getModuleUserPermission("448", "view");
           await getReportingTeam(emp);
 
           return "Success";

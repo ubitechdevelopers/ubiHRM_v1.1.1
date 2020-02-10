@@ -80,7 +80,7 @@ class _MyLeaveState extends State<MyLeave> {
     });
   }
 
-  withdrawlLeave(String leaveid) async{
+  withdrawlLeave(String leaveid, String compoffsts) async{
     setState(() {
       _checkwithdrawnleave = true;
     });
@@ -88,7 +88,7 @@ class _MyLeaveState extends State<MyLeave> {
     final prefs = await SharedPreferences.getInstance();
     String empid = prefs.getString('employeeid')??"";
     String orgid =prefs.getString('organization')??"";
-    var leave = Leave(leaveid: leaveid, orgid: orgid, uid: empid, approverstatus: '5');
+    var leave = Leave(leaveid: leaveid, orgid: orgid, uid: empid, approverstatus: '5', compoffsts: compoffsts);
     var islogin = await withdrawLeave(leave);
     print(islogin);
     if(islogin=="success"){
@@ -129,7 +129,7 @@ class _MyLeaveState extends State<MyLeave> {
     }
   }
 
-  confirmWithdrawl(String leaveid) async{
+  confirmWithdrawl(String leaveid, String compoffsts) async{
     showDialog(context: context, child:
     new AlertDialog(
       title: new Text("Withdraw leave?"),
@@ -140,7 +140,7 @@ class _MyLeaveState extends State<MyLeave> {
             color: Colors.orange[800],
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
-              withdrawlLeave(leaveid);
+              withdrawlLeave(leaveid, compoffsts);
             },
           ),
           FlatButton(
@@ -418,7 +418,6 @@ class _MyLeaveState extends State<MyLeave> {
                                       children: <Widget>[
 
                                         new Row(
-
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: <Widget>[
@@ -428,7 +427,7 @@ class _MyLeaveState extends State<MyLeave> {
                                                 child: Container(
                                             //     color:Colors.red,
                                                     height: MediaQuery .of(context).size.height * 0.04,
-                                                    width: MediaQuery .of(context).size.width * 0.50,
+                                                    width: MediaQuery .of(context).size.width * 0.60,
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
@@ -443,13 +442,13 @@ class _MyLeaveState extends State<MyLeave> {
                                             (snapshot.data[index].withdrawlsts && snapshot.data[index].approverstatus.toString() !='Withdrawn' && snapshot.data[index].approverstatus.toString() !="Rejected" && snapshot.data[index].approverstatus.toString()!="Approved")?
                                               new Expanded(
                                                 child: Padding(
-                                                  padding: const EdgeInsets.fromLTRB(0.0,3.0,5.0,0.0),
+                                                  padding: const EdgeInsets.fromLTRB(115.0,3.0,0.0,0.0),
                                                   child: Container (
                             //                   color:Colors.yellow,
                                                    height: MediaQuery .of(context).size.height * 0.04,
-                                                   margin: EdgeInsets.only(left:40.0),
-                                                   padding: EdgeInsets.only(left:40.0),
-                                                   width: MediaQuery .of(context).size.width * 0.50,
+                                                   //margin: EdgeInsets.only(left:40.0),
+                                                   //padding: EdgeInsets.only(left:40.0),
+                                                   width: MediaQuery .of(context).size.width * 0.30,
                                                    child: new OutlineButton(
                                                       onPressed: () {
                                                         if(_isButtonDisabled)
@@ -458,7 +457,7 @@ class _MyLeaveState extends State<MyLeave> {
                                                           _isButtonDisabled=true;
                                                           checkProcessing = index;
                                                         });
-                                                        confirmWithdrawl(snapshot.data[index].leaveid.toString());
+                                                        confirmWithdrawl(snapshot.data[index].leaveid.toString(),snapshot.data[index].compoffsts.toString());
                                                       },
                                                        child:new Icon(
                                                          Icons.replay,
@@ -478,29 +477,36 @@ class _MyLeaveState extends State<MyLeave> {
 
                                       Container(
                                           width: MediaQuery.of(context).size.width*.90,
-                                          padding: EdgeInsets.only(top:1.5,bottom: .5),
-                                          margin: EdgeInsets.only(top: 4.0),
+                                          //padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                          //margin: EdgeInsets.only(top: 4.0),
                                           child: Text('Duration: '+snapshot.data[index].leavefrom.toString()+snapshot.data[index].leaveto.toString() +"  ",style: TextStyle(color: Colors.grey[600])),
+                                        ),
+
+                                        Container(
+                                          width: MediaQuery.of(context).size.width*.90,
+                                          //padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                          margin: EdgeInsets.only(top: 4.0),
+                                          child: Text('Leave Type: '+snapshot.data[index].leavetype.toString(),style: TextStyle(color: Colors.grey[600])),
                                         ),
 
                                         snapshot.data[index].reason.toString()!='-'?Container(
                                           width: MediaQuery.of(context).size.width*.90,
-                                          padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                          //padding: EdgeInsets.only(top:1.5,bottom: .5),
                                           margin: EdgeInsets.only(top: 4.0),
                                           child: Text('Reason: '+snapshot.data[index].reason.toString(), style: TextStyle(color: Colors.black54),),
                                         ):Center(),
 
                                         snapshot.data[index].comment.toString() != '-' ? Container(
                                           width: MediaQuery .of(context).size .width * .90,
-                                          padding: EdgeInsets.only( top: 0.0, bottom: 0.5),
-                                          margin: EdgeInsets.only(top: 0.0),
+                                          //padding: EdgeInsets.only( top: 0.0, bottom: 0.5),
+                                          margin: EdgeInsets.only(top: 4.0),
                                           child: Text('Approver Comment: ' +  snapshot.data[index].comment.toString(),style: TextStyle(color: Colors.black54),),
                                         ): Center(),
 
                                         snapshot.data[index].approverstatus.toString()!='-'?Container(
                                           width: MediaQuery.of(context).size.width*.90,
-                                          padding: EdgeInsets.only(top:.5,bottom: 1.5),
-                                          margin: EdgeInsets.only(top: 1.0),
+                                          //padding: EdgeInsets.only(top:.5,bottom: 1.5),
+                                          margin: EdgeInsets.only(top: 4.0),
                                           child: RichText(
                                             text: new TextSpan(
                                               // Note: Styles for TextSpans must be explicitly defined.

@@ -243,13 +243,14 @@ class OrdinalSales {
     final mobileSalesData = [new OrdinalSales('', 0) ];
     final tableSalesData = [new OrdinalSales('', 0) ];
     desktopSalesData.clear();
+
     for(int i=0;i<info.length;i++){
-    //  print(")))))))))))))");
-    //  print(info[i]['total']);
-     // print("--------");
-    //  print(info[i]['used']);
-   //   print("2222222222");
-    //  print(info[i]['left']);
+//      print(")))))))))))))");
+//      print(info[i]['total']);
+//      print("--------");
+//      print(info[i]['used']);
+//      print("2222222222");
+//      print(info[i]['left']);
 
       desktopSalesData.add(
         new OrdinalSales(info[i]['name'], double.parse(info[i]['total'])),
@@ -260,6 +261,7 @@ class OrdinalSales {
       tableSalesData.add(
         new OrdinalSales(info[i]['name'], double.parse(info[i]['left'])),
       );
+
     }
 
     /*final desktopSalesData = [
@@ -293,21 +295,17 @@ class OrdinalSales {
     return [
       // Blue bars with a lighter center color.
 
-
       new charts.Series<OrdinalSales, String>(
         id: 'Entitled',
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
+        domainFn: (OrdinalSales sales, _) => sales.name,
+        measureFn: (OrdinalSales sales, _) => sales.count,
 
         data: desktopSalesData,
 
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        fillColorFn: (_, __) =>
-        charts.MaterialPalette.blue.shadeDefault.lighter,
+        fillColorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault.lighter,
 
-        labelAccessorFn: (OrdinalSales sales, _) =>
-        ' ${sales.sales}',
-
+        labelAccessorFn: (OrdinalSales sales, _) => '${sales.name}: ${sales.count.toString()}',
 
       ),
 
@@ -315,32 +313,27 @@ class OrdinalSales {
       // fillColorFn is configured.
       new charts.Series<OrdinalSales, String>(
         id: 'Utilized',
-        measureFn: (OrdinalSales sales, _) => sales.sales,
+        domainFn: (OrdinalSales sales, _) => sales.name,
+        measureFn: (OrdinalSales sales, _) => sales.count,
         data: mobileSalesData,
         // labelAccessorFn: (OrdinalSales row, _) => '${row.year}: ${row.sales}',
         colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        fillColorFn: (_, __) =>
-        charts.MaterialPalette.red.shadeDefault.lighter,
-        domainFn: (OrdinalSales sales, _) => sales.year,
+        fillColorFn: (_, __) => charts.MaterialPalette.red.shadeDefault.lighter,
 
-        labelAccessorFn: (OrdinalSales sales, _) =>
-        '${sales.sales}',
-
+        labelAccessorFn: (OrdinalSales sales, _) => '${sales.count.toString()}',
       ),
       // Hollow green bars.
       new charts.Series<OrdinalSales, String>(
         id: 'Balance',
-        domainFn: (OrdinalSales sales, _) => sales.year,
-        measureFn: (OrdinalSales sales, _) => sales.sales,
+        domainFn: (OrdinalSales sales, _) => sales.name,
+        measureFn: (OrdinalSales sales, _) => sales.count,
         data:  tableSalesData,
 
         //labelAccessorFn: (OrdinalSales row, _) => '${row.year}: ${row.sales}',
         colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
         fillColorFn: (_, __) => charts.MaterialPalette.green.shadeDefault.lighter,
 
-        labelAccessorFn: (OrdinalSales sales, _) =>
-        '${sales.sales}',
-
+        labelAccessorFn: (OrdinalSales sales, _) => '${sales.count.toString()}',
       ),
 
 
@@ -350,8 +343,8 @@ class OrdinalSales {
 
 /// Sample ordinal data type.
 class OrdinalSales {
-  final String year;
-  final double sales;
+  final String name;
+  final double count;
 
-  OrdinalSales(this.year, this.sales);
+  OrdinalSales(this.name, this.count);
 }

@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_share/simple_share.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 
 import '../appbar.dart';
@@ -25,8 +26,7 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
   var profileimage;
   bool showtabbar;
   String orgName="";
-
-
+  bool filests=false;
 
   List<Map<String,String>> chartData;
   void showInSnackBar(String value) {
@@ -34,12 +34,14 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
         content: Text(value,textAlign: TextAlign.center,));
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
+
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
     });
   }
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +50,7 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     getOrgName();
   }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -107,10 +110,22 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Flexible(child: Text('Early Leavers(EL)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Late Comers(LC)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Absent(A)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Present(P)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
+              Flexible(
+                child: Text('Present(P)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Absent(A)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Late Comers(LC)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Early Leavers(EL)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
             ],
           ),
           Divider(),
@@ -186,62 +201,170 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                   scrollDirection: Axis.vertical,
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (BuildContext context, int index) {
-                                    return new Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                    return Column(
                                       children: <Widget>[
-
-                                        SizedBox(height: 40.0,),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.18,
-                                          child:  Text(snapshot.data[index].EntryImage
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),),
-                                        ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.35,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .start,
-                                            children: <Widget>[
-                                              Text(snapshot.data[index].Name
-                                                  .toString(), style: TextStyle(
-                                                  color: Colors.black87,
-
-                                                  fontSize: 16.0),),
-                                            ],
+                                        (index == 0)
+                                            ? Row(children: <Widget>[
+                                          SizedBox(
+                                            height: 25.0,
                                           ),
-                                        ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.13,
-                                          child:  Text(snapshot.data[index].TimeIn
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),),
-                                        ),
-                                        Flexible(
-                                          child: Container(
+                                          Container(
+                                            padding:
+                                            EdgeInsets.only(left: 5.0),
+                                            child: Text(
+                                              "Total Present: " +
+                                                  snapshot.data.length
+                                                      .toString(),
+                                              style: TextStyle(
+                                                color: Colors.orange,
+                                                fontWeight: FontWeight
+                                                    .bold,
+                                                fontSize: 16.0,
+                                              ),
+                                            ),
+                                          ),
+                                         /* Container(
+                                            padding:
+                                            EdgeInsets.only(left: 5.0),
+                                            child: InkWell(
+                                              child: Text(
+                                                'CSV',
+                                                style: TextStyle(
+                                                    decoration:
+                                                    TextDecoration
+                                                        .underline,
+                                                    color:
+                                                    Colors.blueAccent),
+                                              ),
+                                              onTap: () {
+                                                //if (trialstatus != '2') {
+                                                setState(() {
+                                                  filests=true;
+                                                });
+
+                                                getMonthlyCSV(snapshot.data,
+                                                    'Monthly_Present',
+                                                    'present').then((
+                                                    res) {
+                                                  setState(() {
+                                                    filests=false;
+                                                  });
+                                                  dialogwidget(
+                                                      'CSV has been saved in internal storage in ubihrm_files/Monthly_Present',
+                                                      res);
+                                                });
+                                                *//* } else {
+                                                          showInSnackBar(
+                                                              "For CSV please Buy Now");
+                                                        }*//*
+                                              },
+                                            ),
+                                          ),
+                                          Container(
+                                            padding:
+                                            EdgeInsets.only(left: 5.0),
+                                            child: InkWell(
+                                              child: Text(
+                                                'PDF',
+                                                style: TextStyle(
+                                                    decoration:
+                                                    TextDecoration
+                                                        .underline,
+                                                    color:
+                                                    Colors.blueAccent),
+                                              ),
+                                              onTap: () {
+                                                //if (trialstatus != '2') {
+                                                setState(() {
+                                                  filests=true;
+                                                });
+                                                CreateMonthlyPDF(
+                                                    snapshot.data,
+                                                    'Monthly Present Employees Report',
+                                                    snapshot.data.length.toString(),
+                                                    'Monthly_Present',
+                                                    'present')
+                                                    .then((res) {
+                                                  setState(() {
+                                                    filests=false;
+                                                  });
+                                                  dialogwidget(
+                                                      'PDF has been saved in internal storage in ubihrm_files/Monthly_Present.pdf',
+                                                      res);
+                                                });
+                                                *//* } else {
+                                                          showInSnackBar(
+                                                              "For PDF please Buy Now");
+                                                        }*//*
+                                              },
+                                            ),
+                                          ),*/
+                                        ])
+                                            : new Center(),
+                                        (index == 0)
+                                            ? Divider(
+                                          color: Colors.black26,
+                                        ) : new Center(),
+                                        Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: <Widget>[
+
+                                          SizedBox(height: 40.0,),
+                                          Container(
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
-                                                .width * 0.16,
-                                            child:  Text(snapshot.data[index].TimeOut
+                                                .width * 0.18,
+                                            child:  Text(snapshot.data[index].EntryImage
                                                 .toString(), style: TextStyle(
                                                 color: Colors.black87,
-                                                fontSize: 16.0),textAlign: TextAlign.center,),
+                                                fontSize: 16.0),),
                                           ),
-                                        ),
-                                      ],
+                                          Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.35,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: <Widget>[
+                                                Text(snapshot.data[index].Name
+                                                    .toString(), style: TextStyle(
+                                                    color: Colors
+                                                        .black87,
+                                                    fontWeight: FontWeight
+                                                        .bold,
+                                                    fontSize: 16.0)),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.13,
+                                            child:  Text(snapshot.data[index].TimeIn
+                                                .toString(), style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16.0),),
+                                          ),
+                                          Flexible(
+                                            child: Container(
+                                              width: MediaQuery
+                                                  .of(context)
+                                                  .size
+                                                  .width * 0.16,
+                                              child:  Text(snapshot.data[index].TimeOut
+                                                  .toString(), style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontSize: 16.0),textAlign: TextAlign.center,),
+                                            ),
+                                          ),
+                                        ],
 
+                                      ),
+                                    ]
                                     );
                                   }
                               );
@@ -290,65 +413,171 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (BuildContext context, int index) {
 
-                                    return new Row(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .spaceAround,
+                                    return Column(
                                       children: <Widget>[
-
-                                        SizedBox(height: 40.0,),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.18,
-                                          child:  Text(snapshot.data[index].EntryImage
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),),
-                                        ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.35,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .start,
-                                            children: <Widget>[
-                                              Text(snapshot.data[index].Name
-                                                  .toString(), style: TextStyle(
-                                                  color: Colors.black87,
-                                            //      fontWeight: FontWeight.bold,
-                                                  fontSize: 16.0),),
-                                            ],
+                                        (index == 0)
+                                        ? Row(children: <Widget>[
+                                      SizedBox(
+                                        height: 25.0,
+                                      ),
+                                      Container(
+                                        padding:
+                                        EdgeInsets.only(left: 5.0),
+                                        child: Text(
+                                          "Total Absent: " +
+                                              snapshot.data.length
+                                                  .toString(),
+                                          style: TextStyle(
+                                            color: Colors.orange,
+                                            fontWeight: FontWeight
+                                                .bold,
+                                            fontSize: 16.0,
                                           ),
                                         ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.13,
-                                          child:  Text(snapshot.data[index].TimeIn
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),textAlign: TextAlign.center,),
+                                      ),
+                                      /*Container(
+                                        padding:
+                                        EdgeInsets.only(left: 5.0),
+                                        child: InkWell(
+                                          child: Text(
+                                            'CSV',
+                                            style: TextStyle(
+                                                decoration:
+                                                TextDecoration
+                                                    .underline,
+                                                color:
+                                                Colors.blueAccent),
+                                          ),
+                                          onTap: () {
+                                            //if (trialstatus != '2') {
+                                            setState(() {
+                                              filests=true;
+                                            });
+
+                                            getMonthlyCSV(snapshot.data,
+                                                'Monthly_Absent',
+                                                'absent').then((
+                                                res) {
+                                              setState(() {
+                                                filests=false;
+                                              });
+                                              dialogwidget(
+                                                  'CSV has been saved in internal storage in ubihrm_files/Monthly_Absent',
+                                                  res);
+                                            });
+                                            *//* } else {
+                                                          showInSnackBar(
+                                                              "For CSV please Buy Now");
+                                                        }*//*
+                                          },
                                         ),
-                                        Flexible(
-                                          child: Container(
+                                      ),
+                                      Container(
+                                        padding:
+                                        EdgeInsets.only(left: 5.0),
+                                        child: InkWell(
+                                          child: Text(
+                                            'PDF',
+                                            style: TextStyle(
+                                                decoration:
+                                                TextDecoration
+                                                    .underline,
+                                                color:
+                                                Colors.blueAccent),
+                                          ),
+                                          onTap: () {
+                                            //if (trialstatus != '2') {
+                                            setState(() {
+                                              filests=true;
+                                            });
+                                            CreateMonthlyPDF(
+                                                snapshot.data,
+                                                'Monthly Absent Employees',
+                                                snapshot.data.length.toString(),
+                                                'Monthly_Absent',
+                                                'absent')
+                                                .then((res) {
+                                              setState(() {
+                                                filests=false;
+                                              });
+                                              dialogwidget(
+                                                  'PDF has been saved in internal storage in ubihrm_files/Monthly_Absent.pdf',
+                                                  res);
+                                            });
+                                            *//* } else {
+                                                          showInSnackBar(
+                                                              "For PDF please Buy Now");
+                                                        }*//*
+                                          },
+                                        ),
+                                      ),*/
+                                    ]) : new Center(),
+                                    (index == 0)
+                                    ? Divider(
+                                    color: Colors.black26,
+                                    ) : new Center(),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceAround,
+                                        children: <Widget>[
+
+                                          SizedBox(height: 40.0,),
+                                          Container(
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
-                                                .width * 0.16,
-                                            child:  Text(snapshot.data[index].TimeOut
+                                                .width * 0.18,
+                                            child:  Text(snapshot.data[index].EntryImage
+                                                .toString(), style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16.0),),
+                                          ),
+                                          Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.35,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: <Widget>[
+                                                Text(snapshot.data[index].Name
+                                                    .toString(), style: TextStyle(
+                                                    color: Colors
+                                                        .black87,
+                                                    fontWeight: FontWeight
+                                                        .bold,
+                                                    fontSize: 16.0)),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.13,
+                                            child:  Text(snapshot.data[index].TimeIn
                                                 .toString(), style: TextStyle(
                                                 color: Colors.black87,
                                                 fontSize: 16.0),textAlign: TextAlign.center,),
                                           ),
-                                        ),
-                                      ],
+                                          Flexible(
+                                            child: Container(
+                                              width: MediaQuery
+                                                  .of(context)
+                                                  .size
+                                                  .width * 0.16,
+                                              child:  Text(snapshot.data[index].TimeOut
+                                                  .toString(), style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontSize: 16.0),textAlign: TextAlign.center,),
+                                            ),
+                                          ),
+                                        ],
 
+                                      ),
+                                    ]
                                     );
-
                                   }
                               );
                             }else{
@@ -401,64 +630,173 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                   scrollDirection: Axis.vertical,
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (BuildContext context, int index) {
-                                    return new Row(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .spaceAround,
+                                    return Column(
                                       children: <Widget>[
-
-                                        SizedBox(height: 40.0,),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.18,
-                                          child:  Text(snapshot.data[index].EntryImage
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),),
-                                        ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.35,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .start,
-                                            children: <Widget>[
-                                              Text(snapshot.data[index].Name
-                                                  .toString(), style: TextStyle(
-                                                  color: Colors.black87,
-                                              //    fontWeight: FontWeight.bold,
-                                                  fontSize: 16.0),),
-                                            ],
+                                        (index == 0)
+                                        ? Row(children: <Widget>[
+                                      SizedBox(
+                                        height: 25.0,
+                                      ),
+                                      Container(
+                                        padding:
+                                        EdgeInsets.only(left: 5.0),
+                                        child: Text(
+                                          "Total Late Comers: " +
+                                              snapshot.data.length
+                                                  .toString(),
+                                          style: TextStyle(
+                                            color: Colors.orange,
+                                            fontWeight: FontWeight
+                                                .bold,
+                                            fontSize: 16.0,
                                           ),
                                         ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.13,
-                                          child:  Text(snapshot.data[index].TimeIn
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),textAlign: TextAlign.center,),
+                                      ),
+                                     /* Container(
+                                        padding:
+                                        EdgeInsets.only(left: 5.0),
+                                        child: InkWell(
+                                          child: Text(
+                                            'CSV',
+                                            style: TextStyle(
+                                                decoration:
+                                                TextDecoration
+                                                    .underline,
+                                                color:
+                                                Colors.blueAccent),
+                                          ),
+                                          onTap: () {
+                                            //if (trialstatus != '2') {
+                                            setState(() {
+                                              filests=true;
+                                            });
+
+                                            getMonthlyCSV(snapshot.data,
+                                                'Monthly_Late_Comers',
+                                                'late').then((
+                                                res) {
+                                              setState(() {
+                                                filests=false;
+                                              });
+                                              dialogwidget(
+                                                  'CSV has been saved in internal storage in ubihrm_files/Monthly_Late_Comers',
+                                                  res);
+                                            });
+                                            *//* } else {
+                                                          showInSnackBar(
+                                                              "For CSV please Buy Now");
+                                                        }*//*
+                                          },
                                         ),
-                                        Flexible(
-                                          child: Container(
+                                      ),
+                                      Container(
+                                        padding:
+                                        EdgeInsets.only(left: 5.0),
+                                        child: InkWell(
+                                          child: Text(
+                                            'PDF',
+                                            style: TextStyle(
+                                                decoration:
+                                                TextDecoration
+                                                    .underline,
+                                                color:
+                                                Colors.blueAccent),
+                                          ),
+                                          onTap: () {
+                                            //if (trialstatus != '2') {
+                                            setState(() {
+                                              filests=true;
+                                            });
+                                            CreateMonthlyPDF(
+                                                snapshot.data,
+                                                'Monthly Late Comers Employees',
+                                                snapshot.data.length.toString(),
+                                                'Monthly_Late_Comers',
+                                                'late')
+                                                .then((res) {
+                                              setState(() {
+                                                filests=false;
+                                              });
+                                              dialogwidget(
+                                                  'PDF has been saved in internal storage in ubihrm_files/Monthly_Late_Comers.pdf',
+                                                  res);
+                                            });
+                                            *//* } else {
+                                                          showInSnackBar(
+                                                              "For PDF please Buy Now");
+                                                        }*//*
+                                          },
+                                        ),
+                                      ),*/
+                                    ])
+                                        : new Center(),
+                                    (index == 0)
+                                    ? Divider(
+                                    color: Colors.black26,
+                                    )
+                                        : new Center(),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceAround,
+                                        children: <Widget>[
+
+                                          SizedBox(height: 40.0,),
+                                          Container(
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
-                                                .width * 0.16,
-                                            child:  Text(snapshot.data[index].TimeOut
+                                                .width * 0.18,
+                                            child:  Text(snapshot.data[index].EntryImage
+                                                .toString(), style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16.0),),
+                                          ),
+                                          Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.35,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: <Widget>[
+                                                Text(snapshot.data[index].Name
+                                                    .toString(), style: TextStyle(
+                                                    color: Colors
+                                                        .black87,
+                                                    fontWeight: FontWeight
+                                                        .bold,
+                                                    fontSize: 16.0)),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.13,
+                                            child:  Text(snapshot.data[index].TimeIn
                                                 .toString(), style: TextStyle(
                                                 color: Colors.black87,
                                                 fontSize: 16.0),textAlign: TextAlign.center,),
                                           ),
-                                        ),
+                                          Flexible(
+                                            child: Container(
+                                              width: MediaQuery
+                                                  .of(context)
+                                                  .size
+                                                  .width * 0.16,
+                                              child:  Text(snapshot.data[index].TimeOut
+                                                  .toString(), style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontSize: 16.0),textAlign: TextAlign.center,),
+                                            ),
+                                          ),
 
-                                      ],
+                                        ],
 
+                                      ),
+                                    ]
                                     );
                                   }
                               );
@@ -510,63 +848,172 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
                                   scrollDirection: Axis.vertical,
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (BuildContext context, int index) {
-                                    return new Row(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .spaceAround,
+                                    return Column(
                                       children: <Widget>[
-
-                                        SizedBox(height: 40.0,),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.18,
-                                          child:  Text(snapshot.data[index].EntryImage
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),),
-                                        ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.35,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .start,
-                                            children: <Widget>[
-                                              Text(snapshot.data[index].Name
-                                                  .toString(), style: TextStyle(
-                                                  color: Colors.black87,
-                                        //          fontWeight: FontWeight.bold,
-                                                  fontSize: 16.0),),
-                                            ],
+                                        (index == 0)
+                                        ? Row(children: <Widget>[
+                                      SizedBox(
+                                        height: 25.0,
+                                      ),
+                                      Container(
+                                        padding:
+                                        EdgeInsets.only(left: 5.0),
+                                        child: Text(
+                                          "Total Early Leavers: " +
+                                              snapshot.data.length
+                                                  .toString(),
+                                          style: TextStyle(
+                                            color: Colors.orange,
+                                            fontWeight: FontWeight
+                                                .bold,
+                                            fontSize: 16.0,
                                           ),
                                         ),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.13,
-                                          child:  Text(snapshot.data[index].TimeIn
-                                              .toString(), style: TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 16.0),textAlign: TextAlign.center,),
+                                      ),
+                                      /*Container(
+                                        padding:
+                                        EdgeInsets.only(left: 5.0),
+                                        child: InkWell(
+                                          child: Text(
+                                            'CSV',
+                                            style: TextStyle(
+                                                decoration:
+                                                TextDecoration
+                                                    .underline,
+                                                color:
+                                                Colors.blueAccent),
+                                          ),
+                                          onTap: () {
+                                            //if (trialstatus != '2') {
+                                            setState(() {
+                                              filests=true;
+                                            });
+
+                                            getMonthlyCSV(snapshot.data,
+                                                'Monthly_Early_Leavers',
+                                                'early').then((
+                                                res) {
+                                              setState(() {
+                                                filests=false;
+                                              });
+                                              dialogwidget(
+                                                  'CSV has been saved in internal storage in ubihrm_files/Monthly_Early_Leavers',
+                                                  res);
+                                            });
+                                            *//* } else {
+                                                          showInSnackBar(
+                                                              "For CSV please Buy Now");
+                                                        }*//*
+                                          },
                                         ),
-                                        Flexible(
-                                          child: Container(
+                                      ),
+                                      Container(
+                                        padding:
+                                        EdgeInsets.only(left: 5.0),
+                                        child: InkWell(
+                                          child: Text(
+                                            'PDF',
+                                            style: TextStyle(
+                                                decoration:
+                                                TextDecoration
+                                                    .underline,
+                                                color:
+                                                Colors.blueAccent),
+                                          ),
+                                          onTap: () {
+                                            //if (trialstatus != '2') {
+                                            setState(() {
+                                              filests=true;
+                                            });
+                                            CreateMonthlyPDF(
+                                                snapshot.data,
+                                                'Monthly Early Leavers Employees',
+                                                snapshot.data.length.toString(),
+                                                'Monthly_Early_Leavers',
+                                                'early')
+                                                .then((res) {
+                                              setState(() {
+                                                filests=false;
+                                              });
+                                              dialogwidget(
+                                                  'PDF has been saved in internal storage in ubihrm_files/Monthly_Early_Leavers.pdf',
+                                                  res);
+                                            });
+                                            *//* } else {
+                                                          showInSnackBar(
+                                                              "For PDF please Buy Now");
+                                                        }*//*
+                                          },
+                                        ),
+                                      ),*/
+                                    ])
+                                        : new Center(),
+                                    (index == 0)
+                                    ? Divider(
+                                    color: Colors.black26,
+                                    )
+                                        : new Center(),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceAround,
+                                        children: <Widget>[
+
+                                          SizedBox(height: 40.0,),
+                                          Container(
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
-                                                .width * 0.16,
-                                            child:  Text(snapshot.data[index].TimeOut
+                                                .width * 0.18,
+                                            child:  Text(snapshot.data[index].EntryImage
+                                                .toString(), style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 16.0),),
+                                          ),
+                                          Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.35,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: <Widget>[
+                                                Text(snapshot.data[index].Name
+                                                    .toString(), style: TextStyle(
+                                                    color: Colors
+                                                        .black87,
+                                                    fontWeight: FontWeight
+                                                        .bold,
+                                                    fontSize: 16.0)),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.13,
+                                            child:  Text(snapshot.data[index].TimeIn
                                                 .toString(), style: TextStyle(
                                                 color: Colors.black87,
                                                 fontSize: 16.0),textAlign: TextAlign.center,),
                                           ),
-                                        ),
-                                      ],
+                                          Flexible(
+                                            child: Container(
+                                              width: MediaQuery
+                                                  .of(context)
+                                                  .size
+                                                  .width * 0.16,
+                                              child:  Text(snapshot.data[index].TimeOut
+                                                  .toString(), style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontSize: 16.0),textAlign: TextAlign.center,),
+                                            ),
+                                          ),
+                                        ],
 
+                                      ),
+                                    ]
                                     );
                                   }
                               );
@@ -601,5 +1048,38 @@ class _ThisMonth extends State<ThisMonth> with SingleTickerProviderStateMixin {
       ),
     ),
    ]);
+  }
+
+  dialogwidget(msg, filename) {
+    showDialog(
+        context: context,
+        // ignore: deprecated_member_use
+        child: new AlertDialog(
+          content: new Text(msg),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Later'),
+              shape: Border.all(),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+            RaisedButton(
+              child: Text(
+                'Share File',
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.orange[800],
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+                final uri=Uri.file(filename);
+                SimpleShare.share(
+                    uri: uri.toString(),
+                    title: "UBIHRM Report",
+                    msg: "UBIHRM Report");
+              },
+            ),
+          ],
+        ));
   }
 }

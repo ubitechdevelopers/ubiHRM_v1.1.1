@@ -60,7 +60,7 @@ class _ForgotPassword extends State<ForgotPassword> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-          //  new Text(widget.org_name, style: new TextStyle(fontSize: 20.0)),
+          new Text('UBIHRM', style: new TextStyle(fontSize: 20.0)),
           ],
         ),
         leading: IconButton(
@@ -101,23 +101,22 @@ class _ForgotPassword extends State<ForgotPassword> {
         key: _formKey,
         child: SafeArea(
           child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            padding: EdgeInsets.symmetric(horizontal: 12.0),
             children: <Widget>[
           Center(
             child:Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: MediaQuery.of(context).size.height*0.1),
-            Center(child:
-            Text("Forgot Password",style: new TextStyle(fontSize: 22.0,color: Colors.black54)),
-            ),
-                  SizedBox(height: 10.0),
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                  //SizedBox(height: MediaQuery.of(context).size.height*0.1),
+                Center(
+                  child: Text("Forgot Password",style: new TextStyle(fontSize: 22.0,color: appStartColor())),),
+                  SizedBox(height: 15.0),
                   succ==false?Container(
                       child: Row(
                         children: <Widget>[
                           Container(
-                            width: MediaQuery.of(context).size.width*.7,
+                            width: MediaQuery.of(context).size.width*.9,
                             child: TextFormField(
                               controller: _username,
                               focusNode: __username,
@@ -127,17 +126,17 @@ class _ForgotPassword extends State<ForgotPassword> {
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.all(0.0),
                                     child: Icon(
-                                      Icons.person_outline,
+                                      Icons.email,
                                       color: Colors.grey,
                                     ), // icon is 48px widget.
                                   )
                               ),
-                              validator: (value) {
+                             /* validator: (value) {
                                 if (value.isEmpty || value==null) {
 //                                  FocusScope.of(context).requestFocus(__oldPass);
                                   return 'Please enter valid Email';
                                 }
-                              },
+                              },*/
 
                             ),
                           ),
@@ -154,7 +153,12 @@ class _ForgotPassword extends State<ForgotPassword> {
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             if (_username.text == ''||_username.text == null) {
-                              showInSnackBar("Please Enter Email/Phone");
+                              //showInSnackBar("Please Enter Email");
+                              showDialog(context: context, child:
+                                new AlertDialog(
+                                  content: new Text("Please Enter Email"),
+                                )
+                              );
                               FocusScope.of(context).requestFocus(__username);
                             } else {
                               if(_isButtonDisabled)
@@ -166,7 +170,12 @@ class _ForgotPassword extends State<ForgotPassword> {
                                 if(res==1) {
                                   username = _username.text;
                                   _username.text='';
-                                  showInSnackBar("Request submitted successfully");
+                                  //showInSnackBar("Request submitted successfully");
+                                  showDialog(context: context, child:
+                                    new AlertDialog(
+                                      content: new Text("Request submitted successfully"),
+                                    )
+                                  );
                                   setState(() {
                                     login=true;
                                     succ=true;
@@ -175,7 +184,12 @@ class _ForgotPassword extends State<ForgotPassword> {
                                   });
                                 }
                                 else {
-                                  showInSnackBar("Email Not Found.");
+                                  showDialog(context: context, child:
+                                    new AlertDialog(
+                                    content: new Text("Email Not Found"),
+                                    )
+                                  );
+                                  //showInSnackBar("Email Not Found.");
                                   setState(() {
                                     login=false;
                                     succ=false;
@@ -184,7 +198,12 @@ class _ForgotPassword extends State<ForgotPassword> {
                                   });
                                 }
                               }).catchError((onError){
-                                showInSnackBar("Unable to call reset password service");
+                                //showInSnackBar("Unable to call reset password service");
+                                showDialog(context: context, child:
+                                  new AlertDialog(
+                                    content: new Text("Unable to call reset password service"),
+                                  )
+                                );
                                 setState(() {
                                   login=false;
                                   succ=false;
@@ -207,10 +226,13 @@ class _ForgotPassword extends State<ForgotPassword> {
                       ),
                     ],
                   ):Center(),
-                  err==true?Text('Invalid Email/Phone.',style: TextStyle(color: Colors.red,fontSize: 16.0),):Center(),
-                  succ==true?Text('Please check your mail for the Password reset link. After you have reset the password, please click below link to login.',style: TextStyle(fontSize: 16.0),):Center(),
+                  err==true?Text('Invalid Email.',style: TextStyle(color: Colors.red,fontSize: 16.0),):Center(),
+                  Padding(
+                    padding: const EdgeInsets.only(left:20.0, right:20.0),
+                    child: succ==true?Text('Please check your mail for the reset password link. Once you reset the password, click on the below link.',style: TextStyle(fontSize: 16.0),textAlign: TextAlign.justify,):Center(),
+                  ),
                   login==true?InkWell(
-                    child: Text('\nClick here to Login',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16.0,color: appStartColor()),),
+                    child: Text('\nClick here to Login',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18.0,color: appStartColor(), decoration: TextDecoration.underline),textAlign: TextAlign.right,),
                     onTap:() async{
                       final prefs = await SharedPreferences.getInstance();
                       prefs.setString('username', username);

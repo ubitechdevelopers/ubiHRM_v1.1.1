@@ -305,7 +305,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
               MaterialPageRoute(builder: (context) => TimeOffPage()),
             );
           },
-          tooltip: 'Request TimeOff',
+          tooltip: 'Request Timeoff',
           child: new Icon(Icons.add),
         ),
       ),
@@ -467,7 +467,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                   Container(
                     padding: EdgeInsets.only(top:12.0),
                     child:Center(
-                      child:Text('My Time Off',
+                      child:Text('My Timeoff',
                           style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                     ),
                   ),
@@ -585,14 +585,14 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                         //SizedBox(width: 30.0,),
                                         Container(
                                           width: MediaQuery.of(context).size.width*.90,
-                                          padding: EdgeInsets.only(top:1.5,bottom: 0.5),
+                                          //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                           margin: EdgeInsets.only(top: 4.0),
                                           child: Text('Duration: '+snapshot.data[index].TimeFrom.toString()+' to '+snapshot.data[index].TimeTo.toString(), style: TextStyle(color: Colors.black54),),
                                         ),
 
                                         snapshot.data[index].Reason.toString()!='-'?Container(
                                           width: MediaQuery.of(context).size.width*.90,
-                                          padding: EdgeInsets.only(top:1.5,bottom: 0.5),
+                                          //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                           margin: EdgeInsets.only(top: 4.0),
                                           child: Text('Reason: '+snapshot.data[index].Reason.toString(), style: TextStyle(color: Colors.black54),),
                                         ):Center(),
@@ -600,7 +600,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
                                         snapshot.data[index].ApproverComment.toString()!='-'?Container(
                                           width: MediaQuery.of(context).size.width*.90,
-                                          padding: EdgeInsets.only(top:1.5,bottom: 0.5),
+                                          //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                           margin: EdgeInsets.only(top: 3.0),
                                           child: Text('Comment: '+snapshot.data[index].ApproverComment.toString(), style: TextStyle(color: Colors.black54), ),
                                         ):Center(
@@ -609,7 +609,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
                                         snapshot.data[index].ApprovalSts.toString()!='-'?Container(
                                           width: MediaQuery.of(context).size.width*.90,
-                                          padding: EdgeInsets.only(top:1.5,bottom: 1.5),
+                                          //padding: EdgeInsets.only(top:1.5,bottom: 1.5),
                                           margin: EdgeInsets.only(top: 4.0),
                                           child: RichText(
                                             text: new TextSpan(

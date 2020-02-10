@@ -244,7 +244,7 @@ class ChoiceCard extends StatelessWidget {
                   children: <Widget>[
                     Text('Time off Applications',
                         style: new TextStyle(fontSize: 22.0, color: appStartColor())),
-                    new Divider(color: Colors.black54,height: 1.5,),
+                    new Divider(height: 2,),
                     new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 //            crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,7 +314,7 @@ class ChoiceCard extends StatelessWidget {
                                                 new Row(
                                                   mainAxisAlignment: MainAxisAlignment .spaceAround,
                                                   children: <Widget>[
-                                                    SizedBox(height: 40.0,),
+                                                    //SizedBox(height: 40.0,),
                                                     new Expanded(
 
                                                       child: Container(
@@ -341,12 +341,11 @@ class ChoiceCard extends StatelessWidget {
 
                                                     new Expanded(
                                                       child:Container(
-
                                                           width: MediaQuery .of(context)  .size.width * 0.50,
                                                           child: Column(
                                                             crossAxisAlignment: CrossAxisAlignment .center,
                                                             children: <Widget>[
-                                                              Text("         "+snapshot.data[index].applydate
+                                                              Text("     "+snapshot.data[index].applydate
                                                                   .toString()),
                                                             ],
                                                           )
@@ -427,8 +426,8 @@ class ChoiceCard extends StatelessWidget {
                                                 snapshot.data[index].Reason.toString() != '-'
                                                     ? Container(
                                                     width: MediaQuery.of(context).size.width * .90,
-                                                    padding: EdgeInsets.only(top: 1.5),
-                                                    margin: EdgeInsets.only(top: 4.0),
+                                                    //padding: EdgeInsets.only(top: 1.5),
+                                                    margin: EdgeInsets.only(top: 0.5),
                                                     child: RichText(
                                                       text: new TextSpan(
                                                         // Note: Styles for TextSpans must be explicitly defined.
@@ -448,8 +447,8 @@ class ChoiceCard extends StatelessWidget {
 
                                                 snapshot.data[index].Psts.toString()!=''?Container(
                                                   width: MediaQuery.of(context).size.width*.90,
-                                                  padding: EdgeInsets.only(top:1.5,bottom: .5),
-                                                  margin: EdgeInsets.only(top: .5),
+                                                  //padding: EdgeInsets.only(top:1.5),
+                                                  margin: EdgeInsets.only(top: 0.5),
                                                   child: RichText(
                                                     text: new TextSpan(
                                                       // Note: Styles for TextSpans must be explicitly defined.

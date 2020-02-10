@@ -442,7 +442,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                                 ),
                                                 children: <TextSpan>[
                                                   new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
-                                                  new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: snapshot.data[index].ests.toString()=='Approved'?appStartColor() :snapshot.data[index].ests.toString()=='Rejected' || snapshot.data[index].ests.toString()=='Withdrawn' ?Colors.red:snapshot.data[index].ests.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 16.0),),
+                                                  new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: snapshot.data[index].ests.toString()=='Approved'?appStartColor():snapshot.data[index].ests.toString()=='Rejected' || snapshot.data[index].ests.toString()=='Withdrawn' ?Colors.red:snapshot.data[index].ests.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 16.0),),
 
                                                   //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
                                                 ],

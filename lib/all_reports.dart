@@ -37,7 +37,6 @@ class _AllReports extends State<AllReports> {
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     showtabbar=false;
     getOrgName();
-
    /* perAttReport=  getModuleUserPermission("68","view");
     perLeaveReport=  getModuleUserPermission("69","view");*/
 
@@ -55,14 +54,16 @@ class _AllReports extends State<AllReports> {
 
     //  await getProfileInfo(emp);
     getAllPermission(emp).then((res) {
-      setState(() {
-        perAttReport=  getModuleUserPermission("68","view");
-        perLeaveReport=  getModuleUserPermission("69","view");
-        perFlexiReport=  getModuleUserPermission("448","view");
-        print("attendance "+perAttReport);
-        print("leave "+perLeaveReport);
-        print("flexi "+perFlexiReport);
-      });
+      if(mounted) {
+        setState(() {
+          perAttReport=getModuleUserPermission("68", "view");
+          perLeaveReport=getModuleUserPermission("69", "view");
+          perFlexiReport=getModuleUserPermission("448", "view");
+          print("attendance " + perAttReport);
+          print("leave " + perLeaveReport);
+          print("flexi " + perFlexiReport);
+        });
+      }
     });
   }
   @override
@@ -224,9 +225,9 @@ class _AllReports extends State<AllReports> {
               color: Colors.white,
             ),
             child:ListView(
-
               //    mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
+                  //SizedBox(height: 5.0),
                   Text('Reports',
                       style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center),
                   //SizedBox(height: 10.0),
@@ -239,20 +240,20 @@ class _AllReports extends State<AllReports> {
                     //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
-
-                      //     padding: EdgeInsets.only(left:  5.0),
+                      //padding: EdgeInsets.only(left:  5.0),
                       child: Row(
 
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Container(
+                          Icon(const IconData(0xe800, fontFamily: "CustomIcon"),size: 30.0,),
+                          /*Container(
                             decoration: new BoxDecoration(
                               shape: BoxShape.circle,
                               color: appStartColor(),
                             ),
                             child: Icon(Icons.add_to_home_screen,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                             padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                          ),
+                          ),*/
 
                           SizedBox(width: 6.0),
                           Expanded(
@@ -274,7 +275,7 @@ class _AllReports extends State<AllReports> {
                     ),
                     color: Colors.white,
                     elevation: 4.0,
-                    textColor: Colors.black,
+                    textColor: Colors.black54,
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -297,16 +298,17 @@ class _AllReports extends State<AllReports> {
 
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Container(
+                          Icon(const IconData(0xe821, fontFamily: "CustomIcon"), size: 30.0,),
+                          /*Container(
                             decoration: new BoxDecoration(
                               shape: BoxShape.circle,
                               color: appStartColor(),
                             ),
                             child: Icon(Icons.directions_walk,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                             padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                          ),
+                          ),*/
 
-                          SizedBox(width: 15.0),
+                          SizedBox(width: 17.0),
                           Expanded(
                             child:Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -326,7 +328,7 @@ class _AllReports extends State<AllReports> {
                     ),
                     color: Colors.white,
                     elevation: 4.0,
-                    textColor: Colors.black,
+                    textColor: Colors.black54,
                     onPressed: () {
                        Navigator.push(
                         context,
@@ -349,14 +351,15 @@ class _AllReports extends State<AllReports> {
 
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Container(
+                          Icon(const IconData(0xe801, fontFamily: "CustomIcon"),size: 30.0,),
+                          /*Container(
                             decoration: new BoxDecoration(
                               shape: BoxShape.circle,
                               color: appStartColor(),
                             ),
                             child: Icon(Icons.alarm_on,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                             padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                          ),
+                          ),*/
 
                           SizedBox(width: 15.0),
                           Expanded(
@@ -364,7 +367,7 @@ class _AllReports extends State<AllReports> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                    child: Text('Time off',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Timeoff',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
 
                               ],
@@ -380,7 +383,7 @@ class _AllReports extends State<AllReports> {
                     ),
                     color: Colors.white,
                     elevation: 4.0,
-                    textColor: Colors.black,
+                    textColor: Colors.black54,
                     onPressed: () {
                        Navigator.push(
                         context,
@@ -434,7 +437,7 @@ class _AllReports extends State<AllReports> {
                     ),
                     color: Colors.white,
                     elevation: 4.0,
-                    textColor: Colors.black,
+                    textColor: Colors.black54,
                     onPressed: () {
                       Navigator.push(
                         context,

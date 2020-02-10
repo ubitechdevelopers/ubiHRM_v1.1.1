@@ -106,13 +106,13 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
 
             child: Column(
               children: <Widget>[
-                SizedBox(height: 1.0),
+                //SizedBox(height: 1.0),
                 Center(
                   child: Text(
                     "Employees on Leave" ,
                     style: new TextStyle(
                       fontSize: 20.0,
-                      color: Colors.black54,
+                      color: appStartColor(),
                     ),
                   ),
                 ),
@@ -217,7 +217,17 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                   height: 5.2,
                 ),
                 new Expanded(
-                  child: res == true ? getEmpDataList(today.text,emp) : Center(),
+                  child: res == true ? getEmpDataList(today.text,emp) : Container(
+                    height: MediaQuery.of(context).size.height*0.25,
+                    child:Center(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width*1,
+                        color:appStartColor().withOpacity(0.1),
+                        padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                        child:Text("Please select the date",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -336,30 +346,32 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                     ),
                   ),
 
-                  child: new DropdownButton<String>(
-                    isDense: true,
+                  child: DropdownButtonHideUnderline(
+                    child: new DropdownButton<String>(
+                      isDense: true,
 
-                    style: new TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.black,
+                      style: new TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black,
+
+                      ),
+                      value: emp,
+                      onChanged: (String newValue) {
+                        setState(() {
+                          emp = newValue;
+                          res = true;
+                        });
+                      },
+                      items: snapshot.data.map((Map map) {
+                        return new DropdownMenuItem<String>(
+                          value: map["Id"].toString(),
+                          child: new SizedBox(
+                              width: 200.0,
+                              child: map["Code"]!=''&&map["Code"]!='null'?new Text(map["Code"]+' - '+map["Name"]):new Text(map["Name"],)),
+                        );
+                      }).toList(),
 
                     ),
-                    value: emp,
-                    onChanged: (String newValue) {
-                      setState(() {
-                        emp = newValue;
-                        res = true;
-                      });
-                    },
-                    items: snapshot.data.map((Map map) {
-                      return new DropdownMenuItem<String>(
-                        value: map["Id"].toString(),
-                        child: new SizedBox(
-                            width: 200.0,
-                            child: map["Code"]!=''&&map["Code"]!='null'?new Text(map["Name"]+' ('+map["Code"]+')'):new Text(map["Name"],)),
-                      );
-                    }).toList(),
-
                   ),
                 ),
               );

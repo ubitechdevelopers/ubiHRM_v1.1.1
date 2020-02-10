@@ -279,7 +279,7 @@ class _RequestExpenceState extends State<RequestExpence> {
             key: _formKey,
             child: SafeArea(
               child: Column(children: <Widget>[
-                SizedBox(height: 10.0),
+                //SizedBox(height: 5.0),
                 //   mainAxisAlignment: MainAxisAlignment.start,
                 Text('Expense Request',
                     style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center,),
@@ -289,7 +289,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: 10.0),
+                        SizedBox(height: 5.0),
                         Row(
                           children: <Widget>[
                             //     SizedBox(height: MediaQuery.of(context).size.height * .01),
@@ -392,7 +392,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                                     prefixIcon: Padding(
                                       padding: EdgeInsets.all(0.0),
                                       child: Icon(
-                                        Icons.call_to_action,
+                                        Icons.monetization_on,
                                         color: Colors.grey,
                                       ), // icon is 48px widget.
                                     )
@@ -478,11 +478,38 @@ class _RequestExpenceState extends State<RequestExpence> {
                                 Flexible(
                                   child: Container(
                                       width: MediaQuery.of(context).size.width*0.90,
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(width: 1.0, color: Colors.grey),
+                                        )
+                                      ),
                                       child: Padding(
-                                        padding: const EdgeInsets.all(0.0),
-                                        child: FlatButton.icon(
+                                        padding: const EdgeInsets.only(left: 10.0, bottom:16.0, top: 3.0),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Container(
+                                              child: Icon(Icons.file_upload, color: Colors.grey,),
+                                            ),
+                                            InkWell(
+                                              child: Container(
+                                                width: MediaQuery.of(context).size.width*0.6,
+                                                padding: EdgeInsets.fromLTRB(10.0,0.0, 0.0, 0.0),
+                                                //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                                                child:showImage(_image),
+                                              ),
+                                              onTap: () async {
+                                                var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                                print(image);
+                                                setState(() {
+                                                  _image = image;
+                                                });
+                                              },
+                                            )
+                                          ],
+                                        )
+                                        /*child: FlatButton.icon(
                                               icon: Padding(
-                                                padding: const EdgeInsets.only(bottom:15.0),
+                                                padding: const EdgeInsets.only(bottom:15.0, left:0.0),
                                                 child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],size: 27,),
                                               ), //
                                               label: Container(
@@ -503,7 +530,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                                               //height: 55,
                                               //minWidth: 350,
                                               shape: UnderlineInputBorder(),
-                                          ),
+                                          ),*/
                                       ),
                                     ),
 
@@ -619,42 +646,52 @@ class _RequestExpenceState extends State<RequestExpence> {
           if (snapshot.hasData) {
             return new Container(
               //    width: MediaQuery.of(context).size.width*.45,
-              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+              padding: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
               child: InputDecorator(
                 decoration: InputDecoration(
                   labelText: 'Category',
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.all(1.0),
+                    child: Icon(
+                      Icons.account_balance_wallet,
+                      color: Colors.grey,
+                    ), // icon is 48px widget.
+                    //child: Icon(const IconData(0xe804, fontFamily: "CustomIcon"),size: 20.0,),
+                    ),
                   // icon is 48px widget.
                    ),
 
-                  child:  new DropdownButton<String>(
-                  isDense: true,
-                  style: new TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.black
-                  ),
-                  value: headtype,
-                  onChanged: (String newValue) {
-                    setState(() {
-                      headtype =newValue;
-                    });
-                  },
+                  child:  DropdownButtonHideUnderline(
+                    child: new DropdownButton<String>(
+                    isDense: true,
+                    isExpanded: false,
+                    style: new TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.black
+                    ),
+                    value: headtype,
+                    onChanged: (String newValue) {
+                      setState(() {
+                        headtype =newValue;
+                      });
+                    },
 
-                  items: snapshot.data.map((Map map) {
-                    return new DropdownMenuItem<String>(
-                      value: map["Id"].toString(),
-                      child:  new SizedBox(
-                        //     width: MediaQuery.of(context).size.width * 10,
-                          child: new Text(
-                            map["Name"],
-                          )
-                      ),
-                    );
+                    items: snapshot.data.map((Map map) {
+                      return new DropdownMenuItem<String>(
+                        value: map["Id"].toString(),
+                        child:  new SizedBox(
+                          //width: MediaQuery.of(context).size.width * 10,
+                            child: new Text(
+                              map["Name"],
+                            )
+                        ),
+                      );
 
-                  }).toList(),
+                    }).toList(),
 
                 ),
+                  ),
               ),
-
             );
           }
           else if (snapshot.hasError)
@@ -912,14 +949,14 @@ class _RequestExpenceState extends State<RequestExpence> {
           return const Text(
             'Error Picking Attachment',
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 16.0, color: Colors.grey),
+            style: TextStyle(fontSize: 16.0, color: Colors.red),
             textAlign: TextAlign.start,
           );
         } else {
           return const Text(
             'Select Attachment',
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 16.0, color: Colors.grey),
+            style: TextStyle(fontSize: 16.0, color: Colors.black54),
             textAlign: TextAlign.start,
           );
         }

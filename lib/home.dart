@@ -85,7 +85,6 @@ class _HomePageStatemain extends State<HomePageMain> {
     /*getAllPermission(emp);
     await getProfileInfo(emp);
     perEmployeeLeave= getModulePermission("18","view");
-
     perLeaveApproval=  getModulePermission("124","view");
     perAttendance=  getModulePermission("5","view");
     perTimeoff=  getModulePermission("179","view");*/
@@ -151,15 +150,21 @@ class _HomePageStatemain extends State<HomePageMain> {
       print(location_addr);
 
       perEmployeeLeave = getModulePermission("18", "view");
-      perLeaveApproval = getModuleUserPermission("124", "view");
-      perTimeoffApproval = getModuleUserPermission("180", "view");
       perAttendance = getModulePermission("5", "view");
       perTimeoff = getModulePermission("179", "view");
       perSalary = getModulePermission("66", "view");
       perPayroll = getModulePermission("458", "view");
-      perExpense = getModulePermission("170", "view");
+      perSalaryExpense = getModulePermission("170", "view");
+      perPayrollExpense = getModulePermission("473", "view");
       perFlexi = getModulePermission("448", "view");
       perPunchLocation = getModulePermission("305", "view");
+      perLeaveApproval = getModuleUserPermission("124", "view");
+      perTimeoffApproval = getModuleUserPermission("180", "view");
+      perSalaryExpenseApproval = getModuleUserPermission("170", "view");
+      perPayrollExpenseApproval = getModuleUserPermission("473","view");
+      perAttReport=getModuleUserPermission("68", "view");
+      perLeaveReport=getModuleUserPermission("69", "view");
+      perFlexiReport=getModuleUserPermission("448", "view");
 
       await getReportingTeam(emp);
 
@@ -317,10 +322,10 @@ class _HomePageStatemain extends State<HomePageMain> {
             children: <Widget>[
               if(perAttendance == '1') makeDashboardItem("Attendance", HomePage(), 'assets/icons/Attendance_icon.png'),
               if(perEmployeeLeave == '1')  makeDashboardItem("Leave",  MyLeave(), 'assets/icons/leave_icon.png'),
-              if(perTimeoff == '1') makeDashboardItem("Time off", TimeoffSummary(), 'assets/icons/Timeoff_icon.png'),
+              if(perTimeoff == '1') makeDashboardItem("Timeoff", TimeoffSummary(), 'assets/icons/Timeoff_icon.png'),
               if(perPunchLocation == '1') makeDashboardItem("Visits", PunchLocationSummary(), 'assets/icons/visits_icon.png'),
               if(perFlexi == '1') makeDashboardItem("Flexi time", Flexitime(), 'assets/icons/Flexi_icon.png'),
-              if(perExpense == '1') makeDashboardItem("Expenses", MyExpence(), 'assets/icons/Expense_icon.png'),
+              if(perSalaryExpense == '1' || perPayrollExpense == '1') makeDashboardItem("Expenses", MyExpence(), 'assets/icons/Expense_icon.png'),
               if(perSalary == '1') makeDashboardItem("Salary", SalarySummary(), 'assets/icons/Salary_icon.png'),
               if(perPayroll == '1') makeDashboardItem("Payroll", PayrollSummary(), 'assets/icons/Salary_icon.png'),
               makeDashboardItem("Dashboard",DashboardMain(), 'assets/icons/Dashboard_icon.png'),
@@ -579,7 +584,7 @@ class _HomePageStatemain extends State<HomePageMain> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      (perExpense == '1')
+                      (perSalaryExpense == '1' || perPayrollExpense == '1')
                           ? GestureDetector(
                         //   GestureDetector(
                           onTap: () {

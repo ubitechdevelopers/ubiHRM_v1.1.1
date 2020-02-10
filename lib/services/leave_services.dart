@@ -16,17 +16,6 @@ requestLeave(Leave leave) async{
   try {
     final prefs = await SharedPreferences.getInstance();
     String path_hrm_india1 = prefs.getString('path_hrm_india');
-    //print(leave.orgid);
-    //print(leave.uid);
-    //print(leave.leavefrom);
-    //print(leave.leaveto);
-    //print(leave.leavetypefrom);
-    //print(leave.leavetypeto);
-    //print(leave.halfdayfromtype);
-    //print(leave.halfdaytotype);
-    //print(leave.leavetypeid);
-    //print(leave.reason);
-  //  print(leave.substituteemp);
 
     FormData formData = new FormData.from({
       "orgid": leave.orgid,
@@ -39,12 +28,13 @@ requestLeave(Leave leave) async{
       "halfdaytotype": leave.halfdaytotype,
       "leavetypeid": leave.leavetypeid,
       "reason": leave.reason,
-      "substituteemp": leave.substituteemp
+      "substituteemp": leave.substituteemp,
+      "compoffsts": leave.compoffsts
     });
 
     Response response1 = await dio.post(path_hrm_india1+"reqForLeave", data: formData);
     print("------------------------");
-    print(path_hrm_india1+"reqForLeave");
+    print(path_hrm_india1+"reqForLeave?orgid=${leave.orgid}&uid=${leave.uid}leavefrom=${leave.leavefrom}&leaveto=${leave.leaveto}&leavetypefrom=${leave.leavetypefrom}&leavetypeto=${leave.leavetypeto}&halfdayfromtype=${leave.halfdayfromtype}&halfdaytotype=${leave.halfdaytotype}&leavetypeid=${leave.leavetypeid}&reason=${leave.reason}&substituteemp=${leave.substituteemp}&compoffsts=${leave.compoffsts}");
     print("xxxxxxxxxx"+response1.toString());
     print("******************");
     print(response1.statusCode);
@@ -62,10 +52,14 @@ requestLeave(Leave leave) async{
     {
       return "wrong";
     }
-    /*else if (leaveMap.contains("wrong1"))
+    else if (leaveMap.contains("You cannot apply more than credited leaves"))
     {
-      return "wrong1";
-    }*/
+      return "You cannot apply more than credited leaves";
+    }
+    else if (leaveMap.contains("You cannot apply for comp off"))
+    {
+      return "You cannot apply for comp off";
+    }
     else if (leaveMap.contains("alreadyApply"))
     {
       return "alreadyApply";
@@ -93,9 +87,8 @@ Future<List<Leave>> getLeaveSummary() async{
       "uid": empid,
     });
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
-    Response response = await dio.post(
-        path1+"getLeaveList",
-        data: formData);
+    Response response = await dio.post(path1+"getLeaveList", data: formData);
+    print(path1+"getLeaveList&uid=$empid");
     //print(response.data.toString());
     //print('--------------------getLeaveSummary Called-----------------------');
     List responseJson = json.decode(response.data.toString());
@@ -123,16 +116,18 @@ List<Leave> createLeaveList(List data){
     String ApprovalSts=data[i]["status"];
     String ApproverComment=data[i]["comment"];
     String LeaveId=data[i]["leaveid"];
+    String leavetype=data[i]["leavetype"];
+    String compoffsts=data[i]["compoffsts"];
     bool withdrawlsts=data[i]["withdrawlsts"];
-//    print(LeaveFrom+"@@@@@@@"+LeaveTo);
+    //print(LeaveFrom+"@@@@@@@"+LeaveTo);
     if(LeaveFrom==LeaveTo){
       LeaveTo=" - "+LeaveFrom;
     }
     else{
       LeaveTo=" - "+LeaveTo;
     }
- //    print(LeaveDate);
-    Leave leave = new Leave(attendancedate: LeaveDate, leavefrom: LeaveFrom, leaveto: LeaveTo, leavedays: LeaveDays, reason: Reason, approverstatus: ApprovalSts, comment: ApproverComment, leaveid: LeaveId, withdrawlsts: withdrawlsts);
+    //print(LeaveDate);
+    Leave leave = new Leave(attendancedate: LeaveDate, leavefrom: LeaveFrom, leaveto: LeaveTo, leavedays: LeaveDays, reason: Reason, approverstatus: ApprovalSts, comment: ApproverComment, leaveid: LeaveId, leavetype: leavetype, compoffsts:compoffsts, withdrawlsts: withdrawlsts);
     list.add(leave);
    /* print("LEAVE LIST");
     print(list);
@@ -153,8 +148,11 @@ withdrawLeave(Leave leave) async{
       "leaveid": leave.leaveid,
       "uid": leave.uid,
       "orgid": leave.orgid,
-      "leavests": leave.approverstatus
+      "leavests": leave.approverstatus,
+      "compoffsts": leave.compoffsts
     });
+
+    print(path_hrm_india1+"changeleavests?leaveid=${leave.leaveid}&uid=${leave.uid}&orgid=${leave.orgid}&leavests=${leave.approverstatus}&compoffsts=${leave.compoffsts}");
     //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
         path_hrm_india1+"changeleavests",
@@ -206,7 +204,7 @@ List<Map> createList(List data,int label) {
   for (int i = 0; i < data.length; i++) {
     //  if(data[i]["archive"].toString()=='1') {
     // print("kkkkkkk"+data[i]["name"].toString());
-    Map tos={"Name":data[i]["name"].toString()  +" ("+data[i]["leftleave"].toString()+" Remaining ) " ,"Id":data[i]["id"].toString()};
+    Map tos={"Name":data[i]["name"].toString()  +" ("+data[i]["leftleave"].toString()+" Remaining)" ,"Id":data[i]["id"].toString(),"compoffsts":data[i]["compoffsts"].toString()};
     list.add(tos);
     // }
   }
@@ -220,6 +218,7 @@ Future<List<Map>> getsubstitueemp(int label) async{
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   final response = await dio.post(path1 + "getEmployeeHierarchy?orgid=$orgdir&eid=$empid");
+  print(path1 + "getEmployeeHierarchy?orgid=$orgdir&eid=$empid");
   //print("leavetype11----------->");
   // print(response);
   List data = json.decode(response.data.toString());
@@ -228,6 +227,7 @@ Future<List<Map>> getsubstitueemp(int label) async{
   List<Map> substituteemp = createsubstituteempList(data,label);
   return substituteemp;
 }
+
 List<Map> createsubstituteempList(List data,int label) {
   List<Map> list = new List();
   if(label==1) // with -All- label
@@ -248,7 +248,6 @@ List<Map> createsubstituteempList(List data,int label) {
 }
 
 
-
 class LeaveH {
   String Id;
   String name;
@@ -263,6 +262,7 @@ class LeaveH {
         this.Left,
       });
 }
+
 Future<List<LeaveH>> getleavehistory(LeaveTypeId) async{
   final prefs = await SharedPreferences.getInstance();
   String path1 = prefs.getString('path');
@@ -278,8 +278,6 @@ Future<List<LeaveH>> getleavehistory(LeaveTypeId) async{
   List<LeaveH> leavetype = createleavehistory(data);
   return leavetype;
 }
-
-
 
 List<LeaveH> createleavehistory(List data) {
 
@@ -306,12 +304,6 @@ List<LeaveH> createleavehistory(List data) {
   return list;
 }
 
-
-
-
-
-
-
 class LeaveA {
   String Id;
   String name;
@@ -328,6 +320,7 @@ class LeaveA {
   String TimeOfTo;
   String LeaveTypeId;
   String sts;
+  String LeaveType;
 
   LeaveA(
       { this.Id,
@@ -338,7 +331,15 @@ class LeaveA {
         this.Fdate,
         this.Tdate,
         this.Psts,
-        this.Ldays, this.HRSts, this.FromDayType, this.ToDayType, this.TimeOfTo, this.LeaveTypeId, this.sts});
+        this.Ldays,
+        this.HRSts,
+        this.FromDayType,
+        this.ToDayType,
+        this.TimeOfTo,
+        this.LeaveTypeId,
+        this.sts,
+        this.LeaveType,
+      });
 }
 
 
@@ -351,6 +352,8 @@ Future<List<LeaveA>> getApprovals(listType) async {
 
   Response<String> response =
   await dio.post(path1+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  print('path1+"getapproval?datafor');
+  print(path1+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
 //  print(res);
   // print(path+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
@@ -385,6 +388,7 @@ List<LeaveA> createleaveapporval(List data) {
     String ToDayType = data[i]["ToDayType"].toString();
     String TimeOfTo = data[i]["TimeOfTo"].toString();
     String LeaveTypeId = data[i]["LeaveTypeId"].toString();
+    String LeaveType = data[i]["LeaveType"].toString();
  //   print("********************"+data[i]["Pstatus"].toString());
     String HRSts = data[i]["HRSts"].toString();
     print(Fdate+"@@@@@@@"+Tdate);
@@ -409,7 +413,13 @@ List<LeaveA> createleaveapporval(List data) {
         Tdate: Tdate,
         Psts : Psts,
         Ldays: Ldays,
-        HRSts: HRSts,FromDayType: FromDayType,ToDayType: ToDayType,TimeOfTo: TimeOfTo,LeaveTypeId :LeaveTypeId);
+        HRSts: HRSts,
+        FromDayType: FromDayType,
+        ToDayType: ToDayType,
+        TimeOfTo: TimeOfTo,
+        LeaveTypeId :LeaveTypeId,
+        LeaveType: LeaveType
+    );
     list.add(tos);
   }
   return list;
@@ -534,9 +544,9 @@ Future<List<LeaveA>> getTeamApprovals() async {
   String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-  //print(path+"getteamapproval?empid="+empid+'&orgid='+orgdir);
-  Response<String> response =
-  await dio.post(path1+"getteamapproval?empid="+empid+'&orgid='+orgdir);
+  print('====================HELLO==================');
+  print(path1+"getteamapproval?empid="+empid+'&orgid='+orgdir);
+  Response<String> response =await dio.post(path1+"getteamapproval?empid="+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
 
 print(res);
@@ -562,6 +572,7 @@ List<LeaveA> createTeamleaveapporval(List data) {
     String ToDayType = data[i]["ToDayType"].toString();
     String TimeOfTo = data[i]["TimeOfTo"].toString();
     String LeaveTypeId = data[i]["LeaveTypeId"].toString();
+    String LeaveType = data[i]["LeaveType"].toString();
     String sts = data[i]["sts"].toString();
       print("********************"+data[i]["Pstatus"].toString());
     String HRSts = data[i]["HRSts"].toString();
@@ -587,7 +598,13 @@ List<LeaveA> createTeamleaveapporval(List data) {
         Tdate: Tdate,
         Psts : Psts,
         Ldays: Ldays,
-        HRSts: HRSts,FromDayType: FromDayType,ToDayType: ToDayType,TimeOfTo: TimeOfTo,LeaveTypeId :LeaveTypeId,sts :sts);
+        HRSts: HRSts,
+        FromDayType: FromDayType,
+        ToDayType: ToDayType,
+        TimeOfTo: TimeOfTo,
+        LeaveTypeId: LeaveTypeId,
+        LeaveType :LeaveType,
+        sts :sts);
     list.add(tos);
 
   }

@@ -2,6 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_share/simple_share.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 
 import '../appbar.dart';
@@ -27,7 +28,8 @@ class _VisitList extends State<VisitList> {
   var profileimage;
   bool showtabbar;
   String orgName="";
-
+  bool filests=false;
+  Future<List<Punch>> _listFuture;
 
   @override
   void initState() {
@@ -38,6 +40,7 @@ class _VisitList extends State<VisitList> {
     showtabbar =false;
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     getOrgName();
+    _listFuture = getVisitsDataList(today.text);
   }
 
   getOrgName() async {
@@ -103,45 +106,200 @@ class _VisitList extends State<VisitList> {
               height: 10.0,
             ),*/
             SizedBox(height: 2.0),
-            Container(
-              child: DateTimeField(
-                //dateOnly: true,
-                format: formatter,
-                controller: today,
-                readOnly: true,
-                onShowPicker: (context, currentValue) {
-                  return showDatePicker(
-                      context: context,
-                      firstDate: DateTime(1900),
-                      initialDate: currentValue ?? DateTime.now(),
-                      lastDate: DateTime(2100));
-                },
-                decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.all(0.0),
-                    child: Icon(
-                      Icons.date_range,
-                      color: Colors.grey,
-                    ), // icon is 48px widget.
-                  ), // icon is 48px widget.
-                  labelText: 'Select Date',
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    child: DateTimeField(
+                      //dateOnly: true,
+                      format: formatter,
+                      controller: today,
+                      readOnly: true,
+                      onShowPicker: (context, currentValue) {
+                        return showDatePicker(
+                            context: context,
+                            firstDate: DateTime(1900),
+                            initialDate: currentValue ?? DateTime.now(),
+                            lastDate: DateTime(2100));
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.all(0.0),
+                          child: Icon(
+                            Icons.date_range,
+                            color: Colors.grey,
+                          ), // icon is 48px widget.
+                        ), // icon is 48px widget.
+                        labelText: 'Select Date',
+                      ),
+                      onChanged: (date) {
+                        setState(() {
+                          if (date != null && date.toString() != '') {
+                            res=true; //showInSnackBar(date.toString());
+                            _listFuture = getVisitsDataList(today.text);
+                          }
+                          else {
+                            res=false;
+                          }
+                        });
+                      },
+                      validator: (date) {
+                        if (date == null) {
+                          return 'Please select date';
+                        }
+                      },
+                    ),
+                  ),
                 ),
-                onChanged: (date) {
-                  setState(() {
-                    if (date != null && date.toString() != '')
-                      res = true; //showInSnackBar(date.toString());
-                    else
-                      res = false;
-                  });
-                },
-                validator: (date) {
-                  if (date == null) {
-                    return 'Please select date';
-                  }
-                },
-              ),
+
+                /*Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child:(res == false)?
+                  Center()
+                      :Container(
+                      color: Colors.white,
+                      height: 60,
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      child: new FutureBuilder<List<Punch>>(
+                          future: _listFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data.length > 0) {
+                                return new ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder:(BuildContext context, int index) {
+                                      return new Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: <Widget>[
+                                            (index == 0)
+                                                ? Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                SizedBox(
+                                                  height:  60,
+                                                ),
+                                                Container(
+                                                  //padding: EdgeInsets.only(left: 5.0),
+                                                  child: InkWell(
+                                                    child: Text(
+                                                      'CSV',
+                                                      style: TextStyle(
+                                                        decoration:
+                                                        TextDecoration
+                                                            .underline,
+                                                        color: Colors
+                                                            .blueAccent,
+                                                        fontSize: 16,
+                                                        //fontWeight: FontWeight.bold
+                                                      ),
+                                                    ),
+                                                    onTap: () {
+                                                      //openFile(filepath);
+                                                      if (mounted) {
+                                                        setState(() {
+                                                          filests = true;
+                                                        });
+                                                      }
+                                                      getCsv(
+                                                          snapshot.data,
+                                                          'Visits_Report_' +
+                                                              today
+                                                                  .text,
+                                                          'visitlist')
+                                                          .then((res) {
+                                                        if(mounted){
+                                                          setState(() {
+                                                            filests = false;
+                                                          });
+                                                        }
+                                                        // showInSnackBar('CSV has been saved in file storage in ubiattendance_files/Department_Report_'+today.text+'.csv');
+                                                        dialogwidget(
+                                                            "CSV has been saved in internal storage in ubihrm_files/Late_Comers_Report_" +
+                                                                today.text +
+                                                                ".csv",
+                                                            res);
+                                                        *//*showDialog(context: context, child:
+                                                        new AlertDialog(
+                                                          content: new Text("CSV has been saved in file storage in ubiattendance_files/Late_Comers_Report_"+today.text+".csv"),
+                                                        )
+                                                        );*//*
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width:8,
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 5.0),
+                                                  child: InkWell(
+                                                    child: Text(
+                                                      'PDF',
+                                                      style: TextStyle(
+                                                        decoration:
+                                                        TextDecoration
+                                                            .underline,
+                                                        color: Colors
+                                                            .blueAccent,
+                                                        fontSize: 16,),
+                                                    ),
+                                                    onTap: () {
+                                                      //final uri = Uri.file('/storage/emulated/0/ubiattendance_files/Late_Comers_Report_14-Jun-2019.pdf');
+                                                      *//*SimpleShare.share(
+                                                          uri: uri.toString(),
+                                                          title: "Share my file",
+                                                          msg: "My message");*//*
+                                                      if (mounted) {
+                                                        setState(() {
+                                                          filests = true;
+                                                        });
+                                                      }
+                                                      CreatePDF(
+                                                          snapshot.data,
+                                                          'Visits Report ('+today.text+')',
+                                                          snapshot.data.length.toString(),
+                                                          'Visits_Report_' + today.text,
+                                                          'visitlist')
+                                                          .then((res) {
+                                                        setState(() {
+                                                          filests =false;
+                                                          // OpenFile.open("/sdcard/example.txt");
+                                                        });
+                                                        dialogwidget(
+                                                            'PDF has been saved in internal storage in ubihrm_files/' +
+                                                                'Late_Comers_Report_' +
+                                                                today.text +
+                                                                '.pdf',
+                                                            res);
+                                                        // showInSnackBar('PDF has been saved in file storage in ubiattendance_files/'+'Department_Report_'+today.text+'.pdf');
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            ):new Center(),
+                                          ]
+                                      );
+                                    }
+                                );
+                              }
+                            }
+                            return new Center(
+                              //child: Text("No CSV/PDF generated", textAlign: TextAlign.center,),
+                            );
+                          }
+                      )
+                  ),
+                )*/
+              ],
             ),
-            SizedBox(height: 12.0),
+            Divider(
+              height: 5,
+            ),
+            SizedBox(height: 2.0),
             Container(
               //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
        //       width: MediaQuery.of(context).size.width * .9,
@@ -171,7 +329,17 @@ class _VisitList extends State<VisitList> {
               height: 8.2,
             ),
             new Expanded(
-              child: res == true ? getEmpDataList(today.text) : Center(),
+              child: res == true ? getEmpDataList(today.text) : Container(
+                height: MediaQuery.of(context).size.height*0.25,
+                child:Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width*1,
+                    color:appStartColor().withOpacity(0.1),
+                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                    child:Text("Please select the date",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -193,7 +361,7 @@ class _VisitList extends State<VisitList> {
 
   getEmpDataList(date) {
     return new FutureBuilder<List<Punch>>(
-        future: getVisitsDataList(date),
+        future: _listFuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
@@ -278,8 +446,29 @@ class _VisitList extends State<VisitList> {
                               ),
 
 
-
                             ],
+                          ),
+
+                          snapshot.data[index].desc == '' ? Container() : snapshot
+                              .data[index].desc != 'Visit out not punched' ?
+                          Row(
+                            children: <Widget>[
+                              SizedBox(width: 5.0,),
+                              Text('Remark:  ',
+                                style: TextStyle(fontWeight: FontWeight.bold,),),
+                              Text(snapshot.data[index].desc)
+                            ],
+
+                          ) :
+                          Row(
+                            children: <Widget>[
+                              SizedBox(width: 5.0,),
+                              Text('Remark:  ', style: TextStyle(
+                                  fontWeight: FontWeight.bold, color: Colors.red),),
+                              Text(snapshot.data[index].desc,
+                                style: TextStyle(color: Colors.red),)
+                            ],
+
                           ),
                           Divider(color: Colors.black26,),
                         ]);
@@ -303,5 +492,38 @@ class _VisitList extends State<VisitList> {
           // return loader();
           return new Center(child: CircularProgressIndicator());
         });
+  }
+
+  dialogwidget(msg, filename) {
+    showDialog(
+        context: context,
+        // ignore: deprecated_member_use
+        child: new AlertDialog(
+          content: new Text(msg),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Later'),
+              shape: Border.all(),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+            RaisedButton(
+              child: Text(
+                'Share File',
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.orange[800],
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+                final uri=Uri.file(filename);
+                SimpleShare.share(
+                    uri: uri.toString(),
+                    title: "UBIHRM Report",
+                    msg: "UBIHRM Report");
+              },
+            ),
+          ],
+        ));
   }
 } /////////mail class close

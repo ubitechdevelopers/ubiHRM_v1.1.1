@@ -183,8 +183,7 @@ class _AllSetting extends State<AllSetting> {
               color: Colors.white,
             ),
             child:ListView(
-
-              //    mainAxisAlignment: MainAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text('Settings',
                       style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center),
@@ -204,16 +203,17 @@ class _AllSetting extends State<AllSetting> {
 
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Container(
+                          Icon(const IconData(0xe802, fontFamily: "CustomIcon"),size: 30.0,),
+                          /*Container(
                             decoration: new BoxDecoration(
                               shape: BoxShape.circle,
                               color: appStartColor(),
                             ),
                             child: Icon(Icons.add_to_home_screen,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                             padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                          ),
+                          ),*/
 
-                          SizedBox(width: 6.0),
+                          SizedBox(width: 17.0),
                           Expanded(
                             child:Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,7 +233,7 @@ class _AllSetting extends State<AllSetting> {
                     ),
                     color: Colors.white,
                     elevation: 4.0,
-                    textColor: Colors.black,
+                    textColor: Colors.black54,
                     onPressed: () {
                       Navigator.push(
                         context,

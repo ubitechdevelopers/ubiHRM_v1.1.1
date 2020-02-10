@@ -358,7 +358,7 @@ var profilepic;
     return WillPopScope(
       onWillPop: ()=> sendToHome(),
       child: Scaffold(
-  key: _scaffoldKey,
+      key: _scaffoldKey,
         body: new DefaultTabController(
          length: 2,
           child: NestedScrollView(
@@ -409,7 +409,8 @@ var profilepic;
                         child:
                         StickyHeader(
                           header: new Container(
-                            height: 50.0,
+                            //height: 50.0,
+                            height: MediaQuery.of(context).size.height*0.06,
                             color: Colors.grey[100],
                             padding: new EdgeInsets.symmetric(horizontal: 9.0),
                             alignment: Alignment.centerLeft,
@@ -445,8 +446,30 @@ var profilepic;
                                   Text(globalpersnalinfomap["DOJ"]),
                                 ],),
 
-                               SizedBox(height: 10.0,),
-                               countryid=='93'?
+                                globalcompanyinfomap["Location"]!=""?
+                                SizedBox(height: 10.0,):Center(),
+
+                                globalcompanyinfomap["Location"]!=""?
+                                Row(children: <Widget>[
+                                  Container(child: Text("Location:",
+                                    style: TextStyle(color: Colors.grey[600]),),
+                                    width: 100.0,),
+
+                                  Flexible(child: Text(
+                                      globalcompanyinfomap["Location"])),
+                                ],):Center(),
+
+                                SizedBox(height: 10.0,),
+
+                                Row(children: <Widget>[
+                                  Container(child: Text("Division:",
+                                    style: TextStyle(color: Colors.grey[600]),),
+                                    width: 100.0,),
+
+                                  Flexible(child: Text(
+                                      globalcompanyinfomap["Division"])),
+                                ],),
+                               /*countryid=='93'?
                                //SizedBox(height: 10.0,),
                                Row(children: <Widget>[
                                  Container(child: Text("Location:",
@@ -454,9 +477,8 @@ var profilepic;
                                    width: 100.0,),
 
                                  Flexible(child: Text(
-                                     globalcompanyinfomap["Division"])),
+                                     globalcompanyinfomap["Location"])),
                                ],) :
-
                                //SizedBox(height: 10.0,),
                                Row(children: <Widget>[
                                  Container(child: Text("Division:",
@@ -477,7 +499,7 @@ var profilepic;
                                     width: 100.0,),
 
                                   Flexible(child: Text(globalcompanyinfomap["Location"])),
-                                ],):Center(),
+                                ],):Center(),*/
                                 /* SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
                                   new Expanded(
@@ -502,13 +524,13 @@ var profilepic;
                                 ],),*/
                                 SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
-
                                     Container(child:Text("Department:",style: TextStyle(color: Colors.grey[600]),) ,
                                       width: 100.0,),
                                   Flexible(child: Text(globalcompanyinfomap["Department"])),
                                 ],),
-                              /*  SizedBox(height: 10.0,),
-                                Row(children: <Widget>[
+
+                                SizedBox(height: 15.0,),
+                                /*Row(children: <Widget>[
                                   Container(child:Text("Blood Group:",style: TextStyle(color: Colors.grey[600]),) ,
                                     width: 100.0,),
                                   Text(globalpersnalinfomap["BloodGroup"]),
@@ -539,7 +561,8 @@ var profilepic;
                         child:
                         StickyHeader(
                           header: new Container(
-                            height: 50.0,
+                            //height: 50.0,
+                            height: MediaQuery.of(context).size.height*0.06,
                             color: Colors.grey[100],
                             padding: new EdgeInsets.symmetric(horizontal: 9.0),
                             alignment: Alignment.centerLeft,
@@ -590,7 +613,8 @@ var profilepic;
                         child:
                         StickyHeader(
                           header: new Container(
-                            height: 50.0,
+                            //height: 50.0,
+                            height: MediaQuery.of(context).size.height*0.06,
                             color: Colors.grey[100],
                             padding: new EdgeInsets.symmetric(horizontal: 9.0),
                             alignment: Alignment.centerLeft,
@@ -651,7 +675,7 @@ var profilepic;
                                   //),
                                   Text(globalcontactusinfomap["Country"]),
                                 ],),
-                                SizedBox(height: 10.0,),
+                                SizedBox(height: 15.0,),
 
                               ],
                             ),
@@ -693,36 +717,31 @@ var profilepic;
                                     }
                                   });*/
 
-
-
                               return new Row(
                                 children: <Widget>[
-                                   new Container(child:Container(
-                                        width: 50.0,
-                                        height: 50.0,
-                                        decoration: new BoxDecoration(
-                                          color:Colors.grey[300],
-                                            shape: BoxShape.circle,
-                                            image: new DecorationImage(
-                                              fit: BoxFit.fill,
-
-                                            // image: NetworkImage(snapshot.data[index].ProfilePic) ,
-
-                                           image:  toreportprofileimage,
-                                     //      image: _checkLoadedr ? AssetImage('assets/avatar.png') : toreportprofileimage,
-                                            )
-                                        ))
+                                   new Container(child:Padding(
+                                     padding: const EdgeInsets.only(top:10.0),
+                                     child: Container(
+                                          width: 50.0,
+                                          height: 50.0,
+                                          decoration: new BoxDecoration(
+                                            color:Colors.grey[300],
+                                              shape: BoxShape.circle,
+                                              image: new DecorationImage(
+                                                fit: BoxFit.fill,
+                                                //image: NetworkImage(snapshot.data[index].ProfilePic) ,
+                                              image:  toreportprofileimage,
+                                              //image: _checkLoadedr ? AssetImage('assets/avatar.png') : toreportprofileimage,
+                                              )
+                                          )),
+                                   )
                                     ),SizedBox(width: 20.0,),
-                                    Text(snapshot.data[index].FirstName+" "+snapshot.data[index].LastName),
+                                    Text(snapshot.data[index].FirstName+" "+(snapshot.data[index].LastName.toString()!="null"?snapshot.data[index].LastName.toString():"")),
                                     //Text("-"),
                                    // Text(snapshot.data[index].Designation),
-
-
                                   ],
-
                               );
-
-                                }
+                            }
                             );
                           }else{
                             return new Center(

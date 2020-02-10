@@ -135,16 +135,17 @@ class _PayrollSummary extends State<PayrollSummary> {
             child:Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
+                  //SizedBox(height: 5.0),
                   Text('My Payroll',
                       style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                   //SizedBox(height: 10.0),
-
-                  new Divider(color: Colors.black54,height: 1.5,),
+                  new Divider(height: 2,),
+                  SizedBox(height: 5.0,),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     //crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height: 50.0,),
+                      SizedBox(height: 10.0,),
                       //SizedBox(width: MediaQuery.of(context).size.width*0.02),
                       new Expanded(
                         child:  Container(

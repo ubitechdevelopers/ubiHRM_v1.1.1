@@ -30,6 +30,7 @@ class _RequestLeaveState extends State<RequestLeave> {
   bool isloading = false;
   String admin_sts='0';
   String leavetype='0';
+  String CompoffSts='0';
   String substituteemp='0';
   DateTime Date1 = new DateTime.now();
   DateTime Date2 = new DateTime.now();
@@ -41,7 +42,7 @@ class _RequestLeaveState extends State<RequestLeave> {
   FocusNode textSecondFocusNode = new FocusNode();
   FocusNode textthirdFocusNode = new FocusNode();
   FocusNode textfourthFocusNode = new FocusNode();
-  final dateFormat = DateFormat("d MMMM yyyy");
+  final dateFormat = DateFormat("d MMM yyyy");
   final timeFormat = DateFormat("h:mm a");
   final _formKey = GlobalKey<FormState>();
   String _radioValue = "1"; // half day from type
@@ -53,10 +54,8 @@ class _RequestLeaveState extends State<RequestLeave> {
   var profileimage;
   bool showtabbar;
   String orgName="";
-
   bool _checkLoadedprofile=true;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
-
   @override
   void initState() {
     super.initState();
@@ -80,6 +79,8 @@ class _RequestLeaveState extends State<RequestLeave> {
       orgName= prefs.getString('orgname') ?? '';
     });
   }
+
+
 
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
@@ -132,7 +133,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     ));
   }
 
-  requestleave(var leavefrom, var leaveto, var leavetypefrom, var leavetypeto, var halfdayfromtype, var halfdaytotype, var reason, var substituteemp) async{
+  requestleave(var leavefrom, var leaveto, var leavetypefrom, var leavetypeto, var halfdayfromtype, var halfdaytotype, var reason, var substituteemp, var compoffsts) async{
     setState(() {
       isServiceCalling = true;
     });
@@ -140,7 +141,7 @@ class _RequestLeaveState extends State<RequestLeave> {
     final prefs = await SharedPreferences.getInstance();
     String uid = prefs.getString("employeeid")??"";
     String orgid = prefs.getString("organization")??"";
-    Leave leave =new Leave(uid: uid, leavefrom: leavefrom, leaveto: leaveto, orgid: orgid, reason: reason, leavetypeid: leavetype, leavetypefrom: leavetypefrom, leavetypeto: leavetypeto, halfdayfromtype: halfdayfromtype, halfdaytotype: halfdaytotype, substituteemp: substituteemp);
+    Leave leave =new Leave(uid: uid, leavefrom: leavefrom, leaveto: leaveto, orgid: orgid, reason: reason, leavetypeid: leavetype, leavetypefrom: leavetypefrom, leavetypeto: leavetypeto, halfdayfromtype: halfdayfromtype, halfdaytotype: halfdaytotype, substituteemp: substituteemp, compoffsts:compoffsts);
     var islogin1 = await requestLeave(leave);
     //print("---ss>"+islogin1);
     if(islogin1=="true"){
@@ -152,11 +153,11 @@ class _RequestLeaveState extends State<RequestLeave> {
       // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
+
         content: new Text('Leave application applied successfully.'),
       )
       );
-    }
-    else if(islogin1=="false"){
+    }else if(islogin1=="false"){
       // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
@@ -167,8 +168,7 @@ class _RequestLeaveState extends State<RequestLeave> {
         isServiceCalling = false;
       });
       //showInSnackBar("There is some problem while applying for Leave.");
-    }
-    else if(islogin1=="wrong"){
+    }else if(islogin1=="wrong"){
       // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
@@ -179,19 +179,28 @@ class _RequestLeaveState extends State<RequestLeave> {
         isServiceCalling = false;
       });
       //showInSnackBar("Leave format is wrong");
-    }
-    /* else if(islogin1=="wrong1"){
+    }else if(islogin1=="You cannot apply for comp off"){
+      // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('Leave can not be applied for this format'),
+        content: new Text('You cannot apply for comp off'),
       )
       );
       setState(() {
         isServiceCalling = false;
       });
       //showInSnackBar("Leave format is wrong");
-    }*/
-    else if(islogin1=="alreadyApply"){
+    }else if(islogin1=="You cannot apply more than credited leaves"){
+      showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text('You cannot apply more than credited leaves'),
+      )
+      );
+      setState(() {
+        isServiceCalling = false;
+      });
+      //showInSnackBar("Leave format is wrong");
+    }else if(islogin1=="alreadyApply"){
       // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
@@ -202,8 +211,7 @@ class _RequestLeaveState extends State<RequestLeave> {
         isServiceCalling = false;
       });
       //showInSnackBar("You already applied for same date");
-    }
-    else{
+    }else{
       // ignore: deprecated_member_use
       showDialog(context: context, child:
       new AlertDialog(
@@ -298,28 +306,27 @@ class _RequestLeaveState extends State<RequestLeave> {
             key: _formKey,
             child: SafeArea(
                 child: Column( children: <Widget>[
-                  SizedBox(height: 10.0),
+                  //SizedBox(height: 5.0),
                   Text('Request Leave',
                       style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                   new Divider(color: Colors.black54,height: 1.5,),
-                  new Expanded(child: ListView(
+                  new Expanded(
+                    child: ListView(
                     //padding: EdgeInsets.symmetric(horizontal: 15.0),
                     children: <Widget>[
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-
-
+                          //SizedBox(height: 5.0),
                           getLeaveType_DD(),
-
-                          SizedBox(height: 10.0),
+                          SizedBox(height: 5.0),
                           //Enter date
                           Row(
                             children: <Widget>[
                               new Expanded(
                                 child: Container(
-                                  // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
-                                  height: 80.0,
+                                  //margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
+                                  height: MediaQuery.of(context).size.height*0.1,
                                   child:DateTimeField(
                                     //firstDate: new DateTime.now(),
                                     //initialDate: new DateTime.now(),
@@ -363,58 +370,61 @@ class _RequestLeaveState extends State<RequestLeave> {
 
                                   ),
                                 ),
-
                               ),
-                              SizedBox(width: 10.0),
-                              Expanded(
-                                child: Container(
-                                  height: 58.0,
-                                  child: new InputDecorator(
-                                    decoration: InputDecoration(
-                                      // labelText: 'Leave Type',
-
-                                      prefixIcon: Padding(
-                                        padding: EdgeInsets.all(0.0),
-                                        child: Icon(
-                                          Icons.tonality,
-                                          color: Colors.grey,
-                                        ), // icon is 48px widget.
+                              (CompoffSts=='0')?SizedBox(width: 10.0):Center(),
+                              (CompoffSts=='0')?Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top:10.0),
+                                  child: Container(
+                                    //height: MediaQuery.of(context).size.height*0.1,
+                                    //height: 60.0,
+                                    child: new InputDecorator(
+                                      decoration: InputDecoration(
+                                        // labelText: 'Leave Type',
+                                        prefixIcon: Padding(
+                                          padding: EdgeInsets.all(0.0),
+                                          child: Icon(
+                                            Icons.tonality,
+                                            color: Colors.grey,
+                                          ), // icon is 48px widget.
+                                        ),
+                                        border: new UnderlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.white,
+                                              width: 0.0, style: BorderStyle.none ),),
                                       ),
-                                      border: new UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.white,
-                                            width: 0.0, style: BorderStyle.none ),),
-                                    ),
-                                    //   isEmpty: _color == '',
-                                    child:  new DropdownButton<String>(
-                                      isDense: true,
-                                      style: new TextStyle(
-                                          fontSize: 15.0,
-                                          color: Colors.black
-                                      ),
-                                      value: leavetimevalue,
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          leavetimevalue = newValue;
-                                          if(leavetimevalue=="2"){
-                                            visibilityFromHalf = true;
-                                          }else{
-                                            visibilityFromHalf = false;
-                                          }
-                                        });
-                                      },
-                                      items: leavetimeList.map((Map map) {
-                                        return new DropdownMenuItem<String>(
-                                          value: map["id"].toString(),
-
-                                          child: new Text(
-                                            map["name"],
+                                      //   isEmpty: _color == '',
+                                      child:  DropdownButtonHideUnderline(
+                                        child: new DropdownButton<String>(
+                                          isDense: true,
+                                          style: new TextStyle(
+                                              fontSize: 15.0,
+                                              color: Colors.black
                                           ),
-                                        );
-                                      }).toList(),
+                                          value: leavetimevalue,
+                                          onChanged: (String newValue) {
+                                            setState(() {
+                                              leavetimevalue = newValue;
+                                              if(leavetimevalue=="2"){
+                                                visibilityFromHalf = true;
+                                              }else{
+                                                visibilityFromHalf = false;
+                                              }
+                                            });
+                                          },
+                                          items: leavetimeList.map((Map map) {
+                                            return new DropdownMenuItem<String>(
+                                              value: map["id"].toString(),
+                                              child: new Text(
+                                                map["name"],
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
+                              ):Center(),
                             ],
                           ),
                           (visibilityFromHalf)?Row(
@@ -426,7 +436,7 @@ class _RequestLeaveState extends State<RequestLeave> {
                                 onChanged: _handleRadioValueChange,
                               ),
                               Text("First Half",style: TextStyle(fontSize: 16.0),),
-                              SizedBox(width: 30.0,),
+                              SizedBox(width: 50.0,),
                               new Radio(
                                 value: "2",
                                 groupValue: _radioValue,
@@ -435,13 +445,14 @@ class _RequestLeaveState extends State<RequestLeave> {
                               Text("Second Half",style: TextStyle(fontSize: 16.0),)
                             ],
                           ):Container(),
-                          //SizedBox(height: 10.0,),
+                          SizedBox(height: 5.0,),
                           Row(
                             children: <Widget>[
                               new Expanded(
                                 child: Container(
-                                  // margin: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
-                                  height: 80.0,
+                                  //margin: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                                 // height: 80.0,
+                                  height: MediaQuery.of(context).size.height*0.1,
                                   child:DateTimeField(
                                     //firstDate: new DateTime.now(),
                                     //initialDate: new DateTime.now(),
@@ -490,53 +501,56 @@ class _RequestLeaveState extends State<RequestLeave> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 10.0),
-                              Expanded(
-                                  child:Container(
-                                    height: 58.0,
-                                    child: new InputDecorator(
-                                      decoration: InputDecoration(
-                                        // labelText: 'Leave Type',
-                                        prefixIcon: Padding(
-                                          padding: EdgeInsets.all(0.0),
-                                          child: Icon(
-                                            Icons.tonality,
-                                            color: Colors.grey,
-                                          ), // icon is 48px widget.
+                              (CompoffSts=='0')?SizedBox(width: 10.0):Center(),
+                              (CompoffSts=='0')?Expanded(
+                                  child:Padding(
+                                    padding: const EdgeInsets.only(top:10.0),
+                                    child: Container(
+                                      //height: 60.0,
+                                      child: new InputDecorator(
+                                        decoration: InputDecoration(
+                                          // labelText: 'Leave Type',
+                                          prefixIcon: Padding(
+                                            padding: EdgeInsets.all(0.0),
+                                            child: Icon(
+                                              Icons.tonality,
+                                              color: Colors.grey,
+                                            ), // icon is 48px widget.
+                                          ),
                                         ),
-                                      ),
-                                      //   isEmpty: _color == '',
-                                      child:  new DropdownButton<String>(
-                                        isDense: true,
-                                        style: new TextStyle(
-                                            fontSize: 15.0,
-                                            color: Colors.black
-                                        ),
-                                        value: leavetimevalue1,
-                                        onChanged: (String newValue) {
-                                          setState(() {
-                                            leavetimevalue1 = newValue;
-                                            if(leavetimevalue1=="2"){
-                                              visibilityToHalf = true;
-                                            }else{
-                                              visibilityToHalf = false;
-                                            }
-                                          });
-                                        },
-                                        items: leavetimeList.map((Map map) {
-                                          return new DropdownMenuItem<String>(
-                                            value: map["id"].toString(),
-                                            child: new Text(
-                                              map["name"],
+                                        //   isEmpty: _color == '',
+                                        child:  DropdownButtonHideUnderline(
+                                          child:  new DropdownButton<String>(
+                                            isDense: true,
+                                            style: new TextStyle(
+                                                fontSize: 15.0,
+                                                color: Colors.black
                                             ),
-                                          );
-                                        }).toList(),
+                                            value: leavetimevalue1,
+                                            onChanged: (String newValue) {
+                                              setState(() {
+                                                leavetimevalue1 = newValue;
+                                                if(leavetimevalue1=="2"){
+                                                  visibilityToHalf = true;
+                                                }else{
+                                                  visibilityToHalf = false;
+                                                }
+                                              });
+                                            },
+                                            items: leavetimeList.map((Map map) {
+                                              return new DropdownMenuItem<String>(
+                                                value: map["id"].toString(),
+                                                child: new Text(
+                                                  map["name"],
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        )
                                       ),
                                     ),
                                   )
-                              ),
-
-
+                              ):Center(),
                             ],
                           ),
 
@@ -549,7 +563,7 @@ class _RequestLeaveState extends State<RequestLeave> {
                                 onChanged: _handleRadioValueChange1,
                               ),
                               Text("First Half",style: TextStyle(fontSize: 16.0),),
-                              SizedBox(width: 30.0,),
+                              SizedBox(width: 50.0,),
                               new Radio(
                                 value: "2",
                                 groupValue: _radioValue1,
@@ -559,12 +573,14 @@ class _RequestLeaveState extends State<RequestLeave> {
                             ],
                           ):Container(),
 
+                          SizedBox(height: 5.0,),
+
                           TextFormField(
                             controller: _reasonController,
                             decoration: InputDecoration(
                                 labelText: 'Reason',
                                 prefixIcon: Padding(
-                                  padding: EdgeInsets.all(0.0),
+                                  padding: EdgeInsets.only(bottom:0.0),
                                   child: Icon(
                                     Icons.event_note,
                                     color: Colors.grey,
@@ -578,13 +594,13 @@ class _RequestLeaveState extends State<RequestLeave> {
                             },
                             onFieldSubmitted: (String value) {
                               /*if (_formKey.currentState.validate()) {
-    //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
-    }*/
+                              //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
+                              }*/
                             },
                             maxLines: 1,
                           ),
 
-                          getSubstituteEmp_DD(),
+                          (CompoffSts=='0')?getSubstituteEmp_DD():Center(),
 
                           ButtonBar(
                             children: <Widget>[
@@ -602,7 +618,10 @@ class _RequestLeaveState extends State<RequestLeave> {
                                       )
                                       );
                                     }else{
-                                      requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text.trim(), substituteemp);
+                                      if(CompoffSts=='0')
+                                        requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text.trim(), substituteemp, CompoffSts);
+                                      else
+                                        requestleave(_dateController.text, _dateController1.text , '0', '0', '0', '0', _reasonController.text.trim(), '0', CompoffSts);
                                     }
                                   }
                                 },
@@ -650,32 +669,57 @@ class _RequestLeaveState extends State<RequestLeave> {
               child: InputDecorator(
                 decoration: InputDecoration(
                   labelText: 'Leave Type',
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.all(0.0),
+                    child: Icon(const IconData(0xe821, fontFamily: "CustomIcon"), size: 25.0,), // icon is 48px widget.
+                  ),
                   // icon is 48px widget.
                 ),
-                child:  new DropdownButton<String>(
-                  isDense: true,
-                  style: new TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.black
-                  ),
-                  value: leavetype,
-                  onChanged: (String newValue) {
-                    setState(() {
-                      leavetype =newValue;
-                    });
-                  },
-                  items: snapshot.data.map((Map map) {
-                    return new DropdownMenuItem<String>(
-                      value: map["Id"].toString(),
-                      child:  new SizedBox(
-                        //     width: MediaQuery.of(context).size.width * 10,
-                          child: new Text(
-                            map["Name"],
-                          )
+                child:  DropdownButtonHideUnderline(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right:0.0),
+                    child: new DropdownButton<String>(
+                      //iconSize: 0.0,
+                      isDense: true,
+                      style: new TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black
                       ),
-                    );
-                  }).toList(),
+                      value: leavetype,
+                      onChanged: (String newValue) {
+                        for(int i=0;i<snapshot.data.length;i++)
+                        {
+                          if(snapshot.data[i]['Id'].toString()==newValue)
+                          {
+                            setState(() {
+                              CompoffSts= snapshot.data[i]['compoffsts'].toString();
+                              print("CompoffSts");
+                              print(CompoffSts);
+                            });
+                            break;
+                          }
+                          print(i);
+                        }
+                        setState(() {
+                          leavetype=newValue;
+                          print("leavetype");
+                          print(leavetype);
+                        });
+                      },
+                      items: snapshot.data.map((Map map) {
+                        return new DropdownMenuItem<String>(
+                          value: map["Id"].toString(),
+                          child:  new SizedBox(
+                             // width: 200,
+                              child: new Text(
+                                map["Name"],
+                              )
+                          ),
+                        );
+                      }).toList(),
 
+                    ),
+                  ),
                 ),
               ),
             );
@@ -702,38 +746,52 @@ class _RequestLeaveState extends State<RequestLeave> {
           if (snapshot.hasData) {
             return new Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
-              //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+              margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
               child: InputDecorator(
                 decoration: InputDecoration(
                   labelText: 'Suggest Substitute',
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.all(1.0),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.grey,
+                    ), // icon is 48px widget.
+                  ),
                   // icon is 48px widget.
                 ),
 
-                child:  new DropdownButton<String>(
-                  isDense: true,
-                  style: new TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.black
-                  ),
-                  value: substituteemp,
-                  onChanged: (String newValue) {
-                    setState(() {
-                      substituteemp =newValue;
-                    });
-                  },
-                  items: snapshot.data.map((Map map) {
-                    return new DropdownMenuItem<String>(
-                      value: map["Id"].toString(),
-                      child:  new SizedBox(
-                          width: MediaQuery.of(context).size.width*.8,
-                          child: new Text(
-                            map["Name"],
-                          )
+                child:  DropdownButtonHideUnderline(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right:0.0),
+                    child: new DropdownButton<String>(
+                      //iconSize: 0.0,
+                      isDense: true,
+                      style: new TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black
                       ),
-                    );
-                  }).toList(),
+                      value: substituteemp,
+                      onChanged: (String newValue) {
+                        setState(() {
+                          substituteemp =newValue;
+                        });
+                      },
+                      items: snapshot.data.map((Map map) {
+                        return new DropdownMenuItem<String>(
+                          value: map["Id"].toString(),
+                          child:  new Container(
+                              //width: MediaQuery.of(context).size.width*.8,
+                              child: new Text(
+                                map["Name"],
+                              )
+                              //child: map["Code"]!=''&&map["Code"]!='null'?new Text(map["Code"]+' - '+map["Name"]): new Text(map["Name"],)
+                          ),
+                        );
+                      }).toList(),
 
+                    ),
+                  ),
                 ),
               ),
             );
@@ -748,7 +806,5 @@ class _RequestLeaveState extends State<RequestLeave> {
           ),);
         });
   }
-
-
 
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:calendar_strip/calendar_strip.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -24,7 +25,6 @@ class MyTeamAtt extends StatefulWidget {
   _MyTeamAtt createState() => _MyTeamAtt();
 
 }
-TextEditingController today;
 
 class _MyTeamAtt extends State<MyTeamAtt> {
   String fname="";
@@ -40,6 +40,13 @@ class _MyTeamAtt extends State<MyTeamAtt> {
   String orgName="";
   bool res = true;
   var formatter = new DateFormat('dd-MMM-yyyy');
+  DateTime startDate;
+  DateTime startDate1;
+  DateTime endDate;
+  DateTime endDate1;
+  //DateTime selectedDate;
+  DateTime date;
+  //List<DateTime> markedDates;
 
   bool _checkLoaded = true;
   @override
@@ -47,16 +54,96 @@ class _MyTeamAtt extends State<MyTeamAtt> {
     super.initState();
     initPlatformState();
     getOrgName();
-
+    startDate = DateTime.now().subtract(Duration(days: 30));
+    startDate1 = DateTime(startDate.year, startDate.month, startDate.day);
+    print("startDate");
+    print(startDate);
+    print(startDate1);
+    endDate = DateTime.now();
+    endDate1 = DateTime(endDate.year, endDate.month, endDate.day);
+    print("endDate");
+    print(endDate);
+    print(endDate1);
+    /*selectedDate = DateTime.now().subtract(Duration(days: 2));
+    print("selectedDate");
+    print(selectedDate);*/
+    date = startDate1;
+    /*markedDates = [
+      DateTime.now().subtract(Duration(days: 1)),
+      DateTime.now().subtract(Duration(days: 2)),
+      DateTime.now().add(Duration(days: 4))
+    ];*/
   }
-  getOrgName() async{
-    today = new TextEditingController();
-    today.text = formatter.format(DateTime.now());
 
+  getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
     });
+  }
+
+  onSelect(data) {
+    setState(() {
+      if (data != null && data.toString() != '') {
+        res=true;
+        date=data;
+      } else {
+        res=false;
+      }
+    });
+    print("Selected Date -> $data");
+  }
+
+  _monthNameWidget(monthName) {
+    return Container(
+      child: Text(monthName, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.black87)),
+      padding: EdgeInsets.only(top: 8, bottom: 4),
+    );
+  }
+
+  /*getMarkedIndicatorWidget() {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Container(
+        margin: EdgeInsets.only(left: 1, right: 1),
+        width: 7,
+        height: 7,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+      ),
+      Container(
+        width: 7,
+        height: 7,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
+      )
+    ]);
+  }*/
+
+  dateTileBuilder(date, selectedDate, rowIndex, dayName, isDateMarked, isDateOutOfRange) {
+    bool isSelectedDate = date.compareTo(selectedDate) == 0;
+    Color fontColor = isDateOutOfRange ? Colors.black26 : Colors.black87;
+    TextStyle normalStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: fontColor);
+    TextStyle selectedStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: Colors.black87);
+    TextStyle dayNameStyle = TextStyle(fontSize: 14, color: fontColor);
+    List<Widget> _children = [
+      Text(dayName, style: dayNameStyle),
+      Text(date.day.toString(), style: !isSelectedDate ? normalStyle : selectedStyle),
+    ];
+
+    /*if (isDateMarked == true) {
+      _children.add(getMarkedIndicatorWidget());
+    }*/
+
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 150),
+      alignment: Alignment.center,
+      //padding: EdgeInsets.only(top: 8, left: 5, right: 5, bottom: 5),
+      decoration: BoxDecoration(
+        color: !isSelectedDate ? Colors.transparent : Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Column(
+        children: _children,
+      ),
+    );
   }
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
@@ -65,7 +152,6 @@ class _MyTeamAtt extends State<MyTeamAtt> {
     //   profileimage = new NetworkImage(profile);
     // //print("1-"+profile);
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-
     profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
@@ -105,195 +191,240 @@ class _MyTeamAtt extends State<MyTeamAtt> {
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new AppHeader(profileimage,showtabbar,orgName),
-
           bottomNavigationBar:new HomeNavigation(),
-
-
           body: getWidgets(context),
         )
     );
-
   }
+
   getWidgets(context){
-    return
-      Container(
-          margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-          padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-          // width: MediaQuery.of(context).size.width*0.9,
-          decoration: new ShapeDecoration(
-            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
-            color: Colors.white,
-          ),
-          child: Column(
+    return Container(
+      margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+      padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+      // width: MediaQuery.of(context).size.width*0.9,
+      decoration: new ShapeDecoration(
+        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+        color: Colors.white,
+      ),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget> [
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget> [
-
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        flex:48,
-                        child:InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => MyApp()),
-                            );
-                          },
-                          child:Column(
+              children: <Widget>[
+                Expanded(
+                  flex:48,
+                  child:InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                      );
+                    },
+                    child:Column(
+                        children: <Widget>[
+                          // width: double.infinity,
+                          //height: MediaQuery.of(context).size.height * .07,
+                          SizedBox(height:MediaQuery.of(context).size.width*.02),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                // width: double.infinity,
-                                //height: MediaQuery.of(context).size.height * .07,
-                                SizedBox(height:MediaQuery.of(context).size.width*.02),
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(
-                                          Icons.person,
-                                          color: Colors.orange[800],
-                                          size: 22.0 ),
+                                Icon(
+                                    Icons.person,
+                                    color: Colors.orange[800],
+                                    size: 22.0 ),
 
-                                      GestureDetector(
-                                        child: Text(
-                                            'Self',
-                                            style: TextStyle(fontSize: 18,color: Colors.orange[800],)
-                                        ),
-                                        // color: Colors.teal[50],
-                                        /* splashColor: Colors.white,
-                                shape: new RoundedRectangleBorder(
-                                    borderRadius: new BorderRadius.circular(0.0))*/
-                                      ),
-                                    ]
+                                GestureDetector(
+                                  child: Text(
+                                      'Self',
+                                      style: TextStyle(fontSize: 18,color: Colors.orange[800],)
+                                  ),
+                                  // color: Colors.teal[50],
+                                  /* splashColor: Colors.white,
+                                    shape: new RoundedRectangleBorder(
+                                      borderRadius: new BorderRadius.circular(0.0))*/
                                 ),
-                                SizedBox(height:MediaQuery.of(context).size.width*.03),
                               ]
                           ),
-                        ),
-                      ),
-
-                      Expanded(
-                        flex:48,
-                        child: Column(
-                          // width: double.infinity,
-                            children: <Widget>[
-                              SizedBox(height:MediaQuery.of(context).size.width*.02),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(
-                                        Icons.group,
-                                        color: Colors.orange[800],
-                                        size: 22.0 ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        /* Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => MyTeamAtt()),
-                                  );*/
-                                        false;
-                                      },
-                                      child: Text(
-                                          'Team',
-                                          style: TextStyle(fontSize: 18,color: Colors.orange[800],fontWeight:FontWeight.bold)
-                                      ),
-                                      //color: Colors.teal[50],
-
-                                      /* splashColor: Colors.white,
-                                shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(0.0),
-
-                                  /* side: BorderSide(
-                                        color: Colors.blue,
-                                        width: 1,
-
-                                        style: BorderStyle.solid
-                                    )*/
-                                )*/
-                                    ),
-                                  ]),
-                              SizedBox(height:MediaQuery.of(context).size.width*.03),
-                              Divider(
-                                color: Colors.orange[800],
-                                height: 0.4,
-                              ),
-                              Divider(
-                                color: Colors.orange[800],
-                                height: 0.4,
-                              ),
-                              Divider(
-                                color: Colors.orange[800],
-                                height: 0.4,
-                              ),
-                            ]
-                        ),
-                      ),
-                    ]),
-                /// My log start here
-
-                Container(
-                  padding: EdgeInsets.only(top:12.0,),
-                  child:Center(
-                    child:Text('Todays Attendance Log',
-                      style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
+                          SizedBox(height:MediaQuery.of(context).size.width*.03),
+                        ]
+                    ),
                   ),
                 ),
 
-                //Divider(color: Colors.black54,height: 1.5,),
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//            crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 40.0,),
-                    SizedBox(width: MediaQuery.of(context).size.width*0.02),
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.45,
-                      child:Text('Name',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                    ),
-
-                    SizedBox(height: 40.0,),
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.2,
-                      child:Text('Time In',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                    ),
-                    SizedBox(height: 40.0,),
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.2,
-                      child:Text('Time Out',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                    ),
-                  ],
-                ),
-                Divider(),
-                new Expanded(
-                    child: res == true ? mainbody() : Center()
+                Expanded(
+                  flex:48,
+                  child: Column(
+                    // width: double.infinity,
+                    children: <Widget>[
+                      SizedBox(height:MediaQuery.of(context).size.width*.02),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                              Icons.group,
+                              color: Colors.orange[800],
+                              size: 22.0 ),
+                          GestureDetector(
+                            onTap: () {
+                              /* Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => MyTeamAtt()),
+                              );*/
+                              false;
+                            },
+                            child: Text('Team', style: TextStyle(fontSize: 18,color: Colors.orange[800],fontWeight:FontWeight.bold)
+                            ),
+                          ),
+                        ]),
+                      SizedBox(height:MediaQuery.of(context).size.width*.03),
+                      Divider(
+                        color: Colors.orange[800],
+                        height: 0.4,
+                      ),
+                      Divider(
+                        color: Colors.orange[800],
+                        height: 0.4,
+                      ),
+                      Divider(
+                        color: Colors.orange[800],
+                        height: 0.4,
+                      ),
+                    ]
+                  ),
                 ),
               ]
+            ),
+            /// My log start here
 
-          ));
+            Container(
+              padding: EdgeInsets.only(top:5.0,),
+              height: MediaQuery.of(context).size.height*.15,
+              child: CalendarStrip(
+                startDate: startDate1,
+                endDate: endDate1,
+                onDateSelected: onSelect,
+                dateTileBuilder: dateTileBuilder,
+                iconColor: Colors.black87,
+                monthNameWidget: _monthNameWidget,
+                //markedDates: markedDates,
+                containerDecoration: BoxDecoration(color: appStartColor().withOpacity(0.1)),
+              )
+            ),
+
+            Container(
+              padding: EdgeInsets.only(top:5.0,),
+              child:Center(
+                child:Text("Team's Attendance Log",
+                  style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
+              ),
+            ),
+
+            Divider(),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(height: 10.0,),
+                SizedBox(width: MediaQuery.of(context).size.width*0.02),
+                Container(
+                  width: MediaQuery.of(context).size.width*0.40,
+                  child:Text('Name',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                ),
+                SizedBox(height: 10.0,),
+                Container(
+                  width: MediaQuery.of(context).size.width*0.22,
+                  child:Text('Time In',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                ),
+                SizedBox(height: 10.0,),
+                Container(
+                  width: MediaQuery.of(context).size.width*0.23,
+                  child:Text('Time Out',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                ),
+              ],
+            ),
+            Divider(),
+
+            new Expanded(
+                child: res == true ? mainbody() : Center()
+            ),
+
+            /*Expanded(
+              child: Container(
+                height: MediaQuery.of(context).size.height*.55,
+                width: MediaQuery.of(context).size.width*.99,
+                //padding: EdgeInsets.only(bottom: 15.0),
+                color: Colors.white,
+                child: new FutureBuilder<List<User>>(
+                  future: getTeamSummary(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data.length>0) {
+                        return new ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return new Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    new RaisedButton(
+                                      padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                                      child: Container(
+                                        padding: EdgeInsets.only(left:  0.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            SizedBox(width: 15.0),
+                                            Expanded(
+
+                                              child: Container(
+                                                  margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                                                  child: Text(snapshot.data[index].AttendanceDate.toString(),textAlign:TextAlign.left,style: TextStyle(fontWeight:FontWeight.bold,fontSize: 15.0),)
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      color: Colors.white,
+                                      elevation: 4.0,
+                                      textColor: Colors.black,
+                                    ),
+                                    mainbody(),
+                                  ]
+                              );
+                            }
+                        );
+                      }else
+                        return new Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width*1,
+                            color: appStartColor().withOpacity(0.1),
+                            padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                            child:Text("No Expense History",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                          ),
+                        );
+                    } else if (snapshot.hasError) {
+                      return new Text("Unable to connect server");
+                    }
+                    return new Center( child: CircularProgressIndicator());
+                  },
+                ),
+                //////////////////////////////////////////////////////////////////////---------------------------------
+              ),
+            )*/
+          ]
+      ));
   }
 
-  mainbody()
-  {
+  mainbody() {
     return Container(
-        height: MediaQuery.of(context).size.height*0.60,
-        child:
-        FutureBuilder<List<User>>(
-          future: getTeamSummary(),
+        child: FutureBuilder<List<User>>(
+          future: getTeamSummary(date),
           builder: (context, snapshot) {
-
             if (snapshot.hasData) {
-              if(snapshot.data.length==0)
-              {
-                return new Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width*1,
-                    color: appStartColor().withOpacity(0.1),
-                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                    child:Text("Team data not found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
-                  ),
-                );
-              }
-              else
+              if(snapshot.data.length>0) {
                 return new ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -301,8 +432,6 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                     itemBuilder: (context, index) {
                       //   double h_width = MediaQuery.of(context).size.width*0.5; // screen's 50%
                       //   double f_width = MediaQuery.of(context).size.width*1; // screen's 100%
-
-
                       return new Column(
                           children: <Widget>[
                             Row(
@@ -335,12 +464,12 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                                         onTap: () {
                                           goToMap(
                                               snapshot.data[index]
-                                                  .latit_in ,
+                                                  .latit_in,
                                               snapshot.data[index]
                                                   .longi_in);
                                         },
                                       ),
-                                      SizedBox(height:2.0),
+                                      SizedBox(height: 2.0),
                                       InkWell(
                                         child: Text('Time Out: ' +
                                             snapshot.data[index]
@@ -356,30 +485,73 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                                                   .longi_out);
                                         },
                                       ),
-                                      SizedBox(height:2.0),
+                                      SizedBox(height: 2.0),
                                       RichText(
                                         text: new TextSpan(
                                           // Note: Styles for TextSpans must be explicitly defined.
                                           // Child text spans will inherit styles from parent
                                           style: new TextStyle(
-                                            fontSize: 12.0,
+                                            fontSize: 14.0,
                                             color: Colors.black54,
                                           ),
                                           children: <TextSpan>[
-                                            new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black54,), ),
-                                            new TextSpan(text: snapshot.data[index]
-                                                .AttendanceStatus.toString(),style:TextStyle(color: Colors.black54,), ),
+                                            new TextSpan(text: 'Status: ',
+                                              style: TextStyle(
+                                                color: Colors.black54,),),
+                                            new TextSpan(
+                                              text: snapshot.data[index]
+                                                  .AttendanceStatus.toString(),
+                                              style: TextStyle(
+                                                color: snapshot.data[index]
+                                                    .AttendanceStatus ==
+                                                    'Present' ? Colors
+                                                    .blueAccent :
+                                                snapshot.data[index]
+                                                    .AttendanceStatus ==
+                                                    'Absent' ? Colors.red :
+                                                snapshot.data[index]
+                                                    .AttendanceStatus ==
+                                                    'Holiday' ? Colors.green :
+                                                snapshot.data[index]
+                                                    .AttendanceStatus ==
+                                                    'Half Day'
+                                                    ? Colors.blueGrey
+                                                    :
+                                                snapshot.data[index]
+                                                    .AttendanceStatus ==
+                                                    'Week off' ? Colors.orange :
+                                                snapshot.data[index]
+                                                    .AttendanceStatus == 'Leave'
+                                                    ? Colors.lightBlueAccent
+                                                    :
+                                                snapshot.data[index]
+                                                    .AttendanceStatus ==
+                                                    'Comp Off' ? Colors
+                                                    .purpleAccent :
+                                                snapshot.data[index]
+                                                    .AttendanceStatus ==
+                                                    'Work from Home' ? Colors
+                                                    .brown[200] :
+                                                snapshot.data[index]
+                                                    .AttendanceStatus ==
+                                                    'Unpaid Leave' ? Colors
+                                                    .brown :
+                                                snapshot.data[index]
+                                                    .AttendanceStatus ==
+                                                    'Half Day - Unpaid' ? Colors
+                                                    .grey : Colors.black54,
+                                              ),),
                                           ],
                                         ),
                                       ),
 
                                       snapshot.data[index]
-                                          .bhour.toString()!=''?Container(
-                                        color:Colors.orangeAccent,
-                                        child:Text(""+snapshot.data[index]
-                                            .bhour.toString()+" Hr(s)",style: TextStyle(),),
-                                      ):SizedBox(height: 10.0,),
-
+                                          .bhour.toString() != '' ? Container(
+                                        color: Colors.orangeAccent,
+                                        child: Text("" + snapshot.data[index]
+                                            .bhour.toString() + " Hr(s)",
+                                          style: TextStyle(),),
+                                      ) : SizedBox(height: 0.0,),
 
                                     ],
                                   ),
@@ -395,16 +567,23 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                                           .center,
                                       children: <Widget>[
                                         Text(snapshot.data[index].TimeIn
-                                            .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                            .toString(), style: TextStyle(
+                                            fontWeight: FontWeight.bold),),
                                         GestureDetector(
                                           // When the child is tapped, show a snackbar
-                                          onTap: (){
+                                          onTap: () {
                                             Navigator.push(
                                               context,
-                                              MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].EntryImage,org_name: "UBIHRM")),
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ImageView(
+                                                          myimage: snapshot
+                                                              .data[index]
+                                                              .EntryImage,
+                                                          org_name: "UBIHRM")),
                                             );
                                           },
-                                          child:Container(
+                                          child: Container(
                                             width: 62.0,
                                             height: 62.0,
                                             child: Container(
@@ -418,8 +597,9 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                                                                 .data[index]
                                                                 .EntryImage)
                                                     )
-                                                )),),),
-
+                                                )),),
+                                        ),
+                                        // Text(snapshot.data[index].AttendanceDate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
                                       ],
                                     )
 
@@ -434,16 +614,23 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                                           .center,
                                       children: <Widget>[
                                         Text(snapshot.data[index].TimeOut
-                                            .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                            .toString(), style: TextStyle(
+                                            fontWeight: FontWeight.bold),),
                                         GestureDetector(
                                           // When the child is tapped, show a snackbar
-                                          onTap: (){
+                                          onTap: () {
                                             Navigator.push(
                                               context,
-                                              MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].ExitImage,org_name: "UBIHRM")),
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ImageView(
+                                                          myimage: snapshot
+                                                              .data[index]
+                                                              .ExitImage,
+                                                          org_name: "UBIHRM")),
                                             );
                                           },
-                                          child:Container(
+                                          child: Container(
                                             width: 62.0,
                                             height: 62.0,
                                             child: Container(
@@ -458,7 +645,7 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                                                                 .ExitImage)
                                                     )
                                                 )),),),
-
+                                        // Text(snapshot.data[index].AttendanceDate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
                                       ],
                                     )
 
@@ -470,10 +657,24 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                           ]);
                     }
                 );
+              } else {
+                return new Center(
+                  child: Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 1,
+                    color: appStartColor().withOpacity(0.1),
+                    padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                    child: Text(
+                      "Team data not found", style: TextStyle(fontSize: 16.0),
+                      textAlign: TextAlign.center,),
+                  ),
+                );
+              }
             } else if (snapshot.hasError) {
               return new Text("Unable to connect server");
             }
-
             // By default, show a loading spinner
             return new Center( child: CircularProgressIndicator());
           },
@@ -511,13 +712,13 @@ String dateFormatter(String date_) {
 }
 
 
-Future<List<User>> getTeamSummary() async {
+Future<List<User>> getTeamSummary(date) async {
   final prefs = await SharedPreferences.getInstance();
   String path_ubiattendance1 = prefs.getString('path_ubiattendance');
   String empid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
-  final response = await http.get(path_ubiattendance1+'getTeamHistory?uid=$empid&refno=$orgdir');
-  print(path_ubiattendance1+'getTeamHistory?uid=$empid&refno=$orgdir');
+  final response = await http.get(path_ubiattendance1+'getTeamHistory?uid=$empid&refno=$orgdir&date=$date');
+  print(path_ubiattendance1+'getTeamHistory?uid=$empid&refno=$orgdir&date=$date');
   print(response.body);
   List responseJson = json.decode(response.body.toString());
   List<User> userList = createUserList(responseJson);
@@ -527,9 +728,7 @@ Future<List<User>> getTeamSummary() async {
 List<User> createUserList(List data){
   List<User> list = new List();
   for (int i = 0; i < data.length; i++) {
-
-    String title = Formatdate(data[i]["AttendanceDate"]);
-
+    String title = Formatdate2(data[i]["AttendanceDate"]);
     String TimeOut=data[i]["TimeOut"]=="00:00:00"?'-':data[i]["TimeOut"].toString().substring(0,5);
     String TimeIn=data[i]["TimeIn"]=="00:00:00"?'-':data[i]["TimeIn"].toString().substring(0,5);
     String thours = '';//data[i]["thours"]=="00:00:00"?'-':data[i]["thours"].toString().substring(0,5);
@@ -553,9 +752,6 @@ List<User> createUserList(List data){
         checkInLoc:checkInLoc,ExitImage:ExitImage,CheckOutLoc:CheckOutLoc,latit_in: Latit_in,longi_in: Longi_in,
         latit_out: Latit_out,longi_out: Longi_out, AttendanceStatus: Att_Sts);
     list.add(user);
-
-
-
   }
   return list;
 }

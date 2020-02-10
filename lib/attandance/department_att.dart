@@ -5,6 +5,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_share/simple_share.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 
 import './image_view.dart';
@@ -20,11 +21,15 @@ class Department_att extends StatefulWidget {
 TextEditingController today;
 class _Department_att extends State<Department_att> with SingleTickerProviderStateMixin {
   TabController _controller;
+  String countP='0',countA='0',countL='0',countE='0';
+  Future<List<Attn>> _listFuture1,_listFuture2,_listFuture3,_listFuture4;
+  List presentlist= new List(), absentlist= new List(), latecommerlist= new List(),earlyleaverlist= new List();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _orgName;
   var profileimage;
   bool showtabbar;
   String orgName="";
+  bool filests=false;
 
   String dept='0';
   var formatter = new DateFormat('dd-MMM-yyyy');
@@ -51,7 +56,45 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
 
     showtabbar =false;
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+    setAlldata();
   }
+
+  setAlldata(){
+    _listFuture1 = getCDateAttnDeptWise('present',today.text,dept);
+    _listFuture2 = getCDateAttnDeptWise('absent',today.text,dept);
+    _listFuture3 = getCDateAttnDeptWise('latecomings',today.text,dept);
+    _listFuture4 = getCDateAttnDeptWise('earlyleavings',today.text,dept);
+
+
+    _listFuture1.then((data) async{
+      setState(() {
+        presentlist = data;
+        countP = data.length.toString();
+      });
+    });
+
+    _listFuture2.then((data) async{
+      setState(() {
+        absentlist = data;
+        countA = data.length.toString();
+      });
+    });
+
+    _listFuture3.then((data) async{
+      setState(() {
+        latecommerlist = data;
+        countL = data.length.toString();
+      });
+    });
+
+    _listFuture4.then((data) async{
+      setState(() {
+        earlyleaverlist = data;
+        countE= data.length.toString();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -85,43 +128,181 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
           new Container(
             child: Center(child:Text("Department Wise Attendance",style: TextStyle(fontSize: 20.0,color: appStartColor()),),),
           ),
-          Container(
-            child: DateTimeField(
-              //dateOnly: true,
-              format: formatter,
-              controller: today,
-              readOnly: true,
-              onShowPicker: (context, currentValue) {
-                return showDatePicker(
-                    context: context,
-                    firstDate: DateTime(1900),
-                    initialDate: currentValue ?? DateTime.now(),
-                    lastDate: DateTime(2100));
-              },
-              decoration: InputDecoration(
-                prefixIcon: Padding(
-                  padding: EdgeInsets.all(0.0),
-                  child: Icon(
-                    Icons.date_range,
-                    color: Colors.grey,
-                  ), // icon is 48px widget.
-                ), // icon is 48px widget.
-                labelText: 'Select Date',
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  child: DateTimeField(
+                    //dateOnly: true,
+                    format: formatter,
+                    controller: today,
+                    readOnly: true,
+                    onShowPicker: (context, currentValue) {
+                      return showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1900),
+                          initialDate: currentValue ?? DateTime.now(),
+                          lastDate: DateTime(2100));
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(
+                          Icons.date_range,
+                          color: Colors.grey,
+                        ), // icon is 48px widget.
+                      ), // icon is 48px widget.
+                      labelText: 'Select Date',
+                    ),
+                    onChanged: (date) {
+                      setState(() {
+                        if (date != null && date.toString()!='') {
+                          res=true; //showInSnackBar(date.toString());
+                          setAlldata();
+                        }
+                        else {
+                          res=false;
+                          countP='0';
+                          countA='0';
+                          countE='0';
+                          countL='0';
+                        }
+                      });
+                    },
+                    validator: (date) {
+                      if (date == null) {
+                        return 'Please select date';
+                      }
+                    },
+                  ),
+                ),
               ),
-              onChanged: (date) {
-                setState(() {
-                  if (date != null && date.toString()!='')
-                    res = true; //showInSnackBar(date.toString());
-                  else
-                    res = false;
-                });
-              },
-              validator: (date) {
-                if (date == null) {
-                  return 'Please select date';
-                }
-              },
-            ),
+              /*Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child:(res == false)?
+                Center():Container(
+                    color: Colors.white,
+                    height: 60,
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    child: new Column(
+                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          (presentlist.length > 0 || absentlist.length > 0 || latecommerlist.length > 0 || earlyleaverlist.length > 0)
+                              ?Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              SizedBox(
+                                height:  60,
+                              ),
+                              Container(
+                                //padding: EdgeInsets.only(left: 5.0),
+                                child: InkWell(
+                                  child: Text('CSV',
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: Colors.blueAccent,
+                                      fontSize: 16,
+                                      //fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    //openFile(filepath);
+                                    if (mounted) {
+                                      setState(() {
+                                        filests = true;
+                                      });
+                                    }
+                                    getCsvAll(
+                                        presentlist,
+                                        absentlist,
+                                        latecommerlist,
+                                        earlyleaverlist,
+                                        'Department_Wise_Report_' + today.text,
+                                        'dept').then((res) {
+                                      print('snapshot.data');
+
+                                      if(mounted){
+                                        setState(() {
+                                          filests = false;
+                                        });
+                                      }
+                                      // showInSnackBar('CSV has been saved in file storage in ubiattendance_files/Department_Report_'+today.text+'.csv');
+                                      dialogwidget(
+                                          "CSV has been saved in internal storage in ubihrm_files/Department_Wise_Report_" + today.text + ".csv", res);
+
+                                    });
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width:8,
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(
+                                    left: 5.0),
+                                child: InkWell(
+                                  child: Text('PDF',
+                                    style: TextStyle(
+                                      decoration:
+                                      TextDecoration
+                                          .underline,
+                                      color: Colors
+                                          .blueAccent,
+                                      fontSize: 16,),
+                                  ),
+                                  onTap: () {
+                                    *//*final uri = Uri.file('/storage/emulated/0/ubiattendance_files/Designation_Wise_Report_14-Jun-2019.pdf');
+                                    SimpleShare.share(
+                                        uri: uri.toString(),
+                                        title: "Share my file",
+                                        msg: "My message");*//*
+                                    if (mounted) {
+                                      setState(() {
+                                        filests = true;
+                                      });
+                                    }
+                                    CreatePDFAll(
+                                        presentlist,
+                                        absentlist,
+                                        latecommerlist,
+                                        earlyleaverlist,
+                                        'Department Wise Report ('+today.text+')',
+                                        'Department_Wise_Report_' + today.text,
+                                        'dept')
+                                        .then((res) {
+                                      if(mounted) {
+                                        setState(() {
+                                          filests =
+                                          false;
+                                          // OpenFile.open("/sdcard/example.txt");
+                                        });
+                                      }
+                                      dialogwidget(
+                                          'PDF has been saved in internal storage in ubihrm_files/' +
+                                              'Department_Wise_Report_' + today.text + '.pdf',
+                                          res);
+                                      // showInSnackBar('PDF has been saved in file storage in ubiattendance_files/'+'Department_Report_'+today.text+'.pdf');
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ):Center(
+                              *//*child: Padding(
+                                padding: const EdgeInsets.only(top:12.0),
+                                child: Text("No CSV/PDF generated", textAlign: TextAlign.center,),
+                              )*//*
+                          ),
+                        ]
+                    )
+                ),
+              )*/
+            ],
+          ),
+          Divider(
+            height: 5,
+            color: Colors.black,
           ),
           getDepartments_DD(),
 
@@ -184,9 +365,10 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<Attn>>(
-                        future: getCDateAttnDeptWise('present',today.text,dept),
+                        future: _listFuture1,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
+                            countP=snapshot.data.length.toString();
                             if(snapshot.data.length>0) {
                               return new ListView.builder(
                                   scrollDirection: Axis.vertical,
@@ -194,6 +376,18 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                   itemBuilder: (BuildContext context, int index) {
                                     return new Column(
                                         children: <Widget>[
+                                          (index == 0)?
+                                          Row(
+                                              children: <Widget>[
+                                                //SizedBox(height: 25.0,),
+                                                Container(
+                                                  padding: EdgeInsets.only(left: 5.0),
+                                                  child: Text("Total Present: ${countP}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
+                                                ),
+                                              ]
+                                          ):new Center(),
+                                          (index == 0)?
+                                          Divider(color: Colors.black26,):new Center(),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment
                                                 .spaceAround,
@@ -374,70 +568,87 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<Attn>>(
-                        future: getCDateAttnDeptWise('absent',today.text,dept),
+                        future: _listFuture2,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
+                            countA=snapshot.data.length.toString();
                             if(snapshot.data.length>0) {
                               return new ListView.builder(
                                   scrollDirection: Axis.vertical,
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (BuildContext context, int index) {
-                                    return new Row(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .spaceAround,
+                                    return Column(
                                       children: <Widget>[
-                                        SizedBox(height: 40.0,),
-                                        Container(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.42,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .start,
+                                        (index == 0)?
+                                        Row(
                                             children: <Widget>[
-                                              Text(snapshot.data[index].Name
-                                                  .toString(), style: TextStyle(
-                                                  color: Colors.black87,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16.0),),
-                                            ],
-                                          ),
-                                        ),
-
-                                        Container(
+                                              //SizedBox(height: 25.0,),
+                                              Container(
+                                                padding: EdgeInsets.only(left: 5.0),
+                                                child: Text("Total Absent: ${countA}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
+                                              ),
+                                            ]
+                                        ):new Center(),
+                                        (index == 0)?
+                                        Divider(color: Colors.black26,):new Center(),
+                                      new Row(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceAround,
+                                        children: <Widget>[
+                                          SizedBox(height: 40.0,),
+                                          Container(
                                             width: MediaQuery
                                                 .of(context)
                                                 .size
-                                                .width * 0.20,
+                                                .width * 0.42,
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment
-                                                  .center,
+                                                  .start,
                                               children: <Widget>[
-                                                Text(snapshot.data[index].TimeIn
-                                                    .toString()),
+                                                Text(snapshot.data[index].Name
+                                                    .toString(), style: TextStyle(
+                                                    color: Colors.black87,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16.0),),
                                               ],
-                                            )
-
-                                        ),
-                                        Flexible(
-                                          child: Container(
-                                            width: MediaQuery
-                                                .of(context)
-                                                .size
-                                                .width * 0.20,
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment
-                                                  .center,
-                                              children: <Widget>[
-                                                Text(snapshot.data[index].TimeOut
-                                                    .toString()),
-                                              ],
-                                            )
+                                            ),
                                           ),
-                                        ),
-                                      ],
 
+                                          Container(
+                                              width: MediaQuery
+                                                  .of(context)
+                                                  .size
+                                                  .width * 0.20,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment
+                                                    .center,
+                                                children: <Widget>[
+                                                  Text(snapshot.data[index].TimeIn
+                                                      .toString()),
+                                                ],
+                                              )
+
+                                          ),
+                                          Flexible(
+                                            child: Container(
+                                              width: MediaQuery
+                                                  .of(context)
+                                                  .size
+                                                  .width * 0.20,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment
+                                                    .center,
+                                                children: <Widget>[
+                                                  Text(snapshot.data[index].TimeOut
+                                                      .toString()),
+                                                ],
+                                              )
+                                            ),
+                                          ),
+                                        ],
+
+                                      ),
+                                    ]
                                     );
                                   }
                               );
@@ -484,9 +695,10 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<Attn>>(
-                        future: getCDateAttnDeptWise('latecomings',today.text,dept),
+                        future: _listFuture3,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
+                            countL=snapshot.data.length.toString();
                             if(snapshot.data.length>0) {
                               return new ListView.builder(
                                   scrollDirection: Axis.vertical,
@@ -494,6 +706,18 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                   itemBuilder: (BuildContext context, int index) {
                                     return new Column(
                                         children: <Widget>[
+                                          (index == 0)?
+                                          Row(
+                                              children: <Widget>[
+                                                //SizedBox(height: 25.0,),
+                                                Container(
+                                                  padding: EdgeInsets.only(left: 5.0),
+                                                  child: Text("Total Late Comers: ${countL}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
+                                                ),
+                                              ]
+                                          ):new Center(),
+                                          (index == 0)?
+                                          Divider(color: Colors.black26,):new Center(),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment
                                                 .spaceAround,
@@ -678,9 +902,10 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<Attn>>(
-                        future: getCDateAttnDeptWise('earlyleavings',today.text,dept),
+                        future: _listFuture4,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
+                            countE=snapshot.data.length.toString();
                             if(snapshot.data.length>0) {
                               return new ListView.builder(
                                   scrollDirection: Axis.vertical,
@@ -688,6 +913,18 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                   itemBuilder: (BuildContext context, int index) {
                                     return new Column(
                                         children: <Widget>[
+                                          (index == 0)?
+                                          Row(
+                                              children: <Widget>[
+                                                //SizedBox(height: 25.0,),
+                                                Container(
+                                                  padding: EdgeInsets.only(left: 5.0),
+                                                  child: Text("Total Early Leavers: ${countE}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
+                                                ),
+                                              ]
+                                          ):new Center(),
+                                          (index == 0)?
+                                          Divider(color: Colors.black26,):new Center(),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment
                                                 .spaceAround,
@@ -860,7 +1097,12 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
           ):Container(
             height: MediaQuery.of(context).size.height*0.25,
             child:Center(
-              child: Text('Please select the date'),
+              child: Container(
+                width: MediaQuery.of(context).size.width*1,
+                color:appStartColor().withOpacity(0.1),
+                padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                child:Text("Please select the date",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+              ),
             ),
           ),
         ],
@@ -883,42 +1125,53 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                     labelText: 'Select Department',
                     prefixIcon: Padding(
                       padding: EdgeInsets.all(1.0),
-                      child: Icon(
+                      /*child: Icon(
                         Icons.attach_file,
                         color: Colors.grey,
-                      ), // icon is 48px widget.
+                      ),*/ //
+                      child: Icon(const IconData(0xe803, fontFamily: "CustomIcon"),size: 20.0,),// icon is 48px widget.
                     ),
                   ),
 
-                  child: new DropdownButton<String>(
-                    isDense: true,
-                    style: new TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.black
-                    ),
-                    value: dept,
-                    onChanged: (String newValue) {
-                      setState(() {
-                        //  showInSnackBar(newValue);
+                  child: DropdownButtonHideUnderline(
+                    child: new DropdownButton<String>(
+                      isDense: true,
+                      style: new TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black
+                      ),
+                      value: dept,
+                      onChanged: (String newValue) {
                         setState(() {
-                          dept = newValue;
-                          res = true;
-                          print('state set----');
+                          //  showInSnackBar(newValue);
+                          setState(() {
+                            dept = newValue;
+                            if(res = true){
+                              setAlldata();
+                            }else {
+                              print('state set----');
+                              countP='0';
+                              countA='0';
+                              countE='0';
+                              countL='0';
+                            }
+                            print('state set----');
+                          });
                         });
-                      });
-                    },
-                    items: snapshot.data.map((Map map) {
-                      return new DropdownMenuItem<String>(
-                        value: map["Id"].toString(),
-                        child: new SizedBox(
-                            width: 200.0,
-                            child: new Text(
-                              map["Name"],
-                            )
-                        ),
-                      );
-                    }).toList(),
+                      },
+                      items: snapshot.data.map((Map map) {
+                        return new DropdownMenuItem<String>(
+                          value: map["Id"].toString(),
+                          child: new SizedBox(
+                              width: 250.0,
+                              child: new Text(
+                                map["Name"],
+                              )
+                          ),
+                        );
+                      }).toList(),
 
+                    ),
                   ),
                 ),
               );
@@ -935,6 +1188,39 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
             width: 20.0,
           ),);
         });
+  }
+
+  dialogwidget(msg, filename) {
+    showDialog(
+        context: context,
+        // ignore: deprecated_member_use
+        child: new AlertDialog(
+          content: new Text(msg),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Later'),
+              shape: Border.all(),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+            RaisedButton(
+              child: Text(
+                'Share File',
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.orange[800],
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+                final uri=Uri.file(filename);
+                SimpleShare.share(
+                    uri: uri.toString(),
+                    title: "UBIHRM Report",
+                    msg: "UBIHRM Report");
+              },
+            ),
+          ],
+        ));
   }
 
 

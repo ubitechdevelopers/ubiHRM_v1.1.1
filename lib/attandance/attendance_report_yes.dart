@@ -106,10 +106,22 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Flexible(child: Text('Early Leavers(EL)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Late Comers(LC)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Absent(A)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
-              Flexible(child: Text('Present(P)',style: TextStyle(color:Colors.black87,fontSize: 12.0),)),
+              Flexible(
+                child: Text('Present(P)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Absent(A)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Late Comers(LC)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
+              Flexible(
+                child: Text('Early Leavers(EL)',
+                  style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+              ),
             ],
           ),
           Divider(),
@@ -661,7 +673,8 @@ class _YesAttendance extends State<YesAttendance> with SingleTickerProviderState
                   //   shape: Border.all(color: Colors.deepOrange),
                   child: new ListTile(
                     title:
-                    Container( height: MediaQuery.of(context).size.height*30,
+                    Container(
+                      height: MediaQuery.of(context).size.height*30,
                       //width: MediaQuery.of(context).size.width*.99,
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------

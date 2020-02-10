@@ -133,16 +133,17 @@ class _allPayrollSummary extends State<allPayrollSummary> {
             child:Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text('Team Payroll',
+                  Text("Team's Payroll",
                       style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                   //SizedBox(height: 10.0),
-
-                  new Divider(color: Colors.black54,height: 1.5,),
+                  //new Divider(color: Colors.black54,height: 1.5,),
+                  new Divider(height: 2,),
+                  SizedBox(height: 5.0,),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
 //            crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height: 50.0,),
+                      SizedBox(height: 10.0,),
                       new Expanded(
                         child:  Container(
                           width: MediaQuery.of(context).size.width*0.40,
@@ -161,15 +162,15 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                       new Expanded(
                         child:  Container(
                           width: MediaQuery.of(context).size.width*0.17,
-                          margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                          margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
                           child:Text('Amount',style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),textAlign: TextAlign.right),
                         ),
                       ),
 
                       new Expanded(
                         child:  Container(
-                          width: MediaQuery.of(context).size.width*0.20,
-                          margin: EdgeInsets.only(left:30.0),
+                          width: MediaQuery.of(context).size.width*0.15,
+                          margin: EdgeInsets.only(left:26.0),
                           child:Text('Action',style: TextStyle(color:Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
                         ),
                       ),
@@ -207,7 +208,7 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                                                   width: MediaQuery.of(context).size.width * 0.25,
                                                   //margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                                                   child: Text(
-                                                      snapshot.data[index].name.toString(),style:TextStyle()),
+                                                      snapshot.data[index].name.toString(),style:TextStyle(fontWeight: FontWeight.bold)),
                                                 ),
                                               ),
 

@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
@@ -27,7 +29,7 @@ class PunchLocationSummary extends StatefulWidget {
   @override
   _PunchLocationSummary createState() => _PunchLocationSummary();
 }
-
+TextEditingController today;
 class _PunchLocationSummary extends State<PunchLocationSummary> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String lat="";
@@ -47,6 +49,9 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
   bool showtabbar ;
   bool _checkLoaded = true;
 
+  bool res = true;
+  var formatter = new DateFormat('dd-MMM-yyyy');
+
   StreamLocation sl = new StreamLocation();
   bool _isButtonDisabled= false;
   final _comments=TextEditingController();
@@ -55,12 +60,12 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
 
   @override
   void initState() {
-
     super.initState();
     initPlatformState();
     getOrgName();
-
     setLocationAddress();
+    today = new TextEditingController();
+    today.text = formatter.format(DateTime.now());
   }
 
   getOrgName() async{
@@ -96,24 +101,26 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
     showtabbar=false;
   }
   setLocationAddress() async {
-    setState(() {
-      streamlocationaddr = globalstreamlocationaddr;
-      if (list != null && list.length > 0) {
-        lat = list[list.length - 1].latitude.toString();
-        long = list[list.length - 1].longitude.toString();
-        if (streamlocationaddr == '') {
-          streamlocationaddr = lat + ", " + long;
+    if(mounted) {
+      setState(() {
+        streamlocationaddr=globalstreamlocationaddr;
+        if (list != null && list.length > 0) {
+          lat=list[list.length - 1].latitude.toString();
+          long=list[list.length - 1].longitude.toString();
+          if (streamlocationaddr == '') {
+            streamlocationaddr=lat + ", " + long;
+          }
         }
-      }
-      if(streamlocationaddr == ''){
-        sl.startStreaming(5);
-        startTimer();
-      }
-      //print("home addr" + streamlocationaddr);
-      //print(lat + ", " + long);
+        if (streamlocationaddr == '') {
+          sl.startStreaming(5);
+          startTimer();
+        }
+        //print("home addr" + streamlocationaddr);
+        //print(lat + ", " + long);
 
-      //print(stopstreamingstatus.toString());
-    });
+        //print(stopstreamingstatus.toString());
+      });
+    }
   }
   startTimer() {
     const fiveSec = const Duration(seconds: 5);
@@ -415,28 +422,69 @@ print('visit out called for visit id:'+visit_id);
           Container(
             padding: EdgeInsets.only(top:12.0),
             child:Center(
-              child:Text("My Visits Today",
+              child:Text("My Visits",
                   style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
             ),
           ),
-         // Divider(color: Colors.black54,height: 1.5,),
+
+          Container(
+            child: DateTimeField(
+              //dateOnly: true,
+              format: formatter,
+              controller: today,
+              onShowPicker: (context, currentValue) {
+                return showDatePicker(
+                    context: context,
+                    firstDate: DateTime(1900),
+                    initialDate: currentValue ?? DateTime.now(),
+                    lastDate: DateTime(2100));
+              },
+              readOnly: true,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                prefixIcon: Padding(
+                  padding: EdgeInsets.all(0.0),
+                  child: Icon(
+                    Icons.date_range,
+                    color: Colors.grey,
+                  ), // icon is 48px widget.
+                ), // icon is 48px widget.
+                labelText: 'Select Date',
+              ),
+              onChanged: (date) {
+                setState(() {
+                  if (date != null && date.toString() != '')
+                    res = true; //showInSnackBar(date.toString());
+                  else
+                    res = false;
+                });
+              },
+              validator: (date) {
+                if (date == null) {
+                  return 'Please select date';
+                }
+              },
+            ),
+          ),
+          Divider(height:2,),
+         SizedBox(height: 8,),
           new Row(
             mainAxisAlignment: MainAxisAlignment.start,
 //            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 40.0,),
+              SizedBox(height: 20.0,),
               SizedBox(width: MediaQuery.of(context).size.width*0.02),
               Container(
-                width: MediaQuery.of(context).size.width*0.45,
+                width: MediaQuery.of(context).size.width*0.47,
                 child:Text(' Client',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
 
-              SizedBox(height: 40.0,),
+              SizedBox(height: 20.0,),
               Container(
                 width: MediaQuery.of(context).size.width*0.2,
                 child:Text('Visit In',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
               ),
-              SizedBox(height: 40.0,),
+              SizedBox(height: 20.0,),
               Container(
                 width: MediaQuery.of(context).size.width*0.2,
                 child:Text('Visit Out',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
@@ -448,7 +496,7 @@ print('visit out called for visit id:'+visit_id);
           Expanded(
     //        height: MediaQuery.of(context).size.height*0.60,
             child: new FutureBuilder<List<Punch>>(
-              future: getSummaryPunch(),
+              future: getSummaryPunch(today.text),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   if(snapshot.data.length>0) {
@@ -467,89 +515,92 @@ print('visit out called for visit id:'+visit_id);
                                    mainAxisAlignment: MainAxisAlignment.start,
                                    children: <Widget>[
                                      SizedBox(height: 40.0,),
-                                     Container(
-                                       width: MediaQuery
-                                           .of(context)
-                                           .size
-                                           .width * 0.43,
-                                       child: Column(
-                                         crossAxisAlignment: CrossAxisAlignment
-                                             .start,
-                                         children: <Widget>[
-                                           Text(snapshot.data[index].client
-                                               .toString(), style: TextStyle(
-                                               color: Colors.black87,
-                                               fontWeight: FontWeight.bold,
-                                               fontSize: 16.0),),
+                                     Padding(
+                                       padding: const EdgeInsets.only(left:10.0),
+                                       child: Container(
+                                         width: MediaQuery
+                                             .of(context)
+                                             .size
+                                             .width * 0.43,
+                                         child: Column(
+                                           crossAxisAlignment: CrossAxisAlignment
+                                               .start,
+                                           children: <Widget>[
+                                             Text(snapshot.data[index].client
+                                                 .toString(), style: TextStyle(
+                                                 color: Colors.black87,
+                                                 fontWeight: FontWeight.bold,
+                                                 fontSize: 16.0),),
 
-                                           InkWell(
-                                             child: Text('In: ' +
-                                                 snapshot.data[index]
-                                                     .pi_loc.toString(),
+                                             InkWell(
+                                               child: Text('In: ' +
+                                                   snapshot.data[index]
+                                                       .pi_loc.toString(),
+                                                   style: TextStyle(
+                                                       color: Colors.black54,
+                                                       fontSize: 12.0)),
+                                               onTap: () {
+                                                 goToMap(
+                                                     snapshot.data[index]
+                                                         .pi_latit,
+                                                     snapshot.data[index]
+                                                         .pi_longi);
+                                               },
+                                             ),
+                                             SizedBox(height: 2.0),
+                                             InkWell(
+                                               child: Text('Out: ' +
+                                                   snapshot.data[index]
+                                                       .po_loc.toString(),
                                                  style: TextStyle(
                                                      color: Colors.black54,
-                                                     fontSize: 12.0)),
-                                             onTap: () {
-                                               goToMap(
-                                                   snapshot.data[index]
-                                                       .pi_latit,
-                                                   snapshot.data[index]
-                                                       .pi_longi);
-                                             },
-                                           ),
-                                           SizedBox(height: 2.0),
-                                           InkWell(
-                                             child: Text('Out: ' +
-                                                 snapshot.data[index]
-                                                     .po_loc.toString(),
-                                               style: TextStyle(
-                                                   color: Colors.black54,
-                                                   fontSize: 12.0),),
-                                             onTap: () {
-                                               goToMap(
-                                                   snapshot.data[index]
-                                                       .po_latit,
-                                                   snapshot.data[index]
-                                                       .po_longi);
-                                             },
-                                           ),
-                                           snapshot.data[index].po_time == '-'
-                                               ? Padding(
-                                             padding: EdgeInsets.only(
-                                                 right: 8.0,
-                                                 top: 8.0,
-                                                 bottom: 8.0),
-                                             child: InkWell(
-                                               child: new Container(
-                                                 //width: 100.0,
-                                                 height: 25.0,
-                                                 decoration: new BoxDecoration(
-                                                   color: Colors.orange[800],
-                                                   border: new Border.all(
-                                                       color: Colors.white,
-                                                       width: 2.0),
-                                                   //borderRadius: new BorderRadius.circular(10.0),
-                                                 ),
-
-                                                 child: new Center(
-                                                   child: new Text('Visit out',
-                                                     style: new TextStyle(
-                                                         fontSize: 16.0,
-                                                         color: Colors
-                                                             .white),),),
-                                               ),
+                                                     fontSize: 12.0),),
                                                onTap: () {
-                                                 _showDialog(
-                                                     snapshot.data[index].Id
-                                                         .toString());
-                                               },),
-                                           )
-                                               : Container(),
+                                                 goToMap(
+                                                     snapshot.data[index]
+                                                         .po_latit,
+                                                     snapshot.data[index]
+                                                         .po_longi);
+                                               },
+                                             ),
+                                             snapshot.data[index].po_time == '-'
+                                                 ? Padding(
+                                               padding: EdgeInsets.only(
+                                                   right: 8.0,
+                                                   top: 8.0,
+                                                   bottom: 8.0),
+                                               child: InkWell(
+                                                 child: new Container(
+                                                   //width: 100.0,
+                                                   height: 25.0,
+                                                   decoration: new BoxDecoration(
+                                                     color: Colors.orange[800],
+                                                     border: new Border.all(
+                                                         color: Colors.white,
+                                                         width: 2.0),
+                                                     //borderRadius: new BorderRadius.circular(10.0),
+                                                   ),
 
-                                           SizedBox(height: 10.0,),
+                                                   child: new Center(
+                                                     child: new Text('Visit out',
+                                                       style: new TextStyle(
+                                                           fontSize: 16.0,
+                                                           color: Colors
+                                                               .white),),),
+                                                 ),
+                                                 onTap: () {
+                                                   _showDialog(
+                                                       snapshot.data[index].Id
+                                                           .toString());
+                                                 },),
+                                             )
+                                                 : Container(),
+
+                                             SizedBox(height: 10.0,),
 
 
-                                         ],
+                                           ],
+                                         ),
                                        ),
                                      ),
 
@@ -633,29 +684,32 @@ print('visit out called for visit id:'+visit_id);
                                      ),
                                    ],
                                  ), //
-                                 snapshot.data[index].desc == ''
-                                     ? Container()
-                                     : snapshot.data[index].desc !=
-                                     'Visit out not punched' ?
-                                 Row(
-                                   children: <Widget>[
-                                     // SizedBox(width: 16.0,),
-                                     Text('Remark: ', style: TextStyle(
-                                       fontWeight: FontWeight.bold,),),
-                                     Text(snapshot.data[index].desc)
-                                   ],
+                                 Padding(
+                                   padding: const EdgeInsets.only(left:10.0),
+                                   child: snapshot.data[index].desc == ''
+                                       ? Container()
+                                       : snapshot.data[index].desc !=
+                                       'Visit out not punched' ?
+                                   Row(
+                                     children: <Widget>[
+                                       // SizedBox(width: 16.0,),
+                                       Text('Remark: ', style: TextStyle(
+                                         fontWeight: FontWeight.bold,),),
+                                       Text(snapshot.data[index].desc)
+                                     ],
 
-                                 ) :
-                                 Row(
-                                   children: <Widget>[
-                                     // SizedBox(width: 16.0,),
-                                     Text('Remark: ', style: TextStyle(
-                                         fontWeight: FontWeight.bold,
-                                         color: Colors.red),),
-                                     Text(snapshot.data[index].desc,
-                                       style: TextStyle(color: Colors.red),)
-                                   ],
+                                   ) :
+                                   Row(
+                                     children: <Widget>[
+                                       // SizedBox(width: 16.0,),
+                                       Text('Remark: ', style: TextStyle(
+                                           fontWeight: FontWeight.bold,
+                                           color: Colors.red),),
+                                       Text(snapshot.data[index].desc,
+                                         style: TextStyle(color: Colors.red),)
+                                     ],
 
+                                   ),
                                  ),
 
                                  Divider(color: Colors.black26,),
@@ -671,7 +725,7 @@ print('visit out called for visit id:'+visit_id);
                       width: MediaQuery.of(context).size.width*1,
                       color: appStartColor().withOpacity(0.1),
                       padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                      child:Text("No Visits Today",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                      child:Text("No visits found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                       ),
                       );
                       }

@@ -529,6 +529,9 @@ class _PunchLocation extends State<PunchLocation> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
+                  //SizedBox(height: 5.0),
+                  Text('Punch Visits', style: new TextStyle(fontSize: 22.0, color: appStartColor())),
+                  new Divider(color: Colors.black54,height: 1.5,),
                   SizedBox(height: MediaQuery.of(context).size.height * .06),
                   //Image.asset('assets/logo.png',height: 150.0,width: 150.0),
                   // SizedBox(height: 5.0),

@@ -107,10 +107,10 @@ class _FlexiList extends State<FlexiList> {
         //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
         child: Column(
           children: <Widget>[
-            SizedBox(height: 8.0),
+            //SizedBox(height: 5.0),
             Center(
               child: Text(
-                'Flexi Log',
+                'Flexi Logs',
                   style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center
               ),
             ),
@@ -132,6 +132,7 @@ class _FlexiList extends State<FlexiList> {
                       lastDate: DateTime(2100));
                 },
                 decoration: InputDecoration(
+                  border:InputBorder.none,
                   prefixIcon: Padding(
                     padding: EdgeInsets.all(0.0),
                     child: Icon(
@@ -156,16 +157,17 @@ class _FlexiList extends State<FlexiList> {
                 },
               ),
             ),
-            SizedBox(height: 12.0),
+            Divider(height: 1,),
+            SizedBox(height: 5.0),
             Container(
               //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
-              //       width: MediaQuery.of(context).size.width * .9,
+              //  width: MediaQuery.of(context).size.width * .9,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   SizedBox(width: 1.0,),
-              /*    Container(
+              /*Container(
                     width: MediaQuery.of(context).size.width * 0.15,
                     child: Text(
                       'Name',
@@ -383,7 +385,7 @@ class _FlexiList extends State<FlexiList> {
                   width: MediaQuery.of(context).size.width*1,
                   color: appStartColor().withOpacity(0.1),
                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                  child:Text("No Flexi Log Found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                  child:Text("No flexi log found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                 ),
               );
             }

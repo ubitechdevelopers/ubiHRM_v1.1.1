@@ -330,26 +330,25 @@ getWidgets(context){
                 ),
               ),
 
-
+              Divider(),
               new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//            crossAxisAlignment: CrossAxisAlignment.start,
+                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(height: 40.0,),
+                  SizedBox(height: 10.0,),
                   SizedBox(width: MediaQuery.of(context).size.width*0.02),
                   Container(
-                    width: MediaQuery.of(context).size.width*0.45,
+                    width: MediaQuery.of(context).size.width*0.40,
                     child:Text('Date',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
-
-                  SizedBox(height: 40.0,),
+                  SizedBox(height: 10.0,),
                   Container(
-                    width: MediaQuery.of(context).size.width*0.2,
+                    width: MediaQuery.of(context).size.width*0.22,
                     child:Text('Time In',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
-                  SizedBox(height: 40.0,),
+                  SizedBox(height: 10.0,),
                   Container(
-                    width: MediaQuery.of(context).size.width*0.2,
+                    width: MediaQuery.of(context).size.width*0.23,
                     child:Text('Time Out',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
                   ),
                 ],
@@ -359,8 +358,7 @@ getWidgets(context){
               Expanded(
                   child:  Container(
                   height: MediaQuery.of(context).size.height*0.60,
-                  child:
-                  FutureBuilder<List<User>>(
+                  child: FutureBuilder<List<User>>(
                     future: getSummary(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -371,8 +369,6 @@ getWidgets(context){
                             itemBuilder: (context, index) {
                               //   double h_width = MediaQuery.of(context).size.width*0.5; // screen's 50%
                               //   double f_width = MediaQuery.of(context).size.width*1; // screen's 100%
-
-
                               return new Column(
                                   children: <Widget>[
                                     Row(
@@ -432,13 +428,24 @@ getWidgets(context){
                                                   // Note: Styles for TextSpans must be explicitly defined.
                                                   // Child text spans will inherit styles from parent
                                                   style: new TextStyle(
-                                                    fontSize: 12.0,
+                                                    fontSize: 14.0,
                                                     color: Colors.black54,
                                                   ),
                                                   children: <TextSpan>[
                                                     new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black54,), ),
                                                     new TextSpan(text: snapshot.data[index]
-                                                        .AttendanceStatus.toString(),style:TextStyle(color: Colors.black54,), ),
+                                                        .AttendanceStatus.toString(),style:TextStyle(
+                                                      color: snapshot.data[index].AttendanceStatus=='Present'?Colors.blueAccent:
+                                                      snapshot.data[index].AttendanceStatus=='Absent'?Colors.red:
+                                                      snapshot.data[index].AttendanceStatus=='Holiday'?Colors.green:
+                                                      snapshot.data[index].AttendanceStatus=='Half Day'?Colors.blueGrey:
+                                                      snapshot.data[index].AttendanceStatus=='Week off'?Colors.orange:
+                                                      snapshot.data[index].AttendanceStatus=='Leave'?Colors.lightBlueAccent:
+                                                      snapshot.data[index].AttendanceStatus=='Comp Off'?Colors.purpleAccent:
+                                                      snapshot.data[index].AttendanceStatus=='Work from Home'?Colors.brown[200]:
+                                                      snapshot.data[index].AttendanceStatus=='Unpaid Leave'?Colors.brown:
+                                                      snapshot.data[index].AttendanceStatus=='Half Day - Unpaid'?Colors.grey:Colors.black54,
+                                                    ), ),
                                                   ],
                                                 ),
                                               ),
@@ -448,8 +455,7 @@ getWidgets(context){
                                                 color:Colors.orange[800],
                                                 child:Text(""+snapshot.data[index]
                                                     .bhour.toString()+" Hr(s)",style: TextStyle(),),
-                                              ):SizedBox(height: 10.0,),
-
+                                              ):SizedBox(height: 0.0,),
 
                                             ],
                                           ),
@@ -543,25 +549,22 @@ getWidgets(context){
                       } else if (snapshot.hasError) {
                         return new Text("Unable to connect server");
                       }
-
                       // By default, show a loading spinner
                       return new Center( child: CircularProgressIndicator());
                     },
                   )
               )),
-
-
-
             ]
         ));
 }
+
 Future<List<User>> getSummary() async {
   final prefs = await SharedPreferences.getInstance();
   String path_ubiattendance1 = prefs.getString('path_ubiattendance');
   String empid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
   final response = await http.get(path_ubiattendance1+'getHistory?uid=$empid&refno=$orgdir');
-  print(response.body);
+  print(path_ubiattendance1+'getHistory?uid=$empid&refno=$orgdir');
   List responseJson = json.decode(response.body.toString());
   List<User> userList = createUserList(responseJson);
   return userList;
@@ -570,7 +573,7 @@ Future<List<User>> getSummary() async {
 List<User> createUserList(List data){
   List<User> list = new List();
   for (int i = 0; i < data.length; i++) {
-    String title = Formatdate(data[i]["AttendanceDate"]);
+    String title = Formatdate2(data[i]["AttendanceDate"]);
     String TimeOut=data[i]["TimeOut"]=="00:00:00"?'-':data[i]["TimeOut"].toString().substring(0,5);
     String TimeIn=data[i]["TimeIn"]=="00:00:00"?'-':data[i]["TimeIn"].toString().substring(0,5);
     String thours=data[i]["thours"]=="00:00:00"?'-':data[i]["thours"].toString().substring(0,5);

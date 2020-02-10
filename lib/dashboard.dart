@@ -208,12 +208,71 @@ class _DashboardStatemain extends State<DashboardMain> {
                           ),
                         );
                         // return new Center( child: CircularProgressIndicator());
+
                       }
                   ),
 
+
                   //child: new DonutAutoLabelChart .withSampleData(),
                 ):Center(),
-
+                /*new Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                  Flexible(
+                    child: Text('Present(P)',
+                    style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                  ),
+                  Flexible(
+                    child: Text('Absent(A)',
+                    style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                  ),
+                  Flexible(
+                    child: Text('Week Off(W)',
+                    style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                  ),
+                  Flexible(
+                    child: Text('Halfday(HD)',
+                    style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                  ),
+                  ],
+                ),
+                new Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Flexible(
+                      child: Text('Comp Off(C)',
+                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                    ),
+                    Flexible(
+                      child: Text('Work From Home(WFH)',
+                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                    ),
+                    Flexible(
+                      child: Text('Unpaid Leave(UL)',
+                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                    ),
+                    Flexible(
+                      child: Text('Unpaid Halfday(UND)',
+                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                    ),
+                  ],
+                ),
+                new Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Flexible(
+                      child: Text('Unpaid Leave(UL)',
+                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                    ),
+                    Flexible(
+                      child: Text('Unpaid Halfday(UND)',
+                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                    ),
+                  ],
+                ),*/
                 SizedBox(height: 40.0,),
                 //SizedBox(width: 40.0,),
                 perEmployeeLeave =='1' ?
@@ -270,7 +329,7 @@ class _DashboardStatemain extends State<DashboardMain> {
                 Row(children: <Widget>[
                   SizedBox(width: 20.0,),
                  // Text("Monthly Holidays ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
-                  Text("Upcoming Holidays",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
+                  Flexible(child: Text("Upcoming Holidays ["+fiscalyear+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold))),
                 ]
                 ),
                 Divider(height: 10.0,),
@@ -279,14 +338,13 @@ class _DashboardStatemain extends State<DashboardMain> {
                 new Column(
                   children: <Widget>[
                     new   Row(children: <Widget>[
-
                       SizedBox(height: height),
                       new Expanded(
-                        child:   Container(
-                           //height: MediaQuery.of(context).size.height*.55,
-                          height: insideContainerHeight,
+                        child: Container(
+                            height: MediaQuery.of(context).size.height*.1,
+                            //height: insideContainerHeight,
                             width: MediaQuery.of(context).size.width*.99,
-                          //   height: insideContainerHeight,
+                            //height: insideContainerHeight,
                             //width: 400.0,
                             //  padding: new EdgeInsets.all(2.0),
                             //color: Colors.green[50],

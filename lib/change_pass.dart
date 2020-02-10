@@ -157,7 +157,7 @@ class _changePassword extends State<changePassword> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(height: 20.0),
+                  //SizedBox(height: 20.0),
                   Center(
                     child:Text("Change Password",style: new TextStyle(fontSize: 22.0,color: appStartColor())),
                   ),
