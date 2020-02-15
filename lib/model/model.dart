@@ -194,7 +194,6 @@ class Salary{
   Salary({this.id,this.name, this.month, this.paid_days,this.EmployeeCTC,this.Currency});
 }
 
-
 class Payroll{
   String id;
   String name;
@@ -205,8 +204,6 @@ class Payroll{
 
   Payroll({this.id,this.name, this.month, this.paid_days,this.EmployeeCTC,this.Currency});
 }
-
-
 
 /*class Profile{
   String uid;

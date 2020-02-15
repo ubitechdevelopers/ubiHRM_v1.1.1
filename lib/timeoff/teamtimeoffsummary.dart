@@ -364,7 +364,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                   Container(
                     padding: EdgeInsets.only(top:12.0),
                     child:Center(
-                      child:Text("Team's Timeoff",
+                      child:Text("Team's Time Off",
                           style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                     ),
                   ),
@@ -766,7 +766,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Application for timeoff is rejected"),
+                                  content: new Text("Application for time off is rejected"),
                                 )
                             );
 

@@ -517,7 +517,6 @@ List<Attn> createTotalEmployeesList(List data) {
 Future<List<Attn>> getAttSummary(empid, month) async {
   final prefs = await SharedPreferences.getInstance();
   String path_ubiattendance1 = prefs.getString('path_ubiattendance');
-  //String empid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
   final response = await http.get(path_ubiattendance1+'getAttHistory?uid=$empid&refno=$orgdir&month=$month');
   print(path_ubiattendance1+'getAttHistory?uid=$empid&refno=$orgdir&month=$month');
@@ -545,8 +544,8 @@ List<Attn> createAttList(List data){
     Attn att = new Attn(
       Date: Date,
       FullDate: FullDate,
-      TimeOut:TimeOut,
       TimeIn:TimeIn,
+      TimeOut:TimeOut,
       AttSts: AttSts,
       ShiftTime: ShiftTime,
       BreakTime: BreakTime,

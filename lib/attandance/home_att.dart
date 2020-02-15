@@ -1061,8 +1061,8 @@ class _HomePageState extends State<HomePage> {
       } else {
         showDialog(context: context, child:
         new AlertDialog(
-          title: new Text("!"),
-          content: new Text("Problem while marking attendance, try again."),
+          //title: new Text("!"),
+          content: new Text("Selfie not captured, please punch again!"),
         )
         );
         setState((){

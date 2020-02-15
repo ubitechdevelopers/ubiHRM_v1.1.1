@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/attandance/Employee_list.dart';
+import 'package:ubihrm/attandance/employee.dart';
 import 'package:ubihrm/attandance/outside_fence_report.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,8 +21,6 @@ import 'payment.dart';
 import 'thismonth.dart';
 import 'today_attendance_report.dart';
 import 'visits_list.dart';
-
-
 
 class Reports extends StatefulWidget {
   @override
@@ -805,10 +803,14 @@ class _Reports extends State<Reports> {
               //  splashColor: Colors.orangeAccent,
               textColor: Colors.black54,
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => OutSideGeoFence()),
-                );
+                if(trialstatus=="2"){
+                  showDialogWidget("Upgrade to Premium plan to check records of attendance marked out side the geo fence.");
+                }else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OutSideGeoFence()),
+                  );
+                }
               },
             ),
 

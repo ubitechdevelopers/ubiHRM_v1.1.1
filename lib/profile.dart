@@ -446,6 +446,17 @@ var profilepic;
                                   Text(globalpersnalinfomap["DOJ"]),
                                 ],),
 
+                                SizedBox(height: 10.0,),
+
+                                Row(children: <Widget>[
+                                  Container(child: Text("Division:",
+                                    style: TextStyle(color: Colors.grey[600]),),
+                                    width: 100.0,),
+
+                                  Flexible(child: Text(
+                                      globalcompanyinfomap["Division"])),
+                                ],),
+
                                 globalcompanyinfomap["Location"]!=""?
                                 SizedBox(height: 10.0,):Center(),
 
@@ -459,17 +470,7 @@ var profilepic;
                                       globalcompanyinfomap["Location"])),
                                 ],):Center(),
 
-                                SizedBox(height: 10.0,),
-
-                                Row(children: <Widget>[
-                                  Container(child: Text("Division:",
-                                    style: TextStyle(color: Colors.grey[600]),),
-                                    width: 100.0,),
-
-                                  Flexible(child: Text(
-                                      globalcompanyinfomap["Division"])),
-                                ],),
-                               /*countryid=='93'?
+                                /*countryid=='93'?
                                //SizedBox(height: 10.0,),
                                Row(children: <Widget>[
                                  Container(child: Text("Location:",
@@ -507,14 +508,7 @@ var profilepic;
                                     width: 100.0,),),
                                   Text(globalcompanyinfomap["CompanyEmail"]),
                                 ],),*/
-                                SizedBox(height: 10.0,),
-                                Row(children: <Widget>[
-                                  //new Expanded(
-                                   Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600])) ,
-                                      width: 100.0,),
-                                  //),
-                                  Flexible(child: Text(globalcompanyinfomap["Designation"])),
-                                ],),
+
                                 /*  SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
                                   new Expanded(
@@ -527,6 +521,15 @@ var profilepic;
                                     Container(child:Text("Department:",style: TextStyle(color: Colors.grey[600]),) ,
                                       width: 100.0,),
                                   Flexible(child: Text(globalcompanyinfomap["Department"])),
+                                ],),
+
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  //new Expanded(
+                                  Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600])) ,
+                                    width: 100.0,),
+                                  //),
+                                  Flexible(child: Text(globalcompanyinfomap["Designation"])),
                                 ],),
 
                                 SizedBox(height: 15.0,),

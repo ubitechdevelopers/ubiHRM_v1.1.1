@@ -192,7 +192,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Sorry!"),
-        content: new Text("Timeoff could not be withdrawn."),
+        content: new Text("Time Off could not be withdrawn."),
       )
       );
     }else{
@@ -213,7 +213,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
     // ignore: deprecated_member_use
     showDialog(context: context, child:
     new AlertDialog(
-      title: new Text("Withdraw timeoff?",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18.0),),
+      title: new Text("Withdraw Time Off?",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18.0),),
       content:  ButtonBar(
         children: <Widget>[
           RaisedButton(
@@ -305,7 +305,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
               MaterialPageRoute(builder: (context) => TimeOffPage()),
             );
           },
-          tooltip: 'Request Timeoff',
+          tooltip: 'Request Time Off',
           child: new Icon(Icons.add),
         ),
       ),
@@ -467,7 +467,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                   Container(
                     padding: EdgeInsets.only(top:12.0),
                     child:Center(
-                      child:Text('My Timeoff',
+                      child:Text('My Time Off',
                           style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                     ),
                   ),

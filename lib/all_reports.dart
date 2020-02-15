@@ -367,7 +367,7 @@ class _AllReports extends State<AllReports> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                    child: Text('Timeoff',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Time Off',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
 
                               ],

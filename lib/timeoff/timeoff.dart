@@ -265,7 +265,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
             child: Column( children: <Widget>[
               //SizedBox(height: 5.0),
            //   mainAxisAlignment: MainAxisAlignment.start,
-              Text('Request Timeoff',
+              Text('Request Time Off',
                   style: new TextStyle(fontSize: 22.0, color: appStartColor())),
               new Divider(color: Colors.black54,height: 1.5,),
               new Expanded(child: ListView(
@@ -312,7 +312,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
                       ),
                       validator: (date) {
                         if (date==null){
-                          return 'Please enter Timeoff date';
+                          return 'Please enter time off date';
                         }
                       },
                     ),
@@ -507,7 +507,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       );
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('Timeoff applied successfully.'),
+        content: new Text('Time Off applied successfully.'),
       )
       );
     }else if(islogin=="1"){
@@ -515,7 +515,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       //showInSnackBar("There is some problem while applying for Timeoff.");
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('There is some problem while applying Timeoff.'),
+        content: new Text('There is some problem while applying Time Off.'),
       )
       );
       setState(() {
@@ -526,7 +526,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       //showInSnackBar("Timeoff already exist");
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('Timeoff already exist'),
+        content: new Text('Time Off already exists.'),
       )
       );
       setState(() {
@@ -537,7 +537,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       //showInSnackBar("Timeoff should be between shift timing");
       showDialog(context: context, child:
       new AlertDialog(
-        content: new Text('Timeoff should be between shift timing'),
+        content: new Text('Time Off should be between shift timing'),
       )
       );
       setState(() {

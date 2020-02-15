@@ -4,7 +4,7 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:rounded_modal/rounded_modal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/all_approvals.dart';
-import 'package:ubihrm/services/expense_services.dart';
+import 'package:ubihrm/services/payroll_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../b_navigationbar.dart';
@@ -157,7 +157,7 @@ class ChoiceCard1 extends StatelessWidget {
                               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0),),
                               color: Colors.white,
                             ),//////////////////////////////////////////////////////////////////////---------------------------------
-                            child: new FutureBuilder<List<Expense>>(
+                            child: new FutureBuilder<List<PayrollExpense>>(
                               future: getPayrollExpenseApprovals(choice.title),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
@@ -237,55 +237,30 @@ class ChoiceCard1 extends StatelessWidget {
                                                           ),
                                                         )
                                                     ),
-                                                  ],
-                                                ),
 
-                                                Row(
-                                                  children: <Widget>[
-                                                    Container(
-                                                        width: MediaQuery.of(context) .size .width * 0.70,
-                                                        height: MediaQuery.of(context) .size .height * 0.03,
-                                                        //padding: EdgeInsets.only(top:1.5),
-                                                        margin: EdgeInsets.only(top: 0.5),
-                                                        child: RichText(
-                                                          text: new TextSpan(
-                                                            style: new TextStyle(
-                                                              fontSize: 14.0,
-                                                              color: Colors.black,
+                                                    snapshot.data[index].ests.toString() == 'Pending'
+                                                        && snapshot.data[index].Psts.toString() == ""  ?
+                                                    new Expanded(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.fromLTRB(0.0,0.0,10.0,0.0),
+                                                        child: Container(
+                                                          width: MediaQuery.of(context) .size .width * 0.30,
+                                                          child: new OutlineButton(
+                                                            onPressed: () {
+                                                              _modalBottomSheet(context, snapshot.data[index].Id.toString());
+                                                            },
+                                                            child: new Icon(
+                                                              Icons.thumb_up,
+                                                              size: 16.0,
+                                                              color:appStartColor(),
                                                             ),
-                                                            children: <TextSpan>[
-                                                              new TextSpan(
-                                                                  text: 'Amount: ',
-                                                                  style: new TextStyle()),
-                                                              new TextSpan(
-                                                                text: snapshot.data[index].amt.toString()+" "+snapshot.data[index].currency.toString(),style: TextStyle(color: Colors.grey[600]),)
-                                                            ],
+                                                            borderSide: BorderSide(color:  appStartColor()),
+                                                            shape: new CircleBorder(),
+                                                            padding:EdgeInsets.all(3.0),
                                                           ),
-                                                        )
-                                                    ),
-                                                  ],
-                                                ),
-
-                                                Row(
-                                                  children: <Widget>[
-                                                    snapshot.data[index].doc.toString()!=''?Container(
-                                                        width: MediaQuery.of(context) .size .width * 0.70,
-                                                        height: MediaQuery.of(context) .size .height * 0.03,
-                                                        //padding: EdgeInsets.only(top:1.5),
-                                                        margin: EdgeInsets.only(top: 0.5),
-                                                        child: Row(
-                                                          children: <Widget>[
-                                                            Text("Attachment: ", style: TextStyle(color: Colors.black, fontSize: 14.0),),
-                                                            new InkWell(
-                                                              onTap: () {
-                                                                print(snapshot.data[index].doc.toString());
-                                                                launchMap(snapshot.data[index].doc.toString());
-                                                              },
-                                                              child: Text("Attached Document", style: TextStyle(color: Colors.blueAccent, fontSize: 14.0, decoration: TextDecoration.underline),textAlign: TextAlign.start,),
-                                                            ),
-                                                          ],
-                                                        )
-                                                    ):Center(),
+                                                        ),
+                                                      ),
+                                                    ): Center(),
                                                   ],
                                                 ),
 
@@ -312,30 +287,56 @@ class ChoiceCard1 extends StatelessWidget {
                                                           ),
                                                         )
                                                     ),
+                                                  ],
+                                                ),
 
-                                                    snapshot.data[index].ests.toString() == 'Pending'
-                                                        && snapshot.data[index].Psts.toString() == ""  ?
-                                                    new Expanded(
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.fromLTRB(0.0,0.0,10.0,0.0),
-                                                        child: Container(
-                                                          width: MediaQuery.of(context) .size .width * 0.30,
-                                                          child: new OutlineButton(
-                                                            onPressed: () {
-                                                              _modalBottomSheet(context, snapshot.data[index].Id.toString());
-                                                            },
-                                                            child: new Icon(
-                                                              Icons.thumb_up,
-                                                              size: 16.0,
-                                                              color:appStartColor(),
+                                                Row(
+                                                  children: <Widget>[
+                                                    Container(
+                                                        width: MediaQuery.of(context) .size .width * 0.70,
+                                                        height: MediaQuery.of(context) .size .height * 0.03,
+                                                        //padding: EdgeInsets.only(top:1.5),
+                                                        margin: EdgeInsets.only(top: 0.5),
+                                                        child: RichText(
+                                                          text: new TextSpan(
+                                                            style: new TextStyle(
+                                                              fontSize: 14.0,
+                                                              color: Colors.black,
                                                             ),
-                                                            borderSide: BorderSide(color:  appStartColor()),
-                                                            shape: new CircleBorder(),
-                                                            padding:EdgeInsets.all(3.0),
+                                                            children: <TextSpan>[
+                                                              new TextSpan(
+                                                                  text: 'Amount: ',
+                                                                  style: new TextStyle()),
+                                                              new TextSpan(
+                                                                text: snapshot.data[index].currency.toString()+" "+snapshot.data[index].amt.toString(),style: TextStyle(color: Colors.grey[600]),)
+                                                            ],
                                                           ),
-                                                        ),
-                                                      ),
-                                                    ): Center(),
+                                                        )
+                                                    ),
+                                                  ],
+                                                ),
+
+                                                Row(
+                                                  children: <Widget>[
+                                                    snapshot.data[index].doc.toString()!=''?Container(
+                                                        width: MediaQuery.of(context) .size .width * 0.70,
+                                                        height: MediaQuery.of(context) .size .height * 0.03,
+                                                        //padding: EdgeInsets.only(top:1.5),
+                                                        margin: EdgeInsets.only(top: 0.4),
+                                                        child: Row(
+                                                          children: <Widget>[
+                                                            Text("Reciept: ", style: TextStyle(color: Colors.black, fontSize: 14.0),),
+                                                            new InkWell(
+                                                              onTap: () {
+                                                                print(snapshot.data[index].doc.toString());
+                                                                launchMap(snapshot.data[index].doc.toString());
+                                                              },
+                                                              //child: Text("Attached Document", style: TextStyle(color: Colors.blueAccent, fontSize: 14.0, decoration: TextDecoration.underline),textAlign: TextAlign.start,),
+                                                              child: Icon(Icons.file_download, color:Colors.green)
+                                                            ),
+                                                          ],
+                                                        )
+                                                    ):Center(),
                                                   ],
                                                 ),
 
@@ -500,7 +501,7 @@ class ChoiceCard1 extends StatelessWidget {
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
-                                        content: new Text("Expense request approved successfully."),
+                                        content: new Text("Expense claim approved successfully."),
                                       )
                                   );
                                 }
@@ -510,7 +511,7 @@ class ChoiceCard1 extends StatelessWidget {
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
-                                        content: new Text("Expense request rejected successfully."),
+                                        content: new Text("Expense claim rejected successfully."),
                                       )
                                   );
                                 }
@@ -545,7 +546,7 @@ class ChoiceCard1 extends StatelessWidget {
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
-                                        content: new Text("Expense request has been rejected successfully."),
+                                        content: new Text("Expense claim has been rejected successfully."),
                                       )
                                   );
                                 }
@@ -555,7 +556,7 @@ class ChoiceCard1 extends StatelessWidget {
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
-                                        content: new Text("Expense could not be rejected. Try again!"),
+                                        content: new Text("Expense claim could not be rejected. Try again!"),
                                       )
                                   );
                                 }

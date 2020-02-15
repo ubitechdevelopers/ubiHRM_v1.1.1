@@ -296,7 +296,7 @@ class _changePassword extends State<changePassword> {
                                   showDialog(context: context, child:
                                   new AlertDialog(
                                     // title: new Text("Sorry!"),
-                                    content: new Text("Old Password did not match"),
+                                    content: new Text("Old password did not match"),
                                   )
                                   );
                                 else if(res==3)

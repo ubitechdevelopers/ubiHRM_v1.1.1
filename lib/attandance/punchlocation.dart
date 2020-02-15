@@ -694,8 +694,8 @@ class _PunchLocation extends State<PunchLocation> {
       } else {
         showDialog(context: context, child:
           new AlertDialog(
-            title: new Text("Warning!"),
-            content: new Text("Problem while punching visit, try again."),
+            //title: new Text("Warning!"),
+            content: new Text("Selfie not captured, please punch again!"),
           )
         );
         setState(() {

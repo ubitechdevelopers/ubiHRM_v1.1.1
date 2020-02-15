@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/payroll_expence/expenselist.dart';
 
 import 'all_reports.dart';
 import 'attandance/flexi_time.dart';
@@ -320,18 +321,18 @@ class _HomePageStatemain extends State<HomePageMain> {
             crossAxisCount: 3,
             padding: EdgeInsets.all(3.0),
             children: <Widget>[
+              makeDashboardItem("Dashboard",DashboardMain(), 'assets/icons/Dashboard_icon.png'),
+              makeDashboardItem("Profile", CollapsingTab(), 'assets/icons/profile_icon.png'),
               if(perAttendance == '1') makeDashboardItem("Attendance", HomePage(), 'assets/icons/Attendance_icon.png'),
               if(perEmployeeLeave == '1')  makeDashboardItem("Leave",  MyLeave(), 'assets/icons/leave_icon.png'),
-              if(perTimeoff == '1') makeDashboardItem("Timeoff", TimeoffSummary(), 'assets/icons/Timeoff_icon.png'),
+              if(perTimeoff == '1') makeDashboardItem("Time Off", TimeoffSummary(), 'assets/icons/Timeoff_icon.png'),
               if(perPunchLocation == '1') makeDashboardItem("Visits", PunchLocationSummary(), 'assets/icons/visits_icon.png'),
               if(perFlexi == '1') makeDashboardItem("Flexi time", Flexitime(), 'assets/icons/Flexi_icon.png'),
-              if(perSalaryExpense == '1' || perPayrollExpense == '1') makeDashboardItem("Expenses", MyExpence(), 'assets/icons/Expense_icon.png'),
               if(perSalary == '1') makeDashboardItem("Salary", SalarySummary(), 'assets/icons/Salary_icon.png'),
               if(perPayroll == '1') makeDashboardItem("Payroll", PayrollSummary(), 'assets/icons/Salary_icon.png'),
-              makeDashboardItem("Dashboard",DashboardMain(), 'assets/icons/Dashboard_icon.png'),
+              if(perSalaryExpense == '1') makeDashboardItem("Expense", MyExpence(), 'assets/icons/Expense_icon.png'),
+              if(perPayrollExpense == '1') makeDashboardItem("Expense", MyPayrollExpense(), 'assets/icons/Expense_icon.png'),
               if(perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1') makeDashboardItem("Reports", AllReports(), 'assets/icons/graph_icon.png'),
-              makeDashboardItem("Profile", CollapsingTab(), 'assets/icons/profile_icon.png')
-
             ],
           ),
         ),

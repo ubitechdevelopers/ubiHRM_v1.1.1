@@ -9,7 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_services.dart';
-
+import 'package:horizontal_calendar_widget/date_helper.dart';
+import 'package:horizontal_calendar_widget/date_widget.dart';
+import 'package:horizontal_calendar_widget/horizontal_calendar.dart';
 import './image_view.dart';
 import '../appbar.dart';
 import '../drawer.dart';
@@ -25,7 +27,9 @@ class MyTeamAtt extends StatefulWidget {
   _MyTeamAtt createState() => _MyTeamAtt();
 
 }
-
+const labelMonth = 'Month';
+const labelDate = 'Date';
+const labelWeekDay = 'Week Day';
 class _MyTeamAtt extends State<MyTeamAtt> {
   String fname="";
   String lname="";
@@ -44,6 +48,8 @@ class _MyTeamAtt extends State<MyTeamAtt> {
   DateTime startDate1;
   DateTime endDate;
   DateTime endDate1;
+  DateTime firstDate;
+  DateTime lastDate;
   //DateTime selectedDate;
   DateTime date;
   //List<DateTime> markedDates;
@@ -68,12 +74,35 @@ class _MyTeamAtt extends State<MyTeamAtt> {
     print("selectedDate");
     print(selectedDate);*/
     date = startDate1;
+    firstDate = toDateMonthYear(DateTime.now());
+    lastDate = toDateMonthYear(DateTime.now().subtract(Duration(days: 30)));
     /*markedDates = [
       DateTime.now().subtract(Duration(days: 1)),
       DateTime.now().subtract(Duration(days: 2)),
       DateTime.now().add(Duration(days: 4))
     ];*/
   }
+
+
+  String dateFormat = 'dd';
+  String monthFormat = 'MMM';
+  String weekDayFormat = 'EEE';
+  List<String> order = [labelMonth, labelDate, labelWeekDay];
+  bool forceRender = false;
+
+  Color defaultDecorationColor = Colors.transparent;
+  BoxShape defaultDecorationShape = BoxShape.rectangle;
+  bool isCircularRadiusDefault = true;
+
+  Color selectedDecorationColor = Colors.green;
+  BoxShape selectedDecorationShape = BoxShape.rectangle;
+  bool isCircularRadiusSelected = true;
+
+  Color disabledDecorationColor = Colors.grey;
+  BoxShape disabledDecorationShape = BoxShape.rectangle;
+  bool isCircularRadiusDisabled = true;
+
+  int maxSelectedDateCount = 1;
 
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
@@ -312,6 +341,45 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                 //markedDates: markedDates,
                 containerDecoration: BoxDecoration(color: appStartColor().withOpacity(0.1)),
               )
+            ),
+
+            Container(
+               child: HorizontalCalendar(
+                 height: 80,
+                 padding: EdgeInsets.all(8),
+                 firstDate: firstDate,
+                 lastDate: lastDate,
+                 dateFormat: dateFormat,
+                 weekDayFormat: weekDayFormat,
+                 monthFormat: monthFormat,
+                 defaultDecoration: BoxDecoration(
+                   color: defaultDecorationColor,
+                   shape: defaultDecorationShape,
+                   borderRadius: defaultDecorationShape == BoxShape.rectangle &&
+                       isCircularRadiusDefault
+                       ? BorderRadius.circular(8)
+                       : null,
+                 ),
+                 selectedDecoration: BoxDecoration(
+                   color: selectedDecorationColor,
+                   shape: selectedDecorationShape,
+                   borderRadius: selectedDecorationShape == BoxShape.rectangle &&
+                       isCircularRadiusSelected
+                       ? BorderRadius.circular(8)
+                       : null,
+                 ),
+                 disabledDecoration: BoxDecoration(
+                   color: disabledDecorationColor,
+                   shape: disabledDecorationShape,
+                   borderRadius: disabledDecorationShape == BoxShape.rectangle &&
+                       isCircularRadiusDisabled
+                       ? BorderRadius.circular(8)
+                       : null,
+                 ),
+                 isDateDisabled: (date) => date.weekday == 7,
+                 labelOrder: order.map(toLabelType).toList(),
+                 maxSelectedDateCount: maxSelectedDateCount,
+               ),
             ),
 
             Container(
@@ -680,6 +748,22 @@ class _MyTeamAtt extends State<MyTeamAtt> {
           },
         )
     );
+  }
+
+  LabelType toLabelType(String label) {
+    LabelType type;
+    switch (label) {
+      case labelMonth:
+        type = LabelType.month;
+        break;
+      case labelDate:
+        type = LabelType.date;
+        break;
+      case labelWeekDay:
+        type = LabelType.weekday;
+        break;
+    }
+    return type;
   }
 }
 

@@ -125,93 +125,6 @@ ApproveExpense(expenseid,comment,sts) async{
 }
 //////////////////////////////////////SALARY EXPENSE APPROVAL TAB ID 4 AND MODULT ID 170 ENDS HERE///////////////////////////////////////
 
-//////////////////////////////////////////////PAYROLL EXPENSE APPROVAL TAB ID 8 AND MODULT ID 473/////////////////////////////////////////////////
-Future<List<Expense>> getPayrollExpenseApprovals(listType) async {
-  Dio dio = new Dio();
-  final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
-  String orgdir = prefs.getString('organization') ?? '';
-  String empid = prefs.getString('employeeid')??"";
-  Response<String> response = await dio.post(path1+"getPayrollExpenseApproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
-  print('path1+"getExpenseApproval?datafor');
-  print(path1+"getExpenseApproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
-  final res = json.decode(response.data.toString());
-  List<Expense> userList = createPayrollExpenseApporval(res);
-  return userList;
-}
-
-List<Expense> createPayrollExpenseApporval(List data) {
-  List<Expense> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String Id = data[i]["Id"].toString();
-    String name = data[i]["Name"].toString();
-    String categoryid = data[i]["ClaimHeadId"].toString();
-    String category = data[i]["ClaimHead"].toString();
-    String ests = data[i]["ApproverSts"].toString();
-    String desc = data[i]["Purpose"].toString();
-    String applydate = data[i]["FromDate"].toString();
-    String doc = data[i]["Doc"].toString();
-    String amt = data[i]["TotalAmt"].toString();
-    String currency = data[i]["EmpCurrency"].toString();
-    String Pstatus = data[i]["Pstatus"].toString();
-    String Psts="";
-    if(data[i]["Pstatus"].contains("Pending at")) {
-      Psts = data[i]["Pstatus"].toString();
-    }
-    Expense tos = new Expense(
-      Id: Id,
-      name: name,
-      categoryid: categoryid,
-      category: category,
-      ests: ests,
-      desc: desc,
-      applydate: applydate,
-      doc: doc,
-      amt: amt,
-      currency: currency,
-      Psts: Psts,
-    );
-    list.add(tos);
-  }
-  return list;
-}
-
-ApprovePayrollExpense(expenseid,comment,sts) async{
-  String empid;
-  String organization;
-  Dio dio = new Dio();
-  final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
-  empid = prefs.getString('employeeid')??"";
-  organization =prefs.getString('organization')??"";
-  try {
-    FormData formData = new FormData.from({
-      "eid": empid,
-      "orgid": organization,
-      "expenseid": expenseid,
-      "comment": comment,
-      "sts": sts,
-    });
-    Response response = await dio.post(path1+"ApprovedPayrollExpense", data: formData);
-    print(path1+"ApprovedExpense?eid=$empid&orgid=$organization&expenseid=$expenseid&comment=$comment&sts=$sts");
-    final expenseMap = response.data.toString();
-    print("-------------------");
-    print(response.toString());
-    if (expenseMap.contains("false"))
-    {
-      print("false approve expense function--->" + response.data.toString());
-      return "false";
-    } else {
-      print("true  approve expense function---" + response.data.toString());
-      return "true";
-    }
-  }catch(e){
-    //print(e.toString());
-    return "Poor network connection";
-  }
-}
-////////////////////////////////////PAYROLL EXPENSE APPROVAL TAB ID 8 AND MODULT ID 473 ENDS HERE//////////////////////////////////////
-
 Future<List<Expense>> getExpenseDetailById(Id) async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
@@ -357,6 +270,7 @@ Future<List<Map>> getheadtype(int label) async{
   List<Map> leavetype = createList(data,label);
   return leavetype;
 }
+
 List<Map> createList(List data,int label) {
   List<Map> list = new List();
   if(label==1) // with -All- label

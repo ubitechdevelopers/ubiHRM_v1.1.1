@@ -242,7 +242,7 @@ class ChoiceCard extends StatelessWidget {
               // child: Center(
               child:Column(
                   children: <Widget>[
-                    Text('Time off Applications',
+                    Text('Time Off Applications',
                         style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                     new Divider(height: 2,),
                     new Row(
@@ -1120,7 +1120,7 @@ maxLines: 3,
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("TimeOff has been rejected successfully."),
+                                  content: new Text("Time Off has been rejected successfully."),
                                 )
                             );
                           }
@@ -1130,7 +1130,7 @@ maxLines: 3,
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("TimeOff Could not be rejected. Try again!"),
+                                  content: new Text("Time Off Could not be rejected. Try again!"),
                                 )
                             );
                           }

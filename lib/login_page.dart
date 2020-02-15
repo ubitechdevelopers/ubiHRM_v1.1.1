@@ -670,7 +670,7 @@ class _LoginPageState extends State<LoginPage>
           builder: (_) => new
           AlertDialog(
             //title: new Text("Dialog Title"),
-            content: new Text("Successfull"
+            content: new Text("Successfully Logged In"
             ),
           )
       );

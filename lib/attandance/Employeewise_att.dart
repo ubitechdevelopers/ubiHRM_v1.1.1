@@ -751,6 +751,8 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                       child: new FutureBuilder<List<Attn>>(
                         future: getAttSummary(widget.empid, formatter.format(widget.month)),
                         builder: (context, snapshot) {
+                          print("Nidhi mam");
+                          print(snapshot.hasData);
                           if (snapshot.hasData) {
                             if(snapshot.data.length>0) {
                               return new ListView.builder(

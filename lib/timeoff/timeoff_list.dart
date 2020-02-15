@@ -107,7 +107,7 @@ class _TimeOffList extends State<TimeOffList> {
             SizedBox(height: 1.0),
             Center(
               child: Text(
-                'Timeoff History',
+                'Time Off History',
                 style: new TextStyle(
                   fontSize: 20.0,
                   color:appStartColor(),
@@ -335,7 +335,7 @@ class _TimeOffList extends State<TimeOffList> {
                   width: MediaQuery.of(context).size.width*1,
                   color: appStartColor().withOpacity(0.1),
                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                  child:Text("No one is on Timeoff",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                  child:Text("No one is on time off",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                 ),
               );
             }

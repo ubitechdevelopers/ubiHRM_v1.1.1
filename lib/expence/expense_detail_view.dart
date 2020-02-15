@@ -104,7 +104,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
       showDialog(context: context, child:
       new AlertDialog(
         //  title: new Text("Congrats!"),
-        content: new Text("Submitted expenses withdrawn successfully."),
+        content: new Text("Expense claim withdrawn successfully."),
       )
       );
     }else if(islogin=="failure"){
@@ -114,7 +114,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
       showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Sorry!"),
-        content: new Text("Expense could not be withdrawn."),
+        content: new Text("Expense claim could not be withdrawn."),
       )
       );
     }else{
@@ -134,7 +134,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
   confirmWithdrawl(String Id) async{
     showDialog(context: context, child:
     new AlertDialog(
-      title: new Text("Withdraw expense?"),
+      title: new Text("Withdraw Expense Claim?"),
       content:  ButtonBar(
         children: <Widget>[
           RaisedButton(
@@ -227,7 +227,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
               child:Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text('Expense Details',
+                    Text('Expense Detail',
                         style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                     //SizedBox(height: 10.0),
 
@@ -297,7 +297,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                                       color: Colors.black,
                                                     ),
                                                     children: <TextSpan>[
-                                                      new TextSpan(text: 'Apply Date: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
+                                                      new TextSpan(text: 'Claimed on: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
                                                       new TextSpan(text: snapshot.data[index].applydate.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
 
                                                       //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
@@ -413,7 +413,7 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
                                                 ),
                                                 children: <TextSpan>[
                                                   new TextSpan(text: 'Amount: ',style:TextStyle(color: Colors.black,fontSize: 17.0), ),
-                                                  new TextSpan(text: snapshot.data[index].amt.toString()+" "+snapshot.data[index].currency.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
+                                                  new TextSpan(text: snapshot.data[index].currency.toString()+" "+snapshot.data[index].amt.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 16.0)),
 
                                                   //new TextSpan(text: snapshot.data[index].ests.toString(), style: TextStyle(color: Colors.orange,fontWeight:FontWeight.bold,fontSize: 16.0,),)
                                                 ],

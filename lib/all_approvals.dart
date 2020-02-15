@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/expence/payroll_expense_approval.dart';
 import 'package:ubihrm/expence/salary_expense_appproval.dart';
+import 'package:ubihrm/payroll_expence/payroll_expense_approval.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'b_navigationbar.dart';
@@ -231,7 +231,7 @@ class _AllApprovals extends State<AllApprovals> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                    child: Text('Time off',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Time Off',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
 
                               ],
@@ -269,7 +269,7 @@ class _AllApprovals extends State<AllApprovals> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                  child: Text('Salary Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                  child: Text('Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
                               ],
                             ),
@@ -306,7 +306,7 @@ class _AllApprovals extends State<AllApprovals> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                  child: Text('Payroll Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                  child: Text('Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
                               ],
                             ),

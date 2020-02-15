@@ -159,7 +159,7 @@ class _TimeoffReports extends State<TimeoffReports> {
 
               children: <Widget>[
                 //SizedBox(height: 5.0),
-                Text('Timeoff Reports',
+                Text('Time Off Reports',
                     style: new TextStyle(fontSize: 22.0, color: appStartColor(),),textAlign: TextAlign.center),
 
 
@@ -193,7 +193,7 @@ class _TimeoffReports extends State<TimeoffReports> {
                             children: <Widget>[
                               Container(
 
-                                  child: Text("Employees on Timeoff",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                                  child: Text("Employees on Time Off",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
                               ),
                               /*Container(
                                 //    width: MediaQuery.of(context).size.width*0.5,

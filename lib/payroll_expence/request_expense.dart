@@ -14,7 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/services/attandance_gethome.dart';
-import 'package:ubihrm/services/expense_services.dart';
+import 'package:ubihrm/services/payroll_services.dart';
 
 import '../appbar.dart';
 import '../b_navigationbar.dart';
@@ -23,12 +23,12 @@ import '../global.dart';
 import 'expenselist.dart';
 
 // This app is a stateful, it tracks the user's current choice.
-class RequestExpence extends StatefulWidget {
+class RequestPayrollExpense extends StatefulWidget {
   @override
-  _RequestExpenceState createState() => _RequestExpenceState();
+  _RequestPayrollExpenseState createState() => _RequestPayrollExpenseState();
 }
 
-class _RequestExpenceState extends State<RequestExpence> {
+class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
   bool isloading = false;
   bool isServiceCalling = false;
   final _dateController = TextEditingController();
@@ -164,7 +164,7 @@ class _RequestExpenceState extends State<RequestExpence> {
     print("-------> back button pressed");
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => MyExpence()), (Route<dynamic> route) => false,
+      MaterialPageRoute(builder: (context) => MyPayrollExpense()), (Route<dynamic> route) => false,
     );
     return false;
   }
@@ -173,13 +173,13 @@ class _RequestExpenceState extends State<RequestExpence> {
     return WillPopScope(
       onWillPop: ()=> sendToExpenseList(),
       child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor:scaffoldBackColor(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar:  new HomeNavigation(),
-        endDrawer: new AppDrawer(),
-        // body: (act1=='') ? Center(child : loader()) : checkalreadylogin(),
-        //body:  getExpenseWidgit(),
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:  new HomeNavigation(),
+          endDrawer: new AppDrawer(),
+          // body: (act1=='') ? Center(child : loader()) : checkalreadylogin(),
+          //body:  getExpenseWidgit(),
           body: ModalProgressHUD(
               inAsyncCall: isServiceCalling,
               opacity: 0.15,
@@ -282,7 +282,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                 //SizedBox(height: 5.0),
                 //   mainAxisAlignment: MainAxisAlignment.start,
                 Text('Expense Claim',
-                    style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center,),
+                  style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center,),
                 new Divider(color: Colors.black54,height: 1.5,),
                 new Expanded(child: ListView(
                   children: <Widget>[
@@ -331,10 +331,10 @@ class _RequestExpenceState extends State<RequestExpence> {
                             ),
                           ],
                         ),//Enter date
-                  new Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: gethead_DD())]),
+                        new Row(
+                            children: <Widget>[
+                              Expanded(
+                                  child: gethead_DD())]),
 
 
                         //   SizedBox(height: 5.0),
@@ -360,8 +360,8 @@ class _RequestExpenceState extends State<RequestExpence> {
                                       return 'Please enter description';
                                     }
                                   },
-                           onFieldSubmitted: (String value) {
-                           /*if (_formKey.currentState.validate()) {
+                                  onFieldSubmitted: (String value) {
+                                    /*if (_formKey.currentState.validate()) {
 
                             saveExpense (_dateController.text, headtype, _descController.text, amountController.text ,_image,context);
                                     }*/
@@ -381,12 +381,12 @@ class _RequestExpenceState extends State<RequestExpence> {
                                 focusNode: myFocusNodeamount,
                                 controller: amountController,
                                 keyboardType: TextInputType.number,
-                               /* inputFormatters: [
+                                /* inputFormatters: [
                                   WhitelistingTextInputFormatter.digitsOnly,
                                 ],*/
                                 style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.black),
+                                    fontSize: 16.0,
+                                    color: Colors.black),
                                 decoration: InputDecoration(
                                     labelText: 'Amount',
                                     prefixIcon: Padding(
@@ -405,7 +405,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                               ),
                             ),
 
-                         /*   Expanded(
+                            /*   Expanded(
                               child:Container(
                                 width: 50.0,
                               child:  TextFormField(
@@ -432,7 +432,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                         SizedBox(height: 20.0),
 
 
-                       /* Container(
+                        /* Container(
                           //width: MediaQuery.of(context).size.width*0.9,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -467,47 +467,47 @@ class _RequestExpenceState extends State<RequestExpence> {
                           ),
                         ),
 */
-                          new Row(
+                        new Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                /*new Icon(
+                            children: <Widget>[
+                              /*new Icon(
                                   Icons.file_upload,
                                   color: Colors.grey,
                                 ),*/
 
-                                Flexible(
-                                  child: Container(
-                                      width: MediaQuery.of(context).size.width*0.90,
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(width: 1.0, color: Colors.grey),
-                                        )
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 10.0, bottom:16.0, top: 3.0),
-                                        child: Row(
-                                          children: <Widget>[
-                                            Container(
-                                              child: Icon(Icons.attach_file, color: Colors.grey,),
+                              Flexible(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*0.90,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(width: 1.0, color: Colors.grey),
+                                      )
+                                  ),
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(left: 10.0, bottom:16.0, top: 3.0),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Container(
+                                            child: Icon(Icons.attach_file, color: Colors.grey,),
+                                          ),
+                                          InkWell(
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width*0.6,
+                                              padding: EdgeInsets.fromLTRB(10.0,0.0, 0.0, 0.0),
+                                              //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                                              child:showImage(_image),
                                             ),
-                                            InkWell(
-                                              child: Container(
-                                                width: MediaQuery.of(context).size.width*0.6,
-                                                padding: EdgeInsets.fromLTRB(10.0,0.0, 0.0, 0.0),
-                                                //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                                                child:showImage(_image),
-                                              ),
-                                              onTap: () async {
-                                                var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                                print(image);
-                                                setState(() {
-                                                  _image = image;
-                                                });
-                                              },
-                                            )
-                                          ],
-                                        )
-                                        /*child: FlatButton.icon(
+                                            onTap: () async {
+                                              var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                              print(image);
+                                              setState(() {
+                                                _image = image;
+                                              });
+                                            },
+                                          )
+                                        ],
+                                      )
+                                    /*child: FlatButton.icon(
                                               icon: Padding(
                                                 padding: const EdgeInsets.only(bottom:15.0, left:0.0),
                                                 child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],size: 27,),
@@ -531,14 +531,14 @@ class _RequestExpenceState extends State<RequestExpence> {
                                               //minWidth: 350,
                                               shape: UnderlineInputBorder(),
                                           ),*/
-                                      ),
-                                    ),
-
+                                  ),
                                 ),
 
-                             //showImage(_image)
+                              ),
 
-                             /*ButtonTheme(
+                              //showImage(_image)
+
+                              /*ButtonTheme(
                               //minWidth: 100.0,
                              // height: 40.0,
                               child: RaisedButton(
@@ -563,14 +563,14 @@ class _RequestExpenceState extends State<RequestExpence> {
                           ),
                      ),
 */
-                    /* Container(
+                              /* Container(
                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                        margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                        child:showImage(_image),
                      ),*/
-                              ]),
+                            ]),
                         SizedBox(height: 5.0),
-                       ButtonBar(
+                        ButtonBar(
 
                           children: <Widget>[
 
@@ -599,8 +599,8 @@ class _RequestExpenceState extends State<RequestExpence> {
                                     )
                                     );
                                   }else {
-                                    print("hello");
-                                    saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
+                                    print("hello1234");
+                                    savePayrollExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
                                   }
                                   //saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
                                 }
@@ -618,7 +618,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => MyExpence()),
+                                  MaterialPageRoute(builder: (context) => MyPayrollExpense()),
                                 );
                               },
                             ),
@@ -641,7 +641,7 @@ class _RequestExpenceState extends State<RequestExpence> {
   Widget gethead_DD() {
     String dc = "0";
     return new FutureBuilder<List<Map>>(
-       future: getheadtype(0), //with -select- label
+        future: getpayrollheadtype(0), //with -select- label
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return new Container(
@@ -657,12 +657,12 @@ class _RequestExpenceState extends State<RequestExpence> {
                       color: Colors.grey,
                     ), // icon is 48px widget.
                     //child: Icon(const IconData(0xe804, fontFamily: "CustomIcon"),size: 20.0,),
-                    ),
+                  ),
                   // icon is 48px widget.
-                   ),
+                ),
 
-                  child:  DropdownButtonHideUnderline(
-                    child: new DropdownButton<String>(
+                child:  DropdownButtonHideUnderline(
+                  child: new DropdownButton<String>(
                     isDense: true,
                     isExpanded: false,
                     style: new TextStyle(
@@ -689,8 +689,8 @@ class _RequestExpenceState extends State<RequestExpence> {
 
                     }).toList(),
 
-                ),
                   ),
+                ),
               ),
             );
           }
@@ -708,14 +708,14 @@ class _RequestExpenceState extends State<RequestExpence> {
   }
 
 
-  Future<bool> saveExpense(var expensedate, var category, var desc, var amount, File doc, BuildContext context) async { // visit in function
+  Future<bool> savePayrollExpense(var expensedate, var category, var desc, var amount, File doc, BuildContext context) async { // visit in function
 
     try {
       Dio dio = new Dio();
       setState(() {
         isServiceCalling = true;
       });
-      print("----> service calling "+isServiceCalling.toString());
+      print("----> service calling123 "+isServiceCalling.toString());
       final prefs = await SharedPreferences.getInstance();
       String orgid = prefs.getString('organization') ?? '';
       String empid = prefs.getString('employeeid') ?? "";
@@ -737,33 +737,33 @@ class _RequestExpenceState extends State<RequestExpence> {
           final prefs = await SharedPreferences.getInstance();
           String path1 = prefs.getString('path');
           // print(globals.path +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
-          response1 = await dio.post(path1 + "saveExpense", data: formData);
-          print("----->save Expense* --->" + response1.toString());
+          response1 = await dio.post(path1 + "savePayrollExpense", data: formData);
+          print("----->save payroll Expense* --->" + response1.toString());
         } catch (e) {
           print('------------*');
           print(e.toString());
-       //   print('------------*');
+          //   print('------------*');
         }
 
         /*getTempImageDirectory();*/
         Map MarkAttMap = json.decode(response1.data);
-       // print('------------1*');
+        // print('------------1*');
         print(MarkAttMap["status"].toString());
-       // print('------------2*');
+        // print('------------2*');
         if ((response1.toString().contains("true"))) {
-        //  print('------true  in img');
+          //  print('------true  in img');
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MyExpence()),
+            MaterialPageRoute(builder: (context) => MyPayrollExpense()),
           );
           // ignore: deprecated_member_use
           showDialog(context: context, child:
-            new AlertDialog(
-              content: new Text('Expense submitted successfully.'),
-            )
+          new AlertDialog(
+            content: new Text('Expense submitted successfully.'),
+          )
           );
           //showInSnackBar("Expense has been applied successfully.");
-           /*if(tempvar=="1"){
+          /*if(tempvar=="1"){
              Navigator.push(
                context,
                MaterialPageRoute(builder: (context) => MyExpence()),
@@ -775,8 +775,7 @@ class _RequestExpenceState extends State<RequestExpence> {
              );
            }*/
           return true;
-        }
-        else if((response1.toString().contains("false1"))){
+        } else if((response1.toString().contains("false1"))){
           /*Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyExpence()),
@@ -793,7 +792,7 @@ class _RequestExpenceState extends State<RequestExpence> {
           //showInSnackBar("Expence already applied on this date");
         }
         else {
-        //  print('------false  in img');
+          //  print('------false  in img');
           // ignore: deprecated_member_use
           showDialog(context: context, child:
           new AlertDialog(
@@ -807,8 +806,8 @@ class _RequestExpenceState extends State<RequestExpence> {
         }
       }
 
-    else{
-      FormData formData = new FormData.from({
+      else{
+        FormData formData = new FormData.from({
           "empid": empid,
           "orgid": orgid,
           "edate": expensedate,
@@ -816,19 +815,19 @@ class _RequestExpenceState extends State<RequestExpence> {
           "desc": desc,
           "amt": amount,
           "file":"",
-        //  "file": new UploadFileInfo(doc, "image.png"),
+          //  "file": new UploadFileInfo(doc, "image.png"),
         });
-     //   print(formData);
-      //  print(doc);
+        //   print(formData);
+        //  print(doc);
         //print("kkkkkkkkkkkkkk");
         //  print("5" +expensedate+"---"+category+"---"+desc+"---"+amount+"---"+empid+"--"+orgid+"--");
         Response<String> response1;
         try {
           final prefs = await SharedPreferences.getInstance();
           String path1 = prefs.getString('path');
-          print(path1 +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
+          print(path1 +"savePayrollExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
           response1 =
-          await dio.post(path1 + "saveExpense", data: formData);
+          await dio.post(path1 + "savePayrollExpense", data: formData);
           print("----->save Expense* --->" + response1.toString());
         } catch (e) {
           print('------------*');
@@ -837,22 +836,22 @@ class _RequestExpenceState extends State<RequestExpence> {
         }
         /*getTempImageDirectory();*/
         Map expensemap = json.decode(response1.data);
-      //  print('------------1*');
-      //  print(expensemap["status"].toString());
-       // print('------------2*');
-      if ((response1.toString().contains("true"))) {
-      //  print('------true');
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyExpence()),
-        );
-        // ignore: deprecated_member_use
-        showDialog(context: context, child:
+        //  print('------------1*');
+        //  print(expensemap["status"].toString());
+        // print('------------2*');
+        if ((response1.toString().contains("true"))) {
+          //  print('------true');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyPayrollExpense()),
+          );
+          // ignore: deprecated_member_use
+          showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense submitted successfully.'),
           )
-        );
-       /* if(tempvar=="1"){
+          );
+          /* if(tempvar=="1"){
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyExpence()),
@@ -863,43 +862,43 @@ class _RequestExpenceState extends State<RequestExpence> {
             MaterialPageRoute(builder: (context) => RequestExpence()),
           );
         }*/
-        return true;
-      }
-      else if((response1.toString().contains("false1"))){
-        // ignore: deprecated_member_use
-        showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text('Expense already applied on this date.'),
-        )
-        );
-        setState(() {
-          isServiceCalling = false;
-        });
-        //showInSnackBar("Expence already applied on this date");
-      }
-      else {
-     //   print('------false');
-        // ignore: deprecated_member_use
-        showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text('There is some problem while applying for expense.'),
-        )
-        );
-        //showInSnackBar("There is some problem while applying for Expense.");
-        //return false;
-        setState(() {
-          isServiceCalling = false;
-        });
-      }
+          return true;
+        }
+        else if((response1.toString().contains("false1"))){
+          // ignore: deprecated_member_use
+          showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text('Expense already applied on this date.'),
+          )
+          );
+          setState(() {
+            isServiceCalling = false;
+          });
+          //showInSnackBar("Expence already applied on this date");
+        }
+        else {
+          //   print('------false');
+          // ignore: deprecated_member_use
+          showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text('There is some problem while applying for expense.'),
+          )
+          );
+          //showInSnackBar("There is some problem while applying for Expense.");
+          //return false;
+          setState(() {
+            isServiceCalling = false;
+          });
+        }
 
       }
 
-  }
+    }
     catch (e) {
       print('7');
-    //  print("------->");
+      //  print("------->");
       print(e.toString());
-     // print("------->");
+      // print("------->");
 
       return false;
     }
@@ -909,8 +908,8 @@ class _RequestExpenceState extends State<RequestExpence> {
 
 
   Widget showImage(_image) {
-  return FutureBuilder<File>(
-   //  future: ExpenseDoc,
+    return FutureBuilder<File>(
+      //  future: ExpenseDoc,
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
         /*if (snapshot.connectionState == ConnectionState.done &&
             snapshot.data != null) {
@@ -923,14 +922,14 @@ class _RequestExpenceState extends State<RequestExpence> {
         if(_image!=null ) {
           return new Row(
               mainAxisAlignment: MainAxisAlignment.start,
-             children: <Widget>[
-               Text("Attachment Uploaded",style: TextStyle(fontSize: 16.0, color: Colors.green),
-                 overflow: TextOverflow.ellipsis, ),
-               /*Icon(
+              children: <Widget>[
+                Text("Attachment Uploaded",style: TextStyle(fontSize: 16.0, color: Colors.green),
+                  overflow: TextOverflow.ellipsis, ),
+                /*Icon(
                 Icons.check,
                 color: Colors.green,
                 ),*/
-               /* Container(
+                /* Container(
                      child:new IconButton(
                        icon: new Icon(Icons.close, color: Colors.redAccent,),
                        onPressed: () {
@@ -943,7 +942,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                        },
                      )
                 ),*/
-           ]);
+              ]);
         }
         else if (snapshot.error != null) {
           return const Text(

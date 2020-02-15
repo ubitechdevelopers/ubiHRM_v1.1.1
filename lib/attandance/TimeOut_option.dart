@@ -1186,8 +1186,8 @@ class _HomePageTimeOutState extends State<HomePageTimeOut> {
           print('------------------<<<<<<<<<<<');
           showDialog(context: context, child:
           new AlertDialog(
-            title: new Text("!"),
-            content: new Text("Problem while marking attendance, try again."),
+            //title: new Text("!"),
+            content: new Text("Selfie not captured, please punch again!"),
           )
           );
           setState(() {

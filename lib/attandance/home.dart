@@ -644,10 +644,13 @@ class _HomePageState extends State<HomePage> {
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(0.0)),
             color: Colors.green[50]),
-        child: Text(
-          '\nToday\'s attendance is marked successfully.',
-          textAlign: TextAlign.center,
-          style: new TextStyle(color: Colors.black87, fontSize: 15.0),
+        child: Padding(
+          padding: const EdgeInsets.only(top:12.0),
+          child: Text(
+            'Attendance has been Marked.\n Thank you!',
+            textAlign: TextAlign.center,
+            style: new TextStyle(color: Colors.black87, fontSize: 15.0),
+          ),
         ),
         width: double.infinity,
         height: 60.0,
@@ -923,8 +926,8 @@ class _HomePageState extends State<HomePage> {
           print('------------------<<<<<<<<<<<');
           showDialog(context: context, child:
           new AlertDialog(
-            title: new Text("Warning!"),
-            content: new Text("Problem while marking attendance, try again."),
+            //title: new Text("Warning!"),
+            content: new Text("Selfie not captured, please punch again!"),
           )
           );
           if(mounted) {

@@ -237,81 +237,7 @@ class ChoiceCard1 extends StatelessWidget {
                                                       ),
                                                     )
                                                 ),
-                                              ],
-                                            ),
 
-                                            Row(
-                                              children: <Widget>[
-                                                Container(
-                                                    width: MediaQuery.of(context) .size .width * 0.70,
-                                                    height: MediaQuery.of(context) .size .height * 0.03,
-                                                    //padding: EdgeInsets.only(top:1.5),
-                                                    margin: EdgeInsets.only(top: 0.5),
-                                                    child: RichText(
-                                                      text: new TextSpan(
-                                                        style: new TextStyle(
-                                                          fontSize: 14.0,
-                                                          color: Colors.black,
-                                                        ),
-                                                        children: <TextSpan>[
-                                                          new TextSpan(
-                                                              text: 'Amount: ',
-                                                              style: new TextStyle()),
-                                                          new TextSpan(
-                                                            text: snapshot.data[index].amt.toString()+" "+snapshot.data[index].currency.toString(),style: TextStyle(color: Colors.grey[600]),)
-                                                        ],
-                                                      ),
-                                                    )
-                                                ),
-                                              ],
-                                            ),
-
-                                            Row(
-                                              children: <Widget>[
-                                                snapshot.data[index].doc.toString()!=''?Container(
-                                                  width: MediaQuery.of(context) .size .width * 0.70,
-                                                  height: MediaQuery.of(context) .size .height * 0.03,
-                                                  //padding: EdgeInsets.only(top:1.5),
-                                                  margin: EdgeInsets.only(top: 0.5),
-                                                  child: Row(
-                                                    children: <Widget>[
-                                                      Text("Attachment: ", style: TextStyle(color: Colors.black, fontSize: 14.0),),
-                                                      new InkWell(
-                                                        onTap: () {
-                                                          print(snapshot.data[index].doc.toString());
-                                                          launchMap(snapshot.data[index].doc.toString());
-                                                        },
-                                                        child: Text("Attached Document", style: TextStyle(color: Colors.blueAccent, fontSize: 14.0, decoration: TextDecoration.underline),textAlign: TextAlign.start,),
-                                                      ),
-                                                    ],
-                                                  )
-                                                ):Center(),
-                                              ],
-                                            ),
-
-                                            new Row(
-                                              children: <Widget>[
-                                                Container(
-                                                  width: MediaQuery.of(context) .size .width * 0.70,
-                                                  height: MediaQuery.of(context) .size .height * 0.03,
-                                                    //padding: EdgeInsets.only(top:1.5),
-                                                    margin: EdgeInsets.only(top: 0.5),
-                                                  child: RichText(
-                                                    text: new TextSpan(
-                                                      style: new TextStyle(
-                                                        fontSize: 14.0,
-                                                        color: Colors.black,
-                                                      ),
-                                                      children: <TextSpan>[
-                                                        new TextSpan(
-                                                            text: 'Description: ',
-                                                            style: new TextStyle()),
-                                                        new TextSpan(
-                                                          text: snapshot.data[index].desc.toString(),style: TextStyle(color: Colors.grey[600]),)
-                                                      ],
-                                                    ),
-                                                  )
-                                                ),
 
                                                 snapshot.data[index].ests.toString() == 'Pending'
                                                     && snapshot.data[index].Psts.toString() == ""  ?
@@ -336,6 +262,81 @@ class ChoiceCard1 extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ): Center(),
+                                              ],
+                                            ),
+
+                                            new Row(
+                                              children: <Widget>[
+                                                Container(
+                                                    width: MediaQuery.of(context) .size .width * 0.70,
+                                                    height: MediaQuery.of(context) .size .height * 0.03,
+                                                    //padding: EdgeInsets.only(top:1.5),
+                                                    margin: EdgeInsets.only(top: 0.5),
+                                                    child: RichText(
+                                                      text: new TextSpan(
+                                                        style: new TextStyle(
+                                                          fontSize: 14.0,
+                                                          color: Colors.black,
+                                                        ),
+                                                        children: <TextSpan>[
+                                                          new TextSpan(
+                                                              text: 'Description: ',
+                                                              style: new TextStyle()),
+                                                          new TextSpan(
+                                                            text: snapshot.data[index].desc.toString(),style: TextStyle(color: Colors.grey[600]),)
+                                                        ],
+                                                      ),
+                                                    )
+                                                ),
+                                              ],
+                                            ),
+
+                                            Row(
+                                              children: <Widget>[
+                                                Container(
+                                                    width: MediaQuery.of(context) .size .width * 0.70,
+                                                    height: MediaQuery.of(context) .size .height * 0.03,
+                                                    //padding: EdgeInsets.only(top:1.5),
+                                                    margin: EdgeInsets.only(top: 0.5),
+                                                    child: RichText(
+                                                      text: new TextSpan(
+                                                        style: new TextStyle(
+                                                          fontSize: 14.0,
+                                                          color: Colors.black,
+                                                        ),
+                                                        children: <TextSpan>[
+                                                          new TextSpan(
+                                                              text: 'Amount: ',
+                                                              style: new TextStyle()),
+                                                          new TextSpan(
+                                                            text: snapshot.data[index].currency.toString()+" "+snapshot.data[index].amt.toString(),style: TextStyle(color: Colors.grey[600]),)
+                                                        ],
+                                                      ),
+                                                    )
+                                                ),
+                                              ],
+                                            ),
+
+                                            Row(
+                                              children: <Widget>[
+                                                snapshot.data[index].doc.toString()!=''?Container(
+                                                  width: MediaQuery.of(context) .size .width * 0.70,
+                                                  height: MediaQuery.of(context) .size .height * 0.03,
+                                                  //padding: EdgeInsets.only(top:1.5),
+                                                  margin: EdgeInsets.only(top: 0.5),
+                                                  child: Row(
+                                                    children: <Widget>[
+                                                      Text("Reciept: ", style: TextStyle(color: Colors.black, fontSize: 14.0),),
+                                                      new InkWell(
+                                                        onTap: () {
+                                                          print(snapshot.data[index].doc.toString());
+                                                          launchMap(snapshot.data[index].doc.toString());
+                                                        },
+                                                        //child: Text("Attached Document", style: TextStyle(color: Colors.blueAccent, fontSize: 14.0, decoration: TextDecoration.underline),textAlign: TextAlign.start,),
+                                                          child: Icon(Icons.file_download, color:Colors.green)                                                      ),
+                                                    ],
+                                                  )
+                                                ):Center(),
                                               ],
                                             ),
 
@@ -500,7 +501,7 @@ class ChoiceCard1 extends StatelessWidget {
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Expense request approved successfully."),
+                                  content: new Text("Expense claim approved successfully."),
                                 )
                               );
                             }
@@ -510,7 +511,7 @@ class ChoiceCard1 extends StatelessWidget {
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Expense request rejected successfully."),
+                                  content: new Text("Expense claim rejected successfully."),
                                 )
                               );
                             }
@@ -545,7 +546,7 @@ class ChoiceCard1 extends StatelessWidget {
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Expense request has been rejected successfully."),
+                                  content: new Text("Expense claim has been rejected successfully."),
                                 )
                               );
                             }
@@ -555,7 +556,7 @@ class ChoiceCard1 extends StatelessWidget {
                                   builder: (_) =>
                                   new AlertDialog(
                                     //title: new Text("Dialog Title"),
-                                    content: new Text("Expense could not be rejected. Try again!"),
+                                    content: new Text("Expense claim could not be rejected. Try again!"),
                                   )
                               );
                             }

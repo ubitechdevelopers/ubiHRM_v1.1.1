@@ -430,7 +430,7 @@ class _RegisterState extends State<Register> {
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.only(top: 8.0,bottom: 0.0),
-                              child: new Text("Register Your company",
+                              child: new Text("Register Your Company",
                                 textAlign: TextAlign.center,
                                 style: new TextStyle(fontWeight: FontWeight.bold, fontSize:20.0, color: appStartColor() ),
                               ),

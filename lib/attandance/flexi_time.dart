@@ -845,8 +845,8 @@ class _Flexitime extends State<Flexitime> {
       } else {
         showDialog(context: context, child:
         new AlertDialog(
-          title: new Text("Warning!"),
-          content: new Text("Problem while punching Attendance, try again."),
+          //title: new Text("Warning!"),
+          content: new Text("Selfie not captured, please punch again!"),
         )
         );
         setState(() {

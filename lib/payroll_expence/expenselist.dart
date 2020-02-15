@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/services/payroll_services.dart';
 import 'package:ubihrm/services/services.dart';
 
 import '../b_navigationbar.dart';
@@ -9,17 +10,16 @@ import '../global.dart';
 import '../home.dart';
 import '../login_page.dart';
 import '../profile.dart';
-import '../services/expense_services.dart';
 import 'expense_detail_view.dart';
 import 'request_expense.dart';
 
 
-class MyExpence extends StatefulWidget {
+class MyPayrollExpense extends StatefulWidget {
   @override
-  _MyExpenceState createState() => _MyExpenceState();
+  _MyPayrollExpenseState createState() => _MyPayrollExpenseState();
 }
 
-class _MyExpenceState extends State<MyExpence> {
+class _MyPayrollExpenseState extends State<MyPayrollExpense> {
   int _currentIndex = 0;
   int response;
   var profileimage;
@@ -224,10 +224,10 @@ class _MyExpenceState extends State<MyExpence> {
         floatingActionButton: new FloatingActionButton(
           backgroundColor: Colors.orange[800],
           onPressed: (){
-          Navigator.push(
-             context,
-             MaterialPageRoute(builder: (context) => RequestExpence()),
-           );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => RequestPayrollExpense()),
+            );
           },
           tooltip: 'Expense Claim',
           child: new Icon(Icons.add),
@@ -254,7 +254,7 @@ class _MyExpenceState extends State<MyExpence> {
                 children: <Widget>[
                   //SizedBox(height: 5.0),
                   Text('My Expenses',
-                      style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center,),
+                    style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center,),
                   //SizedBox(height: 10.0),
                   //new Divider(color: Colors.black54,height: 1.5,),
                   new Expanded(
@@ -265,8 +265,8 @@ class _MyExpenceState extends State<MyExpence> {
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
 
-                      child: new FutureBuilder<List<Expensedate>>(
-                        future: getExpenselistbydate(),
+                      child: new FutureBuilder<List<PayrollExpenseDate>>(
+                        future: getPayrollExpenselistbydate(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if (snapshot.data.length>0) {
@@ -275,27 +275,27 @@ class _MyExpenceState extends State<MyExpence> {
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (BuildContext context, int index) {
                                     return new Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                     // mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        // mainAxisAlignment: MainAxisAlignment.start,
 
                                         children: <Widget>[
-                                         new RaisedButton(
+                                          new RaisedButton(
                                             //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
                                             //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
                                             //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-                                          padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                                             child: Container(
-                                                  padding: EdgeInsets.only(left:  0.0),
+                                              padding: EdgeInsets.only(left:  0.0),
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: <Widget>[
-                                                SizedBox(width: 15.0),
+                                                  SizedBox(width: 15.0),
                                                   Expanded(
 
-                                                       child: Container(
-                                                            margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                                                            child: Text(snapshot.data[index].dates.toString(),textAlign:TextAlign.left,style: TextStyle(fontWeight:FontWeight.bold,fontSize: 15.0),)
-                                                        ),
+                                                    child: Container(
+                                                        margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                                                        child: Text(snapshot.data[index].dates.toString(),textAlign:TextAlign.left,style: TextStyle(fontWeight:FontWeight.bold,fontSize: 15.0),)
+                                                    ),
 
 
                                                   ),
@@ -310,16 +310,16 @@ class _MyExpenceState extends State<MyExpence> {
                                             elevation: 4.0,
                                             textColor: Colors.black,
                                             onPressed: () {
-                                         //     expensebydatewidget();
-                                             // Navigator.push(
-                                             //   context,
-                                            //    MaterialPageRoute(builder: (context) => LeaveReports()),
-                                            //  );
+                                              //     expensebydatewidget();
+                                              // Navigator.push(
+                                              //   context,
+                                              //    MaterialPageRoute(builder: (context) => LeaveReports()),
+                                              //  );
                                             },
                                           ),
-                                         expensebydatewidget(snapshot.data[index].Fdate.toString()),
+                                          expensebydatewidget(snapshot.data[index].Fdate.toString()),
 
-                                     ]);
+                                        ]);
                                   }
                               );
                             }else
@@ -331,7 +331,7 @@ class _MyExpenceState extends State<MyExpence> {
                                   child:Text("No Expense History",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                                 ),
                               );
-                              /*return new Center(
+                            /*return new Center(
                                 child: Text('No Expense History'),
                               );*/
                           } else if (snapshot.hasError) {
@@ -356,88 +356,88 @@ class _MyExpenceState extends State<MyExpence> {
 
   Widget expensebydatewidget(Fdate){
     return Container(
-      color: Colors.green[100],
-     // height: MediaQuery.of(context).size.height*0.2,
-      child:  Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-
-        new Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          //crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 40.0),
-            //SizedBox(width: MediaQuery.of(context).size.width*0.10),
-            new Expanded(
-              child: Container(
-                width: MediaQuery.of(context).size.width*0.35,
-                //margin: EdgeInsets.only(left:10.0),
-                child:Text('  Category',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
-              ),
-            ),
-
-            new Expanded(
-              child: Container(
-                width: MediaQuery.of(context).size.width*0.35,
-                margin: EdgeInsets.only(left:35.0),
-                child:Text('Amount',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
-              ),
-            ),
-
-            new Expanded(
-              child: Container(
-                width: MediaQuery.of(context).size.width*0.35,
-                margin: EdgeInsets.only(left:50.0),
-                child:Text('Action',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
-              ),
-            ),
-          ] ,
-        ),
-
-        new Row(
+        color: Colors.green[100],
+        // height: MediaQuery.of(context).size.height*0.2,
+        child:  Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            //crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              new Expanded(
-                child: Container(
-                 height: MediaQuery.of(context).size.height*0.10,
-                  //width: MediaQuery.of(context).size.width*.99,
-                  //padding: EdgeInsets.only(bottom: 15.0),
-                  color: Colors.green[50],
-                  child: new FutureBuilder<List<Expense>>(
-                    future: getExpenselist(Fdate),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data.length>0) {
-                          return new ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return new Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                     new Row(
+
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                //crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 40.0),
+                  //SizedBox(width: MediaQuery.of(context).size.width*0.10),
+                  new Expanded(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width*0.35,
+                      //margin: EdgeInsets.only(left:10.0),
+                      child:Text('  Category',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
+                    ),
+                  ),
+
+                  new Expanded(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width*0.35,
+                      margin: EdgeInsets.only(left:35.0),
+                      child:Text('Amount',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
+                    ),
+                  ),
+
+                  new Expanded(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width*0.35,
+                      margin: EdgeInsets.only(left:50.0),
+                      child:Text('Action',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 14.0),),
+                    ),
+                  ),
+                ] ,
+              ),
+
+              new Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    new Expanded(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height*0.10,
+                        //width: MediaQuery.of(context).size.width*.99,
+                        //padding: EdgeInsets.only(bottom: 15.0),
+                        color: Colors.green[50],
+                        child: new FutureBuilder<List<PayrollExpense>>(
+                          future: getPayrollExpenselist(Fdate),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data.length>0) {
+                                return new ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return new Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: <Widget>[
-                                            new Expanded(
-                                              child: Container(
-                                                  width: MediaQuery .of(context).size .width * 0.10,
-                                                  margin: EdgeInsets.only(top:2.0,left:6.0),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      new SizedBox(width: 5.0,),
-                                                      new Text(snapshot.data[index].category.toString(),
-                                                        style: TextStyle(
-                                                            fontWeight: FontWeight.bold),)
+                                            new Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                new Expanded(
+                                                  child: Container(
+                                                      width: MediaQuery .of(context).size .width * 0.10,
+                                                      margin: EdgeInsets.only(top:2.0,left:6.0),
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: <Widget>[
+                                                          new SizedBox(width: 5.0,),
+                                                          new Text(snapshot.data[index].category.toString(),
+                                                            style: TextStyle(
+                                                                fontWeight: FontWeight.bold),)
 
-                                                    ],
-                                                  )
-                                              ),
-                                            ),
+                                                        ],
+                                                      )
+                                                  ),
+                                                ),
 
-                                           /* new Expanded(
+                                                /* new Expanded(
                                               child: Container(
                                                   width: MediaQuery .of(context).size .width * 0.10,
                                                   //margin: EdgeInsets.only(left:20.0),
@@ -454,51 +454,51 @@ class _MyExpenceState extends State<MyExpence> {
                                                   )
                                               ),
                                             ),*/
-                                            new Expanded(
-                                              child: Container(
-                                                  width: MediaQuery .of(context).size .width * 0.10,
-                                                  margin: EdgeInsets.only(left:20.0),
-                                                  padding: EdgeInsets.only(left:15.0),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      new SizedBox(width: 5.0,),
-                                                      new Text(
-                                                       snapshot.data[index].currency.toString()+" "+snapshot.data[index].amt.toString(),textAlign: TextAlign.right,
+                                                new Expanded(
+                                                  child: Container(
+                                                      width: MediaQuery .of(context).size .width * 0.10,
+                                                      margin: EdgeInsets.only(left:20.0),
+                                                      padding: EdgeInsets.only(left:15.0),
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: <Widget>[
+                                                          new SizedBox(width: 5.0,),
+                                                          new Text(
+                                                            snapshot.data[index].currency.toString()+" "+snapshot.data[index].amt.toString(),textAlign: TextAlign.right,
 
-                                                       //   snapshot.data[index].amt.toString() ,textAlign: TextAlign.right,
+                                                            //   snapshot.data[index].amt.toString() ,textAlign: TextAlign.right,
 
+                                                          )
+
+                                                        ],
                                                       )
+                                                  ),
+                                                ),
 
-                                                    ],
-                                                  )
-                                              ),
-                                            ),
-
-                                            new Expanded(
-                                              child: Container (
-                                                //                   color:Colors.yellow,
-                                                 height: MediaQuery .of(context).size.height * 0.03,
-                                                 margin: EdgeInsets.only(left:12.0),
-                                                  padding: EdgeInsets.only(left:12.0),
-                                                  width: MediaQuery .of(context).size.width * 0.50,
-                                                  child: FlatButton(
-                                                    onPressed: () {
-                                                      print("Button pressed");
-                                                      //getExpenseDetailById(snapshot.data[index].Id.toString());
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(builder: (context) => ExpenseDetailView(expenseid: snapshot.data[index].Id.toString())),
-                                                      );
-                                                    },
-                                                    child: Text("view", style: TextStyle(color: Colors.blueAccent, fontSize: 15.0, decoration: TextDecoration.underline),),
-                                                    /*child: Icon(
+                                                new Expanded(
+                                                  child: Container (
+                                                    //                   color:Colors.yellow,
+                                                    height: MediaQuery .of(context).size.height * 0.03,
+                                                    margin: EdgeInsets.only(left:12.0),
+                                                    padding: EdgeInsets.only(left:12.0),
+                                                    width: MediaQuery .of(context).size.width * 0.50,
+                                                    child: FlatButton(
+                                                      onPressed: () {
+                                                        print("Button pressed");
+                                                        //getExpenseDetailById(snapshot.data[index].Id.toString());
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(builder: (context) => PayrollExpenseDetailView(expenseid: snapshot.data[index].Id.toString())),
+                                                        );
+                                                      },
+                                                      child: Text("view", style: TextStyle(color: Colors.blueAccent, fontSize: 15.0, decoration: TextDecoration.underline),),
+                                                      /*child: Icon(
                                                       Icons.remove_red_eye,
                                                       size: 20.0,
                                                       color:appStartColor(),
                                                     ),*/
-                                                  ),
-                                                  /*child: new FlatButton(
+                                                    ),
+                                                    /*child: new FlatButton(
                                                     onPressed: () {
                                                       print("icon pressed");
                                                         *//*Navigator.push(
@@ -514,24 +514,24 @@ class _MyExpenceState extends State<MyExpence> {
                                                     ),
                                                     //         padding:EdgeInsets.all(5.0),
                                                   )*/
-                                              ),
-                                            )
+                                                  ),
+                                                )
 
-                                          ],
-                                        ),
+                                              ],
+                                            ),
 
 
 
-                                      ////
+                                            ////
 
-                                      /*   snapshot.data[index].desc.toString()!='-'?Container(
+                                            /*   snapshot.data[index].desc.toString()!='-'?Container(
                                           width: MediaQuery.of(context).size.width*.90,
                                           padding: EdgeInsets.only(top:1.5,bottom: .5),
                                           margin: EdgeInsets.only(top: 4.0),
                                           child: Text(snapshot.data[index].category.toString(), style: TextStyle(color: Colors.black54),),
                                         ):Center(),*/
 
-                                      /*  snapshot.data[index].desc.toString()!='-'?Container(
+                                            /*  snapshot.data[index].desc.toString()!='-'?Container(
                                           width: MediaQuery.of(context).size.width*.90,
                                           padding: EdgeInsets.only(top:1.5,bottom: 1.5),
                                           margin: EdgeInsets.only(top: 4.0,bottom: 1.5),
@@ -540,36 +540,36 @@ class _MyExpenceState extends State<MyExpence> {
 
 
 
-                                    ]);
-                              }
-                          );
-                        }else
-                          return new Center(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width*1,
-                              color: appStartColor().withOpacity(0.1),
-                              padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                              child:Text("No Expense History",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
-                            ),
-                          );
-                          /*return new Center(
+                                          ]);
+                                    }
+                                );
+                              }else
+                                return new Center(
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width*1,
+                                    color: appStartColor().withOpacity(0.1),
+                                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                                    child:Text("No Expense History",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                                  ),
+                                );
+                              /*return new Center(
                             child: Text('No Expense History'),
                           );*/
-                      } else if (snapshot.hasError) {
-                        return new Text("Unable to connect server");
-                      }
+                            } else if (snapshot.hasError) {
+                              return new Text("Unable to connect server");
+                            }
 
-                      // By default, show a loading spinner
-                      return new Center( child: CircularProgressIndicator());
-                    },
-                  ),
-                  //////////////////////////////////////////////////////////////////////---------------------------------
-                ),
+                            // By default, show a loading spinner
+                            return new Center( child: CircularProgressIndicator());
+                          },
+                        ),
+                        //////////////////////////////////////////////////////////////////////---------------------------------
+                      ),
+                    ),
+                  ]
               ),
             ]
-          ),
-        ]
-      )
+        )
     );
   }
 
