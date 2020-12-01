@@ -5,9 +5,9 @@ import 'attandance/app.dart';
 
 void main(){
   runApp(
-      new MaterialApp(
-        home: new MyApp(),
-      )
+    new MaterialApp(
+      home: new MyApp(),
+    )
   );
 }
 
@@ -21,6 +21,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -32,10 +33,6 @@ class _MyAppState extends State<MyApp> {
             image:Image.asset('assets/ubihrm_splash.gif'),
             backgroundColor: Colors.white,
             photoSize: MediaQuery.of(context).size.width*0.78,
-            //title: new Text('',style: TextStyle(fontSize: 32.0),),
-            //loaderColor: appStartColor(),
-            //styleTextUnderTheLoader: new TextStyle(color: Colors.grey[500]),
-            /*onClick: ()=>print("Flutter Egypt"),*/
           );
         }
       ),

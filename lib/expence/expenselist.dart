@@ -32,8 +32,6 @@ class _MyExpenceState extends State<MyExpence> {
   var PerApprovalLeave;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-
-
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
   @override
   void initState() {
@@ -91,78 +89,6 @@ class _MyExpenceState extends State<MyExpence> {
     ));
   }
 
-  /*withdrawlLeave(String leaveid) async{
-    setState(() {
-      _checkwithdrawnleave = true;
-    });
-    print("----> withdrawn service calling "+_checkwithdrawnleave.toString());
-    final prefs = await SharedPreferences.getInstance();
-
-    String empid = prefs.getString('employeeid')??"";
-    String orgid =prefs.getString('organization')??"";
-    var leave = Leave(leaveid: leaveid, orgid: orgid, uid: empid, approverstatus: '5');
-    var islogin = await withdrawLeave(leave);
-    print(islogin);
-    if(islogin=="success"){
-     *//* Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MyLeave()),
-      );*//*
-      showDialog(context: context, child:
-      new AlertDialog(
-        //  title: new Text("Congrats!"),
-        content: new Text("Expense has been withdrawn successfully."),
-      )
-      );
-    }else if(islogin=="failure"){
-      showDialog(context: context, child:
-      new AlertDialog(
-        //title: new Text("Sorry!"),
-        content: new Text("Expense could not be withdrawn."),
-      )
-      );
-    }else{
-      showDialog(context: context, child:
-      new AlertDialog(
-        // title: new Text("Sorry!"),
-        content: new Text("Poor network connection."),
-      )
-      );
-    }
-  }*/
-
-  /*confirmWithdrawl(String leaveid) async{
-    showDialog(context: context, child:
-    new AlertDialog(
-      title: new Text("Withdraw Expense?"),
-      content:  ButtonBar(
-        children: <Widget>[
-          RaisedButton(
-            child: Text('Withdraw',style: TextStyle(color: Colors.white),),
-            color: Colors.orange[800],
-            onPressed: () {
-              setState(() {
-                _checkwithdrawnleave = true;
-              });
-              Navigator.of(context, rootNavigator: true).pop();
-              withdrawlLeave(leaveid);
-
-            },
-          ),
-          FlatButton(
-            shape: Border.all(color: Colors.orange[800]),
-            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-            },
-          ),
-        ],
-      ),
-    )
-    );
-  }*/
-
-
   Future<Widget> islogin() async{
     final prefs = await SharedPreferences.getInstance();
     int response = prefs.getInt('response')??0;
@@ -178,7 +104,6 @@ class _MyExpenceState extends State<MyExpence> {
   Widget build(BuildContext context) {
     return mainWidget;
   }
-
 
   Widget loadingWidget(){
     return Center(child:SizedBox(

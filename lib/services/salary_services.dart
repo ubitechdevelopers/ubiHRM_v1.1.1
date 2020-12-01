@@ -1,22 +1,30 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/model/model.dart';
+import 'package:ubihrm/global.dart';
+
+
+class Salary{
+  String id;
+  String name;
+  String month;
+  String paid_days;
+  String EmployeeCTC;
+  String Currency;
+
+  Salary({this.id,this.name, this.month, this.paid_days,this.EmployeeCTC,this.Currency});
+}
 
 
 class RequestsalaryService{
-
   var dio = new Dio();
-
 }
 
 
 Future<List<Salary>> getsalarySummary() async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   try {
@@ -24,50 +32,46 @@ Future<List<Salary>> getsalarySummary() async{
       "employeeid": empid,
       "organization": organization,
     });
-    //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
     Response response = await dio.post(
-        path1+"getSalarysummary",
+        path+"getSalarysummary",
         data: formData);
-   // print('--------------------salarySummary Called-----------------------');
-   // print(response.data.toString());
     List responseJson = json.decode(response.data.toString());
-    print(json.decode(response.data.toString()));
 
     List<Salary> userList = createsalaryList(responseJson);
 
     return userList;
 
   }catch(e){
-    //print(e.toString());
+    print(e.toString());
   }
 }
 
-Future<List<Salary>> getsalarySummaryAll() async{
+
+Future<List<Salary>> getSalarySummaryAll() async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   String organization = prefs.getString('organization') ?? '';
-  String empid = prefs.getString('employeeid')??"";
+  String empid = prefs.getString('employeeid')?? '';
+  int profiletype = prefs.getInt('profiletype')??0;
+  int hrsts =prefs.getInt('hrsts')??0;
+  int adminsts =prefs.getInt('adminsts')??0;
+  int dataaccess = prefs.getInt('dataaccess')??0;
   try {
-       FormData formData = new FormData.from({
-       "employeeid": empid,
-       "organization": organization,
-    });
-    //Response response = await dio.post("https://sandbox.ubiattendance.com/index .php/services/getInfo", data: formData);
-    Response response = await dio.post(
-        path1+"getSalarysummary?all=all",
-        data: formData);
-   print('--------------------salarySummary Called-----------------------');
-   print(response.data.toString());
+    /*FormData formData = new FormData.from({
+      "employeeid": empid,
+      "organization": organization,
+    });*/
+    print(path+"getSalarysummary?all=all&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+    Response response = await dio.post(path+"getSalarysummary?all=all&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+
     List responseJson = json.decode(response.data.toString());
-    print(json.decode(response.data.toString()));
 
     List<Salary> userList = createsalaryList(responseJson);
 
     return userList;
 
   }catch(e){
-    //print(e.toString());
+    print(e.toString());
   }
 }
 
@@ -81,20 +85,10 @@ List<Salary> createsalaryList(List data){
     String SalaryMonth=data[i]["SalaryMonth"];
     String EmployeeCTC=data[i]["EmployeeCTC"];
     String Currency=data[i]["currency"];
-  // EmployeeCTC=EmployeeCTC.abs();
 
-
-    //print(id);
     Salary salary = new Salary(id:id,name:name,paid_days:PaidDays,month:SalaryMonth,EmployeeCTC:EmployeeCTC,Currency:Currency);
 
     list.add(salary);
-
   }
-
   return list;
 }
-
-
-
-
-

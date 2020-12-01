@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
@@ -13,17 +12,14 @@ import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/home.dart';
 import 'package:ubihrm/model/timeinout.dart';
+import 'package:ubihrm/register_page.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
-import 'package:ubihrm/services/attandance_gethome.dart';
-import 'package:ubihrm/services/attandance_newservices.dart';
 import 'package:ubihrm/services/attandance_saveimage.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../drawer.dart';
 import '../profile.dart';
-import 'askregister.dart';
 import 'flexi_list.dart';
 
 // This app is a stateful, it tracks the user's current choice.
@@ -171,7 +167,7 @@ class _Flexitime extends State<Flexitime> {
     orgdir = prefs.getString('orgdir') ?? '';
     desinationId = prefs.getString('desinationId') ?? '';
     response = prefs.getInt('response') ?? 0;
-   /* flexitimein= await checkTimeinflexi();
+    /* flexitimein= await checkTimeinflexi();
     print(flexitimein);
     print("---");
     setState(() {
@@ -190,59 +186,59 @@ class _Flexitime extends State<Flexitime> {
       });
     });
 
-  //  if (response == 1) {
-      Loc lock = new Loc();
-      location_addr = await lock.initPlatformState();
-      Home ho = new Home();
-      act = await ho.checkTimeIn(empid, orgdir);
-      ho.managePermission(empid, orgdir, desinationId);
-      // //print(act);
-      ////print("this is-----> "+act);
-      ////print("this is main "+location_addr);
-      setState(() {
-        Is_Delete = prefs.getInt('Is_Delete') ?? 0;
-        newpwd = prefs.getString('newpwd') ?? "";
-        userpwd = prefs.getString('usrpwd') ?? "";
-        print("New pwd"+newpwd+"  User ped"+userpwd);
-        location_addr1 = location_addr;
-        admin_sts = prefs.getString('sstatus').toString() ?? '0';
-        mail_varified = prefs.getString('mail_varified').toString() ?? '0';
-        alertdialogcount = globalalertcount;
-        response = prefs.getInt('response') ?? 0;
-        fname = prefs.getString('fname') ?? '';
-        lname = prefs.getString('lname') ?? '';
-        empid = prefs.getString('empid') ?? '';
-        email = prefs.getString('email') ?? '';
-        status = prefs.getString('status') ?? '';
-        orgid = prefs.getString('orgdir') ?? '';
-        orgdir = prefs.getString('orgdir') ?? '';
-        org_name = prefs.getString('org_name') ?? '';
-        desination = prefs.getString('desination') ?? '';
-        profile = prefs.getString('profile') ?? '';
-        profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
-        // //print("1-"+profile);
-        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __){
-          if (mounted) {
-            setState(() {
-              _checkLoaded = false;
-            });
-          }
-        }));
-        showtabbar=false;
-        // //print("2-"+_checkLoaded.toString());
-        latit = prefs.getString('latit') ?? '';
-        longi = prefs.getString('longi') ?? '';
-        aid = prefs.getString('aid') ?? "";
-        shiftId = prefs.getString('shiftId') ?? "";
-        ////print("this is set state "+location_addr1);
-        act1 = act;
-        // //print(act1);
-        streamlocationaddr = globalstreamlocationaddr;
+    //  if (response == 1) {
+    Loc lock = new Loc();
+    location_addr = await lock.initPlatformState();
+    Home ho = new Home();
+    act = await ho.checkTimeIn(empid, orgdir);
+    ho.managePermission(empid, orgdir, desinationId);
+    // //print(act);
+    ////print("this is-----> "+act);
+    ////print("this is main "+location_addr);
+    setState(() {
+      Is_Delete = prefs.getInt('Is_Delete') ?? 0;
+      newpwd = prefs.getString('newpwd') ?? "";
+      userpwd = prefs.getString('usrpwd') ?? "";
+      print("New pwd"+newpwd+"  User ped"+userpwd);
+      location_addr1 = location_addr;
+      admin_sts = prefs.getString('sstatus').toString() ?? '0';
+      mail_varified = prefs.getString('mail_varified').toString() ?? '0';
+      alertdialogcount = globalalertcount;
+      response = prefs.getInt('response') ?? 0;
+      fname = prefs.getString('fname') ?? '';
+      lname = prefs.getString('lname') ?? '';
+      empid = prefs.getString('empid') ?? '';
+      email = prefs.getString('email') ?? '';
+      status = prefs.getString('status') ?? '';
+      orgid = prefs.getString('orgdir') ?? '';
+      orgdir = prefs.getString('orgdir') ?? '';
+      org_name = prefs.getString('org_name') ?? '';
+      desination = prefs.getString('desination') ?? '';
+      profile = prefs.getString('profile') ?? '';
+      profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
+      // //print("1-"+profile);
+      profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __){
+        if (mounted) {
+          setState(() {
+            _checkLoaded = false;
+          });
+        }
+      }));
+      showtabbar=false;
+      // //print("2-"+_checkLoaded.toString());
+      latit = prefs.getString('latit') ?? '';
+      longi = prefs.getString('longi') ?? '';
+      aid = prefs.getString('aid') ?? "";
+      shiftId = prefs.getString('shiftId') ?? "";
+      ////print("this is set state "+location_addr1);
+      act1 = act;
+      // //print(act1);
+      streamlocationaddr = globalstreamlocationaddr;
 
-      });
+    });
 
 
-   //// }
+    //// }
   }
 
   @override
@@ -281,19 +277,19 @@ class _Flexitime extends State<Flexitime> {
           endDrawer: new AppDrawer(),
           appBar: new FlexiAppHeader(profileimage,showtabbar,orgName),
 
-           /*
+          /*
           persistentFooterButtons: <Widget>[
             quickLinkList1(),
            ],*/
 
           bottomNavigationBar:new HomeNavigation(),
 
-        //  endDrawer: new AppDrawer(),
+          //  endDrawer: new AppDrawer(),
           body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
         ));
   }
 
-    checkalreadylogin() {
+  checkalreadylogin() {
     ////print("---->"+response.toString());
     if (response == 1) {
       return new IndexedStack(
@@ -308,7 +304,7 @@ class _Flexitime extends State<Flexitime> {
     } else {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => AskRegisterationPage()),
+        MaterialPageRoute(builder: (context) => Register()),
             (Route<dynamic> route) => false,
       );
     }
@@ -345,7 +341,7 @@ class _Flexitime extends State<Flexitime> {
                           fontSize: 15.0,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.right,
+                      textAlign: TextAlign.right,
                     ),
                     Text(
                       "If location not being fetched automatically?",
@@ -397,10 +393,12 @@ class _Flexitime extends State<Flexitime> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            ]),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+            CircularProgressIndicator()
+          ]
+        ),
       ),
     );
   }
@@ -484,26 +482,26 @@ class _Flexitime extends State<Flexitime> {
                 color: Colors.white,
               ),
               child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 5.0),
-                //SizedBox(height: MediaQuery.of(context).size.height * .01),
-                Text("Flexi Attendance", style: new TextStyle(fontSize: 22.0,color: appStartColor())),
-                //new Divider(color: Colors.black54,height: 1.5,),
-                SizedBox(height: MediaQuery.of(context).size.height * .02),
-                new GestureDetector(
-                onTap: () {
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 5.0),
+                  //SizedBox(height: MediaQuery.of(context).size.height * .01),
+                  Text("Flexi Attendance", style: new TextStyle(fontSize: 22.0,color: appStartColor())),
+                  //new Divider(color: Colors.black54,height: 1.5,),
+                  SizedBox(height: MediaQuery.of(context).size.height * .02),
+                  new GestureDetector(
+                    onTap: () {
                       // profile navigation
                       /* Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));*/
-                 },
-                  child: new Stack(children: <Widget>[
-                  Container(
-                         //foregroundDecoration: BoxDecoration(color:Colors.yellow ),
+                    },
+                    child: new Stack(children: <Widget>[
+                      Container(
+                        //foregroundDecoration: BoxDecoration(color:Colors.yellow ),
                           width: MediaQuery.of(context).size.height * .18,
                           height: MediaQuery.of(context).size.height * .18,
                           decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                           image: new DecorationImage(
+                              shape: BoxShape.circle,
+                              image: new DecorationImage(
                                 fit: BoxFit.fill,
                                 image:_checkLoaded ? AssetImage('assets/avatar.png') : profileimage,
                                 //image: AssetImage('assets/avatar.png')
@@ -535,7 +533,7 @@ class _Flexitime extends State<Flexitime> {
 
                   SizedBox(height: MediaQuery.of(context).size.height * .01),
                   Text("Hi " + globalpersnalinfomap['FirstName'], style: new TextStyle(fontSize: 16.0)),
-                 // SizedBox(height: 35.0),
+                  // SizedBox(height: 35.0),
                   //SizedBox(height: MediaQuery.of(context).size.height * .01),
                   // SizedBox(height: MediaQuery.of(context).size.height*.01),
                   (act1 == '') ? loader() : getMarkAttendanceWidgit(),
@@ -606,9 +604,9 @@ class _Flexitime extends State<Flexitime> {
                             decoration: TextDecoration.underline),
                       ),
                       onTap: () {
-                       startTimer();
-                       sl.startStreaming(5);
-                       Navigator.push(
+                        startTimer();
+                        sl.startStreaming(5);
+                        Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Flexitime()),
                         );
@@ -622,30 +620,30 @@ class _Flexitime extends State<Flexitime> {
 
         SizedBox(height:MediaQuery.of(context).size.height *0.05,),
 
-    Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      //SizedBox(width: 30.0,),
-        new InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => FlexiList()),
-            );
-          },
-          child: new Text(
-            "Check Flexi Log",
-            style: new TextStyle(
-              // color: appStartColor(),
-                color: Colors.orange[800],
-                decoration: TextDecoration.underline,
-                fontSize: 17.0,
-                fontWeight: FontWeight.bold
-            ),
-          ),
-        ),
-       Text(" "),
-     ]),
+        Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              //SizedBox(width: 30.0,),
+              new InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FlexiList()),
+                  );
+                },
+                child: new Text(
+                  "Check Flexi Log",
+                  style: new TextStyle(
+                    // color: appStartColor(),
+                      color: Colors.orange[800],
+                      decoration: TextDecoration.underline,
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+              ),
+              Text(" "),
+            ]),
       ]);
 
     } else {
@@ -665,7 +663,7 @@ class _Flexitime extends State<Flexitime> {
     return Container(width: 0.0, height: 0.0);
   }
 
-   /*
+  /*
   Widget getBulkAttnWid() {
     List <Widget> widList = List<Widget>();
      widList.add(Container(
@@ -708,11 +706,7 @@ class _Flexitime extends State<Flexitime> {
           style: new TextStyle(fontSize: 22.0, color: Colors.white)),
       color: Colors.orange[800],
       onPressed: () {
-       // if(_clientname.text=='') {
-       //   showInSnackBar('Please insert client name first');
-        //  return false;
-       // }else
-          saveFlexiImage();
+        saveFlexiImage();
       },
     );
   }
@@ -735,24 +729,8 @@ class _Flexitime extends State<Flexitime> {
     setState(() {
       act1 = "";
     });
-    print('****************************>>');
-    print(streamlocationaddr.toString());
-
-
-    // Navigator.of(context, rootNavigator: true).pop();
     issave = await saveImage.saveFlexiOut(empid,streamlocationaddr.toString(),fid.toString(),lat,long,orgid);
-
     if(issave){
-      print(issave);
-      print("444");
-    /*  checkTimeinflexi().then((EmpList) {
-        setState(() {
-          flexiidsts = EmpList;
-          fid = flexiidsts[0].fid;
-          flexitimein = flexiidsts[0].sts;
-
-        });
-      });*/
       showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Attendance punched successfully!"),
@@ -794,40 +772,20 @@ class _Flexitime extends State<Flexitime> {
   }
 
   saveFlexiImage() async {
-    print('------------*11');
     sl.startStreaming(5);
-   // client = _clientname.text;
+
     client ="";
-    MarkVisit mk = new MarkVisit(
-        empid,client, streamlocationaddr, orgdir, lat, long);
-    /* mk1 = mk;*/
+    MarkVisit mk = new MarkVisit(empid,client, streamlocationaddr, orgdir, lat, long);
 
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-      /* Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CameraExampleHome()),
-      );*/
       SaveImage saveImage = new SaveImage();
       bool issave = false;
       setState(() {
         act1 = "";
       });
       issave = await saveImage.saveFlexi(mk);
-      ////print(issave);
       if (issave) {
-       /* checkTimeinflexi().then((EmpList) {
-          setState(() {
-            flexiidsts = EmpList;
-            fid = flexiidsts[0].fid;
-            flexitimein = flexiidsts[0].sts;
-
-            print("id and sts1");
-            print(fid);
-            print(flexitimein);
-
-          });
-        });*/
         showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Attendance punched successfully!"),
@@ -838,15 +796,14 @@ class _Flexitime extends State<Flexitime> {
           context,
           MaterialPageRoute(builder: (context) => FlexiList()),
         );
-
         setState(() {
           act1 = act;
         });
       } else {
         showDialog(context: context, child:
         new AlertDialog(
-          //title: new Text("Warning!"),
-          content: new Text("Selfie not captured, please punch again!"),
+          //content: new Text("Selfie not captured, please punch again!"),
+          content: new Text("Attendance was not captured. Please punch again!"),
         )
         );
         setState(() {
@@ -860,43 +817,7 @@ class _Flexitime extends State<Flexitime> {
       )
       );
     }
-
-
-
-
-
-
-    /*SaveImage saveImage = new SaveImage();
-    bool issave = false;
-    setState(() {
-      act1 = "";
-    });
-    issave = await saveImage.saveTimeInOut(mk);
-    ////print(issave);
-    if (issave) {
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MyApp()),
-      );
-      setState(() {
-        act1 = act;
-      });
-    } else {
-      setState(() {
-        act1 = act;
-      });
-    }*/
   }
-
-/*  saveImage() async {
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CameraApp()),
-      );
-
-  }*/
 
   resendVarification() async{
     NewServices ns= new NewServices();
@@ -915,7 +836,7 @@ class _Flexitime extends State<Flexitime> {
   }
 
 ////////////////////////////////////////////////////////////
- /* Widget getClients_DD() {
+/* Widget getClients_DD() {
 
     return Center(
       child: Form(

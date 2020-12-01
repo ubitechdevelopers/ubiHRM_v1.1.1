@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "909484936842",
+    "firebase_url": "https://ubihrmandroid.firebaseio.com",
+    "project_id": "ubihrmandroid",
+    "storage_bucket": "ubihrmandroid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909484936842:android:17ceb251f9e3c51c",
+        "android_client_info": {
+          "package_name": "com.ubihrm.ubihrm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909484936842-i1tin8fs1fn0uc5vtmv39juuem0gojnf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnjtSOW2Z9YwMYvHeYsIGc8I1b2povidc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

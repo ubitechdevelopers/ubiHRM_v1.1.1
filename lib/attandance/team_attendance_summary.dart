@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:calendar_strip/calendar_strip.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -9,9 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_services.dart';
-import 'package:horizontal_calendar_widget/date_helper.dart';
-import 'package:horizontal_calendar_widget/date_widget.dart';
-import 'package:horizontal_calendar_widget/horizontal_calendar.dart';
 import './image_view.dart';
 import '../appbar.dart';
 import '../drawer.dart';
@@ -53,11 +49,16 @@ class _MyTeamAtt extends State<MyTeamAtt> {
   //DateTime selectedDate;
   DateTime date;
   //List<DateTime> markedDates;
-
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
+  String empname = "";
   bool _checkLoaded = true;
+
   @override
   void initState() {
     super.initState();
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     initPlatformState();
     getOrgName();
     startDate = DateTime.now().subtract(Duration(days: 30));
@@ -74,8 +75,6 @@ class _MyTeamAtt extends State<MyTeamAtt> {
     print("selectedDate");
     print(selectedDate);*/
     date = startDate1;
-    firstDate = toDateMonthYear(DateTime.now());
-    lastDate = toDateMonthYear(DateTime.now().subtract(Duration(days: 30)));
     /*markedDates = [
       DateTime.now().subtract(Duration(days: 1)),
       DateTime.now().subtract(Duration(days: 2)),
@@ -228,198 +227,194 @@ class _MyTeamAtt extends State<MyTeamAtt> {
 
   getWidgets(context){
     return Container(
-      margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-      padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-      // width: MediaQuery.of(context).size.width*0.9,
-      decoration: new ShapeDecoration(
-        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
-        color: Colors.white,
-      ),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget> [
+        margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+        padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+        // width: MediaQuery.of(context).size.width*0.9,
+        decoration: new ShapeDecoration(
+          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+          color: Colors.white,
+        ),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget> [
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      flex:48,
+                      child:InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MyApp()),
+                          );
+                        },
+                        child:Column(
+                            children: <Widget>[
+                              // width: double.infinity,
+                              //height: MediaQuery.of(context).size.height * .07,
+                              SizedBox(height:MediaQuery.of(context).size.width*.02),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                        Icons.person,
+                                        color: Colors.orange[800],
+                                        size: 22.0 ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  flex:48,
-                  child:InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyApp()),
-                      );
-                    },
-                    child:Column(
-                        children: <Widget>[
-                          // width: double.infinity,
-                          //height: MediaQuery.of(context).size.height * .07,
-                          SizedBox(height:MediaQuery.of(context).size.width*.02),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                    Icons.person,
-                                    color: Colors.orange[800],
-                                    size: 22.0 ),
-
-                                GestureDetector(
-                                  child: Text(
-                                      'Self',
-                                      style: TextStyle(fontSize: 18,color: Colors.orange[800],)
-                                  ),
-                                  // color: Colors.teal[50],
-                                  /* splashColor: Colors.white,
+                                    GestureDetector(
+                                      child: Text(
+                                          'Self',
+                                          style: TextStyle(fontSize: 18,color: Colors.orange[800],)
+                                      ),
+                                      // color: Colors.teal[50],
+                                      /* splashColor: Colors.white,
                                     shape: new RoundedRectangleBorder(
                                       borderRadius: new BorderRadius.circular(0.0))*/
-                                ),
-                              ]
-                          ),
-                          SizedBox(height:MediaQuery.of(context).size.width*.03),
-                        ]
+                                    ),
+                                  ]
+                              ),
+                              SizedBox(height:MediaQuery.of(context).size.width*.03),
+                            ]
+                        ),
+                      ),
                     ),
-                  ),
-                ),
 
-                Expanded(
-                  flex:48,
-                  child: Column(
-                    // width: double.infinity,
-                    children: <Widget>[
-                      SizedBox(height:MediaQuery.of(context).size.width*.02),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                              Icons.group,
-                              color: Colors.orange[800],
-                              size: 22.0 ),
-                          GestureDetector(
-                            onTap: () {
-                              /* Navigator.push(
+                    Expanded(
+                      flex:48,
+                      child: Column(
+                        // width: double.infinity,
+                          children: <Widget>[
+                            SizedBox(height:MediaQuery.of(context).size.width*.02),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                      Icons.group,
+                                      color: Colors.orange[800],
+                                      size: 22.0 ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      /* Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => MyTeamAtt()),
                               );*/
-                              false;
-                            },
-                            child: Text('Team', style: TextStyle(fontSize: 18,color: Colors.orange[800],fontWeight:FontWeight.bold)
+                                      false;
+                                    },
+                                    child: Text('Team', style: TextStyle(fontSize: 18,color: Colors.orange[800],fontWeight:FontWeight.bold)
+                                    ),
+                                  ),
+                                ]),
+                            SizedBox(height:MediaQuery.of(context).size.width*.03),
+                            Divider(
+                              color: Colors.orange[800],
+                              height: 0.4,
                             ),
-                          ),
-                        ]),
-                      SizedBox(height:MediaQuery.of(context).size.width*.03),
-                      Divider(
-                        color: Colors.orange[800],
-                        height: 0.4,
+                            Divider(
+                              color: Colors.orange[800],
+                              height: 0.4,
+                            ),
+                            Divider(
+                              color: Colors.orange[800],
+                              height: 0.4,
+                            ),
+                          ]
                       ),
-                      Divider(
-                        color: Colors.orange[800],
-                        height: 0.4,
+                    ),
+                  ]
+              ),
+              /// My log start here
+
+              Container(
+                //padding: EdgeInsets.only(top:3.0,),
+                  height: MediaQuery.of(context).size.height*0.11,
+                  child: CalendarStrip(
+                    startDate: startDate1,
+                    endDate: endDate1,
+                    onDateSelected: onSelect,
+                    dateTileBuilder: dateTileBuilder,
+                    iconColor: Colors.black87,
+                    monthNameWidget: _monthNameWidget,
+                    //markedDates: markedDates,
+                    containerDecoration: BoxDecoration(color: appStartColor().withOpacity(0.1)),
+                  )
+              ),
+
+
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: TextFormField(
+                    controller: _searchController,
+                    focusNode: searchFocusNode,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderRadius:  new BorderRadius.circular(10.0),
                       ),
-                      Divider(
-                        color: Colors.orange[800],
-                        height: 0.4,
-                      ),
-                    ]
+                      prefixIcon: Icon(Icons.search, size: 30,),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      hintText: 'Search Employee',
+                      //labelText: 'Search Employee',
+                      suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            /*Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => EmployeeList()),
+                            );*/
+                          }
+                      ):null,
+                      //focusColor: Colors.white,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        empname = value;
+                        res = true;
+                      });
+                    },
                   ),
                 ),
-              ]
-            ),
-            /// My log start here
-
-            Container(
-              padding: EdgeInsets.only(top:5.0,),
-              height: MediaQuery.of(context).size.height*.15,
-              child: CalendarStrip(
-                startDate: startDate1,
-                endDate: endDate1,
-                onDateSelected: onSelect,
-                dateTileBuilder: dateTileBuilder,
-                iconColor: Colors.black87,
-                monthNameWidget: _monthNameWidget,
-                //markedDates: markedDates,
-                containerDecoration: BoxDecoration(color: appStartColor().withOpacity(0.1)),
-              )
-            ),
-
-            Container(
-               child: HorizontalCalendar(
-                 height: 80,
-                 padding: EdgeInsets.all(8),
-                 firstDate: firstDate,
-                 lastDate: lastDate,
-                 dateFormat: dateFormat,
-                 weekDayFormat: weekDayFormat,
-                 monthFormat: monthFormat,
-                 defaultDecoration: BoxDecoration(
-                   color: defaultDecorationColor,
-                   shape: defaultDecorationShape,
-                   borderRadius: defaultDecorationShape == BoxShape.rectangle &&
-                       isCircularRadiusDefault
-                       ? BorderRadius.circular(8)
-                       : null,
-                 ),
-                 selectedDecoration: BoxDecoration(
-                   color: selectedDecorationColor,
-                   shape: selectedDecorationShape,
-                   borderRadius: selectedDecorationShape == BoxShape.rectangle &&
-                       isCircularRadiusSelected
-                       ? BorderRadius.circular(8)
-                       : null,
-                 ),
-                 disabledDecoration: BoxDecoration(
-                   color: disabledDecorationColor,
-                   shape: disabledDecorationShape,
-                   borderRadius: disabledDecorationShape == BoxShape.rectangle &&
-                       isCircularRadiusDisabled
-                       ? BorderRadius.circular(8)
-                       : null,
-                 ),
-                 isDateDisabled: (date) => date.weekday == 7,
-                 labelOrder: order.map(toLabelType).toList(),
-                 maxSelectedDateCount: maxSelectedDateCount,
-               ),
-            ),
-
-            Container(
-              padding: EdgeInsets.only(top:5.0,),
-              child:Center(
-                child:Text("Team's Attendance Log",
-                  style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
               ),
-            ),
 
-            Divider(),
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 10.0,),
-                SizedBox(width: MediaQuery.of(context).size.width*0.02),
-                Container(
-                  width: MediaQuery.of(context).size.width*0.40,
-                  child:Text('Name',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
+              Container(
+                padding: EdgeInsets.only(top:5.0,),
+                child:Center(
+                  child:Text("Team's Attendance Log",
+                    style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                 ),
-                SizedBox(height: 10.0,),
-                Container(
-                  width: MediaQuery.of(context).size.width*0.22,
-                  child:Text('Time In',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                ),
-                SizedBox(height: 10.0,),
-                Container(
-                  width: MediaQuery.of(context).size.width*0.23,
-                  child:Text('Time Out',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                ),
-              ],
-            ),
-            Divider(),
+              ),
+              Divider(),
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10.0,),
+                  SizedBox(width: MediaQuery.of(context).size.width*0.02),
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.40,
+                    child:Text('Name',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                  ),
+                  SizedBox(height: 10.0,),
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.22,
+                    child:Text('Time In',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                  ),
+                  SizedBox(height: 10.0,),
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.23,
+                    child:Text('Time Out',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                  ),
+                ],
+              ),
+              Divider(),
+              new Expanded(
+                  child: res == true ? mainbody() : Center()
+              ),
 
-            new Expanded(
-                child: res == true ? mainbody() : Center()
-            ),
-
-            /*Expanded(
+              /*Expanded(
               child: Container(
                 height: MediaQuery.of(context).size.height*.55,
                 width: MediaQuery.of(context).size.width*.99,
@@ -482,16 +477,18 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                 //////////////////////////////////////////////////////////////////////---------------------------------
               ),
             )*/
-          ]
-      ));
+            ]
+        ));
   }
 
   mainbody() {
     return Container(
         child: FutureBuilder<List<User>>(
-          future: getTeamSummary(date),
+          future: getTeamSummary(date,empname),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              print("snapshot.data.length");
+              print(snapshot.data.length);
               if(snapshot.data.length>0) {
                 return new ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -750,21 +747,6 @@ class _MyTeamAtt extends State<MyTeamAtt> {
     );
   }
 
-  LabelType toLabelType(String label) {
-    LabelType type;
-    switch (label) {
-      case labelMonth:
-        type = LabelType.month;
-        break;
-      case labelDate:
-        type = LabelType.date;
-        break;
-      case labelWeekDay:
-        type = LabelType.weekday;
-        break;
-    }
-    return type;
-  }
 }
 
 class User {
@@ -796,46 +778,78 @@ String dateFormatter(String date_) {
 }
 
 
-Future<List<User>> getTeamSummary(date) async {
+Future<List<User>> getTeamSummary(date,empname) async {
   final prefs = await SharedPreferences.getInstance();
-  String path_ubiattendance1 = prefs.getString('path_ubiattendance');
+  //String path_ubiattendance1 = prefs.getString('path_ubiattendance');
   String empid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
-  final response = await http.get(path_ubiattendance1+'getTeamHistory?uid=$empid&refno=$orgdir&date=$date');
-  print(path_ubiattendance1+'getTeamHistory?uid=$empid&refno=$orgdir&date=$date');
-  print(response.body);
+  int profiletype = prefs.getInt('profiletype')??0;
+  int hrsts =prefs.getInt('hrsts')??0;
+  int adminsts =prefs.getInt('adminsts')??0;
+  int dataaccess = prefs.getInt('dataaccess')??0;
+  print(path_ubiattendance+'getTeamHistory?uid=$empid&refno=$orgdir&date=$date&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final response = await http.get(path_ubiattendance+'getTeamHistory?uid=$empid&refno=$orgdir&date=$date&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   List responseJson = json.decode(response.body.toString());
-  List<User> userList = createUserList(responseJson);
+  List<User> userList = createUserList(responseJson,empname);
   return userList;
 }
 
-List<User> createUserList(List data){
+List<User> createUserList(List data, String empname){
   List<User> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String title = Formatdate2(data[i]["AttendanceDate"]);
-    String TimeOut=data[i]["TimeOut"]=="00:00:00"?'-':data[i]["TimeOut"].toString().substring(0,5);
-    String TimeIn=data[i]["TimeIn"]=="00:00:00"?'-':data[i]["TimeIn"].toString().substring(0,5);
-    String thours = '';//data[i]["thours"]=="00:00:00"?'-':data[i]["thours"].toString().substring(0,5);
+  if(empname.isNotEmpty)
+    for (int i = 0; i < data.length; i++) {
+      String title = Formatdate2(data[i]["AttendanceDate"]);
+      String TimeOut=data[i]["TimeOut"]=="00:00:00"?'-':data[i]["TimeOut"].toString().substring(0,5);
+      String TimeIn=data[i]["TimeIn"]=="00:00:00"?'-':data[i]["TimeIn"].toString().substring(0,5);
+      String thours = '';//data[i]["thours"]=="00:00:00"?'-':data[i]["thours"].toString().substring(0,5);
 
-    String bhour=data[i]["bhour"]==null?'':'Time Off: '+data[i]["bhour"].substring(0,5);
-    String EntryImage=data[i]["EntryImage"]!=''?data[i]["EntryImage"]:'http://ubiattendance.ubihrm.com/assets/img/avatar.png';
-    String ExitImage=data[i]["ExitImage"]!=''?data[i]["ExitImage"]:'http://ubiattendance.ubihrm.com/assets/img/avatar.png';
-    String checkInLoc=data[i]["checkInLoc"];
-    String CheckOutLoc=data[i]["CheckOutLoc"];
+      String bhour=data[i]["bhour"]==null?'':'Time Off: '+data[i]["bhour"].substring(0,5);
+      String EntryImage=data[i]["EntryImage"]!=''?data[i]["EntryImage"]:'http://ubiattendance.ubihrm.com/assets/img/avatar.png';
+      String ExitImage=data[i]["ExitImage"]!=''?data[i]["ExitImage"]:'http://ubiattendance.ubihrm.com/assets/img/avatar.png';
+      String checkInLoc=data[i]["checkInLoc"];
+      String CheckOutLoc=data[i]["CheckOutLoc"];
 
-    String Latit_in=data[i]["latit_in"];
-    String Longi_in=data[i]["longi_in"];
-    String Latit_out=data[i]["latit_out"];
-    String Longi_out=data[i]["longi_out"];
-    String Att_Sts=data[i]["AttendanceStatus"];
-    String name=data[i]["EmpName"];
+      String Latit_in=data[i]["latit_in"];
+      String Longi_in=data[i]["longi_in"];
+      String Latit_out=data[i]["latit_out"];
+      String Longi_out=data[i]["longi_out"];
+      String Att_Sts=data[i]["AttendanceStatus"];
+      String name=data[i]["EmpName"];
 
-    int id = 0;
-    User user = new User(EmpName:name,
-        AttendanceDate: title,thours: thours,id: id,TimeOut:TimeOut,TimeIn:TimeIn,bhour:bhour,EntryImage:EntryImage,
-        checkInLoc:checkInLoc,ExitImage:ExitImage,CheckOutLoc:CheckOutLoc,latit_in: Latit_in,longi_in: Longi_in,
-        latit_out: Latit_out,longi_out: Longi_out, AttendanceStatus: Att_Sts);
-    list.add(user);
-  }
+      int id = 0;
+      User user = new User(EmpName:name,
+          AttendanceDate: title,thours: thours,id: id,TimeOut:TimeOut,TimeIn:TimeIn,bhour:bhour,EntryImage:EntryImage,
+          checkInLoc:checkInLoc,ExitImage:ExitImage,CheckOutLoc:CheckOutLoc,latit_in: Latit_in,longi_in: Longi_in,
+          latit_out: Latit_out,longi_out: Longi_out, AttendanceStatus: Att_Sts);
+      if(name.toLowerCase().contains(empname.toLowerCase()))
+        list.add(user);
+    }
+  else
+    for (int i = 0; i < data.length; i++) {
+      String title = Formatdate2(data[i]["AttendanceDate"]);
+      String TimeOut=data[i]["TimeOut"]=="00:00:00"?'-':data[i]["TimeOut"].toString().substring(0,5);
+      String TimeIn=data[i]["TimeIn"]=="00:00:00"?'-':data[i]["TimeIn"].toString().substring(0,5);
+      String thours = '';//data[i]["thours"]=="00:00:00"?'-':data[i]["thours"].toString().substring(0,5);
+
+      String bhour=data[i]["bhour"]==null?'':'Time Off: '+data[i]["bhour"].substring(0,5);
+      String EntryImage=data[i]["EntryImage"]!=''?data[i]["EntryImage"]:'http://ubiattendance.ubihrm.com/assets/img/avatar.png';
+      String ExitImage=data[i]["ExitImage"]!=''?data[i]["ExitImage"]:'http://ubiattendance.ubihrm.com/assets/img/avatar.png';
+      String checkInLoc=data[i]["checkInLoc"];
+      String CheckOutLoc=data[i]["CheckOutLoc"];
+
+      String Latit_in=data[i]["latit_in"];
+      String Longi_in=data[i]["longi_in"];
+      String Latit_out=data[i]["latit_out"];
+      String Longi_out=data[i]["longi_out"];
+      String Att_Sts=data[i]["AttendanceStatus"];
+      String name=data[i]["EmpName"];
+
+      int id = 0;
+      User user = new User(EmpName:name,
+          AttendanceDate: title,thours: thours,id: id,TimeOut:TimeOut,TimeIn:TimeIn,bhour:bhour,EntryImage:EntryImage,
+          checkInLoc:checkInLoc,ExitImage:ExitImage,CheckOutLoc:CheckOutLoc,latit_in: Latit_in,longi_in: Longi_in,
+          latit_out: Latit_out,longi_out: Longi_out, AttendanceStatus: Att_Sts);
+      list.add(user);
+    }
   return list;
 }

@@ -35,31 +35,25 @@ circleIconBackgroundColor(){
   return Colors.green[50];
 }
 
-/*String path="http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/";
-//String path_ubiattendance="http://192.168.0.200/ubiattendance/index.php/Att_services/";
-String path_ubiattendance="http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/";
-String path_hrm_india="http://192.168.0.200/UBIHRM/HRMINDIA/services/";*/
+/*String path="http://192.168.0.200/UBIHRM/GLOBAL/ubiapp/";
+String path_ubiattendance="http://192.168.0.200/UBIHRM/GLOBAL/HRMAPP/index.php/Att_services/";
+String path_hrm_india="http://192.168.0.200/UBIHRM/GLOBAL/services/";*/
 
-String path="https://ubitech.ubihrm.com/ubiapp/";
+String path="http://ubihrmglobal.zentylpro.com/ubiapp1/";
+String path_ubiattendance="http://ubihrmglobal.zentylpro.com/HRMAPP/index.php/Att_services1/";
+String path_hrm_india="http://ubihrmglobal.zentylpro.com/services/";
+
+/*String path="https://ubitech.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/";
-String path_hrm_india="https://ubitech.ubihrm.com/services/";
+String path_hrm_india="https://ubitech.ubihrm.com/services/";*/
 
 /*String path="https://sandbox.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://sandbox.ubihrm.com/HRMAPP/index.php/Att_services/";
 String path_hrm_india="https://sandbox.ubihrm.com/services/";*/
 
-
-////payeroll domain url
-
 /*String path="https://ubihrm.ubipayroll.com/ubiapp/";
 String path_ubiattendance="https://ubihrm.ubipayroll.com/HRMAPP/index.php/Att_services/";
 String path_hrm_india="https://ubihrm.ubipayroll.com/services/";*/
-
-/*
-String path = "";
-String path_ubiattendance = "";
-String path_hrm_india = "";
-*/
 
 int home_load_num = 0;
 List<Permission> globalpermissionlist =new List();
@@ -68,8 +62,8 @@ Map globalcompanyinfomap;
 Map globalpersnalinfomap;
 Map globalcontactusinfomap;
 Map globalprofileinfomap;
+Map globalogrperminfomap;
 Map globalyearfiscal;
-
 
 //////Copied from  attendance global///////
 List<LocationData> list = new List();
@@ -80,8 +74,8 @@ int department_permission = 0, designation_permission = 0, leave_permission = 0,
 int globalalertcount = 0;
 MarkTime mk1;
 int visitImage = 1;
-//////Copied from  attendance global///////
 
+//////Copied from  attendance global///////
 var perEmployeeLeave;
 var perLeaveApproval;
 var perTimeoffApproval;
@@ -102,8 +96,12 @@ var overtime;
 var undertime;
 var perSalary;
 var perPayroll;
+var perPayPeriod;
 var perSalaryExpense;
 var perPayrollExpense;
 var perFlexi;
 var deprtcurrency;
+String appVersion='1.0.8';
+String latestVersionReleaseDate='01-Dec-2020';
+String appVersionReleaseDate='02-Feb-2020';
 

@@ -2,7 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_share/simple_share.dart';
+//import 'package:simple_share/simple_share.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 
 import '../appbar.dart';
@@ -15,7 +15,7 @@ class LateComers extends StatefulWidget {
   _LateComers createState() => _LateComers();
 }
 TextEditingController today;
-
+TextEditingController late;
 //FocusNode f_dept ;
 class _LateComers extends State<LateComers> {
   final GlobalKey<ScaffoldState> _scaffoldKey=new GlobalKey<ScaffoldState>();
@@ -26,22 +26,29 @@ class _LateComers extends State<LateComers> {
   var profileimage;
   bool showtabbar;
   String orgName="";
+  String empname = "";
   String countL='0';
   bool filests=false;
   Future<List<EmpList>> _listFuture;
 
   var formatter=new DateFormat('dd-MMM-yyyy');
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
+
 
   @override
   void initState() {
     super.initState();
     today=new TextEditingController();
     today.text=formatter.format(DateTime.now());
+    late = new TextEditingController();
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     showtabbar=false;
     profileimage=new NetworkImage(globalcompanyinfomap['ProfilePic']);
     // f_dept = FocusNode();
     getOrgName();
-    _listFuture=getLateEmpDataList(today.text);
+    _listFuture=getLateEmpDataList(today.text, empname);
   }
 
   getOrgName() async {
@@ -123,7 +130,7 @@ class _LateComers extends State<LateComers> {
                                 context: context,
                                 firstDate: DateTime(1900),
                                 initialDate: currentValue ?? DateTime.now(),
-                                lastDate: DateTime(2100));
+                                lastDate: DateTime.now());
                           },
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -140,7 +147,8 @@ class _LateComers extends State<LateComers> {
                             setState(() {
                               if (date != null && date.toString() != '') {
                                 res=true; //showInSnackBar(date.toString());
-                                _listFuture=getLateEmpDataList(today.text);
+                                //_listFuture=getLateEmpDataList(today.text,empname);
+                                getLateEmpDataList(today.text,empname);
                               } else {
                                 res=false;
                                 countL='0';
@@ -155,10 +163,7 @@ class _LateComers extends State<LateComers> {
                         ),
                       ),
                     ),
-                    Divider(
-                      height: 5.0,
-                    ),
-                   /* Padding(
+                    /* Padding(
                       padding: const EdgeInsets.only(left: 4.0),
                       child: (res == false) ?
                       Center()
@@ -296,10 +301,53 @@ class _LateComers extends State<LateComers> {
                     )*/
                   ],
                 ),
-                Divider(
-                  height: 5,
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: _searchController,
+                            focusNode: searchFocusNode,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              border: OutlineInputBorder(
+                                borderRadius:  new BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: Icon(Icons.search, size: 30,),
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              hintText: 'Search Employee',
+                              labelText: 'Search Employee',
+                              suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    /*Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => LateComers()),
+                                    );*/
+                                    /*Navigator.pop(
+                                      context);*/
+                                  }
+                              ):null,
+                              //focusColor: Colors.white,
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                print("value");
+                                print(value);
+                                empname = value;
+                                res = true;
+                                //getLateEmpDataList(today.text, empname);
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 5.0),
                 Container(
                   //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
                   width: MediaQuery
@@ -366,7 +414,7 @@ class _LateComers extends State<LateComers> {
                   height: 5.2,
                 ),
                 new Expanded(
-                  child: res == true ? getEmpDataList(today.text) : Container(
+                  child: res == true ? getEmpDataList(today.text,empname) : Container(
                     height: MediaQuery.of(context).size.height*0.25,
                     child:Center(
                       child: Container(
@@ -389,17 +437,20 @@ class _LateComers extends State<LateComers> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            ]),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+            CircularProgressIndicator()
+          ]
+        ),
       ),
     );
   }
 
-  getEmpDataList(date) {
+  getEmpDataList(date,empname) {
     return new FutureBuilder<List<EmpList>>(
-        future: _listFuture,
+        future: getLateEmpDataList(today.text, empname),
+       // getLateEmpDataList(today.text, empname);
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             countL=snapshot.data.length.toString();
@@ -508,10 +559,10 @@ class _LateComers extends State<LateComers> {
                   color: appStartColor().withOpacity(0.1),
                   padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                   child: Text(
-                    "No Employees found", style: TextStyle(fontSize: 14.0),
+                    "No employees found", style: TextStyle(fontSize: 14.0),
                     textAlign: TextAlign.center,),
                 ),
-                //child: Text("No Employees found."),
+                //child: Text("No employees found."),
               );
             }
           } else if (snapshot.hasError) {
@@ -522,7 +573,7 @@ class _LateComers extends State<LateComers> {
         });
   }
 
-  dialogwidget(msg, filename) {
+  /*dialogwidget(msg, filename) {
     showDialog(
         context: context,
         // ignore: deprecated_member_use
@@ -553,6 +604,6 @@ class _LateComers extends State<LateComers> {
             ),
           ],
         ));
-  }
+  }*/
 
 } /////////mail class close

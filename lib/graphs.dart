@@ -305,7 +305,7 @@ class OrdinalSales {
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         fillColorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault.lighter,
 
-        labelAccessorFn: (OrdinalSales sales, _) => '${sales.name}: ${sales.count.toString()}',
+        labelAccessorFn: (OrdinalSales sales, _) => '${sales.name.toString()}: \$${sales.count.toString()}',
 
       ),
 

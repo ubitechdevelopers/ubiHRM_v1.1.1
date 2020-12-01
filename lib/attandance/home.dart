@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
@@ -11,20 +10,17 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/model/timeinout.dart';
+import 'package:ubihrm/register_page.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
-import 'package:ubihrm/services/attandance_gethome.dart';
-import 'package:ubihrm/services/attandance_newservices.dart';
 import 'package:ubihrm/services/attandance_saveimage.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../drawer.dart';
 import '../global.dart';
 import '../home.dart';
 import '../profile.dart';
-import 'askregister.dart';
 import 'attendance_summary.dart';
-
 
 
 // This app is a stateful, it tracks the user's current choice.
@@ -76,7 +72,7 @@ class _HomePageState extends State<HomePage> {
       profile,
       latit = "",
       longi = "",
-    Otimests = "";
+      Otimests = "";
   String aid = "";
   String shiftId = "";
   List<Widget> widgets;
@@ -103,7 +99,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
- /* @override
+  /* @override
   void dispose() {
     super.dispose();
     timer.cancel();
@@ -165,20 +161,11 @@ class _HomePageState extends State<HomePage> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
-
-    /*await availableCameras();*/
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('empid') ?? '';
     orgdir = prefs.getString('orgdir') ?? '';
-    //   print("employeeid---"+empid);
     desinationId = globalcompanyinfomap['Designation'];
     response = prefs.getInt('response') ?? 0;
-
-    //var timeout=  await getLastTimeout();
-
-    // print(timeout);
-    // print("******");
-    // if (response == 1) {
     Loc lock = new Loc();
     location_addr = await lock.initPlatformState();
     print(location_addr);
@@ -187,69 +174,56 @@ class _HomePageState extends State<HomePage> {
     act = await ho.checkTimeIn(empid, orgdir);
     print(act);
     ho.managePermission(empid, orgdir, desinationId);
-    // //print(act);
-    ////print("this is-----> "+act);
-    ////print("this is main "+location_addr);
     await getCountAproval();
     if(mounted) {
-    setState(() {
-      approval_count = prefs.getInt('approvalcount') ?? 0;
-      Is_Delete = prefs.getInt('Is_Delete') ?? 0;
-      newpwd = prefs.getString('newpwd') ?? "";
-      userpwd = prefs.getString('usrpwd') ?? "";
-      //  print("New pwd"+newpwd+"  User ped"+userpwd);
-      location_addr1 = location_addr;
-      admin_sts = prefs.getString('sstatus').toString() ?? '0';
-      mail_varified = prefs.getString('mail_varified').toString() ?? '0';
-      alertdialogcount = globalalertcount;
-      response = prefs.getInt('response') ?? 0;
-      fname = prefs.getString('fname') ?? '';
-      lname = prefs.getString('lname') ?? '';
-      empid = prefs.getString('empid') ?? '';
-      email = prefs.getString('email') ?? '';
-      status = prefs.getString('status') ?? '';
-      orgid = prefs.getString('orgid') ?? '';
-      orgdir = prefs.getString('orgdir') ?? '';
-      org_name = prefs.getString('org_name') ?? '';
-      desination = prefs.getString('desination') ?? '';
-      Otimests = prefs.getString('Otimests') ?? '';
-      //       profile = prefs.getString('profile') ?? '';
-      //      profileimage = new NetworkImage( profile);
-      profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
-
-      //      print("ABCDEFGHI-"+profile);
-
-      profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
-        if (mounted) {
-          setState(() {
-            _checkLoaded = false;
-          });
-        }
-      }));
-      showtabbar = false;
-      //    print("ABCDEF"+fname);
-      latit = prefs.getString('latit') ?? '';
-      longi = prefs.getString('longi') ?? '';
-      aid = prefs.getString('aid') ?? "";
-      shiftId = prefs.getString('shiftId') ?? "";
-      ////print("this is set state "+location_addr1);
-      act1 = act;
-      //    print("ABC"+act1);
-      streamlocationaddr = globalstreamlocationaddr;
-
-      perPunchLocation = getModulePermission("305", "view");
-    });
-  }
+      setState(() {
+        newpwd = prefs.getString('newpwd') ?? "";
+        userpwd = prefs.getString('usrpwd') ?? "";
+        location_addr1 = location_addr;
+        admin_sts = prefs.getString('sstatus').toString() ?? '0';
+        mail_varified = prefs.getString('mail_varified').toString() ?? '0';
+        alertdialogcount = globalalertcount;
+        response = prefs.getInt('response') ?? 0;
+        fname = prefs.getString('fname') ?? '';
+        lname = prefs.getString('lname') ?? '';
+        empid = prefs.getString('empid') ?? '';
+        email = prefs.getString('email') ?? '';
+        status = prefs.getString('status') ?? '';
+        orgid = prefs.getString('orgid') ?? '';
+        orgdir = prefs.getString('orgdir') ?? '';
+        org_name = prefs.getString('org_name') ?? '';
+        desination = prefs.getString('desination') ?? '';
+        Otimests = prefs.getString('Otimests') ?? '';
+        profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
+        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
+          if (mounted) {
+            setState(() {
+              _checkLoaded = false;
+            });
+          }
+        }));
+        showtabbar = false;
+        latit = prefs.getString('latit') ?? '';
+        longi = prefs.getString('longi') ?? '';
+        aid = prefs.getString('aid') ?? "";
+        shiftId = prefs.getString('shiftId') ?? "";
+        act1 = act;
+        print("ABC"+act1);
+        streamlocationaddr = globalstreamlocationaddr;
+        print("ABC65367uywe"+streamlocationaddr);
+        perPunchLocation = getModulePermission("305", "view");
+      });
+    }
     //}
   }
 
   @override
   Widget build(BuildContext context) {
     (mail_varified=='0' && alertdialogcount==0 && admin_sts=='1')?Future.delayed(Duration.zero, () => _showAlert(context)):"";
- //act1=='1'?_showAlertbeforeTimeOut(context):"";
+    //act1=='1'?_showAlertbeforeTimeOut(context):"";
     //return (response == 0 || userpwd!=newpwd || Is_Delete!=0) ? new AskRegisterationPage//() :
 
-   return getmainhomewidget();
+    return getmainhomewidget();
 
     /* return MaterialApp(
       home: (response==0) ? new AskRegisterationPage() : getmainhomewidget(),
@@ -259,9 +233,9 @@ class _HomePageState extends State<HomePage> {
   void showInSnackBar(String value) {
     final snackBar = SnackBar(
         content: Text(
-      value,
-      textAlign: TextAlign.center,
-    ));
+          value,
+          textAlign: TextAlign.center,
+        ));
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
@@ -286,55 +260,9 @@ class _HomePageState extends State<HomePage> {
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new AttendanceHomeAppHeader(profileimage,showtabbar,orgName),
-
-/*          appBar: GradientAppBar(
-            backgroundColorStart: appStartColor(),
-            backgroundColorEnd: appEndColor(),
-            automaticallyImplyLeading: false,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                GestureDetector(
-                  // When the child is tapped, show a snackbar
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CollapsingTab()),
-                    );
-                  },
-                  child:Container(
-                      width: 40.0,
-                      height: 40.0,
-                      decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            // image: AssetImage('assets/avatar.png'),
-                            image: _checkLoaded ? AssetImage('assets/avatar.png') : profileimage,
-
-                          )
-                      )),),
-                Container(
-                    padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-                )
-              ],
-
-            ),
-          ),*/
           bottomNavigationBar:new HomeNavigation(),
-       // endDrawer: new AppDrawer(),
-        body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
-        //bottomSheet: getQuickLinksWidget(),
-
-
-       /* persistentFooterButtons: <Widget>[
-          quickLinkList1(),
-        ], */  // body: homewidget()
-
-
-      )
-
+          body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
+        )
     );
   }
 
@@ -345,7 +273,7 @@ class _HomePageState extends State<HomePage> {
         index: _currentIndex,
         children: <Widget>[
           underdevelopment(),
-         (streamlocationaddr != '') ? mainbodyWidget() : refreshPageWidgit(),
+          (streamlocationaddr != '') ? mainbodyWidget() : refreshPageWidgit(),
           //(false) ? mainbodyWidget() : refreshPageWidgit(),
           underdevelopment()
         ],
@@ -353,12 +281,12 @@ class _HomePageState extends State<HomePage> {
     } else {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => AskRegisterationPage()),
-        (Route<dynamic> route) => false,
+        MaterialPageRoute(builder: (context) => Register()),
+            (Route<dynamic> route) => false,
       );
     }
 
-   /* if(userpwd!=newpwd){
+    /* if(userpwd!=newpwd){
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => AskRegisterationPage()),
@@ -405,7 +333,7 @@ class _HomePageState extends State<HomePage> {
                       style: new TextStyle(fontSize: 12.0, color: Colors.black),
                       textAlign: TextAlign.left,
                     ),
-                   /* new InkWell(
+                    /* new InkWell(
                       child: new Text(
                         "Fetch Location now",
                         style: new TextStyle(
@@ -444,20 +372,20 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else {
-    return Column(
+      return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-        Text(
-            'Location permission is restricted from app settings, click "Open Settings" to allow permission.',
-            textAlign: TextAlign.center,
-            style: new TextStyle(fontSize: 14.0, color: Colors.red)),
-        RaisedButton(
-          child: Text('Open Settings'),
-          onPressed: () {
-            PermissionHandler().openAppSettings();
-          },
-        ),
-      ]);
+            Text(
+                'Location permission is restricted from app settings, click "Open Settings" to allow permission.',
+                textAlign: TextAlign.center,
+                style: new TextStyle(fontSize: 14.0, color: Colors.red)),
+            RaisedButton(
+              child: Text('Open Settings'),
+              onPressed: () {
+                PermissionHandler().openAppSettings();
+              },
+            ),
+          ]);
 
     }
   }
@@ -466,11 +394,13 @@ class _HomePageState extends State<HomePage> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              //Text("Loading...")
-              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            ]),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            //Text("Loading...")
+            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+            CircularProgressIndicator()
+          ]
+        ),
       ),
     );
   }
@@ -547,9 +477,9 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
 
               decoration: new ShapeDecoration(
-              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
-              color: Colors.white,
-            ),
+                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+                color: Colors.white,
+              ),
               // foregroundDecoration: BoxDecoration(color:Colors.red ),
               height: MediaQuery.of(context).size.height * 0.80,
               child: Column(
@@ -565,7 +495,7 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: new Stack(children: <Widget>[
                       Container(
-                          //   foregroundDecoration: BoxDecoration(color:Colors.yellow ),
+                        //   foregroundDecoration: BoxDecoration(color:Colors.yellow ),
                           width: MediaQuery.of(context).size.height * .18,
                           height: MediaQuery.of(context).size.height * .18,
                           decoration: new BoxDecoration(
@@ -573,9 +503,9 @@ class _HomePageState extends State<HomePage> {
                               image: new DecorationImage(
                                 fit: BoxFit.fill,
                                 image:_checkLoaded ? AssetImage('assets/avatar.png') : profileimage,
-                               //image: AssetImage('assets/avatar.png')
+                                //image: AssetImage('assets/avatar.png')
                               ))),
-                 /*     new Positioned(
+                      /*     new Positioned(
                     left: MediaQuery.of(context).size.width*.14,
                     top: MediaQuery.of(context).size.height*.11,
                     child: new RawMaterialButton(
@@ -601,7 +531,6 @@ class _HomePageState extends State<HomePage> {
                   //SizedBox(height: MediaQuery.of(context).size.height * .001),
                   SizedBox(height: MediaQuery.of(context).size.height*.02),
                   (act1 == '') ? loader() : getMarkAttendanceWidgit(),
-
 
                 ],
               ),
@@ -666,7 +595,7 @@ class _HomePageState extends State<HomePage> {
             child: new Text(
               "Check Attendance Log",
               style: new TextStyle(
-                 // color: appStartColor(),
+                // color: appStartColor(),
                   color: Colors.orange[800],
                   decoration: TextDecoration.underline,
                   fontSize: 17.0,
@@ -709,11 +638,11 @@ class _HomePageState extends State<HomePage> {
         ),
         SizedBox(height: MediaQuery.of(context).size.height * .03),
         Container(
-            //color: Colors.teal.withOpacity(0.1),
+          //color: Colors.teal.withOpacity(0.1),
             color: appStartColor().withOpacity(0.1),
             height: MediaQuery.of(context).size.height * .15,
             child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               FlatButton(
                 child: new Text('You are at: ' + streamlocationaddr,
                     textAlign: TextAlign.center,
@@ -755,7 +684,7 @@ class _HomePageState extends State<HomePage> {
 
         SizedBox(height:MediaQuery.of(context).size.height *0.05,),
 
-    /*new SizedBox(
+        /*new SizedBox(
     width: double.infinity,
       height: MediaQuery.of(context).size.height * .08,
        child: FlatButton(
@@ -777,7 +706,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),*/
 
-         Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             //SizedBox(width: 50.0,),
@@ -824,17 +753,12 @@ class _HomePageState extends State<HomePage> {
 
   getTimeInOutButton() {
     if (act1 == 'TimeIn') {
-     return RaisedButton(
+      return RaisedButton(
         child: Text('TIME IN',
             style: new TextStyle(fontSize: 22.0, color: Colors.white)),
         color: Colors.orange[800],
         onPressed: () {
-          // //print("Time out button pressed");
-         // _showAlertbeforeTimeOut(context);
-
-         saveImage();
-
-          //Navigator.pushNamed(context, '/home');
+          saveImage();
         },
       );
     } else if (act1 == 'TimeOut' ) {
@@ -843,23 +767,10 @@ class _HomePageState extends State<HomePage> {
             style: new TextStyle(fontSize: 22.0, color: Colors.white)),
         color: Colors.orange[800],
         onPressed: () {
-          // //print("Time out button pressed");
           saveImage();
         },
       );
     }
-
-
-   /*  else if(act1=='1')  {
-   // return  _showAlertbeforeTimeOut(context);
-
-  return  Container(
-        child: Text('TIME OUT1',
-            style: new TextStyle(fontSize: 22.0, color: Colors.white)),
-        color: Colors.orange[800],
-
-      );
-    }*/
   }
 
   Text getText(String addrloc) {
@@ -877,124 +788,103 @@ class _HomePageState extends State<HomePage> {
 
   saveImage() async {
     sl.startStreaming(5);
+    if(globalcompanyinfomap['Department']==''){
+      await showDialog(
+          context: context,
+          // ignore: deprecated_member_use
+          child: new AlertDialog(
+            //title: new Text("Warning!"),
+            content: new Text("Department has not been assigned."),
+          ));
+      return null;
+    }
+    if(globalcompanyinfomap['Designation']==''){
+      await showDialog(
+          context: context,
+          // ignore: deprecated_member_use
+          child: new AlertDialog(
+            //title: new Text("Warning!"),
+            content: new Text("Designation has not been assigned."),
+          ));
+      return null;
+    }
+    if(globalcompanyinfomap['Shift']==''){
+      await showDialog(
+          context: context,
+          // ignore: deprecated_member_use
+          child: new AlertDialog(
+            //title: new Text("Warning!"),
+            content: new Text("Shift has not been assigned."),
+          ));
+      return null;
+    }
 
-    MarkTime mk = new MarkTime(
-        empid, streamlocationaddr, aid, act1, shiftId, orgdir, lat, long);
-   /* mk1 = mk;*/
 
+    MarkTime mk = new MarkTime(empid, streamlocationaddr, aid, act1, shiftId, orgdir, lat, long);
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-      /* Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CameraExampleHome()),
-      );*/
       SaveImage saveImage = new SaveImage();
       bool issave = false;
       if(mounted) {
-      setState(() {
-        act1 = "";
-      });
-    }
+        setState(() {
+          act1 = "";
+        });
+      }
       try {
         issave = await saveImage.saveTimeInOutImagePicker(mk);
-       //print('------------------>');
-       //print(issave);
-       //print('------------------>');
+        print("issave");
+        print(issave);
         if (issave) {
           showDialog(context: context, barrierDismissible: true, child:
           new AlertDialog(
             content: new Text("Attendance marked successfully!"),
           )
           );
-         // if(mounted) {
-
-        //  }
           await new Future.delayed(const Duration(seconds: 2));
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyApp()),
           );
-
-         // Home ho = new Home();
-         // act = await ho.checkTimeIn(empid, orgdir);
           setState(() {
             act1 = act;
-            //  Navigator.of(context, rootNavigator: true).pop('dialog');
           });
-
         } else {
-          print('------------------<<<<<<<<<<<');
           showDialog(context: context, child:
           new AlertDialog(
-            //title: new Text("Warning!"),
-            content: new Text("Selfie not captured, please punch again!"),
+            //content: new Text("Selfie not captured, please punch again!"),
+            content: new Text("Attendance was not captured. Please punch again!"),
           )
           );
           if(mounted) {
-          setState(() {
-            act1 = act;
-
-          });
-        }
+            setState(() {
+              act1 = act;
+            });
+          }
         }
       }catch(e){
         print("EXCEPTION PRINT: "+e.toString());
-
       }
     }else{
       showDialog(context: context, child:
       new AlertDialog(
-
         content: new Text("Internet connection not found."),
       )
       );
     }
-
-
-  /*SaveImage saveImage = new SaveImage();
-    bool issave = false;
-    setState(() {
-      act1 = "";
-    });
-    issave = await saveImage.saveTimeInOut(mk);
-    ////print(issave);
-    if (issave) {
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MyApp()),
-      );
-      setState(() {
-        act1 = act;
-      });
-    } else {
-      setState(() {
-        act1 = act;
-      });
-    }*/
   }
-
-/*  saveImage() async {
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CameraApp()),
-      );
-
-  }*/
 
   resendVarification() async{
     NewServices ns= new NewServices();
     bool res = await ns.resendVerificationMail(orgid);
     if(res){
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-              content: Row( children:<Widget>[
-                Text("Verification link has been sent to \nyour organization's registered Email."),
-              ]
-              )
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Row( children:<Widget>[
+            Text("Verification link has been sent to \nyour organization's registered Email."),
+          ]
           )
+        )
       );
     }
   }
@@ -1002,193 +892,53 @@ class _HomePageState extends State<HomePage> {
   void _showAlert(BuildContext context) {
     globalalertcount = 1;
     if(mounted) {
-    setState(() {
-      alertdialogcount = 1;
-    });
-  }
+      setState(() {
+        alertdialogcount = 1;
+      });
+    }
     showDialog(
-
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Verify Email"),
-          content: Container(
-              height: MediaQuery.of(context).size.height*0.22,
-              child:Column(
-              children:<Widget>[
-              Container(width:MediaQuery.of(context).size.width*0.6, child:Text("Your organization's Email is not verified. Please verify now.")),
+            title: Text("Verify Email"),
+            content: Container(
+                height: MediaQuery.of(context).size.height*0.22,
+                child:Column(
+                    children:<Widget>[
+                      Container(width:MediaQuery.of(context).size.width*0.6, child:Text("Your organization's Email is not verified. Please verify now.")),
 
-              new Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children:<Widget>[
-                    ButtonBar(
-                      children: <Widget>[
-                        FlatButton(
-                          child: Text('Later'),
-                          shape: Border.all(color: Colors.black54),
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true).pop();
-                          },
-                        ),
-                        new RaisedButton(
-                          child: new Text(
-                            "Verify",
-                            style: new TextStyle(
-                              color: Colors.white,
+                      new Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children:<Widget>[
+                            ButtonBar(
+                              children: <Widget>[
+                                FlatButton(
+                                  child: Text('Later'),
+                                  shape: Border.all(color: Colors.black54),
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true).pop();
+                                  },
+                                ),
+                                new RaisedButton(
+                                  child: new Text(
+                                    "Verify",
+                                    style: new TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  color: Colors.orange[800],
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true).pop();
+                                    resendVarification();
+                                  },
+                                ),
+                              ],
                             ),
-                          ),
-                          color: Colors.orange[800],
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true).pop();
-                            resendVarification();
-                          },
-                        ),
-                      ],
-                    ),
-             ])
-          ]
-          ))
+                          ])
+                    ]
+                ))
         )
     );
   }
-
- /*_showAlertwidget() {
- return  new
- Column(
-       children: <Widget>[
-
-    Center(
-
- child: Row(
-     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-     children: <Widget>[
-
-     SizedBox(width: 5.0),
-   Expanded(
-   child:Column(
-   crossAxisAlignment: CrossAxisAlignment.start,
-   children: <Widget>[
-
-   Container(
-    // padding: EdgeInsets.fromLTRB(4.0, 3.0,4.0,0.0),
-     // margin: EdgeInsets.fromLTRB(4.0, 0.0,4.0,0.0),
-   //height: insideContainerHeight,
-   width: 500.0,
-     child:Text("You have not marked Time Out yesterday. ",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
-
-   ),
-
- ])
-
-  )]
- )
-
-    ),
-
-
-   ButtonTheme(
-   minWidth: 100.0,
-   height: 20.0,
-   child:  new FlatButton(
-     //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-     //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-     //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-     padding: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 10.0),
-     child: Container(
-   //     padding: EdgeInsets.only(left:  5.0),
-       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-         children: <Widget>[
-
-           SizedBox(width: 5.0),
-           Container(
-             child: Icon(Icons.radio_button_checked,size: 20.0,color: Colors.green,),
-           ),
-           Expanded(
-            child:Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: <Widget>[
-                 Container(
-                     padding: EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
-        child: Text("Doing overtime? Punch your Time Out now.",style: TextStyle(fontSize: 16.0),)
-                 ),
-
-               ],
-             ),
-           ),
-
-       ],
-       ),
-     ),
-     color: Colors.white,
-     //elevation: 4.0,
-     //  splashColor: Colors.orangeAccent,
-     textColor: Colors.black,
-     onPressed: () {
-
-
-       Navigator.push(
-         context,
-         MaterialPageRoute(builder: (context) => HomePageTimeOut()),
-       );
-     },
-   ),
-   ),
-   ButtonTheme(
-     minWidth: 100.0,
-     height: 40.0,
-     child:  new FlatButton(
-       //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-       //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-       //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-       padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-       child: Container(
-       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-         children: <Widget>[
-           SizedBox(width: 5.0),
-           Container(
-             child: Icon(Icons.radio_button_unchecked,size: 20.0,color: Colors.orange,),
-           ),
-             Expanded(
-             child:Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-                 children: <Widget>[
-                 Container(
-                     padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
-                 child: Text("Forgot to punch Timeout? Punch Time In now.",style: TextStyle(fontSize: 16.0),)
-                   ),
-                 ],
-               ),
-             ),
-
-           ],
-         ),
-       ),
-       color: Colors.white,
-       //elevation: 4.0,
-       //  splashColor: Colors.orangeAccent,
-       textColor: Colors.black,
-       onPressed: () {
-
-         Navigator.push(
-           context,
-           MaterialPageRoute(builder: (context) => HomePageTimeIn()),
-         );
-
-       },
-     ),
-   ),
-       ]);
-   *//* showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-         // title: Text("Wifi"),
-          content: new Text("you have not mark time out yesterday \n Are you doing overtime ? and you forgot to mark timeout?"),
-        )
-    );*//*
-  }*/
-
-
 }
 
 class AttendanceHomeAppHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -1199,21 +949,12 @@ class AttendanceHomeAppHeader extends StatelessWidget implements PreferredSizeWi
   AttendanceHomeAppHeader(profileimage1,showtabbar1,orgname1){
     profileimage = profileimage1;
     orgname = orgname1;
-    // print("--------->");
-    // print(profileimage);
-    //  print("--------->");
-    //   print(_checkLoadedprofile);
     if (profileimage!=null) {
       _checkLoadedprofile = false;
-      //    print(_checkLoadedprofile);
     };
     showtabbar= showtabbar1;
   }
-  /*void initState() {
-    super.initState();
- //   initPlatformState();
-  }
-*/
+
   @override
   Widget build(BuildContext context) {
     return new GradientAppBar(
@@ -1279,6 +1020,5 @@ class AttendanceHomeAppHeader extends StatelessWidget implements PreferredSizeWi
   }
   @override
   Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
-
 }
 

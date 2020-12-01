@@ -5,17 +5,17 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/services/attandance_gethome.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/payroll_services.dart';
-
 import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
@@ -68,6 +68,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
   String shiftId="";
   Future<File> ExpenseDoc;
   File _image=null;
+  File _file=null;
   //var tempvar="";
   String close="";
   @override
@@ -495,97 +496,29 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                                               width: MediaQuery.of(context).size.width*0.6,
                                               padding: EdgeInsets.fromLTRB(10.0,0.0, 0.0, 0.0),
                                               //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                                              child:showImage(_image),
+                                              child:showFile(_file),
                                             ),
                                             onTap: () async {
-                                              var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                              print(image);
+                                              //var file = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                              File file = await FilePicker.getFile(type: FileType.any);
+                                              print(file);
                                               setState(() {
-                                                _image = image;
+                                                //_image = image;
+                                                _file = file;
                                               });
                                             },
                                           )
                                         ],
                                       )
-                                    /*child: FlatButton.icon(
-                                              icon: Padding(
-                                                padding: const EdgeInsets.only(bottom:15.0, left:0.0),
-                                                child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],size: 27,),
-                                              ), //
-                                              label: Container(
-                                                  width: MediaQuery.of(context).size.width*0.6,
-                                                  padding: EdgeInsets.fromLTRB(0.0,0.0, 0.0, 15.0),
-                                                  //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                                                  child:showImage(_image),
-                                              ),
-                                              //child: Text("Select Image", style: TextStyle(color:_image!=null ? Colors.green[500]:Colors.grey[500],),textAlign: TextAlign.start,),
-                                              onPressed: () async {
-                                                var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                                print(image);
-                                                setState(() {
-                                                  _image = image;
-                                                });
-                                              },
-                                              splashColor: Colors.grey,
-                                              //height: 55,
-                                              //minWidth: 350,
-                                              shape: UnderlineInputBorder(),
-                                          ),*/
                                   ),
                                 ),
 
                               ),
-
-                              //showImage(_image)
-
-                              /*ButtonTheme(
-                              //minWidth: 100.0,
-                             // height: 40.0,
-                              child: RaisedButton(
-                              //shape: Border.all(color: Colors.black54),
-                                shape: CircleBorder(),
-                                color:_image!=null ? Colors.green[500]:Colors.grey[500],
-                                onPressed: () async {
-                                  var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                // ExpenseDoc=image;
-                                  setState(() {
-                                    _image = image;
-                                  });
-                                },
-                            child:
-                               new Icon(
-                                  Icons.file_upload,
-                                  color: Colors.white,
-                                ),*//*new Text(
-                              "Supporting docs", textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: 14.0, color: Colors.grey[800]),
-                            ),*//*
-                          ),
-                     ),
-*/
-                              /* Container(
-                       padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                       margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                       child:showImage(_image),
-                     ),*/
                             ]),
                         SizedBox(height: 5.0),
                         ButtonBar(
-
                           children: <Widget>[
-
-                            /*RaisedButton(
-                              *//* child: _isButtonDisabled?Row(children: <Widget>[Text('Processing ',style: TextStyle(color: Colors.white),),SizedBox(width: 10.0,), SizedBox(child:CircularProgressIndicator(),height: 20.0,width: 20.0,),],):Text('SAVE',style: TextStyle(color: Colors.white),),*//*
-                              child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('ADD',style: TextStyle(color: Colors.white),),
-                              color: Colors.orange[800],
-                              onPressed: () {
-                                 tempvar="2";
-                saveExpense (_dateController.text,  headtype, _descController.text,amountController.text , _image, tempvar,context);
-
-                              },
-                            ),*/
                             RaisedButton(
-                              /* child: _isButtonDisabled?Row(children: <Widget>[Text('Processing ',style: TextStyle(color: Colors.white),),SizedBox(width: 10.0,), SizedBox(child:CircularProgressIndicator(),height: 20.0,width: 20.0,),],):Text('SAVE',style: TextStyle(color: Colors.white),),*/
                               child: isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('SUBMIT',style: TextStyle(color: Colors.white),),
                               color: Colors.orange[800],
                               onPressed: () {
@@ -593,24 +526,17 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                                   if (headtype == '0') {
                                     showDialog(context: context, child:
                                     new AlertDialog(
-                                      //title: new Text("Sorry!"),
                                       content: new Text(
                                           "Please select headtype!"),
                                     )
                                     );
                                   }else {
                                     print("hello1234");
-                                    savePayrollExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
+                                    savePayrollExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _file, context);
                                   }
-                                  //saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
                                 }
-                                //tempvar="1";
-
-                                // requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,
-                                //   _descController.text, context);
                               },
                             ),
-
 
                             FlatButton(
                               shape: Border.all(color: Colors.orange[800]),
@@ -622,7 +548,6 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                                 );
                               },
                             ),
-
                           ],
                         ),
 
@@ -708,18 +633,17 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
   }
 
 
-  Future<bool> savePayrollExpense(var expensedate, var category, var desc, var amount, File doc, BuildContext context) async { // visit in function
-
+  Future<bool> savePayrollExpense(var expensedate, var category, var desc, var amount, File file, BuildContext context) async { // visit in function
     try {
       Dio dio = new Dio();
       setState(() {
         isServiceCalling = true;
       });
-      print("----> service calling123 "+isServiceCalling.toString());
       final prefs = await SharedPreferences.getInstance();
       String orgid = prefs.getString('organization') ?? '';
       String empid = prefs.getString('employeeid') ?? "";
-      if (doc!=null) {
+      String ext = p.extension(file.path);
+      if (file!=null) {
         FormData formData = new FormData.from({
           "empid": empid,
           "orgid": orgid,
@@ -727,31 +651,24 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
           "category": category,
           "desc": desc,
           "amt": amount,
-          "file": new UploadFileInfo(doc, "image.png"),
+          "file": new UploadFileInfo(file, "doc"+ext),
         });
         print(formData);
-        print(doc);
-        //  print("5" +expensedate+"---"+category+"---"+desc+"---"+amount+"---"+empid+"--"+orgid+"--");
+        print(file);
         Response<String> response1;
         try {
-          final prefs = await SharedPreferences.getInstance();
-          String path1 = prefs.getString('path');
-          // print(globals.path +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
-          response1 = await dio.post(path1 + "savePayrollExpense", data: formData);
+          //final prefs = await SharedPreferences.getInstance();
+          //String path1 = prefs.getString('path');
+          print(path +"savePayrollExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount+"&file=$file");
+          response1 = await dio.post(path + "savePayrollExpense", data: formData);
           print("----->save payroll Expense* --->" + response1.toString());
         } catch (e) {
-          print('------------*');
           print(e.toString());
-          //   print('------------*');
         }
 
-        /*getTempImageDirectory();*/
         Map MarkAttMap = json.decode(response1.data);
-        // print('------------1*');
         print(MarkAttMap["status"].toString());
-        // print('------------2*');
         if ((response1.toString().contains("true"))) {
-          //  print('------true  in img');
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyPayrollExpense()),
@@ -762,25 +679,8 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
             content: new Text('Expense submitted successfully.'),
           )
           );
-          //showInSnackBar("Expense has been applied successfully.");
-          /*if(tempvar=="1"){
-             Navigator.push(
-               context,
-               MaterialPageRoute(builder: (context) => MyExpence()),
-             );
-           }else{
-             Navigator.push(
-               context,
-               MaterialPageRoute(builder: (context) => RequestExpence()),
-             );
-           }*/
           return true;
         } else if((response1.toString().contains("false1"))){
-          /*Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyExpence()),
-          );*/
-          // ignore: deprecated_member_use
           showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense already applied on this date.'),
@@ -788,25 +688,16 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
           setState(() {
             isServiceCalling = false;
           });
-          //print('------false1  in img');
-          //showInSnackBar("Expence already applied on this date");
-        }
-        else {
-          //  print('------false  in img');
-          // ignore: deprecated_member_use
+        } else {
           showDialog(context: context, child:
           new AlertDialog(
             content: new Text('There is some problem while applying for expense.'),
           ));
-          //showInSnackBar("There is some problem while applying for Expense.");
-          //return false;
           setState(() {
             isServiceCalling = false;
           });
         }
-      }
-
-      else{
+      } else{
         FormData formData = new FormData.from({
           "empid": empid,
           "orgid": orgid,
@@ -815,32 +706,19 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
           "desc": desc,
           "amt": amount,
           "file":"",
-          //  "file": new UploadFileInfo(doc, "image.png"),
         });
-        //   print(formData);
-        //  print(doc);
-        //print("kkkkkkkkkkkkkk");
-        //  print("5" +expensedate+"---"+category+"---"+desc+"---"+amount+"---"+empid+"--"+orgid+"--");
         Response<String> response1;
         try {
-          final prefs = await SharedPreferences.getInstance();
-          String path1 = prefs.getString('path');
-          print(path1 +"savePayrollExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
-          response1 =
-          await dio.post(path1 + "savePayrollExpense", data: formData);
+          print(path +"savePayrollExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
+          response1 = await dio.post(path + "savePayrollExpense", data: formData);
           print("----->save Expense* --->" + response1.toString());
         } catch (e) {
           print('------------*');
           print(e.toString());
           print('------------*');
         }
-        /*getTempImageDirectory();*/
         Map expensemap = json.decode(response1.data);
-        //  print('------------1*');
-        //  print(expensemap["status"].toString());
-        // print('------------2*');
         if ((response1.toString().contains("true"))) {
-          //  print('------true');
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyPayrollExpense()),
@@ -851,20 +729,8 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
             content: new Text('Expense submitted successfully.'),
           )
           );
-          /* if(tempvar=="1"){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyExpence()),
-          );
-        }else{
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => RequestExpence()),
-          );
-        }*/
           return true;
-        }
-        else if((response1.toString().contains("false1"))){
+        } else if((response1.toString().contains("false1"))){
           // ignore: deprecated_member_use
           showDialog(context: context, child:
           new AlertDialog(
@@ -874,77 +740,34 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
           setState(() {
             isServiceCalling = false;
           });
-          //showInSnackBar("Expence already applied on this date");
-        }
-        else {
-          //   print('------false');
-          // ignore: deprecated_member_use
+        } else {
           showDialog(context: context, child:
           new AlertDialog(
             content: new Text('There is some problem while applying for expense.'),
           )
           );
-          //showInSnackBar("There is some problem while applying for Expense.");
-          //return false;
           setState(() {
             isServiceCalling = false;
           });
         }
-
       }
-
-    }
-    catch (e) {
-      print('7');
-      //  print("------->");
+    } catch (e) {
       print(e.toString());
-      // print("------->");
-
       return false;
     }
   }
 
-
-
-
-  Widget showImage(_image) {
+  Widget showFile(_file) {
     return FutureBuilder<File>(
-      //  future: ExpenseDoc,
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
-        /*if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.data != null) {
-            return Image.file(
-                snapshot.data,
-                width: 50,
-                height: 50,
-              );
-        } */
-        if(_image!=null ) {
+        if(_file!=null ) {
           return new Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text("Attachment Uploaded",style: TextStyle(fontSize: 16.0, color: Colors.green),
-                  overflow: TextOverflow.ellipsis, ),
-                /*Icon(
-                Icons.check,
-                color: Colors.green,
-                ),*/
-                /* Container(
-                     child:new IconButton(
-                       icon: new Icon(Icons.close, color: Colors.redAccent,),
-                       onPressed: () {
-                        setState(() {
-                           print("onpressiconclose");
-                           close='1';
-                           _image=null;
-                           print(_image);
-                         });
-                       },
-                     )
-                ),*/
-              ]);
-        }
-        else if (snapshot.error != null) {
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(_file.path.split('/').last,style: TextStyle(fontSize: 16.0, color: Colors.green),
+                overflow: TextOverflow.ellipsis, ),
+            ]);
+        } else if (snapshot.error != null) {
           return const Text(
             'Error Picking Attachment',
             overflow: TextOverflow.ellipsis,

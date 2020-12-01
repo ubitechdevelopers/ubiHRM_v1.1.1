@@ -2,30 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/attandance/employee.dart';
 import 'package:ubihrm/attandance/outside_fence_report.dart';
+import 'package:ubihrm/attandance/periodic_att.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../all_reports.dart';
 import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
 import '../global.dart';
-import 'attendance_report_yes.dart';
 import 'cust_date_report.dart';
 import 'department_att.dart';
 import 'designation_att.dart';
 import 'earlyLeavers.dart';
-import 'last_seven_days.dart';
 import 'late_comers.dart';
-import 'payment.dart';
-import 'thismonth.dart';
-import 'today_attendance_report.dart';
 import 'visits_list.dart';
 
 class Reports extends StatefulWidget {
   @override
   _Reports createState() => _Reports();
 }
+
 class _Reports extends State<Reports> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _currentIndex = 1;
@@ -59,12 +55,13 @@ class _Reports extends State<Reports> {
   setAlldata() async{
     _listFuture = getOrgCreatedDate();
 
-     _listFuture.then((data) async{
+    _listFuture.then((data) async{
       setState(() {
         orgCreatedDate = data;
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return getmainhomewidget();
@@ -89,11 +86,11 @@ class _Reports extends State<Reports> {
   }
 
   getmainhomewidget(){
-  //  print('99999999999999' + _orgName.toString());
+    //  print('99999999999999' + _orgName.toString());
     return WillPopScope(
       onWillPop: ()=> sendToAllReportsList(),
       child: new Scaffold(
-            key: _scaffoldKey,
+        key: _scaffoldKey,
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
         appBar: new AppHeader(profileimage,showtabbar,orgName),
@@ -125,7 +122,7 @@ class _Reports extends State<Reports> {
         ),*/
 
         bottomNavigationBar: HomeNavigation(),
-         /*     currentIndex: _currentIndex,
+        /*     currentIndex: _currentIndex,
               onTap: (newIndex) {
                 if(newIndex==2){
                   Navigator.push(
@@ -180,9 +177,9 @@ class _Reports extends State<Reports> {
               ],*/
 
 
-            body:getReportsWidget(),
+        body:getReportsWidget(),
 
-          ),
+      ),
     );
 
   }
@@ -214,11 +211,12 @@ class _Reports extends State<Reports> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Image.asset(
-                  'assets/spinner.gif', height: 80.0, width: 80.0),
-            ]),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+            CircularProgressIndicator()
+          ]
+        ),
       ),
     );
   }
@@ -233,129 +231,184 @@ class _Reports extends State<Reports> {
 
   showDialogWidget(String loginstr){
 
-      return showDialog(context: context, builder:(context) {
+    return showDialog(context: context, builder:(context) {
 
-        return new AlertDialog(
-          title: new Text(
-            loginstr,
-            style: TextStyle(fontSize: 15.0),),
-          content: ButtonBar(
-            children: <Widget>[
-              FlatButton(
-                child: Text('Later',style: TextStyle(fontSize: 13.0)),
-                shape: Border.all(),
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                },
-              ),
-              RaisedButton(
-                child: Text(
-                  'Pay Now', style: TextStyle(color: Colors.white,fontSize: 13.0),),
-                color: Colors.orange,
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PaymentPage()),
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      }
+      return new AlertDialog(
+        title: new Text(
+          loginstr,
+          style: TextStyle(fontSize: 15.0),),
+        content: ButtonBar(
+          children: <Widget>[
+            FlatButton(
+              child: Text('Later',style: TextStyle(fontSize: 13.0)),
+              shape: Border.all(),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+            /*RaisedButton(
+              child: Text(
+                'Pay Now', style: TextStyle(color: Colors.white,fontSize: 13.0),),
+              color: Colors.orange,
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PaymentPage()),
+                );
+              },
+            ),*/
+          ],
+        ),
       );
+    }
+    );
 
   }
 
   getReportsWidget(){
     return Stack(
       children: <Widget>[
-      Container(
-      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-      padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
-      //width: MediaQuery.of(context).size.width*0.9,
-    //  height:MediaQuery.of(context).size.height*0.75,
-      decoration: new ShapeDecoration(
-        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
-        color: Colors.white,
-      ),
-      child: ListView(
-        padding: EdgeInsets.all(0.0),
-          children: <Widget>[
-            //SizedBox(height: 5.0),
-            Text('Attendance Reports',
-                style: new TextStyle(fontSize: 22.0, color: appStartColor(),),textAlign: TextAlign.center),
+        Container(
+          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+          padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+          //width: MediaQuery.of(context).size.width*0.9,
+          //  height:MediaQuery.of(context).size.height*0.75,
+          decoration: new ShapeDecoration(
+            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+            color: Colors.white,
+          ),
+          child: ListView(
+              padding: EdgeInsets.all(0.0),
+              children: <Widget>[
+                //SizedBox(height: 5.0),
+                Text('Attendance Reports',
+                    style: new TextStyle(fontSize: 22.0, color: appStartColor(),),textAlign: TextAlign.center),
 
-            ///// 1st button//////
-            SizedBox(height: 16.0),
-            new RaisedButton(
-           //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-          //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-          //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Container(
-           //     padding: EdgeInsets.only(left:  5.0),
-                child: Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Icon(const IconData(0xe800, fontFamily: "CustomIcon"),size: 30.0,),
-                     /*Container(
+                ///// 1st button//////
+                SizedBox(height: 16.0),
+                /*new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe800, fontFamily: "CustomIcon"),size: 30.0,),
+                        *//*Container(
                         decoration: new BoxDecoration(
                           shape: BoxShape.circle,
                           color: appStartColor(),
                         ),
                         child: Icon(Icons.access_alarms,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                         padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                      ),*/
-                    SizedBox(width: 15.0),
-                    Expanded(
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              child: Text("Today's",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                      ),*//*
+                        SizedBox(width: 15.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text("Today's",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text("Show Today's Attendance ",style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
                           ),
-                          Container(
-                          //    width: MediaQuery.of(context).size.width*0.5,
-                              child: Text("Show Today's Attendance ",style: TextStyle(fontSize: 14.0,),)
-                          ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
                     ),
-                    Container(
-                      child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                    ),
-                  ],
+                  ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TodayAttendance()),
+                    );
+                  },
                 ),
-              ),
-              color: Colors.white,
-              elevation: 4.0,
-            //  splashColor: Colors.orangeAccent,
-              textColor: Colors.black54,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TodayAttendance()),
-                );
-              },
-            ),
 
-            ///////2nd button///////
-            SizedBox(height: 6.0),
-            new RaisedButton(
-              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-              //     shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Container(
-                //   color: Colors.red,
-                //     padding: EdgeInsets.only(left:  5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Icon(const IconData(0xe811, fontFamily: "CustomIcon"),size: 30.0,),
-                    /*Container(
+                ///////2nd button///////
+                SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //     shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //   color: Colors.red,
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe811, fontFamily: "CustomIcon"),size: 30.0,),
+                        *//*Container(
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: appStartColor(),
+                      ),
+                      child: Icon(Icons.perm_contact_calendar,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
+                      padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                    ),*//*
+                        SizedBox(width: 15.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text("Yesterday's ",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text("Get Yesterday's List",style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
+                    ),
+                  ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => YesAttendance()),
+                    );
+                  },
+                ),*/
+
+                /////////7th button ///////////
+                SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //     shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //   color: Colors.red,
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe80e, fontFamily: "CustomIcon"),size: 30.0,),
+                        /*Container(
                       decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         color: appStartColor(),
@@ -363,113 +416,59 @@ class _Reports extends State<Reports> {
                       child: Icon(Icons.perm_contact_calendar,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                       padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                     ),*/
-                    SizedBox(width: 15.0),
-                    Expanded(
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              child: Text("Yesterday's ",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                        SizedBox(width: 15.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text('Daily Attendance',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text('Get Daily Attendance',style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
                           ),
-                          Container(
-                            //    width: MediaQuery.of(context).size.width*0.5,
-                              child: Text("Get Yesterday's List",style: TextStyle(fontSize: 14.0,),)
-                          ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
                     ),
-                    Container(
-                      child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                    ),
-                  ],
+                  ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    if(trialstatus=="2"){
+                      showDialogWidget("Upgrade to Premium plan to check Get Specific Days Attendance records.");
+                    }else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CustomDateAttendance()),
+                      );
+                    }
+                  },
                 ),
-              ),
-              color: Colors.white,
-              elevation: 4.0,
-              //  splashColor: Colors.orangeAccent,
-              textColor: Colors.black54,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => YesAttendance()),
-                );
-              },
-            ),
 
-            /////// 3rd button///////
-            SizedBox(height: 6.0),
-            new RaisedButton(
-              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-              //    shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Container(
-                //   color: Colors.red,
-                //     padding: EdgeInsets.only(left:  5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Icon(const IconData(0xe816, fontFamily: "CustomIcon"),size: 30.0,),
-                    /*Container(
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: appStartColor(),
-                      ),
-                      child: Icon(Icons.desktop_windows,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
-                      padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                    ),*/
-                    SizedBox(width: 15.0),
-                    Expanded(
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              child: Text('Early Leavers',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
-                          ),
-                          Container(
-                            //    width: MediaQuery.of(context).size.width*0.5,
-                              child: Text('Get Early Leavers List ',style: TextStyle(fontSize: 14.0,),)
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                    ),
-                  ],
-                ),
-              ),
-              color: Colors.white,
-              elevation: 4.0,
-              //  splashColor: Colors.orangeAccent,
-              textColor: Colors.black54,
-              onPressed: () {
-                if(trialstatus=="2"){
-                  showDialogWidget("Upgrade to Premium plan to check Early Leavers records.");
-                }else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EarlyLeavers()),
-                  );
-                }
-              },
-            ),
-
-            /////// 4th button///////
-            SizedBox(height: 6.0),
-            new RaisedButton(
-              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-          //    shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Container(
-                //   color: Colors.red,
-                //     padding: EdgeInsets.only(left:  5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Icon(const IconData(0xe80a, fontFamily: "CustomIcon"),size: 30.0,),
-                    /*Container(
+                /////// 4th button///////
+                SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //    shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //   color: Colors.red,
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe80a, fontFamily: "CustomIcon"),size: 30.0,),
+                        /*Container(
                       decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         color: appStartColor(),
@@ -477,58 +476,117 @@ class _Reports extends State<Reports> {
                       child: Icon(Icons.timer_off,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                       padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                     ),*/
-                    SizedBox(width: 15.0),
-                    Expanded(
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              child: Text('Late Comers',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                        SizedBox(width: 15.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text('Late Comers',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text('Get Late Comers List ',style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
                           ),
-                          Container(
-                            //    width: MediaQuery.of(context).size.width*0.5,
-                              child: Text('Get Late Comers List ',style: TextStyle(fontSize: 14.0,),)
-                          ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
                     ),
-                    Container(
-                      child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                    ),
-                  ],
+                  ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    if(trialstatus=="2"){
+                      showDialogWidget("Upgrade to Premium plan to check Late Comer's records.");
+                    }else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LateComers()),
+                      );
+                    }
+                  },
                 ),
-              ),
-              color: Colors.white,
-              elevation: 4.0,
-              //  splashColor: Colors.orangeAccent,
-              textColor: Colors.black54,
-                onPressed: () {
-                  if(trialstatus=="2"){
-                    showDialogWidget("Upgrade to Premium plan to check Late Comer's records.");
-                  }else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LateComers()),
-                    );
-                  }
-                },
-            ),
 
-          /////////  5th button  ////////
-          SizedBox(height: 6.0),
-          new RaisedButton(
-            //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-        //    shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-            //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-            padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-            child: Container(
-              //   color: Colors.red,
-              //     padding: EdgeInsets.only(left:  5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Icon(const IconData(0xe80d, fontFamily: "CustomIcon"),size: 30.0,),
-                 /* Container(
+                /////// 3rd button///////
+                SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //    shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //   color: Colors.red,
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe816, fontFamily: "CustomIcon"),size: 30.0,),
+                        /*Container(
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: appStartColor(),
+                      ),
+                      child: Icon(Icons.desktop_windows,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
+                      padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                    ),*/
+                        SizedBox(width: 15.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text('Early Leavers',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text('Get Early Leavers List ',style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
+                    ),
+                  ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    if(trialstatus=="2"){
+                      showDialogWidget("Upgrade to Premium plan to check Early Leavers records.");
+                    }else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EarlyLeavers()),
+                      );
+                    }
+                  },
+                ),
+
+                /////////  5th button  ////////
+                SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //    shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //   color: Colors.red,
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe80d, fontFamily: "CustomIcon"),size: 30.0,),
+                        /* Container(
                     decoration: new BoxDecoration(
                       shape: BoxShape.circle,
                       color: appStartColor(),
@@ -536,58 +594,120 @@ class _Reports extends State<Reports> {
                     child: Icon(Icons.location_on,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                     padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                   ),*/
-                  SizedBox(width: 15.0),
-                  Expanded(
-                    child:Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            child: Text('Punched Visits',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                        SizedBox(width: 15.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text('Punched Visits',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text('List of punched visits ',style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
+                          ),
                         ),
                         Container(
-                          //    width: MediaQuery.of(context).size.width*0.5,
-                            child: Text('List of punched visits ',style: TextStyle(fontSize: 14.0,),)
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    if(trialstatus=="2"){
+                      showDialogWidget("Upgrade to Premium plan to check Visited Locations records.");
+                    }else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => VisitList()),
+                      );
+                    }
+                  },
+                ),
+
+                SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //      shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //   color: Colors.red,
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
+
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe803, fontFamily: "CustomIcon"),size: 30.0,),
+                        /*Container(
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: appStartColor(),
+                      ),
+                      child: Icon(Icons.perm_contact_calendar,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
+                      padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                    ),*/
+                        SizedBox(width: 15.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text('By Department',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text('Attendance by Department',style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-            color: Colors.white,
-            elevation: 4.0,
-            //  splashColor: Colors.orangeAccent,
-            textColor: Colors.black54,
-            onPressed: () {
-              if(trialstatus=="2"){
-              showDialogWidget("Upgrade to Premium plan to check Visited Locations records.");
-              }else {
-              Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => VisitList()),
-              );
-              }
-            },
-          ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    if(trialstatus=="2"){
+                      showDialogWidget("Upgrade to Premium plan to check departmentwise attendance records.");
+                    }else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Department_att()),
+                      );
+                    }
+                  },
+                ),
 
-            SizedBox(height: 6.0),
-            new RaisedButton(
-              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-              //      shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Container(
-                //   color: Colors.red,
-                //     padding: EdgeInsets.only(left:  5.0),
-                child: Row(
 
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Icon(const IconData(0xe803, fontFamily: "CustomIcon"),size: 30.0,),
-                    /*Container(
+                /////////11th button ///////////
+
+                SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //      shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //   color: Colors.red,
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe804, fontFamily: "CustomIcon"),size: 30.0,),
+                        /*Container(
                       decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         color: appStartColor(),
@@ -595,122 +715,60 @@ class _Reports extends State<Reports> {
                       child: Icon(Icons.perm_contact_calendar,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                       padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                     ),*/
-                    SizedBox(width: 15.0),
-                    Expanded(
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              child: Text('By Department',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                        SizedBox(width: 15.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text('By Designation',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text('Attendance by Designation',style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
                           ),
-                          Container(
-                            //    width: MediaQuery.of(context).size.width*0.5,
-                              child: Text('Attendance by Department',style: TextStyle(fontSize: 14.0,),)
-                          ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
                     ),
-
-                    Container(
-                      child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                    ),
-                  ],
+                  ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    if(trialstatus=="2"){
+                      showDialogWidget("Upgrade to Premium plan to check designationwise attendance records.");
+                    }else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Designation_att()),
+                      );
+                    }
+                  },
                 ),
-              ),
-              color: Colors.white,
-              elevation: 4.0,
-              //  splashColor: Colors.orangeAccent,
-              textColor: Colors.black54,
-              onPressed: () {
-                if(trialstatus=="2"){
-                  showDialogWidget("Upgrade to Premium plan to check departmentwise attendance records.");
-                }else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Department_att()),
-                  );
-                }
-              },
-            ),
 
 
-            /////////11th button ///////////
+                /////////12th button ///////////
 
-            SizedBox(height: 6.0),
-            new RaisedButton(
-              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-              //      shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Container(
-                //   color: Colors.red,
-                //     padding: EdgeInsets.only(left:  5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Icon(const IconData(0xe804, fontFamily: "CustomIcon"),size: 30.0,),
-                    /*Container(
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: appStartColor(),
-                      ),
-                      child: Icon(Icons.perm_contact_calendar,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
-                      padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                    ),*/
-                    SizedBox(width: 15.0),
-                    Expanded(
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              child: Text('By Designation',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
-                          ),
-                          Container(
-                            //    width: MediaQuery.of(context).size.width*0.5,
-                              child: Text('Attendance by Designation',style: TextStyle(fontSize: 14.0,),)
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                    ),
-                  ],
-                ),
-              ),
-              color: Colors.white,
-              elevation: 4.0,
-              //  splashColor: Colors.orangeAccent,
-              textColor: Colors.black54,
-              onPressed: () {
-                if(trialstatus=="2"){
-                  showDialogWidget("Upgrade to Premium plan to check designationwise attendance records.");
-                }else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Designation_att()),
-                  );
-                }
-              },
-            ),
-
-
-            /////////12th button ///////////
-
-            SizedBox(height: 6.0),
-            new RaisedButton(
-              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-              //     shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Container(
-                //   color: Colors.red,
-                //     padding: EdgeInsets.only(left:  5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Icon(const IconData(0xe806, fontFamily: "CustomIcon"),size: 30.0,),
-                    /*Container(
+                SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //     shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //   color: Colors.red,
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe806, fontFamily: "CustomIcon"),size: 30.0,),
+                        /*Container(
                       decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         color: appStartColor(),
@@ -719,57 +777,57 @@ class _Reports extends State<Reports> {
                       padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                     ),*/
 
-                    SizedBox(width: 15.0),
-                    Expanded(
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              child: Text('By Employee',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                        SizedBox(width: 15.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text('By Employee',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text('Attendance by Employee',style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
                           ),
-                          Container(
-                            //    width: MediaQuery.of(context).size.width*0.5,
-                              child: Text('Attendance by Employee',style: TextStyle(fontSize: 14.0,),)
-                          ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
                     ),
-                    Container(
-                      child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                    ),
-                  ],
+                  ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    if(trialstatus=="2"){
+                      showDialogWidget("Upgrade to Premium plan to check Employeewise attendance records.");
+                    }else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Employee_list(orgDate: orgCreatedDate)),
+                      );
+                    }
+                  },
                 ),
-              ),
-              color: Colors.white,
-              elevation: 4.0,
-              //  splashColor: Colors.orangeAccent,
-              textColor: Colors.black54,
-              onPressed: () {
-                if(trialstatus=="2"){
-                  showDialogWidget("Upgrade to Premium plan to check Employeewise attendance records.");
-                }else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Employee_list(orgDate: orgCreatedDate)),
-                  );
-                }
-              },
-            ),
-            /////////6th button ///////////
-            SizedBox(height: 6.0),
-            new RaisedButton(
-              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-              //     shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Container(
-                //   color: Colors.red,
-                //     padding: EdgeInsets.only(left:  5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Icon(const IconData(0xe808, fontFamily: "CustomIcon"),size: 30.0,),
-                    /*Container(
+                /////////6th button ///////////
+                SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //     shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //   color: Colors.red,
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe808, fontFamily: "CustomIcon"),size: 30.0,),
+                        /*Container(
                       decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         color: appStartColor(),
@@ -777,59 +835,59 @@ class _Reports extends State<Reports> {
                       child: Icon(Icons.perm_contact_calendar,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                       padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                     ),*/
-                    SizedBox(width: 15.0),
-                    Expanded(
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              child: Text("Outside the fence",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                        SizedBox(width: 15.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text("Outside Geo Fence",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text("Outside the Geo Fence",style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
                           ),
-                          Container(
-                            //    width: MediaQuery.of(context).size.width*0.5,
-                              child: Text("Outside the geo fence",style: TextStyle(fontSize: 14.0,),)
-                          ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
                     ),
-                    Container(
-                      child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                    ),
-                  ],
+                  ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    if(trialstatus=="2"){
+                      showDialogWidget("Upgrade to Premium plan to check records of attendance marked out side the geo fence.");
+                    }else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => OutSideGeoFence()),
+                      );
+                    }
+                  },
                 ),
-              ),
-              color: Colors.white,
-              elevation: 4.0,
-              //  splashColor: Colors.orangeAccent,
-              textColor: Colors.black54,
-              onPressed: () {
-                if(trialstatus=="2"){
-                  showDialogWidget("Upgrade to Premium plan to check records of attendance marked out side the geo fence.");
-                }else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => OutSideGeoFence()),
-                  );
-                }
-              },
-            ),
 
+                /////////8th button ///////////
+                SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //       shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //   color: Colors.red,
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
 
-            /////////7th button ///////////
-            SizedBox(height: 6.0),
-            new RaisedButton(
-              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-         //     shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Container(
-                //   color: Colors.red,
-                //     padding: EdgeInsets.only(left:  5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Icon(const IconData(0xe80e, fontFamily: "CustomIcon"),size: 30.0,),
-                    /*Container(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe811, fontFamily: "CustomIcon"),size: 25.0,),
+                        /*Container(
                       decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         color: appStartColor(),
@@ -837,171 +895,109 @@ class _Reports extends State<Reports> {
                       child: Icon(Icons.perm_contact_calendar,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                       padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                     ),*/
-                    SizedBox(width: 15.0),
-                    Expanded(
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              child: Text('Custom Date',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                        SizedBox(width: 20.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text('Periodic Attendance',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text('Get Attendance of Specific Duration',style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
                           ),
-                          Container(
-                            //    width: MediaQuery.of(context).size.width*0.5,
-                              child: Text('Get Specific Days Attendance',style: TextStyle(fontSize: 14.0,),)
-                          ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
                     ),
-                    Container(
-                      child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                    ),
-                  ],
+                  ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    if(trialstatus=="2"){
+                      showDialogWidget("Upgrade to Premium plan to check last 7 days attendance records.");
+                    }else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PeriodicAttendance()),
+                      );
+                    }
+                  },
                 ),
-              ),
-              color: Colors.white,
-              elevation: 4.0,
-              //  splashColor: Colors.orangeAccent,
-              textColor: Colors.black54,
-              onPressed: () {
-                if(trialstatus=="2"){
-                  showDialogWidget("Upgrade to Premium plan to check Get Specific Days Attendance records.");
-                }else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CustomDateAttendance()),
-                  );
-                }
-              },
-            ),
 
-       /////////8th button ///////////
+                SizedBox(height: 6.0),
+                /////////9th button ///////////
 
-            SizedBox(height: 6.0),
-            new RaisedButton(
-              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-       //       shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Container(
-                //   color: Colors.red,
-                //     padding: EdgeInsets.only(left:  5.0),
-                child: Row(
+                /*SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //  shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+                    //   color: Colors.red,
+                    //     padding: EdgeInsets.only(left:  5.0),
+                    child: Row(
 
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Icon(const IconData(0xe814, fontFamily: "CustomIcon"),size: 25.0,),
-                    /*Container(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe812, fontFamily: "CustomIcon"),size: 25.0,),
+                        *//*Container(
                       decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         color: appStartColor(),
                       ),
                       child: Icon(Icons.perm_contact_calendar,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
                       padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                    ),*/
-                    SizedBox(width: 20.0),
-                    Expanded(
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              child: Text('Last 7 Days',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                    ),*//*
+                        SizedBox(width: 20.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text('Last 30 Days',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                              Container(
+                                //    width: MediaQuery.of(context).size.width*0.5,
+                                  child: Text('Get Last 30 Days Attendance',style: TextStyle(fontSize: 14.0,),)
+                              ),
+                            ],
                           ),
-                          Container(
-                            //    width: MediaQuery.of(context).size.width*0.5,
-                              child: Text('Get Last 7 Days Attendance',style: TextStyle(fontSize: 14.0,),)
-                          ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
                     ),
-                    Container(
-                      child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                    ),
-                  ],
-                ),
-              ),
-              color: Colors.white,
-              elevation: 4.0,
-              //  splashColor: Colors.orangeAccent,
-              textColor: Colors.black54,
-              onPressed: () {
-                if(trialstatus=="2"){
-                  showDialogWidget("Upgrade to Premium plan to check last 7 days attendance records.");
-                }else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LastSeven()),
-                  );
-                }
-              },
-            ),
+                  ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  //  splashColor: Colors.orangeAccent,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    if(trialstatus=="2"){
+                      showDialogWidget("Upgrade to Premium plan to check last 30 days attendance records.");
+                    }else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ThisMonth()),
+                      );
+                    }
+                  },
+                ),*/
 
 
-            /////////9th button ///////////
+                /////////10th button ///////////
 
-            SizedBox(height: 6.0),
-            new RaisedButton(
-              //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-             //  shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-              //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Container(
-                //   color: Colors.red,
-                //     padding: EdgeInsets.only(left:  5.0),
-                child: Row(
-
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Icon(const IconData(0xe812, fontFamily: "CustomIcon"),size: 25.0,),
-                    /*Container(
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: appStartColor(),
-                      ),
-                      child: Icon(Icons.perm_contact_calendar,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
-                      padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                    ),*/
-                    SizedBox(width: 20.0),
-                    Expanded(
-                      child:Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              child: Text('Last 30 Days',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
-                          ),
-                          Container(
-                            //    width: MediaQuery.of(context).size.width*0.5,
-                              child: Text('Get Last 30 Days Attendance',style: TextStyle(fontSize: 14.0,),)
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
-                    ),
-                  ],
-                ),
-              ),
-              color: Colors.white,
-              elevation: 4.0,
-              //  splashColor: Colors.orangeAccent,
-              textColor: Colors.black54,
-              onPressed: () {
-                if(trialstatus=="2"){
-                  showDialogWidget("Upgrade to Premium plan to check last 30 days attendance records.");
-                }else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ThisMonth()),
-                  );
-                }
-              },
-            ),
-
-
-            /////////10th button ///////////
-
-    /*        SizedBox(height: 6.0),
+                /*        SizedBox(height: 6.0),
             new RaisedButton(
               child: Container(
                 padding: EdgeInsets.only(top: 5.0,bottom: 5.0),
@@ -1044,9 +1040,9 @@ class _Reports extends State<Reports> {
               },
             ),*/
 
-          ]),
-    ),
-    ],
+              ]),
+        ),
+      ],
     );
   }
 }

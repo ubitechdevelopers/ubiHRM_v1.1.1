@@ -219,7 +219,7 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,                                              children: <Widget>[
                                                       new Text(
-                                                        snapshot.data[index].month.toString(),style: TextStyle(),),
+                                                        snapshot.data[index].startdate.toString(),style: TextStyle(),),
 
                                                     ],
                                                     )
@@ -242,9 +242,9 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                                                   child: new OutlineButton(
                                                     onPressed: () async{
                                                       final prefs = await SharedPreferences.getInstance();
-                                                      String path1 = prefs.getString('path');
-                                                      print(path1+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
-                                                      launchMap(path1+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
+                                                      //String path1 = prefs.getString('path');
+                                                      print(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+snapshot.data[index].empId.toString());
+                                                      launchMap(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+snapshot.data[index].empId.toString());
                                                     },
                                                     child: new Icon(
                                                       Icons.print,

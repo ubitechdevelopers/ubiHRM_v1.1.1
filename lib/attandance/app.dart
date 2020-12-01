@@ -35,7 +35,7 @@ class _ShrineAppState extends State<ShrineApp> {
   String long="";
   int response;
   int responsestate;
-  String cur_ver='1.0.7',new_ver='1.0.7';
+  String cur_ver='1.0.8',new_ver='1.0.8';
   String updatestatus;
   //Widget _defaultHome = new LoginPage();
 
@@ -61,10 +61,10 @@ class _ShrineAppState extends State<ShrineApp> {
 
   getShared() async{
     final prefs = await SharedPreferences.getInstance();
-      setState(() {
-        response = prefs.getInt('response') ?? 0;
-        //print("Response "+response.toString());
-      });
+    setState(() {
+      response = prefs.getInt('response') ?? 0;
+      //print("Response "+response.toString());
+    });
   }
   // Set default home.
   // Get result of the login function.
@@ -84,9 +84,7 @@ class _ShrineAppState extends State<ShrineApp> {
     );
   }
 
-  /*getUpdate(response){
+/*getUpdate(response){
     return (response==1) ? new HomePageMain() : new LoginPage();
   }*/
 }
-
-

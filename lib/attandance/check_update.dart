@@ -15,10 +15,10 @@
 import 'package:flutter/material.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/login_page.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 
 import 'home.dart';
-import 'login.dart';
 
 class CheckUpdate extends StatefulWidget {
   @override
@@ -34,10 +34,12 @@ class _CheckUpdate extends State<CheckUpdate> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            ]),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+            CircularProgressIndicator()
+          ]
+        ),
       ),
     );
   }

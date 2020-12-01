@@ -92,82 +92,82 @@ class _FlexiList extends State<FlexiList> {
     return new WillPopScope(
       onWillPop: ()=> sendToHome(),
       child: new Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      appBar: new FlexiAppHeader(profileimage,showtabbar,orgName),
-      bottomNavigationBar: new HomeNavigation(),
-      endDrawer: new AppDrawer(),
-      body: Container(
-        margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-        padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-        decoration: new ShapeDecoration(
-          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
-          color: Colors.white,
-        ),
-        //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
-        child: Column(
-          children: <Widget>[
-            //SizedBox(height: 5.0),
-            Center(
-              child: Text(
-                'Flexi Logs',
-                  style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center
-              ),
-            ),
-            Divider(
-              height: 1.0,
-            ),
-            //SizedBox(height: 2.0),
-           Container(
-              child: DateTimeField(
-                //dateOnly: true,
-                format: formatter,
-                controller: today,
-                readOnly: true,
-                onShowPicker: (context, currentValue) {
-                  return showDatePicker(
-                      context: context,
-                      firstDate: DateTime(1900),
-                      initialDate: currentValue ?? DateTime.now(),
-                      lastDate: DateTime(2100));
-                },
-                decoration: InputDecoration(
-                  border:InputBorder.none,
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.all(0.0),
-                    child: Icon(
-                      Icons.date_range,
-                      color: Colors.grey,
-                    ), // icon is 48px widget.
-                  ), // icon is 48px widget.
-                  labelText: 'Select Date',
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        appBar: new FlexiAppHeader(profileimage,showtabbar,orgName),
+        bottomNavigationBar: new HomeNavigation(),
+        endDrawer: new AppDrawer(),
+        body: Container(
+          margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+          padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+          decoration: new ShapeDecoration(
+            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+            color: Colors.white,
+          ),
+          //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
+          child: Column(
+            children: <Widget>[
+              //SizedBox(height: 5.0),
+              Center(
+                child: Text(
+                    'Flexi Logs',
+                    style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center
                 ),
-                onChanged: (date) {
-                  setState(() {
-                    if (date != null && date.toString() != '')
-                      res = true; //showInSnackBar(date.toString());
-                    else
-                      res = false;
-                  });
-                },
-                validator: (date) {
-                  if (date == null) {
-                    return 'Please select date';
-                  }
-                },
               ),
-            ),
-            Divider(height: 1,),
-            SizedBox(height: 5.0),
-            Container(
-              //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
-              //  width: MediaQuery.of(context).size.width * .9,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  SizedBox(width: 1.0,),
-              /*Container(
+              Divider(
+                height: 1.0,
+              ),
+              //SizedBox(height: 2.0),
+              Container(
+                child: DateTimeField(
+                  //dateOnly: true,
+                  format: formatter,
+                  controller: today,
+                  readOnly: true,
+                  onShowPicker: (context, currentValue) {
+                    return showDatePicker(
+                        context: context,
+                        firstDate: DateTime(1900),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime(2100));
+                  },
+                  decoration: InputDecoration(
+                    border:InputBorder.none,
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(0.0),
+                      child: Icon(
+                        Icons.date_range,
+                        color: Colors.grey,
+                      ), // icon is 48px widget.
+                    ), // icon is 48px widget.
+                    labelText: 'Select Date',
+                  ),
+                  onChanged: (date) {
+                    setState(() {
+                      if (date != null && date.toString() != '')
+                        res = true; //showInSnackBar(date.toString());
+                      else
+                        res = false;
+                    });
+                  },
+                  validator: (date) {
+                    if (date == null) {
+                      return 'Please select date';
+                    }
+                  },
+                ),
+              ),
+              Divider(height: 1,),
+              SizedBox(height: 5.0),
+              Container(
+                //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
+                //  width: MediaQuery.of(context).size.width * .9,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    SizedBox(width: 1.0,),
+                    /*Container(
                     width: MediaQuery.of(context).size.width * 0.15,
                     child: Text(
                       'Name',
@@ -175,52 +175,52 @@ class _FlexiList extends State<FlexiList> {
                       textAlign: TextAlign.left,
                     ),
                   ),*/
-               Expanded(
-                 flex: 48,
-                 child: Padding(
-                   // width: MediaQuery.of(context).size.width * 0.37,
-                   padding: EdgeInsets.only(left: 4.0),
-                    child: Text(
-                      'Location',
-                      style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
-                      textAlign: TextAlign.left,
+                    Expanded(
+                      flex: 48,
+                      child: Padding(
+                        // width: MediaQuery.of(context).size.width * 0.37,
+                        padding: EdgeInsets.only(left: 4.0),
+                        child: Text(
+                          'Location',
+                          style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
                     ),
-                   ),
-                  ),
 
-                  Expanded(
-                    flex: 26,
-                    child:Container(
-                  //  width: MediaQuery.of(context).size.width * 0.15,
-                    child: Text('Time In',
-                        style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
-                        textAlign: TextAlign.center),
-                  ),
-                  ),
+                    Expanded(
+                      flex: 26,
+                      child:Container(
+                        //  width: MediaQuery.of(context).size.width * 0.15,
+                        child: Text('Time In',
+                            style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
+                            textAlign: TextAlign.center),
+                      ),
+                    ),
 
-                  Expanded(
-                    flex: 26,
-                    child:Container(
-                  //  width: MediaQuery.of(context).size.width * 0.15,
-                    child: Text('Time Out ',
-                        style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
-                        textAlign: TextAlign.center),
-                  ),
-                  ),
+                    Expanded(
+                      flex: 26,
+                      child:Container(
+                        //  width: MediaQuery.of(context).size.width * 0.15,
+                        child: Text('Time Out ',
+                            style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
+                            textAlign: TextAlign.center),
+                      ),
+                    ),
 
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 5.0),
-            Divider(
-              height: 5.2,
-            ),
-            new Expanded(
-              child: res == true ? getEmpDataList(today.text) : Center(),
-            ),
-          ],
+              SizedBox(height: 5.0),
+              Divider(
+                height: 5.2,
+              ),
+              new Expanded(
+                child: res == true ? getEmpDataList(today.text) : Center(),
+              ),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
@@ -229,10 +229,12 @@ class _FlexiList extends State<FlexiList> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            ]),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+            CircularProgressIndicator()
+          ]
+        ),
       ),
     );
   }
@@ -254,8 +256,8 @@ class _FlexiList extends State<FlexiList> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                           // SizedBox(width: 8.0,),
-                         /*   new Container(
+                            // SizedBox(width: 8.0,),
+                            /*   new Container(
                                 width: MediaQuery.of(context).size.width * 0.18,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,107 +268,107 @@ class _FlexiList extends State<FlexiList> {
                                 )),*/
                             Expanded(
                               flex: 46,
-                           child: new Container(
-                             // width: MediaQuery.of(context).size.width * 0.37,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                 /* new Text(
+                              child: new Container(
+                                // width: MediaQuery.of(context).size.width * 0.37,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    /* new Text(
                                     snapshot.data[index].client.toString(),style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.left,
                                   ),*/
-                                  InkWell(
-                                    child:Text("In: "+
-                                        snapshot.data[index].pi_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
-                                    onTap: ()
-                                    {
-                                     goToMap(snapshot.data[index].pi_latit,snapshot.data[index].pi_longi.toString());
-                                    },
-                                  ),
-                                  SizedBox(height: 5.0),
-                                  InkWell(
-                                    child:Text("Out: "+
-                                        snapshot.data[index].po_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
-                                    onTap: () {goToMap(snapshot.data[index].po_latit.toString(),snapshot.data[index].po_longi.toString());},
-                                  ),
-                                ],
+                                    InkWell(
+                                      child:Text("In: "+
+                                          snapshot.data[index].pi_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
+                                      onTap: ()
+                                      {
+                                        goToMap(snapshot.data[index].pi_latit,snapshot.data[index].pi_longi.toString());
+                                      },
+                                    ),
+                                    SizedBox(height: 5.0),
+                                    InkWell(
+                                      child:Text("Out: "+
+                                          snapshot.data[index].po_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
+                                      onTap: () {goToMap(snapshot.data[index].po_latit.toString(),snapshot.data[index].po_longi.toString());},
+                                    ),
+                                  ],
+                                ),
                               ),
-                             ),
                             ),
 
                             Expanded(
                               flex: 27,
                               child:Container(
                                 //width: MediaQuery.of(context).size.width * 0.19,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(snapshot.data[index].pi_time
-                                        .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
-                                    Container(
-                                      width: 62.0,
-                                      height: 62.0,
-                                      child:InkWell(
-                                        child: Container(
-                                            decoration: new BoxDecoration(
-                                                shape: BoxShape .circle,
-                                                image: new DecorationImage(
-                                                    fit: BoxFit.fill,
-                                                    image: new NetworkImage(snapshot.data[index].pi_img)
-                                                )
-                                            )),
-                                        onTap: (){
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].pi_img,org_name: _orgName)),
-                                          );
-                                        },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(snapshot.data[index].pi_time
+                                          .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
+                                      Container(
+                                        width: 62.0,
+                                        height: 62.0,
+                                        child:InkWell(
+                                          child: Container(
+                                              decoration: new BoxDecoration(
+                                                  shape: BoxShape .circle,
+                                                  image: new DecorationImage(
+                                                      fit: BoxFit.fill,
+                                                      image: new NetworkImage(snapshot.data[index].pi_img)
+                                                  )
+                                              )),
+                                          onTap: (){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].pi_img,org_name: _orgName)),
+                                            );
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                   Text(snapshot.data[index].timeindate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
-                                  ],
-                                )
+                                      Text(snapshot.data[index].timeindate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
+                                    ],
+                                  )
                               ),
                             ),
 
                             Expanded(
                               flex: 27,
                               child:Container(
-                               // width: MediaQuery.of(context).size.width * 0.22,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(snapshot.data[index].po_time
-                                    .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
-                                    Container(
-                                      width: 62.0,
-                                      height: 62.0,
-                                      child:InkWell(
-                                        child: Container(
-                                            decoration: new BoxDecoration(
-                                                shape: BoxShape
-                                                    .circle,
-                                                image: new DecorationImage(
-                                                    fit: BoxFit.fill,
-                                                    image: new NetworkImage(
-                                                        snapshot
-                                                            .data[index]
-                                                            .po_img)
-                                                )
-                                            )),
-                                        onTap: (){
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].po_img,org_name: _orgName)),
-                                          );
-                                        },
+                                // width: MediaQuery.of(context).size.width * 0.22,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(snapshot.data[index].po_time
+                                          .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
+                                      Container(
+                                        width: 62.0,
+                                        height: 62.0,
+                                        child:InkWell(
+                                          child: Container(
+                                              decoration: new BoxDecoration(
+                                                  shape: BoxShape
+                                                      .circle,
+                                                  image: new DecorationImage(
+                                                      fit: BoxFit.fill,
+                                                      image: new NetworkImage(
+                                                          snapshot
+                                                              .data[index]
+                                                              .po_img)
+                                                  )
+                                              )),
+                                          onTap: (){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].po_img,org_name: _orgName)),
+                                            );
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                    Text(snapshot.data[index].timeoutdate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
+                                      Text(snapshot.data[index].timeoutdate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
 
-                                  ],
-                                )
-                               ),
+                                    ],
+                                  )
+                              ),
                             ),
 
                           ],
@@ -450,7 +452,7 @@ class FlexiAppHeader extends StatelessWidget implements PreferredSizeWidget {
                   width: 40.0,
                   height: 40.0,
                   decoration: new BoxDecoration(
-                  shape: BoxShape.circle,
+                      shape: BoxShape.circle,
                       color: Colors.white,
                       image: new DecorationImage(
                         fit: BoxFit.fill,

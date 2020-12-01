@@ -92,7 +92,19 @@ class _DashboardStatemain extends State<DashboardMain> {
       String empid = prefs.getString('employeeid')??"";
       String organization =prefs.getString('organization')??"";
       String userprofileid =prefs.getString('userprofileid')??"";
-      Employee emp = new Employee(employeeid: empid, organization: organization,userprofileid:userprofileid);
+      int profiletype =prefs.getInt('profiletype')??0;
+      int hrsts =prefs.getInt('hrsts')??0;
+      int adminsts =prefs.getInt('adminsts')??0;
+      int dataaccess =prefs.getInt('dataaccess')??0;
+      Employee emp = new Employee(
+        employeeid: empid,
+        organization: organization,
+        userprofileid:userprofileid,
+        profiletype:profiletype,
+        hrsts:hrsts,
+        adminsts:adminsts,
+        dataaccess:dataaccess
+      );
 
       await getfiscalyear(emp);
       await getovertime(emp);
@@ -293,7 +305,7 @@ class _DashboardStatemain extends State<DashboardMain> {
                   margin: EdgeInsets.all(0.2),
                   height: 200.0,
                   child: new FutureBuilder<List<Map<String,String>>>(
-                      future: getChartDataYes(),
+                      future: getChartDataLeave(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           if (snapshot.data.length > 0) {
@@ -427,7 +439,7 @@ class _DashboardStatemain extends State<DashboardMain> {
                   Divider(height: 10.0,),
                   SizedBox(height: 10.0,),
                   Row(children: <Widget>[
-                   Text('1.Makar sankranti ',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
+                   Text('1. Makar sankranti ',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
                    Expanded(
                      child: Container(
                       width:0.5,

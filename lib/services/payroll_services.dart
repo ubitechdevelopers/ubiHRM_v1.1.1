@@ -1,15 +1,25 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/model/model.dart';
+import 'package:ubihrm/global.dart';
 
 
 class RequestPayrollService{
-
   var dio = new Dio();
+}
 
+class Payroll{
+  String id;
+  String empId;
+  String name;
+  String startdate;
+  String enddate;
+  String paid_days;
+  String EmployeeCTC;
+  String Currency;
+
+  Payroll({this.id, this.empId, this.name, this.startdate, this.enddate, this.paid_days, this.EmployeeCTC, this.Currency});
 }
 
 class PayrollExpense {
@@ -55,24 +65,17 @@ class PayrollExpenseDate {
 Future<List<PayrollExpense>> getPayrollExpenselist(date) async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid =  prefs.getString('employeeid')??"";
-
-  Response<String>response =
-  await dio.post(path1+"getPayrollExpenseDetail?empid="+empid+'&orgid='+orgdir+'&date='+date);
+  Response<String>response = await dio.post(path+"getPayrollExpenseDetail?empid="+empid+'&orgid='+orgdir+'&date='+date);
   final res = json.decode(response.data.toString());
-
   List<PayrollExpense> userList = createPayrollExpenselist(res);
-
   return userList;
 }
 
 List<PayrollExpense> createPayrollExpenselist(List data) {
-
   List<PayrollExpense> list = new List();
   for (int i = 0; i < data.length; i++) {
-
     String Id = data[i]["id"].toString();
     String name = data[i]["employee"].toString();
     String category = data[i]["ClaimHeadname"].toString();
@@ -92,7 +95,6 @@ List<PayrollExpense> createPayrollExpenselist(List data) {
       ests: ests,
       amt: amt,
       currency: currency,
-
     );
     list.add(tos);
   }
@@ -103,27 +105,19 @@ List<PayrollExpense> createPayrollExpenselist(List data) {
 Future<List<PayrollExpenseDate>> getPayrollExpenselistbydate() async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid =  prefs.getString('employeeid')??"";
-
-  Response<String>response =
-  await dio.post(path1+"getPayrollExpenseDetailbydate?empid="+empid+'&orgid='+orgdir);
+  Response<String>response = await dio.post(path+"getPayrollExpenseDetailbydate?empid="+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
-
   List<PayrollExpenseDate> userList = createPayrollExpenselistbydate(res);
-
   return userList;
 }
 
 List<PayrollExpenseDate> createPayrollExpenselistbydate(List data) {
-
   List<PayrollExpenseDate> list = new List();
-
   for (int i = 0; i < data.length; i++) {
     String dates = data[i]["fromdate"].toString();
     String Fdate = data[i]["Fdate"].toString();
-
     PayrollExpenseDate tos = new PayrollExpenseDate(
       dates: dates,
       Fdate: Fdate,
@@ -136,14 +130,11 @@ List<PayrollExpenseDate> createPayrollExpenselistbydate(List data) {
 
 Future<List<Map>> getpayrollheadtype(int label) async{
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-  final response = await dio.post(path1 + "getpayrollheadtype?orgid=$orgdir&eid=$empid");
-
+  final response = await dio.post(path + "getpayrollheadtype?orgid=$orgdir&eid=$empid");
   List data = json.decode(response.data.toString());
-
   List<Map> leavetype = createPayrollHeadList(data,label);
   return leavetype;
 }
@@ -166,20 +157,18 @@ List<Map> createPayrollHeadList(List data,int label) {
 Future<List<PayrollExpense>> getPayrollExpenseDetailById(Id) async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path_hrm_india1 = prefs.getString('path_hrm_india');
   String orgid = prefs.getString('organization') ?? '';
   try {
     FormData formData = new FormData.from({
       "Id" : Id,
       "orgid":orgid
     });
-    print(path_hrm_india1+"showPayrollExpenseDetail?Id=$Id&orgid=$orgid");
+    print(path_hrm_india+"showPayrollExpenseDetail?Id=$Id&orgid=$orgid");
     Response response = await dio.post(
-        path_hrm_india1+"showPayrollExpenseDetail",
+        path_hrm_india+"showPayrollExpenseDetail",
         data: formData
     );
     List responseJson = json.decode(response.data.toString());
-    print("***************"+responseJson.toString());
     List<PayrollExpense> expenseDetail = viewPayrollExpenseDetail(responseJson);
 
     return expenseDetail;
@@ -190,7 +179,6 @@ Future<List<PayrollExpense>> getPayrollExpenseDetailById(Id) async{
 }
 
 List<PayrollExpense> viewPayrollExpenseDetail(List data) {
-
   List<PayrollExpense> list = new List();
   for (int i = 0; i < data.length; i++) {
     String Id = data[i]["Id"].toString();
@@ -222,12 +210,10 @@ List<PayrollExpense> viewPayrollExpenseDetail(List data) {
 Future<List<PayrollExpense>> getPayrollExpenseApprovals(listType) async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-  Response<String> response = await dio.post(path1+"getPayrollExpenseApproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
-  print('path1+"getPayrollExpenseApproval?datafor');
-  print(path1+"getPayrollExpenseApproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  Response<String> response = await dio.post(path+"getPayrollExpenseApproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  print(path+"getPayrollExpenseApproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
   List<PayrollExpense> userList = createPayrollExpenseApporval(res);
   return userList;
@@ -269,12 +255,12 @@ List<PayrollExpense> createPayrollExpenseApporval(List data) {
   return list;
 }
 
+
 ApprovePayrollExpense(expenseid,comment,sts) async{
   String empid;
   String organization;
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   empid = prefs.getString('employeeid')??"";
   organization =prefs.getString('organization')??"";
   try {
@@ -285,17 +271,13 @@ ApprovePayrollExpense(expenseid,comment,sts) async{
       "comment": comment,
       "sts": sts,
     });
-    Response response = await dio.post(path1+"ApprovedPayrollExpense", data: formData);
-    print(path1+"ApprovedExpense?eid=$empid&orgid=$organization&expenseid=$expenseid&comment=$comment&sts=$sts");
+    Response response = await dio.post(path+"ApprovedPayrollExpense", data: formData);
+    print(path+"ApprovedExpense?eid=$empid&orgid=$organization&expenseid=$expenseid&comment=$comment&sts=$sts");
     final expenseMap = response.data.toString();
-    print("-------------------");
-    print(response.toString());
-    if (expenseMap.contains("false"))
-    {
-      print("false approve expense function--->" + response.data.toString());
+
+    if (expenseMap.contains("false")) {
       return "false";
     } else {
-      print("true  approve expense function---" + response.data.toString());
       return "true";
     }
   }catch(e){
@@ -304,34 +286,27 @@ ApprovePayrollExpense(expenseid,comment,sts) async{
   }
 }
 
+
 withdrawPayrollExpense(PayrollExpense expense) async{
   Dio dio = new Dio();
   try {
-    final prefs = await SharedPreferences.getInstance();
-    String path_hrm_india1 = prefs.getString('path_hrm_india');
     FormData formData = new FormData.from({
       "id": expense.Id,
       "status": expense.ests
     });
-    print("---------------"+expense.Id);
-    print("---------------"+expense.ests);
-    //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
-    Response response = await dio.post(
-        path_hrm_india1+"changePayrollExpenseSts",
-        data: formData);
-    //print(response.toString());
+    Response response = await dio.post(path_hrm_india+"changePayrollExpenseSts", data: formData);
     if (response.statusCode == 200) {
-      Map leaveMap = json.decode(response.data);
-      if(leaveMap["status"]==true){
+      final expenseMap = response.data.toString();
+      if (expenseMap.contains("true")) {
         return "success";
-      }else{
+      } else {
         return "failure";
       }
     }else{
       return "No Connection";
     }
   }catch(e){
-    //print(e.toString());
+    print(e.toString());
     return "Poor network connection";
   }
 }
@@ -341,7 +316,6 @@ withdrawPayrollExpense(PayrollExpense expense) async{
 Future<List<Payroll>> getPayrollSummary() async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   try {
@@ -349,11 +323,9 @@ Future<List<Payroll>> getPayrollSummary() async{
       "employeeid": empid,
       "organization": organization,
     });
-    print(path1+"getPayrollSummary?employeeid=$empid&organization=$organization");
-    Response response = await dio.post(path1+"getPayrollSummary", data: formData);
-    print('--------------------Payroll Summary Called-----------------------');
+    print(path+"getPayrollSummary?employeeid=$empid&organization=$organization");
+    Response response = await dio.post(path+"getPayrollSummary", data: formData);
     List responseJson = json.decode(response.data.toString());
-    print(json.decode(response.data.toString()));
 
     List<Payroll> userList = createPayrollList(responseJson);
 
@@ -364,23 +336,24 @@ Future<List<Payroll>> getPayrollSummary() async{
   }
 }
 
+
 Future<List<Payroll>> getPayrollSummaryAll() async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   String organization = prefs.getString('organization') ?? '';
-  String empid = prefs.getString('employeeid')??"";
+  String empid = prefs.getString('employeeid')?? '';
+  int profiletype = prefs.getInt('profiletype')??0;
+  int hrsts =prefs.getInt('hrsts')??0;
+  int adminsts =prefs.getInt('adminsts')??0;
+  int dataaccess = prefs.getInt('dataaccess')??0;
   try {
-    FormData formData = new FormData.from({
+    /*FormData formData = new FormData.from({
       "employeeid": empid,
       "organization": organization,
-    });
-    print(path1+"getPayrollSummary?all=all&employeeid=$empid&organization=$organization");
-    Response response = await dio.post(path1+"getPayrollSummary?all=all", data: formData);
-    print('--------------------Payroll Summary Called For ALL-----------------------');
-    print(response.data.toString());
+    });*/
+    print(path+"getPayrollSummary?all=all&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+    Response response = await dio.post(path+"getPayrollSummary?all=all&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
     List responseJson = json.decode(response.data.toString());
-    print(json.decode(response.data.toString()));
 
     List<Payroll> userList = createPayrollList(responseJson);
 
@@ -395,12 +368,13 @@ List<Payroll> createPayrollList(List data){
   List<Payroll> list = new List();
   for (int i = 0; i < data.length; i++) {
     String id = data[i]["Id"];
+    String empId = data[i]["EmployeeId"];
     String name=data[i]["name"];
     String PaidDays=data[i]["PaidDays"];
     String SalaryMonth=data[i]["SalaryMonth"];
     String EmployeeCTC=data[i]["EmployeeCTC"];
     String Currency=data[i]["currency"];
-    Payroll payroll = new Payroll(id:id, name:name, paid_days:PaidDays, month:SalaryMonth, EmployeeCTC:EmployeeCTC, Currency:Currency);
+    Payroll payroll = new Payroll(id:id, empId:empId, name:name, paid_days:PaidDays, startdate:SalaryMonth, EmployeeCTC:EmployeeCTC, Currency:Currency);
     list.add(payroll);
   }
   return list;

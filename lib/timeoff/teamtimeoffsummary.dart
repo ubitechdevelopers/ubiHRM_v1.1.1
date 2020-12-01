@@ -24,8 +24,6 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
   bool showtabbar;
   String orgName="";
 
-
-
   bool _checkLoaded = true;
   int checkProcessing = 0;
   int _currentIndex = 1;
@@ -53,11 +51,18 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
   String lid = "";
   String shiftId = "";
   TextEditingController client_name,comments;
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
+  bool res = true;
+  String empname = "";
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
+
   @override
   void initState() {
     client_name = new TextEditingController();
     comments = new TextEditingController();
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     super.initState();
     initPlatformState();
     getOrgName();
@@ -78,18 +83,8 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('empid') ?? '';
     orgdir = prefs.getString('orgdir') ?? '';
-    //   response = prefs.getInt('response') ?? 0;
     admin_sts = prefs.getString('sstatus') ?? 0.toString();
-    //  if (response == 1) {
-    //    Loc lock = new Loc();
-    //    location_addr = await lock.initPlatformState();
-    //act =await checkPunch(empid, orgdir);
-
-    //act= 'PunchOut';
-
     setState(() {
-      //      location_addr1 = location_addr;
-      //    response = prefs.getInt('response') ?? 0;
       fname = prefs.getString('fname') ?? '';
       lname = prefs.getString('lname') ?? '';
       empid = prefs.getString('empid') ?? '';
@@ -102,7 +97,6 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
       desination = prefs.getString('desination') ?? '';
       profile = prefs.getString('profile') ?? '';
       lid = prefs.getString('lid') ?? "0";
-      //    act= lid!='0'?'PunchOut':'PunchIn';
       showtabbar=false;
       profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
       profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
@@ -112,13 +106,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
           });
         }
       }));
-      //     latit = prefs.getString('latit') ?? '';
-      //      longi = prefs.getString('longi') ?? '';
-      //      shiftId = prefs.getString('shiftId') ?? "";
-      //      print("this is set state " + lid);
-      //     act1 = act;
     });
-//    }
   }
 
 
@@ -147,81 +135,27 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
   getmainhomewidget() {
     return new WillPopScope(
         onWillPop: ()=> sendToHome(),
-    child: Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
-
-      /*appBar: GradientAppBar(
-        automaticallyImplyLeading: false,
-        *//*    title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-
-            new Text(org_name, style: new TextStyle(fontSize: 20.0)),
-
-          ],
-        ),
-        leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()),
-          );
-        },),
-        backgroundColor: Colors.teal,*//*
-        backgroundColorStart: appStartColor(),
-        backgroundColorEnd: appEndColor(),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            new Container(
-                width: 40.0,
-                height: 40.0,
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage('assets/avatar.png'),
-                    )
-                )),
-            Container(
-                padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-            )
-          ],
-
-        ),
-
-      ),*/
-      bottomNavigationBar:  new HomeNavigation(),
-
-      body:getMarkAttendanceWidgit(),
-     )
+        child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:  new HomeNavigation(),
+          body:getMarkAttendanceWidgit(),
+        )
     );
   }
 
   checkalreadylogin() {
-
-
-    //   if (response == 1) {
     return new IndexedStack(
       index: _currentIndex,
       children: <Widget>[
-        //      underdevelopment(),
-        //    mainbodyWidget(),
-        //     underdevelopment()
       ],
     );
-    /*  } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-    }*/
   }
 
   loader() {
-    /* return new Container(
+     return new Container(
       child: Center(
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -231,7 +165,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                 style: new TextStyle(fontSize: 30.0, color: Colors.teal),)
             ]),
       ),
-    );*/
+    );
   }
 
   underdevelopment() {
@@ -275,43 +209,43 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                       children: <Widget>[
                         Expanded(
                           flex:48,
-                            child:InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => TimeoffSummary()),
-                                );
+                          child:InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => TimeoffSummary()),
+                              );
 
-                              },
-                          child:Column(
-                              children: <Widget>[
-                                // width: double.infinity,
-                                //height: MediaQuery.of(context).size.height * .07,
-                                SizedBox(height:MediaQuery.of(context).size.width*.02),
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(
-                                          Icons.person,
-                                          color: Colors.orange[800],
-                                          size: 22.0 ),
+                            },
+                            child:Column(
+                                children: <Widget>[
+                                  // width: double.infinity,
+                                  //height: MediaQuery.of(context).size.height * .07,
+                                  SizedBox(height:MediaQuery.of(context).size.width*.02),
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(
+                                            Icons.person,
+                                            color: Colors.orange[800],
+                                            size: 22.0 ),
 
-                                      GestureDetector(
+                                        GestureDetector(
 
-                                        child: Text(
-                                            'Self',
-                                            style: TextStyle(fontSize: 18,color: Colors.orange[800],)
-                                        ),
-                                        // color: Colors.teal[50],
-                                        /* splashColor: Colors.white,
+                                          child: Text(
+                                              'Self',
+                                              style: TextStyle(fontSize: 18,color: Colors.orange[800],)
+                                          ),
+                                          // color: Colors.teal[50],
+                                          /* splashColor: Colors.white,
                                 shape: new RoundedRectangleBorder(
                                     borderRadius: new BorderRadius.circular(0.0))*/
-                                      ),
-                                    ]
-                                ),
-                                SizedBox(height:MediaQuery.of(context).size.width*.03),
-                              ]
-                          ),
+                                        ),
+                                      ]
+                                  ),
+                                  SizedBox(height:MediaQuery.of(context).size.width*.03),
+                                ]
+                            ),
                           ),
                         ),
 
@@ -362,10 +296,47 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                   ),
 
                   Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: TextFormField(
+                        controller: _searchController,
+                        focusNode: searchFocusNode,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          border: OutlineInputBorder(
+                            borderRadius:  new BorderRadius.circular(10.0),
+                          ),
+                          prefixIcon: Icon(Icons.search, size: 30,),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          hintText: 'Search Employee',
+                          //labelText: 'Search Employee',
+                          suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                              onPressed: () {
+                                _searchController.clear();
+                               /* Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => EmployeeList()),
+                                );*/
+                              }
+                          ):null,
+                          //focusColor: Colors.white,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            empname = value;
+                            res = true;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+
+                  Container(
                     padding: EdgeInsets.only(top:12.0),
                     child:Center(
                       child:Text("Team's Time Off",
-                          style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
+                        style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                     ),
                   ),
 
@@ -400,7 +371,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child:new FutureBuilder<List<TIMEOFFA>>(
-                        future: getTeamTimeoffapproval(),
+                        future: getTeamTimeoffapproval(empname),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if(snapshot.data.length>0) {
@@ -414,11 +385,10 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                           new Row(
                                             mainAxisAlignment: MainAxisAlignment .spaceAround,
                                             children: <Widget>[
-                                            //  SizedBox(height: 40.0,),
-
                                               new Expanded(
                                                 child: Container(
-                                                  width: MediaQuery.of(context) .size.width * 0.50,
+                                                  margin: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
+                                                  width: MediaQuery.of(context) .size.width * 0.80,
                                                   child: Column(
                                                     crossAxisAlignment: CrossAxisAlignment  .start,
                                                     children: <Widget>[
@@ -434,15 +404,15 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
 
                                               new Expanded(
                                                 child:Container(
-                                                    width: MediaQuery .of(context)  .size.width * 0.50,
+                                                    margin: EdgeInsets.fromLTRB(50.0, 5.0, 0.0, 0.0),
+                                                    width: MediaQuery .of(context)  .size.width * 0.20,
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment .center,
                                                       children: <Widget>[
-                                                        Text("          "+snapshot.data[index].applydate
+                                                        Text(snapshot.data[index].applydate
                                                             .toString()),
                                                       ],
                                                     )
-
                                                 ),
                                               ),
 
@@ -454,53 +424,52 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                             width: MediaQuery.of(context).size.width*.90,
                                             //padding: EdgeInsets.only(top:1.5,bottom: .5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('Date: '+snapshot.data[index].TimeofDate.toString(), style: TextStyle(color: Colors.black54),),
+                                            child: Text('TimeOff Date: '+snapshot.data[index].TimeofDate.toString(), style: TextStyle(color: Colors.black54),),
                                           ),
 
                                           new Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.start,
                                             children: <Widget>[
+                                              snapshot.data[index].Fdate.toString()!="-"?
                                               new Expanded(
                                                 child: Container(
-                                                  //     color:Colors.red,
-                                                  //     height: MediaQuery .of(context).size.height * 0.06,
-                                                    width: MediaQuery .of(context).size.width * 0.70,
+                                                    width: MediaQuery .of(context).size.width * 0.90,
                                                     margin: EdgeInsets.only(top: 4.0),
-                                                    padding: EdgeInsets.only(top:1.5,bottom: .5),
+                                                    //padding: EdgeInsets.only(top:1.5,bottom: .5),
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
-                                                        //     new SizedBox(width: 5.0,),
-                                                        new Text("Duration: "+snapshot.data[index].Fdate.toString()+snapshot.data[index].Tdate.toString(),style: TextStyle(color: Colors.grey[600]),)
+                                                        new Text("Requested Duration: "+snapshot.data[index].Fdate.toString()+" to "+snapshot.data[index].Tdate.toString(),style: TextStyle(color: Colors.grey[600]),)
                                                       ],
                                                     )
                                                 ),
-                                              ),
+                                              ):Center(),
 
-                                              (snapshot.data[index].sts.toString() == 'true')?
+                                              (snapshot.data[index].sts.toString() == "true")?
                                               new Expanded(
-                                                child: Container (
-                                                  //      color:Colors.yellow,
-                                                    height: MediaQuery .of(context).size.height * 0.06,
-                                                    margin: EdgeInsets.only(left:32.0),
-                                                    padding: EdgeInsets.only(left:32.0),
-                                                    width: MediaQuery.of(context).size.width * 0.30,
-                                                    child: new OutlineButton(
-                                                      onPressed: () {
-                                                        _modalBottomSheet(
-                                                            context, snapshot.data[index].Id.toString());
-                                                      },
-                                                      child:new Icon(
-                                                        Icons.thumb_up,
-                                                        size: 16.0,
-                                                        color:appStartColor(),
-                                                        //      textDirection: TextDirection.rtl,
-                                                      ),
-                                                      borderSide: BorderSide(color:appStartColor()),
-                                                      shape: new CircleBorder(),
-                                                      //         padding:EdgeInsets.all(5.0),
-                                                    )
+                                                child: Padding(
+                                                  padding: const EdgeInsets.fromLTRB(60.0,0.0,0.0,0.0),
+                                                  child: Container (
+                                                    //color:Colors.yellow,
+                                                      height: MediaQuery .of(context).size.height * 0.05,
+                                                      //margin: EdgeInsets.only(left:60.0),
+                                                      //padding: EdgeInsets.all(3.0),
+                                                      width: MediaQuery.of(context).size.width * 0.10,
+                                                      child: new OutlineButton(
+                                                        onPressed: () {
+                                                          _modalBottomSheet(
+                                                              context, snapshot.data[index].Id.toString());
+                                                        },
+                                                        child:new Icon(
+                                                          Icons.thumb_up,
+                                                          size: 16.0,
+                                                          color:appStartColor(),
+                                                          //      textDirection: TextDirection.rtl,
+                                                        ),
+                                                        borderSide: BorderSide(color:appStartColor()),
+                                                        shape: new CircleBorder(),
+                                                        //padding:EdgeInsets.all(10.0),
+                                                      )
+                                                  ),
                                                 ),
                                               ):Center(),
                                             ],
@@ -510,11 +479,42 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                             width: MediaQuery.of(context).size.width*.90,
                                             //padding: EdgeInsets.only(top:1.5,bottom: .5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('Reason: '+snapshot.data[index].Reason.toString(), style: TextStyle(color: Colors.black54),),
+                                            child: Text('Reason: '+snapshot.data[index].Reason.toString(),overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black54),),
                                           ):Center(),
 
+                                          snapshot.data[index].StartTimeFrom.toString()!='-'?Container(
+                                              width: MediaQuery.of(context).size.width*.70,
+                                              //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
+                                              margin: EdgeInsets.only(top: 4.0),
+                                              //child: Text('Actual Duration: '+snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(color: Colors.black54),),
+                                              child: Row(
+                                                children: <Widget>[
+                                                  Text('Actual Duration: ', style: TextStyle(color: Colors.black54),),
+                                                  RichText(
+                                                      text: TextSpan(
+                                                          children: [
+                                                            snapshot.data[index].StopTimeTo.toString()=='-'?
+                                                            TextSpan(
+                                                                text: snapshot.data[index].StartTimeFrom.toString(), style: TextStyle(color: Colors.black54)
+                                                            ):
+                                                            TextSpan(
+                                                                text: snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(color: Colors.black54)
+                                                            )
+                                                          ]
+                                                      )
+                                                  ),
+                                                ],
+                                              )
+                                          ):Center(),
 
-                                          (snapshot.data[index].Timeoffsts.toString()!='Pending' ) ?Container(
+                                          Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
+                                            margin: EdgeInsets.only(top: 4.0),
+                                            child: Text('TimeOff Status: '+snapshot.data[index].TimeOffSts.toString(), style: TextStyle(color: Colors.black54),),
+                                          ),
+
+                                          (snapshot.data[index].Timeoffsts.toString()!='Pending' && snapshot.data[index].TimeOffSts.toString()!='Withdrawn') ?Container(
                                             width: MediaQuery.of(context).size.width*.90,
                                             //padding: EdgeInsets.only(top:.5,bottom: 1.5),
                                             margin: EdgeInsets.only(top: 4.0),
@@ -527,7 +527,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                                   color: Colors.black,
                                                 ),
                                                 children: <TextSpan>[
-                                                  new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black54,), ),
+                                                  new TextSpan(text: 'Approval Status: ',style:TextStyle(color: Colors.black54,), ),
                                                   new TextSpan(text: snapshot.data[index].Timeoffsts.toString(), style: TextStyle(color: snapshot.data[index].Timeoffsts.toString()=='Approved'?appStartColor() :snapshot.data[index].Timeoffsts.toString()=='Rejected' || snapshot.data[index].Timeoffsts.toString()=='Cancel' ?Colors.red:Colors.blue[600], fontSize: 14.0),),
                                                 ],
                                               ),
@@ -536,31 +536,31 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                             // child:Text(snapshot.data[index].withdrawlsts.toString()),
                                           ),
 
-
                                           (snapshot.data[index].Timeoffsts.toString()=='Pending' && snapshot.data[index].Psts.toString()!='') ?Container(
                                             width: MediaQuery.of(context).size.width*.90,
-                                            //padding: EdgeInsets.only(top:.5,bottom: 1.5),
                                             margin: EdgeInsets.only(top: 4.0),
                                             child: RichText(
                                               text: new TextSpan(
-                                                // Note: Styles for TextSpans must be explicitly defined.
-                                                // Child text spans will inherit styles from parent
                                                 style: new TextStyle(
                                                   fontSize: 14.0,
                                                   color: Colors.black,
                                                 ),
                                                 children: <TextSpan>[
-                                                  new TextSpan(text: 'Status: ',style:TextStyle(color: Colors.black54,), ),
+                                                  new TextSpan(text: 'Approval Status: ',style:TextStyle(color: Colors.black54,), ),
                                                   new TextSpan(text: snapshot.data[index].Psts.toString(), style: TextStyle(color: Colors.orange[800], fontSize: 14.0),),
                                                 ],
                                               ),
                                             ),
-                                          ):Center(
-                                            // child:Text(snapshot.data[index].withdrawlsts.toString()),
-                                          ),
+                                          ):Center(),
 
+                                          snapshot.data[index].ApproverComment.toString()!='-'?Container(
+                                            width: MediaQuery.of(context).size.width*.90,
+                                            //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
+                                            margin: EdgeInsets.only(top: 3.0),
+                                            child: Text('Comment: '+snapshot.data[index].ApproverComment.toString(), style: TextStyle(color: Colors.black54), ),
+                                          ):Center(),
 
-                                          Divider(color: Colors.black45,),
+                                          Divider(color: Colors.black54,),
                                         ] );
                                   }
                               );
@@ -573,16 +573,11 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                   child:Text("No Records",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                                 ),
                               );
-                             /* return new Center(
-                                child:Text("No Records"),
-                              );*/
                             }
                           }
                           else if (snapshot.hasError) {
                             return new Text("Unable to connect server");
                           }
-
-                          // By default, show a loading spinner
                           return new Center(child: CircularProgressIndicator());
                         },
                       ),
@@ -591,9 +586,6 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
 
                 ])
         ),
-
-
-
       ],
     );
   }
@@ -631,15 +623,6 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
               alignment: Alignment.topCenter,
               child: Wrap(
                 children: <Widget>[
-                  /*    new Container(
-                    width: MediaQuery.of(context).size.width * .20,
-                    child:Text(psts,style:TextStyle(
-                        fontFamily: "WorkSansSemiBold",
-                        fontSize: 18.0,
-                        color: Colors.black)),
-
-                  ),
-                  Divider(color: Colors.black45,),*/
                   Padding(
                     padding: EdgeInsets.only(
                         top: 20.0, bottom: 20.0, left: 20.0, right: 20.0),
@@ -658,29 +641,10 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         fillColor: Colors.white, filled: true,
-                        /* icon: Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                          size: 22.0,
-                        ),*/
                         hintText: "Comment",
                         hintStyle: TextStyle(
                             fontFamily: "WorkSansSemiBold", fontSize: 15.0),
-                        /*  suffixIcon: GestureDetector(
-                          //onTap: _toggleLogin,
-                          child: Icon(
-                            Icons.edit,
-                            size: 15.0,
-                            color: Colors.black,
-                          ),
-                        ),*/
                       ),
-
-                      /*validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter Email or Phone no.';
-                            }
-                          },*/
                       maxLines: 3,
                     ),
                   ),
@@ -689,14 +653,12 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                         top: 10.0, bottom: 0.0, left: 60.0, right: 7.0),
                     child:  ButtonTheme(
                       minWidth: 50.0,
-                 //     height: 40.0,
+                      //     height: 40.0,
                       child: OutlineButton(
                         onPressed: () async  {
                           //getApprovals(choice.title);
                           //Navigator.pop(context);  // for close bottom sheet
                           final sts= await ApproveTimeoff(timeoffid,CommentController.text,2);
-                          //  print("kk");
-                          // print("kk"+sts);
                           if(sts=="true") {
                             Navigator.pop(context);
                             showDialog(
@@ -704,39 +666,27 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Approved"),
+                                  content: new Text("Time Off application approved successfully."),
                                 )
                             );
-
                             await new Future.delayed(const Duration(seconds: 2));
                             Navigator.pop(context);
-
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => TeamTimeoffSummary()),
                             );
-                          }
-                          else{
+                          }else{
                             showDialog(
                                 context: context,
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Could not be approved. Try again."),
+                                  content: new Text("Time Off application could not be approved."),
                                 )
                             );
                           }
-
-                          /*Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => TimeOffApp()),
-                          );*/
-                        },
+                          },
                         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0),),
-
-                        /* gradient: LinearGradient(
-                          colors: <Color>[Colors.green[700], Colors.green[700]],
-                        ),*/
                         child: new Text('Approve',
                             style: new TextStyle(
                               color: Colors.green[700],
@@ -753,7 +703,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                         top: 10.0, bottom: 0.0, left: 5.0, right: 20.0),
                     child:  ButtonTheme(
                       minWidth: 50.0,
-                   //   height: 40.0,
+                      //   height: 40.0,
                       child: OutlineButton(
                         onPressed: () async {
                           //getApprovals(choice.title);
@@ -766,7 +716,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Application for time off is rejected"),
+                                  content: new Text("Time Off application rejected successfully."),
                                 )
                             );
 
@@ -777,21 +727,20 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                               MaterialPageRoute(builder: (context) => TeamTimeoffSummary()),
                             );
 
-                          }
-                          else{
+                          }else{
                             showDialog(
                                 context: context,
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
-                                  content: new Text("Could not be rejected"),
+                                  content: new Text("Time Off application could not be rejected."),
                                 )
                             );
                           }
 
 
 
-                         /* Navigator.push(
+                          /* Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => TimeOffApp()),
                           );*/
@@ -801,7 +750,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                         /* color: Colors.red,
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(30.0)),*/
-                       /* gradient: LinearGradient(
+                        /* gradient: LinearGradient(
                           colors: <Color>[Colors.red[700], Colors.red[700]],
                         ),*/
                         child: new Text('Reject',

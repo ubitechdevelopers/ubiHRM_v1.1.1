@@ -9,7 +9,6 @@ class MarkTime{
   String latit;
   String longi;
 
-
   MarkTime(this.uid, this.location, this.aid, this.act, this.shiftid, this.refid, this.latit, this.longi);
 
   MarkTime.fromMap(Map map){
@@ -36,6 +35,41 @@ class MarkTime{
 
 }
 
+/*class MarkStartTimeOff{
+  String empid;
+  String orgid;
+  DateTime time;
+  String act;
+  String timeoffId;
+  String location;
+  String latit;
+  String longi;
+
+  MarkStartTimeOff(this.empid, this.orgid, this.time, this.act, this.timeoffId, this.location, this.latit, this.longi);
+
+  MarkStartTimeOff.fromMap(Map map){
+    empid = map[empid];
+    orgid = map[orgid];
+    time = map[time];
+    act = map[act];
+    timeoffId = map[timeoffId];
+    location = map[location];
+    latit = map[latit];
+    longi = map[longi];
+  }
+
+  MarkStartTimeOff.fromJson(Map map){
+    empid = map[empid];
+    orgid = map[orgid];
+    time = map[time];
+    act = map[act];
+    timeoffId = map[timeoffId];
+    location = map[location];
+    latit = map[latit];
+    longi = map[longi];
+  }
+
+}*/
 
 class MarkVisit{
 

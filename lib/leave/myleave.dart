@@ -81,48 +81,55 @@ class _MyLeaveState extends State<MyLeave> {
   }
 
   withdrawlLeave(String leaveid, String compoffsts) async{
-    setState(() {
-      _checkwithdrawnleave = true;
-    });
-    print("----> withdrawn service calling "+_checkwithdrawnleave.toString());
-    final prefs = await SharedPreferences.getInstance();
-    String empid = prefs.getString('employeeid')??"";
-    String orgid =prefs.getString('organization')??"";
-    var leave = Leave(leaveid: leaveid, orgid: orgid, uid: empid, approverstatus: '5', compoffsts: compoffsts);
-    var islogin = await withdrawLeave(leave);
-    print(islogin);
-    if(islogin=="success"){
+    try {
       setState(() {
-        _isButtonDisabled=false;
+        _checkwithdrawnleave = true;
       });
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MyLeave()),
-      );
+      final prefs = await SharedPreferences.getInstance();
+      String empid = prefs.getString('employeeid')??"";
+      String orgid =prefs.getString('organization')??"";
+      var leave = Leave(leaveid: leaveid, orgid: orgid, uid: empid, approverstatus: '5', compoffsts: compoffsts);
+      var islogin = await withdrawLeave(leave);
+
+      if (islogin == "success") {
+        setState(() {
+          _checkwithdrawnleave = false;
+          _isButtonDisabled = false;
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MyLeave()),
+        );
+        showDialog(context: context, child:
+        new AlertDialog(
+          content: new Text("Leave application withdrawn successfully."),
+        )
+        );
+      } else {
+        setState(() {
+          _checkwithdrawnleave = false;
+          _isButtonDisabled = false;
+        });
+        showDialog(context: context, child:
+        new AlertDialog(
+          content: new Text("Leave could not be withdrawn."),
+        )
+        );
+      } /*else {
+        setState(() {
+          _checkwithdrawnleave = false;
+          _isButtonDisabled = false;
+        });
+        showDialog(context: context, child:
+        new AlertDialog(
+          content: new Text("Some error occurred."),
+        )
+        );
+      }*/
+    }catch(e){
+      print(e.toString());
       showDialog(context: context, child:
       new AlertDialog(
-        //backgroundColor: appEndColor(),
-      //  title: new Text("Congrats!"),
-        content: new Text("Leave application withdrawn successfully."),
-      )
-      );
-    }else if(islogin=="failure"){
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-        //title: new Text("Sorry!"),
-        content: new Text("Leave could not be withdrawn."),
-      )
-      );
-    }else{
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-       // title: new Text("Sorry!"),
         content: new Text("Poor network connection."),
       )
       );
@@ -157,12 +164,6 @@ class _MyLeaveState extends State<MyLeave> {
       ),
     )
     );
-    /*return new Center(child: SizedBox(
-      child: CircularProgressIndicator(strokeWidth: 2.2,),
-      height: 20.0,
-      width: 20.0,
-    ),
-    );*/
   }
 
   void showInSnackBar(String value) {

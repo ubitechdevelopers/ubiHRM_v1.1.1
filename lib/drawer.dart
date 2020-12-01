@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/attandance/about_app.dart';
 import 'package:ubihrm/payroll/allpayroll_list.dart';
 import 'package:ubihrm/salary/allsalary_list.dart';
+import 'package:ubihrm/userGuide.dart';
 
 import 'all_reports.dart';
 import 'global.dart';
@@ -24,7 +26,8 @@ class _AppDrawerState extends State<AppDrawer> {
   bool _checkLoaded = true;
   String fname="";
   String lname="";
-  String store="http://play.google.com/store/apps/details?id=com.ubihrm.ubihrm";
+  String appstore="https://apps.apple.com/in/app/ubihrm/id1489689034";
+  String playstore="https://play.google.com/store/apps/details?id=com.ubihrm.ubihrm";
   String sstatus="";
   String desination="";
   String profile="";
@@ -46,7 +49,7 @@ class _AppDrawerState extends State<AppDrawer> {
     setState(() {
      fname = prefs.getString('fname') ?? '';
      profile = prefs.getString('profile') ?? '';
-     store = 'http://play.google.com/store/apps/details?id=com.ubihrm.ubihrm';
+     //store = 'http://play.google.com/store/apps/details?id=com.ubihrm.ubihrm';
      //print("-------555555->"+globalcompanyinfomap['ProfilePic']);
      profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
      //print("-------555555->"+profileimage);
@@ -184,6 +187,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => HomePageMain()),
@@ -199,6 +203,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AllReports()),
@@ -214,6 +219,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => allSalarySummary()),
@@ -229,6 +235,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => allPayrollSummary()),
@@ -244,6 +251,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AllSetting()),
@@ -323,12 +331,12 @@ class _AppDrawerState extends State<AppDrawer> {
             title: Row(
               children: <Widget>[
                 Icon(Icons.share,size: 20.0),SizedBox(width: 5.0),
-                new Text("Share App", style: new TextStyle(fontSize: 15.0)),
+                new Text("Share", style: new TextStyle(fontSize: 15.0)),
               ],
             ),
             onTap: () {
               final RenderBox box = context.findRenderObject();
-              Share.share("Hi! I have had a great experience with ubiHRM App!  I highly recommend it to manage your Human resource. Download via the following link\n"+store,
+              Share.share("Hi! I have had a great experience with ubiHRM App! I highly recommend it to manage your Human resource. Download the Android app via the following link -\n"+playstore+" \niPhone users can download through -\n"+appstore,
                   sharePositionOrigin:
                   box.localToGlobal(Offset.zero) &
                   box.size);
@@ -343,6 +351,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
+              Navigator.of(context).pop();
               LaunchReview.launch(
                   androidAppId: "com.ubihrm.ubihrm"
               );
@@ -366,14 +375,21 @@ class _AppDrawerState extends State<AppDrawer> {
               );
             },
           ), */
-         /* new ListTile(
+          new ListTile(
             title: Row(
               children: <Widget>[
                 Icon(Icons.security,size: 20.0),SizedBox(width: 5.0),
                 new Text("User Guide", style: new TextStyle(fontSize: 14.0)),
               ],
             ),
-          ),*/
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserGuide()),
+              );
+            },
+          ),
 
 
         /*  new ListTile(
@@ -390,6 +406,22 @@ class _AppDrawerState extends State<AppDrawer> {
               );
             },
           ),*/
+
+          new ListTile(
+            title: Row(
+              children: <Widget>[
+                Icon(Icons.perm_device_information,size: 20.0),SizedBox(width: 5.0),
+                new Text('About', style: new TextStyle(fontSize: 15.0)),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AboutApp()),
+              );
+            },
+          ),
+
           new ListTile(
             title: Row(
               children: <Widget>[
@@ -409,9 +441,6 @@ class _AppDrawerState extends State<AppDrawer> {
   logout() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('response');
-    prefs.setString("path", '');
-    prefs.setString("path_ubiattendance", '');
-    prefs.setString("path_hrm_india", '');
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,

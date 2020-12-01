@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/services/salary_services.dart';
-import 'package:ubihrm/services/timeoff_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../appbar.dart';
@@ -25,8 +24,6 @@ class _allSalarySummary extends State<allSalarySummary> {
   var profileimage;
   bool showtabbar;
   String orgName="";
-
-
 
   bool _checkLoaded = true;
   int checkProcessing = 0;
@@ -65,7 +62,6 @@ class _allSalarySummary extends State<allSalarySummary> {
     super.initState();
     initPlatformState();
     getOrgName();
-
   }
 
   getOrgName() async{
@@ -76,126 +72,41 @@ class _allSalarySummary extends State<allSalarySummary> {
   }
 
   @override
-
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('empid') ?? '';
     orgdir = prefs.getString('orgdir') ?? '';
- //   response = prefs.getInt('response') ?? 0;
     admin_sts = prefs.getString('sstatus') ?? 0.toString();
-  //  if (response == 1) {
-  //    Loc lock = new Loc();
-  //    location_addr = await lock.initPlatformState();
-      //act =await checkPunch(empid, orgdir);
 
-      //act= 'PunchOut';
-
-      setState(() {
-  //      location_addr1 = location_addr;
-   //    response = prefs.getInt('response') ?? 0;
-        fname = prefs.getString('fname') ?? '';
-        lname = prefs.getString('lname') ?? '';
-        empid = prefs.getString('empid') ?? '';
-        email = prefs.getString('email') ?? '';
-        status = prefs.getString('status') ?? '';
-        orgid = prefs.getString('orgid') ?? '';
-        orgdir = prefs.getString('orgdir') ?? '';
-        sstatus = prefs.getString('sstatus') ?? '';
-        org_name = prefs.getString('org_name') ?? '';
-        desination = prefs.getString('desination') ?? '';
-        profile = prefs.getString('profile') ?? '';
-        lid = prefs.getString('lid') ?? "0";
-    //    act= lid!='0'?'PunchOut':'PunchIn';
-        showtabbar=false;
-        profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __){
-          if (mounted) {
-            setState(() {
-              _checkLoaded = false;
-            });
-          }
-        }));
-   //     latit = prefs.getString('latit') ?? '';
-  //      longi = prefs.getString('longi') ?? '';
-  //      shiftId = prefs.getString('shiftId') ?? "";
-  //      print("this is set state " + lid);
-   //     act1 = act;
-      });
-//    }
+    setState(() {
+      fname = prefs.getString('fname') ?? '';
+      lname = prefs.getString('lname') ?? '';
+      empid = prefs.getString('empid') ?? '';
+      email = prefs.getString('email') ?? '';
+      status = prefs.getString('status') ?? '';
+      orgid = prefs.getString('orgid') ?? '';
+      orgdir = prefs.getString('orgdir') ?? '';
+      sstatus = prefs.getString('sstatus') ?? '';
+      org_name = prefs.getString('org_name') ?? '';
+      desination = prefs.getString('desination') ?? '';
+      profile = prefs.getString('profile') ?? '';
+      lid = prefs.getString('lid') ?? "0";
+      showtabbar=false;
+      profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+      profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __){
+        if (mounted) {
+          setState(() {
+            _checkLoaded = false;
+          });
+        }
+      }));
+    });
   }
 
-  withdrawlTimeOff(String timeoffid) async{
-    RequestTimeOffService ns = new RequestTimeOffService();
-
-    var timeoff = TimeOff(TimeOffId: timeoffid, OrgId: orgid, EmpId: empid, ApprovalSts: '5');
-    var islogin = await ns.withdrawTimeOff(timeoff);
-   // print(islogin);
-    if(islogin=="success"){
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => allSalarySummary()),
-      );
-
-    }else if(islogin=="failure"){
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-        title: new Text("Sorry!"),
-        content: new Text("Timeoff withdrawl failed."),
-      )
-      );
-    }else{
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-        title: new Text("Sorry!"),
-        content: new Text("Poor network connection."),
-      )
-      );
-    }
-  }
-
-  confirmWithdrawl(String timeoffid) async{
-    showDialog(context: context, child:
-    new AlertDialog(
-      title: new Text("Are you sure?",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18.0),),
-      content:  ButtonBar(
-        children: <Widget>[
-          FlatButton(
-            shape: Border.all(color: Colors.orange[800]),
-            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
-            onPressed: () {
-              setState(() {
-                _isButtonDisabled=false;
-              });
-              Navigator.of(context, rootNavigator: true).pop();
-            },
-          ),
-          RaisedButton(
-            child: Text('Withdraw',style: TextStyle(color: Colors.white),),
-            color: Colors.orange[800],
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-              withdrawlTimeOff(timeoffid);
-            },
-          ),
-        ],
-      ),
-    )
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-//    return (response == 0) ? new LoginPage() : getmainhomewidget();
     return  getmainhomewidget();
   }
 
@@ -211,144 +122,21 @@ class _allSalarySummary extends State<allSalarySummary> {
       backgroundColor:scaffoldBackColor(),
       endDrawer: new AppDrawer(),
       appBar: new AppHeader(profileimage,showtabbar,orgName),
-
-      /*appBar: GradientAppBar(
-        automaticallyImplyLeading: false,
-        *//*    title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-
-            new Text(org_name, style: new TextStyle(fontSize: 20.0)),
-
-          ],
-        ),
-        leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()),
-          );
-        },),
-        backgroundColor: Colors.teal,*//*
-        backgroundColorStart: appStartColor(),
-        backgroundColorEnd: appEndColor(),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            new Container(
-                width: 40.0,
-                height: 40.0,
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage('assets/avatar.png'),
-                    )
-                )),
-            Container(
-                padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-            )
-          ],
-
-        ),
-
-      ),*/
       bottomNavigationBar:  new HomeNavigation(),
-      /*     bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (newIndex) {
-          if(newIndex==2){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Settings()),
-            );
-            return;
-          }
-          else if (newIndex == 0) {
-            (admin_sts == '1')
-                ? Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Reports()),
-            )
-                : Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
-            );
-            return;
-          }
-          if(newIndex==1){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-            return;
-          }
-          print("Current pressed new indexed "+newIndex.toString());
-          setState((){_currentIndex = newIndex;});
-        }, // this will be set when a new tab is tapped
-        items: [
-          (admin_sts == '1')
-              ? BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.library_books,
-            ),
-            title: new Text('Reports'),
-          )
-              : BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.person,
-            ),
-            title: new Text('Profile'),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.home,color: Colors.black54,),
-            title: new Text('Home',style:TextStyle(color: Colors.black54,)),
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              title: Text('Settings')
-          )
-        ],
-      ),*/
-
-      // endDrawer: new AppDrawer(),
-    //  body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
       body:getMarkAttendanceWidgit(),
-     /* floatingActionButton: new FloatingActionButton(
-        backgroundColor: Colors.orange[800],
-        onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TimeOffPage()),
-          );
-        },
-        tooltip: 'Request TimeOff',
-        child: new Icon(Icons.add),
-      ),*/
     );
   }
 
   checkalreadylogin() {
-
-
- //   if (response == 1) {
-      return new IndexedStack(
-        index: _currentIndex,
-        children: <Widget>[
-    //      underdevelopment(),
-      //    mainbodyWidget(),
-     //     underdevelopment()
-        ],
-      );
-  /*  } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-    }*/
+    return new IndexedStack(
+      index: _currentIndex,
+      children: <Widget>[
+      ],
+    );
   }
 
-  loader() {
-   /* return new Container(
+  /*loader() {
+    return new Container(
       child: Center(
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -358,10 +146,10 @@ class _allSalarySummary extends State<allSalarySummary> {
                 style: new TextStyle(fontSize: 30.0, color: Colors.teal),)
             ]),
       ),
-    );*/
-  }
+    );
+  }*/
 
-  underdevelopment() {
+  /*underdevelopment() {
     return new Container(
       child: Center(
         child: Row(
@@ -373,41 +161,14 @@ class _allSalarySummary extends State<allSalarySummary> {
             ]),
       ),
     );
-  }
-
-  /*
-  mainbodyWidget() {
-    return SafeArea(
-      child: ListView(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(height: 15.0),
-              getMarkAttendanceWidgit(),
-              //getMarkAttendanceWidgit(),
-            ],
-          ),
-
-
-        ],
-      ),
-
-    );
   }*/
 
   Widget getMarkAttendanceWidgit() {
-    //  double h_width = MediaQuery.of(context).size.width*0.5; // screen's 50%
-    //  double f_width = MediaQuery.of(context).size.width*1;
-
-
     return Stack(
       children: <Widget>[
         Container(
             margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-            //width: MediaQuery.of(context).size.width*0.9,
-       //     height:MediaQuery.of(context).size.height*0.75,
             decoration: new ShapeDecoration(
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
               color: Colors.white,
@@ -472,7 +233,7 @@ class _allSalarySummary extends State<allSalarySummary> {
                     color: Colors.white,
                     //////////////////////////////////////////////////////////////////////---------------------------------
                     child: new FutureBuilder<List<Salary>>(
-                      future: getsalarySummaryAll(),
+                      future: getSalarySummaryAll(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           if(snapshot.data.length>0){
@@ -502,7 +263,7 @@ class _allSalarySummary extends State<allSalarySummary> {
                                            crossAxisAlignment: CrossAxisAlignment.start,                                              children: <Widget>[
                                            new Text(
                                            snapshot.data[index].month.toString(),style: TextStyle(),),
-                                                    /*  (snapshot.data[index].withdrawlsts && snapshot.data[index].ApprovalSts.toString()!='Withdrawn' && snapshot.data[index].ApprovalSts.toString()!="Rejected")?new Container(
+                                             /*  (snapshot.data[index].withdrawlsts && snapshot.data[index].ApprovalSts.toString()!='Withdrawn' && snapshot.data[index].ApprovalSts.toString()!="Rejected")?new Container(
                                               height:18.5,
                                               child:new  FlatButton(
                                                 shape: Border.all(color: Colors.blue),
@@ -512,7 +273,7 @@ class _allSalarySummary extends State<allSalarySummary> {
                                                 },
                                                 child: Text("Withdraw",style: TextStyle(color: Colors.blue),),
                                               )
-                                      ):Center(),*/
+                                              ):Center(),*/
                                                   ],
                                                 )),),
 
@@ -537,9 +298,9 @@ class _allSalarySummary extends State<allSalarySummary> {
                                                 child: new OutlineButton(
                                                   onPressed: () async{
                                                     final prefs = await SharedPreferences.getInstance();
-                                                    String path1 = prefs.getString('path');
-                                                    print(path1+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
-                                                    launchMap(path1+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
+                                                    //String path1 = prefs.getString('path');
+                                                    print(path+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
+                                                    launchMap(path+"viewpayslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
 
                                                   },
                                                   child: new Icon(
@@ -583,9 +344,6 @@ class _allSalarySummary extends State<allSalarySummary> {
 
                 ])
         ),
-
-
-
       ],
     );
   }

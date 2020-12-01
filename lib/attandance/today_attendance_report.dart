@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_share/simple_share.dart';
+//import 'package:simple_share/simple_share.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 
 import './image_view.dart';
@@ -128,25 +128,33 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
+                    SizedBox(width: 15.0,),
                     Flexible(
-                      child: Text('Present(P)',
-                        style: TextStyle(
-                            color: Colors.black87, fontSize: 12.0),),
+                      child: Container(
+                        child: Text('Present(P)',
+                          style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                      ),
                     ),
+                    SizedBox(width: 20.0,),
                     Flexible(
-                      child: Text('Absent(A)',
-                        style: TextStyle(
-                            color: Colors.black87, fontSize: 12.0),),
+                      child: Container(
+                        child: Text('Absent(A)',
+                          style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                      ),
                     ),
+                    SizedBox(width: 20.0,),
                     Flexible(
-                      child: Text('Late Comers(LC)',
-                        style: TextStyle(
-                            color: Colors.black87, fontSize: 12.0),),
+                      child: Container(
+                        child: Text('Late Comers(LC)',
+                          style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                      ),
                     ),
+                    SizedBox(width: 15.0,),
                     Flexible(
-                      child: Text('Early Leavers(EL)',
-                        style: TextStyle(
-                            color: Colors.black87, fontSize: 12.0),),
+                      child: Container(
+                        child: Text('Early Leavers(EL)',
+                          style: TextStyle(color: Colors.black87, fontSize: 12.0),),
+                      ),
                     ),
                   ],
                 ),
@@ -551,11 +559,11 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                         color: appStartColor().withOpacity(0.1),
                                         padding: EdgeInsets.only(
                                             top: 5.0, bottom: 5.0),
-                                        child: Text("No Employees found",
+                                        child: Text("No employees found",
                                           style: TextStyle(fontSize: 14.0),
                                           textAlign: TextAlign.center,),
                                       ),
-                                      //child: Text("No Employees found. "),
+                                      //child: Text("No employees found. "),
                                     );
                                   }
                                 }
@@ -780,11 +788,11 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                         color: appStartColor().withOpacity(0.1),
                                         padding: EdgeInsets.only(
                                             top: 5.0, bottom: 5.0),
-                                        child: Text("No Employees found",
+                                        child: Text("No employees found",
                                           style: TextStyle(fontSize: 14.0),
                                           textAlign: TextAlign.center,),
                                       ),
-                                      //child: Text("No Employees found."),
+                                      //child: Text("No employees found."),
                                     );
                                   }
                                 }
@@ -1137,11 +1145,11 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                         color: appStartColor().withOpacity(0.1),
                                         padding: EdgeInsets.only(
                                             top: 5.0, bottom: 5.0),
-                                        child: Text("No Employees found",
+                                        child: Text("No employees found",
                                           style: TextStyle(fontSize: 14.0),
                                           textAlign: TextAlign.center,),
                                       ),
-                                      //child: Text("No Employees found."),
+                                      //child: Text("No employees found."),
                                     );
                                   }
                                 }
@@ -1494,11 +1502,11 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
                                         color: appStartColor().withOpacity(0.1),
                                         padding: EdgeInsets.only(
                                             top: 5.0, bottom: 5.0),
-                                        child: Text("No Employees found",
+                                        child: Text("No employees found",
                                           style: TextStyle(fontSize: 14.0),
                                           textAlign: TextAlign.center,),
                                       ),
-                                      //child: Text("No Employees found."),
+                                      //child: Text("No employees found."),
                                     );
                                   }
                                 }
@@ -1525,7 +1533,7 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
         ]);
   }
 
-  dialogwidget(msg, filename) {
+ /* dialogwidget(msg, filename) {
     showDialog(
         context: context,
         // ignore: deprecated_member_use
@@ -1556,6 +1564,6 @@ class _TodayAttendance extends State<TodayAttendance> with SingleTickerProviderS
             ),
           ],
         ));
-  }
+  }*/
 }
 

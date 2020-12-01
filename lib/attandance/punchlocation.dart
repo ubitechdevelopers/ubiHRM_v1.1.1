@@ -11,17 +11,15 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/model/timeinout.dart';
+import 'package:ubihrm/register_page.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../drawer.dart';
 import '../global.dart';
 import '../profile.dart';
 import '../services/attandance_fetch_location.dart';
-import '../services/attandance_gethome.dart';
-import '../services/attandance_newservices.dart';
 import '../services/attandance_saveimage.dart';
-import 'askregister.dart';
 import 'punchlocation_summary.dart';
 
 // This app is a stateful, it tracks the user's current choice.
@@ -88,7 +86,7 @@ class _PunchLocation extends State<PunchLocation> {
     initPlatformState();
     getOrgName();
     setLocationAddress();
-  //  startTimer();
+    //  startTimer();
 
   }
 
@@ -168,63 +166,63 @@ class _PunchLocation extends State<PunchLocation> {
     response = prefs.getInt('response') ?? 0;
 
 
-  //  if (response == 1) {
-      Loc lock = new Loc();
-      location_addr = await lock.initPlatformState();
-      Home ho = new Home();
-      act = await ho.checkTimeIn(empid, orgdir);
-      ho.managePermission(empid, orgdir, desinationId);
-      // //print(act);
-      ////print("this is-----> "+act);
-      ////print("this is main "+location_addr);
-      setState(() {
-        Is_Delete = prefs.getInt('Is_Delete') ?? 0;
-        newpwd = prefs.getString('newpwd') ?? "";
-        userpwd = prefs.getString('usrpwd') ?? "";
-        print("New pwd"+newpwd+"  User ped"+userpwd);
-        location_addr1 = location_addr;
-        admin_sts = prefs.getString('sstatus').toString() ?? '0';
-        mail_varified = prefs.getString('mail_varified').toString() ?? '0';
-        alertdialogcount = globalalertcount;
-        response = prefs.getInt('response') ?? 0;
-        fname = prefs.getString('fname') ?? '';
-        lname = prefs.getString('lname') ?? '';
-        empid = prefs.getString('empid') ?? '';
-        email = prefs.getString('email') ?? '';
-        status = prefs.getString('status') ?? '';
-        orgid = prefs.getString('orgid') ?? '';
-        orgdir = prefs.getString('orgdir') ?? '';
-        org_name = prefs.getString('org_name') ?? '';
-        desination = prefs.getString('desination') ?? '';
-        profile = prefs.getString('profile') ?? '';
-        profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+    //  if (response == 1) {
+    Loc lock = new Loc();
+    location_addr = await lock.initPlatformState();
+    Home ho = new Home();
+    act = await ho.checkTimeIn(empid, orgdir);
+    ho.managePermission(empid, orgdir, desinationId);
+    // //print(act);
+    ////print("this is-----> "+act);
+    ////print("this is main "+location_addr);
+    setState(() {
+      Is_Delete = prefs.getInt('Is_Delete') ?? 0;
+      newpwd = prefs.getString('newpwd') ?? "";
+      userpwd = prefs.getString('usrpwd') ?? "";
+      print("New pwd"+newpwd+"  User ped"+userpwd);
+      location_addr1 = location_addr;
+      admin_sts = prefs.getString('sstatus').toString() ?? '0';
+      mail_varified = prefs.getString('mail_varified').toString() ?? '0';
+      alertdialogcount = globalalertcount;
+      response = prefs.getInt('response') ?? 0;
+      fname = prefs.getString('fname') ?? '';
+      lname = prefs.getString('lname') ?? '';
+      empid = prefs.getString('empid') ?? '';
+      email = prefs.getString('email') ?? '';
+      status = prefs.getString('status') ?? '';
+      orgid = prefs.getString('orgid') ?? '';
+      orgdir = prefs.getString('orgdir') ?? '';
+      org_name = prefs.getString('org_name') ?? '';
+      desination = prefs.getString('desination') ?? '';
+      profile = prefs.getString('profile') ?? '';
+      profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
 
 
-        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
-          if (mounted) {
-            setState(() {
-              _checkLoaded = false;
-            });
-          }
-        }));
-        showtabbar=false;
-        // //print("2-"+_checkLoaded.toString());
-        latit = prefs.getString('latit') ?? '';
-        longi = prefs.getString('longi') ?? '';
-        aid = prefs.getString('aid') ?? "";
-        shiftId = prefs.getString('shiftId') ?? "";
-        ////print("this is set state "+location_addr1);
-        act1 = act;
-        // //print(act1);
-        streamlocationaddr = globalstreamlocationaddr;
-      });
+      profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
+        if (mounted) {
+          setState(() {
+            _checkLoaded = false;
+          });
+        }
+      }));
+      showtabbar=false;
+      // //print("2-"+_checkLoaded.toString());
+      latit = prefs.getString('latit') ?? '';
+      longi = prefs.getString('longi') ?? '';
+      aid = prefs.getString('aid') ?? "";
+      shiftId = prefs.getString('shiftId') ?? "";
+      ////print("this is set state "+location_addr1);
+      act1 = act;
+      // //print(act1);
+      streamlocationaddr = globalstreamlocationaddr;
+    });
 
-  //  }
+    //  }
   }
 
   @override
   Widget build(BuildContext context) {
-   // return (response == 0 || userpwd!=newpwd || Is_Delete!=0) ? new AskRegisterationPage() : getmainhomewidget();
+    // return (response == 0 || userpwd!=newpwd || Is_Delete!=0) ? new AskRegisterationPage() : getmainhomewidget();
     return getmainhomewidget();
   }
 
@@ -354,7 +352,7 @@ class _PunchLocation extends State<PunchLocation> {
     } else {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => AskRegisterationPage()),
+        MaterialPageRoute(builder: (context) => Register()),
             (Route<dynamic> route) => false,
       );
     }
@@ -684,19 +682,19 @@ class _PunchLocation extends State<PunchLocation> {
           MaterialPageRoute(builder: (context) => PunchLocationSummary()),
         );
         showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text("Visit punched successfully!"),
-          )
+        new AlertDialog(
+          content: new Text("Visit punched successfully!"),
+        )
         );
         setState(() {
           act1 = act;
         });
       } else {
         showDialog(context: context, child:
-          new AlertDialog(
-            //title: new Text("Warning!"),
-            content: new Text("Selfie not captured, please punch again!"),
-          )
+        new AlertDialog(
+          //content: new Text("Selfie not captured, please punch again!"),
+          content: new Text("Attendance was not captured. Please punch again!"),
+        )
         );
         setState(() {
           act1 = act;
@@ -704,10 +702,10 @@ class _PunchLocation extends State<PunchLocation> {
       }
     }else{
       showDialog(context: context, child:
-        new AlertDialog(
+      new AlertDialog(
 
-          content: new Text("Internet connection not found."),
-        )
+        content: new Text("Internet connection not found."),
+      )
       );
     }
 
@@ -764,23 +762,23 @@ class _PunchLocation extends State<PunchLocation> {
   Widget getClients_DD() {
     return Center(
       child: Form(
-          child: TextFormField(
-            controller: _clientname,
+        child: TextFormField(
+          controller: _clientname,
 
-            keyboardType: TextInputType.text,
+          keyboardType: TextInputType.text,
 
-            decoration: InputDecoration(
-                labelText: 'Client Name',
-                prefixIcon: Padding(
-                  padding: EdgeInsets.all(0.0),
-                  child: Icon(
-                    Icons.supervised_user_circle,
-                    color: Colors.grey,
-                  ), // icon is 48px widget.
-                )
-            ),
-
+          decoration: InputDecoration(
+              labelText: 'Client Name',
+              prefixIcon: Padding(
+                padding: EdgeInsets.all(0.0),
+                child: Icon(
+                  Icons.supervised_user_circle,
+                  color: Colors.grey,
+                ), // icon is 48px widget.
+              )
           ),
+
+        ),
       ),
     );
 

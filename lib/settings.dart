@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/department_list.dart';
+import 'package:ubihrm/designation_list.dart';
+import 'package:ubihrm/division.dart';
+import 'package:ubihrm/employees_list.dart';
+import 'package:ubihrm/home.dart';
+import 'package:ubihrm/profile.dart';
+import 'package:ubihrm/services/services.dart';
+import 'package:ubihrm/shift_list.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'geofence.dart';
 import 'appbar.dart';
 import 'b_navigationbar.dart';
 import 'change_pass.dart';
 import 'drawer.dart';
 import 'global.dart';
-
+import 'holiday.dart';
 
 class AllSetting extends StatefulWidget {
   @override
@@ -15,15 +25,12 @@ class AllSetting extends StatefulWidget {
 }
 class _AllSetting extends State<AllSetting> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  int _currentIndex = 1;
-  String _orgName;
-  String buystatus = "";
-  String trialstatus = "";
-  String orgmail = "";
-  String admin_sts = "0";
   var profileimage;
   bool showtabbar;
   String orgName="";
+  int hrsts=0;
+  int adminsts=0;
+  int divhrsts=0;
 
   @override
   void initState() {
@@ -32,13 +39,17 @@ class _AllSetting extends State<AllSetting> {
     showtabbar=false;
     getOrgName();
   }
+
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
-
+      hrsts =prefs.getInt('hrsts')??0;
+      adminsts =prefs.getInt('adminsts')??0;
+      divhrsts =prefs.getInt('divhrsts')??0;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return getmainhomewidget();
@@ -49,125 +60,27 @@ class _AllSetting extends State<AllSetting> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
+  Future<bool> move() async {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HomePageMain()), (
+        Route<dynamic> route) => false,
+    );
+    return false;
+  }
 
   getmainhomewidget() {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
-/*      appBar: GradientAppBar(
-
-        automaticallyImplyLeading: false,
-
-        backgroundColorStart: appStartColor(),
-        backgroundColorEnd: appEndColor(),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            new Container(
-                width: 40.0,
-                height: 40.0,
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage('assets/avatar.png'),
-                    )
-                )),
-            Container(
-                padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-            )
-          ],
-
-        ),
-
-      ),*/
-      bottomNavigationBar:  new HomeNavigation(),
-
-      body:getReportsWidget(),
-
-    );
-  }
-
-  /*
-  mainbodyWidget() {
-    return SafeArea(
-      child: ListView(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(height: 15.0),
-              getReportsWidget(),
-              //getMarkAttendanceWidgit(),
-            ],
-          ),
-
-
-        ],
-      ),
-
-    );
-  }
-  */
-
-  loader(){
-    return new Container(
-      child: Center(
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Image.asset(
-                  'assets/spinner.gif', height: 80.0, width: 80.0),
-            ]),
+    return WillPopScope(
+      onWillPop: () => move(),
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        endDrawer: new AppDrawer(),
+        appBar: new SettingsAppHeader(profileimage,showtabbar,orgName),
+        bottomNavigationBar:  new HomeNavigation(),
+        body:getReportsWidget(),
       ),
     );
-  }
-
-  launchMap(String url) async{
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      print( 'Could not launch $url');
-    }
-  }
-
-  showDialogWidget(String loginstr){
-
-    return showDialog(context: context, builder:(context) {
-
-      return new AlertDialog(
-        title: new Text(
-          loginstr,
-          style: TextStyle(fontSize: 15.0),),
-        content: ButtonBar(
-          children: <Widget>[
-            FlatButton(
-              child: Text('Later',style: TextStyle(fontSize: 13.0)),
-              shape: Border.all(),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-            ),
-            RaisedButton(
-              child: Text(
-                'Pay Now', style: TextStyle(color: Colors.white,fontSize: 13.0),),
-              color: Colors.orange[800],
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-                /*       Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PaymentPage()),
-                );*/
-              },
-            ),
-          ],
-        ),
-      );
-    }
-    );
-
   }
 
   getReportsWidget(){
@@ -177,42 +90,274 @@ class _AllSetting extends State<AllSetting> {
             margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             //width: MediaQuery.of(context).size.width*0.9,
-            //      height:MediaQuery.of(context).size.height*0.75,
+            //height:MediaQuery.of(context).size.height*0.75,
             decoration: new ShapeDecoration(
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
               color: Colors.white,
             ),
             child:ListView(
-              // mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text('Settings',
-                      style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center),
-                  //SizedBox(height: 10.0),
-
+                  Text('Settings', style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center),
                   SizedBox(height: 15.0),
-
-                  new RaisedButton(
-                    //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-                    //      shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-                    //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
-
-                      //     padding: EdgeInsets.only(left:  5.0),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Icon(const IconData(0xe817, fontFamily: "CustomIcon"),size: 30.0,),
+                          SizedBox(width: 17.0),
+                          Expanded(
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Text('Employees',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                ),
 
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Colors.white,
+                    elevation: 4.0,
+                    textColor: Colors.black54,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EmployeeList()),
+                      );
+                    },
+                  ):Center(),
+                  SizedBox(height: 6.0),
+                  (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Icon(const IconData(0xe800, fontFamily: "CustomIcon"),size: 30.0,),
+                          SizedBox(width: 17.0),
+                          Expanded(
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Text('Shift',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Colors.white,
+                    elevation: 4.0,
+                    textColor: Colors.black54,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ShiftList()),
+                      );
+                    },
+                  ):Center(),
+                  SizedBox(height: 6.0),
+                  (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Icon(const IconData(0xe803, fontFamily: "CustomIcon"),size: 30.0,),
+                          SizedBox(width: 17.0),
+                          Expanded(
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Text('Department',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Colors.white,
+                    elevation: 4.0,
+                    textColor: Colors.black54,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Department()),
+                      );
+                    },
+                  ):Center(),
+                  SizedBox(height: 6.0),
+                  (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Icon(const IconData(0xe804, fontFamily: "CustomIcon"),size: 30.0,),
+                          SizedBox(width: 17.0),
+                          Expanded(
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Text('Designation',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Colors.white,
+                    elevation: 4.0,
+                    textColor: Colors.black54,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Designation()),
+                      );
+                    },
+                  ):Center(),
+                  SizedBox(height: 6.0),
+                  (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Icon(const IconData(0xe809, fontFamily: "CustomIcon"),size: 30.0,),
+                          SizedBox(width: 17.0),
+                          Expanded(
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Text('Holidays',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Colors.white,
+                    elevation: 4.0,
+                    textColor: Colors.black54,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Holiday()),
+                      );
+                    },
+                  ):Center(),
+                  SizedBox(height: 6.0),
+                  (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Icon(Icons.home_work_outlined,size: 30.0,color: Colors.grey[400],),
+                          /*Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),*/
+                          SizedBox(width: 17.0),
+                          Expanded(
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Text('Division',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Colors.white,
+                    elevation: 4.0,
+                    textColor: Colors.black54,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Division()),
+                      );
+                    },
+                  ):Center(),
+                  SizedBox(height: 6.0),
+                  (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Icon(Icons.location_on_outlined,size: 30.0,color: Colors.grey[400],),
+                          /*Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),*/
+                          SizedBox(width: 17.0),
+                          Expanded(
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    child: Text('Geofence',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: Colors.white,
+                    elevation: 4.0,
+                    textColor: Colors.black54,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Geofence()),
+                      );
+                    },
+                  ):Center(),
+                  SizedBox(height: 6.0),
+                  new RaisedButton(
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    child: Container(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Icon(const IconData(0xe802, fontFamily: "CustomIcon"),size: 30.0,),
-                          /*Container(
-                            decoration: new BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: appStartColor(),
-                            ),
-                            child: Icon(Icons.add_to_home_screen,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
-                            padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                          ),*/
-
                           SizedBox(width: 17.0),
                           Expanded(
                             child:Column(
@@ -241,12 +386,6 @@ class _AllSetting extends State<AllSetting> {
                       );
                     },
                   ),
-
-
-                  SizedBox(height: 6.0),
-
-
-
                 ])
         ),
       ],
@@ -254,5 +393,80 @@ class _AllSetting extends State<AllSetting> {
   }
 }
 
+class SettingsAppHeader extends StatelessWidget implements PreferredSizeWidget {
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+  SettingsAppHeader(profileimage1,showtabbar1,orgname1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+    };
+    showtabbar= showtabbar1;
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+                );
+              },),
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(orgname, overflow: TextOverflow.ellipsis,)
+              ),
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
 
+}

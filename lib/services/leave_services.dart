@@ -1,22 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/global.dart';
 import 'package:ubihrm/model/model.dart';
 
-//import 'package:http/http.dart' as http;
 
-
-
-//////////////////// SERVICE TO REQUEST FOR LEAVE /////////////////////
-
+///////////////////////////////////* SERVICE TO REQUEST FOR LEAVE STARTS FROM HERE *//////////////////////////////////////
 requestLeave(Leave leave) async{
   Dio dio = new Dio();
   try {
-    final prefs = await SharedPreferences.getInstance();
-    String path_hrm_india1 = prefs.getString('path_hrm_india');
-
     FormData formData = new FormData.from({
       "orgid": leave.orgid,
       "uid": leave.uid,
@@ -32,76 +25,80 @@ requestLeave(Leave leave) async{
       "compoffsts": leave.compoffsts
     });
 
-    Response response1 = await dio.post(path_hrm_india1+"reqForLeave", data: formData);
-    print("------------------------");
-    print(path_hrm_india1+"reqForLeave?orgid=${leave.orgid}&uid=${leave.uid}leavefrom=${leave.leavefrom}&leaveto=${leave.leaveto}&leavetypefrom=${leave.leavetypefrom}&leavetypeto=${leave.leavetypeto}&halfdayfromtype=${leave.halfdayfromtype}&halfdaytotype=${leave.halfdaytotype}&leavetypeid=${leave.leavetypeid}&reason=${leave.reason}&substituteemp=${leave.substituteemp}&compoffsts=${leave.compoffsts}");
-    print("xxxxxxxxxx"+response1.toString());
-    print("******************");
-    print(response1.statusCode);
-    //final leaveMap = json.decode(response1.toString());
+    Response response1 = await dio.post(path_hrm_india+"reqForLeave", data: formData);
+    print('*************REQUEST FOR LEAVE***********');
+    print(path_hrm_india+"reqForLeave?orgid=${leave.orgid}&uid=${leave.uid}&leavefrom=${leave.leavefrom}&leaveto=${leave.leaveto}&leavetypefrom=${leave.leavetypefrom}&leavetypeto=${leave.leavetypeto}&halfdayfromtype=${leave.halfdayfromtype}&halfdaytotype=${leave.halfdaytotype}&leavetypeid=${leave.leavetypeid}&reason=${leave.reason}&substituteemp=${leave.substituteemp}&compoffsts=${leave.compoffsts}");
     final leaveMap = response1.data.toString();
-    // print("-------ddddddddd"+leaveMap["status"]);
-    // if (response1.statusCode == 200) {
-    // print("yyyyyyyyy"+leaveMap);
-    //  print("yyyyyyyyy"+response1.toString());
     if (leaveMap.contains("false")) {
-      //  print("false--->" + response1.data.toString());
       return "false";
-    }
-    else if (leaveMap.contains("wrong"))
-    {
+    } else if (leaveMap.contains("wrong")) {
       return "wrong";
-    }
-    else if (leaveMap.contains("You cannot apply more than credited leaves"))
-    {
+    } else if (leaveMap.contains("You cannot apply more than credited leaves")) {
       return "You cannot apply more than credited leaves";
-    }
-    else if (leaveMap.contains("You cannot apply for comp off"))
-    {
+    } else if (leaveMap.contains("You cannot apply for comp off")) {
       return "You cannot apply for comp off";
-    }
-    else if (leaveMap.contains("alreadyApply"))
-    {
+    } else if (leaveMap.contains("alreadyApply")) {
       return "alreadyApply";
-    }
-    else {
-      //print("true---" + response1.data.toString());
+    } else {
       return "true";
     }
   }
-  //}
   catch(e){
-    //print(e.toString());
+    print(e.toString());
     return "No Connection";
   }
 }
+///////////////////////////////////* SERVICE TO REQUEST FOR LEAVE ENDS HERE *//////////////////////////////////////
+
+
+///////////////////////////////////////////* SERVICE TO WITHRAW LEAVE STARTS FROM HERE *//////////////////////////////////////////
+withdrawLeave(Leave leave) async{
+  Dio dio = new Dio();
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    FormData formData = new FormData.from({
+      "leaveid": leave.leaveid,
+      "uid": leave.uid,
+      "orgid": leave.orgid,
+      "leavests": leave.approverstatus,
+      "compoffsts": leave.compoffsts
+    });
+    print(path_hrm_india+"changeleavests?leaveid=${leave.leaveid}&uid=${leave.uid}&orgid=${leave.orgid}&leavests=${leave.approverstatus}&compoffsts=${leave.compoffsts}");
+    Response response = await dio.post(path_hrm_india+"changeleavests", data: formData);
+    if (response.statusCode == 200) {
+      final leaveMap = response.data.toString();
+      if(leaveMap.contains("true")){
+        return "success";
+      }else{
+        return "failure";
+      }
+    }else{
+      return "No Connection";
+    }
+  }catch(e){
+    //print(e.toString());
+    return "Poor network connection";
+  }
+}
+///////////////////////////////////////////* SERVICE TO WITHRAW LEAVE ENDS HERE *//////////////////////////////////////////
+
 
 Future<List<Leave>> getLeaveSummary() async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
   try {
     FormData formData = new FormData.from({
       "uid": empid,
     });
-    //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
-    Response response = await dio.post(path1+"getLeaveList", data: formData);
-    print(path1+"getLeaveList&uid=$empid");
-    //print(response.data.toString());
-    //print('--------------------getLeaveSummary Called-----------------------');
+    Response response = await dio.post(path+"getLeaveList", data: formData);
+    print(path+"getLeaveList&uid=$empid");
     List responseJson = json.decode(response.data.toString());
-  /*  print("LEAVE LIST");
-  //  print(userList);
-    print(response.data.toString());
-    print("LEAVE LIST");*/
     List<Leave> userList = createLeaveList(responseJson);
-
     return userList;
-
   }catch(e){
-    //print(e.toString());
+    print(e.toString());
   }
 }
 
@@ -119,111 +116,59 @@ List<Leave> createLeaveList(List data){
     String leavetype=data[i]["leavetype"];
     String compoffsts=data[i]["compoffsts"];
     bool withdrawlsts=data[i]["withdrawlsts"];
-    //print(LeaveFrom+"@@@@@@@"+LeaveTo);
     if(LeaveFrom==LeaveTo){
       LeaveTo=" - "+LeaveFrom;
-    }
-    else{
+    } else{
       LeaveTo=" - "+LeaveTo;
     }
-    //print(LeaveDate);
     Leave leave = new Leave(attendancedate: LeaveDate, leavefrom: LeaveFrom, leaveto: LeaveTo, leavedays: LeaveDays, reason: Reason, approverstatus: ApprovalSts, comment: ApproverComment, leaveid: LeaveId, leavetype: leavetype, compoffsts:compoffsts, withdrawlsts: withdrawlsts);
     list.add(leave);
-   /* print("LEAVE LIST");
-    print(list);
-    print("LEAVE LIST");*/
   }
   return list;
 }
-///////////////////////////
-///////////////////////////////// SERVICE TO WIDRAWL LEAVE /////////////////////////////////
-//////////////////////////////
-
-withdrawLeave(Leave leave) async{
-  Dio dio = new Dio();
-  try {
-    final prefs = await SharedPreferences.getInstance();
-    String path_hrm_india1 = prefs.getString('path_hrm_india');
-    FormData formData = new FormData.from({
-      "leaveid": leave.leaveid,
-      "uid": leave.uid,
-      "orgid": leave.orgid,
-      "leavests": leave.approverstatus,
-      "compoffsts": leave.compoffsts
-    });
-
-    print(path_hrm_india1+"changeleavests?leaveid=${leave.leaveid}&uid=${leave.uid}&orgid=${leave.orgid}&leavests=${leave.approverstatus}&compoffsts=${leave.compoffsts}");
-    //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
-    Response response = await dio.post(
-        path_hrm_india1+"changeleavests",
-        data: formData);
-    //print(response.toString());
-    if (response.statusCode == 200) {
-      Map leaveMap = json.decode(response.data);
-      if(leaveMap["status"]==true){
-        return "success";
-      }else{
-        return "failure";
-      }
-    }else{
-      return "No Connection";
-    }
-  }catch(e){
-    //print(e.toString());
-    return "Poor network connection";
-  }
-}
-
 
 
 Future<List<Map>> getleavetype(int label) async{
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-  print("leavetype----------->");
-  print(path1 + "getEmployeeAllLeaveType?orgid=$orgdir&eid=$empid");
-  final response = await dio.post(path1+"getEmployeeAllLeaveType?orgid=$orgdir&eid=$empid");
-  //print("leavetype11----------->");
-  // print(response);
+  print(path + "getEmployeeAllLeaveType?orgid=$orgdir&eid=$empid");
+  final response = await dio.post(path+"getEmployeeAllLeaveType?orgid=$orgdir&eid=$empid");
   List data = json.decode(response.data.toString());
-
-print(data);
+  print(data);
   List<Map> leavetype = createList(data,label);
   return leavetype;
 }
+
 List<Map> createList(List data,int label) {
   List<Map> list = new List();
   if(label==1) // with -All- label
     list.add({"Id":"0","Name":"-All-"});
   else
     list.add({"Id":"0","Name":"-Select-"});
-  // print("666666666");
-  // print(data);
+
   for (int i = 0; i < data.length; i++) {
-    //  if(data[i]["archive"].toString()=='1') {
-    // print("kkkkkkk"+data[i]["name"].toString());
     Map tos={"Name":data[i]["name"].toString()  +" ("+data[i]["leftleave"].toString()+" Remaining)" ,"Id":data[i]["id"].toString(),"compoffsts":data[i]["compoffsts"].toString()};
     list.add(tos);
-    // }
   }
   return list;
 }
-/////////Substitute Employee dropdowns///////
+
+
+///////////////////////////////////////*Substitute Employee Dropdown////////////////////////////////////////////
 Future<List<Map>> getsubstitueemp(int label) async{
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   Dio dio = new Dio();
-  String orgdir = prefs.getString('organization') ?? '';
+  String orgdir = prefs.getString('organization') ??"";
   String empid = prefs.getString('employeeid')??"";
-  final response = await dio.post(path1 + "getEmployeeHierarchy?orgid=$orgdir&eid=$empid");
-  print(path1 + "getEmployeeHierarchy?orgid=$orgdir&eid=$empid");
-  //print("leavetype11----------->");
-  // print(response);
+  int profiletype = prefs.getInt('profiletype')??0;
+  int hrsts =prefs.getInt('hrsts')??0;
+  int adminsts =prefs.getInt('adminsts')??0;
+  int dataaccess = prefs.getInt('dataaccess')??0;
+  final response = await dio.post(path + "getEmployeeHierarchy?orgid=$orgdir&eid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+  print(path + "getEmployeeHierarchy?orgid=$orgdir&eid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
   List data = json.decode(response.data.toString());
-  // print("leavetype----------->");
-//  print(data);
   List<Map> substituteemp = createsubstituteempList(data,label);
   return substituteemp;
 }
@@ -234,18 +179,14 @@ List<Map> createsubstituteempList(List data,int label) {
     list.add({"Id":"0","Name":"-All-"});
   else
     list.add({"Id":"0","Name":"-Select-"});
-  // print("666666666");
-  // print(data);
+
   for (int i = 0; i < data.length; i++) {
-    //  if(data[i]["archive"].toString()=='1') {
-    //print("kkkkkkk"+data[i]["name"].toString());
     Map tos={"Name":data[i]["name"].toString(),"Id":data[i]["id"].toString()};
     list.add(tos);
-
-    // }
   }
   return list;
 }
+
 
 
 class LeaveH {
@@ -263,35 +204,27 @@ class LeaveH {
       });
 }
 
+
 Future<List<LeaveH>> getleavehistory(LeaveTypeId) async{
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-  final response = await dio.post(path1 + 'getEmployeeAllLeaveTypeForMail?orgid=$orgdir&empid=$empid&leavetypeid=$LeaveTypeId');
-  // print("leavetype22----------->");
-  // print(response);
+  final response = await dio.post(path + 'getEmployeeAllLeaveTypeForMail?orgid=$orgdir&empid=$empid&leavetypeid=$LeaveTypeId');
   List data = json.decode(response.data.toString());
-  // print("leavetype----------->");
-  // print(data);
   List<LeaveH> leavetype = createleavehistory(data);
   return leavetype;
 }
 
 List<LeaveH> createleavehistory(List data) {
-
   List<LeaveH> list = new List();
   for (int i = 0; i < data.length; i++) {
-
     String Id = data[i]["id"].toString();
     String name = data[i]["name"].toString();
     String Entitle = data[i]["days"].toString();
     String Used = data[i]["usedleave"].toString();
     String CF = data[i]["carryforward"].toString();
     String Left = data[i]["leftleave"].toString();
-
-  //  print("********************"+Left+"***"+Used+"***"+Entitle);
     LeaveH tos = new LeaveH(
       Id: Id,
       name: name,
@@ -304,6 +237,8 @@ List<LeaveH> createleavehistory(List data) {
   return list;
 }
 
+
+
 class LeaveA {
   String Id;
   String name;
@@ -315,6 +250,7 @@ class LeaveA {
   String Psts;
   String Ldays;
   String HRSts;
+  String DivHrSts;
   String FromDayType;
   String ToDayType;
   String TimeOfTo;
@@ -322,8 +258,7 @@ class LeaveA {
   String sts;
   String LeaveType;
 
-  LeaveA(
-      { this.Id,
+  LeaveA({ this.Id,
         this.name,
         this.Leavests,
         this.Reason,
@@ -333,6 +268,7 @@ class LeaveA {
         this.Psts,
         this.Ldays,
         this.HRSts,
+        this.DivHrSts,
         this.FromDayType,
         this.ToDayType,
         this.TimeOfTo,
@@ -346,36 +282,18 @@ class LeaveA {
 Future<List<LeaveA>> getApprovals(listType) async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-
-  Response<String> response =
-  await dio.post(path1+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
-  print('path1+"getapproval?datafor');
-  print(path1+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  Response<String> response = await dio.post(path+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
+  print(path+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
-//  print(res);
-  // print(path+"getapproval?datafor="+listType+'&empid='+empid+'&orgid='+orgdir);
-
-/*  List responseJson;
-  if (listType == 'Approved')
-    responseJson = res['Approved'];
-  else if (listType == 'Pending')
-    responseJson = res['Pending'];
-  else if (listType == 'Rejected')
-    responseJson = res['Rejected'];*/
-
   List<LeaveA> userList = createleaveapporval(res);
-
   return userList;
 }
 
 List<LeaveA> createleaveapporval(List data) {
-
   List<LeaveA> list = new List();
   for (int i = 0; i < data.length; i++) {
-
     String Id = data[i]["Id"].toString();
     String name = data[i]["name"].toString();
     String Leavests = data[i]["LeaveStatus"].toString();
@@ -389,13 +307,11 @@ List<LeaveA> createleaveapporval(List data) {
     String TimeOfTo = data[i]["TimeOfTo"].toString();
     String LeaveTypeId = data[i]["LeaveTypeId"].toString();
     String LeaveType = data[i]["LeaveType"].toString();
- //   print("********************"+data[i]["Pstatus"].toString());
     String HRSts = data[i]["HRSts"].toString();
-    print(Fdate+"@@@@@@@"+Tdate);
+    String DivHrSts = data[i]["divhrsts"].toString();
     if(Fdate==Tdate){
       Tdate=" - "+Fdate;
-    }
-    else{
+    } else{
       Tdate=" - "+Tdate;
     }
     String Psts="";
@@ -414,6 +330,7 @@ List<LeaveA> createleaveapporval(List data) {
         Psts : Psts,
         Ldays: Ldays,
         HRSts: HRSts,
+        DivHrSts: DivHrSts,
         FromDayType: FromDayType,
         ToDayType: ToDayType,
         TimeOfTo: TimeOfTo,
@@ -426,16 +343,15 @@ List<LeaveA> createleaveapporval(List data) {
 }
 
 
+////////////////////////////////////* SERVICE TO APPROVE LEAVE STARTS FROM HERE *///////////////////////////////////////
 ApproveLeave(Leaveid,comment,sts) async{
   String empid;
   String organization;
-  // Employee emp;
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   empid = prefs.getString('employeeid')??"";
   organization =prefs.getString('organization')??"";
-  //emp = new Employee(employeeid: empid, organization: organization);
+  organization =prefs.getString('organization')??"";
   try {
     FormData formData = new FormData.from({
       "eid": empid,
@@ -443,59 +359,29 @@ ApproveLeave(Leaveid,comment,sts) async{
       "leaveid": Leaveid,
       "comment": comment,
       "sts": sts,
-      // "leavests": leave.approverstatus
     });
-  /*  print(comment);
-    print(Leaveid);
-    print(empid);
-    print(organization);
-    print(sts);*/
-    //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
-//Response response = await dio.post(  path_hrm_india+"ApproveLeave",data: formData);
-    Response response = await dio.post(
-        path1+"Approvedleave",
-        data: formData);
+    print(path+"Approvedleave?&eid=$empid&orgid=$organization&leaveid=$Leaveid&comment=$comment&sts=$sts");
+    Response response = await dio.post(path+"Approvedleave", data: formData);
     final leaveMap = response.data.toString();
-    print("-------------------");
-    print(response.toString());
-    if (leaveMap.contains("false"))
-    {
-    print("false approve leave function--->" + response.data.toString());
+    if (leaveMap.contains("false")) {
       return "false";
     } else {
-    print("true  approve leave function---" + response.data.toString());
       return "true";
     }
-    //print(response.toString());
-    /* if (response.statusCode == 200) {
-      Map leaveMap = json.decode(response.data);
-      if(leaveMap["status"]==true){
-        return "success";
-
-      }else{
-        return "failure";
-      }
-    }else{
-      return "No Connection";
-    }*/
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
   }
 }
 
+
 ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
   String empid;
   String organization;
-  print("**********Approve HR function called***");
-  print(LBD);
-  // Employee emp;
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
   empid = prefs.getString('employeeid')??"";
   organization =prefs.getString('organization')??"";
-  //emp = new Employee(employeeid: empid, organization: organization);
   try {
     FormData formData = new FormData.from({
       "eid": empid,
@@ -504,30 +390,13 @@ ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
       "comment": comment,
       "sts": sts,
       "LBD": LBD,
-      // "FromDayType": FromDayType,
-      //"ToDayType": ToDayType,
-      //  "TimeOfTo": TimeOfTo,
-      // "leavests": leave.approverstatus
     });
-    /*print(comment);
-    print(Leaveid);
-    print(empid);
-    print(organization);
-    print(sts);*/
-    //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
-//Response response = await dio.post(  path_hrm_india+"ApproveLeave",data: formData);
-    Response response = await dio.post(
-        path1+"ApprovedleaveBYHr",
-        data: formData);
-    //print(response.toString());
+
+    Response response = await dio.post(path+"ApprovedleaveBYHr", data: formData);
     final leaveMap = response.data.toString();
-    if (leaveMap.contains("false"))
-    {
-      print("false approve leave hrfunction--->" + response.data.toString());
+    if (leaveMap.contains("false")) {
       return "false";
-    }
-    else {
-      print("true  approve leave hr function---" + response.data.toString());
+    } else {
       return "true";
     }
   }catch(e){
@@ -535,339 +404,155 @@ ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
     return "Poor network connection";
   }
 }
+////////////////////////////////////* SERVICE TO APPROVE LEAVE ENDS HERE *///////////////////////////////////////
 
 
-
-Future<List<LeaveA>> getTeamApprovals() async {
+Future<List<LeaveA>> getTeamApprovals(empname) async {
+  print("empname354435453456657");
+  print(empname);
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
-  String path1 = prefs.getString('path');
-  String orgdir = prefs.getString('organization') ?? '';
+  String orgdir = prefs.getString('organization') ??"";
   String empid = prefs.getString('employeeid')??"";
-  print('====================HELLO==================');
-  print(path1+"getteamapproval?empid="+empid+'&orgid='+orgdir);
-  Response<String> response =await dio.post(path1+"getteamapproval?empid="+empid+'&orgid='+orgdir);
+  int profiletype = prefs.getInt('profiletype')??0;
+  int hrsts =prefs.getInt('hrsts')??0;
+  int adminsts =prefs.getInt('adminsts')??0;
+  int dataaccess = prefs.getInt('dataaccess')??0;
+  print(path+"getteamapproval?empid=$empid&orgid=$orgdir&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+  Response<String> response=await dio.post(path+"getteamapproval?empid=$empid&orgid=$orgdir&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
   final res = json.decode(response.data.toString());
-
-print(res);
-  List<LeaveA> userList1 = createTeamleaveapporval(res);
-
+  List<LeaveA> userList1 = createTeamleaveapporval(res,empname);
   return userList1;
 }
 
-List<LeaveA> createTeamleaveapporval(List data) {
-
+List<LeaveA> createTeamleaveapporval(List data, String empname) {
   List<LeaveA> list = new List();
-  for (int i = 0; i < data.length; i++) {
-
-    String Id = data[i]["Id"].toString();
-    String name = data[i]["name"].toString();
-    String Leavests = data[i]["LeaveStatus"].toString();
-    String Reason = data[i]["LeaveReason"].toString();
-    String applydate = data[i]["ApplyDate"].toString();
-    String Fdate = data[i]["FDate"].toString();
-    String Tdate = data[i]["TDate"].toString();
-    String Ldays = data[i]["Ldays"].toString();
-    String FromDayType = data[i]["FromDayType"].toString();
-    String ToDayType = data[i]["ToDayType"].toString();
-    String TimeOfTo = data[i]["TimeOfTo"].toString();
-    String LeaveTypeId = data[i]["LeaveTypeId"].toString();
-    String LeaveType = data[i]["LeaveType"].toString();
-    String sts = data[i]["sts"].toString();
-      print("********************"+data[i]["Pstatus"].toString());
-    String HRSts = data[i]["HRSts"].toString();
- //   print(Fdate+"@@@@@@@"+Tdate);
-    if(Fdate==Tdate){
-      Tdate=" - "+Fdate;
-    }
-    else{
-      Tdate=" - "+Tdate;
-    }
-    String Psts="";
-    if(data[i]["Pstatus"].contains("Pending at")) {
-      Psts = data[i]["Pstatus"].toString();
-    }
-
-    LeaveA tos = new LeaveA(
-        Id: Id,
-        name: name,
-        Leavests: Leavests,
-        Reason: Reason,
-        applydate: applydate,
-        Fdate: Fdate,
-        Tdate: Tdate,
-        Psts : Psts,
-        Ldays: Ldays,
-        HRSts: HRSts,
-        FromDayType: FromDayType,
-        ToDayType: ToDayType,
-        TimeOfTo: TimeOfTo,
-        LeaveTypeId: LeaveTypeId,
-        LeaveType :LeaveType,
-        sts :sts);
-    list.add(tos);
-
-  }
-  return list;
-}
-
-
-
-
-/*
-class profileup {
-
-  var dio = new Dio();
-
-  getProfile(String empid) async {
-    //  print('---------------------------------------------------------');
-    try {
-      FormData formData = new FormData.from({
-        "uid": empid,
-      }); //print('##############################################################');
-      //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
-      Response response = await dio.post(
-          path + "getProfile",
-          data: formData);
-      //  print('##############################################################');
-      // print(response.toString());
-      if (response.statusCode == 200) {
-        Map profileMap = json.decode(response.data);
-        return profileMap;
-      } else {
-        return "No Connection";
+  if(empname.isNotEmpty)
+    for (int i = 0; i < data.length; i++) {
+      String Id = data[i]["Id"].toString();
+      String name = data[i]["name"].toString();
+      String Leavests = data[i]["LeaveStatus"].toString();
+      String Reason = data[i]["LeaveReason"].toString();
+      String applydate = data[i]["ApplyDate"].toString();
+      String Fdate = data[i]["FDate"].toString();
+      String Tdate = data[i]["TDate"].toString();
+      String Ldays = data[i]["Ldays"].toString();
+      String FromDayType = data[i]["FromDayType"].toString();
+      String ToDayType = data[i]["ToDayType"].toString();
+      String TimeOfTo = data[i]["TimeOfTo"].toString();
+      String LeaveTypeId = data[i]["LeaveTypeId"].toString();
+      String LeaveType = data[i]["LeaveType"].toString();
+      String sts = data[i]["sts"].toString();
+      String HRSts = data[i]["HRSts"].toString();
+      if(Fdate==Tdate){
+        Tdate=" - "+Fdate;
+      }else{
+        Tdate=" - "+Tdate;
       }
-    } catch (e) {
-      //print(e.toString());
-      return "Poor network connection";
+      String Psts="";
+      if(data[i]["Pstatus"].contains("Pending at")) {
+        Psts = data[i]["Pstatus"].toString();
+      }
+
+      LeaveA tos = new LeaveA(
+          Id: Id,
+          name: name,
+          Leavests: Leavests,
+          Reason: Reason,
+          applydate: applydate,
+          Fdate: Fdate,
+          Tdate: Tdate,
+          Psts : Psts,
+          Ldays: Ldays,
+          HRSts: HRSts,
+          FromDayType: FromDayType,
+          ToDayType: ToDayType,
+          TimeOfTo: TimeOfTo,
+          LeaveTypeId: LeaveTypeId,
+          LeaveType :LeaveType,
+          sts :sts);
+      if(name.toLowerCase().contains(empname.toLowerCase()))
+        list.add(tos);
     }
-  }
-
-  updateProfile(Profile profile) async {
-    try {
-      FormData formData = new FormData.from({
-        "uid": profile.uid,
-        "refno": profile.orgid,
-        "no": profile.mobile,
-        "con": profile.countryid
-      });
-
-
-      final prefs = await SharedPreferences.getInstance();
-
-
-      String empid = prefs.getString('employeeid')??"";
-      String organization =prefs.getString('organization')??"";
-      Employee emp = new Employee(employeeid: empid, organization: organization);
-
-
-      //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
-      Response response = await dio.post(
-          path + "updateProfile",
-          data: formData);
-      //print(response.toString());
-      if (response.statusCode == 200) {
-        Map profileMap = json.decode(response.data);
-        // getProfileInfo(emp);
-        //print("**********))))))))");
-        //print(profileMap["res"]);
-        if (profileMap["res"] == 1) {
-
-          return "success";
-        } else {
-          return "failure";
-        }
-      } else {
-        return "No Connection";
-      }
-    } catch (e) {
-      //print(e.toString());
-      return "Poor network connection";
-    }
-  }
-
-
-  Future<bool> updateProfilePhoto(int uploadtype, String empid,
-      String orgid) async {
-    Dio dio = new Dio();
-    try {
-      File imagei = null;
-      imageCache.clear();
-      //for gallery
-      if (uploadtype == 1) {
-        imagei = await ImagePicker.pickImage(source: ImageSource.gallery);
-      }
-      //for camera
-      if (uploadtype == 2) {
-        imagei = await ImagePicker.pickImage(source: ImageSource.camera);
-      }
-      //for removing photo
-      if (uploadtype == 3) {
-        imagei = null;
-      }
-      print("Selected image information ****************************");
-      print(imagei.toString());
-      if (imagei != null) {
-        //// sending this base64image string +to rest api
-        FormData formData = new FormData.from({
-          "uid": empid,
-          "refno": orgid,
-          "file": new UploadFileInfo(imagei, "sample.png"),
-        });
-        //print("5");
-        Response<String> response1 = await dio.post(
-            path_hrm_india + "updateProfilePhoto", data: formData);
-
-        //imagei.deleteSync();
-        imageCache.clear();
-        /*getTempImageDirectory();*/
-        Map MarkAttMap = json.decode(response1.data);
-        //print(MarkAttMap["status"].toString());
-        if (MarkAttMap["status"])
-          return true;
-        else
-          return false;
-      } else if (uploadtype == 3 && imagei == null) {
-        FormData formData = new FormData.from({
-          "uid": empid,
-          "refno": orgid,
-        });
-        Response<String> response1 = await dio.post(
-            path_hrm_india + "updateProfilePhoto", data: formData);
-        print("mmmmmmmmmmmmmmmmmm" + response1.toString());
-        Map MarkAttMap = json.decode(response1.data);
-        //print(MarkAttMap["status"].toString());
-        if (MarkAttMap["status"])
-          return true;
-        else
-          return false;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      print("this is catch.. of updateprofilephoto**************************");
-      print(e.toString());
-      return false;
-    }
-  }
-
-} */
-
-/*
-
-Future<List<TimeOff>> getTimeOffSummary() async{
-  Dio dio = new Dio();
-  final prefs = await SharedPreferences.getInstance();
-  String organization = prefs.getString('organization') ?? '';
-  String empid = prefs.getString('employeeid')??"";
-  try {
-    FormData formData = new FormData.from({
-      "uid": empid,
-    });
-    //Response response = await dio.post("https://sandbox.ubiattendance.com/index.php/services/getInfo", data: formData);
-    Response response = await dio.post(
-        path_ubiattendance+"fetchTimeOffList",
-        data: formData);
-    //print('--------------------getLeaveSummary Called-----------------------');
-    List responseJson = json.decode(response.data.toString());
-    //   print('---getLeaveSummary Called---' + json.decode(response.data.toString()));
-
-    List<TimeOff> userList = createTimeOffList(responseJson);
-    return userList;
-  }catch(e){
-    //print(e.toString());
-  }
-}
-
-
-
-List<TimeOff> createTimeOffList(List data){
-
-  List<TimeOff> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String TimeofDate = data[i]["date"];
-    String TimeFrom=data[i]["from"];
-    String TimeTo=data[i]["to"];
-    String hrs=data[i]["hrs"];
-    String Reason=data[i]["reason"];
-    String ApprovalSts=data[i]["status"];
-    String ApproverComment=data[i]["comment"];
-    String TimeOffId=data[i]["timeoffid"].toString();
-    bool withdrawlsts=data[i]["withdrawlsts"];
-
-    //  print(LeaveDate);
-    TimeOff timeoff = new TimeOff(TimeofDate: TimeofDate, TimeFrom: TimeFrom, TimeTo: TimeTo, hrs: hrs, Reason: Reason, ApprovalSts: ApprovalSts, ApproverComment: ApproverComment, TimeOffId: TimeOffId, withdrawlsts: withdrawlsts);
-    list.add(timeoff);
-
-  }
-  return list;
-}
-
-*/
-
-
-/*
-
-/////////FOR EMPLOYEE LEAVE REPORT///////////
-
-Future<List<Map>> getEmployeesList(int label) async{
-  Dio dio = new Dio();
-  final prefs = await SharedPreferences.getInstance();
-  String orgid = prefs.getString('orgdir') ?? '';
-  String empid = prefs.getString('employeeid') ?? "";
-
-  final response = await dio.post(path_hrm_india + 'getReportingTeam?organization=$orgid&employeeid=$empid');
-  List data = json.decode(response.data.toString());
-  List<Map> depts = createEMpListDD(data,label);
-  print(depts);
-  return depts;
-}
-List<Map> createEMpListDD(List data,int label) {
-  List<Map> list = new List();
-  if(label==1) // with -All- label
-    list.add({"Id":"0","Name":"-All-","Code":""});
   else
-    list.add({"Id":"0","Name":"-Select-","Code":""});
-  for (int i = 0; i < data.length; i++) {
-    Map tos;
-    if(data[i]["LastName"].toString()!='' && data[i]["LastName"].toString()!=null)
-      tos={"Name":data[i]["FirstName"].toString()+" "+data[i]["LastName"].toString(),"Id":data[i]["Id"].toString(),"Code":data[i]["Code"].toString()};
-    list.add(tos);
-  }
+    for (int i = 0; i < data.length; i++) {
+      String Id = data[i]["Id"].toString();
+      String name = data[i]["name"].toString();
+      String Leavests = data[i]["LeaveStatus"].toString();
+      String Reason = data[i]["LeaveReason"].toString();
+      String applydate = data[i]["ApplyDate"].toString();
+      String Fdate = data[i]["FDate"].toString();
+      String Tdate = data[i]["TDate"].toString();
+      String Ldays = data[i]["Ldays"].toString();
+      String FromDayType = data[i]["FromDayType"].toString();
+      String ToDayType = data[i]["ToDayType"].toString();
+      String TimeOfTo = data[i]["TimeOfTo"].toString();
+      String LeaveTypeId = data[i]["LeaveTypeId"].toString();
+      String LeaveType = data[i]["LeaveType"].toString();
+      String sts = data[i]["sts"].toString();
+      String HRSts = data[i]["HRSts"].toString();
+      if(Fdate==Tdate){
+        Tdate=" - "+Fdate;
+      }else{
+        Tdate=" - "+Tdate;
+      }
+      String Psts="";
+      if(data[i]["Pstatus"].contains("Pending at")) {
+        Psts = data[i]["Pstatus"].toString();
+      }
+
+      LeaveA tos = new LeaveA(
+          Id: Id,
+          name: name,
+          Leavests: Leavests,
+          Reason: Reason,
+          applydate: applydate,
+          Fdate: Fdate,
+          Tdate: Tdate,
+          Psts : Psts,
+          Ldays: Ldays,
+          HRSts: HRSts,
+          FromDayType: FromDayType,
+          ToDayType: ToDayType,
+          TimeOfTo: TimeOfTo,
+          LeaveTypeId: LeaveTypeId,
+          LeaveType :LeaveType,
+          sts :sts);
+      list.add(tos);
+    }
   return list;
+}
+
+
+class EmpListLeave {
+  String days;
+  String to;
+  String from;
+  String name;
+  String date;
+  String leavetype;
+  String breakdown;
+
+  EmpListLeave({this.days, this.to, this.from, this.name, this.date, this.leavetype, this.breakdown});
 }
 
 
 Future<List<EmpListLeave>> getEmployeeLeaveList(date,emp) async {
   Dio dio = new Dio();
-  // String empid;
   if (date == '' || date == null) return null;
   try {
-    */
-/* print("ABC");
-    print(emp);
-    print(date);
-    print("ABC");*//*
-
-
-
     final prefs = await SharedPreferences.getInstance();
     String orgid = prefs.getString('orgdir') ?? '';
-    String empid = prefs.getString('employeeid') ?? "";
-    */
-/* print("-------->");
-    print(empid);
-    print(date);
-    print("-------->");*//*
-
-
-    final response = await dio.post(path_hrm_india +
-        'getEmployeeLeaveList?fd=$date&orgid=$orgid&empid=$empid&emp=$emp');
-
+    String empid = prefs.getString('employeeid') ?? '';
+    int profiletype = prefs.getInt('profiletype')??0;
+    int hrsts =prefs.getInt('hrsts')??0;
+    int adminsts =prefs.getInt('adminsts')??0;
+    int dataaccess = prefs.getInt('dataaccess')??0;
+    int divhrsts = prefs.getInt('divhrsts')??0;
+    print(path_hrm_india + 'getEmployeeLeaveList?fd=$date&orgid=$orgid&empid=$empid&emp=$emp&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+    final response = await dio.post(path_hrm_india + 'getEmployeeLeaveList?fd=$date&orgid=$orgid&empid=$empid&emp=$emp&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
     List responseJson = json.decode(response.data.toString());
-
     List<EmpListLeave> list = createEmployeeLeaveDataList(responseJson);
-
     return list;
   }catch(e){
     print(e.toString());
@@ -876,11 +561,6 @@ Future<List<EmpListLeave>> getEmployeeLeaveList(date,emp) async {
 
 List<EmpListLeave> createEmployeeLeaveDataList(List data) {
   List<EmpListLeave> list = new List();
-  */
-/*print("XYZ");
-    print(data.length);
-    print("XYZ");*//*
-
   for (int i = 0; i < data.length; i++) {
     String days = data[i]["days"];
     String to = data[i]["to"];
@@ -896,115 +576,45 @@ List<EmpListLeave> createEmployeeLeaveDataList(List data) {
   return list;
 }
 
-class EmpListLeave {
-  String days;
-  String to;
-  String from;
-  String name;
-  String date;
-  String leavetype;
-  String breakdown;
-
-  EmpListLeave({this.days, this.to, this.from, this.name, this.date, this.leavetype, this.breakdown});
+///////////////////////////////////////*COMP OFF LEAVE SERVICE STARTS FROM HERE*////////////////////////////////////////
+class EmpCompOffLeave {
+  String id;
+  String empname;
+  int credited;
+  int utilized;
+  EmpCompOffLeave({this.id, this.empname, this.credited, this.utilized});
 }
-*/
 
-//////////FOR EMPLOYEE LEAVE REPORT///////////
 
-Future<List<Map>> getEmployeesList(int label) async{
-  Dio dio = new Dio();
+Future<List<EmpCompOffLeave>> getCompOffLeave(emp) async{
   final prefs = await SharedPreferences.getInstance();
-  String path_hrm_india1 = prefs.getString('path_hrm_india');
-  String orgid = prefs.getString('orgdir') ?? '';
-  String empid = prefs.getString('employeeid') ?? "";
-
-  final response = await dio.post(path_hrm_india1 + 'getReportingTeam?organization=$orgid&employeeid=$empid');
-  List data = json.decode(response.data.toString());
-  List<Map> depts = createEMpListDD(data,label);
-  print(depts);
-  return depts;
-}
-List<Map> createEMpListDD(List data,int label) {
-  List<Map> list = new List();
-  if(label==1) // with -All- label
-    list.add({"Id":"0","Name":"-All-","Code":""});
-  else
-    list.add({"Id":"0","Name":"-Select-","Code":""});
-  for (int i = 0; i < data.length; i++) {
-    Map tos;
-  //  if(data[i]["LastName"].toString()!='' && data[i]["LastName"].toString()!=null)
-  //    tos={"Name":data[i]["FirstName"].toString()+" "+data[i]["LastName"].toString(),"Id":data[i]["Id"].toString(),"Code":data[i]["Code"].toString()};
- //   if(data[i]["LastName"].toString()!='' && data[i]["LastName"].toString()!=null)
-      tos={"Name":data[i]["Name"].toString(),"Id":data[i]["Id"].toString(),"Code":data[i]["Code"].toString()};
-    list.add(tos);
-  print("-----------------"+tos.toString());
-
-  }
-  return list;
-}
-
-
-Future<List<EmpListLeave>> getEmployeeLeaveList(date,emp) async {
   Dio dio = new Dio();
-  // String empid;
-  if (date == '' || date == null) return null;
-  try {
-    /* print("ABC");
-    print(emp);
-    print(date);
-    print("ABC");*/
-
-
-    final prefs = await SharedPreferences.getInstance();
-    String path_hrm_india1 = prefs.getString('path_hrm_india');
-    String orgid = prefs.getString('orgdir') ?? '';
-    String empid = prefs.getString('employeeid') ?? "";
-    /* print("-------->");
-    print(empid);
-    print(date);
-    print("-------->");*/
-
-    final response = await dio.post(path_hrm_india1 +
-        'getEmployeeLeaveList?fd=$date&orgid=$orgid&empid=$empid&emp=$emp');
-
-    List responseJson = json.decode(response.data.toString());
-
-    List<EmpListLeave> list = createEmployeeLeaveDataList(responseJson);
-
-    return list;
-  }catch(e){
-    print(e.toString());
-  }
+  String orgid = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid') ?? '';
+  int profiletype = prefs.getInt('profiletype')??0;
+  int hrsts =prefs.getInt('hrsts')??0;
+  int adminsts =prefs.getInt('adminsts')??0;
+  int dataaccess = prefs.getInt('dataaccess')??0;
+  int divhrsts = prefs.getInt('divhrsts')??0;
+  print(path_hrm_india + "getCompOffLeave?orgid=$orgid&empid=$empid&emp=$emp&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess&divhrsts=$divhrsts");
+  final response = await dio.post(path_hrm_india+"getCompOffLeave?orgid=$orgid&empid=$empid&emp=$emp&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess&divhrsts=$divhrsts");
+  List data = json.decode(response.data.toString());
+  print(data);
+  List<EmpCompOffLeave> compoffleavecount = createCompOffList(data);
+  return compoffleavecount;
 }
 
-List<EmpListLeave> createEmployeeLeaveDataList(List data) {
-  List<EmpListLeave> list = new List();
-  /*print("XYZ");
-    print(data.length);
-    print("XYZ");*/
+List<EmpCompOffLeave> createCompOffList(List data) {
+  List<EmpCompOffLeave> list = new List();
   for (int i = 0; i < data.length; i++) {
-    String days = data[i]["days"];
-    String to = data[i]["to"];
-    String from = data[i]["from"];
-    String name = data[i]["name"];
-    String date = data[i]["date"];  //this is leave appy date
-    String leavetype = data[i]["leavetype"];
-    String breakdown = data[i]["breakdown"];
-    EmpListLeave row = new EmpListLeave(
-        days: days, to: to, from: from, name: name, date: date, leavetype: leavetype, breakdown: breakdown);
+    String id = data[i]["id"];
+    String empname = data[i]["empname"];
+    int credited = data[i]["initialbalance"];
+    int utilized = data[i]["utilized"];
+    EmpCompOffLeave row = new EmpCompOffLeave(
+        id: id, empname: empname, credited: credited, utilized: utilized);
     list.add(row);
   }
   return list;
 }
-
-class EmpListLeave {
-  String days;
-  String to;
-  String from;
-  String name;
-  String date;
-  String leavetype;
-  String breakdown;
-
-  EmpListLeave({this.days, this.to, this.from, this.name, this.date, this.leavetype, this.breakdown});
-}
+///////////////////////////////////////*COMP OFF LEAVE SERVICE ENDS HERE*////////////////////////////////////////

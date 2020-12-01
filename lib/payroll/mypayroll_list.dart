@@ -211,7 +211,9 @@ class _PayrollSummary extends State<PayrollSummary> {
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
                                                         new Text(
-                                                          snapshot.data[index].month.toString(),style: TextStyle(),),
+                                                          snapshot.data[index].enddate.toString().isEmpty?
+                                                          snapshot.data[index].startdate.toString():
+                                                          snapshot.data[index].startdate.toString()+'-'+snapshot.data[index].startdate.toString(),style: TextStyle(),),
                                                       ],
                                                     )
                                                 ),
@@ -241,9 +243,9 @@ class _PayrollSummary extends State<PayrollSummary> {
                                                   child: new OutlineButton(
                                                     onPressed: () async{
                                                       final prefs = await SharedPreferences.getInstance();
-                                                      String path1 = prefs.getString('path');
-                                                      print(path1+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
-                                                      launchMap(path1+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
+                                                      //String path1 = prefs.getString('path');
+                                                      print(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
+                                                      launchMap(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
                                                     },
                                                     child: new Icon(
                                                       Icons.print,

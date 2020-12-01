@@ -2,7 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_share/simple_share.dart';
+//import 'package:simple_share/simple_share.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 
 import '../appbar.dart';
@@ -124,7 +124,7 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
                                 context: context,
                                 firstDate: DateTime(1900),
                                 initialDate: currentValue ?? DateTime.now(),
-                                lastDate: DateTime(2100));
+                                lastDate: DateTime.now());
                           },
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -405,115 +405,115 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
                     return new Container(
                       //          width: MediaQuery.of(context).size.width * .9,
                       child:Column(
-                        children: <Widget>[
-                          SizedBox(height: 5.0,),
-                          (index == 0)?
-                          Row(
-                              children: <Widget>[
-                                //SizedBox(height: 25.0,),
-                                Container(
-                                  padding: EdgeInsets.only(left: 5.0),
-                                  child: Text("Total: ${count}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
-                                ),
-                              ]
-                          ):new Center(),
-                          (index == 0)?
-                          Divider(color: Colors.black26,):new Center(),
-                        new Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment : MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            SizedBox(width: 8.0,),
-                            Expanded(
-                              flex: 20,
-                              child:  new Container(
-                                  width: MediaQuery.of(context).size.width * 0.18,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      new Text(
-                                        snapshot.data[index].empname.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 13.0),textAlign: TextAlign.left,),
-                                    ],
-                                  )),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(""),
-                            ),
-                            Expanded(
-                              flex: 37,
-                              child:  new Container(
-                                //width: MediaQuery.of(context).size.width * 0.37,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    /* new Text(
+                            SizedBox(height: 5.0,),
+                            (index == 0)?
+                            Row(
+                                children: <Widget>[
+                                  //SizedBox(height: 25.0,),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 5.0),
+                                    child: Text("Total: ${count}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
+                                  ),
+                                ]
+                            ):new Center(),
+                            (index == 0)?
+                            Divider(color: Colors.black26,):new Center(),
+                            new Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                SizedBox(width: 8.0,),
+                                Expanded(
+                                  flex: 20,
+                                  child:  new Container(
+                                      width: MediaQuery.of(context).size.width * 0.18,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          new Text(
+                                            snapshot.data[index].empname.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 13.0),textAlign: TextAlign.left,),
+                                        ],
+                                      )),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(""),
+                                ),
+                                Expanded(
+                                  flex: 37,
+                                  child:  new Container(
+                                    //width: MediaQuery.of(context).size.width * 0.37,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        /* new Text(
                                     snapshot.data[index].client.toString(),style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.left,
                                   ),*/
-                                    InkWell(
-                                      child:Text(
-                                        snapshot.data[index].locationin.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
-                                      onTap: () {
-                                        goToMap(snapshot.data[index].latin,snapshot.data[index].lonin.toString());
-                                      },
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.all(2.0),
-                                      color: snapshot.data[index].incolor.toString()=='0'?Colors.red:Colors.green,
-
-                                      child: Text(snapshot.data[index].instatus,
-                                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(""),
-                            ),
-                            Expanded(
-                              flex: 37,
-                              child:  new Container(
-                                // width: MediaQuery.of(context).size.width * 0.37,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-
-
-                                    InkWell(
-                                      child:Text(
-                                        snapshot.data[index].locationout.toString(),
-                                        style: TextStyle
-                                          (
-                                            color: Colors.black54,fontSize: 12.0
+                                        InkWell(
+                                          child:Text(
+                                            snapshot.data[index].locationin.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
+                                          onTap: () {
+                                            goToMap(snapshot.data[index].latin,snapshot.data[index].lonin.toString());
+                                          },
                                         ),
-                                      ),
-                                      onTap: ()
-                                      {
-                                        goToMap(
-                                            snapshot.data[index].latout.toString(),
-                                            snapshot.data[index].lonout.toString()
-                                        );
-                                      },
-                                    ),
-                                    snapshot.data[index].outstatus!=''?
-                                    new Container(
-                                      padding: EdgeInsets.all(2.0),
+                                        Container(
+                                          padding: EdgeInsets.all(2.0),
+                                          color: snapshot.data[index].incolor.toString()=='0'?Colors.red:Colors.green,
 
-                                      color: snapshot.data[index].outcolor.toString()=='0'?Colors.red:Colors.green,
-                                      child: Text(snapshot.data[index].outstatus,
-                                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.white),
-                                      ),
-                                    ):Center(child: Text("-"),),
-                                  ],
+                                          child: Text(snapshot.data[index].instatus,
+                                            style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            /*
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(""),
+                                ),
+                                Expanded(
+                                  flex: 37,
+                                  child:  new Container(
+                                    // width: MediaQuery.of(context).size.width * 0.37,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+
+
+                                        InkWell(
+                                          child:Text(
+                                            snapshot.data[index].locationout.toString(),
+                                            style: TextStyle
+                                              (
+                                                color: Colors.black54,fontSize: 12.0
+                                            ),
+                                          ),
+                                          onTap: ()
+                                          {
+                                            goToMap(
+                                                snapshot.data[index].latout.toString(),
+                                                snapshot.data[index].lonout.toString()
+                                            );
+                                          },
+                                        ),
+                                        snapshot.data[index].outstatus!=''?
+                                        new Container(
+                                          padding: EdgeInsets.all(2.0),
+
+                                          color: snapshot.data[index].outcolor.toString()=='0'?Colors.red:Colors.green,
+                                          child: Text(snapshot.data[index].outstatus,
+                                            style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.white),
+                                          ),
+                                        ):Center(child: Text("-"),),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                /*
                             Container(
                                 width: MediaQuery
                                     .of(context)
@@ -550,15 +550,15 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
                                 )
 
                             ),*/
-                          ],
-                        ),
+                              ],
+                            ),
 
-                        Divider
-                          (
-                          color: Colors.blueGrey.withOpacity(0.25),
-                          height: 10.2,
-                        ),
-                      ]),
+                            Divider
+                              (
+                              color: Colors.blueGrey.withOpacity(0.25),
+                              height: 10.2,
+                            ),
+                          ]),
                     );
                   });
             }
@@ -569,7 +569,7 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
                   width: MediaQuery.of(context).size.width*1,
                   color: appStartColor().withOpacity(0.1),
                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                  child:Text("No Employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                  child:Text("No employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                 ),
               );
             }
@@ -619,7 +619,6 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
                           if(res = true){
                             _listFuture = getOutsidegeoReport(today.text,emp);
                           }else {
-                            print('state set----');
                             count='0';
                           }
                         });
@@ -655,7 +654,7 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
         });
   }
 
-  dialogwidget(msg, filename) {
+  /*dialogwidget(msg, filename) {
     showDialog(
         context: context,
         // ignore: deprecated_member_use
@@ -686,5 +685,5 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
             ),
           ],
         ));
-  }
+  }*/
 } /////////mail class close

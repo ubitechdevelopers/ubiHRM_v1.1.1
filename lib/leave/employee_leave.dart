@@ -2,6 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/leave_services.dart';
 
 import '../appbar.dart';
@@ -146,7 +147,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                     onChanged: (date) {
                       setState(() {
                         if (date != null && date.toString()!='') {
-                        res = true; //showInSnackBar(date.toString());
+                          res = true; //showInSnackBar(date.toString());
                         } else{
                           res = false;
                         }
@@ -170,7 +171,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                     Expanded(child:
+                      Expanded(child:
                       Container(
 
                         width: MediaQuery.of(context).size.width * 0.33,
@@ -182,8 +183,8 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                           textAlign: TextAlign.left,
                         ),
                       ),
-          ),
-                     Expanded(child: Container(
+                      ),
+                      Expanded(child: Container(
                         width: MediaQuery.of(context).size.width * 0.40,
                         child: Text(
                           'Duration',
@@ -193,7 +194,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                           textAlign: TextAlign.left,
                         ),
                       ),),
-                     Expanded(child:    Container(
+                      Expanded(child:    Container(
                         width: MediaQuery.of(context).size.width * 0.50,
                         child: Text('Type',
                             style: TextStyle(color: appStartColor(),
@@ -239,10 +240,12 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            ]),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+            CircularProgressIndicator()
+          ]
+        ),
       ),
     );
   }
@@ -312,7 +315,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                   width: MediaQuery.of(context).size.width*1,
                   color: appStartColor().withOpacity(0.1),
                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                  child:Text("No one is on Leave ",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                  child:Text("No employee is on Leave ",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                 ),
               );
             }
@@ -351,8 +354,8 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                       isDense: true,
 
                       style: new TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.black,
+                        fontSize: 15.0,
+                        color: Colors.black,
 
                       ),
                       value: emp,

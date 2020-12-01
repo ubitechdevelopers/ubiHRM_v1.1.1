@@ -155,6 +155,7 @@ class _HomePageStatemain extends State<HomePageMain> {
       perTimeoff = getModulePermission("179", "view");
       perSalary = getModulePermission("66", "view");
       perPayroll = getModulePermission("458", "view");
+      perPayPeriod = getModulePermission("491", "view");
       perSalaryExpense = getModulePermission("170", "view");
       perPayrollExpense = getModulePermission("473", "view");
       perFlexi = getModulePermission("448", "view");
@@ -215,10 +216,19 @@ class _HomePageStatemain extends State<HomePageMain> {
     );
   }
 
+/*
+  Future<bool> exit() async{
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+    );
+    return false;
+  }
+*/
+
   Widget mainScafoldWidget() {
-    //print("BBBBBB");
     return WillPopScope(
-      onWillPop: () async => true,
+      //onWillPop: ()=> exit(),
       child: Scaffold(
           backgroundColor: scaffoldBackColor(),
           endDrawer: new AppDrawer(),
@@ -327,12 +337,13 @@ class _HomePageStatemain extends State<HomePageMain> {
               if(perEmployeeLeave == '1')  makeDashboardItem("Leave",  MyLeave(), 'assets/icons/leave_icon.png'),
               if(perTimeoff == '1') makeDashboardItem("Time Off", TimeoffSummary(), 'assets/icons/Timeoff_icon.png'),
               if(perPunchLocation == '1') makeDashboardItem("Visits", PunchLocationSummary(), 'assets/icons/visits_icon.png'),
-              if(perFlexi == '1') makeDashboardItem("Flexi time", Flexitime(), 'assets/icons/Flexi_icon.png'),
+              if(perFlexi == '1') makeDashboardItem("Flexi Time", Flexitime(), 'assets/icons/Flexi_icon.png'),
               if(perSalary == '1') makeDashboardItem("Salary", SalarySummary(), 'assets/icons/Salary_icon.png'),
-              if(perPayroll == '1') makeDashboardItem("Payroll", PayrollSummary(), 'assets/icons/Salary_icon.png'),
-              if(perSalaryExpense == '1') makeDashboardItem("Expense", MyExpence(), 'assets/icons/Expense_icon.png'),
-              if(perPayrollExpense == '1') makeDashboardItem("Expense", MyPayrollExpense(), 'assets/icons/Expense_icon.png'),
-              if(perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1') makeDashboardItem("Reports", AllReports(), 'assets/icons/graph_icon.png'),
+              if(perPayroll == '1'|| perPayPeriod == '1') makeDashboardItem("Payroll", PayrollSummary(), 'assets/icons/Salary_icon.png'),
+              if(perSalaryExpense == '1') makeDashboardItem("Salary\nExpense", MyExpence(), 'assets/icons/Expense_icon.png'),
+              if(perPayrollExpense == '1') makeDashboardItem("Payroll\nExpense", MyPayrollExpense(), 'assets/icons/Expense_icon.png'),
+              if(perLeaveReport=='1' ||  perAttReport=='1' || perFlexiReport=='1' )
+                if(perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1') makeDashboardItem("Reports", AllReports(), 'assets/icons/graph_icon.png'),
             ],
           ),
         ),

@@ -50,8 +50,20 @@ class _AllReports extends State<AllReports> {
     String empid = prefs.getString('employeeid')??"";
     String organization =prefs.getString('organization')??"";
     String userprofileid =prefs.getString('userprofileid')??"";
-    Employee emp = new Employee(employeeid: empid, organization: organization,userprofileid:userprofileid);
+    int profiletype =prefs.getInt('profiletype')??0;
+    int hrsts =prefs.getInt('hrsts')??0;
+    int adminsts =prefs.getInt('adminsts')??0;
+    int dataaccess =prefs.getInt('dataaccess')??0;
 
+    Employee emp = new Employee(
+      employeeid: empid,
+      organization: organization,
+      userprofileid: userprofileid,
+      profiletype:profiletype,
+      hrsts:hrsts,
+      adminsts:adminsts,
+      dataaccess:dataaccess,
+    );
     //  await getProfileInfo(emp);
     getAllPermission(emp).then((res) {
       if(mounted) {
@@ -158,11 +170,12 @@ class _AllReports extends State<AllReports> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Image.asset(
-                  'assets/spinner.gif', height: 80.0, width: 80.0),
-            ]),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            CircularProgressIndicator()
+            //Image.asset('assets/spinner.gif', height: 80.0, width: 80.0),
+          ]
+        ),
       ),
     );
   }
@@ -367,7 +380,7 @@ class _AllReports extends State<AllReports> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                    child: Text('Time Off',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Timeoff',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
 
                               ],

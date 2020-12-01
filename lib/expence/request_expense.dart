@@ -5,17 +5,17 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:path/path.dart' as p;
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/services/attandance_gethome.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/expense_services.dart';
-
 import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
@@ -51,7 +51,6 @@ class _RequestExpenceState extends State<RequestExpence> {
   var profileimage;
   bool showtabbar;
   String orgName="";
-
   String headtype='0';
   bool _checkLoaded = true;
   bool _isButtonDisabled=false;
@@ -68,6 +67,7 @@ class _RequestExpenceState extends State<RequestExpence> {
   String shiftId="";
   Future<File> ExpenseDoc;
   File _image=null;
+  File _file=null;
   //var tempvar="";
   String close="";
   @override
@@ -492,16 +492,18 @@ class _RequestExpenceState extends State<RequestExpence> {
                                             ),
                                             InkWell(
                                               child: Container(
-                                                width: MediaQuery.of(context).size.width*0.6,
+                                                //width: MediaQuery.of(context).size.width*0.6,
                                                 padding: EdgeInsets.fromLTRB(10.0,0.0, 0.0, 0.0),
                                                 //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                                                child:showImage(_image),
+                                                child:showFile(_file),
                                               ),
                                               onTap: () async {
-                                                var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                                print(image);
+                                                //var file = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                                File file = await FilePicker.getFile(type: FileType.any);
+                                                print(file);
                                                 setState(() {
-                                                  _image = image;
+                                                  //_image = image;
+                                                  _file = file;
                                                 });
                                               },
                                             )
@@ -600,7 +602,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                                     );
                                   }else {
                                     print("hello");
-                                    saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
+                                    saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _file, context);
                                   }
                                   //saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
                                 }
@@ -693,9 +695,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                   ),
               ),
             );
-          }
-          else if (snapshot.hasError)
-          {
+          } else if (snapshot.hasError) {
             return new Text("${snapshot.error}");
           }
           // return loader();
@@ -708,18 +708,17 @@ class _RequestExpenceState extends State<RequestExpence> {
   }
 
 
-  Future<bool> saveExpense(var expensedate, var category, var desc, var amount, File doc, BuildContext context) async { // visit in function
-
+  Future<bool> saveExpense(var expensedate, var category, var desc, var amount, File file, BuildContext context) async { // visit in function
     try {
       Dio dio = new Dio();
       setState(() {
         isServiceCalling = true;
       });
-      print("----> service calling "+isServiceCalling.toString());
       final prefs = await SharedPreferences.getInstance();
       String orgid = prefs.getString('organization') ?? '';
       String empid = prefs.getString('employeeid') ?? "";
-      if (doc!=null) {
+      String ext = p.extension(file.path);
+      if (file!=null) {
         FormData formData = new FormData.from({
           "empid": empid,
           "orgid": orgid,
@@ -727,31 +726,23 @@ class _RequestExpenceState extends State<RequestExpence> {
           "category": category,
           "desc": desc,
           "amt": amount,
-          "file": new UploadFileInfo(doc, "image.png"),
+          "file": new UploadFileInfo(file, "doc"+ext),
         });
         print(formData);
-        print(doc);
-        //  print("5" +expensedate+"---"+category+"---"+desc+"---"+amount+"---"+empid+"--"+orgid+"--");
+        print(file);
         Response<String> response1;
         try {
-          final prefs = await SharedPreferences.getInstance();
-          String path1 = prefs.getString('path');
-          // print(globals.path +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
-          response1 = await dio.post(path1 + "saveExpense", data: formData);
+          //final prefs = await SharedPreferences.getInstance();
+          //String path1 = prefs.getString('path');
+          print(path +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount+"&file=$file");
+          response1 = await dio.post(path + "saveExpense", data: formData);
           print("----->save Expense* --->" + response1.toString());
         } catch (e) {
-          print('------------*');
           print(e.toString());
-       //   print('------------*');
         }
-
-        /*getTempImageDirectory();*/
         Map MarkAttMap = json.decode(response1.data);
-       // print('------------1*');
         print(MarkAttMap["status"].toString());
-       // print('------------2*');
         if ((response1.toString().contains("true"))) {
-        //  print('------true  in img');
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyExpence()),
@@ -762,26 +753,8 @@ class _RequestExpenceState extends State<RequestExpence> {
               content: new Text('Expense submitted successfully.'),
             )
           );
-          //showInSnackBar("Expense has been applied successfully.");
-           /*if(tempvar=="1"){
-             Navigator.push(
-               context,
-               MaterialPageRoute(builder: (context) => MyExpence()),
-             );
-           }else{
-             Navigator.push(
-               context,
-               MaterialPageRoute(builder: (context) => RequestExpence()),
-             );
-           }*/
           return true;
-        }
-        else if((response1.toString().contains("false1"))){
-          /*Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyExpence()),
-          );*/
-          // ignore: deprecated_member_use
+        } else if((response1.toString().contains("false1"))){
           showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense already applied on this date.'),
@@ -789,26 +762,17 @@ class _RequestExpenceState extends State<RequestExpence> {
           setState(() {
             isServiceCalling = false;
           });
-          //print('------false1  in img');
-          //showInSnackBar("Expence already applied on this date");
-        }
-        else {
-        //  print('------false  in img');
-          // ignore: deprecated_member_use
+        } else {
           showDialog(context: context, child:
           new AlertDialog(
             content: new Text('There is some problem while applying for expense.'),
           ));
-          //showInSnackBar("There is some problem while applying for Expense.");
-          //return false;
           setState(() {
             isServiceCalling = false;
           });
         }
-      }
-
-    else{
-      FormData formData = new FormData.from({
+      } else{
+        FormData formData = new FormData.from({
           "empid": empid,
           "orgid": orgid,
           "edate": expensedate,
@@ -816,56 +780,31 @@ class _RequestExpenceState extends State<RequestExpence> {
           "desc": desc,
           "amt": amount,
           "file":"",
-        //  "file": new UploadFileInfo(doc, "image.png"),
         });
-     //   print(formData);
-      //  print(doc);
-        //print("kkkkkkkkkkkkkk");
-        //  print("5" +expensedate+"---"+category+"---"+desc+"---"+amount+"---"+empid+"--"+orgid+"--");
         Response<String> response1;
         try {
-          final prefs = await SharedPreferences.getInstance();
-          String path1 = prefs.getString('path');
-          print(path1 +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
-          response1 =
-          await dio.post(path1 + "saveExpense", data: formData);
+          //final prefs = await SharedPreferences.getInstance();
+          //String path1 = prefs.getString('path');
+          print(path +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
+          response1 = await dio.post(path + "saveExpense", data: formData);
           print("----->save Expense* --->" + response1.toString());
         } catch (e) {
-          print('------------*');
           print(e.toString());
-          print('------------*');
         }
-        /*getTempImageDirectory();*/
         Map expensemap = json.decode(response1.data);
-      //  print('------------1*');
-      //  print(expensemap["status"].toString());
-       // print('------------2*');
-      if ((response1.toString().contains("true"))) {
-      //  print('------true');
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyExpence()),
-        );
+        if ((response1.toString().contains("true"))) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyExpence()),
+          );
         // ignore: deprecated_member_use
         showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense submitted successfully.'),
           )
         );
-       /* if(tempvar=="1"){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyExpence()),
-          );
-        }else{
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => RequestExpence()),
-          );
-        }*/
         return true;
-      }
-      else if((response1.toString().contains("false1"))){
+      } else if((response1.toString().contains("false1"))){
         // ignore: deprecated_member_use
         showDialog(context: context, child:
         new AlertDialog(
@@ -875,77 +814,34 @@ class _RequestExpenceState extends State<RequestExpence> {
         setState(() {
           isServiceCalling = false;
         });
-        //showInSnackBar("Expence already applied on this date");
-      }
-      else {
-     //   print('------false');
-        // ignore: deprecated_member_use
+      } else {
         showDialog(context: context, child:
         new AlertDialog(
           content: new Text('There is some problem while applying for expense.'),
         )
         );
-        //showInSnackBar("There is some problem while applying for Expense.");
-        //return false;
         setState(() {
           isServiceCalling = false;
         });
       }
-
-      }
-
-  }
-    catch (e) {
-      print('7');
-    //  print("------->");
+    }
+  } catch (e) {
       print(e.toString());
-     // print("------->");
-
       return false;
     }
   }
 
-
-
-
-  Widget showImage(_image) {
-  return FutureBuilder<File>(
-   //  future: ExpenseDoc,
+  Widget showFile(_file) {
+    return FutureBuilder<File>(
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
-        /*if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.data != null) {
-            return Image.file(
-                snapshot.data,
-                width: 50,
-                height: 50,
-              );
-        } */
-        if(_image!=null ) {
+        if(_file!=null ) {
           return new Row(
               mainAxisAlignment: MainAxisAlignment.start,
              children: <Widget>[
-               Text("Attachment Uploaded",style: TextStyle(fontSize: 16.0, color: Colors.green),
+               Text(_file.path.split('/').last,style: TextStyle(fontSize: 16.0, color: Colors.green),
                  overflow: TextOverflow.ellipsis, ),
-               /*Icon(
-                Icons.check,
-                color: Colors.green,
-                ),*/
-               /* Container(
-                     child:new IconButton(
-                       icon: new Icon(Icons.close, color: Colors.redAccent,),
-                       onPressed: () {
-                        setState(() {
-                           print("onpressiconclose");
-                           close='1';
-                           _image=null;
-                           print(_image);
-                         });
-                       },
-                     )
-                ),*/
            ]);
-        }
-        else if (snapshot.error != null) {
+        } else if (snapshot.error != null) {
           return const Text(
             'Error Picking Attachment',
             overflow: TextOverflow.ellipsis,

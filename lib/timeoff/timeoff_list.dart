@@ -90,141 +90,141 @@ class _TimeOffList extends State<TimeOffList> {
 
   getReportsWidget() {
     return Stack(
-      children: <Widget>[
-        Container(
-        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
-        //width: MediaQuery.of(context).size.width*0.9,
-        //  height:MediaQuery.of(context).size.height*0.75,
-        decoration: new ShapeDecoration(
-        shape: new RoundedRectangleBorder(
-        borderRadius: new BorderRadius.circular(20.0)),
-        color: Colors.white,
-        ),
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+            //width: MediaQuery.of(context).size.width*0.9,
+            //  height:MediaQuery.of(context).size.height*0.75,
+            decoration: new ShapeDecoration(
+              shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(20.0)),
+              color: Colors.white,
+            ),
 
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 1.0),
-            Center(
-              child: Text(
-                'Time Off History',
-                style: new TextStyle(
-                  fontSize: 20.0,
-                  color:appStartColor(),
-                ),
-              ),
-            ),
-            Divider(
-              height: 10.0,
-            ),
-            SizedBox(height: 2.0),
-            Container(
-              child: DateTimeField(
-                //dateOnly: true,
-                format: formatter,
-                controller: today,
-                readOnly: true,
-                onShowPicker: (context, currentValue) {
-                  return showDatePicker(
-                      context: context,
-                      firstDate: DateTime(1900),
-                      initialDate: currentValue ?? DateTime.now(),
-                      lastDate: DateTime(2100));
-                },
-                decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.all(0.0),
-                    child: Icon(
-                      Icons.date_range,
-                      color: Colors.grey,
-                    ), // icon is 48px widget.
-                  ), // icon is 48px widget.
-                  labelText: 'Select Date',
-                ),
-                onChanged: (date) {
-                  setState(() {
-                    if (date != null && date.toString()!='')
-                      res = true; //showInSnackBar(date.toString());
-                    else
-                      res = false;
-                  });
-                },
-                validator: (date) {
-                  if (date == null) {
-                    return 'Please select date';
-                  }
-                },
-              ),
-            ),
-            SizedBox(height: 12.0),
-            Container(
-              //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
-              width: MediaQuery.of(context).size.width * .9,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-
-                    width: MediaQuery.of(context).size.width * 0.35,
-                    child: Text(
-                      ' Name',
-                      style: TextStyle(color: appStartColor(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0),
-                      textAlign: TextAlign.left,
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 1.0),
+                Center(
+                  child: Text(
+                    'Employees on Time Off',
+                    style: new TextStyle(
+                      fontSize: 20.0,
+                      color:appStartColor(),
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.22,
-                    child: Text(
-                      'From',
-                      style: TextStyle(color: appStartColor(),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0),
-                      textAlign: TextAlign.left,
+                ),
+                Divider(
+                  height: 10.0,
+                ),
+                SizedBox(height: 2.0),
+                Container(
+                  child: DateTimeField(
+                    //dateOnly: true,
+                    format: formatter,
+                    controller: today,
+                    readOnly: true,
+                    onShowPicker: (context, currentValue) {
+                      return showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1900),
+                          initialDate: currentValue ?? DateTime.now(),
+                          lastDate: DateTime(2100));
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(
+                          Icons.date_range,
+                          color: Colors.grey,
+                        ), // icon is 48px widget.
+                      ), // icon is 48px widget.
+                      labelText: 'Select Date',
                     ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.2,
-                    child: Text('To',
-                        style: TextStyle(color: appStartColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0),
-                        textAlign: TextAlign.left),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.12,
-                    child: Text('Total Time',
-                        style: TextStyle(color: appStartColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0),
-                        textAlign: TextAlign.left),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 5.0),
-            Divider(
-              height: 5.2,
-            ),
-            new Expanded(
-              child: res == true ? getEmpDataList(today.text) : Container(
-                height: MediaQuery.of(context).size.height*0.25,
-                child:Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width*1,
-                    color:appStartColor().withOpacity(0.1),
-                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                    child:Text("Please select the date",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                    onChanged: (date) {
+                      setState(() {
+                        if (date != null && date.toString()!='')
+                          res = true; //showInSnackBar(date.toString());
+                        else
+                          res = false;
+                      });
+                    },
+                    validator: (date) {
+                      if (date == null) {
+                        return 'Please select date';
+                      }
+                    },
                   ),
                 ),
-              ),
+                SizedBox(height: 12.0),
+                Container(
+                  //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
+                  width: MediaQuery.of(context).size.width * .9,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        child: Text(
+                          ' Name',
+                          style: TextStyle(color: appStartColor(),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.22,
+                        child: Text(
+                          'From',
+                          style: TextStyle(color: appStartColor(),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.2,
+                        child: Text('To',
+                            style: TextStyle(color: appStartColor(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0),
+                            textAlign: TextAlign.left),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.12,
+                        child: Text('Total Time',
+                            style: TextStyle(color: appStartColor(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0),
+                            textAlign: TextAlign.left),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 5.0),
+                Divider(
+                  height: 5.2,
+                ),
+                new Expanded(
+                  child: res == true ? getEmpDataList(today.text) : Container(
+                    height: MediaQuery.of(context).size.height*0.25,
+                    child:Center(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width*1,
+                        color:appStartColor().withOpacity(0.1),
+                        padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                        child:Text("Please select the date",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    ]);
+          ),
+        ]);
   }
 
   loader() {
@@ -251,47 +251,47 @@ class _TimeOffList extends State<TimeOffList> {
                   itemBuilder: (BuildContext context, int index) {
                     return new Column(children: <Widget>[
                       SizedBox(height: 5,),
-                        Padding(
-                          padding: const EdgeInsets.only(left:8.0),
-                          child: new Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              new Container(
-                                  width: MediaQuery.of(context).size.width * 0.34,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      new Text(
-                                          snapshot.data[index].name.toString()),
+                      Padding(
+                        padding: const EdgeInsets.only(left:8.0),
+                        child: new Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            new Container(
+                                width: MediaQuery.of(context).size.width * 0.34,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    new Text(
+                                        snapshot.data[index].name.toString()),
 
-                                    ],
-                                  )),
-                              new Container(
-                                width: MediaQuery.of(context).size.width * 0.2,
+                                  ],
+                                )),
+                            new Container(
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              child: new Text(
+                                snapshot.data[index].from.toString(),
+                              ),
+                            ),
+                            new Container(
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              child: new Text(
+                                snapshot.data[index].to.toString(),
+                              ),
+                            ),
+                            Flexible(
+                              child: new Container(
+                                width: MediaQuery.of(context).size.width * 0.10,
                                 child: new Text(
-                                  snapshot.data[index].from.toString(),
+                                  snapshot.data[index].diff.toString(),
+                                  style: TextStyle(
+                                      color:appStartColor()),
                                 ),
                               ),
-                              new Container(
-                                width: MediaQuery.of(context).size.width * 0.2,
-                                child: new Text(
-                                  snapshot.data[index].to.toString(),
-                                ),
-                              ),
-                              Flexible(
-                                child: new Container(
-                                  width: MediaQuery.of(context).size.width * 0.10,
-                                  child: new Text(
-                                    snapshot.data[index].diff.toString(),
-                                    style: TextStyle(
-                                        color:appStartColor()),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+                      ),
                       SizedBox(height: 5,),
                       Padding(
                         padding: const EdgeInsets.only(left:8.0),
@@ -312,8 +312,8 @@ class _TimeOffList extends State<TimeOffList> {
                                     snapshot.data[index].sts.toString(),
                                     style: TextStyle(
                                         color: snapshot.data[index].sts=='Approved'?appStartColor():
-                                                snapshot.data[index].sts=='Rejected'?Colors.red:
-                                                snapshot.data[index].sts=='Pending'?Colors.orange[800]:Colors.orange[800]
+                                        snapshot.data[index].sts=='Rejected'?Colors.red:
+                                        snapshot.data[index].sts=='Pending'?Colors.orange[800]:Colors.orange[800]
                                     ),
                                   ),
                                 ),
@@ -335,12 +335,12 @@ class _TimeOffList extends State<TimeOffList> {
                   width: MediaQuery.of(context).size.width*1,
                   color: appStartColor().withOpacity(0.1),
                   padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                  child:Text("No one is on time off",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                  child:Text("No employee is on time off",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
                 ),
               );
             }
           } else if (snapshot.hasError) {
-             return new Text("Unable to connect server");
+            return new Text("Unable to connect server");
           }
           // return loader();
           return new Center(child: CircularProgressIndicator());

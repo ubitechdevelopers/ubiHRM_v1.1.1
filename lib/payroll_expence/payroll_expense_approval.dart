@@ -139,7 +139,7 @@ class ChoiceCard1 extends StatelessWidget {
                           child: Container(
                             margin: EdgeInsets.fromLTRB(60.0, 0.0, 0.0, 0.0),
                             width: MediaQuery.of(context).size.width*0.20,
-                            child:Text('Applied on',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                            child:Text(' Applied on',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                           ),
                         ),
 
@@ -217,10 +217,10 @@ class ChoiceCard1 extends StatelessWidget {
                                                 Row(
                                                   children: <Widget>[
                                                     Container(
-                                                        width: MediaQuery.of(context) .size .width * 0.70,
-                                                        height: MediaQuery.of(context) .size .height * 0.03,
-                                                        //padding: EdgeInsets.only(top:1.5),
-                                                        margin: EdgeInsets.only(top: 0.5),
+                                                        width: MediaQuery.of(context) .size .width * 0.60,
+                                                        //height: MediaQuery.of(context) .size .height * 0.03,
+                                                        //padding: EdgeInsets.only(top:3.0),
+                                                        margin: EdgeInsets.only(top: 4.0),
                                                         child: RichText(
                                                           text: new TextSpan(
                                                             style: new TextStyle(
@@ -242,9 +242,9 @@ class ChoiceCard1 extends StatelessWidget {
                                                         && snapshot.data[index].Psts.toString() == ""  ?
                                                     new Expanded(
                                                       child: Padding(
-                                                        padding: const EdgeInsets.fromLTRB(0.0,0.0,10.0,0.0),
+                                                        padding: const EdgeInsets.fromLTRB(0.0,0.0,0.0,0.0),
                                                         child: Container(
-                                                          width: MediaQuery.of(context) .size .width * 0.30,
+                                                          //height: MediaQuery.of(context) .size .height * 0.04,
                                                           child: new OutlineButton(
                                                             onPressed: () {
                                                               _modalBottomSheet(context, snapshot.data[index].Id.toString());
@@ -268,9 +268,9 @@ class ChoiceCard1 extends StatelessWidget {
                                                   children: <Widget>[
                                                     Container(
                                                         width: MediaQuery.of(context) .size .width * 0.70,
-                                                        height: MediaQuery.of(context) .size .height * 0.03,
-                                                        //padding: EdgeInsets.only(top:1.5),
-                                                        margin: EdgeInsets.only(top: 0.5),
+                                                        //height: MediaQuery.of(context) .size .height * 0.03,
+                                                        //padding: EdgeInsets.only(top:3.0),
+                                                        margin: EdgeInsets.only(top: 4.0),
                                                         child: RichText(
                                                           text: new TextSpan(
                                                             style: new TextStyle(
@@ -294,9 +294,9 @@ class ChoiceCard1 extends StatelessWidget {
                                                   children: <Widget>[
                                                     Container(
                                                         width: MediaQuery.of(context) .size .width * 0.70,
-                                                        height: MediaQuery.of(context) .size .height * 0.03,
-                                                        //padding: EdgeInsets.only(top:1.5),
-                                                        margin: EdgeInsets.only(top: 0.5),
+                                                        //height: MediaQuery.of(context) .size .height * 0.03,
+                                                        //padding: EdgeInsets.only(top:3.0),
+                                                        margin: EdgeInsets.only(top: 4.0),
                                                         child: RichText(
                                                           text: new TextSpan(
                                                             style: new TextStyle(
@@ -318,14 +318,37 @@ class ChoiceCard1 extends StatelessWidget {
 
                                                 Row(
                                                   children: <Widget>[
-                                                    snapshot.data[index].doc.toString()!=''?Container(
+                                                    snapshot.data[index].doc.toString()!='null'?Container(
                                                         width: MediaQuery.of(context) .size .width * 0.70,
-                                                        height: MediaQuery.of(context) .size .height * 0.03,
+                                                        //height: MediaQuery.of(context) .size .height * 0.03,
                                                         //padding: EdgeInsets.only(top:1.5),
-                                                        margin: EdgeInsets.only(top: 0.4),
+                                                        //margin: EdgeInsets.only(top: 0.4),
                                                         child: Row(
                                                           children: <Widget>[
-                                                            Text("Reciept: ", style: TextStyle(color: Colors.black, fontSize: 14.0),),
+                                                            RichText(text: TextSpan(
+                                                                style: new TextStyle(
+                                                                  fontSize: 14.0,
+                                                                  color: Colors.black,
+                                                                ),
+                                                                children: <TextSpan>[
+                                                                  new TextSpan(
+                                                                      text: 'Reciept: ',
+                                                                      style: new TextStyle()),
+                                                                ]
+                                                            )),
+                                                            new InkWell(
+                                                                onTap: () {
+                                                                  print(snapshot.data[index].doc.toString());
+                                                                  launchMap(snapshot.data[index].doc.toString());
+                                                                },
+                                                                //child: Text("Attached Document", style: TextStyle(color: Colors.blueAccent, fontSize: 14.0, decoration: TextDecoration.underline),textAlign: TextAlign.start,),
+                                                                child: Icon(Icons.file_download, color:Colors.green)
+                                                            ),
+                                                          ],
+                                                        )
+                                                      /*child: Row(
+                                                          children: <Widget>[
+                                                            Text("Reciept: ", style: TextStyle(color: Colors.black, fontSize: 13.0),),
                                                             new InkWell(
                                                               onTap: () {
                                                                 print(snapshot.data[index].doc.toString());
@@ -335,15 +358,15 @@ class ChoiceCard1 extends StatelessWidget {
                                                               child: Icon(Icons.file_download, color:Colors.green)
                                                             ),
                                                           ],
-                                                        )
+                                                        )*/
                                                     ):Center(),
                                                   ],
                                                 ),
 
                                                 snapshot.data[index].Psts.toString()!=''?Container(
                                                   width: MediaQuery.of(context).size.width*.90,
-                                                  //padding: EdgeInsets.only(top:1.0,bottom: .5),
-                                                  margin: EdgeInsets.only(top: 0.5),
+                                                  //padding: EdgeInsets.only(top:3.0),
+                                                  margin: EdgeInsets.only(top: 4.0),
                                                   child: RichText(
                                                     text: new TextSpan(
                                                       // Note: Styles for TextSpans must be explicitly defined.
@@ -511,7 +534,7 @@ class ChoiceCard1 extends StatelessWidget {
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
-                                        content: new Text("Expense claim rejected successfully."),
+                                        content: new Text("Expense claim could not be approved."),
                                       )
                                   );
                                 }
@@ -546,7 +569,7 @@ class ChoiceCard1 extends StatelessWidget {
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
-                                        content: new Text("Expense claim has been rejected successfully."),
+                                        content: new Text("Expense claim rejected successfully."),
                                       )
                                   );
                                 }
@@ -556,7 +579,7 @@ class ChoiceCard1 extends StatelessWidget {
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
-                                        content: new Text("Expense claim could not be rejected. Try again!"),
+                                        content: new Text("Expense claim could not be rejected."),
                                       )
                                   );
                                 }

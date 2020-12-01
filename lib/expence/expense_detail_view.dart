@@ -82,54 +82,63 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
   }
 
   withdrawlExpense(String Id) async{
-    setState(() {
-      _checkwithdrawnexpense = true;
-    });
-    print("----> withdrawn service calling "+_checkwithdrawnexpense.toString());
-    final prefs = await SharedPreferences.getInstance();
-    //String id = prefs.getString('expenseid')??"";
-    //String empid = prefs.getString('employeeid')??"";
-    //String orgid =prefs.getString('organization')??"";
-    var expense = Expense(Id: Id, ests: '5');
-    var islogin = await withdrawExpense(expense);
-    print(islogin);
-    if(islogin=="success"){
+    try {
       setState(() {
-        _isButtonDisabled=false;
+        _checkwithdrawnexpense = true;
       });
-       Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MyExpence()),
-      );
+      final prefs = await SharedPreferences.getInstance();
+      //String id = prefs.getString('expenseid')??"";
+      //String empid = prefs.getString('employeeid')??"";
+      //String orgid =prefs.getString('organization')??"";
+      var expense = Expense(Id: Id, ests: '5');
+      var islogin = await withdrawExpense(expense);
+      print(islogin);
+      if(islogin=="success"){
+        setState(() {
+          _isButtonDisabled=false;
+          _checkwithdrawnexpense = false;
+        });
+         Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MyExpence()),
+        );
+        showDialog(context: context, child:
+        new AlertDialog(
+          //  title: new Text("Congrats!"),
+          content: new Text("Expense claim withdrawn successfully."),
+        )
+        );
+      }else if(islogin=="failure"){
+        setState(() {
+          _isButtonDisabled=false;
+          _checkwithdrawnexpense = false;
+        });
+        showDialog(context: context, child:
+        new AlertDialog(
+          //title: new Text("Sorry!"),
+          content: new Text("Expense claim could not be withdrawn."),
+        )
+        );
+      }/*else{
+        setState(() {
+          _isButtonDisabled=false;
+        });
+        showDialog(context: context, child:
+        new AlertDialog(
+          // title: new Text("Sorry!"),
+          content: new Text("Poor network connection."),
+        )
+        );
+      }*/
+    }catch(e){
+      print(e.toString());
       showDialog(context: context, child:
       new AlertDialog(
-        //  title: new Text("Congrats!"),
-        content: new Text("Expense claim withdrawn successfully."),
-      )
-      );
-    }else if(islogin=="failure"){
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-        //title: new Text("Sorry!"),
-        content: new Text("Expense claim could not be withdrawn."),
-      )
-      );
-    }else{
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-        // title: new Text("Sorry!"),
         content: new Text("Poor network connection."),
       )
       );
     }
   }
-
 
   confirmWithdrawl(String Id) async{
     showDialog(context: context, child:

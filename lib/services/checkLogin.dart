@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/model/model.dart';
-
 import 'services.dart';
 
 class Login{
@@ -16,20 +14,15 @@ class Login{
   Future<String> checklogin(UserLogin user, BuildContext context) async{
     final prefs = await SharedPreferences.getInstance();
     Dio dio = new Dio();
-    // var empid;
-    // var organization;
-    // Employee emp;
 
     FormData formData = new FormData.from({
       "user_name": user.username,
       "user_password": user.password,
       "token": user.token,
       "qr":false,
-
     });
 
-    Response<String> response =
-    await dio.post(path + "checklogin", data: formData);
+    Response<String> response = await dio.post(path + "checklogin", data: formData);
     print(path + "checklogin?user_name=${user.username}&user_password=${user.password}&token=${user.token}");
     print("login response_______"+response.toString());
     print(response.statusCode);
@@ -42,64 +35,68 @@ class Login{
         prefs.setString("organization", employeeMap['organization']);
         prefs.setString("userprofileid", employeeMap['userprofileid']);
         prefs.setString("countryid", employeeMap['countryid']);
-        print("countryid");
-        print(employeeMap['countryid']);
-
-        print("*********PRATIBHA***********");
-        if(employeeMap['countryid']=="93"){
-          //print("Helloindia");
-
-          /*prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/');
-          prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/');
-          prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMINDIA/services/');*/
-
-          prefs.setString("path", 'https://ubitech.ubihrm.com/ubiapp/');
-          prefs.setString("path_ubiattendance", 'https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/');
-          prefs.setString("path_hrm_india", 'https://ubitech.ubihrm.com/services/');
-
-        }else{
-
-         //print("Hiiiall");
-
-          /*prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMALL/ubiapp/');
-          prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMALL/HRMAPP/index.php/Att_services/');
-          prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMALL/services/');*/
-
-          prefs.setString("path", 'https://ubitechdigital.ubihrm.com/ubiapp/');
-          prefs.setString("path_ubiattendance", 'https://ubitechdigital.ubihrm.com/HRMAPP/index.php/Att_services/');
-          prefs.setString("path_hrm_india", 'https://ubitechdigital.ubihrm.com/services/');
-
-        }
         prefs.setString("empid", employeeMap['employeeid']);
         prefs.setString("orgdir", employeeMap['organization']);
         prefs.setString("orgname", employeeMap['organizationname']);
-        prefs.setString('fname',employeeMap['fname']);
-        prefs.setString('profile', employeeMap['profile']);
+        //prefs.setString('fname',employeeMap['fname']);
+        //prefs.setString('profile', employeeMap['profile']);
+        prefs.setInt('profiletype', employeeMap['profiletype']);
+        prefs.setInt('hrsts', employeeMap['hrsts']);
+        prefs.setInt('adminsts', employeeMap['adminsts']);
+        prefs.setInt('dataaccess', employeeMap['dataaccess']);
+        prefs.setInt('SAPintegrationsts', employeeMap['SAPintegrationsts']);
+        prefs.setInt('divhrsts', employeeMap['divhrsts']);
 
         String empid = prefs.getString('employeeid')??"";
         String organization =prefs.getString('organization')??"";
         String userprofileid =prefs.getString('userprofileid')??"";
-        print("----------->");
-        print(userprofileid);
-        print("----------->");
-        Employee emp = new Employee(employeeid: empid, organization: organization, userprofileid: userprofileid);
+        int profiletype =prefs.getInt('profiletype')??0;
+        int hrsts =prefs.getInt('hrsts')??0;
+        int adminsts =prefs.getInt('adminsts')??0;
+        int dataaccess =prefs.getInt('dataaccess')??0;
+        int SAPintegrationsts =prefs.getInt('SAPintegrationsts')??0;
+        int divhrsts =prefs.getInt('divhrsts')??0;
 
-        //await getProfileInfo(emp);
+        Employee emp = new Employee(
+          employeeid: empid,
+          organization: organization,
+          userprofileid: userprofileid,
+          profiletype:profiletype,
+          hrsts:hrsts,
+          adminsts:adminsts,
+          dataaccess:dataaccess,
+          SAPintegrationsts:SAPintegrationsts,
+          divhrsts:divhrsts,
+        );
+
         await getAllPermission(emp);
         await getProfileInfo(emp, context);
-        perEmployeeLeave= getModulePermission("18","view");
-        //perLeaveApproval=  getModulePermission("124","view");
-        perAttendance=  getModulePermission("5","view");
-        perTimeoff=  getModulePermission("179","view");
         await getReportingTeam(emp);
 
+        perEmployeeLeave= getModulePermission("18","view");
+        perAttendance=  getModulePermission("5","view");
+        perTimeoff=  getModulePermission("179","view");
+        perSalary = getModulePermission("66", "view");
+        perPayroll = getModulePermission("458", "view");
+        perPayPeriod = getModulePermission("491", "view");
+        perSalaryExpense = getModulePermission("170", "view");
+        perPayrollExpense = getModulePermission("473", "view");
+        perFlexi = getModulePermission("448", "view");
+        perPunchLocation = getModulePermission("305", "view");
+        perLeaveApproval=  getModuleUserPermission("124","view");
+        perTimeoffApproval = getModuleUserPermission("180", "view");
+        perSalaryExpenseApproval=  getModuleUserPermission("170","view");
+        perPayrollExpenseApproval=  getModuleUserPermission("473","view");
+        perAttReport=getModuleUserPermission("68", "view");
+        perLeaveReport=getModuleUserPermission("69", "view");
+        perFlexiReport=getModuleUserPermission("448", "view");
+
         return "true";
-      }else if(employeeMap['response']==2){
+      } else if(employeeMap['response']==2){
         return "false1";
-      }else if(employeeMap['response']==3){
+      } else if(employeeMap['response']==3){
         return "false2";
-      }
-      else{
+      } else{
         return "false";
       }
     }
@@ -109,9 +106,11 @@ class Login{
     try {
       final prefs = await SharedPreferences.getInstance();
       Dio dio = new Dio();
+
       print(user.username + "----");
       print(user.password + "----");
       print(user.token + "----");
+
       if(user.username=='' || user.password=='')
         return "failure";
       FormData formData = new FormData.from({
@@ -119,73 +118,58 @@ class Login{
         "user_password": user.password,
         "token": user.token,
         "qr":true,
-
       });
 
-      // Response response1 = await dio.post("https://sandbox.ubiattendance.com/index.php/services/checkLogin",data: formData);
-      // Response response1 = await dio.post("https://ubiattendance.ubihrm.com/index.php/services/checkLogin",data: formData);
       Response response1 = await dio.post(path+"checklogin", data: formData);
-      // Response response1 = await dio.post("http://192.168.0.200/UBIHRM/HRMINDIA/services/checkLogin", data: formData);
       print(response1.toString());
       print(response1.statusCode.toString());
 
       if (response1.statusCode == 200) {
         Map employeeMap = json.decode(response1.data);
-        print(employeeMap["response"]);
         if(employeeMap['response']==1){
           prefs.setInt("response", 1);
           prefs.setString("employeeid", employeeMap['employeeid']);
           prefs.setString("organization", employeeMap['organization']);
           prefs.setString("userprofileid", employeeMap['userprofileid']);
           prefs.setString("countryid", employeeMap['countryid']);
-          print("countryid");
-          print(employeeMap['countryid']);
-
-          print("*********PRATIBHA123***********");
-          if(employeeMap['countryid']=="93"){
-            //print("Helloindia");
-
-            /*prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMINDIA/ubiapp/');
-            prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMINDIA/HRMAPP/index.php/Att_services/');
-            prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMINDIA/services/');*/
-
-            prefs.setString("path", 'https://ubitech.ubihrm.com/ubiapp/');
-            prefs.setString("path_ubiattendance", 'https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/');
-            prefs.setString("path_hrm_india", 'https://ubitech.ubihrm.com/services/');
-
-          }else{
-            //print("Hiiiall");
-
-            /*prefs.setString("path", 'http://192.168.0.200/UBIHRM/HRMALL/ubiapp/');
-            prefs.setString("path_ubiattendance", 'http://192.168.0.200/UBIHRM/HRMALL/HRMAPP/index.php/Att_services/');
-            prefs.setString("path_hrm_india", 'http://192.168.0.200/UBIHRM/HRMALL/services/');*/
-
-            prefs.setString("path", 'https://ubitechdigital.ubihrm.com/ubiapp/');
-            prefs.setString("path_ubiattendance", 'https://ubitechdigital.ubihrm.com/HRMAPP/index.php/Att_services/');
-            prefs.setString("path_hrm_india", 'https://ubitechdigital.ubihrm.com/services/');
-
-          }
-          prefs.setString("empid", employeeMap['employeeid']
-          );
+          prefs.setString("empid", employeeMap['employeeid']);
           prefs.setString("orgdir", employeeMap['organization']);
           prefs.setString("orgname", employeeMap['organizationname']);
-          prefs.setString('fname',employeeMap['fname']);
-          prefs.setString('profile', employeeMap['profile']);
+          //prefs.setString('fname',employeeMap['fname']);
+          //prefs.setString('profile', employeeMap['profile']);
+          prefs.setInt('profiletype', employeeMap['profiletype']);
+          prefs.setInt('hrsts', employeeMap['hrsts']);
+          prefs.setInt('adminsts', employeeMap['adminsts']);
+          prefs.setInt('dataaccess', employeeMap['dataaccess']);
 
           String empid = prefs.getString('employeeid')??"";
           String organization =prefs.getString('organization')??"";
           String userprofileid =prefs.getString('userprofileid')??"";
+          int profiletype =prefs.getInt('profiletype')??0;
+          int hrsts =prefs.getInt('hrsts')??0;
+          int adminsts =prefs.getInt('adminsts')??0;
+          int dataaccess =prefs.getInt('dataaccess')??0;
 
-          Employee emp = new Employee(employeeid: empid, organization: organization, userprofileid: userprofileid);
+          Employee emp = new Employee(
+            employeeid: empid,
+            organization: organization,
+            userprofileid: userprofileid,
+            profiletype:profiletype,
+            hrsts:hrsts,
+            adminsts:adminsts,
+            dataaccess:dataaccess,
+          );
 
-          //await getProfileInfo(emp);
           await getAllPermission(emp);
           await getProfileInfo(emp, context);
+          await getReportingTeam(emp);
+
           perEmployeeLeave= getModulePermission("18","view");
           perAttendance=  getModulePermission("5","view");
           perTimeoff=  getModulePermission("179","view");
           perSalary = getModulePermission("66", "view");
           perPayroll = getModulePermission("458", "view");
+          perPayPeriod = getModulePermission("491", "view");
           perSalaryExpense = getModulePermission("170", "view");
           perPayrollExpense = getModulePermission("473", "view");
           perFlexi = getModulePermission("448", "view");
@@ -197,40 +181,9 @@ class Login{
           perAttReport=getModuleUserPermission("68", "view");
           perLeaveReport=getModuleUserPermission("69", "view");
           perFlexiReport=getModuleUserPermission("448", "view");
-          await getReportingTeam(emp);
 
           return "Success";
-        }
-        /*  return "true";
-        }else if(employeeMap['response']==2){
-          return "false1";
-        }else if(employeeMap['response']==3){
-          return "false2";
-        }
-        else{
-          return "false";
-        }*/
-        // if (employeeMap["response"] == 1) {
-        /*  var user = new Employee.fromJson(employeeMap);
-          print(user.fname + " " + user.lname);
-          print(user.org_perm);
-          Home ho = new Home();
-          StreamLocation sl = new StreamLocation();
-          sl.startStreaming(1);
-          Map timeinout = await ho.checkTimeInQR(user.empid, user.orgid);
-          print(timeinout);
-          var marktimeinout = MarkTime(timeinout["uid"].toString(), timeinout["location"], timeinout["aid"].toString(), timeinout["act"], timeinout["shiftId"], timeinout["refid"].toString(), timeinout["latit"].toString(), timeinout["longi"].toString());
-          if(timeinout["act"]!="Imposed") {
-            SaveImage mark = new SaveImage();
-            bool res = await mark.saveTimeInOutQR(marktimeinout);
-            if (res)
-              return "success";
-            else
-              return "poor network";
-          }else{
-            return "imposed";
-          }
-        } */else {
+        } else {
           return "failure";
         }
       } else {
@@ -241,155 +194,12 @@ class Login{
       return "poor network";
     }
   }
-/*Future<bool> checklogin(UserLogin user) async{
-  final prefs = await SharedPreferences.getInstance();
-  Dio dio = new Dio();
-  // var empid;
- // var organization;
- // Employee emp;
 
-
-  FormData formData = new FormData.from({
-    "user_name": user.username,
-    "user_password": user.password,
-    "token": user.token,
-    "qr":false,
-
-  });
-
-  Response<String> response =
-  await dio.post(path + "checklogin", data: formData);
-  print("login response_______"+response.toString());
-
-  if(response.statusCode==200){
-    Map employeeMap = json.decode(response.data);
-    if(employeeMap['response']==1){
-      prefs.setInt("response", 1);
-      prefs.setString("employeeid", employeeMap['employeeid']);
-      prefs.setString("organization", employeeMap['organization']);
-      prefs.setString("userprofileid", employeeMap['userprofileid']);
-      prefs.setString("empid", employeeMap['employeeid']);
-      prefs.setString("orgdir", employeeMap['organization']);
-      prefs.setString("orgname", employeeMap['organizationname']);
-      prefs.setString('fname',employeeMap['fname']);
-      prefs.setString('profile', employeeMap['profile']);
-
-      String empid = prefs.getString('employeeid')??"";
-      String organization =prefs.getString('organization')??"";
-      String userprofileid =prefs.getString('userprofileid')??"";
-      Employee emp = new Employee(employeeid: empid, organization: organization,userprofileid:userprofileid);
-
-      //  await getProfileInfo(emp);
-      await getAllPermission(emp);
-      await getProfileInfo(emp);
-      perEmployeeLeave= getModulePermission("18","view");
-
-      perLeaveApproval=  getModulePermission("124","view");
-      perAttendance=  getModulePermission("5","view");
-      perTimeoff=  getModulePermission("179","view");
-      await getReportingTeam(emp);
-
-      return true;
-    }
-
-    else{
-      return false;
-    }
+  markAttByQR(String qr, BuildContext context, token1) async{
+    List splitstring = qr.split("ykks==");
+    User qruser = new User(splitstring[0], splitstring[1],token1);
+    String result = await checkLoginForQr(qruser, context);
+    return result;
   }
+
 }
-
-checkLoginForQr(User user) async{
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      Dio dio = new Dio();
-      print(user.username + "----");
-      print(user.password + "----");
-      print(user.token + "----");
-      if(user.username=='' || user.password=='')
-        return "failure";
-      FormData formData = new FormData.from({
-        "user_name": user.username,
-        "user_password": user.password,
-        "token": user.token,
-        "qr":true,
-
-      });
-
-      // Response response1 = await dio.post("https://sandbox.ubiattendance.com/index.php/services/checkLogin",data: formData);
-      // Response response1 = await dio.post("https://ubiattendance.ubihrm.com/index.php/services/checkLogin",data: formData);
-      Response response1 = await dio.post(path+"checklogin", data: formData);
-      // Response response1 = await dio.post("http://192.168.0.200/UBIHRM/HRMINDIA/services/checkLogin", data: formData);
-      print(response1.toString());
-      print(response1.statusCode.toString());
-
-      if (response1.statusCode == 200) {
-        Map employeeMap = json.decode(response1.data);
-        print(employeeMap["response"]);
-        if(employeeMap['response']==1){
-          prefs.setInt("response", 1);
-          prefs.setString("employeeid", employeeMap['employeeid']);
-          prefs.setString("organization", employeeMap['organization']);
-          prefs.setString("empid", employeeMap['employeeid']);
-          prefs.setString("orgdir", employeeMap['organization']);
-          prefs.setString("orgname", employeeMap['organizationname']);
-          prefs.setString('fname',employeeMap['fname']);
-          prefs.setString('profile', employeeMap['profile']);
-
-          String empid = prefs.getString('employeeid')??"";
-          String organization =prefs.getString('organization')??"";
-          Employee emp = new Employee(employeeid: empid, organization: organization);
-
-          //  await getProfileInfo(emp);
-          await getAllPermission(emp);
-          await getProfileInfo(emp);
-          perEmployeeLeave= getModulePermission("18","view");
-
-          perLeaveApproval=  getModulePermission("124","view");
-          perAttendance=  getModulePermission("5","view");
-          perTimeoff=  getModulePermission("179","view");
-          await getReportingTeam(emp);
-
-          return "Success";
-        }
-        // if (employeeMap["response"] == 1) {
-        /*  var user = new Employee.fromJson(employeeMap);
-          print(user.fname + " " + user.lname);
-          print(user.org_perm);
-          Home ho = new Home();
-          StreamLocation sl = new StreamLocation();
-          sl.startStreaming(1);
-          Map timeinout = await ho.checkTimeInQR(user.empid, user.orgid);
-          print(timeinout);
-          var marktimeinout = MarkTime(timeinout["uid"].toString(), timeinout["location"], timeinout["aid"].toString(), timeinout["act"], timeinout["shiftId"], timeinout["refid"].toString(), timeinout["latit"].toString(), timeinout["longi"].toString());
-          if(timeinout["act"]!="Imposed") {
-            SaveImage mark = new SaveImage();
-            bool res = await mark.saveTimeInOutQR(marktimeinout);
-            if (res)
-              return "success";
-            else
-              return "poor network";
-          }else{
-            return "imposed";
-          }
-        } */else {
-          return "failure";
-        }
-      } else {
-        return "poor network";
-      }
-    }catch(e){
-      print(e.toString());
-      return "poor network";
-    }
-  }*/
-
-markAttByQR(String qr, BuildContext context, token1) async{
-  List splitstring = qr.split("ykks==");
-  User qruser = new User(splitstring[0], splitstring[1],token1);
-  String result = await checkLoginForQr(qruser, context);
-  return result;
-  print(splitstring[0]);
-  print(splitstring[1]);
-  print(qr);
-  //return "success";
-}}

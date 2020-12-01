@@ -112,12 +112,11 @@ class _BootomNavigationState extends State<HomeNavigation> {
                     color: Colors.white,
                     size: 25.0 ),
                 title: Text('Settings',style: TextStyle(color: Colors.white))),*/
-          ((perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1')) ?  new  BottomNavigationBarItem(
+          (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?  new  BottomNavigationBarItem(
             //      (((perLeaveApproval=='1') )) ?  new  BottomNavigationBarItem(
             icon: new Stack(
               children: <Widget>[
                 new Icon(Icons.check_circle_outline,color: Colors.white,),
-
                 new Positioned(
                     right: 0,
                     top:0,
@@ -146,14 +145,13 @@ class _BootomNavigationState extends State<HomeNavigation> {
               ],
             ),
             title: Text('Approvals',style: TextStyle(color: Colors.white)),
-          ) :
-
-          BottomNavigationBarItem(
+          ) : BottomNavigationBarItem(
               icon: Icon(
                   Icons.person,
                   color: Colors.white,
                   size: 25.0 ),
-              title: Text('Profile',style: TextStyle(color: Colors.white))),
+              title: Text('Profile',style: TextStyle(color: Colors.white))
+          ),
 
           BottomNavigationBarItem(
             icon: new Icon(
@@ -175,9 +173,8 @@ class _BootomNavigationState extends State<HomeNavigation> {
         currentIndex: _currentIndex,
         onTap: (newIndex) {
           if (newIndex == 0) {
-            (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?
-            //    (perLeaveApproval=='1') ?
-            Navigator.push(
+            (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1')
+                ? Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AllApprovals()),
             ):Navigator.push(

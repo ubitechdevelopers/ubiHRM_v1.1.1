@@ -1,12 +1,14 @@
+import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/login_page.dart';
-
+import 'package:ubihrm/survey.dart';
 import 'global.dart';
 
 
@@ -18,21 +20,25 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   bool _isServiceCalling = false;
   final _formKeyKey = GlobalKey<FormState>();
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  Position _currentPosition;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final FocusNode myFocusNodeEmail = FocusNode();
   final FocusNode myFocusNodeName = FocusNode();
-  final FocusNode myFocusNodephone = FocusNode();
-  final FocusNode myFocusNodecity = FocusNode();
+  final FocusNode myFocusNodePhone = FocusNode();
+  final FocusNode myFocusNodeCity = FocusNode();
   final FocusNode myFocusNodeCPN = FocusNode();
-  final FocusNode __contcode = FocusNode();
+  final FocusNode myFocusNodeContcode = FocusNode();
+  final FocusNode myFocusNodePass = FocusNode();
 
   TextEditingController signupEmailController = new TextEditingController();
   TextEditingController signupNameController = new TextEditingController();
-  TextEditingController _contcode = new TextEditingController();
+  TextEditingController signupContcodeController = new TextEditingController();
   TextEditingController signupPhoneController = new TextEditingController();
-  TextEditingController CPNController = new TextEditingController();
-  TextEditingController signupcityController = new TextEditingController();
+  TextEditingController signupCPNController = new TextEditingController();
+  TextEditingController signupCityController = new TextEditingController();
+  TextEditingController signupPassController = new TextEditingController();
 
   bool _isButtonDisabled = false;
 
@@ -285,6 +291,7 @@ class _RegisterState extends State<Register> {
 
   String _country;
   String  _tempcontry  = '';
+  bool _obscureText = true;
 
   @override
   void dispose() {
@@ -300,19 +307,22 @@ class _RegisterState extends State<Register> {
 
   @override
   void initState(){
+    _getCurrentLocation();
     signupEmailController = new TextEditingController();
     signupNameController = new TextEditingController();
-    _contcode = new TextEditingController();
+    signupContcodeController = new TextEditingController();
     signupPhoneController = new TextEditingController();
-    CPNController = new TextEditingController();
-    signupcityController = new TextEditingController();
+    signupCPNController = new TextEditingController();
+    signupCityController = new TextEditingController();
+    signupPassController = new TextEditingController();
+    signupPassController.text='123456';
     super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
 
-    _firebaseMessaging.configure(
+    /*_firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) {
         print('on message $message');
       },
@@ -324,10 +334,10 @@ class _RegisterState extends State<Register> {
       },
     );
 
-    gettokenstate();
+    gettokenstate();*/
   }
 
-  gettokenstate() async{
+  /*gettokenstate() async{
     final prefs = await SharedPreferences.getInstance();
     _firebaseMessaging.getToken().then((token){
       token1 = token;
@@ -335,6 +345,22 @@ class _RegisterState extends State<Register> {
       // print(tokenn);
       // print(token1);
 
+    });
+  }*/
+
+  SearchCountry(String country) {
+    for (int i=0; i < _myJson.length; i++) {
+      if (country == _myJson[i]["name"]) {
+        _country = _myJson[i]["ind"];
+        signupContcodeController.text = _myJson[i]['countrycode'];
+        _tempcontry = _myJson[i]['id'];
+      }
+    }
+  }
+
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
     });
   }
 
@@ -453,6 +479,7 @@ class _RegisterState extends State<Register> {
                                         icon: Icon(
                                           FontAwesomeIcons.solidBuilding,
                                           color: Colors.black,
+                                          size: 20.0,
                                         ),
                                         hintText: "Company ",
                                         hintStyle: TextStyle(
@@ -477,7 +504,7 @@ class _RegisterState extends State<Register> {
                                         top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
                                     child: TextFormField(
                                       focusNode: myFocusNodeCPN,
-                                      controller: CPNController,
+                                      controller: signupCPNController,
                                       keyboardType: TextInputType.text,
                                       textCapitalization: TextCapitalization.words,
                                       style: TextStyle(
@@ -489,6 +516,7 @@ class _RegisterState extends State<Register> {
                                         icon: Icon(
                                           FontAwesomeIcons.userAlt,
                                           color: Colors.black,
+                                          size: 20.0,
                                         ),
                                         hintText: "Contact Person Name",
                                         hintStyle: TextStyle(
@@ -524,6 +552,7 @@ class _RegisterState extends State<Register> {
                                         icon: Icon(
                                           FontAwesomeIcons.solidEnvelope,
                                           color: Colors.black,
+                                          size: 20.0,
                                         ),
                                         hintText: "Email ",
                                         hintStyle: TextStyle(
@@ -544,7 +573,7 @@ class _RegisterState extends State<Register> {
                                     //height: 27,
                                     width: MediaQuery.of(context).size.width,
                                     padding: EdgeInsets.only(
-                                        top: 5.0, bottom: 7.0, left: 25.0, right: 25.0),
+                                        top: 0.0, bottom: 7.0, left: 25.0, right: 25.0),
                                     child:new InputDecorator(
                                       decoration: const InputDecoration(
                                         //labelText: 'Country',
@@ -554,6 +583,7 @@ class _RegisterState extends State<Register> {
                                         icon: Icon(
                                           FontAwesomeIcons.globeAsia,
                                           color: Colors.black,
+                                          size: 20.0,
                                         ),
                                       ),
                                       //   isEmpty: _color == '',
@@ -568,15 +598,10 @@ class _RegisterState extends State<Register> {
                                             value: _country,
                                             onChanged: (String newValue) {
                                               setState(() {
+                                                signupCityController.text='';
                                                 _country = newValue;
-                                                //print("*************************");
-                                                //print("@@@@@@@@@@"+newValue);
-                                                //print(_myJson[int.parse(newValue)]['countrycode']);
-                                                //print(_myJson[int.parse(newValue)]['name']);
-                                                _contcode.text = _myJson[int.parse(newValue)]['countrycode'];
+                                                signupContcodeController.text = _myJson[int.parse(newValue)]['countrycode'];
                                                 _tempcontry = _myJson[int.parse(newValue)]['id'];
-                                                //print(_tempcontry);
-                                                //print(_myJson);
 
                                               });
                                               /*setState(() {
@@ -613,10 +638,10 @@ class _RegisterState extends State<Register> {
                                 Expanded(
                                   child: Padding(
                                     padding: EdgeInsets.only(
-                                        top: 7.0, bottom: 7.0, left: 20.0, right: 25.0),
+                                        top: 7.0, bottom: 7.0, left: 22.0, right: 25.0),
                                     child: TextFormField(
-                                      focusNode: myFocusNodecity,
-                                      controller: signupcityController,
+                                      focusNode: myFocusNodeCity,
+                                      controller: signupCityController,
                                       //keyboardType: TextInputType.text,
                                       textCapitalization: TextCapitalization.words,
                                       style: TextStyle(
@@ -625,11 +650,11 @@ class _RegisterState extends State<Register> {
                                       decoration: InputDecoration(
                                         //border: InputBorder.none,
                                         icon: Padding(
-                                          padding: const EdgeInsets.only(bottom:5.0, right: 5.0),
+                                          padding: const EdgeInsets.only(bottom:5.0, right: 3.0),
                                           child: Icon(
                                             FontAwesomeIcons.city,
                                             color: Colors.black,
-
+                                            size: 20.0,
                                           ),
                                         ),
                                         hintText: "City ",
@@ -650,12 +675,15 @@ class _RegisterState extends State<Register> {
                             Row(
                               children: <Widget>[
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 20.0,bottom: 5),
+                                  padding: const EdgeInsets.only(left: 15.0,bottom: 5),
                                   child: Container(
-                                    child: Icon(
-                                      Icons.phone,
-                                      color: Colors.black,
-                                      size: 33,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        FontAwesomeIcons.phoneAlt,
+                                        color: Colors.black,
+                                        size: 20,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -668,7 +696,7 @@ class _RegisterState extends State<Register> {
                                         textAlign: TextAlign.justify,
                                         style: new TextStyle(
                                           height: 1.25,
-                                          color: Colors.black38,
+                                          color: Colors.black,
                                           //fontWeight: FontWeight.bold,
                                         ),
                                         decoration: const InputDecoration(
@@ -681,8 +709,8 @@ class _RegisterState extends State<Register> {
                                         ),*/
                                           // filled: true,
                                         ),
-                                        controller: _contcode,
-                                        focusNode: __contcode,
+                                        controller: signupContcodeController,
+                                        focusNode: myFocusNodeContcode,
                                         keyboardType: TextInputType.phone,
                                         inputFormatters: [
                                           WhitelistingTextInputFormatter.digitsOnly,
@@ -695,7 +723,7 @@ class _RegisterState extends State<Register> {
                                   child: Padding(
                                     padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 10.0, right: 25.0),
                                     child: TextFormField(
-                                      focusNode: myFocusNodephone,
+                                      focusNode: myFocusNodePhone,
                                       controller: signupPhoneController,
                                       keyboardType: TextInputType.phone,
                                       inputFormatters: [
@@ -727,15 +755,63 @@ class _RegisterState extends State<Register> {
                               ],
                             ),
 
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 3.0, bottom: 7.0, left: 24.0, right: 25.0),
+                                    child: TextFormField(
+                                      obscureText: _obscureText,
+                                      focusNode: myFocusNodePass,
+                                      controller: signupPassController,
+                                      keyboardType: TextInputType.text,
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.black),
+                                      decoration: InputDecoration(
+                                        // border: InputBorder.none,
+                                        icon: Icon(
+                                          FontAwesomeIcons.lock,
+                                          color: Colors.black,
+                                          size: 20.0,
+                                        ),
+                                        hintText: "Password",
+                                        hintStyle: TextStyle(
+                                            fontSize: 14.0),
+                                        suffixIcon: IconButton(
+                                          onPressed: _toggle,
+                                          icon: Icon(_obscureText ?Icons.visibility_off:Icons.visibility,
+                                              color: Colors.black),
+                                        )
+                                      ),
+                                      validator: (value) {
+                                        if (value.isEmpty || value==null ) {
+                                          // FocusScope.of(context).requestFocus(__newPass);
+                                          return 'Please enter password';
+                                        }
+                                        if(value.length<6)
+                                        {
+                                          return 'Password must contain at least 6 characters';
+                                        }
+
+                                        Pattern pattern = r'^[a-zA-Z0-9]+$';
+                                        RegExp regex = new RegExp(pattern);
+                                        if (!regex.hasMatch(value))
+                                          return 'Password should not contain \nany special characters';
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
                             Padding(
                               padding: const EdgeInsets.only(top: 10.0, bottom: 12.0, left: 0.0, right: 0.0),
                               child: Row(
                                 children: <Widget>[
                                   Expanded(
                                     child: Container(
-                                      //width: 190,
                                       width: MediaQuery.of(context).size.width*0.5,
-                                      //margin: EdgeInsets.only(top: 450.0),
                                       padding: EdgeInsets.only(
                                           top: 0.0, bottom: 0.0, left: 45.0, right: 15.0),
                                       decoration: new BoxDecoration(
@@ -743,9 +819,6 @@ class _RegisterState extends State<Register> {
                                       ),
                                       child: _isButtonDisabled?new RaisedButton(
                                           color: Colors.orange[800],
-                                          //color: Color.fromRGBO(0, 166, 90,1.0),
-                                          //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                                          /*shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),*/
                                           textColor: Colors.white,
                                           padding: EdgeInsets.all(10.0),
                                           child: const Text('Registering...',style: TextStyle(fontSize: 16.0),),
@@ -753,14 +826,9 @@ class _RegisterState extends State<Register> {
 
                                           }
                                       ): new ButtonTheme(
-                                        //minWidth: 100.0,
                                         child:RaisedButton(
                                             color: Colors.orange[800],
-                                            // textColor: Colors.white,
-                                            //color: Color.fromRGBO(0,166, 90,1.0),
                                             textColor: Colors.white,
-                                            //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                                            /* shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),*/
                                             padding: EdgeInsets.all(5.0),
                                             child: const Text('Register',style: TextStyle(fontSize: 16.0),),
                                             onPressed: ()  {
@@ -768,74 +836,70 @@ class _RegisterState extends State<Register> {
                                                 if(_tempcontry=='' ) {
                                                   showDialog(context: context, child:
                                                   new AlertDialog(
-                                                    //title: new Text("Alert"),
                                                     content: new Text("Please Select a Country."),
                                                   ));
-                                                  FocusScope.of(context).requestFocus(myFocusNodephone);
+                                                  FocusScope.of(context).requestFocus(myFocusNodePhone);
                                                 }else if(_country=='0') {
                                                   showDialog(context: context, child:
                                                   new AlertDialog(
-                                                    //title: new Text("Alert"),
                                                     content: new Text("Please select a country"),
                                                   ));
-                                                  //FocusScope.of(context).requestFocus(myFocusNodephone);
                                                 }else{
                                                   setState(() {
                                                     _isButtonDisabled=true;
                                                   });
 
-                                                  //print("&&&&&&&&&&&&&"+_tempcontry);
-                                                  //print("**************"+_contcode.toString());
-                                                  //print("^^^^^^^^^^^^^^^"+_country);
+                                                  print(path+"register_org?org_name=${signupNameController.text.trim()}&name=${signupCPNController.text.trim()}&email=${signupEmailController.text.trim()}&country=${_tempcontry}&city=${signupCityController.text.trim()}&countrycode=${signupContcodeController.text}&phone=${signupPhoneController.text.trim()}&password=${signupPassController.text.trim()}&platform=android");
                                                   var url = path+"register_org";
                                                   http.post(url, body: {
                                                     "org_name": signupNameController.text.trim(),
-                                                    "name": CPNController.text.trim(),
-                                                    "phone": signupPhoneController.text.trim(),
+                                                    "name": signupCPNController.text.trim(),
                                                     "email": signupEmailController.text.trim(),
-                                                    //"password": signupPasswordController.text,
-                                                    "city": signupcityController.text.trim(),
                                                     "country": _tempcontry,
-                                                    "countrycode": _contcode.text,
-                                                    "address": _tempcontry,
-                                                    //_contcode.text = _myJson[int.parse(newValue)]['countrycode'];
-                                                    //_tempcontry = _myJson[int.parse(newValue)]['id'];
+                                                    "city": signupCityController.text.trim(),
+                                                    "countrycode": signupContcodeController.text,
+                                                    "phone": signupPhoneController.text.trim(),
+                                                    "password":signupPassController.text.trim(),
+                                                    "platform":"android"
                                                   }).then((response) {
                                                     if (response.statusCode == 200) {
+                                                      Map data = json.decode(response.body);
                                                       print("-----------------> After Registration ---------------->");
                                                       print(response.body.toString());
-                                                      // res = json.decode(response.body.toString());
-                                                      //print("999");
-                                                      // print(res);
-                                                      if (response.body.toString().contains("1")) {
+                                                      print(data["trialorgid"]);
+                                                      print(data["status"]);
+                                                      if (data["status"].contains("1")) {
                                                         Navigator.push(
                                                           context,
-                                                          MaterialPageRoute(builder: (context) => LoginPage()),
+                                                          MaterialPageRoute(builder: (context) => SurveyForm(
+                                                              trialOrgId: data["trialorgid"],
+                                                              orgName: signupNameController.text.trim(),
+                                                              name: signupCPNController.text.trim(),
+                                                              email: signupEmailController.text.trim(),
+                                                              countrycode: signupContcodeController.text,
+                                                              phone: signupPhoneController.text.trim(),
+                                                          )),
                                                         );
-                                                        showDialog(context: context, child:
+                                                        /*showDialog(context: context, child:
                                                         new AlertDialog(
-                                                          //  title: new Text("UBIHRM"),
                                                           content: new Text("Company registered successfully, please check your mail."),
-                                                        ));
+                                                        ));*/
 
-                                                      } else if(response.body.toString().contains("2")){
+                                                      } else if(data["status"].contains("2")){
                                                         showDialog(context: context, child:
                                                         new AlertDialog(
-                                                          //title: new Text("ubihrm"),
                                                           content: new Text(
                                                               "Email already exists."),
                                                         ));
-                                                      } else if(response.body.toString().contains("3")){
+                                                      } else if(data["status"].contains("3")){
                                                         showDialog(context: context, child:
                                                         new AlertDialog(
-                                                          //title: new Text("ubihrm"),
                                                           content: new Text(
                                                               "Phone no. already exists."),
                                                         ));
-                                                      }else if(response.body.toString().contains("4")){
+                                                      }else if(data["status"].contains("4")){
                                                         showDialog(context: context, child:
                                                         new AlertDialog(
-                                                          //title: new Text("ubihrm"),
                                                           content: new Text(
                                                               "Email or Phone no already exists."),
                                                         ));
@@ -843,7 +907,6 @@ class _RegisterState extends State<Register> {
                                                       else {
                                                         showDialog(context: context, child:
                                                         new AlertDialog(
-                                                          //title: new Text("ubihrm"),
                                                           content: new Text(
                                                               "Oops! Company not registered. Try later"),
                                                         ));
@@ -915,4 +978,35 @@ class _RegisterState extends State<Register> {
     else
       return null;
   }
+
+  _getCurrentLocation() {
+    geolocator
+        .getCurrentPosition(desiredAccuracy:LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+      _getAddressFromLatLng();
+    }).catchError((e) {
+      print(e);
+    });
+
+  }
+
+  _getAddressFromLatLng() async {
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(_currentPosition.latitude, _currentPosition.longitude);
+
+      Placemark place = p[0];
+
+      setState(() {
+        signupCityController.text = place.locality;
+        SearchCountry(place.country);
+      });
+    } catch (e) {
+      print(e);
+    }
+
+  }
+
 }

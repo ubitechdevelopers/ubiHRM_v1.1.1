@@ -2,13 +2,14 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_share/simple_share.dart';
+//import 'package:simple_share/simple_share.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 
 import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
 import '../global.dart';
+import 'image_view.dart';
 
 class VisitList extends StatefulWidget {
   @override
@@ -16,31 +17,37 @@ class VisitList extends StatefulWidget {
 }
 
 TextEditingController today;
-
+TextEditingController visit_li;
 //FocusNode f_dept ;
 class _VisitList extends State<VisitList> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _currentIndex = 1;
   String _orgName;
-  String admin_sts='0';
+  String admin_sts = '0';
   bool res = true;
   var formatter = new DateFormat('dd-MMM-yyyy');
   var profileimage;
   bool showtabbar;
-  String orgName="";
-  bool filests=false;
+  String orgName = "";
+  String empname = "";
+  bool filests = false;
   Future<List<Punch>> _listFuture;
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
 
   @override
   void initState() {
     super.initState();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
+    visit_li = new TextEditingController();
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     // f_dept = FocusNode();
-    showtabbar =false;
-    profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+    showtabbar = false;
+    profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     getOrgName();
-    _listFuture = getVisitsDataList(today.text);
+    _listFuture = getVisitsDataList(today.text, empname);
   }
 
   getOrgName() async {
@@ -53,9 +60,9 @@ class _VisitList extends State<VisitList> {
   void showInSnackBar(String value) {
     final snackBar = SnackBar(
         content: Text(
-          value,
-          textAlign: TextAlign.center,
-        ));
+      value,
+      textAlign: TextAlign.center,
+    ));
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
@@ -67,27 +74,25 @@ class _VisitList extends State<VisitList> {
   getmainhomewidget() {
     return new Scaffold(
       key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar,orgName),
+      backgroundColor: scaffoldBackColor(),
+      appBar: new AppHeader(profileimage, showtabbar, orgName),
       endDrawer: new AppDrawer(),
       bottomNavigationBar: HomeNavigation(),
       body: getReportsWidget(),
     );
   }
 
-
   getReportsWidget() {
-    return Stack(
-      children: <Widget>[
-        Container(
+    return Stack(children: <Widget>[
+      Container(
         margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
         padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
         //width: MediaQuery.of(context).size.width*0.9,
         //  height:MediaQuery.of(context).size.height*0.75,
         decoration: new ShapeDecoration(
-        shape: new RoundedRectangleBorder(
-        borderRadius: new BorderRadius.circular(20.0)),
-        color: Colors.white,
+          shape: new RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(20.0)),
+          color: Colors.white,
         ),
         //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
         child: Column(
@@ -120,7 +125,7 @@ class _VisitList extends State<VisitList> {
                             context: context,
                             firstDate: DateTime(1900),
                             initialDate: currentValue ?? DateTime.now(),
-                            lastDate: DateTime(2100));
+                            lastDate: DateTime.now());
                       },
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -136,11 +141,11 @@ class _VisitList extends State<VisitList> {
                       onChanged: (date) {
                         setState(() {
                           if (date != null && date.toString() != '') {
-                            res=true; //showInSnackBar(date.toString());
-                            _listFuture = getVisitsDataList(today.text);
-                          }
-                          else {
-                            res=false;
+                            res = true; //showInSnackBar(date.toString());
+                            _listFuture =
+                                getVisitsDataList(today.text, empname);
+                          } else {
+                            res = false;
                           }
                         });
                       },
@@ -220,11 +225,13 @@ class _VisitList extends State<VisitList> {
                                                                 today.text +
                                                                 ".csv",
                                                             res);
-                                                        *//*showDialog(context: context, child:
+                                                        */
+                /*showDialog(context: context, child:
                                                         new AlertDialog(
                                                           content: new Text("CSV has been saved in file storage in ubiattendance_files/Late_Comers_Report_"+today.text+".csv"),
                                                         )
-                                                        );*//*
+                                                        );*/
+                /*
                                                       });
                                                     },
                                                   ),
@@ -248,10 +255,12 @@ class _VisitList extends State<VisitList> {
                                                     ),
                                                     onTap: () {
                                                       //final uri = Uri.file('/storage/emulated/0/ubiattendance_files/Late_Comers_Report_14-Jun-2019.pdf');
-                                                      *//*SimpleShare.share(
+                                                      */
+                /*SimpleShare.share(
                                                           uri: uri.toString(),
                                                           title: "Share my file",
-                                                          msg: "My message");*//*
+                                                          msg: "My message");*/
+                /*
                                                       if (mounted) {
                                                         setState(() {
                                                           filests = true;
@@ -296,31 +305,103 @@ class _VisitList extends State<VisitList> {
                 )*/
               ],
             ),
-            Divider(
-              height: 5,
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: TextFormField(
+                        controller: _searchController,
+                        focusNode: searchFocusNode,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          border: OutlineInputBorder(
+                            borderRadius:  new BorderRadius.circular(10.0),
+                          ),
+                          prefixIcon: Icon(Icons.search, size: 30,),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          hintText: 'Search Employee',
+                          labelText: 'Search Employee',
+                          suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                              onPressed: () {
+                                _searchController.clear();
+                                /*Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => LateComers()),
+                                    );*/
+                                /*Navigator.pop(
+                                      context);*/
+                              }
+                          ):null,
+                          //focusColor: Colors.white,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            print("value");
+                            print(value);
+                            empname = value;
+                            res = true;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 2.0),
+
             Container(
               //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
-       //       width: MediaQuery.of(context).size.width * .9,
+              //       width: MediaQuery.of(context).size.width * .9,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   //SizedBox(width: MediaQuery.of(context).size.width*0.02),
                   Expanded(
                     flex: 50,
-                    child:Text(' Name',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child: Text(
+                      ' Name',
+                      style: TextStyle(
+                          color: appStartColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0),
+                    ),
                   ),
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 20.0,
+                    width: 100,
+                  ),
                   Expanded(
                     flex: 50,
                     // width: MediaQuery.of(context).size.width*0.2,
-                    child:Text('Client',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    child: Text(
+                      'Time In',
+                      style: TextStyle(
+                          color: appStartColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0),
+                    ),
                   ),
-
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Expanded(
+                    flex: 50,
+                    // width: MediaQuery.of(context).size.width*0.2,
+                    child: Text(
+                      'Time Out',
+                      style: TextStyle(
+                          color: appStartColor(),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -329,22 +410,28 @@ class _VisitList extends State<VisitList> {
               height: 8.2,
             ),
             new Expanded(
-              child: res == true ? getEmpDataList(today.text) : Container(
-                height: MediaQuery.of(context).size.height*0.25,
-                child:Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width*1,
-                    color:appStartColor().withOpacity(0.1),
-                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                    child:Text("Please select the date",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
-                  ),
-                ),
-              ),
+              child: res == true
+                  ? getEmpDataList(today.text,empname)
+                  : Container(
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      child: Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 1,
+                          color: appStartColor().withOpacity(0.1),
+                          padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                          child: Text(
+                            "Please select the date",
+                            style: TextStyle(fontSize: 14.0),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
             ),
           ],
         ),
       ),
-   ] );
+    ]);
   }
 
   loader() {
@@ -359,9 +446,9 @@ class _VisitList extends State<VisitList> {
     );
   }
 
-  getEmpDataList(date) {
+  getEmpDataList(date,empname) {
     return new FutureBuilder<List<Punch>>(
-        future: _listFuture,
+        future: getVisitsDataList(date, empname),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
@@ -369,117 +456,207 @@ class _VisitList extends State<VisitList> {
                   itemCount: snapshot.data.length,
                   //    padding: EdgeInsets.only(left: 15.0,right: 15.0),
                   itemBuilder: (BuildContext context, int index) {
-
                     return new Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Expanded(
-                                  flex:50,
-
-                                  child: Column(
-
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-
-                                      Text(" "+snapshot.data[index].Emp
-                                          .toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                      SizedBox(height: 10.0,),
-                                      Text(" TimeIn:    "+snapshot.data[index].pi_time
-                                          .toString(),),
-                                      SizedBox(height: 5.0,),
-                                      Text(" TimeOut: "+snapshot.data[index].po_time
-                                          .toString(),),
-
-
-                                    ],
-                                  )
-                              ),
-
-                              Expanded(
-                                flex:50,
+                                flex: 50,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(snapshot.data[index].client
-                                        .toString(), style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),),
-
+                                    Text(
+                                      snapshot.data[index].client.toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                     InkWell(
-                                      child: Text('In: ' +
-                                          snapshot.data[index]
-                                              .pi_loc.toString(),
+                                      child: Text(
+                                          'In: ' +
+                                              snapshot.data[index].pi_loc
+                                                  .toString(),
                                           style: TextStyle(
                                               color: Colors.black54,
                                               fontSize: 12.0)),
                                       onTap: () {
-                                        goToMap(
-                                            snapshot.data[index]
-                                                .pi_latit ,
-                                            snapshot.data[index]
-                                                .pi_longi);
+                                        goToMap(snapshot.data[index].pi_latit,
+                                            snapshot.data[index].pi_longi);
                                       },
                                     ),
-                                    SizedBox(height:2.0),
+                                    SizedBox(height: 2.0),
                                     InkWell(
-                                      child: Text('Out: ' +
-                                          snapshot.data[index]
-                                              .po_loc.toString(),
+                                      child: Text(
+                                        'Out: ' +
+                                            snapshot.data[index].po_loc
+                                                .toString(),
                                         style: TextStyle(
                                             color: Colors.black54,
-                                            fontSize: 12.0),),
+                                            fontSize: 12.0),
+                                      ),
                                       onTap: () {
-                                        goToMap(
-                                            snapshot.data[index]
-                                                .po_latit,
-                                            snapshot.data[index]
-                                                .po_longi);
+                                        goToMap(snapshot.data[index].po_latit,
+                                            snapshot.data[index].po_longi);
                                       },
                                     ),
                                   ],
                                 ),
                               ),
+                              SizedBox(width: 20),
+                              Expanded(
+                                  flex: 50,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            // Text(snapshot.data[index].Emp.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                            // SizedBox(height: 10.0,),
+                                            Text(
+                                              snapshot.data[index].pi_time
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(height: 10),
+                                            GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ImageView(
+                                                                myimage: snapshot
+                                                                    .data[index]
+                                                                    .pi_img,
+                                                                org_name:
+                                                                    "Ubitech Solutions")),
+                                                  );
+                                                },
+                                                child: Container(
+                                                  width: 62.0,
+                                                  height: 62.0,
+                                                  child: Container(
+                                                      decoration: new BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          image: new DecorationImage(
+                                                              fit: BoxFit.fill,
+                                                              image: new NetworkImage(
+                                                                  snapshot
+                                                                      .data[index]
+                                                                      .pi_img)))),
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(width: 20),
+                                      Container(
 
-
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text(
+                                              snapshot.data[index].po_time
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(height: 10),
+                                            GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ImageView(
+                                                                myimage: snapshot
+                                                                    .data[index]
+                                                                    .po_img,
+                                                                org_name:
+                                                                    "Ubitech Solutions")),
+                                                  );
+                                                },
+                                                child: Container(
+                                                  width: 62.0,
+                                                  height: 62.0,
+                                                  child: Container(
+                                                      decoration: new BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          image: new DecorationImage(
+                                                              fit: BoxFit.fill,
+                                                              image: new NetworkImage(
+                                                                  snapshot
+                                                                      .data[index]
+                                                                      .po_img)))),
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )),
                             ],
                           ),
-
-                          snapshot.data[index].desc == '' ? Container() : snapshot
-                              .data[index].desc != 'Visit out not punched' ?
-                          Row(
-                            children: <Widget>[
-                              SizedBox(width: 5.0,),
-                              Text('Remark:  ',
-                                style: TextStyle(fontWeight: FontWeight.bold,),),
-                              Text(snapshot.data[index].desc)
-                            ],
-
-                          ) :
-                          Row(
-                            children: <Widget>[
-                              SizedBox(width: 5.0,),
-                              Text('Remark:  ', style: TextStyle(
-                                  fontWeight: FontWeight.bold, color: Colors.red),),
-                              Text(snapshot.data[index].desc,
-                                style: TextStyle(color: Colors.red),)
-                            ],
-
+                          snapshot.data[index].desc == ''
+                              ? Container()
+                              : snapshot.data[index].desc !=
+                                      'Visit out not punched'
+                                  ? Row(
+                                      children: <Widget>[
+                                        SizedBox(
+                                          width: 5.0,
+                                        ),
+                                        Text(
+                                          'Remark:  ',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(snapshot.data[index].desc)
+                                      ],
+                                    )
+                                  : Row(
+                                      children: <Widget>[
+                                        SizedBox(
+                                          width: 5.0,
+                                        ),
+                                        Text(
+                                          'Remark:  ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.red),
+                                        ),
+                                        Text(
+                                          snapshot.data[index].desc,
+                                          style: TextStyle(color: Colors.red),
+                                        )
+                                      ],
+                                    ),
+                          Divider(
+                            color: Colors.black26,
                           ),
-                          Divider(color: Colors.black26,),
                         ]);
                   });
             } else {
               return new Center(
                 child: Container(
-                  width: MediaQuery.of(context).size.width*1,
+                  width: MediaQuery.of(context).size.width * 1,
                   color: appStartColor().withOpacity(0.1),
-                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                  child:Text("No Visits found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                  padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                  child: Text(
+                    "No Visits found",
+                    style: TextStyle(fontSize: 14.0),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               );
               /*return new Center(
@@ -487,14 +664,14 @@ class _VisitList extends State<VisitList> {
               );*/
             }
           } else if (snapshot.hasError) {
-		   return new Text("Unable to connect server");
+            return new Text("Unable to connect server");
           }
           // return loader();
           return new Center(child: CircularProgressIndicator());
         });
   }
 
-  dialogwidget(msg, filename) {
+  /*dialogwidget(msg, filename) {
     showDialog(
         context: context,
         // ignore: deprecated_member_use
@@ -525,5 +702,5 @@ class _VisitList extends State<VisitList> {
             ),
           ],
         ));
-  }
+  }*/
 } /////////mail class close

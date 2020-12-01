@@ -155,18 +155,18 @@ class _FlexiReport extends State<FlexiReport> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   //SizedBox(width: 1.0,),
-              Expanded(
-                   flex:48,
-                   child:Container(
-                    //width: MediaQuery.of(context).size.width * 0.15,
-                    child: Text(
-                      'Name',
-                      style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
-                      textAlign: TextAlign.left,
+                  Expanded(
+                    flex:48,
+                    child:Container(
+                      //width: MediaQuery.of(context).size.width * 0.15,
+                      child: Text(
+                        'Name',
+                        style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
+                        textAlign: TextAlign.left,
+                      ),
                     ),
                   ),
-                  ),
-                 /* Container(
+                  /* Container(
                     width: MediaQuery.of(context).size.width * 0.37,
                     child: Text(
                       'Location',
@@ -175,23 +175,23 @@ class _FlexiReport extends State<FlexiReport> {
                     ),
                   ),*/
 
-              Expanded(
-                flex:26,
-                child:Container(
-                   // width: MediaQuery.of(context).size.width * 0.15,
-                    child: Text('Time In',
-                        style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
-                        textAlign: TextAlign.center),
-                  )
-              ),
                   Expanded(
-                    flex:26,
-                    child:Container(
-                   // width: MediaQuery.of(context).size.width * 0.15,
-                    child: Text('Time Out ',
-                        style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
-                        textAlign: TextAlign.center),
-                  )),
+                      flex:26,
+                      child:Container(
+                        // width: MediaQuery.of(context).size.width * 0.15,
+                        child: Text('Time In',
+                            style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
+                            textAlign: TextAlign.center),
+                      )
+                  ),
+                  Expanded(
+                      flex:26,
+                      child:Container(
+                        // width: MediaQuery.of(context).size.width * 0.15,
+                        child: Text('Time Out ',
+                            style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
+                            textAlign: TextAlign.center),
+                      )),
                 ],
               ),
             ),
@@ -212,10 +212,12 @@ class _FlexiReport extends State<FlexiReport> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            ]),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+            CircularProgressIndicator()
+          ]
+        ),
       ),
     );
   }
@@ -310,45 +312,45 @@ class _FlexiReport extends State<FlexiReport> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment : MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                           // SizedBox(width: 8.0,),
+                            // SizedBox(width: 8.0,),
 
                             Expanded(
                               flex:46,
                               child:Container(
                                 //width: MediaQuery.of(context).size.width * 0.20,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment : MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Text(snapshot.data[index].Emp.toString(),style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                                    SizedBox(height: 3.0),
-                                    InkWell(
-                                      child:Text("In: "+
-                                          snapshot.data[index].pi_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
-                                      onTap: () {
-                                        goToMap(snapshot.data[index].pi_latit,snapshot.data[index].pi_longi.toString());
-                                      },
-                                    ),
-                                    SizedBox(height: 3.0),
-                                    InkWell(
-                                      child:Text("Out: "+
-                                          snapshot.data[index].po_loc.toString(),
-                                        style: TextStyle
-                                          (
-                                            color: Colors.black54,fontSize: 12.0
-                                        ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment : MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      new Text(snapshot.data[index].Emp.toString(),style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                                      SizedBox(height: 3.0),
+                                      InkWell(
+                                        child:Text("In: "+
+                                            snapshot.data[index].pi_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
+                                        onTap: () {
+                                          goToMap(snapshot.data[index].pi_latit,snapshot.data[index].pi_longi.toString());
+                                        },
                                       ),
-                                      onTap: ()
-                                      {
-                                        goToMap(snapshot.data[index].po_latit.toString(), snapshot.data[index].po_longi.toString());
-                                      },
-                                    ),
-                                  ],
-                                )
-                             ),
+                                      SizedBox(height: 3.0),
+                                      InkWell(
+                                        child:Text("Out: "+
+                                            snapshot.data[index].po_loc.toString(),
+                                          style: TextStyle
+                                            (
+                                              color: Colors.black54,fontSize: 12.0
+                                          ),
+                                        ),
+                                        onTap: ()
+                                        {
+                                          goToMap(snapshot.data[index].po_latit.toString(), snapshot.data[index].po_longi.toString());
+                                        },
+                                      ),
+                                    ],
+                                  )
+                              ),
                             ),
 
-                           /* new Container(
+                            /* new Container(
                               width: MediaQuery.of(context).size.width * 0.37,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -385,32 +387,32 @@ class _FlexiReport extends State<FlexiReport> {
                             Expanded(
                               flex:27,
                               child:Container(
-                               // width: MediaQuery.of(context) .size .width * 0.15,
+                                // width: MediaQuery.of(context) .size .width * 0.15,
                                 child:Column(
-                                  children: <Widget>[
-                                    new Text(snapshot.data[index].pi_time.toString()+"|"+snapshot.data[index].timeindate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
-                                    Container(
-                                      width: 56.0,
-                                      height: 56.0,
-                                      child:InkWell(
-                                        child: Container(
-                                            decoration: new BoxDecoration(
-                                            shape: BoxShape .circle,
-                                              image: new DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: new NetworkImage(snapshot.data[index].pi_img)
-                                              )
-                                            )),
-                                        onTap:()
-                                        {
-                                          Navigator.push(
-                                          context, MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].pi_img,org_name: orgName)),
-                                          );
-                                       },
+                                    children: <Widget>[
+                                      new Text(snapshot.data[index].pi_time.toString()+"|"+snapshot.data[index].timeindate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
+                                      Container(
+                                        width: 56.0,
+                                        height: 56.0,
+                                        child:InkWell(
+                                          child: Container(
+                                              decoration: new BoxDecoration(
+                                                  shape: BoxShape .circle,
+                                                  image: new DecorationImage(
+                                                      fit: BoxFit.fill,
+                                                      image: new NetworkImage(snapshot.data[index].pi_img)
+                                                  )
+                                              )),
+                                          onTap:()
+                                          {
+                                            Navigator.push(
+                                              context, MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].pi_img,org_name: orgName)),
+                                            );
+                                          },
+                                        ),
                                       ),
-                                    ),
 
-                                   /* Column(
+                                      /* Column(
                                         crossAxisAlignment: CrossAxisAlignment.center,
 
                                         children: <Widget>[
@@ -427,7 +429,7 @@ class _FlexiReport extends State<FlexiReport> {
                                     ),*/
 
 
-                           /*Padding(
+                                      /*Padding(
                              padding: EdgeInsets.only(right:2.0,top: 2.0),
                              child: InkWell(
                                child:Text(""+
@@ -438,8 +440,8 @@ class _FlexiReport extends State<FlexiReport> {
                              ),
                            ),*/
 
-                             ]
-                             ),
+                                    ]
+                                ),
                               ),
                             ),
 
@@ -462,19 +464,19 @@ class _FlexiReport extends State<FlexiReport> {
                                                 image: new DecorationImage(
                                                     fit: BoxFit.fill,
                                                     image: new NetworkImage(
-                                                    snapshot.data[index].po_img)
+                                                        snapshot.data[index].po_img)
                                                 )
                                             )),
                                         onTap: ()
                                         {
                                           Navigator.push(context,MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].po_img,org_name: orgName)),
-                                       );
+                                          );
 
-                                       },
+                                        },
                                       ),
                                     ),
 
-                                   /* Column(
+                                    /* Column(
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Padding(
@@ -489,9 +491,9 @@ class _FlexiReport extends State<FlexiReport> {
                                           ),
                                          ]
                                        ),*/
-                                ],
+                                  ],
+                                ),
                               ),
-                             ),
                             ),
 
                           ],
@@ -501,21 +503,21 @@ class _FlexiReport extends State<FlexiReport> {
                           (
                           color: Colors.blueGrey.withOpacity(0.25),
                           height: 20.2,
-                         ),
+                        ),
                       ]),
                     );
                   });
-                }
-             else
-              {
-                return new Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width*1,
-                    color: appStartColor().withOpacity(0.1),
-                    padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                    child:Text("No Attendance Found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
-                  ),
-                );
+            }
+            else
+            {
+              return new Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width*1,
+                  color: appStartColor().withOpacity(0.1),
+                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                  child:Text("No Attendance Found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                ),
+              );
             }
           }
           else if (snapshot.hasError)

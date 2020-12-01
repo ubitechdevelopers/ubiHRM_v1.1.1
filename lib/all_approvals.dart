@@ -30,6 +30,7 @@ class _AllApprovals extends State<AllApprovals> {
   var profileimage;
   bool showtabbar;
   String orgName="";
+  String empid="";
 
 
   @override
@@ -39,6 +40,7 @@ class _AllApprovals extends State<AllApprovals> {
     showtabbar=false;
     getOrgName();
   }
+
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -48,26 +50,42 @@ class _AllApprovals extends State<AllApprovals> {
     String empid = prefs.getString('employeeid')??"";
     String organization =prefs.getString('organization')??"";
     String userprofileid =prefs.getString('userprofileid')??"";
-    Employee emp = new Employee(employeeid: empid, organization: organization,userprofileid:userprofileid);
+    int profiletype =prefs.getInt('profiletype')??0;
+    int hrsts =prefs.getInt('hrsts')??0;
+    int adminsts =prefs.getInt('adminsts')??0;
+    int dataaccess =prefs.getInt('dataaccess')??0;
 
+    Employee emp = new Employee(
+      employeeid: empid,
+      organization: organization,
+      userprofileid: userprofileid,
+      profiletype:profiletype,
+      hrsts:hrsts,
+      adminsts:adminsts,
+      dataaccess:dataaccess,
+    );
     //  await getProfileInfo(emp);
     getAllPermission(emp).then((res) {
-      setState(() {
-        perLeaveApproval=   getModuleUserPermission("124","view");
-        perTimeoffApproval=  getModuleUserPermission("180","view");
-        perSalaryExpenseApproval=  getModuleUserPermission("170","view");
-        perPayrollExpenseApproval=  getModuleUserPermission("473","view");
-        print("leave "+perLeaveApproval);
-        print("timeoff "+perTimeoffApproval);
-        print("salary expense "+perSalaryExpenseApproval);
-        print("payroll expense "+perPayrollExpenseApproval);
-      });
+      if(mounted) {
+        setState(() {
+          perLeaveApproval=   getModuleUserPermission("124","view");
+          perTimeoffApproval=  getModuleUserPermission("180","view");
+          perSalaryExpenseApproval=  getModuleUserPermission("170","view");
+          perPayrollExpenseApproval=  getModuleUserPermission("473","view");
+          print("leave "+perLeaveApproval);
+          print("timeoff "+perTimeoffApproval);
+          print("salary expense "+perSalaryExpenseApproval);
+          print("payroll expense "+perPayrollExpenseApproval);
+        });
+      }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return getmainhomewidget();
   }
+
   void showInSnackBar(String value) {
     final snackBar = SnackBar(
         content: Text(value,textAlign: TextAlign.center,));
@@ -105,11 +123,12 @@ class _AllApprovals extends State<AllApprovals> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Image.asset(
-                  'assets/spinner.gif', height: 80.0, width: 80.0),
-            ]),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            //Image.asset('assets/spinner.gif', height: 80.0, width: 80.0),
+            CircularProgressIndicator()
+          ]
+        ),
       ),
     );
   }
@@ -177,7 +196,7 @@ class _AllApprovals extends State<AllApprovals> {
                       style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center),
                   //SizedBox(height: 10.0),
 
-                  SizedBox(height: 16.0),
+                  perLeaveApproval=='1' ?SizedBox(height: 16.0):Center(),
                   perLeaveApproval=='1' ?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -216,7 +235,7 @@ class _AllApprovals extends State<AllApprovals> {
                     },
                   ): Center(),
 
-                  SizedBox(height: 6.0),
+                  perTimeoffApproval=='1' ?SizedBox(height: 6.0):Center(),
                   perTimeoffApproval=='1' ?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -254,7 +273,7 @@ class _AllApprovals extends State<AllApprovals> {
                     },
                   ):Center(),
 
-                  SizedBox(height: 6.0),
+                  perSalaryExpenseApproval=='1' ?SizedBox(height: 6.0):Center(),
                   perSalaryExpenseApproval=='1' ?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -269,7 +288,7 @@ class _AllApprovals extends State<AllApprovals> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                  child: Text('Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Salary Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
                               ],
                             ),
@@ -291,7 +310,7 @@ class _AllApprovals extends State<AllApprovals> {
                     },
                   ): Center(),
 
-                  SizedBox(height: 6.0),
+                  perPayrollExpenseApproval=='1' ?SizedBox(height: 6.0):Center(),
                   perPayrollExpenseApproval=='1' ?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -306,7 +325,7 @@ class _AllApprovals extends State<AllApprovals> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                  child: Text('Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Payroll Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
                               ],
                             ),

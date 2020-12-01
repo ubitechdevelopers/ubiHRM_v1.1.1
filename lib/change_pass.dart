@@ -117,11 +117,12 @@ class _changePassword extends State<changePassword> {
     return new Container(
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Image.asset(
-                  'assets/spinner.gif', height: 80.0, width: 80.0),
-            ]),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            //Image.asset('assets/spinner.gif', height: 80.0, width: 80.0),
+            CircularProgressIndicator()
+          ]
+        ),
       ),
     );
   }
@@ -221,7 +222,6 @@ class _changePassword extends State<changePassword> {
                               focusNode: __newPass,
                               keyboardType: TextInputType.text,
                               obscureText: _obscureText_new,
-
                               decoration: InputDecoration(
                                   labelText: 'New Password',
                                   prefixIcon: Padding(
@@ -296,7 +296,7 @@ class _changePassword extends State<changePassword> {
                                   showDialog(context: context, child:
                                   new AlertDialog(
                                     // title: new Text("Sorry!"),
-                                    content: new Text("Old password did not match"),
+                                    content: new Text("Old Password did not match"),
                                   )
                                   );
                                 else if(res==3)

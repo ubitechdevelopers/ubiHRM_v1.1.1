@@ -4,7 +4,6 @@ class UserLogin {
   final String password;
   final String token;
 
-
   UserLogin({this.username,this.password,this.token});
 
   UserLogin.fromJson(Map<String, dynamic> json)
@@ -17,8 +16,8 @@ class UserLogin {
         'password': password,
         'token': token,
       };
-
 }
+
 
 class User{
 
@@ -36,28 +35,56 @@ class User{
 
 }
 
-class Employee {
 
+class Employee {
   final String employeeid;
   final String organization;
   final String userprofileid;
+  int profiletype;
+  int hrsts;
+  int adminsts;
+  int dataaccess;
+  int SAPintegrationsts;
+  int divhrsts;
 
-
-  Employee({this.employeeid,this.organization,this.userprofileid});
+  Employee({
+    this.employeeid,
+    this.organization,
+    this.userprofileid,
+    this.profiletype,
+    this.hrsts,
+    this.adminsts,
+    this.dataaccess,
+    this.SAPintegrationsts,
+    this.divhrsts,
+  });
 
   Employee.fromJson(Map<String, dynamic> json)
-      : employeeid = json['employeeid'],
-        organization = json['organization'],
-        userprofileid = json['userprofileid'];
+    : employeeid = json['employeeid'],
+      organization = json['organization'],
+      userprofileid = json['userprofileid'],
+      profiletype = json['profiletype'],
+      hrsts = json['hrsts'],
+      adminsts = json['adminsts'],
+      dataaccess = json['dataaccess'],
+      SAPintegrationsts = json['SAPintegrationsts'],
+      divhrsts = json['divhrsts'];
 
-  Map<String, dynamic> toJson() =>
-      {
-        'employeeid': employeeid,
-        'organization': organization,
-        'userprofileid': userprofileid,
-      };
+  Map<String, dynamic> toJson() => {
+    'employeeid': employeeid,
+    'organization': organization,
+    'userprofileid': userprofileid,
+    'profiletype': profiletype,
+    'hrsts': hrsts,
+    'adminsts': adminsts,
+    'dataaccess': dataaccess,
+    'SAPintegrationsts': SAPintegrationsts,
+    'divhrsts': divhrsts,
+  };
 
 }
+
+
 class Profile{
   String uid;
   String orgid;
@@ -67,13 +94,13 @@ class Profile{
   Profile(this.uid,this.orgid,this.mobile,this.countryid);
 }
 
-class Permission {
 
+class Permission {
   final String moduleid;
   final List<Map<String,String>> permissionlist;
   Permission({this.moduleid,this.permissionlist});
-
 }
+
 
 class Team {
   String Id;
@@ -85,30 +112,38 @@ class Team {
   String BloodGroup;
   String CompanyEmail;
   String ProfilePic;
-  Team({this.Id, this.FirstName, this.LastName, this.Designation, this.DOB, this.Nationality, this.BloodGroup, this.CompanyEmail, this.ProfilePic});
+  String ParentId;
+  List<dynamic> juniorlist;
+  List<dynamic> superjuniorlist;
+  List<dynamic> ultrasuperjuniorlist;
+
+  Team({this.Id, this.FirstName, this.LastName, this.Designation, this.DOB, this.Nationality, this.BloodGroup, this.CompanyEmail, this.ProfilePic, this.ParentId, this.juniorlist, this.superjuniorlist, this.ultrasuperjuniorlist});
 }
 
+
 class Leave{
-  String uid,
-      leavefrom,
-      leaveto,
-      orgid,
-      reason,
-      leavetypeid,
-      leavetypefrom,
-      leavetypeto,
-      halfdayfromtype,
-      halfdaytotype,
-      leavedays,
-      approverstatus,
-      comment,
-      attendancedate,
-      leaveid,
-      substituteemp,
-      leavetype,
-      compoffsts;
+  String uid;
+  String leavefrom; // timein or timeout
+  String leaveto;
+  String orgid;
+  String reason;
+  String leavetypeid;
+  String leavetypefrom;
+  String leavetypeto;
+  String halfdayfromtype;
+  String halfdaytotype;
+  String leavedays;
+  String approverstatus;
+  String comment;
+  String attendancedate;
+  String leaveid;
+  String substituteemp;
+  String leavetype;
+  String compoffsts;
   bool withdrawlsts;
-  Leave({this.uid,
+
+  Leave({
+    this.uid,
     this.leavefrom,
     this.leaveto,
     this.orgid,
@@ -123,10 +158,10 @@ class Leave{
     this.comment,
     this.attendancedate,
     this.leaveid,
-    this.withdrawlsts,
     this.leavetype,
     this.substituteemp,
-    this.compoffsts
+    this.compoffsts,
+    this.withdrawlsts
   });
 }
 
@@ -140,32 +175,6 @@ class Holi{
 }
 
 
-
-///// For Attendance
-
-
-/*class TimeOff{
-
-  String timeoffdate;
-  String starttime;
-  String endtime;
-  String reason;
-  String empid;
-  String orgid;
-
- TimeOff(this.timeoffdate,this.starttime,this.endtime,this.reason,this.empid, this.orgid);
-
-  TimeOff.fromMap(Map map) {
-    timeoffdate = map[timeoffdate];
-    starttime = map[starttime];
-    endtime = map[endtime];
-    reason = map[reason];
-    empid = map[empid];
-    orgid = map[orgid];
-  }
-
-}*/
-
 class TimeOff {
   String EmpId;
   String OrgId;
@@ -173,49 +182,18 @@ class TimeOff {
   String TimeofDate;
   String TimeFrom;
   String TimeTo;
+  String StartTimeFrom;
+  String StopTimeTo;
+  String TimeOffSts;
   String hrs;
   String Reason;
   String ApprovalSts;
   String ApproverComment;
   bool withdrawlsts;
-  TimeOff({this.TimeofDate,this.TimeFrom,this.TimeTo,this.hrs,this.Reason,this.ApprovalSts,this.ApproverComment,this.withdrawlsts, this.TimeOffId, this.EmpId, this.OrgId});
+  bool starticonsts;
+  bool stopiconsts;
+
+  TimeOff({this.EmpId,this.OrgId,this.TimeOffId,this.TimeofDate,this.TimeFrom,this.TimeTo,this.StartTimeFrom,this.StopTimeTo,this.TimeOffSts,this.hrs,this.Reason,this.ApprovalSts,this.ApproverComment,this.withdrawlsts,this.starticonsts,this.stopiconsts});
 }
 
 
-
-class Salary{
-  String id;
-  String name;
-  String month;
-  String paid_days;
-  String EmployeeCTC;
-  String Currency;
-
-  Salary({this.id,this.name, this.month, this.paid_days,this.EmployeeCTC,this.Currency});
-}
-
-class Payroll{
-  String id;
-  String name;
-  String month;
-  String paid_days;
-  String EmployeeCTC;
-  String Currency;
-
-  Payroll({this.id,this.name, this.month, this.paid_days,this.EmployeeCTC,this.Currency});
-}
-
-/*class Profile{
-  String uid;
-  String orgid;
-  String mobile;
-  String countryid;
-
-  Profile(this.uid,this.orgid,this.mobile,this.countryid);
-}
-
-class Leave{
-  String uid, leavefrom, leaveto, orgid, reason, leavetypeid, leavetypefrom, leavetypeto, halfdayfromtype, halfdaytotype, leavedays, approverstatus, comment, attendancedate, leaveid;
-  bool withdrawlsts;
-  Leave({this.uid, this.leavefrom, this.leaveto, this.orgid, this.reason, this.leavetypeid, this.leavetypefrom, this.leavetypeto, this.halfdayfromtype, this.halfdaytotype, this.leavedays, this.approverstatus, this.comment, this.attendancedate, this.leaveid, this.withdrawlsts});
-}*/
