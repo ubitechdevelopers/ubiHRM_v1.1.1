@@ -6,7 +6,6 @@ import 'package:ubihrm/attandance/about_app.dart';
 import 'package:ubihrm/payroll/allpayroll_list.dart';
 import 'package:ubihrm/salary/allsalary_list.dart';
 import 'package:ubihrm/userGuide.dart';
-
 import 'all_reports.dart';
 import 'global.dart';
 import 'home.dart';
@@ -20,8 +19,6 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  /*var _defaultimage = new NetworkImage(
-      "http://ubiattendance.ubihrm.com/assets/img/avatar.png");*/
   var profileimage;
   bool _checkLoaded = true;
   String fname="";
@@ -45,35 +42,27 @@ class _AppDrawerState extends State<AppDrawer> {
 
   initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
-    //String admin= await getUserPerm();
     setState(() {
-     fname = prefs.getString('fname') ?? '';
-     profile = prefs.getString('profile') ?? '';
-     //store = 'http://play.google.com/store/apps/details?id=com.ubihrm.ubihrm';
-     //print("-------555555->"+globalcompanyinfomap['ProfilePic']);
-     profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
-     //print("-------555555->"+profileimage);
-     profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __)  {
-       if (mounted) {
-         setState(() {
-           _checkLoaded = false;
-         });
-       }
-     }));
+      fname = prefs.getString('fname') ?? '';
+      profile = prefs.getString('profile') ?? '';
+      profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
+      profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __)  {
+        if (mounted) {
+          setState(() {
+            _checkLoaded = false;
+          });
+        }
+      }));
     });
   }
+
   @override
   Widget build(BuildContext context) {
-
     return new Drawer(
-
       child:new ListView(
         children: <Widget>[
           new Container(
-           // color: bottomNavigationColor(),
-            //color: Color.fromRGBO(38,102,75,1.0),
             height: sstatus==''?170.0:182.0,
-
             decoration: BoxDecoration(
               // Box decoration takes a gradient
               gradient: LinearGradient(
@@ -81,99 +70,69 @@ class _AppDrawerState extends State<AppDrawer> {
                 begin: FractionalOffset.topRight,
                 end: FractionalOffset.bottomLeft,
                 // Add one stop for each color. Stops should increase from 0 to 1
-               // stops: [0.1, 0.5, 0.7, 0.9],
+                // stops: [0.1, 0.5, 0.7, 0.9],
                 colors: [
-                  // Colors are easy thanks to Flutter's Colors class.
-
                   appStartColor(),
                   appStartColor(),
                   appStartColor(),
                   appStartColor(),
-                  //Color.fromRGBO(0,102,153,1.0),
-                  //Color.fromRGBO(7,99,145,1.0),
-                  //Color.fromRGBO(12,99,142,1.0),
-                  // Color.fromRGBO(34,94,124,1.0),
                 ],
               ),
             ),
             child: new DrawerHeader(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children:<Widget>[
-                  Center(),
-                  Column(
-                children: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      new GestureDetector(
-                          onTap: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => CollapsingTab()),
-                            );
-                          },
-                          child: Container(
-
-                      width: 85.0,
-                      height: 85.0,
-                      decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          image: new DecorationImage(
-                            fit: BoxFit.fill,
-                           //  image: NetworkImage(globalcompanyinfomap['ProfilePic']),
-                         image: _checkLoaded ? AssetImage('assets/avatar.png') : NetworkImage(globalcompanyinfomap['ProfilePic']),
-                          )
-                      )),),
-             /*   new Positioned(
-                  right: MediaQuery.of(context).size.width*-.06,
-                  top: MediaQuery.of(context).size.height*.07,
-
-                  child: new RawMaterialButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CollapsingTab()),
-                      );
-                    },
-                    child: new Icon(
-                      Icons.edit,
-                      size: 16.0,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children:<Widget>[
+                    Center(),
+                    Column(
+                      children: <Widget>[
+                        Stack(
+                          children: <Widget>[
+                            new GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                                );
+                              },
+                              child: Container(
+                                width: 85.0,
+                                height: 85.0,
+                                decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                  image: new DecorationImage(
+                                    fit: BoxFit.fill,
+                                    //  image: NetworkImage(globalcompanyinfomap['ProfilePic']),
+                                    image: _checkLoaded ? AssetImage('assets/avatar.png') : NetworkImage(globalcompanyinfomap['ProfilePic']),
+                                  )
+                                )
+                              ),
+                            ),
+                          ]),
+                                                SizedBox(height: 4.0,),
+                        Text("Hi "+globalpersnalinfomap['FirstName'],style: new TextStyle(fontSize: 18.0,color: Colors.white)),
+                        SizedBox(height: 3.0),
+                        Text(globalcompanyinfomap['Designation'],style: new TextStyle(fontSize: 12.0,color: Colors.white)),
+                        sstatus!=''?Text(sstatus,style: new TextStyle(fontSize: 10.0,color: Colors.white)):Center(),
+                      ],
                     ),
-                    shape: new CircleBorder(),
-                    elevation: 0.5,
-                    fillColor: Colors.orangeAccent,
-                    padding: const EdgeInsets.all(1.0),
-                  ),
-                ),*/
-            ]),
-                  //SizedBox(height: 2.0),
-                  //Image.asset('assets/logo.png',height: 150.0,width: 150.0),
-                  // SizedBox(height: 5.0),
+                    (buystatus=="0" && reportper==1)?new Column(
+                        children:<Widget>[
+                          ButtonTheme(
+                            minWidth: 60.0,
+                            height: 30.0,
+                            child:RaisedButton(
+                              child: Row(children:<Widget>[Text("Buy Now")]),
+                              color: Colors.orange[800],
+                              onPressed: (){
 
-                  SizedBox(height: 4.0,),
-                    Text("Hi "+globalpersnalinfomap['FirstName'],style: new TextStyle(fontSize: 18.0,color: Colors.white)),
-                  SizedBox(height: 3.0),
-                  Text(globalcompanyinfomap['Designation'],style: new TextStyle(fontSize: 12.0,color: Colors.white)),
-                  sstatus!=''?Text(sstatus,style: new TextStyle(fontSize: 10.0,color: Colors.white)):Center(),
-                ],
-              ),
-                  (buystatus=="0" && reportper==1)?new Column(
-                      children:<Widget>[
-                        ButtonTheme(
-                    minWidth: 60.0,
-                    height: 30.0,
-                    child:RaisedButton(
-                      child: Row(children:<Widget>[Text("Buy Now")]),
-                      color: Colors.orange[800],
-                      onPressed: (){
+                              },
+                              textColor: Colors.white,
+                            ),
 
-                      },
-                      textColor: Colors.white,
-                    ),
-
-                  )]):Center(),
-                 ]
+                          )]):Center(),
+                  ]
               ),
 
             ),
@@ -260,73 +219,6 @@ class _AppDrawerState extends State<AppDrawer> {
             },
           ),
 
-    /*      reportper ==1?new ListTile(
-           title: Row(
-              children: <Widget>[
-                Icon(Icons.attach_money,size: 20.0),SizedBox(width: 5.0),
-                new Text("Generate Payroll", style: new TextStyle(fontSize: 15.0)),
-              ],
-            ),
-            onTap: () {
-              showDialogWidget("To Generate Payroll, Login to the web panel.", "To Generate Payroll upgrade to Premium Plan.");
-            },
-          ):new Center(),*/
-
-         /* new ListTile(
-            title: Row(
-              children: <Widget>[
-                Icon(Icons.account_box,size: 20.0),SizedBox(width: 5.0),
-                new Text("Profile", style: new TextStyle(fontSize: 15.0)),
-              ],
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyApp()),
-              );
-            },
-          ),*/
-           /*   Text("Monika Rai",
-                style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-              )),*/
-          /*new ListTile(
-            title: Row(
-              children: <Widget>[
-                Icon(Icons.perm_contact_calendar,size: 20.0),SizedBox(width: 5.0),
-                new Text("Employee History", style: new TextStyle(fontSize: 15.0)),
-              ],
-            ),
-            onTap: () {
-              /*
-              getUserPerm().then((res){
-                print('func called with response: '+res);
-              });*/
-
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyApp()),
-              );
-
-            },
-          ),*/
-       /*   new ListTile(
-            title: Row(
-              children: <Widget>[
-                Icon(Icons.location_city,size: 20.0),SizedBox(width: 5.0),
-                new Text("Organization", style: new TextStyle(fontSize: 15.0)),
-              ],
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyApp()),
-              );
-            },
-          ),*/
-
           new ListTile(
             title: Row(
               children: <Widget>[
@@ -336,7 +228,7 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
             onTap: () {
               final RenderBox box = context.findRenderObject();
-              Share.share("Hi! I have had a great experience with ubiHRM App! I highly recommend it to manage your Human resource. Download the Android app via the following link -\n"+playstore+" \niPhone users can download through -\n"+appstore,
+              Share.share("Hi! I have had a great experience with ubiHRM App! I highly recommend it to manage your Human resource. Download the Android app via the following link -\n"+playstore+" iPhone users can download through -\n"+appstore,
                   sharePositionOrigin:
                   box.localToGlobal(Offset.zero) &
                   box.size);
@@ -353,28 +245,11 @@ class _AppDrawerState extends State<AppDrawer> {
             onTap: () {
               Navigator.of(context).pop();
               LaunchReview.launch(
-                  androidAppId: "com.ubihrm.ubihrm"
+                  iOSAppId: "1489689034"
               );
             },
           ),
 
-
-
-
-        /*  new ListTile(
-            title: Row(
-              children: <Widget>[
-                Icon(Icons.security,size: 20.0),SizedBox(width: 5.0),
-                new Text("Privacy Policy", style: new TextStyle(fontSize: 14.0)),
-              ],
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyAppPolicy()),
-              );
-            },
-          ), */
           new ListTile(
             title: Row(
               children: <Widget>[
@@ -390,22 +265,6 @@ class _AppDrawerState extends State<AppDrawer> {
               );
             },
           ),
-
-
-        /*  new ListTile(
-            title: Row(
-              children: <Widget>[
-                Icon(Icons.location_on,size: 20.0),SizedBox(width: 5.0),
-                new Text("About Us", style: new TextStyle(fontSize: 14.0)),
-              ],
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyAppAbout()),
-              );
-            },
-          ),*/
 
           new ListTile(
             title: Row(
@@ -430,7 +289,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-                logout();
+              logout();
             },
           ),
         ],

@@ -39,15 +39,11 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
   String countE='0';
   Future<List<Attn>> _listFuture;
   List presentlist= new List(), absentlist= new List(), latecommerlist= new List(), earlyleaverlist= new List();
-//  var formatter = new DateFormat('dd-MMM-yyyy');
   var formatter = new DateFormat('dd-MMM-yyyy');
   bool res = true;
   List<Map<String,String>> chartData;
-  void showInSnackBar(String value) {
-    final snackBar = SnackBar(
-        content: Text(value,textAlign: TextAlign.center,));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
-  }
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
 
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
@@ -65,6 +61,8 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
     getOrgName();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     from = new DateTime.now();
     selectedMonth = new DateTime(from.year, from.month, 1);
     print("Hello");
@@ -75,7 +73,7 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
   setAlldata() async{
     print("Hello Employees");
     print(selectedMonth);
-    _listFuture = getTotalEmployeesList(selectedMonth);
+    _listFuture = getTotalEmployeesList(selectedMonth,empname);
 
     _listFuture.then((data) async{
       setState(() {
@@ -113,9 +111,44 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
             child: ListView(
               //physics: NeverScrollableScrollPhysics(),
               children: <Widget>[
-                SizedBox(height:1.0),
+                //SizedBox(height:1.0),
                 new Container(
                   child: Center(child:Text("Employee Wise Attendance",style: TextStyle(fontSize: 20.0,color: appStartColor()),),),
+                ),
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _searchController,
+                      focusNode: searchFocusNode,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        border: OutlineInputBorder(
+                          borderRadius:  new BorderRadius.circular(10.0),
+                        ),
+                        prefixIcon: Icon(Icons.search, size: 30,),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: 'Search Employee',
+                        labelText: 'Search Employee',
+                        /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Employee_list()),
+                              );
+                            }
+                        ):null,*/
+                        //focusColor: Colors.white,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          empname = value;
+                        });
+                      },
+                    ),
+                  ),
                 ),
                 Column(
                   children: <Widget>[
@@ -124,7 +157,7 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                       from: widget.orgDate,
                       to: selectedMonth,
                       initialMonth: selectedMonth,
-                      height: 48.0,
+                      height:  25.0,
                       viewportFraction: 0.25,
                       onMonthChanged: (v) {
                         setState(() {
@@ -141,6 +174,7 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                         });
                       },
                     ),
+                    SizedBox(height: 6.0,),
                     Divider(height: 5.0,),
                     Row(
                         children: <Widget>[
@@ -274,7 +308,6 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                     SizedBox(height: 5.0,)
                   ],
                 ),
-
                 new Divider(height: 1.0,),
                 res==true?new Container(
                     height: MediaQuery.of(context).size.height*.50,
@@ -288,7 +321,7 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                           color: Colors.white,
                           //////////////////////////////////////////////////////////////////////---------------------------------
                           child: new FutureBuilder<List<Attn>>(
-                            future: getTotalEmployeesList(selectedMonth),
+                            future: getTotalEmployeesList(selectedMonth, empname),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 //countE=snapshot.data.length.toString();
@@ -404,10 +437,12 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                                     ),
                                   );
                                 }
-                              } else if (snapshot.hasError) {
+                              }
+                              else if (snapshot.hasError) {
                                 return new Text("Unable to connect server");
                                 // return new Text("${snapshot.error}");
                               }
+
                               // By default, show a loading spinner
                               return new Center( child: CircularProgressIndicator());
                             },

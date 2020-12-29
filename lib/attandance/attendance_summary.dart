@@ -308,6 +308,7 @@ getWidgets(context){
                                         color: Colors.orange[800],
                                         size: 22.0 ),
                                     GestureDetector(
+
                                       child: Text(
                                           'Team',
                                           style: TextStyle(fontSize: 18,color: Colors.orange[800])

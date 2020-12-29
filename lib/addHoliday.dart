@@ -1,12 +1,15 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart';
-import 'package:ubihrm/holiday.dart';
+import 'package:ubihrm/holiday_list.dart';
+import 'package:ubihrm/profile.dart';
 import 'package:ubihrm/services/attandance_services.dart';
+import 'package:ubihrm/services/services.dart';
 import 'package:ubihrm/settings.dart';
 import 'all_approvals.dart';
 import 'b_navigationbar.dart';
@@ -95,7 +98,7 @@ class _AddHolidayState extends State<AddHoliday> {
           key: _scaffoldKey,
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
-          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          appBar: new AddHolidayAppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:  new HomeNavigation(),
           body: ModalProgressHUD(
               inAsyncCall: isServiceCalling,
@@ -144,6 +147,7 @@ class _AddHolidayState extends State<AddHoliday> {
                             TextFormField(
                               controller: _nameController,
                               focusNode: textFirstFocusNode,
+                              textCapitalization: TextCapitalization.words,
                               decoration: InputDecoration(
                                   labelText: 'Holiday',
                                   prefixIcon: Padding(
@@ -227,6 +231,8 @@ class _AddHolidayState extends State<AddHoliday> {
                                   ),
                             SizedBox(height: 5.0,),
                             TextFormField(
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.sentences,
                               controller: _desController,
                               focusNode: textfourthFocusNode,
                               decoration: InputDecoration(
@@ -309,27 +315,57 @@ class _AddHolidayState extends State<AddHoliday> {
                                             context,
                                             MaterialPageRoute(builder: (context) => Holiday()),
                                           );
-                                          showDialog(context: context, child:
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text("Holiday added successfully."),
+                                                );
+                                              });
+                                          /*showDialog(context: context, child:
                                             new AlertDialog(
                                               content: new Text('Holiday added successfully.'),
                                             )
-                                          );
+                                          );*/
                                         }else if(status =='alreadyexist'){
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(builder: (context) => Holiday()),
                                           );
-                                          showDialog(context: context, child:
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text("Holiday already exist."),
+                                                );
+                                              });
+                                          /*showDialog(context: context, child:
                                           new AlertDialog(
                                             content: new Text('Already Exist'),
                                           )
-                                          );
+                                          );*/
                                         } else{
-                                          showDialog(context: context, child:
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text("There is some problem while adding holiday"),
+                                                );
+                                              });
+                                          /*showDialog(context: context, child:
                                           new AlertDialog(
                                             content: new Text('There is some problem while adding holiday'),
                                           )
-                                          );
+                                          );*/
                                         }
                                       }
                                     }
@@ -457,5 +493,83 @@ class _AddHolidayState extends State<AddHoliday> {
         });
   }
 
+
+}
+
+class AddHolidayAppHeader extends StatelessWidget implements PreferredSizeWidget {
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+  AddHolidayAppHeader(profileimage1,showtabbar1,orgname1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+    };
+    showtabbar= showtabbar1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => AllSetting()), (Route<dynamic> route) => false,
+                );
+              },),
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(orgname, overflow: TextOverflow.ellipsis,)
+              ),
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
 
 }

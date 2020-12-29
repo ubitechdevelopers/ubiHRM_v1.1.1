@@ -197,55 +197,56 @@ class _PayrollSummary extends State<PayrollSummary> {
                                   itemBuilder: (BuildContext context, int index) {
 
                                     return new Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        //crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
                                           new Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            //crossAxisAlignment: CrossAxisAlignment.start,
+                                            //mainAxisAlignment: MainAxisAlignment.start,
                                             children: <Widget>[
 
-                                              new Expanded(
-                                                child: Container(
-                                                    width: MediaQuery.of(context).size.width * 0.30,
-                                                    child: Column(
+                                              //new Expanded(child:
+                                              Container(
+                                                    width: MediaQuery.of(context).size.width * 0.26,
+                                                    child: /*Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: <Widget>[
-                                                        new Text(
-                                                          snapshot.data[index].enddate.toString().isEmpty?
-                                                          snapshot.data[index].startdate.toString():
-                                                          snapshot.data[index].startdate.toString()+'-'+snapshot.data[index].startdate.toString(),style: TextStyle(),),
-                                                      ],
-                                                    )
+                                                      children: <Widget>[*/
+                                                    snapshot.data[index].enddate.toString()==""?
+                                                    Text(snapshot.data[index].startdate.toString()):
+                                                    Text(snapshot.data[index].startdate.toString()+'\n         to \n'+snapshot.data[index].enddate.toString()),
+                                                      /*],
+                                                    )*/
                                                 ),
-                                              ),
+                                              //),
 
-                                              new Expanded(
-                                                child: Container(
-                                                  width: MediaQuery.of(context).size.width * 0.25,
-                                                  margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                                              //new Expanded(child:
+                                              Container(
+                                                  width: MediaQuery.of(context).size.width * 0.22,
+                                                  //margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                                                   child:  Text(
-                                                    snapshot.data[index].EmployeeCTC.toString()+" "+snapshot.data[index].Currency.toString(),style:TextStyle(),  textAlign: TextAlign.right,),
+                                                    snapshot.data[index].EmployeeCTC.toString()+" "+snapshot.data[index].Currency.toString(),style:TextStyle(),),
                                                 ),
-                                              ),
+                                              //),
 
-                                              new Expanded(
-                                                child: Container(
-                                                  width: MediaQuery.of(context).size.width * 0.17, margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                                              //new Expanded(child:
+                                              Container(
+                                                  width: MediaQuery.of(context).size.width * 0.15,
+                                                  //margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                                                   child:  Text(
                                                     snapshot.data[index].paid_days.toString(),style:TextStyle(),  textAlign: TextAlign.right,),
                                                 ),
-                                              ),
+                                              //),
 
                                               new Expanded(
                                                 child: Container(
-                                                  width: MediaQuery.of(context) .size .width * 0.30,margin: EdgeInsets.only(left:30.0),
+                                                  width: MediaQuery.of(context) .size .width * 0.30,
+                                                  margin: EdgeInsets.only(left:30.0),
                                                   height: 28.0,
                                                   child: new OutlineButton(
                                                     onPressed: () async{
                                                       final prefs = await SharedPreferences.getInstance();
                                                       //String path1 = prefs.getString('path');
-                                                      print(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
-                                                      launchMap(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid);
+                                                      print(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid+"/"+globalogrperminfomap['groupcompaniessts']);
+                                                      launchMap(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid+"/"+globalogrperminfomap['groupcompaniessts']);
                                                     },
                                                     child: new Icon(
                                                       Icons.print,

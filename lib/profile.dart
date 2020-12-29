@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sticky_headers/sticky_headers.dart';
@@ -38,11 +36,10 @@ class _CollapsingTabState extends State<CollapsingTab> {
   var toreportprofileimage;
   bool _checkLoadedr = true;
   var profilepic;
-  Future<List<Team>> _listFuture;
-  List dataList= new List();
 
   Widget _buildActions() {
     Widget profile = new GestureDetector(
+
         child: new Container(
             width: 90.0,
             height: 90.0,
@@ -119,18 +116,6 @@ class _CollapsingTabState extends State<CollapsingTab> {
     scrollController.addListener(() => setState(() {}));
     scrollController.addListener(_scrollListener);
     initPlatformState();
-    setAlldata();
-  }
-
-  setAlldata() async{
-    _listFuture = getTeamList();
-    _listFuture.then((data) async{
-      setState(() {
-        dataList = data;
-        print("dataList");
-        print(dataList);
-      });
-    });
   }
 
   initPlatformState() async{
@@ -138,7 +123,13 @@ class _CollapsingTabState extends State<CollapsingTab> {
     empid = prefs.getString('employeeid')??"";
     organization =prefs.getString('organization')??"";
     countryid =prefs.getString('countryid')??"";
+
     emp = new Employee(employeeid: empid, organization: organization);
+//print("-1111111111111"+emp.employeeid);
+//print ("22222222222222"+empid);
+    // if(empid!='')
+    // bool ish = await getAllPermission(emp);
+
     reporttoprofileimage = new NetworkImage( globalcompanyinfomap['ReportingToProfilePic']);
     reporttoprofileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
@@ -148,15 +139,21 @@ class _CollapsingTabState extends State<CollapsingTab> {
       }
     }));
 
+
+    // profilepic =prefs.getString('profilepic')??"";
+    // profileimage = new NetworkImage(profilepic);
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
+    //  print("ABC"+profileimage);
     profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
           _checkLoadedprofile = false;
         });
+
       }
     }));
   }
+
 
   _scrollListener() {
     double scale;
@@ -173,6 +170,29 @@ class _CollapsingTabState extends State<CollapsingTab> {
       });
       scale = scrollController.offset / 300;
       scale = scale * 2;
+      //print(scale1);
+      //print(scale.toString());
+
+      /*if (scale > 1) {
+        //scale = 1.0;
+       // print(scale);
+        setState(() {
+          height=150.0;
+          insideContainerHeight=500.0;
+          print("scale is greater than one");
+        });
+
+        print(height);
+        print(insideContainerHeight);
+      }else if(scale==0.0){
+        setState(() {
+          height=0.0;
+          insideContainerHeight=350.0;
+          print("scale is greater than one");
+        });
+        print("bottom");
+        print(scale);
+      }*/
     }
 
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
@@ -180,6 +200,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
       setState(() {
         height=150.0;
         insideContainerHeight=450.0;
+        //print("reach the bottom "+height.toString());
       });
     }
     if (scrollController.offset <= scrollController.position.minScrollExtent &&
@@ -187,6 +208,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
       setState(() {
         height=0.0;
         insideContainerHeight=300.0;
+        //print("reach the top "+height.toString());
       });
     }
   }
@@ -195,19 +217,32 @@ class _CollapsingTabState extends State<CollapsingTab> {
   Widget build(BuildContext context) {
     var flexibleSpaceWidget = new SliverAppBar(
       automaticallyImplyLeading: true,
+      //  key: _scaffoldKey,
       expandedHeight: 200.0,
       pinned: true,
+      // backgroundColor: Color.fromRGBO(0,102,153,1.0),
       backgroundColor: appStartColor(),
+
       flexibleSpace: FlexibleSpaceBar(
+
         centerTitle: true,
         title:Column(children:<Widget>[
           SizedBox(height: 30.0,),
           Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"],
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-            )),
-        ]),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+              )),
+          //appBarHeading()
+        ]), /*Column(
+            children:<Widget>[
+            Text("Monika Rai",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+              )),
+            //appBarHeading()
+          ]),*/
 
         background: Column(
 
@@ -225,6 +260,13 @@ class _CollapsingTabState extends State<CollapsingTab> {
                         height: 40.0,
                         width: 40.0,
                         child: new CircularProgressIndicator(),
+                        /*decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                       image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image:AssetImage('assets/spinner.gif'),
+                        )
+                    )*/
                       ):Container(
                         margin: EdgeInsets.only(
                             top: 30.0),
@@ -234,13 +276,39 @@ class _CollapsingTabState extends State<CollapsingTab> {
                           shape: BoxShape.circle,
                           color: Colors.white,
                           image: new DecorationImage(
+                            //image: new ExactAssetImage("assets/avatar.png"),
                             fit: BoxFit.fill,
+                            //image: NetworkImage(globalcompanyinfomap['ProfilePic']),
                             image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
                             // fit: BoxFit.cover,
                           ),
+                          //border:
+                          //Border.all(color: Colors.black, width: 2.0),
+
                         ),
+
                       ),
                     ),
+                    /*  new Positioned(
+              left: MediaQuery.of(context).size.width*.11,
+                top: MediaQuery.of(context).size.height*.09,
+                child: new RawMaterialButton(
+                  onPressed: () {
+                   // controller.close();
+                    showBottomNavigation();
+                  },
+                  child: new Icon(
+                    Icons.camera_alt,
+                    size: 18.0,
+                  ),
+                  shape: new CircleBorder(),
+                  elevation: 0.5,
+                  fillColor: Colors.teal,
+                  padding: const EdgeInsets.all(1.0),
+                ),
+              ),*/
+
+
                   ]),
               SizedBox(height: 10.0,),
               Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"],
@@ -339,6 +407,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
                           child:
                           StickyHeader(
                             header: new Container(
+                              //height: 50.0,
                               height: MediaQuery.of(context).size.height*0.06,
                               color: Colors.grey[100],
                               padding: new EdgeInsets.symmetric(horizontal: 9.0),
@@ -353,75 +422,134 @@ class _CollapsingTabState extends State<CollapsingTab> {
                               child: Column(
                                 children: <Widget>[
 
+                                  //SizedBox(height: 10.0,),
+                                  globallabelinfomap['emp_code']!=""?
                                   Row(children: <Widget>[
-                                    Container(child:Text("Emp Code:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    Container(child:Text(globallabelinfomap['emp_code']+":",style: TextStyle(color: Colors.grey[600]),) ,
                                       width: 100.0,),
-
                                     Text(globalcompanyinfomap["EmpCode"]),
-                                  ],),
-
-                                  SizedBox(height: 10.0,),
-                                  Row(children: <Widget>[
-                                    Container(child:Text("Name:",style: TextStyle(color: Colors.grey[600]),) ,
-                                      width: 100.0,),
-                                    Flexible(child: Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"])),
-                                  ],),
-
-                                  SizedBox(height: 10.0,),
-                                  Row(children: <Widget>[
-                                    Container(child:Text("DOJ:",style: TextStyle(color: Colors.grey[600]),) ,
-                                      width: 100.0,),
-                                    Text(globalpersnalinfomap["DOJ"]),
-                                  ],),
-
-                                  SizedBox(height: 10.0,),
-
-                                  Row(children: <Widget>[
-                                    Container(child: Text("Division:",
-                                      style: TextStyle(color: Colors.grey[600]),),
-                                      width: 100.0,),
-
-                                    Flexible(child: Text(
-                                        globalcompanyinfomap["Division"])),
-                                  ],),
-
-                                  globalcompanyinfomap["Location"]!=""?
-                                  SizedBox(height: 10.0,):Center(),
-
-                                  globalcompanyinfomap["Location"]!=""?
-                                  Row(children: <Widget>[
-                                    Container(child: Text("Location:",
-                                      style: TextStyle(color: Colors.grey[600]),),
-                                      width: 100.0,),
-
-                                    Flexible(child: Text(
-                                        globalcompanyinfomap["Location"])),
                                   ],):Center(),
 
-                                  SizedBox(height: 10.0,),
+                                  globallabelinfomap['first_name']!=""?SizedBox(height: 10.0,):Center(),
+                                  globallabelinfomap['first_name']!=""?
                                   Row(children: <Widget>[
-                                    Container(child:Text("Department:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    Container(child:Text(globallabelinfomap['first_name']+":",style: TextStyle(color: Colors.grey[600]),) ,
+                                      width: 100.0,),
+                                    Flexible(child: Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"])),
+                                  ],):Center(),
+
+                                  globallabelinfomap["doj"]!=""?SizedBox(height: 10.0,):Center(),
+                                  globallabelinfomap["doj"]!=""?
+                                  Row(children: <Widget>[
+                                    Container(child:Text(globallabelinfomap["doj"]+":",style: TextStyle(color: Colors.grey[600]),) ,
+                                      width: 100.0,),
+                                    Text(globalpersnalinfomap["DOJ"]),
+                                  ],):Center(),
+
+                                  globallabelinfomap["division"]!=""?SizedBox(height: 10.0,):Center(),
+                                  globallabelinfomap["division"]!=""?
+                                  Row(children: <Widget>[
+                                    Container(child: Text(globallabelinfomap["division"]+":",
+                                      style: TextStyle(color: Colors.grey[600]),),
+                                      width: 100.0,),
+                                    Flexible(child: Text(
+                                        globalcompanyinfomap["Division"])),
+                                  ],):Center(),
+
+                                  globallabelinfomap["location"]!=""?SizedBox(height: 10.0,):Center(),
+                                  globallabelinfomap["location"]!=""?
+                                  Row(children: <Widget>[
+                                    Container(child: Text(globallabelinfomap["location"]+":",
+                                      style: TextStyle(color: Colors.grey[600]),),
+                                      width: 100.0,),
+                                    Flexible(child: Text(globalcompanyinfomap["Location"])),
+                                  ],):Center(),
+
+                                  /*countryid=='93'?
+                               //SizedBox(height: 10.0,),
+                               Row(children: <Widget>[
+                                 Container(child: Text("Location:",
+                                   style: TextStyle(color: Colors.grey[600]),),
+                                   width: 100.0,),
+
+                                 Flexible(child: Text(
+                                     globalcompanyinfomap["Location"])),
+                               ],) :
+                               //SizedBox(height: 10.0,),
+                               Row(children: <Widget>[
+                                 Container(child: Text("Division:",
+                                   style: TextStyle(color: Colors.grey[600]),),
+                                   width: 100.0,),
+
+                                 Flexible(child: Text(
+                                     globalcompanyinfomap["Division"])),
+                               ],),
+
+                                countryid!='93'?
+                                SizedBox(height: 10.0,):Center(),
+
+                                countryid!='93'?
+                            //    SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  Container(child:Text("Location",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+
+                                  Flexible(child: Text(globalcompanyinfomap["Location"])),
+                                ],):Center(),*/
+                                  /* SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  new Expanded(
+                                    child:Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),),
+                                  Text(globalcompanyinfomap["CompanyEmail"]),
+                                ],),*/
+
+                                  /*  SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  new Expanded(
+                                    child:Container(child:Text("Reporting To:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),),
+                                  Text(globalcompanyinfomap["ReportingTo"]),
+                                ],),*/
+                                  globallabelinfomap["depart"]!=""?SizedBox(height: 10.0,):Center(),
+                                  globallabelinfomap["depart"]!=""?
+                                  Row(children: <Widget>[
+                                    Container(child:Text(globallabelinfomap["depart"]+":",style: TextStyle(color: Colors.grey[600]),) ,
                                       width: 100.0,),
                                     Flexible(child: Text(globalcompanyinfomap["Department"])),
-                                  ],),
+                                  ],):Center(),
 
-                                  SizedBox(height: 10.0,),
+                                  globallabelinfomap["desig"]!=""?SizedBox(height: 10.0,):Center(),
+                                  globallabelinfomap["desig"]!=""?
                                   Row(children: <Widget>[
                                     //new Expanded(
-                                    Container(child:Text("Designation:",style: TextStyle(color: Colors.grey[600])) ,
+                                    Container(child:Text(globallabelinfomap["desig"]+":",style: TextStyle(color: Colors.grey[600])) ,
                                       width: 100.0,),
                                     //),
                                     Flexible(child: Text(globalcompanyinfomap["Designation"])),
-                                  ],),
+                                  ],):Center(),
 
                                   SizedBox(height: 15.0,),
+                                  /*Row(children: <Widget>[
+                                  Container(child:Text("Blood Group:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+                                  Text(globalpersnalinfomap["BloodGroup"]),
+                                ],),
+                                SizedBox(height: 10.0,),
+                                Row(children: <Widget>[
+                                  Container(child:Text("Nationality:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    width: 100.0,),
+                                  Text(globalpersnalinfomap["Nationality"]),
+                                ],),
+                                SizedBox(height: 10.0,),*/
+
                                 ],
                               ),
                             ),
                           ),
                         ),
 
-                        globalcompanyinfomap["ReportingTo"]!=''? Container(
+                        globallabelinfomap["reporting_to"]!=''? Container(
                           //height: MediaQuery.of(context).size.height,
                           margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -439,7 +567,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
                               padding: new EdgeInsets.symmetric(horizontal: 9.0),
                               alignment: Alignment.centerLeft,
                               child: new Text(
-                                'Reporting to',
+                                globallabelinfomap["reporting_to"],
                                 style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -456,11 +584,14 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                             shape: BoxShape.circle,
                                             image: new DecorationImage(
                                               fit: BoxFit.fill,
+                                              //  image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
                                               image: _checkLoaded ? AssetImage('assets/avatar.png') : reporttoprofileimage,
                                             )
                                         ))
                                     ),SizedBox(width: 20.0,),
                                     Flexible(child: Text(globalcompanyinfomap["ReportingTo"]+"\n("+globalcompanyinfomap["ReportingToDesignation"]+")")),
+                                    //Text("-"),
+                                    //Text(globalcompanyinfomap["ReportingToDesignation"],overflow: TextOverflow.ellipsis),
                                   ],),
                                   SizedBox(height: 10.0,),
                                 ],
@@ -497,22 +628,24 @@ class _CollapsingTabState extends State<CollapsingTab> {
                               child: Column(
                                 children: <Widget>[
                                   // SizedBox(height: 10.0,),
-                                  globalcontactusinfomap["Phone"]!='0'?Row(children: <Widget>[
+                                  globallabelinfomap["personal_no"]!=""?
+                                  Row(children: <Widget>[
                                     // new Expanded(
-                                    Container(child:Text("Phone:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    Container(child:Text(globallabelinfomap["personal_no"]+":",style: TextStyle(color: Colors.grey[600]),) ,
                                       width: 100.0,),
                                     // ),
                                     Text(globalcontactusinfomap["Phone"]),
                                   ],):Center(),
-                                  SizedBox(height: 10.0,),
-                                  Row(children: <Widget>[
+
+                                  globallabelinfomap["current_email_id"]!=""?SizedBox(height: 10.0,):Center(),
+                                  globallabelinfomap["current_email_id"]!=""?Row(children: <Widget>[
                                     //  new Expanded(child:
-                                    Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600])) ,
+                                    Container(child:Text(globallabelinfomap["current_email_id"]+":",style: TextStyle(color: Colors.grey[600])) ,
                                       width: 100.0,),
                                     //),
                                     //Text(globalcontactusinfomap["Email"]),
                                     Flexible(child: Text(globalcompanyinfomap["CompanyEmail"]))
-                                  ],),
+                                  ],):Center(),
                                   /*     SizedBox(height: 10.0,),
                                 Row(children: <Widget>[
                                   new Expanded(
@@ -527,22 +660,26 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                     width: 100.0,),),
                                   Text(globalcontactusinfomap["PostalCode"]),
                                 ],),*/
-                                  SizedBox(height: 10.0,),
-                                  Row(children: <Widget>[
-                                    // new Expanded(child:
-                                    Container(child:Text("Country:",style: TextStyle(color: Colors.grey[600]),) ,
-                                      width: 100.0,),
-                                    //),
-                                    Text(globalcontactusinfomap["Country"]),
-                                  ],),
-                                  SizedBox(height: 10.0,),
+
+                                  globallabelinfomap["current_city"]!=""?SizedBox(height: 10.0,):Center(),
+                                  globallabelinfomap["current_city"]!=""?
                                   Row(children: <Widget>[
                                     // new Expanded( child:
-                                    Container(child:Text("City:",style: TextStyle(color: Colors.grey[600]),) ,
+                                    Container(child:Text(globallabelinfomap["current_city"]+":",style: TextStyle(color: Colors.grey[600]),) ,
                                       width: 100.0,),
                                     //),
                                     Text(globalcontactusinfomap["City"]),
-                                  ],),
+                                  ],):Center(),
+
+                                  globallabelinfomap["current_country"]!=""?SizedBox(height: 10.0,):Center(),
+                                  globallabelinfomap["current_country"]!=""?
+                                  Row(children: <Widget>[
+                                    // new Expanded(child:
+                                    Container(child:Text(globallabelinfomap["current_country"]+":",style: TextStyle(color: Colors.grey[600]),) ,
+                                      width: 100.0,),
+                                    //),
+                                    Text(globalcontactusinfomap["Country"]),
+                                  ],):Center(),
                                   SizedBox(height: 15.0,),
 
                                 ],
@@ -550,30 +687,36 @@ class _CollapsingTabState extends State<CollapsingTab> {
                             ),
                           ),
                         ),
+
+
                       ],),
                     ),
-                  ),
-                ],),
+                  ),  ],),
                 /////////
 
                 //////// Team /////////
 
                 Column(children: <Widget>[
+
                   SizedBox(height: height),
                   new Expanded(
                     child: Container(
                         height: insideContainerHeight,
                         width: 400.0,
+                        //color: Colors.green[50],
                         child: FutureBuilder<List<Team>>(
                           future: getTeamList(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               if(snapshot.data.length>0) {
+                                print("snapshot.data.length");
+                                print(snapshot.data.length);
                                 return new ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     itemCount: snapshot.data.length,
                                     itemBuilder: (BuildContext context, int index) {
-                                      _listviewtile(){
+                                      toreportprofileimage = new NetworkImage(snapshot.data[index].ProfilePic);
+//                                      if(snapshot.data[index].juniorlist==null)
                                         return ListTile(
                                           leading: new Container(child:Padding(
                                             padding: const EdgeInsets.only(top:0.0),
@@ -592,109 +735,56 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                           ),
                                           title:Text(snapshot.data[index].FirstName+" "+(snapshot.data[index].LastName.toString()!="null"?snapshot.data[index].LastName.toString():"")),
                                         );
-                                      }
-
-                                      _expansiontile(){
-                                        return ExpansionTile(
-                                          leading: Container(
-                                              width: 50.0,
-                                              height: 50.0,
-                                              decoration: new BoxDecoration(
-                                                  color:Colors.grey[300],
-                                                  shape: BoxShape.circle,
-                                                  image: new DecorationImage(
-                                                    fit: BoxFit.fill,
-                                                    image: toreportprofileimage,
-                                                  )
-                                              )
-                                          ),
-                                          title:Text(snapshot.data[index].FirstName+" "+(snapshot.data[index].LastName.toString()!="null"?snapshot.data[index].LastName.toString():"")),
-                                          children: <Widget>[
-                                            Container(
-
+                                      //print("snapshot.data[index].juniorlist.length");
+                                      //print(snapshot.data[index].juniorlist.length.toString());
+/*                                      return ExpansionTile(
+                                        leading: Container(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            decoration: new BoxDecoration(
+                                                color:Colors.grey[300],
+                                                shape: BoxShape.circle,
+                                                image: new DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  //image: NetworkImage(snapshot.data[index].ProfilePic) ,
+                                                  image:  toreportprofileimage,
+                                                  //image: _checkLoadedr ? AssetImage('assets/avatar.png') : toreportprofileimage,
+                                                )
+                                            )
+                                        ),
+                                        title:Text(snapshot.data[index].FirstName+" "+(snapshot.data[index].LastName.toString()!="null"?snapshot.data[index].LastName.toString():"")),
+                                        children: <Widget>[
+                                          Container(
                                               margin: EdgeInsets.only(top: 5, left: 50, right: 0, bottom: 5),
                                               height: MediaQuery.of(context).size.height*0.2,
                                               child: ListView.builder(
-                                                itemCount: snapshot.data[index].juniorlist.length,
-                                                itemBuilder: (BuildContext context, int juniorIndex){
-                                                  if(snapshot.data[index].juniorlist[juniorIndex]["Junior"]==null)
+                                                  itemCount: snapshot.data[index].juniorlist.length,
+                                                  itemBuilder: (BuildContext context, int juniorIndex){
+                                                    //print("juniorIndex");
+                                                    //print(juniorIndex);
                                                     return ListTile(
                                                       leading: new Container(child:Padding(
                                                         padding: const EdgeInsets.only(top:0.0),
                                                         child: Container(
-                                                          width: 50.0,
-                                                          height: 50.0,
-                                                          decoration: new BoxDecoration(
-                                                            color:Colors.grey[300],
-                                                            shape: BoxShape.circle,
-                                                            image: new DecorationImage(
-                                                              fit: BoxFit.fill,
-                                                              image: NetworkImage(snapshot.data[index].juniorlist[juniorIndex]["ProfilePic"]) ,
-                                                            )
-                                                          )
-                                                        ),
+                                                            width: 50.0,
+                                                            height: 50.0,
+                                                            decoration: new BoxDecoration(
+                                                                color:Colors.grey[300],
+                                                                shape: BoxShape.circle,
+                                                                image: new DecorationImage(
+                                                                  fit: BoxFit.fill,
+                                                                  image: NetworkImage(snapshot.data[index].juniorlist[juniorIndex]["ProfilePic"]) ,
+                                                                )
+                                                            )),
                                                       )
                                                       ),
                                                       title:Text(snapshot.data[index].juniorlist[juniorIndex]["FirstName"].toString()+" "+(snapshot.data[index].juniorlist[juniorIndex]["LastName"].toString()!="null"?snapshot.data[index].juniorlist[juniorIndex]["LastName"].toString():"")),
                                                     );
-
-                                                  return ExpansionTile(
-                                                    leading: Container(
-                                                        width: 50.0,
-                                                        height: 50.0,
-                                                        decoration: new BoxDecoration(
-                                                            color:Colors.grey[300],
-                                                            shape: BoxShape.circle,
-                                                            image: new DecorationImage(
-                                                              fit: BoxFit.fill,
-                                                              image: toreportprofileimage,
-                                                            )
-                                                        )
-                                                    ),
-                                                    title:Text(snapshot.data[index].juniorlist[juniorIndex]["FirstName"]+" "+(snapshot.data[index].juniorlist[juniorIndex]["LastName"].toString()!="null"?snapshot.data[index].juniorlist[juniorIndex]["LastName"].toString():"")),
-                                                    children: <Widget>[
-                                                      Container(
-                                                          margin: EdgeInsets.only(top: 5, left: 50, right: 0, bottom: 5),
-                                                          height: MediaQuery.of(context).size.height*0.2,
-                                                          child: ListView.builder(
-                                                              itemCount: snapshot.data[index].juniorlist[juniorIndex].superjuniorlist.length,
-                                                              itemBuilder: (BuildContext context, int superjuniorIndex){
-                                                                print("snapshot.data[index].superjuniorlist");
-                                                                print(snapshot.data[index].superjuniorlist.length);
-                                                                return ListTile(
-                                                                  leading: new Container(child:Padding(
-                                                                    padding: const EdgeInsets.only(top:0.0),
-                                                                    child: Container(
-                                                                      width: 50.0,
-                                                                      height: 50.0,
-                                                                      decoration: new BoxDecoration(
-                                                                        color:Colors.grey[300],
-                                                                        shape: BoxShape.circle,
-                                                                        image: new DecorationImage(
-                                                                          fit: BoxFit.fill,
-                                                                          image: NetworkImage(snapshot.data[index].superjuniorlist[superjuniorIndex]["ProfilePic"]) ,
-                                                                        )
-                                                                      )
-                                                                    ),
-                                                                  )
-                                                                  ),
-                                                                  title:Text(snapshot.data[index].superjuniorlist[superjuniorIndex]["FirstName"].toString()+" "+(snapshot.data[index].superjuniorlist[superjuniorIndex]["LastName"].toString()!="null"?snapshot.data[index].superjuniorlist[superjuniorIndex]["LastName"].toString():"")),
-                                                                );
-                                                              }
-                                                          )
-                                                      ),
-                                                    ],
-                                                  );
-                                                }
+                                                  }
                                               )
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                      toreportprofileimage = new NetworkImage(snapshot.data[index].ProfilePic);
-                                      if(snapshot.data[index].juniorlist==null)
-                                        return _listviewtile();
-                                      return _expansiontile();
+                                          ),
+                                        ],
+                                      );*/
                                     }
                                 );
                               }else{
@@ -707,9 +797,11 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                   ),
                                 );
                               }
-                            } else if (snapshot.hasError) {
+                            }
+                            else if (snapshot.hasError) {
                               return new Text("Unable to connect server");
                             }
+
                             // By default, show a loading spinner
                             return new Center( child: CircularProgressIndicator());
                           },
@@ -848,13 +940,8 @@ class _CollapsingTabState extends State<CollapsingTab> {
     });
     profileup ns = profileup();
     bool isupdate = await ns.updateProfilePhoto(uploadtype,empid,organization);
-    print("isupdate");
-    print(isupdate);
     // bool isupdate = true;
     if(isupdate){
-      setState(() {
-        _isProfileUploading = false;
-      });
       if(uploadtype==3){
         setState(() {
           _checkLoadedprofile = true;

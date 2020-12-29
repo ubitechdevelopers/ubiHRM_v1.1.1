@@ -5,9 +5,11 @@
 import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/attandance/attendance_summary.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/model/timeinout.dart';
 import 'package:ubihrm/register_page.dart';
@@ -20,8 +22,6 @@ import '../drawer.dart';
 import '../global.dart';
 import '../home.dart';
 import '../profile.dart';
-import 'attendance_summary.dart';
-
 
 // This app is a stateful, it tracks the user's current choice.
 class HomePage extends StatefulWidget {
@@ -30,10 +30,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static const platform = const MethodChannel('location.spoofing.check');
   StreamLocation sl = new StreamLocation();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  /*var _defaultimage =
-      new NetworkImage("http://ubiattendance.ubihrm.com/assets/img/avatar.png");*/
   var profileimage;
   bool showtabbar ;
   bool _checkLoaded = true;
@@ -78,16 +77,26 @@ class _HomePageState extends State<HomePage> {
   List<Widget> widgets;
   String orgName="";
   int approval_count;
+  bool fakeLocationDetected = false;
+  String address = "";
 
   @override
   void initState() {
     super.initState();
-
     initPlatformState();
     getOrgName();
-    setLocationAddress();
-    startTimer();
+    platform.setMethodCallHandler(_handleMethod);
 
+    print("assignedAreaIds.isNotEmpty");
+    print(assignedAreaIds.isNotEmpty);
+    print('perGeoFence=="1"');
+    print(perGeoFence=="1");
+    print("perGeoFence");
+    print(perGeoFence);
+    print(areaSts);
+    print(areaSts=="0");
+    //setLocationAddress();
+    //startTimer();
   }
 
   getOrgName() async{
@@ -99,31 +108,15 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  /* @override
-  void dispose() {
-    super.dispose();
-    timer.cancel();
-  }*/
-  startTimer() {
+/*  startTimer() {
     const fiveSec = const Duration(seconds: 5);
     int count = 0;
     timer = new Timer.periodic(fiveSec, (Timer t) {
-      //print("timmer is running");
       count++;
-      //print("timer counter" + count.toString());
       setLocationAddress();
       if (stopstreamingstatus) {
         t.cancel();
-        //print("timer canceled");
       }
-    });
-  }
-
-  startTimer1() {
-    const fiveSec = const Duration(seconds: 1);
-    int count = 0;
-    timer1 = new Timer.periodic(fiveSec, (Timer t) {
-      print("timmer is running");
     });
   }
 
@@ -142,20 +135,16 @@ class _HomePageState extends State<HomePage> {
           sl.startStreaming(5);
           startTimer();
         }
-        //print("home addr" + streamlocationaddr);
-        //print(lat + ", " + long);
-
-        //print(stopstreamingstatus.toString());
       });
     }
-  }
+  }*/
 
   launchMap(String lat, String long) async {
     String url = "https://maps.google.com/?q=" + lat + "," + long;
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      //print('Could not launch $url');
+      print('Could not launch $url');
     }
   }
 
@@ -166,9 +155,25 @@ class _HomePageState extends State<HomePage> {
     orgdir = prefs.getString('orgdir') ?? '';
     desinationId = globalcompanyinfomap['Designation'];
     response = prefs.getInt('response') ?? 0;
-    Loc lock = new Loc();
-    location_addr = await lock.initPlatformState();
-    print(location_addr);
+
+    getAreaStatus().then((res) {
+      print('attendance/home dot dart');
+      if (mounted) {
+        setState(() {
+          areaSts = res.toString();
+          print('response'+res.toString());
+          if (assignedAreaIds.isNotEmpty && perGeoFence=="1") {
+            AbleTomarkAttendance = areaSts;
+          }
+        });
+      }
+    }).catchError((onError) {
+      print('Exception occured in clling function.......');
+      print(onError);
+    });
+    //Loc lock = new Loc();
+    //location_addr = await lock.initPlatformState();
+    //print(location_addr);
 
     Home ho = new Home();
     act = await ho.checkTimeIn(empid, orgdir);
@@ -208,9 +213,9 @@ class _HomePageState extends State<HomePage> {
         aid = prefs.getString('aid') ?? "";
         shiftId = prefs.getString('shiftId') ?? "";
         act1 = act;
-        print("ABC"+act1);
         streamlocationaddr = globalstreamlocationaddr;
-        print("ABC65367uywe"+streamlocationaddr);
+        print("globalstreamlocationaddr");
+        print(globalstreamlocationaddr);
         perPunchLocation = getModulePermission("305", "view");
       });
     }
@@ -220,31 +225,54 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     (mail_varified=='0' && alertdialogcount==0 && admin_sts=='1')?Future.delayed(Duration.zero, () => _showAlert(context)):"";
-    //act1=='1'?_showAlertbeforeTimeOut(context):"";
-    //return (response == 0 || userpwd!=newpwd || Is_Delete!=0) ? new AskRegisterationPage//() :
-
     return getmainhomewidget();
-
-    /* return MaterialApp(
-      home: (response==0) ? new AskRegisterationPage() : getmainhomewidget(),
-    );*/
   }
 
-  void showInSnackBar(String value) {
-    final snackBar = SnackBar(
-        content: Text(
-          value,
-          textAlign: TextAlign.center,
-        ));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
+  Future<dynamic> _handleMethod(MethodCall call) async {
+    switch (call.method) {
+      case "locationAndInternet":
+        locationThreadUpdatedLocation = true;
+        var long = call.arguments["longitude"].toString();
+        var lat = call.arguments["latitude"].toString();
+        assign_lat = double.parse(lat);
+        assign_long = double.parse(long);
+        address = await getAddressFromLati(lat, long);
+        globalstreamlocationaddr = address;
+        print(call.arguments["mocked"].toString());
+
+        getAreaStatus().then((res) {
+          print('home dot dart');
+          if (mounted) {
+            setState(() {
+              areaSts = res.toString();
+              print('response'+res.toString());
+              if (assignedAreaIds.isNotEmpty && perGeoFence=="1") {
+                AbleTomarkAttendance = areaSts;
+              }
+            });
+          }
+        }).catchError((onError) {
+          print('Exception occured in clling function.......');
+          print(onError);
+        });
+
+        setState(() {
+          if (call.arguments["mocked"].toString() == "Yes") {
+            fakeLocationDetected = true;
+          } else {
+            fakeLocationDetected = false;
+          }
+          if (call.arguments["TimeSpoofed"].toString() == "Yes") {
+            timeSpoofed = true;
+          }
+        });
+        break;
+
+        return new Future.value("");
+    }
   }
 
   Future<bool> sendToHome() async{
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );*/
-    print("-------> back button pressed");
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
@@ -255,7 +283,6 @@ class _HomePageState extends State<HomePage> {
   getmainhomewidget() {
     return new WillPopScope(
         onWillPop: () => sendToHome(),
-
         child: Scaffold(
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
@@ -267,14 +294,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   checkalreadylogin() {
-    ////print("---->"+response.toString());
     if (response == 1) {
       return new IndexedStack(
         index: _currentIndex,
         children: <Widget>[
           underdevelopment(),
           (streamlocationaddr != '') ? mainbodyWidget() : refreshPageWidgit(),
-          //(false) ? mainbodyWidget() : refreshPageWidgit(),
           underdevelopment()
         ],
       );
@@ -285,14 +310,6 @@ class _HomePageState extends State<HomePage> {
             (Route<dynamic> route) => false,
       );
     }
-
-    /* if(userpwd!=newpwd){
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => AskRegisterationPage()),
-            (Route<dynamic> route) => false,
-      );
-    }*/
   }
 
   refreshPageWidgit() {
@@ -358,9 +375,8 @@ class _HomePageState extends State<HomePage> {
                       color: appStartColor(), decoration: TextDecoration.underline),
                 ),
                 onPressed: () {
-                  sl.startStreaming(5);
-                  print("shaifali-----------");
-                  startTimer();
+                  /*startTimer();
+                  sl.startStreaming(5);*/
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => HomePage()),
@@ -394,12 +410,12 @@ class _HomePageState extends State<HomePage> {
     return new Container(
       child: Center(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            //Text("Loading...")
-            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            CircularProgressIndicator()
-          ]
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              //Text("Loading...")
+              //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+              CircularProgressIndicator()
+            ]
         ),
       ),
     );
@@ -450,8 +466,8 @@ class _HomePageState extends State<HomePage> {
                       color: appStartColor(), decoration: TextDecoration.underline),
                 ),
                 onPressed: () {
-                  sl.startStreaming(5);
-                  startTimer();
+                  /*sl.startStreaming(5);
+                  startTimer();*/
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => HomePage()),
@@ -475,27 +491,22 @@ class _HomePageState extends State<HomePage> {
             Container(
               margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
               padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-
               decoration: new ShapeDecoration(
                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
                 color: Colors.white,
               ),
-              // foregroundDecoration: BoxDecoration(color:Colors.red ),
               height: MediaQuery.of(context).size.height * 0.80,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  //SizedBox(height: 5.0),
                   Text("Punch Attendance", style: new TextStyle(fontSize: 22.0,color: appStartColor())),
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
                   new GestureDetector(
                     onTap: () {
                       // profile navigation
-                      /* Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));*/
                     },
                     child: new Stack(children: <Widget>[
                       Container(
-                        //   foregroundDecoration: BoxDecoration(color:Colors.yellow ),
                           width: MediaQuery.of(context).size.height * .18,
                           height: MediaQuery.of(context).size.height * .18,
                           decoration: new BoxDecoration(
@@ -503,32 +514,11 @@ class _HomePageState extends State<HomePage> {
                               image: new DecorationImage(
                                 fit: BoxFit.fill,
                                 image:_checkLoaded ? AssetImage('assets/avatar.png') : profileimage,
-                                //image: AssetImage('assets/avatar.png')
                               ))),
-                      /*     new Positioned(
-                    left: MediaQuery.of(context).size.width*.14,
-                    top: MediaQuery.of(context).size.height*.11,
-                    child: new RawMaterialButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-                      },
-                      child: new Icon(
-                        Icons.edit,
-                        size: 18.0,
-                      ),
-                      shape: new CircleBorder(),
-                      elevation: 0.5,
-                      fillColor: Colors.teal,
-                      padding: const EdgeInsets.all(1.0),
-                    ),
-                  ),*/
                     ]),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
-                  //Image.asset('assets/logo.png',height: 150.0,width: 150.0),
-                  // SizedBox(height: 5.0),
                   Text("Hi " + globalpersnalinfomap['FirstName'], style: new TextStyle(fontSize: 16.0)),
-                  //SizedBox(height: MediaQuery.of(context).size.height * .001),
                   SizedBox(height: MediaQuery.of(context).size.height*.02),
                   (act1 == '') ? loader() : getMarkAttendanceWidgit(),
 
@@ -546,22 +536,14 @@ class _HomePageState extends State<HomePage> {
       return getAlreadyMarkedWidgit();
     } else {
       return Container(
-        // height: MediaQuery.of(context).size.height*0.5,
-        //foregroundDecoration: BoxDecoration(color:Colors.green ),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              /* Text('Mark Attendance',
-                style: new TextStyle(fontSize: 30.0, color: Colors.teal)),
-            SizedBox(height: 10.0),*/
               getwidget(location_addr1),
-              //    SizedBox(height: MediaQuery.of(context).size.height*.1),
-
             ]),
       );
     }
   }
-
 
   getAlreadyMarkedWidgit() {
     return Column(children: <Widget>[
@@ -590,19 +572,16 @@ class _HomePageState extends State<HomePage> {
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          //SizedBox(width: 30.0,),
           new InkWell(
             child: new Text(
               "Check Attendance Log",
               style: new TextStyle(
-                // color: appStartColor(),
                   color: Colors.orange[800],
                   decoration: TextDecoration.underline,
                   fontSize: 17.0,
                   fontWeight: FontWeight.bold
               ),
             ),
-
             onTap: () {
               Navigator.push(
                 context,
@@ -614,17 +593,6 @@ class _HomePageState extends State<HomePage> {
 
         ],
       ),
-      /*SizedBox(height: MediaQuery.of(context).size.height*.25),
-          Container(
-            height: MediaQuery.of(context).size.height*.10,
-            color: Colors.teal.withOpacity(0.8),
-            child: Column(
-                children:[
-                  SizedBox(height: 10.0,),
-                  getQuickLinksWidget()
-                ]
-            ),
-          )*/
     ]);
   }
 
@@ -638,23 +606,43 @@ class _HomePageState extends State<HomePage> {
         ),
         SizedBox(height: MediaQuery.of(context).size.height * .03),
         Container(
-          //color: Colors.teal.withOpacity(0.1),
             color: appStartColor().withOpacity(0.1),
-            height: MediaQuery.of(context).size.height * .15,
-            child:
-            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            height: MediaQuery.of(context).size.height * .20,
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               FlatButton(
                 child: new Text('You are at: ' + streamlocationaddr,
                     textAlign: TextAlign.center,
                     style: new TextStyle(fontSize: 14.0)),
                 onPressed: () {
                   launchMap(lat, long);
-                  /* Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );*/
                 },
               ),
+              (assignedAreaIds.isNotEmpty && perGeoFence=="1")?areaSts=="0"
+                  ? Container(
+                padding:
+                EdgeInsets.only(top: 5.0, right: 5.0),
+                child: Text(
+                  'Outside Geofence',
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                      backgroundColor: Colors.red,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1.0),
+                ),
+              ) : Container(
+                padding: EdgeInsets.only(top:5.0),
+                child: Text(
+                  'Within Geofence',
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                      backgroundColor: Colors.green,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1.0),
+                ),
+              ):Center(),
+              SizedBox(height: 5.0,),
               new Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -669,8 +657,8 @@ class _HomePageState extends State<HomePage> {
                             decoration: TextDecoration.underline),
                       ),
                       onTap: () {
-                        startTimer();
-                        sl.startStreaming(5);
+                        /*startTimer();
+                        sl.startStreaming(5);*/
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => HomePage()),
@@ -683,28 +671,6 @@ class _HomePageState extends State<HomePage> {
             ])),
 
         SizedBox(height:MediaQuery.of(context).size.height *0.05,),
-
-        /*new SizedBox(
-    width: double.infinity,
-      height: MediaQuery.of(context).size.height * .08,
-       child: FlatButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Att_tab()),
-            );
-          },
-          child: const Text(
-              'Attendance Log',
-              style: TextStyle(fontSize: 18,color: Colors.white,)
-          ),
-          color: Colors.orange[800],
-           splashColor: Colors.orange[800],
-
-          /* shape: new RoundedRectangleBorder(
-               borderRadius: new BorderRadius.circular(0.0))*/
-        ),
-      ),*/
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -730,9 +696,7 @@ class _HomePageState extends State<HomePage> {
             Text(" "),
           ],
         ),
-
       ]);
-
     } else {
       return Column(children: [
         Text(
@@ -743,7 +707,6 @@ class _HomePageState extends State<HomePage> {
           child: Text('Open Settings'),
           onPressed: () {
             PermissionHandler().openAppSettings();
-            //print("hello-------------");
           },
         ),
       ]);
@@ -773,52 +736,99 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Text getText(String addrloc) {
-    if (addrloc != "PermissionStatus.deniedNeverAsk") {
-      return Text('You are at: ' + addrloc,
-          textAlign: TextAlign.center, style: new TextStyle(fontSize: 14.0));
-    } else {
-      return new Text(
-          'Location access is denied. Enable the access through the settings.',
-          textAlign: TextAlign.center,
-          style: new TextStyle(fontSize: 14.0, color: Colors.red));
-      /*return new  Text('Location is restricted from app settings, click here to allow location permission and refresh', textAlign: TextAlign.center, style: new TextStyle(fontSize: 14.0,color: Colors.red));*/
-    }
-  }
-
   saveImage() async {
-    sl.startStreaming(5);
+
+    if(perGeoFence=="1") {
+      if (areaSts=="0") {
+        if(assignedAreaIds.isEmpty){
+          geoFenceStatus = "";
+        }else{
+          geoFenceStatus = "Outside Geofence";
+        }
+
+        print('geoFenceStatus---->>>>'+geoFenceStatus);
+        print('geoFenceOrgPerm---->>>>'+geoFenceOrgPerm);
+
+        if(geoFenceOrgPerm=="1"||fenceAreaSts=="1") {
+          print('geoFenceStatus---->>>>'+geoFenceStatus);
+
+          /*await showDialog(
+            context: context,
+            // ignore: deprecated_member_use
+            child: new AlertDialog(
+              //title: new Text("Warning!"),
+              content: new Text(
+                  "You Can't punch Attendance Outside Geofence."),
+            ));*/
+          return null;
+        }
+
+      } else {
+        geoFenceStatus = "Within Geofence";
+        print('geoFenceStatus--->>>>'+geoFenceStatus);
+      }
+    }
+    print('geoFenceStatus---->>>>'+geoFenceStatus);
+
+    //sl.startStreaming(5);
     if(globalcompanyinfomap['Department']==''){
       await showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Department has not been assigned."),
+            );
+          });
+      /*await showDialog(
           context: context,
           // ignore: deprecated_member_use
           child: new AlertDialog(
             //title: new Text("Warning!"),
             content: new Text("Department has not been assigned."),
-          ));
+          ));*/
       return null;
     }
     if(globalcompanyinfomap['Designation']==''){
       await showDialog(
           context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Designation has not been assigned."),
+            );
+          });/*showDialog(
+          context: context,
           // ignore: deprecated_member_use
           child: new AlertDialog(
             //title: new Text("Warning!"),
             content: new Text("Designation has not been assigned."),
-          ));
+          ));*/
       return null;
     }
     if(globalcompanyinfomap['Shift']==''){
       await showDialog(
           context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Shift has not been assigned."),
+            );
+          });/*showDialog(
+          context: context,
           // ignore: deprecated_member_use
           child: new AlertDialog(
             //title: new Text("Warning!"),
             content: new Text("Shift has not been assigned."),
-          ));
+          ));*/
       return null;
     }
-
 
     MarkTime mk = new MarkTime(empid, streamlocationaddr, aid, act1, shiftId, orgdir, lat, long);
     var connectivityResult = await (new Connectivity().checkConnectivity());
@@ -835,12 +845,22 @@ class _HomePageState extends State<HomePage> {
         print("issave");
         print(issave);
         if (issave) {
-          showDialog(context: context, barrierDismissible: true, child:
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Attendance marked successfully!"),
+                );
+              });
+          /*showDialog(context: context, barrierDismissible: true, child:
           new AlertDialog(
             content: new Text("Attendance marked successfully!"),
           )
-          );
-          await new Future.delayed(const Duration(seconds: 2));
+          );*/
+          //await new Future.delayed(const Duration(seconds: 2));
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyApp()),
@@ -849,12 +869,22 @@ class _HomePageState extends State<HomePage> {
             act1 = act;
           });
         } else {
-          showDialog(context: context, child:
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Attendance was not captured. Please punch again!"),
+                );
+              });
+          /*showDialog(context: context, child:
           new AlertDialog(
             //content: new Text("Selfie not captured, please punch again!"),
             content: new Text("Attendance was not captured. Please punch again!"),
           )
-          );
+          );*/
           if(mounted) {
             setState(() {
               act1 = act;
@@ -878,13 +908,13 @@ class _HomePageState extends State<HomePage> {
     bool res = await ns.resendVerificationMail(orgid);
     if(res){
       showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Row( children:<Widget>[
-            Text("Verification link has been sent to \nyour organization's registered Email."),
-          ]
+          context: context,
+          builder: (context) => AlertDialog(
+              content: Row( children:<Widget>[
+                Text("Verification link has been sent to \nyour organization's registered Email."),
+              ]
+              )
           )
-        )
       );
     }
   }
@@ -905,7 +935,6 @@ class _HomePageState extends State<HomePage> {
                 child:Column(
                     children:<Widget>[
                       Container(width:MediaQuery.of(context).size.width*0.6, child:Text("Your organization's Email is not verified. Please verify now.")),
-
                       new Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children:<Widget>[
@@ -1010,9 +1039,6 @@ class AttendanceHomeAppHeader extends StatelessWidget implements PreferredSizeWi
           tabs: choices.map((Choice choice) {
             return Tab(
               text: choice.title,
-              //   unselectedLabelColor: Colors.white70,
-              //   indicatorColor: Colors.white,
-              //   icon: Icon(choice.icon),
             );
           }).toList(),
         ):null

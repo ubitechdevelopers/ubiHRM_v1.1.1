@@ -10,21 +10,23 @@ class Department extends StatefulWidget {
   @override
   _Department createState() => _Department();
 }
-TextEditingController dept;
-//FocusNode f_dept ;
+
 class _Department extends State<Department> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  int _currentIndex = 2;
   String _sts = 'Active';
   String _sts1 = 'Active';
-
   String orgName="";
   int adminsts=0;
   bool _isButtonDisabled= false;
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
+  String deptname = "";
+
   @override
   void initState() {
     super.initState();
-    dept = new TextEditingController();
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     getOrgName();
   }
 
@@ -79,9 +81,44 @@ class _Department extends State<Department> {
               child: Text('Departments',
                 style: new TextStyle(fontSize: 22.0, color: appStartColor(),),),
             ),
-            Divider(),
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: _searchController,
+                  focusNode: searchFocusNode,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderRadius:  new BorderRadius.circular(10.0),
+                    ),
+                    prefixIcon: Icon(Icons.search, size: 30,),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    hintText: 'Search Department',
+                    labelText: 'Search Department',
+                    suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Department()),
+                          );
+                        }
+                    ):null,
+                    //focusColor: Colors.white,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      deptname = value;
+                    });
+                  },
+                ),
+              ),
+            ),
+            //Divider(),
             //Divider(height: 10.0,),
-            SizedBox(height: 5.0),
+            //SizedBox(height: 5.0),
             Container(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +153,7 @@ class _Department extends State<Department> {
 
   getDeptWidget() {
     return new FutureBuilder<List<Dept>>(
-        future: getDepartments(),
+        future: getDepartments(deptname),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
@@ -133,15 +170,17 @@ class _Department extends State<Department> {
                                 new Container(
                                   width: MediaQuery.of(context).size.width*0.65,
                                   child: new Text(
-                                      snapshot.data[index].dept.toString()),
+                                      snapshot.data[index].dept.toString(),style: TextStyle(
+                                      fontSize: 14, fontWeight: FontWeight.bold)),
                                 ),
                                 new Container(
                                   child: new Text(
                                     snapshot.data[index].status.toString(),
                                     style: TextStyle(
+                                        fontSize: 14,
                                         color: snapshot.data[index].status
                                             .toString() != 'Active' ? Colors
-                                            .deepOrange : Colors.green),),
+                                            .red : Colors.green),),
                                 ),
                               ],
                             ),
@@ -285,25 +324,72 @@ class _Department extends State<Department> {
                   });
                   updateDept(new_dept.text,_sts1,did).
                   then((res) {
-                    if(res=='0')
+                    if(res=='0') {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Unable to update department"),
+                            );
+                          });
                       //showInSnackBar('Unable to update department');
-                      showDialog(context: context, child:
+                      /*showDialog(context: context, child:
                       new AlertDialog(
                         content: new Text("Unable to update department"),
-                      ));
-                    else if(res=='-1')
+                      ));*/
+                    }else if(res=='-1') {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Department name already exist"),
+                            );
+                          });
                       //showInSnackBar('Department name already exist');
-                      showDialog(context: context, child:
+                      /*showDialog(context: context, child:
                       new AlertDialog(
-                      content: new Text("Department name already exist"),
-                      ));
-                    else {
+                        content: new Text("Department name already exist"),
+                      ));*/
+                    }else if(res=='-2') {
                       Navigator.of(context, rootNavigator: true).pop('dialog');
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Employees assigned to this departement therefore can't be updated"),
+                            );
+                          });
+                      //showInSnackBar('Department name already exist');
+                      /*showDialog(context: context, child:
+                      new AlertDialog(
+                        content: new Text("Employees assigned to this departement therefore can't be updated"),
+                      ));*/
+                    }else {
+                      Navigator.of(context, rootNavigator: true).pop('dialog');
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Department updated successfully"),
+                            );
+                          });
                       //showInSnackBar('Department updated successfully');
-                      showDialog(context: context, child:
+                      /*showDialog(context: context, child:
                       new AlertDialog(
                       content: new Text("Department updated successfully"),
-                      ));
+                      ));*/
                       getDeptWidget();
                       new_dept.text = '';
                       _sts1 = 'Active';

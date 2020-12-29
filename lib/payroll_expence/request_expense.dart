@@ -68,6 +68,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
   String shiftId="";
   Future<File> ExpenseDoc;
   File _image=null;
+  //FilePickerResult _file=null;
   File _file=null;
   //var tempvar="";
   String close="";
@@ -345,6 +346,8 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                               child:  Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
                                 child: TextFormField(
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization: TextCapitalization.sentences,
                                   controller: _descController,
                                   decoration: InputDecoration(
                                       labelText: 'Description',
@@ -501,6 +504,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                                             onTap: () async {
                                               //var file = await ImagePicker.pickImage(source: ImageSource.gallery);
                                               File file = await FilePicker.getFile(type: FileType.any);
+                                              //FilePickerResult file = await FilePicker.platform.pickFiles(type: FileType.any);
                                               print(file);
                                               setState(() {
                                                 //_image = image;
@@ -633,7 +637,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
   }
 
 
-  Future<bool> savePayrollExpense(var expensedate, var category, var desc, var amount, File file, BuildContext context) async { // visit in function
+  Future<bool> savePayrollExpense(var expensedate, var category, var desc, var amount/*, FilePickerResult file*/, File file, BuildContext context) async { // visit in function
     try {
       Dio dio = new Dio();
       setState(() {
@@ -643,6 +647,8 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
       String orgid = prefs.getString('organization') ?? '';
       String empid = prefs.getString('employeeid') ?? "";
       String ext = p.extension(file.path);
+      //List<String> ext = file.names;
+      print(ext);
       if (file!=null) {
         FormData formData = new FormData.from({
           "empid": empid,
@@ -652,6 +658,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
           "desc": desc,
           "amt": amount,
           "file": new UploadFileInfo(file, "doc"+ext),
+          //"file": File(file.files.single.path)
         });
         print(formData);
         print(file);
@@ -674,25 +681,55 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
             MaterialPageRoute(builder: (context) => MyPayrollExpense()),
           );
           // ignore: deprecated_member_use
-          showDialog(context: context, child:
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Expense submitted successfully."),
+                );
+              });
+          /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense submitted successfully.'),
           )
-          );
+          );*/
           return true;
         } else if((response1.toString().contains("false1"))){
-          showDialog(context: context, child:
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Expense already applied on this date."),
+                );
+              });
+          /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense already applied on this date.'),
-          ));
+          ));*/
           setState(() {
             isServiceCalling = false;
           });
         } else {
-          showDialog(context: context, child:
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("There is some problem while applying for expense."),
+                );
+              });
+          /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('There is some problem while applying for expense.'),
-          ));
+          ));*/
           setState(() {
             isServiceCalling = false;
           });
@@ -724,28 +761,58 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
             MaterialPageRoute(builder: (context) => MyPayrollExpense()),
           );
           // ignore: deprecated_member_use
-          showDialog(context: context, child:
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Expense submitted successfully."),
+                );
+              });
+          /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense submitted successfully.'),
           )
-          );
+          );*/
           return true;
         } else if((response1.toString().contains("false1"))){
           // ignore: deprecated_member_use
-          showDialog(context: context, child:
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Expense already applied on this date."),
+                );
+              });
+          /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense already applied on this date.'),
           )
-          );
+          );*/
           setState(() {
             isServiceCalling = false;
           });
         } else {
-          showDialog(context: context, child:
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("There is some problem while applying for expense."),
+                );
+              });
+          /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('There is some problem while applying for expense.'),
           )
-          );
+          );*/
           setState(() {
             isServiceCalling = false;
           });

@@ -548,22 +548,42 @@ class ChoiceCard1 extends StatelessWidget {
                                 if(sts=="true") {
                                   showDialog(
                                       context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Expense claim approved successfully."),
+                                        );
+                                      });
+                                  /*showDialog(
+                                      context: context,
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
                                         content: new Text("Expense claim approved successfully."),
                                       )
-                                  );
+                                  );*/
                                 }
                                 else{
                                   showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Expense claim could not be approved."),
+                                        );
+                                      });
+                                  /*showDialog(
                                       context: context,
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
                                         content: new Text("Expense claim could not be approved."),
                                       )
-                                  );
+                                  );*/
                                 }
                                 Navigator.push(
                                   context,
@@ -593,22 +613,42 @@ class ChoiceCard1 extends StatelessWidget {
                                 if(sts=="true") {
                                   showDialog(
                                       context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Expense claim rejected successfully."),
+                                        );
+                                      });
+                                  /*showDialog(
+                                      context: context,
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
                                         content: new Text("Expense claim rejected successfully."),
                                       )
-                                  );
+                                  );*/
                                 }
                                 else{
                                   showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Expense claim could not be rejected."),
+                                        );
+                                      });
+                                  /*showDialog(
                                       context: context,
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
                                         content: new Text("Expense claim could not be rejected."),
                                       )
-                                  );
+                                  );*/
                                 }
                                 Navigator.push(
                                   context,

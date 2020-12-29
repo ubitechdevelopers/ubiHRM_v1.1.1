@@ -237,7 +237,7 @@ class OrdinalSales {
   /// Create series list with multiple series
   static List<charts.Series<OrdinalSales, String>> _createSampleData(info) {
     final random = new Random();
-   // print(info);
+    // print(info);
     // print("00000000000"+info[]['totalleaveC']);
     final desktopSalesData = [new OrdinalSales('', 0) ];
     final mobileSalesData = [new OrdinalSales('', 0) ];
@@ -305,7 +305,7 @@ class OrdinalSales {
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         fillColorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault.lighter,
 
-        labelAccessorFn: (OrdinalSales sales, _) => '${sales.name.toString()}: \$${sales.count.toString()}',
+        labelAccessorFn: (OrdinalSales sales, _) => '${sales.name}: ${sales.count.toString()}',
 
       ),
 

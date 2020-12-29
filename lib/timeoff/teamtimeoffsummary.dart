@@ -155,13 +155,13 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
   }
 
   loader() {
-     return new Container(
+    return new Container(
       child: Center(
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
 
-                  Text("Under development" + "ff",
+              Text("Under development" + "ff",
                 style: new TextStyle(fontSize: 30.0, color: Colors.teal),)
             ]),
       ),
@@ -294,7 +294,13 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                         ),
                       ]
                   ),
-
+                  Container(
+                    padding: EdgeInsets.only(top:12.0),
+                    child:Center(
+                      child:Text("Team's Time Off",
+                        style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
+                    ),
+                  ),
                   Container(
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
@@ -314,7 +320,8 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                           suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
                               onPressed: () {
                                 _searchController.clear();
-                               /* Navigator.push(
+                                empname='';
+                                /* Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => EmployeeList()),
                                 );*/
@@ -331,15 +338,6 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                       ),
                     ),
                   ),
-
-                  Container(
-                    padding: EdgeInsets.only(top:12.0),
-                    child:Center(
-                      child:Text("Team's Time Off",
-                        style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
-                    ),
-                  ),
-
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
 //            crossAxisAlignment: CrossAxisAlignment.start,
@@ -685,7 +683,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                 )
                             );
                           }
-                          },
+                        },
                         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0),),
                         child: new Text('Approve',
                             style: new TextStyle(

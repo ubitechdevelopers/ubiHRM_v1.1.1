@@ -10,22 +10,22 @@ class Designation extends StatefulWidget {
   @override
   _Designation createState() => _Designation();
 }
-TextEditingController desg;
+
 class _Designation extends State<Designation> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  int _currentIndex = 2;
-  String _sts = 'Active';
   String _sts1 = 'Active';
-
   String orgName="";
   int adminsts=0;
-
   bool _isButtonDisabled= false;
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
+  String desgname = "";
 
   @override
   void initState() {
     super.initState();
-    desg = new TextEditingController();
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     getOrgName();
   }
 
@@ -78,8 +78,43 @@ class _Designation extends State<Designation> {
               child: Text('Designations',
                 style: new TextStyle(fontSize: 22.0, color: appStartColor(),),),
             ),
-            Divider(),
-            SizedBox(height: 5.0),
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: _searchController,
+                  focusNode: searchFocusNode,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderRadius:  new BorderRadius.circular(10.0),
+                    ),
+                    prefixIcon: Icon(Icons.search, size: 30,),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    hintText: 'Search Designation',
+                    labelText: 'Search Designation',
+                    suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Designation()),
+                          );
+                        }
+                    ):null,
+                    //focusColor: Colors.white,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      desgname = value;
+                    });
+                  },
+                ),
+              ),
+            ),
+            //Divider(),
+            //SizedBox(height: 5.0),
             Container(
               child: Row(
                 //crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +151,7 @@ class _Designation extends State<Designation> {
 
   getDesgWidget() {
     return new FutureBuilder<List<Desg>>(
-      future: getDesignation(),
+      future: getDesignation(desgname),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
@@ -133,15 +168,17 @@ class _Designation extends State<Designation> {
                                 new Container(
                                   width: MediaQuery.of(context).size.width*0.65,
                                   child: new Text(
-                                      snapshot.data[index].desg.toString()),
+                                      snapshot.data[index].desg.toString(),style: TextStyle(
+                                      fontSize: 14, fontWeight: FontWeight.bold)),
                                 ),
                                 new Container(
                                   child: new Text(
                                     snapshot.data[index].status.toString(),
                                     style: TextStyle(
+                                        fontSize: 14,
                                         color: snapshot.data[index].status
                                             .toString() != 'Active' ? Colors
-                                            .deepOrange : Colors.green),),
+                                            .red : Colors.green),),
                                 ),
                               ],
                             ),
@@ -288,25 +325,72 @@ class _Designation extends State<Designation> {
                     _isButtonDisabled=true;
                   });
                   updateDesg(new_dept.text,_sts1,did).then((res) {
-                    if(res=='0')
+                    if(res=='0') {
                       //showInSnackBar('Unable to update designation');
-                      showDialog(context: context, child:
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Unable to update designation"),
+                            );
+                          });
+                      /*showDialog(context: context, child:
                       new AlertDialog(
                         content: new Text("Unable to update designation"),
-                      ));
-                    else if(res=='-1')
+                      ));*/
+                    }else if(res=='-1') {
                       //showInSnackBar('Designation name already exist');
-                      showDialog(context: context, child:
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Designation name already exist"),
+                            );
+                          });
+                      /*showDialog(context: context, child:
                       new AlertDialog(
-                      content: new Text("Designation name already exist"),
-                      ));
-                    else {
+                        content: new Text("Designation name already exist"),
+                      ));*/
+                    }else if(res=='-2') {
+                      Navigator.of(context, rootNavigator: true).pop('dialog');
+                      //showInSnackBar('Designation name already exist');
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Employees assigned to this designation therefore can't be updated"),
+                            );
+                          });
+                      /*showDialog(context: context, child:
+                      new AlertDialog(
+                        content: new Text("Employees assigned to this designation therefore can't be updated"),
+                      ));*/
+                    }else {
                       Navigator.of(context, rootNavigator: true).pop('dialog');
                       //showInSnackBar('Designation updated successfully');
-                      showDialog(context: context, child:
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Designation updated successfully"),
+                            );
+                          });
+                      /*showDialog(context: context, child:
                       new AlertDialog(
                       content: new Text("Designation updated successfully"),
-                      ));
+                      ));*/
                       getDesgWidget();
                       new_dept.text = '';
                       _sts1 = 'Active';

@@ -197,15 +197,13 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                         ),
                       ]
                   ),
-
                   Container(
-                    padding: EdgeInsets.only(top:12.0),
+                    padding: EdgeInsets.only(top:5.0),
                     child:Center(
                       child:Text("Team's Leave",
                         style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
                     ),
                   ),
-
                   Container(
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
@@ -225,10 +223,11 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                           suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
                               onPressed: () {
                                 _searchController.clear();
+                                empname='';
                                 /*Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => EmployeeList()),
-                            );*/
+                                  context,
+                                  MaterialPageRoute(builder: (context) => EmployeeList()),
+                                );*/
                               }
                           ):null,
                           //focusColor: Colors.white,
@@ -236,15 +235,12 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                         onChanged: (value) {
                           setState(() {
                             empname = value;
-                            print("empname");
-                            print(empname);
                             res = true;
                           });
                         },
                       ),
                     ),
                   ),
-
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     //crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,8 +275,6 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                       child: new FutureBuilder<List<LeaveA>>(
                         future: getTeamApprovals(empname),
                         builder: (context, snapshot) {
-                          print("empnamevanshika");
-                          print(empname);
                           if (snapshot.hasData) {
                             if (snapshot.data.length>0) {
                               return new ListView.builder(
@@ -555,12 +549,22 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                               Navigator.pop(context);
                               showDialog(
                                   context: context,
+                                  builder: (context) {
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context).pop(true);
+                                    });
+                                    return AlertDialog(
+                                      content: new Text("Leave application approved successfully."),
+                                    );
+                                  });
+                              /*showDialog(
+                                  context: context,
                                   builder: (_) =>
                                   new AlertDialog(
                                     //title: new Text("Dialog Title"),
                                     content: new Text("Leave application approved successfully."),
                                   )
-                              );
+                              );*/
                               await new Future.delayed(const Duration(seconds: 2));
                               Navigator.pop(context);
                               Navigator.push(
@@ -570,12 +574,22 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                             }else{
                               showDialog(
                                   context: context,
+                                  builder: (context) {
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context).pop(true);
+                                    });
+                                    return AlertDialog(
+                                      content: new Text("Leave application Could not be approved."),
+                                    );
+                                  });
+                              /*showDialog(
+                                  context: context,
                                   builder: (_) =>
                                   new AlertDialog(
                                     //title: new Text("Dialog Title"),
                                     content: new Text("Leave application Could not be approved."),
                                   )
-                              );
+                              );*/
                             }
                           },
                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0),),
@@ -603,12 +617,22 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                               Navigator.pop(context);
                               showDialog(
                                   context: context,
+                                  builder: (context) {
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context).pop(true);
+                                    });
+                                    return AlertDialog(
+                                      content: new Text("Leave application rejected successfully."),
+                                    );
+                                  });
+                              /*showDialog(
+                                  context: context,
                                   builder: (_) =>
                                   new AlertDialog(
                                     //title: new Text("Dialog Title"),
                                     content: new Text("Leave application rejected successfully."),
                                   )
-                              );
+                              );*/
                               await new Future.delayed(const Duration(seconds: 2));
                               Navigator.pop(context);
                               Navigator.push(
@@ -618,12 +642,22 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                             }else{
                               showDialog(
                                   context: context,
+                                  builder: (context) {
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context).pop(true);
+                                    });
+                                    return AlertDialog(
+                                      content: new Text("Leave application could not be rejected"),
+                                    );
+                                  });
+                              /*showDialog(
+                                  context: context,
                                   builder: (_) =>
                                   new AlertDialog(
                                     //title: new Text("Dialog Title"),
                                     content: new Text("Leave application could not be rejected."),
                                   )
-                              );
+                              );*/
                             }
                           },
                           shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))

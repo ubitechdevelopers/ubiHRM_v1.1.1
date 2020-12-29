@@ -306,8 +306,9 @@ class _TimeOffPageState extends State<TimeOffPage> {
                                   final endTime = DateTime(2018, 6, 23,int.parse(arr1[0]),int.parse(arr1[1]),00,00);
                                   if(endTime.isBefore(startTime)){
                                     return '\"To Time\" can\'t be smaller.';
+                                  }else if(startTime.isAtSameMomentAs(endTime)){
+                                    return '\"To Time\" can\'t be equal.';
                                   }
-
                                 },
                               ),
                             ),
@@ -320,6 +321,8 @@ class _TimeOffPageState extends State<TimeOffPage> {
                             Expanded(
                               child:  TextFormField(
                                 controller: _reasonController,
+                                keyboardType: TextInputType.text,
+                                textCapitalization: TextCapitalization.sentences,
                                 decoration: InputDecoration(
                                     labelText: 'Reason',
                                     prefixIcon: Padding(
@@ -395,57 +398,117 @@ class _TimeOffPageState extends State<TimeOffPage> {
         context,
         MaterialPageRoute(builder: (context) => TimeoffSummary()),
       );
-      showDialog(context: context, child:
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Time Off applied successfully."),
+            );
+          });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Time Off applied successfully.'),
       )
-      );
+      );*/
     }else if(islogin=="1"){
-      showDialog(context: context, child:
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("There is some problem while applying Time Off."),
+            );
+          });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('There is some problem while applying Time Off.'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling=false;
       });
     }else if(islogin=="2"){
-      showDialog(context: context, child:
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Time Off already exists."),
+            );
+          });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Time Off already exists.'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling=false;
       });
     }else if(islogin=="3"){
-      showDialog(context: context, child:
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Time Off should be between shift timing"),
+            );
+          });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Time Off should be between shift timing'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling=false;
       });
     }else if(islogin=="4"){
-      showDialog(context: context, child:
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("You can not apply for a TimeOff more than decided hours"),
+            );
+          });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('You can not apply for a TimeOff more than decided hours'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling=false;
       });
     }else if(islogin=="5"){
-      showDialog(context: context, child:
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("This month's Time Off limit exceeded"),
+            );
+          });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("This month's Time Off limit exceeded"),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling=false;
       });
-    }else if(islogin=="6"){
+    }/*else if(islogin=="6"){
       showDialog(context: context, child:
       new AlertDialog(
         content: new Text("You can not apply for Time Off before marking Time In"),
@@ -463,7 +526,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
       setState(() {
         isServiceCalling=false;
       });
-    }else if(islogin=="false"){
+    }*/else if(islogin=="false"){
       showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Poor Network Connection'),

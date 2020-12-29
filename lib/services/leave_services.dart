@@ -26,11 +26,15 @@ requestLeave(Leave leave) async{
     });
 
     Response response1 = await dio.post(path_hrm_india+"reqForLeave", data: formData);
-    print('*************REQUEST FOR LEAVE***********');
+    print('*************REQUEST FOR LEAVE*************');
     print(path_hrm_india+"reqForLeave?orgid=${leave.orgid}&uid=${leave.uid}&leavefrom=${leave.leavefrom}&leaveto=${leave.leaveto}&leavetypefrom=${leave.leavetypefrom}&leavetypeto=${leave.leavetypeto}&halfdayfromtype=${leave.halfdayfromtype}&halfdaytotype=${leave.halfdaytotype}&leavetypeid=${leave.leavetypeid}&reason=${leave.reason}&substituteemp=${leave.substituteemp}&compoffsts=${leave.compoffsts}");
     final leaveMap = response1.data.toString();
-    if (leaveMap.contains("false")) {
-      return "false";
+    if (leaveMap.contains("false1")) {
+      return "false1";
+    } else if (leaveMap.contains("false2")) {
+      return "false2";
+    } else if (leaveMap.contains("false3")) {
+      return "false3";
     } else if (leaveMap.contains("wrong")) {
       return "wrong";
     } else if (leaveMap.contains("You cannot apply more than credited leaves")) {
@@ -42,8 +46,7 @@ requestLeave(Leave leave) async{
     } else {
       return "true";
     }
-  }
-  catch(e){
+  } catch(e){
     print(e.toString());
     return "No Connection";
   }
@@ -259,23 +262,23 @@ class LeaveA {
   String LeaveType;
 
   LeaveA({ this.Id,
-        this.name,
-        this.Leavests,
-        this.Reason,
-        this.applydate,
-        this.Fdate,
-        this.Tdate,
-        this.Psts,
-        this.Ldays,
-        this.HRSts,
-        this.DivHrSts,
-        this.FromDayType,
-        this.ToDayType,
-        this.TimeOfTo,
-        this.LeaveTypeId,
-        this.sts,
-        this.LeaveType,
-      });
+    this.name,
+    this.Leavests,
+    this.Reason,
+    this.applydate,
+    this.Fdate,
+    this.Tdate,
+    this.Psts,
+    this.Ldays,
+    this.HRSts,
+    this.DivHrSts,
+    this.FromDayType,
+    this.ToDayType,
+    this.TimeOfTo,
+    this.LeaveTypeId,
+    this.sts,
+    this.LeaveType,
+  });
 }
 
 
@@ -408,8 +411,6 @@ ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
 
 
 Future<List<LeaveA>> getTeamApprovals(empname) async {
-  print("empname354435453456657");
-  print(empname);
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('organization') ??"";
@@ -520,8 +521,10 @@ List<LeaveA> createTeamleaveapporval(List data, String empname) {
           sts :sts);
       list.add(tos);
     }
+
   return list;
 }
+
 
 
 class EmpListLeave {
@@ -537,7 +540,7 @@ class EmpListLeave {
 }
 
 
-Future<List<EmpListLeave>> getEmployeeLeaveList(date,emp) async {
+Future<List<EmpListLeave>> getEmployeeLeaveList(String date, String empname) async {
   Dio dio = new Dio();
   if (date == '' || date == null) return null;
   try {
@@ -549,29 +552,57 @@ Future<List<EmpListLeave>> getEmployeeLeaveList(date,emp) async {
     int adminsts =prefs.getInt('adminsts')??0;
     int dataaccess = prefs.getInt('dataaccess')??0;
     int divhrsts = prefs.getInt('divhrsts')??0;
-    print(path_hrm_india + 'getEmployeeLeaveList?fd=$date&orgid=$orgid&empid=$empid&emp=$emp&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-    final response = await dio.post(path_hrm_india + 'getEmployeeLeaveList?fd=$date&orgid=$orgid&empid=$empid&emp=$emp&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+    print(path_hrm_india + 'getEmployeeLeaveList?fd=$date&orgid=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+    final response = await dio.post(path_hrm_india + 'getEmployeeLeaveList?fd=$date&orgid=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
     List responseJson = json.decode(response.data.toString());
-    List<EmpListLeave> list = createEmployeeLeaveDataList(responseJson);
+    List<EmpListLeave> list = createEmployeeLeaveDataList(responseJson,empname);
     return list;
   }catch(e){
     print(e.toString());
   }
 }
 
-List<EmpListLeave> createEmployeeLeaveDataList(List data) {
+List<EmpListLeave> createEmployeeLeaveDataList(List data, String empname) {
   List<EmpListLeave> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String days = data[i]["days"];
-    String to = data[i]["to"];
-    String from = data[i]["from"];
-    String name = data[i]["name"];
-    String date = data[i]["date"];  //this is leave appy date
-    String leavetype = data[i]["leavetype"];
-    String breakdown = data[i]["breakdown"];
-    EmpListLeave row = new EmpListLeave(
-        days: days, to: to, from: from, name: name, date: date, leavetype: leavetype, breakdown: breakdown);
-    list.add(row);
+  if(empname.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      String days = data[i]["days"];
+      String to = data[i]["to"];
+      String from = data[i]["from"];
+      String name = data[i]["name"];
+      String date = data[i]["date"]; //this is leave appy date
+      String leavetype = data[i]["leavetype"];
+      String breakdown = data[i]["breakdown"];
+      EmpListLeave row = new EmpListLeave(
+          days: days,
+          to: to,
+          from: from,
+          name: name,
+          date: date,
+          leavetype: leavetype,
+          breakdown: breakdown);
+      if(name.toLowerCase().contains(empname.toLowerCase()))
+        list.add(row);
+    }
+  }else {
+    for (int i = 0; i < data.length; i++) {
+      String days = data[i]["days"];
+      String to = data[i]["to"];
+      String from = data[i]["from"];
+      String name = data[i]["name"];
+      String date = data[i]["date"]; //this is leave appy date
+      String leavetype = data[i]["leavetype"];
+      String breakdown = data[i]["breakdown"];
+      EmpListLeave row = new EmpListLeave(
+          days: days,
+          to: to,
+          from: from,
+          name: name,
+          date: date,
+          leavetype: leavetype,
+          breakdown: breakdown);
+      list.add(row);
+    }
   }
   return list;
 }

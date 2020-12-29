@@ -38,6 +38,10 @@ class User{
 
 class Employee {
   final String employeeid;
+  final String empemail;
+  final String empnumber;
+  final String email;
+  final String number;
   final String organization;
   final String userprofileid;
   int profiletype;
@@ -49,6 +53,10 @@ class Employee {
 
   Employee({
     this.employeeid,
+    this.empemail,
+    this.empnumber,
+    this.email,
+    this.number,
     this.organization,
     this.userprofileid,
     this.profiletype,
@@ -60,18 +68,26 @@ class Employee {
   });
 
   Employee.fromJson(Map<String, dynamic> json)
-    : employeeid = json['employeeid'],
-      organization = json['organization'],
-      userprofileid = json['userprofileid'],
-      profiletype = json['profiletype'],
-      hrsts = json['hrsts'],
-      adminsts = json['adminsts'],
-      dataaccess = json['dataaccess'],
-      SAPintegrationsts = json['SAPintegrationsts'],
-      divhrsts = json['divhrsts'];
+      : employeeid = json['employeeid'],
+        empemail = json['empemail'],
+        empnumber = json['empnumber'],
+        email = json['email'],
+        number = json['number'],
+        organization = json['organization'],
+        userprofileid = json['userprofileid'],
+        profiletype = json['profiletype'],
+        hrsts = json['hrsts'],
+        adminsts = json['adminsts'],
+        dataaccess = json['dataaccess'],
+        SAPintegrationsts = json['SAPintegrationsts'],
+        divhrsts = json['divhrsts'];
 
   Map<String, dynamic> toJson() => {
     'employeeid': employeeid,
+    'empemail': empemail,
+    'empnumber': empnumber,
+    'email': email,
+    'number': number,
     'organization': organization,
     'userprofileid': userprofileid,
     'profiletype': profiletype,
@@ -167,11 +183,15 @@ class Leave{
 
 
 class Holi{
+  String id;
   String name;
   String date;
   String message;
+  String DateFrom;
+  String DateTo;
+  String Duration;
 
-  Holi({this.name, this.date, this.message});
+  Holi({this.id, this.name, this.date, this.message, this.DateFrom, this.DateTo, this.Duration});
 }
 
 

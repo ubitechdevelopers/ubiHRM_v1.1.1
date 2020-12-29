@@ -14,8 +14,9 @@ class LateComers extends StatefulWidget {
   @override
   _LateComers createState() => _LateComers();
 }
+
 TextEditingController today;
-TextEditingController late;
+
 //FocusNode f_dept ;
 class _LateComers extends State<LateComers> {
   final GlobalKey<ScaffoldState> _scaffoldKey=new GlobalKey<ScaffoldState>();
@@ -29,26 +30,22 @@ class _LateComers extends State<LateComers> {
   String empname = "";
   String countL='0';
   bool filests=false;
-  Future<List<EmpList>> _listFuture;
-
+  //Future<List<EmpList>> _listFuture;
   var formatter=new DateFormat('dd-MMM-yyyy');
   TextEditingController _searchController;
   FocusNode searchFocusNode;
-
 
   @override
   void initState() {
     super.initState();
     today=new TextEditingController();
     today.text=formatter.format(DateTime.now());
-    late = new TextEditingController();
-    _searchController = new TextEditingController();
-    searchFocusNode = FocusNode();
     showtabbar=false;
     profileimage=new NetworkImage(globalcompanyinfomap['ProfilePic']);
-    // f_dept = FocusNode();
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     getOrgName();
-    _listFuture=getLateEmpDataList(today.text, empname);
+    //_listFuture=getLateEmpDataList(today.text,empname);
   }
 
   getOrgName() async {
@@ -148,7 +145,7 @@ class _LateComers extends State<LateComers> {
                               if (date != null && date.toString() != '') {
                                 res=true; //showInSnackBar(date.toString());
                                 //_listFuture=getLateEmpDataList(today.text,empname);
-                                getLateEmpDataList(today.text,empname);
+                                //getLateEmpDataList(today.text,empname);
                               } else {
                                 res=false;
                                 countL='0';
@@ -162,6 +159,9 @@ class _LateComers extends State<LateComers> {
                           },
                         ),
                       ),
+                    ),
+                    Divider(
+                      height: 5.0,
                     ),
                     /* Padding(
                       padding: const EdgeInsets.only(left: 4.0),
@@ -306,7 +306,7 @@ class _LateComers extends State<LateComers> {
                     Expanded(
                       child: Container(
                         child: Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
                             controller: _searchController,
                             focusNode: searchFocusNode,
@@ -320,18 +320,18 @@ class _LateComers extends State<LateComers> {
                               floatingLabelBehavior: FloatingLabelBehavior.always,
                               hintText: 'Search Employee',
                               labelText: 'Search Employee',
-                              suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                              /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
                                   onPressed: () {
                                     _searchController.clear();
-                                    /*Navigator.push(
+                                    //getLateEmpDataList(today.text,empname);
+                                    //res = true;
+                                    Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) => LateComers()),
-                                    );*/
-                                    /*Navigator.pop(
-                                      context);*/
+                                    );
+                                    Navigator.pop(context);
                                   }
-                              ):null,
-                              //focusColor: Colors.white,
+                              ):null,*/
                             ),
                             onChanged: (value) {
                               setState(() {
@@ -339,7 +339,6 @@ class _LateComers extends State<LateComers> {
                                 print(value);
                                 empname = value;
                                 res = true;
-                                //getLateEmpDataList(today.text, empname);
                               });
                             },
                           ),
@@ -348,6 +347,10 @@ class _LateComers extends State<LateComers> {
                     ),
                   ],
                 ),
+               /* Divider(
+                  height: 5,
+                ),
+                SizedBox(height: 5.0),*/
                 Container(
                   //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
                   width: MediaQuery
@@ -414,7 +417,7 @@ class _LateComers extends State<LateComers> {
                   height: 5.2,
                 ),
                 new Expanded(
-                  child: res == true ? getEmpDataList(today.text,empname) : Container(
+                  child: res == true ? getEmpDataList(today.text) : Container(
                     height: MediaQuery.of(context).size.height*0.25,
                     child:Center(
                       child: Container(
@@ -437,20 +440,18 @@ class _LateComers extends State<LateComers> {
     return new Container(
       child: Center(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            CircularProgressIndicator()
-          ]
-        ),
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+            ]),
       ),
     );
   }
 
-  getEmpDataList(date,empname) {
+  getEmpDataList(date) {
     return new FutureBuilder<List<EmpList>>(
-        future: getLateEmpDataList(today.text, empname),
-       // getLateEmpDataList(today.text, empname);
+        //future: _listFuture,
+        future: getLateEmpDataList(today.text,empname),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             countL=snapshot.data.length.toString();

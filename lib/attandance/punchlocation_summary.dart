@@ -62,7 +62,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
     super.initState();
     initPlatformState();
     getOrgName();
-    setLocationAddress();
+    //setLocationAddress();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
   }
@@ -89,7 +89,6 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
     });
 
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-    //      print("ABCDEFGHI-"+profile);
     profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
@@ -99,7 +98,8 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
     }));
     showtabbar=false;
   }
-  setLocationAddress() async {
+
+/*  setLocationAddress() async {
     if(mounted) {
       setState(() {
         streamlocationaddr=globalstreamlocationaddr;
@@ -116,11 +116,11 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
         }
         //print("home addr" + streamlocationaddr);
         //print(lat + ", " + long);
-
         //print(stopstreamingstatus.toString());
       });
     }
   }
+
   startTimer() {
     const fiveSec = const Duration(seconds: 5);
     int count = 0;
@@ -134,7 +134,8 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
         //print("timer canceled");
       }
     });
-  }
+  }*/
+
   // This widget is the root of your application.
   void showInSnackBar(String value) {
     final snackBar = SnackBar(
@@ -143,18 +144,13 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
   }
 
   Future<bool> sendToHome() async{
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );*/
-    print("-------> back button pressed");
-    //  return false;
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
     );
     return false;
   }
+
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
@@ -195,7 +191,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
   }
   /////////////
   _showDialog(visit_id) async {
-    sl.startStreaming(2);
+    //sl.startStreaming(2);
     setState(() {
       if(list!=null && list.length>0) {
         latit = list[list.length - 1].latitude.toString();
@@ -238,7 +234,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                   isServiceCalling = true;
                 });
                 print("----> service calling "+isServiceCalling.toString());
-                sl.startStreaming(5);
+                //sl.startStreaming(5);
                 SaveImage saveImage = new SaveImage();
                 Navigator.of(context, rootNavigator: true).pop();
                 saveImage.saveVisitOut(empid,streamlocationaddr.toString(),visit_id.toString(),latit,longi,_comments.text,orgid).then((res){
@@ -247,31 +243,61 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                       context,
                       MaterialPageRoute(builder: (context) => PunchLocationSummary()),
                     );
-                    showDialog(context: context, child:
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
+                          });
+                          return AlertDialog(
+                            content: new Text("Visit punched successfully!"),
+                          );
+                        });
+                    /*showDialog(context: context, child:
                     new AlertDialog(
                       content: new Text("Visit punched successfully!"),
                     )
-                    );
+                    );*/
                   }else{
                     _comments.text='';
-                    showDialog(context: context, child:
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
+                          });
+                          return AlertDialog(
+                            content: new Text("Visit not captured, please punch again!"),
+                          );
+                        });
+                    /*showDialog(context: context, child:
                     new AlertDialog(
-                      //content: new Text("Selfie not captured, please punch again!"),
-                      content: new Text("Attendance was not captured. Please punch again!"),
+                      //title: new Text("Warning!"),
+                      content: new Text("Selfie not captured, please punch again!"),
                     )
-                    );
+                    );*/
                     setState(() {
                       isServiceCalling = false;
                     });
                   }
                 }).catchError((ett){
                   //showInSnackBar('Unable to punch visit');
-                  showDialog(context: context, child:
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        Future.delayed(Duration(seconds: 3), () {
+                          Navigator.of(context).pop(true);
+                        });
+                        return AlertDialog(
+                          content: new Text("Unable to punch visit"),
+                        );
+                      });
+                  /*showDialog(context: context, child:
                   new AlertDialog(
                     //title: new Text("Warning!"),
                     content: new Text('Unable to punch visit'),
                   )
-                  );
+                  );*/
                 });
                 /*       //  Loc lock = new Loc();
                 //   location_addr1 = await lock.initPlatformState();
@@ -285,7 +311,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                 //PunchInOut(comments.text,'','empid', location_addr1, 'lid', 'act', 'orgdir', latit, longi).then((res){
                 SaveImage saveImage = new SaveImage();
                  saveImage.visitOut(comments.text,visit_id,location_addr1,latit, longi).then((res){
-print('visit out called for visit id:'+visit_id);
+                print('visit out called for visit id:'+visit_id);
                 /*
                   Navigator.push(
                     context,

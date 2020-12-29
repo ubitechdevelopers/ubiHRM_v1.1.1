@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/drawer.dart';
 import 'package:ubihrm/global.dart';
+import 'package:ubihrm/home.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'home.dart';
 
@@ -15,7 +16,7 @@ class AboutApp extends StatefulWidget {
 
 class _AboutApp extends State<AboutApp> {
   String org_name = "";
-  String new_ver='1.0.8';
+  String new_ver='1.0.2';
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   getOrgName() async{
@@ -59,7 +60,7 @@ class _AboutApp extends State<AboutApp> {
           leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => HomePageMain()),
             );
           },),
           backgroundColor: appStartColor(),
@@ -71,88 +72,88 @@ class _AboutApp extends State<AboutApp> {
 
   userWidget(){
     return Stack(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-          padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-          decoration: new ShapeDecoration(
-            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
-            color: Colors.white,
-          ),
-          child: ListView(
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  //SizedBox(height: 60,),
-                  Center(
-                    child:Text(
-                        "About ubiHRM",
-                        style: new TextStyle(
-                            fontSize: 30.0,
-                            color:appStartColor(),
-                            fontWeight: FontWeight.w600
-                        )
-                    ),
-                  ),
-                  SizedBox(height: 15,),
-                  Center(
-                    child: Text(
-                      'Installed Version '+appVersion,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                      ),
-                    ),
-                  ),
-                  //SizedBox(height: 15,),
-                  Center(
-                    child: Text(
-                      'Released On '+appVersionReleaseDate,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 15,),
-                  Center(
-                    child: Text(
-                      'Latest Version '+new_ver,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      'Released On '+latestVersionReleaseDate,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 15,),
-                  Center(
-                      child: new_ver==appVersion?Text(
-                        'The latest version is already installed.',
-                        style: TextStyle(
-                            fontSize: 16.0, color: Colors.green
-                        ),
-                      ):Text(
-                        'Please install the latest version.',
-                        style: TextStyle(
-                            fontSize: 16.0, color: Colors.red
-                        ),
-                      )
-                  ),
-                ],
-              ),
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+            padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+            decoration: new ShapeDecoration(
+              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
+              color: Colors.white,
             ),
-          ],
-      ),
-        ),
-    ]
+            child: ListView(
+              children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      //SizedBox(height: 60,),
+                      Center(
+                        child:Text(
+                            "About ubiHRM",
+                            style: new TextStyle(
+                                fontSize: 30.0,
+                                color:appStartColor(),
+                                fontWeight: FontWeight.w600
+                            )
+                        ),
+                      ),
+                      SizedBox(height: 15,),
+                      Center(
+                        child: Text(
+                          'Installed Version '+appVersion,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ),
+                      //SizedBox(height: 15,),
+                      Center(
+                        child: Text(
+                          'Released On '+appVersionReleaseDate,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 15,),
+                      Center(
+                        child: Text(
+                          'Latest Version '+new_ver,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          'Released On '+latestVersionReleaseDate,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 15,),
+                      Center(
+                          child: new_ver==appVersion?Text(
+                            'The latest version is already installed.',
+                            style: TextStyle(
+                                fontSize: 16.0, color: Colors.green
+                            ),
+                          ):Text(
+                            'Please install the latest version.',
+                            style: TextStyle(
+                                fontSize: 16.0, color: Colors.red
+                            ),
+                          )
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ]
     );
   }
 }

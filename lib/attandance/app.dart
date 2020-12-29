@@ -27,17 +27,13 @@ class ShrineApp extends StatefulWidget {
 }
 
 class _ShrineAppState extends State<ShrineApp> {
-  //Map<String, double> _currentLocation;
-  //StreamSubscription<Map<String, double>> _locationSubscription;
-  Location _location = new Location();
   String streamlocationaddr="";
   String lat="";
   String long="";
   int response;
   int responsestate;
-  String cur_ver='1.0.8',new_ver='1.0.8';
+  String cur_ver='1.0.2',new_ver='1.0.2';
   String updatestatus;
-  //Widget _defaultHome = new LoginPage();
 
   @override
   void initState() {
@@ -46,15 +42,12 @@ class _ShrineAppState extends State<ShrineApp> {
     checkNow().then((res){
       setState(() {
         new_ver=res;
-        /*print("new_ver");
-        print(new_ver);*/
       });
     });
+
     UpdateStatus().then((res){
       setState(() {
         updatestatus = res;
-        /*print("updatestatus");
-        print(updatestatus);*/
       });
     });
   }
@@ -63,28 +56,16 @@ class _ShrineAppState extends State<ShrineApp> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       response = prefs.getInt('response') ?? 0;
-      //print("Response "+response.toString());
     });
   }
-  // Set default home.
-  // Get result of the login function.
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ubiHRM',
       home:((cur_ver == new_ver || new_ver=="error") || updatestatus=='0')?HomePageMain():CheckUpdate(),
-      //home: (true)?HomePage():CheckUpdate(),
-      /*routes: {
-        // When we navigate to the "/" route, build the FirstScreen Widget
-        'ubihrm/login_page': (context) => LoginPage(),
-        // When we navigate to the "/second" route, build the SecondScreen Widget
-        'ubihrm/home': (context) => HomePageMain()
-      },*/
     );
   }
-
-/*getUpdate(response){
-    return (response==1) ? new HomePageMain() : new LoginPage();
-  }*/
 }
+
+

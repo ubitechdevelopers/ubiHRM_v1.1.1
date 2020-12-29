@@ -1,21 +1,23 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart';
+import 'package:ubihrm/global.dart' as globals;
+import 'package:http/http.dart' as http;
 import 'package:ubihrm/model/model.dart';
-
 import '../login_page.dart';
 
 
 
 getAllPermission(Employee emp) async{
-print("**********GET ALL PERMISSION**********");
+  print("**********GET ALL PERMISSION**********");
   //final prefs = await SharedPreferences.getInstance();
   //String path1 = prefs.getString('path');
   Dio dio = new Dio();
@@ -92,7 +94,6 @@ List<Permission> createUserPermList(List data) {
 getModuleUserPermission(String moduleid, String permission_type){
   List<Permission> list = new List();
   list = globalpermissionlist1;
-
   for (int i = 0; i < list.length; i++) {
     if(list[i].moduleid==moduleid){
       for (int j = 0; j < list[i].permissionlist.length; j++) {
@@ -128,35 +129,137 @@ getProfileInfo(Employee emp, BuildContext context) async{
       globalcompanyinfomap = responseJson['Company'];
       globalprofileinfomap = responseJson['ProfilePic'];
       globalogrperminfomap = responseJson['Orgperm'];
-      prefs.setString("profilepic", responseJson['ProfilePic']);
+      globallabelinfomap = responseJson['Label'];
+      geoFenceOrgPerm=globalogrperminfomap['geofencests'];
+      orgCreatedDate=globalogrperminfomap['createddate'];
+      print("orgCreatedDate");
+      print(orgCreatedDate);
+      mailVerifySts=globalogrperminfomap['mailverifiedsts'];
+      print("mailVerifySts");
+      print(mailVerifySts);
+      showMailVerificationDialog=globalogrperminfomap['mailverificationdialogsts'];
+      print("showMailVerificationDialog");
+      print(showMailVerificationDialog);
+
+      print("responseJson['Personal']");
+      print(responseJson['Personal']);
+      print(responseJson['Label']);
+      print(globallabelinfomap['EmployeeCode']);
+      assignedAreaIds=globalcompanyinfomap['AssignedAreaIds'];
+      prefs.setString("assignedAreaIds", responseJson['AssignedAreaIds']);
+      fenceAreaSts=globalcompanyinfomap['UserFenceAreaPerm'];
+      prefs.setString("fenceAreaSts", responseJson['UserFenceAreaPerm']);
+      areaSts= await getAreaStatus();
+      print("***************************************************");
+      print("assignedAreaIds && perGeoFence");
+      print((geoFenceOrgPerm=="1" || fenceAreaSts=="1"));
+      print((assignedAreaIds.isNotEmpty && perGeoFence=="1"));
+      print(globalcompanyinfomap['AssignedAreaIds']);
+      print(globalcompanyinfomap['Areas']);
+      print(globalcompanyinfomap['Areas'][0]['id']);
+      print(perGeoFence);
+      print(geoFenceOrgPerm);
+      print(fenceAreaSts);
+      print(areaSts);
+      print("***************************************************");
+      List areas = globalcompanyinfomap['Areas'];
+      double calculateDistance(lat1, lon1, lat2, lon2) {
+        var p = 0.017453292519943295;
+        var c = cos;
+        var a = 0.5 - c((lat2 - lat1) * p) / 2 +
+            c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+        return 12742 * asin(sqrt(a));
+      }
+      double totalDistance = 0.0;
+      double lat = globals.assign_lat;
+      double long = globals.assign_long;
+      for (var i = 0; i < areas.length; i++) {
+        double user_lat = double.parse(areas[i]['lat']);
+        double user_long = double.parse(areas[i]['long']);
+        globals.assign_radius = double.parse(areas[i]['radius']);
+
+        double Temp_totalDistance = calculateDistance(user_lat, user_long, lat, long);
+        if (i == 0) {
+          totalDistance = Temp_totalDistance;
+          globals.areaId = int.parse(areas[i]['id']);
+          globals.assigned_lat = double.parse(areas[i]['lat']);
+          globals.assigned_long = double.parse(areas[i]['long']);
+          globals.assign_radius = double.parse(areas[i]['radius']);
+        }else {
+          if (totalDistance > Temp_totalDistance) {
+            totalDistance = Temp_totalDistance;
+            globals.areaId = int.parse(areas[i]['id']);
+            globals.assigned_lat = double.parse(areas[i]['lat']);
+            globals.assigned_long = double.parse(areas[i]['long']);
+            globals.assign_radius = double.parse(areas[i]['radius']);
+          }
+        }
+      }
       return "true";
     }else if(responseJson['Status']=='b'){
       prefs.remove('response');
       Navigator.pushAndRemoveUntil(
         context, MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
       );
-      showDialog(context: context, child:
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Your plan has expired!"),
+            );
+          });
+     /* showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Your plan has expired!"),
       )
-      );
+      );*/
       return "false2";
     }else if(responseJson['Status']=='a'){
       prefs.remove('response');
       Navigator.pushAndRemoveUntil(
         context, MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
       );
-      showDialog(context: context, child:
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Your trial period has expired!"),
+            );
+          });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Your trial period has expired!"),
       )
-      );
+      );*/
       return "false1";
     }
   }catch(e){
     //print(e.toString());
     return "Poor network connection";
   }
+}
+
+updateCounter() async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')?? '';
+  print(path + 'updateCounter?&orgid=$orgdir&empid=$empid');
+  final response = await http.get(path + 'updateCounter?&orgid=$orgdir&empid=$empid');
+  print (response.body.toString());
+  return response.body.toString();
+}
+
+verification(String orgid, String name, String email) async {
+  print(path_ubiattendance + 'mailVerification?&orgid=$orgid&empemail=$email&name=$name');
+  final response = await http.get(path_ubiattendance + 'mailVerification?&orgid=$orgid&email=$email&name=$name');
+  print (response.body.toString());
+  return response.body.toString();
 }
 
 getfiscalyear(Employee emp) async{
@@ -217,6 +320,27 @@ getovertime(Employee emp) async{
 
 }
 
+/*getCountAproval() async{
+  final prefs = await SharedPreferences.getInstance();
+  //String path1 = prefs.getString('path');
+  Dio dio = new Dio();
+  String orgdir = prefs.getString('organization') ?? '';
+  String empid = prefs.getString('employeeid')??"";
+
+  var response =  await dio.post(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
+  print(path+"getapprovalCount?empid="+empid+"&orgid="+orgdir);
+  Map responseJson = json.decode(response.data.toString());
+
+  if(responseJson['total']>0) {
+    prefs.setInt('approvalcount', responseJson['total']);
+    return true;
+  }else{
+    prefs.setInt('approvalcount', responseJson['total']);
+    return false;
+  }
+
+}*/
+
 getCountAproval() async{
   final prefs = await SharedPreferences.getInstance();
   //String path1 = prefs.getString('path');
@@ -231,11 +355,11 @@ getCountAproval() async{
   print("timeoff>>>>>>>>>> "+perTimeoffApproval);
   print("salary expense>>>>>>>>>>> "+perSalaryExpenseApproval);
   print("payroll expense>>>>>>>>>>> "+perPayrollExpenseApproval);
-  int leavecount=0;
-  int timeoffcount=0;
-  int expensecount=0;
-  int payrollexpensecount=0;
-  int total=0;
+  int leavecount;
+  int timeoffcount;
+  int expensecount;
+  int payrollexpensecount;
+  int total;
 
   if(perLeaveApproval=='1') {
     print(path + "getLeaveApprovalCount?empid=" + empid + "&orgid=" + orgdir);
@@ -244,7 +368,10 @@ getCountAproval() async{
     prefs.setInt('leavecount', responseJson1['leavecount']);
     leavecount = prefs.getInt('leavecount')??"";
     print(leavecount);
+  }else{
+    leavecount=0;
   }
+
   if(perTimeoffApproval=='1') {
     print(path + "getTimeoffApprovalCount?empid=" + empid + "&orgid=" + orgdir);
     var response = await dio.post(path + "getTimeoffApprovalCount?empid=" + empid + "&orgid=" + orgdir);
@@ -252,7 +379,10 @@ getCountAproval() async{
     prefs.setInt('timeoffcount', responseJson2['timeoffcount']);
     timeoffcount = prefs.getInt('timeoffcount')??"";
     print(timeoffcount);
+  }else{
+    timeoffcount=0;
   }
+
   if(perSalaryExpenseApproval=='1') {
     print(path + "getSalaryExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
     var response = await dio.post(path + "getSalaryExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
@@ -260,7 +390,10 @@ getCountAproval() async{
     prefs.setInt('expensecount', responseJson3['expensecount']);
     expensecount = prefs.getInt('expensecount')??"";
     print(expensecount);
+  }else{
+    expensecount=0;
   }
+
   if(perPayrollExpenseApproval=='1') {
     print(path + "getPayrollExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
     var response = await dio.post(path + "getPayrollExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
@@ -268,13 +401,18 @@ getCountAproval() async{
     prefs.setInt('payrollexpensecount', responseJson4['payrollexpensecount']);
     payrollexpensecount = prefs.getInt('payrollexpensecount')??"";
     print(payrollexpensecount);
+  }else{
+    payrollexpensecount=0;
   }
 
   total = leavecount+timeoffcount+expensecount+payrollexpensecount;
   print(total);
-  if(total>=0) {
+  if(total>0) {
     prefs.setInt('approvalcount', total);
     return true;
+  } else {
+    prefs.setInt('approvalcount', total);
+    return false;
   }
 
 }
@@ -294,31 +432,29 @@ getReportingTeam(Employee emp) async{
     //print(e.toString());
     return "Poor network connection";
   }
+
 }
 
 Future<List<Team>> getTeamList() async {
   final prefs = await SharedPreferences.getInstance();
   //String path1 = prefs.getString('path');
   Dio dio = new Dio();
+
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
 
   print(path + "getReportingTeam?&employeeid=$empid&organization=$orgdir");
   Response<String> response = await dio.post(path + "getReportingTeam?&employeeid=$empid&organization=$orgdir");
   List responseJson = json.decode(response.data.toString());
-  print("response.data.toString()");
-  print(response.data.toString());
+
   List<Team> teamlist = createTeamList(responseJson);
-  print("teamlist");
-  print(teamlist);
   return teamlist;
+
 }
 
 List<Team> createTeamList(List data) {
   List<Team> list = new List();
   List<dynamic> juniorlist = new List();
-  List<dynamic> superjuniorlist = new List();
-  List<dynamic> ultrasuperjuniorlist = new List();
   for (int i = 0; i < data.length; i++) {
     String Id = data[i]["Id"];
     String FirstName = data[i]["FirstName"];
@@ -331,27 +467,13 @@ List<Team> createTeamList(List data) {
     String ProfilePic = data[i]["ProfilePic"];
     String ParentId = data[i]["ParentId"];
     juniorlist = data[i]["Junior"];
+
     print("juniorlist");
     print(juniorlist);
-    if(juniorlist!=null) {
-      for (int j = 0; j < juniorlist.length; j++) {
-        superjuniorlist =  juniorlist[j]["Junior"];
-        print("superjuniorlist");
-        print(superjuniorlist);
-        if(superjuniorlist!=null){
-          for (int k = 0; k < superjuniorlist.length; k++) {
-            ultrasuperjuniorlist = superjuniorlist[k]["Junior"];
-            print( "ultrasuperjuniorlist" );
-            print( ultrasuperjuniorlist );
-          }
-        }
-      }
-    }
-    Team team = new Team(Id: Id, FirstName: FirstName, LastName: LastName, Designation: Designation, DOB: DOB, Nationality: Nationality, BloodGroup: BloodGroup, CompanyEmail: CompanyEmail, ProfilePic: ProfilePic, ParentId:ParentId, juniorlist:juniorlist, superjuniorlist:superjuniorlist, ultrasuperjuniorlist:ultrasuperjuniorlist);
+    Team team = new Team(Id: Id, FirstName: FirstName, LastName: LastName, Designation: Designation, DOB: DOB, Nationality: Nationality, BloodGroup: BloodGroup, CompanyEmail: CompanyEmail, ProfilePic: ProfilePic, ParentId:ParentId, juniorlist:juniorlist);
     list.add(team);
   }
-  print("list");
-  print(list);
+
   return list;
 }
 
@@ -545,67 +667,52 @@ class profileup {
   }
 
   Future<bool> updateProfilePhoto(int uploadtype, String empid, String orgid) async {
-    //final prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     //String path_hrm_india1 = prefs.getString('path_hrm_india');
     try{
+
       File imagei = null;
       imageCache.clear();
       //for gallery
       if(uploadtype==1){
         imagei = await ImagePicker.pickImage(source: ImageSource.gallery);
-        print("Gallery");
-        print(imagei);
       }
       //for camera
       if(uploadtype==2){
         imagei = await ImagePicker.pickImage(source: ImageSource.camera);
-        print("Camera");
-        print(imagei);
       }
       //for removing photo
       if(uploadtype==3){
         imagei = null;
-        print("remove");
-        print(imagei);
       }
-      print("Selected image information ****************************");
-      print(imagei.toString());
-      print(imagei!=null && imagei!='');
-      if(imagei!=null && imagei!='') {
-        print('hello');
+
+      if(imagei!=null ) {
         FormData formData = new FormData.from({
           "uid": empid,
           "refno": orgid,
           "file": new UploadFileInfo(imagei, "sample.png"),
         });
-        print(UploadFileInfo(imagei, "sample.png"),);
-        print(path_hrm_india+"updateProfilePhoto?uid=$empid&refno=$orgid&file=$imagei");
         Response<String> response1=await dio.post(path_hrm_india+"updateProfilePhoto",data:formData);
-        imagei.deleteSync();
         imageCache.clear();
         Map MarkAttMap = json.decode(response1.data);
-        if (MarkAttMap["status"]){
+        if (MarkAttMap["status"])
           return true;
-        } else {
+        else
           return false;
-        }
       }else if(uploadtype==3 && imagei==null){
-        print("uploadtype==3 && imagei==null");
         FormData formData = new FormData.from({
           "uid": empid,
           "refno": orgid,
         });
-        print(path_hrm_india+"updateProfilePhoto?uid=$empid&refno=$orgid");
         Response<String> response1=await dio.post(path_hrm_india+"updateProfilePhoto",data:formData);
         Map MarkAttMap = json.decode(response1.data);
-        if (MarkAttMap["status"]){
+        if (MarkAttMap["status"])
           return true;
-        } else {
+        else
           return false;
-        }
-      }/*else{
+      }else{
         return false;
-      }*/
+      }
     } catch (e) {
       print(e.toString());
       return false;
@@ -626,3 +733,71 @@ const List<Choice> choices = const <Choice>[
   const Choice(title: 'Rejected'),
 ];
 
+getAddressFromLati( String Latitude, String Longitude) async{
+  try {
+    if (assign_lat.compareTo(0.0) != 0&& assign_lat!=null) {
+      var addresses = await Geocoder.local.findAddressesFromCoordinates(
+          Coordinates(assign_lat, assign_long));
+      var first = addresses.first;
+      var streamlocationaddr = "${first.addressLine}";
+      var city = "${first.locality}";
+
+      globalstreamlocationaddr = streamlocationaddr;
+      globalcity = city;
+      return streamlocationaddr;
+    } else{
+      globalstreamlocationaddr="Location not fetched.";
+
+      return globalstreamlocationaddr;
+    }
+
+  }catch(e){
+    print(e.toString());
+    if (assign_lat.compareTo(0.0) != 0&& assign_lat!=null) {
+      globalstreamlocationaddr = "$Latitude,$Longitude";
+      print("inside iffffffffffffffffffffffffffffffffffffffffffffffsfhjsafhjasfjhffh"+assign_lat.toString());
+    }
+    else{
+      globalstreamlocationaddr="Location not fetched.";
+    }
+
+    return globalstreamlocationaddr;
+  }
+}
+
+Future<String> getAreaStatus() async {
+  double lat = globals.assign_lat;
+  double long = globals.assign_long;
+  double assign_lat = globals.assigned_lat;
+  double assign_long = globals.assigned_long;
+  double assign_radius = globals.assign_radius;
+  print('getareastatusfunctionstart');
+  print(lat);
+  print(long);
+  print(assign_lat);
+  print(assign_long);
+  print('getareastatusfunctionend');
+
+  final prefs = await SharedPreferences.getInstance();
+  String empid = prefs.getString('empid') ?? '';
+  String status = '0';
+  if (empid != null && empid != '' && empid != 0) {
+    double calculateDistance(lat1, lon1, lat2, lon2) {
+      var p = 0.017453292519943295;
+      var c = cos;
+      var a = 0.5 -
+          c((lat2 - lat1) * p) / 2 +
+          c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+      return 12742 * asin(sqrt(a));
+    }
+
+    double totalDistance =
+    calculateDistance(lat, long, assign_lat, assign_long);
+    status = (assign_radius >= totalDistance) ? '1' : '0';
+    print("status");
+    print(status);
+  }
+  print(status);
+  globals.areaSts=status;
+  return status;
+}

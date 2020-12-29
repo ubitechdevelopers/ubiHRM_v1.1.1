@@ -1,19 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_appavailability/flutter_appavailability.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:rounded_modal/rounded_modal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/model.dart';
-import 'package:ubihrm/otpverificationpage.dart';
 import 'package:ubihrm/register_page.dart';
 import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:ubihrm/services/checkLogin.dart';
+import 'package:ubihrm/services/services.dart';
 import 'package:ubihrm/survey.dart';
 
 import 'global.dart';
@@ -68,11 +69,6 @@ class _LoginPageState extends State<LoginPage>
     });
   }
 
-  final FocusNode myFocusNodeEmail = FocusNode();
-  TextEditingController EmailController = new TextEditingController();
-  bool otploader = false;
-
-
   setLocal(var fname, var empid, var  orgid) async {
     prefs = await SharedPreferences.getInstance();
     await prefs.setString('fname',fname);
@@ -85,65 +81,63 @@ class _LoginPageState extends State<LoginPage>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: new Scaffold(
-        key: _scaffoldKey,
-        body: NotificationListener<OverscrollIndicatorNotification>(
-          onNotification: (overscroll) {
-            overscroll.disallowGlow();
-          },
-            child: SingleChildScrollView(
-              child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height >= 640.0 ? MediaQuery.of(context).size.height : 640.0,
-                  decoration: new BoxDecoration(
-                    gradient: new LinearGradient(
-                        colors: [
-                          Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.9),
-                          Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.2)
-                          /*Theme.Colors.loginGradientEnd*/
-                        ],
-                        begin: const FractionalOffset(0.0, 0.0),
-                        end: const FractionalOffset(1.0, 1.0),
-                        stops: [0.0, 1.0],
-                        tileMode: TileMode.clamp),
-                  ),
-                  child:ModalProgressHUD(inAsyncCall: _isServiceCalling,opacity: 0.5,progressIndicator: SizedBox(
-                    child:
-                    new CircularProgressIndicator(
-                        valueColor: new AlwaysStoppedAnimation(appStartColor()),
-                        strokeWidth: 5.0),
-                    height: 40.0,
-                    width: 40.0,),child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-
-                      Padding(
-                        padding: EdgeInsets.only(top: 50.0),
-                        child: new Container(
-                          width: 135.0,
-                          height: 132.0,
-                          decoration: new BoxDecoration(
-                            color: const Color(0xff7c94b6),
-                            image: new DecorationImage(
-                              image:new AssetImage('assets/img/logohrmbg.png'),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: new BorderRadius.all(new Radius.circular(77.0)),
-                            // border: new Border.all(
-                            // color: Colors.red,
-                            //width: 4.0,
-                            // ),
-                          ),
-                        ),
-                      ),
-                      _buildSignIn(context),
+    return new Scaffold(
+      key: _scaffoldKey,
+      body: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: (overscroll) {
+          overscroll.disallowGlow();
+        },
+        child: SingleChildScrollView(
+          child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height >= 640.0 ? MediaQuery.of(context).size.height : 640.0,
+              decoration: new BoxDecoration(
+                gradient: new LinearGradient(
+                    colors: [
+                      Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.9),
+                      Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.2)
+                      /*Theme.Colors.loginGradientEnd*/
                     ],
-                  ),
-                  )
+                    begin: const FractionalOffset(0.0, 0.0),
+                    end: const FractionalOffset(1.0, 1.0),
+                    stops: [0.0, 1.0],
+                    tileMode: TileMode.clamp),
               ),
-            ),
+              child:ModalProgressHUD(inAsyncCall: _isServiceCalling,opacity: 0.5,progressIndicator: SizedBox(
+                child:
+                new CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation(appStartColor()),
+                    strokeWidth: 5.0),
+                height: 40.0,
+                width: 40.0,),child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+
+                  Padding(
+                    padding: EdgeInsets.only(top: 50.0),
+                    child: new Container(
+                      width: 135.0,
+                      height: 132.0,
+                      decoration: new BoxDecoration(
+                        color: const Color(0xff7c94b6),
+                        image: new DecorationImage(
+                          image:new AssetImage('assets/img/logohrmbg.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: new BorderRadius.all(new Radius.circular(77.0)),
+                        // border: new Border.all(
+                        // color: Colors.red,
+                        //width: 4.0,
+                        // ),
+                      ),
+                    ),
+                  ),
+                  _buildSignIn(context),
+                ],
+              ),
+              )
           ),
+        ),
       ),
     );
   }
@@ -153,7 +147,7 @@ class _LoginPageState extends State<LoginPage>
     super.dispose();
   }
 
-  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+  //FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
 
   String token1="";
   String tokenn="";
@@ -167,7 +161,7 @@ class _LoginPageState extends State<LoginPage>
       DeviceOrientation.portraitDown,
     ]);
 
-    _pageController = PageController();
+    /*_pageController = PageController();
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) {
         print('on message $message');
@@ -180,21 +174,24 @@ class _LoginPageState extends State<LoginPage>
       },
     );
 
-    gettokenstate();
+    gettokenstate();*/
   }
 
-  gettokenstate() async{
+  /*gettokenstate() async{
     final prefs = await SharedPreferences.getInstance();
     _firebaseMessaging.getToken().then((token){
       token1 = token;
       prefs.setString("token1", token1);
+      // print(tokenn);
+      // print(token1);
+
     });
-  }
+  }*/
 
   initPlatformState() async {
-    Loc lock = new Loc();
+    /*Loc lock = new Loc();
     location_addr = await lock.loginrequestPermission();
-    print(location_addr);
+    print(location_addr);*/
   }
 
   Widget _buildSignIn(BuildContext context) {
@@ -216,7 +213,7 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.64,
+                    height: MediaQuery.of(context).size.height*0.55,
                     //width: 370.0,
                     //height: 350.0,
                     child: Column(
@@ -224,33 +221,35 @@ class _LoginPageState extends State<LoginPage>
                         Padding(
                           padding: const EdgeInsets.only(top: 20.0, bottom: 0.0, left: 20.0, right: 0.0),
                           child: Row(
-                            children: <Widget>[
-                              Flexible(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*0.55,
+                              children: <Widget>[
+                                Flexible(
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width*0.55,
+                                  ),
                                 ),
-                              ),
-                              Flexible(
-                                child: Container(
-                                    width: MediaQuery.of(context).size.width*0.35,
-                                  /*child: Padding(
+                                Flexible(
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width*0.35,
+                                      /*child: Padding(
                                     padding: EdgeInsets.only(top: 20.0, bottom: 0.0, left: 100.0, right: 10.0),*/
                                       child:GestureDetector(
-                                  onTap: () {
-                                    scan().then((onValue){
-                                      //print("******************** QR value **************************");
-                                      //print(onValue);
-                                      markAttByQR(onValue,context,token1);
-                                    });
-                                  },
-                                  child:  Image.asset(
-                                    'assets/qr.png', height: 35.0, width: 35.0, alignment: Alignment.bottomRight,
+                                        onTap: () {
+                                          scan().then((onValue){
+                                            print("******************** QR value **************************");
+                                            print(onValue);
+                                            print(context);
+                                            print(token1);
+                                            markAttByQR(onValue,context,token1);
+                                          });
+                                        },
+                                        child:  Image.asset(
+                                          'assets/qr.png', height: 35.0, width: 35.0, alignment: Alignment.bottomRight,
+                                        ),
+                                      )
+                                    //),
                                   ),
-                            )
-                                  //),
                                 ),
-                              ),
-                            ]
+                              ]
                           ),
                         ),
                         Padding(
@@ -271,7 +270,7 @@ class _LoginPageState extends State<LoginPage>
                               icon: Icon(
                                 FontAwesomeIcons.userAlt,
                                 color: Colors.black,
-                                size: 20.0,
+                                size: 22.0,
                               ),
                               hintText: "Email/Phone",
                               hintStyle: TextStyle(
@@ -310,7 +309,7 @@ class _LoginPageState extends State<LoginPage>
                                     top: 0.0, bottom: 5.0, left: 0.0, right: 0.0),
                                 child: Icon(
                                   FontAwesomeIcons.lock,
-                                  size: 20.0,
+                                  size: 22.0,
                                   color: Colors.black,
                                 ),
                               ),
@@ -321,7 +320,7 @@ class _LoginPageState extends State<LoginPage>
                                 onTap: _toggle_new,
                                 child: Icon(
                                   _obscureText_new ?Icons.visibility_off:Icons.visibility,
-                                  size: 25.0,
+                                  size: 30.0,
                                   color: Colors.black,
                                 ),
                               ),
@@ -334,19 +333,37 @@ class _LoginPageState extends State<LoginPage>
                               }else{
 
                                 if(loginEmailController.text.trim().isEmpty) {
-                                  showDialog(context: context, child:
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                            content: new Text("Please enter Email or Phone no."),
+                                        );
+                                      });
+                                  /*showDialog(context: context, child:
                                   new AlertDialog(
-
                                     content: new Text("Please enter Email or Phone no."),
                                   )
-                                  );
+                                  );*/
                                 }else if(loginPasswordController.text.trim().isEmpty){
-                                  showDialog(context: context, child:
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Please enter Password."),
+                                        );
+                                      });
+                                  /*showDialog(context: context, child:
                                   new AlertDialog(
-
                                     content: new Text("Please enter Password."),
                                   )
-                                  );
+                                  );*/
                                 }
                               }
                             },
@@ -376,9 +393,9 @@ class _LoginPageState extends State<LoginPage>
                               child: Text(
                                 "Forgot Password?",
                                 style: TextStyle(
-                                  color:appStartColor(),
-                                  fontSize: 14,
-                                  decoration: TextDecoration.underline
+                                    color:appStartColor(),
+                                    fontSize: 14,
+                                    decoration: TextDecoration.underline
                                 ),
                               )
                           ),
@@ -398,7 +415,7 @@ class _LoginPageState extends State<LoginPage>
                             child: RaisedButton(
                               /*highlightColor: Colors.transparent,
                     s           plashColor: Theme.Colors.loginGradientEnd,*/
-                                //color: Color.fromRGBO(0, 166, 90,1.0),
+                              //color: Color.fromRGBO(0, 166, 90,1.0),
                                 color: Colors.orange[800],
                                 //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                                 /* shape: new RoundedRectangleBorder(
@@ -420,18 +437,37 @@ class _LoginPageState extends State<LoginPage>
                                   }else{
 
                                     if(loginEmailController.text.trim().isEmpty) {
-                                      showDialog(context: context, child:
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please enter Email or Phone no."),
+                                            );
+                                          });
+                                      /*showDialog(context: context, child:
                                       new AlertDialog(
-
                                         content: new Text("Please enter Email or Phone no."),
                                       )
-                                      );
+                                      );*/
                                     }else if(loginPasswordController.text.trim().isEmpty){
-                                      showDialog(context: context, child:
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please enter Password."),
+                                            );
+                                          });
+                                      /*showDialog(context: context, child:
                                       new AlertDialog(
                                         content: new Text("Please enter Password."),
                                       )
-                                      );
+                                      );*/
                                     }
                                   }
                                 }
@@ -443,7 +479,7 @@ class _LoginPageState extends State<LoginPage>
                         Row(
                           //mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                             /* Expanded(child: Container(
+                              /* Expanded(child: Container(
                                 margin: EdgeInsets.only(left: 60.0,right:0.0,top: 10.0),
 
                                 child:Text("Not registered?", style: TextStyle(
@@ -462,16 +498,16 @@ class _LoginPageState extends State<LoginPage>
                                   child: new ButtonTheme(
                                     // color:appStartColor(),
                                     child: OutlineButton(
-                                      child: new Text("Company not registered? Sign Up", style: TextStyle(
-                                        color:  Colors.black,
-                                        fontSize: 15.0,),),
-                                      borderSide: BorderSide(color: Colors.orange[800]),
-                                      onPressed: (){
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => Register()),
-                                        );
-                                      }
+                                        child: new Text("Company not registered? Sign Up", style: TextStyle(
+                                          color:  Colors.black,
+                                          fontSize: 15.0,),),
+                                        borderSide: BorderSide(color: Colors.orange[800]),
+                                        onPressed: (){
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => Register()),
+                                          );
+                                        }
                                     ),
                                     // borderSide: BorderSide(color:  appStartColor()),
                                     /* shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))*/
@@ -481,108 +517,6 @@ class _LoginPageState extends State<LoginPage>
                               ),
                             ]
                         ),
-
-                        /*Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              *//* Expanded(child: Container(
-                                margin: EdgeInsets.only(left: 60.0,right:0.0,top: 10.0),
-
-                                child:Text("Not registered?", style: TextStyle(
-                                  color: Colors.black54,fontSize: 14,),),
-                              ),),*//*
-                              Expanded(child: Container(
-                                  height: 50.0,
-                                  //margin: EdgeInsets.only(top: 250.0),
-                                  //width: MediaQuery.of(context).size.width,
-                                  padding: EdgeInsets.only(
-                                      top: 10.0, bottom: 0.0, left: 25.0, right: 25.0),
-                                  decoration: new BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                  ),
-
-                                  child: new ButtonTheme(
-                                    // color:appStartColor(),
-                                    child: OutlineButton(
-                                        child: new Text("Verify Email ID", style: TextStyle(
-                                          color:  Colors.black,
-                                          fontSize: 15.0,),),
-                                        borderSide: BorderSide(color: Colors.orange[800]),
-                                        onPressed: () {
-                                          showDialog(context: context,
-                                            builder: (_) => AlertDialog(
-                                              elevation: 10.0,
-                                              title: Text('Enter Registered Email ID', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),),
-                                              content: new TextFormField(
-                                                focusNode: myFocusNodeEmail,
-                                                controller: EmailController,
-                                                keyboardType: TextInputType.emailAddress,
-                                                style: TextStyle(fontSize: 16.0, color: Colors.black),
-                                                decoration: InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  *//*icon: Icon(
-                                                    FontAwesomeIcons.userAlt,
-                                                    color: Colors.black,
-                                                    size: 22.0,
-                                                  ),*//*
-                                                  hintText: "Email Id",
-                                                  hintStyle: TextStyle(fontSize: 14.0),
-                                                ),
-                                              ),
-                                              actions: <Widget>[
-                                                Padding(
-                                                  padding: const EdgeInsets.only(right:20.0),
-                                                  child: Row(
-                                                    children: <Widget>[
-                                                      RaisedButton(
-                                                        child: Text('SUBMIT'),
-                                                        color: Colors.orange[800],
-                                                        onPressed: () {
-                                                          if(EmailController.text==""){
-                                                            showDialog(context: context, child:
-                                                            new AlertDialog(
-                                                              content: new Text("Please enter registered Mail ID"),
-                                                            ));
-                                                          }else{
-                                                           verifyemail(EmailController.text.trim());
-                                                            print('resendOTP(EmailController);');
-                                                            print(EmailController.text.trim());
-                                                            EmailController.clear();
-                                                            Navigator.of(context, rootNavigator: true).pop();
-                                                            *//* resendOTP(widget.trialOrgId);
-                                                              print('resendOTP(widget.trialOrgId);');
-                                                              print(widget.trialOrgId);*//*
-                                                          }
-                                                        },
-                                                      ),
-                                                      SizedBox(width:10.0),
-                                                      FlatButton(
-                                                        shape: Border.all(color: Colors.orange[800]),
-                                                        child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
-                                                        onPressed: () {
-                                                          Navigator.of(context, rootNavigator: true).pop();
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                       //   Navigator.push(
-                                       //     context,
-                                       //     MaterialPageRoute(builder: (context) => Otp()),
-                                          //);
-                                        }
-                                    ),
-                                    // borderSide: BorderSide(color:  appStartColor()),
-                                    *//* shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))*//*
-
-                                  )
-                              ),
-                              ),
-                            ]
-                        ),*/
                       ],
                     ),
                   ),
@@ -601,7 +535,7 @@ class _LoginPageState extends State<LoginPage>
     });
     Login dologin = Login();
     UserLogin user = new UserLogin(username: username,password: pass,token:token1);
-    dologin.checklogin(user, context).then((res){
+    dologin.checklogin(user, context).then((res) async {
       print("response");
       print(res);
       if(res=='true'){
@@ -613,44 +547,146 @@ class _LoginPageState extends State<LoginPage>
         setState(() {
           _isServiceCalling = false;
         });
-        showDialog(context: context, child:
-        new AlertDialog(
-
-          content: new Text("Your trial period has expired!"),
-        )
-        );
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Your trial period has expired!"),
+              );
+            });
+        /*showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text("Your trial period has expired!"),
+          )
+        );*/
       }else if(res=='false2'){
         setState(() {
           _isServiceCalling = false;
         });
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Your plan has expired!"),
+              );
+            });
+        /*showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text("Your plan has expired!"),
+          )
+        );*/
+      }else if(res=='false3'){
+        setState(() {
+          _isServiceCalling = false;
+        });
+        final prefs = await SharedPreferences.getInstance();
+        String orgid = prefs.getString('orgid')??"";
+        String name = prefs.getString('name')??"";
+        String email = prefs.getString('email')??"";
+        print(orgid+" "+name+" "+email);
+        showDialog(
+          barrierDismissible: false,
+          context: context, child:
+          new AlertDialog(
+            title: new Text("You have not verified your registered mail id, please verify to login again.",
+              style: TextStyle(fontSize: 16.0),),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                RaisedButton(
+                  child: Text(
+                    'VERIFY', style: TextStyle(color: Colors.white),),
+                  color: Colors.orange[800],
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    verification(orgid, name, email).then((result) {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context, child:
+                        new AlertDialog(
+                          title: new Text("Mail verification link has been sent on your registered mail id, by clicking on sent verification link you can verify you mail id",
+                          style: TextStyle(fontSize: 16.0),),
+                          content: RaisedButton(
+                            child: Text('Open Mail', style: TextStyle(color: Colors.white),),
+                            color: Colors.orange[800],
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              openEmailApp(context);
+                            },
+                          ),
+                        )
+                      );
+                    });
+                  },
+                ),
+                FlatButton(
+                  shape: Border.all(color: Colors.orange[800]),
+                  child: Text(
+                    'CANCEL', style: TextStyle(color: Colors.black87),),
+                  onPressed: () {
+                    _exitApp(context);
+                  },
+                ),
+              ],
+            ),
+          )
+        );
+      }else if(res=='false4'){
+        setState(() {
+          _isServiceCalling = false;
+        });
         showDialog(context: context, child:
-        new AlertDialog(
-
-          content: new Text("Your plan has expired!"),
-        )
+          new AlertDialog(
+            content: new Text("Please conatct your admin."),
+          )
         );
       }else{
         setState(() {
           _isServiceCalling = false;
         });
-        showDialog(context: context, child:
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Invalid login credentials."),
+              );
+            });
+        /*showDialog(context: context, child:
         new AlertDialog(
-
           content: new Text("Invalid login credentials."),
         )
-        );
+        );*/
       }
     }).catchError((exp){
+      print(exp);
       setState(() {
         _isServiceCalling=false;
       });
-      showDialog(context: context, child:
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Unable to connect server."),
+            );
+          });
+      /*showDialog(context: context, child:
       new AlertDialog(
-
         content: new Text("Unable to connect server."),
       )
-      );
-    });
+      );*/
+    });;
   }
 
 
@@ -681,98 +717,6 @@ class _LoginPageState extends State<LoginPage>
       _obscureTextSignupConfirm = !_obscureTextSignupConfirm;
     });
   }
-
-  verifyemail(emailid) async{
-    print(path+"verifyemail?emailid=${EmailController.text.trim()}");
-    var url = path+"verifyemail";
-    setState(() {
-      otploader = true;
-    });
-    http.post(url, body: {
-      "emailid": EmailController.text.trim()
-    }).then((response)async{
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        Map data = json.decode(response.body);
-        print("This will return response");
-        print(response.body.toString());
-        print(data["sts"]);
-
-        if(data["sts"].contains("surveynotcompleted")) {
-          setState(() {
-            otploader = false;
-          });
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) =>
-                SurveyForm(
-                  trialOrgId: data["trialorgid"],
-                  orgName: data["orgname"],
-                  name: data["name"],
-                  email: data["email"],
-                  countrycode: data["contcode"],
-                  phone: data["phone"],
-                )), (Route<dynamic> route) => false,
-          );
-        } else if(data["sts"].contains("otpLimitExceeded")){
-          setState(() {
-            otploader = false;
-          });
-          showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text("Otp limit has been exceeded. You need to register again"),
-          ));
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => Register()), (Route<dynamic> route) => false,
-          );
-        } else if(data["sts"].contains("mailnotvarified")){
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => Otp(
-              trialOrgId: data["trialorgid"],
-            )), (Route<dynamic> route) => false,
-          );
-        }else if(data["sts"].contains("alreadyRegistered")){
-          setState(() {
-            otploader = false;
-          });
-          showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text("Your organization has been already registered"),
-          ));
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
-          );
-        }else if(data["sts"].contains("emailIdNotFound")) {
-          setState(() {
-            otploader = false;
-          });
-          showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text("Entered Email ID is not found"),
-          ));
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => Register()), (Route<dynamic> route) => false,
-          );
-        }
-      }
-    }).catchError((onError) {
-      print(onError);
-      setState(() {
-        setState(() {
-          otploader = false;
-        });
-        showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text("Unable to Connect server."),
-        ));
-      });
-    });
-  }
-
 
   /*markAttByQR(var qr, BuildContext context,token1) async{
     Login dologin = Login();
@@ -868,20 +812,30 @@ class _LoginPageState extends State<LoginPage>
       setState(() {
         loader = false;
       });
-      showDialog(
-          context : context,
-          builder: (_) => new
-          AlertDialog(
-            //title: new Text("Dialog Title"),
-            content: new Text("Successfully logged in!"
-            ),
-          )
-      );
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
       );
-       Scaffold.of(context)
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Successfully Logged In"),
+            );
+          });
+      /*showDialog(
+          context : context,
+          builder: (_) => new
+          AlertDialog(
+            //title: new Text("Dialog Title"),
+            content: new Text("Successfully Logged In"
+            ),
+          )
+      );*/
+      Scaffold.of(context)
           .showSnackBar(
           SnackBar(content: Text("Attendance marked successfully.")));
     }else if(islogin=="failure"){
@@ -889,6 +843,16 @@ class _LoginPageState extends State<LoginPage>
         loader = false;
       });
       showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Invalid login"),
+            );
+          });
+      /*showDialog(
           context : context,
           builder: (_) => new
           AlertDialog(
@@ -896,13 +860,13 @@ class _LoginPageState extends State<LoginPage>
             content: new Text("Invalid login."
             ),
           )
-      );
+      );*/
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
       );
 
-        Scaffold.of(context)
+      Scaffold.of(context)
           .showSnackBar(
           SnackBar(content: Text("Invalid login credentials")));
     }else if(islogin=="imposed"){
@@ -914,7 +878,8 @@ class _LoginPageState extends State<LoginPage>
           builder: (_) => new
           AlertDialog(
             //title: new Text("Dialog Title"),
-            content: new Text("Invalid login."),
+            content: new Text("Invalid login."
+            ),
           )
       );
     }else{
@@ -954,18 +919,18 @@ class _LoginPageState extends State<LoginPage>
 
   _modalBottomSheet(context) async{
     showRoundedModalBottomSheet(
-      context: context,
-      color:Colors.grey[100],
-      builder: (BuildContext bc){
-        return new  Container(
-          //height: 250.0,
-          height: MediaQuery.of(context).size.height*0.38,
-          child: new Container(
-            decoration: new BoxDecoration(
-            color: appStartColor().withOpacity(0.1),
-              borderRadius: new BorderRadius.only(
-                topLeft: const Radius.circular(0.0),
-                topRight: const Radius.circular(0.0))),
+        context: context,
+        color:Colors.grey[100],
+        builder: (BuildContext bc){
+          return new  Container(
+            //height: 250.0,
+            height: MediaQuery.of(context).size.height*0.38,
+            child: new Container(
+              decoration: new BoxDecoration(
+                  color: appStartColor().withOpacity(0.1),
+                  borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(0.0),
+                      topRight: const Radius.circular(0.0))),
               alignment: Alignment.topCenter,
               child: Center(
                 child: Column(
@@ -985,8 +950,8 @@ class _LoginPageState extends State<LoginPage>
                                 child: Container(
                                   width: MediaQuery.of(context).size.width*.9,
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
 
                                   ),
                                   child: TextFormField(
@@ -994,7 +959,7 @@ class _LoginPageState extends State<LoginPage>
                                     focusNode: __username,
                                     keyboardType: TextInputType.text,
                                     decoration: InputDecoration(
-                                      border: InputBorder.none,
+                                        border: InputBorder.none,
                                         hintText: 'Email',
                                         prefixIcon: Padding(
                                           padding: EdgeInsets.all(0.0),
@@ -1053,11 +1018,21 @@ class _LoginPageState extends State<LoginPage>
                                         _isButtonDisabled=false;
                                       });
                                     } else {
-                                      showDialog(context: context, child:
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Email Not Found"),
+                                            );
+                                          });
+                                      /*showDialog(context: context, child:
                                       new AlertDialog(
                                         content: new Text("Email Not Found"),
                                       )
-                                      );
+                                      );*/
                                       //showInSnackBar("Email Not Found.");
                                       setState(() {
                                         login=false;
@@ -1068,11 +1043,21 @@ class _LoginPageState extends State<LoginPage>
                                     }
                                   }).catchError((onError){
                                     //showInSnackBar("Unable to call reset password service");
-                                    showDialog(context: context, child:
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          Future.delayed(Duration(seconds: 3), () {
+                                            Navigator.of(context).pop(true);
+                                          });
+                                          return AlertDialog(
+                                            content: new Text("Unable to call reset password service"),
+                                          );
+                                        });
+                                    /*showDialog(context: context, child:
                                     new AlertDialog(
                                       content: new Text("Unable to call reset password service"),
                                     )
-                                    );
+                                    );*/
                                     setState(() {
                                       login=false;
                                       succ=false;
@@ -1097,6 +1082,10 @@ class _LoginPageState extends State<LoginPage>
                             child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
                             onPressed: () {
                               Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginPage()),
+                              );
                             },
                           ),
                         ],
@@ -1127,6 +1116,41 @@ class _LoginPageState extends State<LoginPage>
 
         }
     );
+  }
+}
 
+Future<bool> _exitApp(BuildContext context) {
+  return showDialog(
+    context: context,
+    child: new AlertDialog(
+      title: new Text('Do you want to exit this app?'),
+      //content: new Text('We hate to see you leave...'),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () => Navigator.of(context, rootNavigator: true).pop(false),
+          child: new Text('No'),
+        ),
+        new FlatButton(
+          onPressed: () => exit(0),
+          child: new Text('Yes'),
+        ),
+      ],
+    ),
+  ) ?? false;
+}
+
+void openEmailApp(BuildContext context){
+  try{
+    AppAvailability.launchApp(Platform.isIOS ? "message://" : "com.google.android.gm").then((_) {
+      print("App Email launched!");
+    }).catchError((err) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text("App Email not found!")
+      ));
+      print(err);
+    });
+  } catch(e) {
+    print(e);
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text("Email App not found!")));
   }
 }

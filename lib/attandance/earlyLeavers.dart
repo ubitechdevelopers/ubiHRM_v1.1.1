@@ -16,7 +16,7 @@ class EarlyLeavers extends StatefulWidget {
 }
 
 TextEditingController today;
-TextEditingController early;
+
 //FocusNode f_dept ;
 class _EarlyLeavers extends State<EarlyLeavers> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -28,26 +28,24 @@ class _EarlyLeavers extends State<EarlyLeavers> {
   var profileimage;
   bool showtabbar;
   String orgName="";
-  String empname = "";
+  String empname="";
   String countE='-';
   bool filests=false;
-  Future<List<EmpList>> _listFuture;
   TextEditingController _searchController;
   FocusNode searchFocusNode;
+  //Future<List<EmpList>> _listFuture;
 
   @override
   void initState() {
     super.initState();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
-    early = new TextEditingController();
     _searchController = new TextEditingController();
     searchFocusNode = FocusNode();
     showtabbar =false;
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-    // f_dept = FocusNode();
     getOrgName();
-    _listFuture = getEarlyEmpDataList(today.text,empname);
+    //_listFuture = getEarlyEmpDataList(today.text);
   }
 
   getOrgName() async {
@@ -144,7 +142,8 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                             setState(() {
                               if (date != null && date.toString() != '') {
                                 res=true; //showInSnackBar(date.toString());
-                                _listFuture=getEarlyEmpDataList(today.text,empname);
+                                //_listFuture=getEarlyEmpDataList(today.text);
+                                //getEarlyEmpDataList(today.text,empname);
                               } else {
                                 res=false;
                                 countE='0';
@@ -226,13 +225,11 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                                                                 today.text +
                                                                 ".csv",
                                                             res);
-                                                        */
-                    /*showDialog(context: context, child:
+                                                        *//*showDialog(context: context, child:
                                                         new AlertDialog(
                                                           content: new Text("CSV has been saved in file storage in ubiattendance_files/Early_Leavers_Report_"+today.text+".csv"),
                                                         )
-                                                        );*/
-                    /*
+                                                        );*//*
                                                       });
                                                     },
                                                   ),
@@ -255,13 +252,11 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                                                         fontSize: 16,),
                                                     ),
                                                     onTap: () {
-                                                      */
-                    /* final uri = Uri.file('/storage/emulated/0/ubiattendance_files/Early_Leavers_Report_14-Jun-2019.pdf');
+                                                      *//* final uri = Uri.file('/storage/emulated/0/ubiattendance_files/Early_Leavers_Report_14-Jun-2019.pdf');
                                                       SimpleShare.share(
                                                           uri: uri.toString(),
                                                           title: "Share my file",
-                                                          msg: "My message");*/
-                    /*
+                                                          msg: "My message");*//*
                                                       if (mounted) {
                                                         setState(() {
                                                           filests = true;
@@ -314,7 +309,7 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                     Expanded(
                       child: Container(
                         child: Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
                             controller: _searchController,
                             focusNode: searchFocusNode,
@@ -328,18 +323,18 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                               floatingLabelBehavior: FloatingLabelBehavior.always,
                               hintText: 'Search Employee',
                               labelText: 'Search Employee',
-                              suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                              /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
                                   onPressed: () {
                                     _searchController.clear();
-                                    /*Navigator.push(
+                                    //getLateEmpDataList(today.text,empname);
+                                    //res = true;
+                                    Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => EarlyLeavers()),
-                                    );*/
-                                    /*Navigator.pop(
-                                      context);*/
+                                      MaterialPageRoute(builder: (context) => LateComers()),
+                                    );
+                                    Navigator.pop(context);
                                   }
-                              ):null,
-                              //focusColor: Colors.white,
+                              ):null,*/
                             ),
                             onChanged: (value) {
                               setState(() {
@@ -355,6 +350,10 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                     ),
                   ],
                 ),
+                /*Divider(
+                  height: 5,
+                ),
+                SizedBox(height: 5.0),*/
                 Container(
                   //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
                   width: MediaQuery.of(context).size.width * .9,
@@ -406,7 +405,7 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                   height: 5.2,
                 ),
                 new Expanded(
-                  child: res == true ? getEmpDataList(today.text,empname) : Container(
+                  child: res == true ? getEmpDataList(today.text) : Container(
                     height: MediaQuery.of(context).size.height*0.25,
                     child:Center(
                       child: Container(
@@ -428,19 +427,18 @@ class _EarlyLeavers extends State<EarlyLeavers> {
     return new Container(
       child: Center(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            CircularProgressIndicator()
-          ]
-        ),
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+            ]),
       ),
     );
   }
 
-  getEmpDataList(date,empname) {
+  getEmpDataList(date) {
     return new FutureBuilder<List<EmpList>>(
-        future:getEarlyEmpDataList(today.text,empname),
+        //future: _listFuture,
+        future: getEarlyEmpDataList(today.text,empname),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             countE=snapshot.data.length.toString();

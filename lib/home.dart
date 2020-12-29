@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +23,6 @@ import 'model/model.dart';
 import 'payroll//mypayroll_list.dart';
 import 'profile.dart';
 import 'salary/mysalary_list.dart';
-import 'services/attandance_fetch_location.dart';
 import 'services/services.dart';
 import 'timeoff/timeoff_summary.dart';
 
@@ -34,7 +34,7 @@ class HomePageMain extends StatefulWidget {
 }
 
 class _HomePageStatemain extends State<HomePageMain> {
-  // StreamLocation sl = new StreamLocation();
+  static const platform = const MethodChannel('location.spoofing.check');
   var orgname;
   double height = 0.0;
   double insideContainerHeight = 300.0;
@@ -48,8 +48,8 @@ class _HomePageStatemain extends State<HomePageMain> {
   var profileimage;
   bool showtabbar;
   String orgName = "";
-
-
+  bool fakeLocationDetected = false;
+  String address = "";
   bool _checkLoadedprofile = true;
 
   String location_addr = "";
@@ -63,6 +63,13 @@ class _HomePageStatemain extends State<HomePageMain> {
     super.initState();
     initPlatformState();
     getOrgName();
+    platform.setMethodCallHandler(_handleMethod);
+   /*print("orgCreateDate");
+    print(orgCreatedDate);
+    var orgCreationDate = DateTime.parse(orgCreatedDate);
+    print(orgCreationDate.add(Duration(days: 3)));
+    if(mailVerifySts == "1")
+      print("Shaifali Rathore");*/
   }
 
   getOrgName() async {
@@ -73,37 +80,30 @@ class _HomePageStatemain extends State<HomePageMain> {
   }
 
   initPlatformState() async {
-
-    /*final prefs = await SharedPreferences.getInstance();
-    empid = prefs.getString('employeeid')??"";
-    organization =prefs.getString('organization')??"";
-    emp = new Employee(employeeid: empid, organization: organization);*/
-    //  PLeave= "1";
-    /*empid = prefs.getString('employeeid')??"";
-    organization =prefs.getString('organization')??"";
-    emp = new Employee(employeeid: empid, organization: organization);
-    getAllPermission(emp);*/
-    /*getAllPermission(emp);
-    await getProfileInfo(emp);
-    perEmployeeLeave= getModulePermission("18","view");
-    perLeaveApproval=  getModulePermission("124","view");
-    perAttendance=  getModulePermission("5","view");
-    perTimeoff=  getModulePermission("179","view");*/
-    //  perReport=  getModulePermission("124","view");
-    //  perSet=  getModulePermission("124","view");
-    //   perAttMS=  getModulePermission("124","view");
-    //   perHoliday=  getModulePermission("29","view");
-    //prefs.setString("PerLeave", PerLeave1);
-    //prefs.setString("PerApprovalLeave", PerApprovalLeave1);
     var now = new DateTime.now();
     var formatter = new DateFormat('MMMM');
     month = formatter.format(now);
+
+    getAreaStatus().then((res) {
+      print('lib/home dot dart');
+      if (mounted) {
+        setState(() {
+          areaSts = res.toString();
+          print('response'+res.toString());
+          if (assignedAreaIds.isNotEmpty && perGeoFence=="1") {
+            AbleTomarkAttendance = areaSts;
+          }
+        });
+      }
+    }).catchError((onError) {
+      print('Exception occured in clling function.......');
+      print(onError);
+    });
 
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
       setState(() {
-        //print("HIIIIIIIIIIIIII");
         mainWidget = loadingWidget();
       });
 
@@ -126,29 +126,164 @@ class _HomePageStatemain extends State<HomePageMain> {
     }
   }
 
+  Future<dynamic> _handleMethod(MethodCall call) async {
+    print("lib/home.dart's handle method");
+    switch (call.method) {
+      case "locationAndInternet":
+        locationThreadUpdatedLocation = true;
+        var long = call.arguments["longitude"].toString();
+        var lat = call.arguments["latitude"].toString();
+        assign_lat = double.parse(lat);
+        assign_long = double.parse(long);
+        address = await getAddressFromLati(lat, long);
+        globalstreamlocationaddr = address;
+        print(call.arguments["mocked"].toString());
+
+        getAreaStatus().then((res) {
+          print('home.dart');
+          if (mounted) {
+            setState(() {
+              areaSts = res.toString();
+              print('response'+res.toString());
+              if (assignedAreaIds.isNotEmpty && perGeoFence == "1") {
+                AbleTomarkAttendance = areaSts;
+              }
+            });
+          }
+        }).catchError((onError) {
+          print('Exception occured in clling function.......');
+          print(onError);
+        });
+
+        setState(() {
+          if (call.arguments["mocked"].toString() == "Yes") {
+            fakeLocationDetected = true;
+          } else {
+            fakeLocationDetected = false;
+          }
+          if (call.arguments["TimeSpoofed"].toString() == "Yes") {
+            timeSpoofed = true;
+          }
+        });
+        break;
+
+        return new Future.value("");
+    }
+  }
+
   Future<Widget> islogin() async {
     final prefs = await SharedPreferences.getInstance();
     int response = prefs.getInt('response') ?? 0;
     if (response == 1) {
-
-      print("*********SOHAN*********");
-      //   print("AAAAAAAAA");
       String empid = prefs.getString('employeeid') ?? "";
       String organization = prefs.getString('organization') ?? "";
       String userprofileid = prefs.getString('userprofileid') ?? "";
+      String empemail = prefs.getString('empemail') ?? "";
+      String empnumber = prefs.getString('empnumber') ?? "";
+      String email = prefs.getString('email') ?? "";
+      String number = prefs.getString('number') ?? "";
+      String name = prefs.getString('name') ?? "";
+
       Employee emp = new Employee(
           employeeid: empid,
           organization: organization,
-          userprofileid: userprofileid);
+          userprofileid: userprofileid,
+      );
 
       await getAllPermission(emp);
       await getProfileInfo(emp, context);
-      //await getfiscalyear(emp);
-      //await getovertime(emp);
+      await getReportingTeam(emp);
 
-      Loc lock = new Loc();
-      location_addr = await lock.loginrequestPermission();
-      print(location_addr);
+      if(empemail==email || empnumber==number) {
+        if (showMailVerificationDialog == 'true') {
+          showDialog(
+            barrierDismissible: false,
+            context: context, child:
+            new AlertDialog(
+              title: new Text("Verify Mail ID?"),
+              content: ButtonBar(
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text(
+                      'Verify', style: TextStyle(color: Colors.white),),
+                    color: Colors.orange[800],
+                    onPressed: () {
+                      verification(organization, name, email);
+                    },
+                  ),
+                  FlatButton(
+                    shape: Border.all(color: Colors.orange[800]),
+                    child: Text(
+                      'CANCEL', style: TextStyle(color: Colors.black87),),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                      updateCounter();
+                    },
+                  ),
+                ],
+              ),
+            )
+          );
+        } else if(showMailVerificationDialog == 'logout') {
+          logout();
+        }
+      }
+      /*var orgCreationDate = DateTime.parse(orgCreatedDate);
+      print(orgCreationDate);
+      var tillDate = orgCreationDate.add(Duration(days: 3));
+      print(tillDate);
+      var nowDate = DateTime.now();
+      print(nowDate);
+      print(nowDate.isAfter(tillDate));
+      print(empemail);
+      print(email);
+      print(empnumber);
+      print(number);
+      print(empemail.contains(email));
+      print(empnumber.contains(number));
+      print(empemail.contains(email) || empnumber.contains(number));
+      if(empemail.contains(email) || empnumber.contains(number)) {
+        //if (nowDate.isBefore(tillDate) || nowDate.isAtSameMomentAs(nowDate)) {
+        if (nowDate.isAfter(tillDate)) {
+          if (mailVerifySts == '0') {
+            showDialog(context: context, child:
+            new AlertDialog(
+              title: new Text("Verify Mail ID?"),
+              content: ButtonBar(
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text(
+                      'Verify', style: TextStyle(color: Colors.white),),
+                    color: Colors.orange[800],
+                    onPressed: () {},
+                  ),
+                  FlatButton(
+                    shape: Border.all(color: Colors.orange[800]),
+                    child: Text(
+                      'CANCEL', style: TextStyle(color: Colors.black87),),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
+                  ),
+                ],
+              ),
+            )
+            );
+          }
+        } else {
+          print("false condition");
+          logout() async {
+            final prefs = await SharedPreferences.getInstance();
+            prefs.remove('response');
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()), (
+                Route<dynamic> route) => false,
+            );
+          }
+          logout();
+        }
+      }*/
 
       perEmployeeLeave = getModulePermission("18", "view");
       perAttendance = getModulePermission("5", "view");
@@ -164,17 +299,12 @@ class _HomePageStatemain extends State<HomePageMain> {
       perTimeoffApproval = getModuleUserPermission("180", "view");
       perSalaryExpenseApproval = getModuleUserPermission("170", "view");
       perPayrollExpenseApproval = getModuleUserPermission("473","view");
-      perAttReport=getModuleUserPermission("68", "view");
-      perLeaveReport=getModuleUserPermission("69", "view");
-      perFlexiReport=getModuleUserPermission("448", "view");
-
-      await getReportingTeam(emp);
+      perAttReport = getModuleUserPermission("68", "view");
+      perLeaveReport = getModuleUserPermission("69", "view");
+      perFlexiReport = getModuleUserPermission("448", "view");
 
       showtabbar = false;
       profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
-      //profileimage = new NetworkImage(pic);
-      //print("ABCDEFGHI");
-      //print(profileimage);
 
       profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
         if (mounted) {
@@ -199,7 +329,6 @@ class _HomePageStatemain extends State<HomePageMain> {
         decoration: new BoxDecoration(color: Colors.green[100]),
         child: Center(
             child: SizedBox(
-              //child: Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
               child: new CircularProgressIndicator(),
             )));
   }
@@ -216,58 +345,13 @@ class _HomePageStatemain extends State<HomePageMain> {
     );
   }
 
-/*
-  Future<bool> exit() async{
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
-    );
-    return false;
-  }
-*/
-
   Widget mainScafoldWidget() {
     return WillPopScope(
-      //onWillPop: ()=> exit(),
+      //onWillPop: () async => true,
       child: Scaffold(
           backgroundColor: scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new HomeAppHeader(profileimage, showtabbar, orgName),
-/*        appBar: GradientAppBar(
-            backgroundColorStart: appStartColor(),
-            backgroundColorEnd: appEndColor(),
-            automaticallyImplyLeading: false,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-      GestureDetector(
-      // When the child is tapped, show a snackbar
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => CollapsingTab()),
-        );
-          },
-                child:Container(
-                    width: 40.0,
-                    height: 40.0,
-                    decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: new DecorationImage(
-                          fit: BoxFit.fill,
-                       // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
-                        )
-                    )),),
-                Container(
-                    padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-                )
-              ],
-
-            ),
-          ),*/
-
           bottomNavigationBar: new HomeNavigation(),
           body: homewidget()
       ),
@@ -279,7 +363,6 @@ class _HomePageStatemain extends State<HomePageMain> {
         elevation: 1.0,
         margin: new EdgeInsets.all(8.0),
         child: Container(
-
           child: new InkWell(
             onTap: () {
               Navigator.push(
@@ -339,11 +422,10 @@ class _HomePageStatemain extends State<HomePageMain> {
               if(perPunchLocation == '1') makeDashboardItem("Visits", PunchLocationSummary(), 'assets/icons/visits_icon.png'),
               if(perFlexi == '1') makeDashboardItem("Flexi Time", Flexitime(), 'assets/icons/Flexi_icon.png'),
               if(perSalary == '1') makeDashboardItem("Salary", SalarySummary(), 'assets/icons/Salary_icon.png'),
-              if(perPayroll == '1'|| perPayPeriod == '1') makeDashboardItem("Payroll", PayrollSummary(), 'assets/icons/Salary_icon.png'),
+              if(perPayroll == '1' || perPayPeriod == '1') makeDashboardItem("Payroll", PayrollSummary(), 'assets/icons/Salary_icon.png'),
               if(perSalaryExpense == '1') makeDashboardItem("Salary\nExpense", MyExpence(), 'assets/icons/Expense_icon.png'),
               if(perPayrollExpense == '1') makeDashboardItem("Payroll\nExpense", MyPayrollExpense(), 'assets/icons/Expense_icon.png'),
-              if(perLeaveReport=='1' ||  perAttReport=='1' || perFlexiReport=='1' )
-                if(perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1') makeDashboardItem("Reports", AllReports(), 'assets/icons/graph_icon.png'),
+              if(perAttendance == '1' || perEmployeeLeave == '1' || perTimeoff == '1') makeDashboardItem("Reports", AllReports(), 'assets/icons/graph_icon.png'),
             ],
           ),
         ),
@@ -352,7 +434,6 @@ class _HomePageStatemain extends State<HomePageMain> {
   }
 
   Widget homewidget1() {
-    // print("CCCCCCCC");
     return Stack(
       children: <Widget>[
         Container(
@@ -370,9 +451,6 @@ class _HomePageStatemain extends State<HomePageMain> {
                 SizedBox(
                   height: 60.0,
                 ),
-                //   Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //      children: [
                 GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -488,8 +566,6 @@ class _HomePageStatemain extends State<HomePageMain> {
                                   color: Colors.black)),
                         ],
                       )),
-                //    ]
-                //   ),
 
                 SizedBox(
                   height: 60.0,
@@ -498,7 +574,6 @@ class _HomePageStatemain extends State<HomePageMain> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    //    perSet=='1'? GestureDetector(
                     perTimeoff == '1'
                         ? GestureDetector(
                         onTap: () {
@@ -559,33 +634,6 @@ class _HomePageStatemain extends State<HomePageMain> {
                           ],
                         ))
                         : Center(),
-
-                    /*GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AllSetting()),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            new
-                            Container(
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: AssetImage('assets/icons/settings_icon.png'),
-                                    ),
-                                    color:circleIconBackgroundColor()
-                                )),
-                            Text(' Settings         ',
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(fontSize: 15.0, color: Colors.black)),
-                          ],
-                        )),*/
                   ],
                 ),
 
@@ -598,7 +646,6 @@ class _HomePageStatemain extends State<HomePageMain> {
                     children: [
                       (perSalaryExpense == '1' || perPayrollExpense == '1')
                           ? GestureDetector(
-                        //   GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
@@ -629,7 +676,6 @@ class _HomePageStatemain extends State<HomePageMain> {
 
                       (perSalary == '1')
                           ? GestureDetector(
-                        //   GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
@@ -658,9 +704,8 @@ class _HomePageStatemain extends State<HomePageMain> {
                           ))
                           : Center(),
 
-                      (perPayroll == '1')
+                      (perPayroll == '1' || perPayPeriod == '1')
                           ? GestureDetector(
-                        //   GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
@@ -691,7 +736,6 @@ class _HomePageStatemain extends State<HomePageMain> {
 
                       (perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1')
                           ? GestureDetector(
-                        //   GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
@@ -720,366 +764,20 @@ class _HomePageStatemain extends State<HomePageMain> {
                           ))
                           : Center(),
                     ]),
-                /*    Row(children: <Widget>[
-                    Icon(Icons.brightness_1,color: Colors.blue,),
-                    SizedBox(width: 20.0,),
-                    Text('Leave entitled'),
-                    SizedBox(width: 30.0,),
-                    Icon(Icons.brightness_1,color: Colors.red,),
-                    SizedBox(width: 20.0,),
-                    Text('Balance Leave')
-                  ],),
-
-                  Row(children: <Widget>[
-                    Icon(Icons.brightness_1,color: Colors.green,),
-                    SizedBox(width: 20.0,),
-                    Text('Leave utilized')
-                  ],),
-*/
-
-                // Attendance monthly summary bar graph
-                /* overtime!='00:00'?Divider(height: 10.0,):undertime!='00:00'?Divider(height: 10.0,):Center(),
-                SizedBox(height: 20.0,),
-                overtime!='00:00'?getimg():undertime!='00:00'?getimg1():Center(),*/
-
-                /*overtime!=null?Divider(height: 10.0,):undertime!=null?Divider(height: 10.0,):Center(),
-                SizedBox(height: 20.0,),
-                overtime!=null?getimg():undertime!=null?getimg1():Center(),
-*/
-
-                /* SizedBox(height: 20.0,),
-                perAttendance=='1'?  Row(children: <Widget>[
-                  SizedBox(width: 20.0,),
-                  Text("Monthly summary  ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
-                ]
-                ):Center(),*/
-
-/*                perAttendance=='1'?  Divider(height: 10.0,):Center(),
-                */ /*SimpleBarChart.withSampleData(),*/ /*
-                perAttendance=='1'?  new Container(
-
-                  padding: EdgeInsets.all(0.2),
-                  margin: EdgeInsets.all(0.2),
-                  height: 200.0,
-
-                  child: new FutureBuilder<List<Map<String,String>>>(
-
-                      future: getAttsummaryChart(),
-                      builder: (context, snapshot)
-                      {
-                        if (snapshot.hasData){
-                          if (snapshot.data.length > 0)
-                          {
-                            return new DonutAutoLabelChart.withSampleData(snapshot.data);
-                          }
-                          return new Center(
-                              child: CircularProgressIndicator()
-                          );
-
-                        }
-                        return new Center( child: Text("No data found"), );
-                        // return new Center( child: CircularProgressIndicator());
-                      }
-
-                  ),
-
-                  //child: new DonutAutoLabelChart .withSampleData(),
-                ):Center(),*/
-
-                /*        Row(children: <Widget>[
-                    Icon(Icons.brightness_1,color: Colors.green,),
-                    SizedBox(width: 20.0,),
-                    Text('Total Present'),
-                    SizedBox(width: 30.0,),
-                    Icon(Icons.brightness_1,color: Colors.orangeAccent,),
-                    SizedBox(width: 20.0,),
-                    Text('Total Abscent')
-                  ],),
-
-                  Row(children: <Widget>[
-                    Icon(Icons.brightness_1,color: Colors.blue,),
-                    SizedBox(width: 20.0,),
-                    Text('Total Leave')
-                  ],),
-*/
-
-                /* SizedBox(width: 40.0,),
-                Divider(height: 10.0,),
-                perEmployeeLeave =='1' ?
-
-                Row(children: <Widget>[
-                  SizedBox(width: 20.0,),
-                  Text("Leave Data ["+fiscalyear+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
-                ]
-                ):Center(),*/
-
-                //   perEmployeeLeave =='1' ? Divider(height: 0.0,):Center(),
-                /*SimpleBarChart.withSampleData(),*/
-
-/*                perEmployeeLeave =='1' ?  new Container(
-
-                  padding: EdgeInsets.all(0.2),
-                  margin: EdgeInsets.all(0.2),
-                  height: 200.0,
-                  child: new FutureBuilder<List<Map<String,String>>>(
-                      future: getChartDataYes(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          if (snapshot.data.length > 0) {
-                            return new StackedHorizontalBarChart.withSampleData(snapshot.data);
-                          }
-                          return new Center( child: Text("No data found"), );
-                        }
-
-                        return new Center( child: Text("No data found"), );
-                      }
-                  ),
-                  // child: new StackedHorizontalBarChart .withSampleData()
-                ):Center(
-                  child: Text(""),
-
-                ),*/
-
-/*
-                SizedBox(height: 40.0,),
-                Row(children: <Widget>[
-                  SizedBox(width: 20.0,),
-
-                  Text("Monthly Holidays ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
-                ]
-                ),
-                Divider(height: 10.0,),
-                SizedBox(height: 10.0,),
-
-                new Column(
-                  children: <Widget>[
-                    new   Row(children: <Widget>[
-
-                      SizedBox(height: height),
-                      new Expanded(
-                        child:   Container(
-
-                          //   height: insideContainerHeight,
-                            width: 400.0,
-                            //  padding: new EdgeInsets.all(2.0),
-                            //color: Colors.green[50],
-
-                            child: FutureBuilder<List<Holi>>(
-                              future: getHolidays(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                    if(snapshot.data.length>0) {
-                                        return new ListView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: snapshot.data.length,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          var string=snapshot.data[index].name;
-                                          var name =  string.replaceAll("Holiday - ", "");                            return new Column(
-                                          children: <Widget>
-                                            [
-                                              new Row(
-                                                children: <Widget>
-                                                [
-                                                  SizedBox(width: 20.0,),
-                                                  Text(name+" ",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
-                                                  Text("-"),
-                                                  //  Text(snapshot.data[index].message),
-                                                  Text(snapshot.data[index].date,style: TextStyle(color: Colors.grey[600]),textAlign: TextAlign.right),
-
-                                                ],),
-                                              */ /*  new Row(
-                                                children: <Widget>
-                                                [
-                                                  SizedBox(width: 20.0,),
-                                                  snapshot.data[index].message.toString() != '-'
-                                                      ? Container(
-
-                                                    //  SizedBox(width: 20.0,),
-                                                    child: Text("Indian Ritual"+snapshot.data[index].message,style: TextStyle(color: Colors.grey[600]),),
-                                                  ): Center(),
-                                                  Divider(color: Colors.black45,),
-
-                                                ],)*/ /*
-                                            ],);
-
-                                        }
-
-                                    );
-
-                                  }else{
-                                    return new Center(
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width*1,
-                                        color: Colors.teal.withOpacity(0.1),
-                                        padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                        child:Text("No Holidays this month ",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
-                                      ),
-                                    );
-                                  }
-                                }
-                                else if (snapshot.hasError) {
-                                  return new Text("Unable to connect server");
-                                }
-
-                                // By default, show a loading spinner
-                                return new Center(child: CircularProgressIndicator());
-                              },
-                             )
-                            ),),
-                          ],),
-
-                    //undertime!='null'?getimg1():getimg(),
-
-                   ],)*/
-
-                /*      Row(children: <Widget>[
-                    SizedBox(width: 20.0,),
-                    Text("Holidays this month",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
-                  ]
-                  ),
-                  Divider(height: 10.0,),
-                  SizedBox(height: 10.0,),
-                  Row(children: <Widget>[
-                   Text('1.Makar sankranti ',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
-                   Expanded(
-                     child: Container(
-                      width:0.5,
-                     ),
-                   ),
-                   Container(child:Text("14th Jan 2019",style: TextStyle(color: Colors.grey[600]),)) ,
-                  ],
-                  )
-                  ,
-                /*  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('14th Jan 2019',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
-
-                  ],
-
-                  ),*/
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('Indian rituals')
-                    ],),
-                  SizedBox(width: 30.0,),
-                  Row(children: <Widget>[
-                    Text('2.Republic Day 2019',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
-
-
-                  ],),
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('26th Jan',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
-
-                    ],),
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('National holiday on republic day of india')
-                    ],),
-                  SizedBox(width: 30.0,),
-                  Row(children: <Widget>[
-                    Text('3. Holiday - Holi 2019',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
-
-
-                  ],),
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('4th Mar',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
-                      Text(' - ',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
-                      Text('9th Mar',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
-                    ],),
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('Festival of colors')
-                    ],),
-                  SizedBox(width: 20.0,),
-*/
               ],
             )),
       ],
     );
   }
 
-  Widget getimg() {
-    return new Column(children: <Widget>[
-      // SizedBox(width: 20.0,),
-      Row(children: <Widget>[
-        new Text("    " + month + "",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: headingColor(),
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-            )),
-      ]),
-      Container(
-        height: 165,
-        width: 120,
-        decoration: new BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-          border: new Border.all(
-            color: Colors.green,
-            width: 2.5,
-          ),
-        ),
-        child: new Center(
-          child: new Text(
-            "Overtime \n     " + overtime,
-            style: TextStyle(
-                fontSize: 16.0,
-                color: overtime != '' ? Colors.green : appStartColor()),
-          ),
-        ),
-      ),
-    ]);
-  }
-
-  Widget getimg1() {
-    return new Column(children: <Widget>[
-      // SizedBox(width: 20.0,),
-      Row(children: <Widget>[
-        new Text("     " + month + "",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: headingColor(),
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-            )),
-      ]),
-      Container(
-        height: 165,
-        width: 120,
-        decoration: new BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-          border: new Border.all(
-            color: Colors.red,
-            width: 2.5,
-          ),
-        ),
-        child: new Center(
-          child: new Text(
-            "Undertime \n     " + undertime,
-            style: TextStyle(
-                fontSize: 16.0,
-                color: undertime != '' ? Colors.redAccent : appStartColor()),
-          ),
-        ),
-      ),
-    ]);
+  logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('response');
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()), (
+        Route<dynamic> route) => false,
+    );
   }
 }
 
@@ -1091,21 +789,12 @@ class HomeAppHeader extends StatelessWidget implements PreferredSizeWidget {
   HomeAppHeader(profileimage1,showtabbar1,orgname1){
     profileimage = profileimage1;
     orgname = orgname1;
-    // print("--------->");
-    // print(profileimage);
-    // print("--------->");
-    // print(_checkLoadedprofile);
     if (profileimage!=null) {
       _checkLoadedprofile = false;
-      //    print(_checkLoadedprofile);
     };
     showtabbar= showtabbar1;
   }
-  /*void initState() {
-    super.initState();
- //   initPlatformState();
-  }
-*/
+
   @override
   Widget build(BuildContext context) {
     return new GradientAppBar(

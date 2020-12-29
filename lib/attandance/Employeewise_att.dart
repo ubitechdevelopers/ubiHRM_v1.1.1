@@ -288,12 +288,12 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                   children: <Widget>[
                     SizedBox(height: 40.0,),
                     Container(
-                      width: MediaQuery.of(context).size.width*0.20,
+                      width: MediaQuery.of(context).size.width*0.18,
                       child:Text('  Date',style: TextStyle(color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                     ),
                     SizedBox(height: 40.0,),
                     Container(
-                        width: MediaQuery.of(context).size.width*0.20,
+                        width: MediaQuery.of(context).size.width*0.22,
                         child:Row(
                           children: <Widget>[
                             Column(
@@ -309,7 +309,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                   child: new Container(
                                     //alignment: Alignment.topLeft,
                                     child:InkWell(
-                                      child: Icon(Icons.help, color: appStartColor(),),
+                                      child: Icon(Icons.info, color: appStartColor(),),
                                       onTap: (){
                                         showDialog<String>(
                                             context: context,
@@ -421,7 +421,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                     child: Row(
                                                                       children: <Widget>[
                                                                         new Text(
-                                                                          'Week off',
+                                                                          'Week Off',
                                                                           style: TextStyle(
                                                                               color:Colors.orange,
                                                                               fontSize: 15.0,
@@ -729,7 +729,8 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                             style: TextStyle(
                                                                                 color:Colors.orange,
                                                                                 fontSize: 15.0,
-                                                                                fontWeight: FontWeight.w400
+                                                                                fontWeight: FontWeight
+                                                                                    .w400
                                                                             ),
                                                                           ),
                                                                         )
@@ -786,7 +787,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                         child: new FutureBuilder<List<Attn>>(
                           future: getAttSummary(widget.empid, formatter.format(widget.month)),
                           builder: (context, snapshot) {
-                            print("Nidhi mam");
+                            print("getAttSummary");
                             print(snapshot.hasData);
                             if (snapshot.hasData) {
                               if(snapshot.data.length>0) {
@@ -913,6 +914,45 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                                     child: Text(
                                                                                       snapshot.data[index]
                                                                                           .BreakTime.toString(),
+                                                                                      style: TextStyle(
+                                                                                          color: Colors
+                                                                                              .black87,
+                                                                                          fontSize: 15.0,
+                                                                                          fontWeight: FontWeight
+                                                                                              .w400
+                                                                                      ),
+                                                                                    ),
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            )
+                                                                          ]
+                                                                      ),
+                                                                      TableRow(
+                                                                          children: [
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  new Text(
+                                                                                    'Time Off Hours:',
+                                                                                    style: TextStyle(
+                                                                                        color: Colors
+                                                                                            .black87,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight
+                                                                                            .bold
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      snapshot.data[index]
+                                                                                          .TimeOffTime.toString(),
                                                                                       style: TextStyle(
                                                                                           color: Colors
                                                                                               .black87,

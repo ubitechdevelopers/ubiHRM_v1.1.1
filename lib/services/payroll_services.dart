@@ -371,10 +371,11 @@ List<Payroll> createPayrollList(List data){
     String empId = data[i]["EmployeeId"];
     String name=data[i]["name"];
     String PaidDays=data[i]["PaidDays"];
-    String SalaryMonth=data[i]["SalaryMonth"];
+    String StartDate=data[i]["SalaryMonth"];
+    String EndDate=data[i]["EndDate"];
     String EmployeeCTC=data[i]["EmployeeCTC"];
     String Currency=data[i]["currency"];
-    Payroll payroll = new Payroll(id:id, empId:empId, name:name, paid_days:PaidDays, startdate:SalaryMonth, EmployeeCTC:EmployeeCTC, Currency:Currency);
+    Payroll payroll = new Payroll(id:id, empId:empId, name:name, paid_days:PaidDays, startdate:StartDate, enddate:EndDate, EmployeeCTC:EmployeeCTC, Currency:Currency);
     list.add(payroll);
   }
   return list;

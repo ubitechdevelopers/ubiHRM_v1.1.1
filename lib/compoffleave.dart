@@ -296,7 +296,7 @@ class _CompOffLeave extends State<CompOffLeave> {
   Widget getEmployee_DD() {
     String dc = "0";
     return new FutureBuilder<List<Map>>(
-        future: getEmployeesList(1),// with -select- label
+        future: getEmployeesList(1, '0', '0'),// with -select- label
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             try {

@@ -17,8 +17,6 @@ class VisitList extends StatefulWidget {
 }
 
 TextEditingController today;
-TextEditingController visit_li;
-//FocusNode f_dept ;
 class _VisitList extends State<VisitList> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _currentIndex = 1;
@@ -40,14 +38,12 @@ class _VisitList extends State<VisitList> {
     super.initState();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
-    visit_li = new TextEditingController();
     _searchController = new TextEditingController();
     searchFocusNode = FocusNode();
-    // f_dept = FocusNode();
     showtabbar = false;
     profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     getOrgName();
-    _listFuture = getVisitsDataList(today.text, empname);
+    //_listFuture = getVisitsDataList(today.text, empname);
   }
 
   getOrgName() async {
@@ -60,9 +56,9 @@ class _VisitList extends State<VisitList> {
   void showInSnackBar(String value) {
     final snackBar = SnackBar(
         content: Text(
-      value,
-      textAlign: TextAlign.center,
-    ));
+          value,
+          textAlign: TextAlign.center,
+        ));
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
@@ -142,8 +138,7 @@ class _VisitList extends State<VisitList> {
                         setState(() {
                           if (date != null && date.toString() != '') {
                             res = true; //showInSnackBar(date.toString());
-                            _listFuture =
-                                getVisitsDataList(today.text, empname);
+                            //_listFuture = getVisitsDataList(today.text, empname);
                           } else {
                             res = false;
                           }
@@ -310,7 +305,7 @@ class _VisitList extends State<VisitList> {
                 Expanded(
                   child: Container(
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         controller: _searchController,
                         focusNode: searchFocusNode,
@@ -324,17 +319,17 @@ class _VisitList extends State<VisitList> {
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           hintText: 'Search Employee',
                           labelText: 'Search Employee',
-                          suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                          /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
                               onPressed: () {
                                 _searchController.clear();
-                                /*Navigator.push(
+                                *//*Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) => LateComers()),
-                                    );*/
-                                /*Navigator.pop(
-                                      context);*/
+                                    );*//*
+                                *//*Navigator.pop(
+                                      context);*//*
                               }
-                          ):null,
+                          ):null,*/
                           //focusColor: Colors.white,
                         ),
                         onChanged: (value) {
@@ -354,7 +349,7 @@ class _VisitList extends State<VisitList> {
 
             Container(
               //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
-              //       width: MediaQuery.of(context).size.width * .9,
+              //  width: MediaQuery.of(context).size.width * .9,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -366,7 +361,7 @@ class _VisitList extends State<VisitList> {
                   Expanded(
                     flex: 50,
                     child: Text(
-                      ' Name',
+                      '  Name',
                       style: TextStyle(
                           color: appStartColor(),
                           fontWeight: FontWeight.bold,
@@ -381,7 +376,7 @@ class _VisitList extends State<VisitList> {
                     flex: 50,
                     // width: MediaQuery.of(context).size.width*0.2,
                     child: Text(
-                      'Time In',
+                      'Visit In',
                       style: TextStyle(
                           color: appStartColor(),
                           fontWeight: FontWeight.bold,
@@ -395,7 +390,7 @@ class _VisitList extends State<VisitList> {
                     flex: 50,
                     // width: MediaQuery.of(context).size.width*0.2,
                     child: Text(
-                      'Time Out',
+                      'Visit Out',
                       style: TextStyle(
                           color: appStartColor(),
                           fontWeight: FontWeight.bold,
@@ -411,22 +406,22 @@ class _VisitList extends State<VisitList> {
             ),
             new Expanded(
               child: res == true
-                  ? getEmpDataList(today.text,empname)
+                  ? getEmpDataList(today.text)
                   : Container(
-                      height: MediaQuery.of(context).size.height * 0.25,
-                      child: Center(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 1,
-                          color: appStartColor().withOpacity(0.1),
-                          padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                          child: Text(
-                            "Please select the date",
-                            style: TextStyle(fontSize: 14.0),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
+                height: MediaQuery.of(context).size.height * 0.25,
+                child: Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 1,
+                    color: appStartColor().withOpacity(0.1),
+                    padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                    child: Text(
+                      "Please select the date",
+                      style: TextStyle(fontSize: 14.0),
+                      textAlign: TextAlign.center,
                     ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -446,7 +441,7 @@ class _VisitList extends State<VisitList> {
     );
   }
 
-  getEmpDataList(date,empname) {
+  getEmpDataList(date) {
     return new FutureBuilder<List<Punch>>(
         future: getVisitsDataList(date, empname),
         builder: (context, snapshot) {
@@ -456,195 +451,200 @@ class _VisitList extends State<VisitList> {
                   itemCount: snapshot.data.length,
                   //    padding: EdgeInsets.only(left: 15.0,right: 15.0),
                   itemBuilder: (BuildContext context, int index) {
-                    return new Column(
+                    return Padding(
+                      padding: const EdgeInsets.only(left:8.0),
+                      child: new Column(
                         // crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Expanded(
-                                flex: 50,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      snapshot.data[index].client.toString(),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 50,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                          snapshot.data[index].Emp.toString(),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    InkWell(
-                                      child: Text(
-                                          'In: ' +
-                                              snapshot.data[index].pi_loc
+                                      Text("Client: "+
+                                        snapshot.data[index].client.toString(),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,color: Colors.black54
+                                        ),
+                                      ),
+                                      InkWell(
+                                        child: Text(
+                                            'In: ' +
+                                                snapshot.data[index].pi_loc
+                                                    .toString(),
+                                            style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 12.0)),
+                                        onTap: () {
+                                          goToMap(snapshot.data[index].pi_latit,
+                                              snapshot.data[index].pi_longi);
+                                        },
+                                      ),
+                                      SizedBox(height: 2.0),
+                                      InkWell(
+                                        child: Text(
+                                          'Out: ' +
+                                              snapshot.data[index].po_loc
                                                   .toString(),
                                           style: TextStyle(
                                               color: Colors.black54,
-                                              fontSize: 12.0)),
-                                      onTap: () {
-                                        goToMap(snapshot.data[index].pi_latit,
-                                            snapshot.data[index].pi_longi);
-                                      },
-                                    ),
-                                    SizedBox(height: 2.0),
-                                    InkWell(
-                                      child: Text(
-                                        'Out: ' +
-                                            snapshot.data[index].po_loc
-                                                .toString(),
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 12.0),
-                                      ),
-                                      onTap: () {
-                                        goToMap(snapshot.data[index].po_latit,
-                                            snapshot.data[index].po_longi);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              Expanded(
-                                  flex: 50,
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            // Text(snapshot.data[index].Emp.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
-                                            // SizedBox(height: 10.0,),
-                                            Text(
-                                              snapshot.data[index].pi_time
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(height: 10),
-                                            GestureDetector(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ImageView(
-                                                                myimage: snapshot
-                                                                    .data[index]
-                                                                    .pi_img,
-                                                                org_name:
-                                                                    "Ubitech Solutions")),
-                                                  );
-                                                },
-                                                child: Container(
-                                                  width: 62.0,
-                                                  height: 62.0,
-                                                  child: Container(
-                                                      decoration: new BoxDecoration(
-                                                          shape: BoxShape.circle,
-                                                          image: new DecorationImage(
-                                                              fit: BoxFit.fill,
-                                                              image: new NetworkImage(
-                                                                  snapshot
-                                                                      .data[index]
-                                                                      .pi_img)))),
-                                                )),
-                                          ],
+                                              fontSize: 12.0),
                                         ),
-                                      ),
-                                      SizedBox(width: 20),
-                                      Container(
-
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text(
-                                              snapshot.data[index].po_time
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(height: 10),
-                                            GestureDetector(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ImageView(
-                                                                myimage: snapshot
-                                                                    .data[index]
-                                                                    .po_img,
-                                                                org_name:
-                                                                    "Ubitech Solutions")),
-                                                  );
-                                                },
-                                                child: Container(
-                                                  width: 62.0,
-                                                  height: 62.0,
-                                                  child: Container(
-                                                      decoration: new BoxDecoration(
-                                                          shape: BoxShape.circle,
-                                                          image: new DecorationImage(
-                                                              fit: BoxFit.fill,
-                                                              image: new NetworkImage(
-                                                                  snapshot
-                                                                      .data[index]
-                                                                      .po_img)))),
-                                                )),
-                                          ],
-                                        ),
+                                        onTap: () {
+                                          goToMap(snapshot.data[index].po_latit,
+                                              snapshot.data[index].po_longi);
+                                        },
                                       ),
                                     ],
-                                  )),
-                            ],
-                          ),
-                          snapshot.data[index].desc == ''
-                              ? Container()
-                              : snapshot.data[index].desc !=
-                                      'Visit out not punched'
-                                  ? Row(
-                                      children: <Widget>[
-                                        SizedBox(
-                                          width: 5.0,
-                                        ),
-                                        Text(
-                                          'Remark:  ',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                                Expanded(
+                                    flex: 50,
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              // Text(snapshot.data[index].Emp.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                                              // SizedBox(height: 10.0,),
+                                              Text(
+                                                snapshot.data[index].pi_time
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              SizedBox(height: 10),
+                                              GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ImageView(
+                                                                  myimage: snapshot
+                                                                      .data[index]
+                                                                      .pi_img,
+                                                                  org_name:
+                                                                  "Ubitech Solutions")),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    width: 62.0,
+                                                    height: 62.0,
+                                                    child: Container(
+                                                        decoration: new BoxDecoration(
+                                                            shape: BoxShape.circle,
+                                                            image: new DecorationImage(
+                                                                fit: BoxFit.fill,
+                                                                image: new NetworkImage(
+                                                                    snapshot
+                                                                        .data[index]
+                                                                        .pi_img)))),
+                                                  )),
+                                            ],
                                           ),
                                         ),
-                                        Text(snapshot.data[index].desc)
-                                      ],
-                                    )
-                                  : Row(
-                                      children: <Widget>[
-                                        SizedBox(
-                                          width: 5.0,
+                                        SizedBox(width: 20),
+                                        Container(
+
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text(
+                                                snapshot.data[index].po_time
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              SizedBox(height: 10),
+                                              GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ImageView(
+                                                                  myimage: snapshot
+                                                                      .data[index]
+                                                                      .po_img,
+                                                                  org_name:
+                                                                  "Ubitech Solutions")),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    width: 62.0,
+                                                    height: 62.0,
+                                                    child: Container(
+                                                        decoration: new BoxDecoration(
+                                                            shape: BoxShape.circle,
+                                                            image: new DecorationImage(
+                                                                fit: BoxFit.fill,
+                                                                image: new NetworkImage(
+                                                                    snapshot
+                                                                        .data[index]
+                                                                        .po_img)))),
+                                                  )),
+                                            ],
+                                          ),
                                         ),
-                                        Text(
-                                          'Remark:  ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.red),
-                                        ),
-                                        Text(
-                                          snapshot.data[index].desc,
-                                          style: TextStyle(color: Colors.red),
-                                        )
                                       ],
-                                    ),
-                          Divider(
-                            color: Colors.black26,
-                          ),
-                        ]);
+                                    )),
+                              ],
+                            ),
+                            snapshot.data[index].desc == ''
+                                ? Container()
+                                : snapshot.data[index].desc !=
+                                'Visit out not punched'
+                                ? Row(
+                              children: <Widget>[
+                                //SizedBox(width: 5.0,),
+                                Text(
+                                  'Remark:  ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(snapshot.data[index].desc)
+                              ],
+                            )
+                                : Row(
+                              children: <Widget>[
+                                //SizedBox(width: 5.0,),
+                                Text(
+                                  'Remark:  ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red),
+                                ),
+                                Text(
+                                  snapshot.data[index].desc,
+                                  style: TextStyle(color: Colors.red),
+                                )
+                              ],
+                            ),
+                            Divider(
+                              color: Colors.black26,
+                            ),
+                          ]),
+                    );
                   });
             } else {
               return new Center(
@@ -671,7 +671,7 @@ class _VisitList extends State<VisitList> {
         });
   }
 
-  /*dialogwidget(msg, filename) {
+/*dialogwidget(msg, filename) {
     showDialog(
         context: context,
         // ignore: deprecated_member_use

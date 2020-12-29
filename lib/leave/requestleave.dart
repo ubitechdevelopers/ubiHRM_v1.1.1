@@ -612,6 +612,8 @@ class _RequestLeaveState extends State<RequestLeave> {
 
                             TextFormField(
                               controller: _reasonController,
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.sentences,
                               decoration: InputDecoration(
                                   labelText: 'Reason',
                                   prefixIcon: Padding(
@@ -854,6 +856,7 @@ class _RequestLeaveState extends State<RequestLeave> {
                           ),
                         );
                       }).toList(),
+
                     ),
                   ),
                 ),

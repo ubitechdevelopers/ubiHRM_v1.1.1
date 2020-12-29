@@ -39,7 +39,7 @@ class _changePassword extends State<changePassword> {
     super.initState();
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     showtabbar=false;
-  //  initPlatformState();
+    //  initPlatformState();
     getOrgName();
   }
   getOrgName() async{
@@ -117,12 +117,11 @@ class _changePassword extends State<changePassword> {
     return new Container(
       child: Center(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            //Image.asset('assets/spinner.gif', height: 80.0, width: 80.0),
-            CircularProgressIndicator()
-          ]
-        ),
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Image.asset(
+                  'assets/spinner.gif', height: 80.0, width: 80.0),
+            ]),
       ),
     );
   }
@@ -130,7 +129,7 @@ class _changePassword extends State<changePassword> {
     return new Container(
       child: Center(
         child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Icon(Icons.android,color: appStartColor(),),Text("Under development",style: new TextStyle(fontSize: 30.0,color: appStartColor()),)
             ]),
@@ -215,32 +214,33 @@ class _changePassword extends State<changePassword> {
                       child: Row(
                         children: <Widget>[
                           Flexible(
-                           child:Container(
-                            width: MediaQuery.of(context).size.width*.7,
-                            child: TextFormField(
-                              controller: _newPass,
-                              focusNode: __newPass,
-                              keyboardType: TextInputType.text,
-                              obscureText: _obscureText_new,
-                              decoration: InputDecoration(
-                                  labelText: 'New Password',
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.all(0.0),
-                                    child: Icon(
-                                      Icons.lock,
-                                      color: Colors.grey,
-                                    ), // icon is 48px widget.
-                                  )
+                            child:Container(
+                              width: MediaQuery.of(context).size.width*.7,
+                              child: TextFormField(
+                                controller: _newPass,
+                                focusNode: __newPass,
+                                keyboardType: TextInputType.text,
+                                obscureText: _obscureText_new,
+
+                                decoration: InputDecoration(
+                                    labelText: 'New Password',
+                                    prefixIcon: Padding(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Icon(
+                                        Icons.lock,
+                                        color: Colors.grey,
+                                      ), // icon is 48px widget.
+                                    )
+                                ),
+                                validator: (value) {
+                                  if (value.isEmpty || value==null || value.length<6 ) {
+                                    __oldPass.notifyListeners();
+                                    //                                 FocusScope.of(context).requestFocus(__newPass);
+                                    return 'Password must be at least 6 characters';
+                                  }
+                                },
                               ),
-                              validator: (value) {
-                                if (value.isEmpty || value==null || value.length<6 ) {
-                                  __oldPass.notifyListeners();
-                                  //                                 FocusScope.of(context).requestFocus(__newPass);
-                                  return 'Password must be at least 6 characters';
-                                }
-                              },
                             ),
-                          ),
                           ),
 
                           Container(
@@ -268,64 +268,122 @@ class _changePassword extends State<changePassword> {
                             if (_oldPass.text == _newPass.text) {
                               //showInSnackBar("New password can't same as old");
                               // ignore: deprecated_member_use
-                              showDialog(context: context, child:
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context).pop(true);
+                                    });
+                                    return AlertDialog(
+                                      content: new Text("New password can't same as old"),
+                                    );
+                                  });
+                              /*showDialog(context: context, child:
                               new AlertDialog(
                                 // title: new Text("Sorry!"),
                                 content: new Text("New password can't same as old"),
                               )
-                              );
+                              );*/
                               FocusScope.of(context).requestFocus(__newPass);
                             } else {
                               changeMyPassword(_oldPass.text, _newPass.text).then((res){
                                 if(res==1) {
                                   _newPass.text='';
                                   _oldPass.text='';
-
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Password changed successfully"),
+                                        );
+                                      });
                                   //showInSnackBar("Password changed successfully");
                                   // ignore: deprecated_member_use
-                                  showDialog(context: context, child:
+                                  /*showDialog(context: context, child:
                                   new AlertDialog(
                                     // title: new Text("Sorry!"),
                                     content: new Text("Password changed successfully"),
                                   )
-                                  );
-                                }
-                                else if(res==2)
+                                  );*/
+                                }else if(res==2)
                                   //showInSnackBar("Old Password did not match");
                                   // ignore: deprecated_member_use
-                                  showDialog(context: context, child:
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Old Password did not match"),
+                                        );
+                                      });
+                                  /*showDialog(context: context, child:
                                   new AlertDialog(
                                     // title: new Text("Sorry!"),
                                     content: new Text("Old Password did not match"),
                                   )
-                                  );
+                                  );*/
                                 else if(res==3)
                                   //showInSnackBar("New password can't be the same as old password");
                                   // ignore: deprecated_member_use
-                                  showDialog(context: context, child:
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("New password can't be the same as old password"),
+                                        );
+                                      });
+                                  /*showDialog(context: context, child:
                                   new AlertDialog(
-                                  // title: new Text("Sorry!"),
-                                  content: new Text("New password can't be the same as old password"),
+                                    // title: new Text("Sorry!"),
+                                    content: new Text("New password can't be the same as old password"),
                                   )
-                                  );
+                                  );*/
                                 else
                                   //showInSnackBar("Unable to set password "+res.toString());
                                   // ignore: deprecated_member_use
-                                  showDialog(context: context, child:
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Unable to set password "+res.toString()),
+                                        );
+                                      });
+                                  /*showDialog(context: context, child:
                                   new AlertDialog(
                                     // title: new Text("Sorry!"),
                                     content: new Text("Unable to set password "+res.toString()),
                                   )
-                                  );
+                                  );*/
                               }).catchError((onError){
                                 //showInSnackBar("Unable to connect server");
                                 // ignore: deprecated_member_use
-                                showDialog(context: context, child:
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
+                                      });
+                                      return AlertDialog(
+                                        content: new Text("Unable to connect server"),
+                                      );
+                                    });
+                                /*showDialog(context: context, child:
                                 new AlertDialog(
                                   // title: new Text("Sorry!"),
                                   content: new Text("Unable to connect server"),
                                 )
-                                );
+                                );*/
                                 print(onError);
                               });
                             }

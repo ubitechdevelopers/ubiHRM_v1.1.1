@@ -13,16 +13,18 @@ import 'package:url_launcher/url_launcher.dart';
 
 class EditEmployee extends StatefulWidget {
   @override
+  final String empid;
   final String fname;
   final String lname;
   final String phone;
   final String email;
+  final String divisionid;
+  final String departmentid;
+  final String designationid;
+  final String locationid;
+  final String shiftid;
   //final String password;
-  final String department;
-  final String designation;
-  final String shift;
-  final String empid;
-  EditEmployee({Key key, this.fname, this.lname, this.phone, this.email, /*this.password,*/ this.department,this.designation ,this.shift,this.empid})
+  EditEmployee({Key key, this.empid, this.fname, this.lname, this.phone, this.email, this.divisionid, this.departmentid, this.designationid, this.locationid, this.shiftid/*, this.password*/})
       : super(key: key);
   _EditEmployee createState() => _EditEmployee();
 }
@@ -46,7 +48,7 @@ class _EditEmployee extends State<EditEmployee> {
   bool _isButtonDisabled = false;
   int _currentIndex = 2;
   String updatedcontact = '';
-  String dept = '0', desg = '0', shift = '0';
+  String div = '0', dept = '0', desg = '0', loc = '0', shift = '0';
   String orgname = "";
   String org_country = "";
   String admname = '';
@@ -69,21 +71,24 @@ class _EditEmployee extends State<EditEmployee> {
     if (response == 1) {
       Home ho = new Home();
       setState(() {
-        dept = widget.department;
-        desg = widget.designation;
-        shift = widget.shift;
-        //_pass.text = widget.password;
+        div = widget.divisionid;
+        print("div"+div);
+        dept = widget.departmentid;
+        print("dept"+dept);
+        desg = widget.designationid;
+        print("desg"+desg);
+        loc = widget.locationid;
+        print("loc"+loc);
+        shift = widget.shiftid;
+        print("shift"+shift);
         _firstName.text =widget.fname;
         _lastName.text =widget.lname;
         _contact.text = widget.phone;
         _email.text = widget.email;
-
+        //_pass.text = widget.password;
         orgname = prefs.getString('orgname') ?? '';
         org_country = prefs.getString('countryid') ?? '';
         adminsts = prefs.getInt('adminsts') ?? 0;
-        //admname = prefs.getString('fname') ?? ''+' '+ prefs.getString('lname') ?? '';
-        if (adminsts == 2) supervisor = false;
-        _department1.text = departmentname;
       });
     }
   }
@@ -98,15 +103,6 @@ class _EditEmployee extends State<EditEmployee> {
   Widget build(BuildContext context) {
     return getmainhomewidget();
   }
-
-  /*void showInSnackBar(String value) {
-    final snackBar = SnackBar(
-        content: Text(
-          value,
-          textAlign: TextAlign.center,
-        ));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
-  }*/
 
   Future<bool> move() async {
     Navigator.pushAndRemoveUntil(
@@ -226,6 +222,7 @@ class _EditEmployee extends State<EditEmployee> {
                         child: TextFormField(
                           controller: _firstName,
                           keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.words,
                           //initialValue: _firstName.text,
                           decoration: InputDecoration(
                             //isDense: true,
@@ -257,6 +254,7 @@ class _EditEmployee extends State<EditEmployee> {
                         child: TextFormField(
                           controller: _lastName,
                           keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.words,
                           //initialValue: _firstName.text,
                           decoration: InputDecoration(
                             //isDense: true,
@@ -384,9 +382,11 @@ class _EditEmployee extends State<EditEmployee> {
                         )
                       ),*/
                       ////////////////////-----------------
-                      (supervisor) ? getDepartments_DD() : getDepartments_DD1(),
-                      //getDepartments_DD(),
+                      //(supervisor) ? getDepartments_DD() : getDepartments_DD1(),
+                      getDivisions_DD(),
+                      getDepartments_DD(),
                       getDesignations_DD(),
+                      getLocations_DD(),
                       getShifts_DD(),
                       ////////////////////-----------------
                       SizedBox(height: 40,),
@@ -520,8 +520,82 @@ class _EditEmployee extends State<EditEmployee> {
   }
 
   ///////////////////////common dropdowns/////////////////////
+  Widget getDivisions_DD() {
+    return new FutureBuilder<List<Map>>(
+      future: getDivisionsList(0), //with -select- label
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            children: <Widget>[
+              SizedBox(height: 15.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0,right: 10.0),
+                child: new Container(
+                 // width: MediaQuery.of(context).size.width * .9,
+                  // width: MediaQuery.of(context).size.width*.45,
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                     // isDense: true,
+                      border: OutlineInputBorder(),
+                      labelText: "Division",
+                      hintText: "Division",
+                      hintStyle: TextStyle(
+                          fontSize: 14.0),
+                      icon: Icon(
+                        Icons.group,
+                        color: Colors.black54,
+                        size: 25,
+                      )
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: ButtonTheme(
+                        child: new DropdownButton<String>(
+                          isDense: true,
+                          style: new TextStyle(fontSize: 15.0, color: Colors.black),
+                          value: div,
+                          onChanged: (String newValue) {
+                            setState(() {
+                              div = newValue;
+                              print("div");
+                              print(div);
+                            });
+                          },
+                          items: snapshot.data.map((Map map) {
+                            return new DropdownMenuItem<String>(
+                              value: map["Id"].toString(),
+                              child: new SizedBox(
+                                width: 200,
+                                  child: new Text(
+                                    map["Name"],
+                                  )),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        } else if (snapshot.hasError) {
+          return new Text("${snapshot.error}");
+        }
+        // return loader();
+        return new Center(
+          child: SizedBox(
+            child: CircularProgressIndicator(
+              strokeWidth: 2.2,
+            ),
+            height: 20.0,
+            width: 20.0,
+          ),
+        );
+      }
+    );
+  }
+
   Widget getDepartments_DD() {
-    String dc = "0";
     return new FutureBuilder<List<Map>>(
       future: getDepartmentsList(0), //with -select- label
       builder: (context, snapshot) {
@@ -596,39 +670,7 @@ class _EditEmployee extends State<EditEmployee> {
     );
   }
 
-  Widget getDepartments_DD1() {
-    return Column(
-      children: <Widget>[
-        SizedBox(height: 10.0),
-        Padding(
-          padding: const EdgeInsets.only(left: 10.0,right: 10.0),
-          child: Container(
-            //width: MediaQuery.of(context).size.width * .9,
-            child: TextFormField(
-              controller: _department1,
-              enabled: false,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                //isDense: true,
-                border: OutlineInputBorder(),
-                labelText: "Department",
-                  hintText: "Department",
-                  hintStyle: TextStyle(fontSize: 14.0),
-                icon: Icon(
-                  Icons.phone_android,
-                  color: Colors.black54,
-                  size: 25,
-                )
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget getDesignations_DD() {
-    String dc = "0";
     return new FutureBuilder<List<Map>>(
       future: getDesignationsList(0),
       builder: (context, snapshot) {
@@ -702,9 +744,83 @@ class _EditEmployee extends State<EditEmployee> {
     );
   }
 
+  Widget getLocations_DD() {
+    return new FutureBuilder<List<Map>>(
+      future: getLocationsList(0),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            children: <Widget>[
+              SizedBox(height: 15.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0,right: 10.0),
+                child: new Container(
+                  //width: MediaQuery.of(context).size.width * .9,
+                  // width: MediaQuery.of(context).size.width*.45,
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      //isDense: true,
+                      border: OutlineInputBorder(),
+                      labelText: "Location",
+                      hintText: "Location",
+                      hintStyle: TextStyle(
+                          fontSize: 14.0),
+                      icon: Icon(
+                        Icons.desktop_windows,
+                        color: Colors.black54,
+                        size: 25
+                      ),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: ButtonTheme(
+                        child: new DropdownButton<String>(
+                          isDense: true,
+                          style: new TextStyle(fontSize: 15.0, color: Colors.black),
+                          value: loc,
+                          onChanged: (String newValue) {
+                            setState(() {
+                              loc = newValue;
+                            });
+                          },
+                          items: snapshot.data.map((Map map) {
+                            return new DropdownMenuItem<String>(
+                              value: map["Id"].toString(),
+                              child: new SizedBox(
+                                width: 200.0,
+                                child: new Text(
+                                  map["Name"],
+                                )
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        } else if (snapshot.hasError) {
+          return new Text("${snapshot.error}");
+        }
+        // return loader();
+        return new Center(
+          child: SizedBox(
+            child: CircularProgressIndicator(
+              strokeWidth: 2.2,
+            ),
+            height: 20.0,
+            width: 20.0,
+          ),
+        );
+      }
+    );
+  }
+
   Widget getShifts_DD() {
     return new FutureBuilder<List<Map>>(
-      future: getShiftsList(),
+      future: getShiftsList(0),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Column(

@@ -1,12 +1,14 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/home.dart';
+import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/otpverificationpage.dart';
-
+import 'package:ubihrm/services/checkLogin.dart';
 import 'global.dart';
 
 
@@ -18,7 +20,8 @@ class SurveyForm extends StatefulWidget {
   final String email;
   final String countrycode;
   final String phone;
-  SurveyForm({Key key,  this.trialOrgId,  this.orgName,  this.name,  this.email,  this.countrycode,  this.phone}) : super(key: key);
+  final String password;
+  SurveyForm({Key key, this.trialOrgId, this.orgName, this.name, this.email, this.countrycode, this.phone, this.password}) : super(key: key);
 
   _SurveyFormState createState() => _SurveyFormState();
 }
@@ -27,11 +30,6 @@ class _SurveyFormState extends State<SurveyForm> {
   bool _isServiceCalling = false;
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  /*final FocusNode myFocusNodeOrgName = FocusNode();
-  final FocusNode myFocusNodeName = FocusNode();
-  final FocusNode myFocusNodeEmail = FocusNode();
-  final FocusNode myFocusNodePhone = FocusNode();*/
   final FocusNode myFocusNodeEmpNum = FocusNode();
   final FocusNode myFocusNodeReq = FocusNode();
   final FocusNode __contcode = FocusNode();
@@ -55,15 +53,15 @@ class _SurveyFormState extends State<SurveyForm> {
   String attModule='', leaveModule='',payrollModule='', expenseModule='', salaryModule='', timesheetModule='', performanceModule='';
 
   List<String> _timeIST = ['09:00-10:00',
-                            '10:00-11:00',
-                            '11:00-12:00',
-                            '12:00-13:00',
-                            '13:00-14:00',
-                            '14:00-15:00',
-                            '15:00-16:00',
-                            '16:00-17:00',
-                            '17:00-18:00',
-                            '18:00-19:00'];
+    '10:00-11:00',
+    '11:00-12:00',
+    '12:00-13:00',
+    '13:00-14:00',
+    '14:00-15:00',
+    '15:00-16:00',
+    '16:00-17:00',
+    '17:00-18:00',
+    '18:00-19:00'];
   String _selectedISTtime;
 
   setLocal(var fname, var empid, var  orgid) async {
@@ -81,7 +79,7 @@ class _SurveyFormState extends State<SurveyForm> {
     super.dispose();
   }
 
-  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+  //FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
 
   String token1="";
   String tokenn="";
@@ -99,7 +97,7 @@ class _SurveyFormState extends State<SurveyForm> {
       DeviceOrientation.portraitDown,
     ]);
 
-    _firebaseMessaging.configure(
+    /*_firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) {
         print('on message $message');
       },
@@ -111,10 +109,10 @@ class _SurveyFormState extends State<SurveyForm> {
       },
     );
 
-    gettokenstate();
+    gettokenstate();*/
   }
 
-  gettokenstate() async{
+  /*gettokenstate() async{
     final prefs = await SharedPreferences.getInstance();
     _firebaseMessaging.getToken().then((token){
       token1 = token;
@@ -123,7 +121,7 @@ class _SurveyFormState extends State<SurveyForm> {
       // print(token1);
 
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -214,8 +212,8 @@ class _SurveyFormState extends State<SurveyForm> {
                     child: Container(
                       //width: 370.0,
                       width: MediaQuery.of(context).size.width,
-                     // height: MediaQuery.of(context).size.height*1.03,
-                      height: 850.0,
+                      height: MediaQuery.of(context).size.height*1.3,
+                      //height: 870.0,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
@@ -243,7 +241,7 @@ class _SurveyFormState extends State<SurveyForm> {
                                     controller: OrgNameController,
                                     keyboardType: TextInputType.text,
                                     enabled: false,
-                                    //textCapitalization: TextCapitalization.words,
+                                    textCapitalization: TextCapitalization.words,
                                     style: TextStyle(
                                         fontSize: 16.0,
                                         color: Colors.black54),
@@ -315,7 +313,7 @@ class _SurveyFormState extends State<SurveyForm> {
                                   padding: EdgeInsets.only(
                                       top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
                                   child: TextFormField(
-                                      //focusNode: myFocusNodeEmail,
+                                    //focusNode: myFocusNodeEmail,
                                       controller: EmailController,
                                       keyboardType: TextInputType.emailAddress,
                                       enabled: false,
@@ -677,94 +675,99 @@ class _SurveyFormState extends State<SurveyForm> {
                             ],
                           ),
 
-                              Padding(
-                                padding: const EdgeInsets.only(top:30.0),
-                                child: Center(
-                                  child: RaisedButton(
-                                    child:Text('SUBMIT',style: TextStyle(color: Colors.white, fontSize: 18),),
-                                    color: Colors.orange[800],
-                                    onPressed: () {
-                                      print("Hello");
-                                      print(EmpNumController.text);
-                                      print(attModule);
-                                      print(leaveModule);
-                                      print(expenseModule);
-                                      print(salaryModule);
-                                      print(timesheetModule);
-                                      print(performanceModule);
-                                      print(ReqController.text);
-                                      print(_selectedISTtime);
-                                      //if (_formKey.currentState.validate()) {
-                                        if(EmpNumController.text==""){
-                                          showDialog(context: context, child:
-                                          new AlertDialog(
-                                            content: new Text("Please enter no. of employees"),
-                                          ));
-                                          FocusScope.of(context).requestFocus(myFocusNodeEmpNum);
-                                        }else if((chkAttVal||chkLeaveVal||chkPayrollVal||chkSalaryVal||chkTimesheetVal||chkPerformanceVal)==false){
-                                          showDialog(context: context, child:
-                                          new AlertDialog(
-                                            content: new Text("Please select atleast one module"),
-                                          ));
-                                        }else if(_selectedISTtime==null){
-                                          showDialog(context: context, child:
-                                          new AlertDialog(
-                                            content: new Text("Please select preferred time (IST) to call"),
-                                          ));
-                                        }else{
-                                          print(path+"savesurvey?trialorgid=${widget.trialOrgId}&org_name=${OrgNameController.text}&name=${NameController.text}&email=${EmailController.text}&countrycode=${ContCodeController.text}&phone=${PhoneController.text}&empno=${EmpNumController.text}&attmodule=$attModule&leavemodule=$leaveModule&payrollmodule=$payrollModule&salarymodule=$salaryModule&timesheetmodule=$timesheetModule&performancemodule=$performanceModule&requirement=${ReqController.text}&timetocall=$_selectedISTtime");
-                                          var url = path+"savesurvey";
-                                          http.post(url, body: {
-                                            "trialorgid": widget.trialOrgId,
-                                            "org_name": OrgNameController.text,
-                                            "name": NameController.text,
-                                            "email": EmailController.text,
-                                            "countrycode": ContCodeController.text,
-                                            "phone": PhoneController.text,
-                                            "empno": EmpNumController.text,
-                                            "attmodule": attModule,
-                                            "leavemodule": leaveModule,
-                                            "payrollmodule": payrollModule,
-                                            "salarymodule": salaryModule,
-                                            "timesheetmodule": timesheetModule,
-                                            "performancemodule": performanceModule,
-                                            "requirement": ReqController.text,
-                                            "timetocall": _selectedISTtime,
-                                          }).then((response) {
-                                            if (response.statusCode == 200) {
-                                              if (response.body.toString().contains("true")) {
-                                                /*showDialog(context: context, child:
+                          Padding(
+                            padding: const EdgeInsets.only(top:30.0),
+                            child: Center(
+                              child: RaisedButton(
+                                  child:Text('SUBMIT',style: TextStyle(color: Colors.white, fontSize: 18),),
+                                  color: Colors.orange[800],
+                                  onPressed: () {
+                                    print("Hello");
+                                    print(EmpNumController.text);
+                                    print(attModule);
+                                    print(leaveModule);
+                                    print(expenseModule);
+                                    print(salaryModule);
+                                    print(timesheetModule);
+                                    print(performanceModule);
+                                    print(ReqController.text);
+                                    print(_selectedISTtime);
+                                    //if (_formKey.currentState.validate()) {
+                                    if(EmpNumController.text==""){
+                                      showDialog(context: context, child:
+                                      new AlertDialog(
+                                        content: new Text("Please enter no. of employees"),
+                                      ));
+                                      FocusScope.of(context).requestFocus(myFocusNodeEmpNum);
+                                    }else if((chkAttVal||chkLeaveVal||chkPayrollVal||chkSalaryVal||chkTimesheetVal||chkPerformanceVal)==false){
+                                      showDialog(context: context, child:
+                                      new AlertDialog(
+                                        content: new Text("Please select atleast one module"),
+                                      ));
+                                    }else if(_selectedISTtime==null){
+                                      showDialog(context: context, child:
+                                      new AlertDialog(
+                                        content: new Text("Please select preferred time (IST) to call"),
+                                      ));
+                                    }else{
+                                      print(path+"savesurvey?trialorgid=${widget.trialOrgId}&org_name=${OrgNameController.text}&name=${NameController.text}&email=${EmailController.text}&countrycode=${ContCodeController.text}&phone=${PhoneController.text}&empno=${EmpNumController.text}&attmodule=$attModule&leavemodule=$leaveModule&payrollmodule=$payrollModule&salarymodule=$salaryModule&timesheetmodule=$timesheetModule&performancemodule=$performanceModule&requirement=${ReqController.text}&timetocall=$_selectedISTtime");
+                                      var url = path+"savesurvey";
+                                      http.post(url, body: {
+                                        "trialorgid": widget.trialOrgId,
+                                        "org_name": OrgNameController.text,
+                                        "name": NameController.text,
+                                        "email": EmailController.text,
+                                        "countrycode": ContCodeController.text,
+                                        "phone": PhoneController.text,
+                                        "empno": EmpNumController.text,
+                                        "attmodule": attModule,
+                                        "leavemodule": leaveModule,
+                                        "payrollmodule": payrollModule,
+                                        "salarymodule": salaryModule,
+                                        "timesheetmodule": timesheetModule,
+                                        "performancemodule": performanceModule,
+                                        "requirement": ReqController.text,
+                                        "timetocall": _selectedISTtime,
+                                        "platform": 'iOS'
+                                      }).then((response) {
+                                        if (response.statusCode == 200) {
+                                          if (response.body.toString().contains("true")) {
+                                            gethome () async{
+                                              await new Future.delayed(const Duration(seconds: 1));
+                                              checklogin(widget.phone, widget.password, context);
+                                            }
+                                            gethome ();
+                                            /*showDialog(context: context, child:
                                                 new AlertDialog(
                                                   content: new Text(
                                                       "Survey submitted successfully"),
                                                 ));*/
-                                                Navigator.pushAndRemoveUntil(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) => Otp(
-                                                    trialOrgId: widget.trialOrgId,
-                                                  )), (Route<dynamic> route) => false,
-                                                );
-                                              }else if(response.body.toString().contains("false")){
-                                                showDialog(context: context, child:
-                                                new AlertDialog(
-                                                  content: new Text(
-                                                      "Survey not submitted successfully"),
-                                                ));
-                                              }else if(response.body.toString().contains("false1")){
-                                                showDialog(context: context, child:
-                                                new AlertDialog(
-                                                  content: new Text(
-                                                      "Survey not submitted"),
-                                                ));
-                                              }
-                                            }
-                                          });
+                                            /*Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => Otp(
+                                                trialOrgId: widget.trialOrgId,
+                                              )), (Route<dynamic> route) => false,
+                                            );*/
+                                          }else if(response.body.toString().contains("false")){
+                                            showDialog(context: context, child:
+                                            new AlertDialog(
+                                              content: new Text(
+                                                  "Survey not submitted successfully"),
+                                            ));
+                                          }else if(response.body.toString().contains("false1")){
+                                            showDialog(context: context, child:
+                                            new AlertDialog(
+                                              content: new Text("Survey not submitted"),
+                                            ));
+                                          }
                                         }
-                                      //}
+                                      });
                                     }
-                                  ),
-                                ),
+                                    //}
+                                  }
                               ),
+                            ),
+                          ),
 
 
                         ],
@@ -794,6 +797,64 @@ class _SurveyFormState extends State<SurveyForm> {
       return 'Enter Valid Email';
     else
       return null;
+  }
+
+  checklogin(String username, String pass, BuildContext context) async{
+    setState(() {
+      _isServiceCalling = true;
+    });
+    Login dologin = Login();
+    UserLogin user = new UserLogin(username: username, password: pass);
+    dologin.checklogin(user, context).then((res){
+      print("response");
+      print(res);
+      if(res=='true'){
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+        );
+      }else if(res=='false1'){
+        setState(() {
+          _isServiceCalling = false;
+        });
+        showDialog(context: context, child:
+        new AlertDialog(
+
+          content: new Text("Your trial period has expired!"),
+        )
+        );
+      }else if(res=='false2'){
+        setState(() {
+          _isServiceCalling = false;
+        });
+        showDialog(context: context, child:
+        new AlertDialog(
+
+          content: new Text("Your plan has expired!"),
+        )
+        );
+      }else{
+        setState(() {
+          _isServiceCalling = false;
+        });
+        showDialog(context: context, child:
+        new AlertDialog(
+
+          content: new Text("Invalid login credentials."),
+        )
+        );
+      }
+    }).catchError((exp){
+      setState(() {
+        _isServiceCalling=false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+
+        content: new Text("Unable to connect server."),
+      )
+      );
+    });
   }
 }
 

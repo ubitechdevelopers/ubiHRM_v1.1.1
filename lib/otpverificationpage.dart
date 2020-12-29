@@ -559,7 +559,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
         print("This will return response");
         print(data);
         if (data["sts"].contains("true")) {
-         gethome () async{
+          gethome () async{
             await new Future.delayed(const Duration(seconds: 1));
             checklogin(data['phone'], data['pwd'], context);
           }

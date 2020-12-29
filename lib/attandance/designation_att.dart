@@ -33,6 +33,7 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
   bool filests=false;
 
   String desg='0';
+  String emp='0';
   var formatter = new DateFormat('dd-MMM-yyyy');
   bool res = true;
   List<Map<String,String>> chartData;
@@ -61,10 +62,10 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
   }
 
   setAlldata(){
-    _listFuture1 = getCDateAttnDesgWise('present',today.text,desg);
-    _listFuture2 = getCDateAttnDesgWise('absent',today.text,desg);
-    _listFuture3 = getCDateAttnDesgWise('latecomings',today.text,desg);
-    _listFuture4 = getCDateAttnDesgWise('earlyleavings',today.text,desg);
+    _listFuture1 = getCDateAttnDesgWise('present',today.text,desg,emp);
+    _listFuture2 = getCDateAttnDesgWise('absent',today.text,desg,emp);
+    _listFuture3 = getCDateAttnDesgWise('latecomings',today.text,desg,emp);
+    _listFuture4 = getCDateAttnDesgWise('earlyleavings',today.text,desg,emp);
 
     _listFuture1.then((data) async{
       setState(() {
@@ -251,13 +252,11 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                                       fontSize: 16,),
                                   ),
                                   onTap: () {
-                                    */
-                    /*final uri = Uri.file('/storage/emulated/0/ubiattendance_files/Designation_Wise_Report_14-Jun-2019.pdf');
+                                    *//*final uri = Uri.file('/storage/emulated/0/ubiattendance_files/Designation_Wise_Report_14-Jun-2019.pdf');
                                     SimpleShare.share(
                                         uri: uri.toString(),
                                         title: "Share my file",
-                                        msg: "My message");*/
-                    /*
+                                        msg: "My message");*//*
                                     if (mounted) {
                                       setState(() {
                                         filests = true;
@@ -292,12 +291,10 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                               ),
                             ],
                           ):Center(
-                              */
-                    /*child: Padding(
+                              *//*child: Padding(
                                 padding: const EdgeInsets.only(top:12.0),
                                 child: Text("No CSV/PDF generated", textAlign: TextAlign.center,),
-                              )*/
-                    /*
+                              )*//*
                           ),
                         ]
                     )
@@ -310,7 +307,7 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                   color: Colors.black,
                 ),
                 getDesignations_DD(),
-
+                getDesgEmp_DD(),
                 /* res==true?new Container(
             padding: EdgeInsets.all(0.1),
             margin: EdgeInsets.all(0.1),
@@ -1161,16 +1158,12 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
           if (snapshot.hasData) {
             try {
               return new Container(
-                //    width: MediaQuery.of(context).size.width*.45,
+                //width: MediaQuery.of(context).size.width*.45,
                 child: InputDecorator(
                   decoration: InputDecoration(
                     labelText: 'Select Designation',
                     prefixIcon: Padding(
                       padding: EdgeInsets.all(1.0),
-                      /*child: Icon(
-                        Icons.attach_file,
-                        color: Colors.grey,
-                      ),*/ // icon is 48px widget.
                       child: Icon(const IconData(0xe804, fontFamily: "CustomIcon"),size: 20.0,),
                     ),
                   ),
@@ -1185,9 +1178,84 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                       value: desg,
                       onChanged: (String newValue) {
                         setState(() {
-                          //  showInSnackBar(newValue);
                           setState(() {
                             desg = newValue;
+                            if(res = true){
+                              setAlldata();
+                            }else {
+                              countP='0';
+                              countA='0';
+                              countE='0';
+                              countL='0';
+                            }
+                          });
+                        });
+                      },
+                      items: snapshot.data.map((Map map) {
+                        return new DropdownMenuItem<String>(
+                          value: map["Id"].toString(),
+                          child: new SizedBox(
+                              width: 250.0,
+                              child: new Text(
+                                map["Name"],
+                              )
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              );
+            }catch(e){
+              return Text("EX: Unable to fetch designations");
+            }
+          } else if (snapshot.hasError) {
+            return new Text("ER: Unable to fetch designations");
+          }
+          // return loader();
+          return new Center(child: SizedBox(
+            child: CircularProgressIndicator(strokeWidth: 2.2,),
+            height: 20.0,
+            width: 20.0,
+          ),);
+        });
+  }
+
+  Widget getDesgEmp_DD() {
+    String dc = "0";
+    return new FutureBuilder<List<Map>>(
+        future: getEmployeesList(1, '0', desg),// with -All- label
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            try {
+              return new Container(
+                //width: MediaQuery.of(context).size.width*.45,
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    labelText: 'Select Employee',
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(1.0),
+                      child: Icon(
+                        Icons.person_outline,
+                        color: Colors.grey,
+                      ),
+                      //child: Icon(const IconData(0xe803, fontFamily: "CustomIcon"),size: 20.0,),// icon is 48px widget.
+                    ),
+                  ),
+
+                  child: DropdownButtonHideUnderline(
+                    child: new DropdownButton<String>(
+                      isDense: true,
+                      style: new TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black
+                      ),
+                      value: emp,
+                      onChanged: (String newValue) {
+                        setState(() {
+                          //  showInSnackBar(newValue);
+                          setState(() {
+                            emp = newValue;
                             if(res = true){
                               setAlldata();
                             }else {
@@ -1218,10 +1286,10 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                 ),
               );
             }catch(e){
-              return Text("EX: Unable to fetch designations");
+              return Text("Ex: Unable to fetch departments");
             }
           } else if (snapshot.hasError) {
-            return new Text("ER: Unable to fetch designations");
+            return new Text("ER: Unable to fetch departments");
           }
           // return loader();
           return new Center(child: SizedBox(

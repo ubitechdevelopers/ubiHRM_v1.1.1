@@ -8,7 +8,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
+//import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +16,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/expense_services.dart';
+
 import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
@@ -344,6 +345,8 @@ class _RequestExpenceState extends State<RequestExpence> {
                               child:  Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
                                 child: TextFormField(
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization: TextCapitalization.sentences,
                                   controller: _descController,
                                   decoration: InputDecoration(
                                       labelText: 'Description',
@@ -492,14 +495,14 @@ class _RequestExpenceState extends State<RequestExpence> {
                                             ),
                                             InkWell(
                                               child: Container(
-                                                //width: MediaQuery.of(context).size.width*0.6,
+                                                width: MediaQuery.of(context).size.width*0.6,
                                                 padding: EdgeInsets.fromLTRB(10.0,0.0, 0.0, 0.0),
                                                 //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                                                 child:showFile(_file),
                                               ),
                                               onTap: () async {
-                                                //var file = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                                File file = await FilePicker.getFile(type: FileType.any);
+                                                var file = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                                //File file = await FilePicker.getFile(type: FileType.any);
                                                 print(file);
                                                 setState(() {
                                                   //_image = image;

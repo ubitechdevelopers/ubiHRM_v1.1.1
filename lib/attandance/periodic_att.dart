@@ -20,17 +20,16 @@ class PeriodicAttendance extends StatefulWidget {
 
 class _PeriodicAttendance extends State<PeriodicAttendance> with SingleTickerProviderStateMixin {
   TabController _controller;
-  TextEditingController _searchController;
-  FocusNode searchFocusNode;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _orgName;
   var profileimage;
   bool showtabbar;
   String orgName="";
-  String empname="";
+  String emp="0";
   String newValue='Last 7 days ' ;
   String month;
   Future<List<Attn>> _listFuture,_listFuture1,_listFuture2,_listFuture3,_listFuture4;
+  Future<List<Map<String, String>>> _chartDataValue;
   final DateFormat dateFormat = new DateFormat('MMMM yyyy');
   DateTime selectedMonth;
   List<Map<String,String>> chartData;
@@ -50,29 +49,25 @@ class _PeriodicAttendance extends State<PeriodicAttendance> with SingleTickerPro
 
   @override
   void initState() {
-    _searchController = new TextEditingController();
-    searchFocusNode = FocusNode();
     super.initState();
-    _listFuture1 = getAttnDataLast('Last 7 days ','null','present',empname);
-    _listFuture2 = getAttnDataLast('Last 7 days ','null','absent',empname);
-    _listFuture3 = getAttnDataLast('Last 7 days ','null','latecomings',empname);
-    _listFuture4 = getAttnDataLast('Last 7 days ','null','earlyleavings',empname);
-    print("empname1");
-    print(empname);
+    _listFuture1 = getAttnDataLast('Last 7 days ','null','present',emp);
+    _listFuture2 = getAttnDataLast('Last 7 days ','null','absent',emp);
+    _listFuture3 = getAttnDataLast('Last 7 days ','null','latecomings',emp);
+    _listFuture4 = getAttnDataLast('Last 7 days ','null','earlyleavings',emp);
+    _chartDataValue = getChartDataLast('Last 7 days ','null',emp);
     _controller = new TabController(length: 4, vsync: this);
     showtabbar =false;
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     getOrgName();
-    selectedMonth = new DateTime.now();
+    //selectedMonth = new DateTime.now();
   }
 
   setAlldata() {
-
-    _listFuture1 = getAttnDataLast(newValue,selectedMonth,'present',empname);
-    _listFuture2 = getAttnDataLast(newValue,selectedMonth,'absent',empname);
-    _listFuture3 = getAttnDataLast(newValue,selectedMonth,'latecomings',empname);
-    _listFuture4 = getAttnDataLast(newValue,selectedMonth,'earlyleavings',empname);
-
+    _listFuture1 = getAttnDataLast(newValue,selectedMonth,'present',emp);
+    _listFuture2 = getAttnDataLast(newValue,selectedMonth,'absent',emp);
+    _listFuture3 = getAttnDataLast(newValue,selectedMonth,'latecomings',emp);
+    _listFuture4 = getAttnDataLast(newValue,selectedMonth,'earlyleavings',emp);
+    _chartDataValue = getChartDataLast(newValue,selectedMonth,emp);
   }
 
   @override
@@ -108,43 +103,7 @@ class _PeriodicAttendance extends State<PeriodicAttendance> with SingleTickerPro
                   child: Center(child:Text("Attendance Snap",style: TextStyle(fontSize: 20.0,color: appStartColor()),),),
                 ),
                 SizedBox(height:10.0),
-                /*Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: TextFormField(
-                      controller: _searchController,
-                      focusNode: searchFocusNode,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        border: OutlineInputBorder(
-                          borderRadius:  new BorderRadius.circular(10.0),
-                        ),
-                        prefixIcon: Icon(Icons.search, size: 30,),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: 'Search Employee',
-                        labelText: 'Search Employee',
-                        suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
-                            onPressed: () {
-                              _searchController.clear();
-                              empname='';
-                              *//*Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => EmployeeList()),
-                              );*//*
-                            }
-                        ):null,
-                        //focusColor: Colors.white,
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          empname = value;
-                          //res = true;
-                        });
-                      },
-                    ),
-                  ),
-                ),*/
+                getEmployee_DD(),
                 Row(
                   children: <Widget>[
                     Padding(
@@ -199,12 +158,12 @@ class _PeriodicAttendance extends State<PeriodicAttendance> with SingleTickerPro
                                   } else {
                                     selectedMonth = null;
                                   }
+                                  print("value");
                                   print(value);
+                                  print("newValue");
                                   print(newValue);
                                   setState(() {
                                     setAlldata();
-                                    print("empname2");
-                                    print(empname);
                                   });
                                 },
                                 items: <String>['Last 7 days ', 'Last 14 days ', 'Last 30 days ', 'Custom Month '].map((String value) {
@@ -261,8 +220,6 @@ class _PeriodicAttendance extends State<PeriodicAttendance> with SingleTickerPro
                       print(selectedMonth);
                       setState(() {
                         setAlldata();
-                        print("empname3");
-                        print(empname);
                       });
                     });
                   },
@@ -274,7 +231,8 @@ class _PeriodicAttendance extends State<PeriodicAttendance> with SingleTickerPro
                     title: new SizedBox(height: MediaQuery.of(context).size.height*0.25,
 
                       child: new FutureBuilder<List<Map<String,String>>>(
-                          future: (newValue!= null && selectedMonth!='null')? getChartDataLast(newValue,selectedMonth): getChartDataLast('Last 7 days ','null'),
+                          //future: (newValue!= null && selectedMonth!='null' && emp!='0')? getChartDataLast(newValue,selectedMonth,emp): getChartDataLast('Last 7 days ','null',emp),
+                          future: _chartDataValue,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               if (snapshot.data.length > 0) {
@@ -308,7 +266,7 @@ class _PeriodicAttendance extends State<PeriodicAttendance> with SingleTickerPro
                           style: TextStyle(color: Colors.black87, fontSize: 12.0),),
                       ),
                     ),
-                    SizedBox(width: 20.0,),
+                    SizedBox(width: 18.0,),
                     Flexible(
                       child: Container(
                         child: Text('Late Comers(LC)',
@@ -821,5 +779,72 @@ class _PeriodicAttendance extends State<PeriodicAttendance> with SingleTickerPro
             ),
           ),
         ]);
+  }
+
+  Widget getEmployee_DD() {
+    String dc = "0";
+    return new FutureBuilder<List<Map>>(
+        future: getEmployeesList(1, '0', '0'),// with -select- label
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            try {
+              return new Container(
+                //width: MediaQuery.of(context).size.width*.45,
+                child: InputDecorator(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    labelText: 'Select Employee',
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(1.0),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.grey,
+                      ), // icon is 48px widget.
+                    ),
+                  ),
+
+                  child: DropdownButtonHideUnderline(
+                    child: new DropdownButton<String>(
+                      isDense: true,
+                      style: new TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.black
+                      ),
+                      value: emp,
+                      onChanged: (String newValue) {
+                        setState(() {
+                          emp = newValue;
+                          setAlldata();
+                        });
+                      },
+                      items: snapshot.data.map((Map map) {
+                        return new DropdownMenuItem<String>(
+                          value: map["Id"].toString(),
+                          child: new SizedBox(
+                              width: 250.0,
+                              child: map["Code"]!=''&&map["Code"]!='null'?new Text(map["Code"]+' - '+map["Name"]): new Text(map["Name"],)
+                          ),
+                        );
+                      }).toList(),
+
+                    ),
+                  ),
+                ),
+              );
+            }
+            catch(e){
+              return Text("EX: Unable to fetch employees");
+            }
+          } else if (snapshot.hasError) {
+            print(snapshot.error);
+            return new Text("ER: Unable to fetch employees");
+          }
+          // return loader();
+          return new Center(child: SizedBox(
+            child: CircularProgressIndicator(strokeWidth: 2.2,),
+            height: 20.0,
+            width: 20.0,
+          ),);
+        });
   }
 }

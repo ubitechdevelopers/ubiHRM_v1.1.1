@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pdf/widgets.dart' as prefix0;
+//import 'package:pdf/widgets.dart' as prefix0;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
@@ -11,19 +11,22 @@ class ShiftList extends StatefulWidget {
   @override
   _ShiftList createState() => _ShiftList();
 }
-TextEditingController dept;
-//FocusNode f_dept ;
+
 class _ShiftList extends State<ShiftList> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _sts1 = 'Active';
   String orgName='';
   bool _isButtonDisabled = false;
   int adminsts=0;
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
+  String shiftname = "";
 
   @override
   void initState() {
     super.initState();
-    dept = new TextEditingController();
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     getOrgName();
   }
 
@@ -46,12 +49,6 @@ class _ShiftList extends State<ShiftList> {
   Widget build(BuildContext context) {
     return getmainhomewidget();
   }
-
-  /*void showInSnackBar(String value) {
-    final snackBar = SnackBar(
-        content: Text(value, textAlign: TextAlign.center,));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
-  }*/
 
   Future<bool> sendToHome() async{
     Navigator.pushAndRemoveUntil(
@@ -96,9 +93,44 @@ class _ShiftList extends State<ShiftList> {
                 child: Text('Shifts',
                   style: new TextStyle(fontSize: 22.0, color: appStartColor(),),),
               ),
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _searchController,
+                    focusNode: searchFocusNode,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderRadius:  new BorderRadius.circular(10.0),
+                      ),
+                      prefixIcon: Icon(Icons.search, size: 30,),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      hintText: 'Search Shift',
+                      labelText: 'Search Shift',
+                      suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ShiftList()),
+                            );
+                          }
+                      ):null,
+                      //focusColor: Colors.white,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        shiftname = value;
+                      });
+                    },
+                  ),
+                ),
+              ),
               //Divider(height: 1.5,),
-              Divider(),
-              SizedBox(height: 5.0),
+              //Divider(),
+              //SizedBox(height: 5.0),
               Container(
                 padding: EdgeInsets.only(bottom:10.0,top: 0.0, left:15.0, right: 10.0),
                 width: MediaQuery.of(context).size.width*.9,
@@ -127,7 +159,7 @@ class _ShiftList extends State<ShiftList> {
               ),
               Divider(height: 0.2,),
               new Expanded(
-                child: getDeptWidget(),
+                child: getShiftWidget(),
               ),
             ],
           ),
@@ -136,9 +168,9 @@ class _ShiftList extends State<ShiftList> {
     );
   }
 
-  getDeptWidget() {
+  getShiftWidget() {
     return new FutureBuilder<List<Shift>>(
-      future: getShifts(),
+      future: getShifts(shiftname),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.length > 0) {
@@ -162,7 +194,8 @@ class _ShiftList extends State<ShiftList> {
                                         .start,
                                     children: <Widget>[
                                       new Text(snapshot.data[index].Name
-                                          .toString()),
+                                          .toString(),style: TextStyle(
+                                          fontSize: 14, fontWeight: FontWeight.bold)),
                                       new Text('(' + snapshot.data[index].Type
                                           .toString() + ')', style: TextStyle(
                                           color: Colors.grey)),
@@ -195,9 +228,10 @@ class _ShiftList extends State<ShiftList> {
                                 child: new Text(
                                   snapshot.data[index].Status.toString(),
                                   style: TextStyle(
+                                      fontSize: 14,
                                       color: snapshot.data[index].Status
                                           .toString() != 'Active' ? Colors
-                                          .deepOrange : Colors.green),
+                                          .red : Colors.green),
                                   textAlign: TextAlign.center,),
                               ),
                             ],
@@ -325,26 +359,73 @@ class _ShiftList extends State<ShiftList> {
                   });
                   updateShift(new_dept.text,_sts1,did).
                   then((res) {
-                    if(res=='0')
+                    if(res=='0') {
                       //showInSnackBar('Unable to update shift');
-                      showDialog(context: context, child:
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Unable to update shift"),
+                            );
+                          });
+                      /*showDialog(context: context, child:
                       new AlertDialog(
                         content: new Text("Unable to update shift"),
-                      ));
-                    else if(res=='-1')
+                      ));*/
+                    }else if(res=='-1') {
                       //showInSnackBar('Shift name already exist');
-                      showDialog(context: context, child:
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Shift name already exist"),
+                            );
+                          });
+                      /*showDialog(context: context, child:
                       new AlertDialog(
-                      content: new Text("Shift name already exist"),
-                      ));
-                    else {
+                        content: new Text("Shift name already exist"),
+                      ));*/
+                    }else if(res=='-2') {
+                      Navigator.of(context, rootNavigator: true).pop('dialog');
+                      //showInSnackBar('Shift name already exist');
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Employees assigned to this shift therefore can't be updated"),
+                            );
+                          });
+                      /*showDialog(context: context, child:
+                      new AlertDialog(
+                        content: new Text("Employees assigned to this shift therefore can't be updated"),
+                      ));*/
+                    }else {
                       Navigator.of(context, rootNavigator: true).pop('dialog');
                       //showInSnackBar('Shift updated successfully');
-                      showDialog(context: context, child:
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(Duration(seconds: 3), () {
+                              Navigator.of(context).pop(true);
+                            });
+                            return AlertDialog(
+                              content: new Text("Shift updated successfully"),
+                            );
+                          });
+                      /*showDialog(context: context, child:
                       new AlertDialog(
                       content: new Text("Shift updated successfully"),
-                      ));
-                      getDeptWidget();
+                      ));*/
+                      getShiftWidget();
                       new_dept.text = '';
                       _sts1 = 'Active';
                     }

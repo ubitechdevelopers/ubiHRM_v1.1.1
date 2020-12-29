@@ -24,18 +24,22 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
   String _orgName;
   bool res = true;
   String admin_sts='0';
+  String emp='0';
   var formatter = new DateFormat('dd-MMM-yyyy');
   var profileimage;
   bool showtabbar;
   String orgName="";
-
-  String emp='0';
+  String empname="";
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
 
   @override
   void initState() {
     super.initState();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     showtabbar =false;
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     // f_dept = FocusNode();
@@ -135,6 +139,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                           lastDate: DateTime(2100));
                     },
                     decoration: InputDecoration(
+                      border: InputBorder.none,
                       prefixIcon: Padding(
                         padding: EdgeInsets.all(0.0),
                         child: Icon(
@@ -160,8 +165,53 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                     },
                   ),
                 ),
-
-                getEmployee_DD(),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: _searchController,
+                            focusNode: searchFocusNode,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              border: OutlineInputBorder(
+                                borderRadius:  new BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: Icon(Icons.search, size: 30,),
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              hintText: 'Search Employee',
+                              labelText: 'Search Employee',
+                              /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    //getLateEmpDataList(today.text,empname);
+                                    //res = true;
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => LateComers()),
+                                    );
+                                    Navigator.pop(context);
+                                  }
+                              ):null,*/
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                print("value");
+                                print(value);
+                                empname = value;
+                                res = true;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                //getEmployee_DD(),
 
                 SizedBox(height: 12.0),
                 Container(
@@ -218,7 +268,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                   height: 5.2,
                 ),
                 new Expanded(
-                  child: res == true ? getEmpDataList(today.text,emp) : Container(
+                  child: res == true ? getEmpDataList(today.text) : Container(
                     height: MediaQuery.of(context).size.height*0.25,
                     child:Center(
                       child: Container(
@@ -240,19 +290,17 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
     return new Container(
       child: Center(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            CircularProgressIndicator()
-          ]
-        ),
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
+            ]),
       ),
     );
   }
 
-  getEmpDataList(date,emp) {
+  getEmpDataList(date) {
     return new FutureBuilder<List<EmpListLeave>>(
-        future: getEmployeeLeaveList(date,emp),
+        future: getEmployeeLeaveList(date,empname),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
@@ -272,8 +320,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     new Text(
-                                        snapshot.data[index].name.toString()),
-
+                                        snapshot.data[index].name.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
                                   ],
                                 ))),
                             Expanded(child:   new Container(
@@ -331,7 +378,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
   Widget getEmployee_DD() {
     String dc = "0";
     return new FutureBuilder<List<Map>>(
-        future: getEmployeesList(1),// with -select- label
+        future: getEmployeesList(1, '0', '0'),// with -select- label
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             try {

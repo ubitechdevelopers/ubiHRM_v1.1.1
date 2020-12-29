@@ -19,7 +19,6 @@ class Department_att extends StatefulWidget {
   _Department_att createState() => _Department_att();
 }
 TextEditingController today;
-
 class _Department_att extends State<Department_att> with SingleTickerProviderStateMixin {
   TabController _controller;
   String countP='0',countA='0',countL='0',countE='0';
@@ -31,11 +30,11 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
   bool showtabbar;
   String orgName="";
   bool filests=false;
-  String empname = "";
+
   String dept='0';
+  String emp='0';
   var formatter = new DateFormat('dd-MMM-yyyy');
   bool res = true;
-
   List<Map<String,String>> chartData;
   void showInSnackBar(String value) {
     final snackBar = SnackBar(
@@ -55,16 +54,17 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
     getOrgName();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
+
     showtabbar =false;
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-    //setAlldata();
+    setAlldata();
   }
 
- /* setAlldata(){
-    _listFuture1 = getCDateAttnDeptWise('present',today.text,dept);
-    _listFuture2 = getCDateAttnDeptWise('absent',today.text,dept);
-    _listFuture3 = getCDateAttnDeptWise('latecomings',today.text,dept);
-    _listFuture4 = getCDateAttnDeptWise('earlyleavings',today.text,dept);
+  setAlldata(){
+    _listFuture1 = getCDateAttnDeptWise('present',today.text,dept,emp);
+    _listFuture2 = getCDateAttnDeptWise('absent',today.text,dept,emp);
+    _listFuture3 = getCDateAttnDeptWise('latecomings',today.text,dept,emp);
+    _listFuture4 = getCDateAttnDeptWise('earlyleavings',today.text,dept,emp);
 
 
     _listFuture1.then((data) async{
@@ -94,7 +94,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
         countE= data.length.toString();
       });
     });
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,8 +160,8 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                             setState(() {
                               if (date != null && date.toString()!='') {
                                 res=true; //showInSnackBar(date.toString());
-                                //setAlldata();
-                              }else{
+                                setAlldata();
+                              }else {
                                 res=false;
                                 countP='0';
                                 countA='0';
@@ -252,13 +252,11 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                       fontSize: 16,),
                                   ),
                                   onTap: () {
-                                    */
-                    /*final uri = Uri.file('/storage/emulated/0/ubiattendance_files/Designation_Wise_Report_14-Jun-2019.pdf');
+                                    *//*final uri = Uri.file('/storage/emulated/0/ubiattendance_files/Designation_Wise_Report_14-Jun-2019.pdf');
                                     SimpleShare.share(
                                         uri: uri.toString(),
                                         title: "Share my file",
-                                        msg: "My message");*/
-                    /*
+                                        msg: "My message");*//*
                                     if (mounted) {
                                       setState(() {
                                         filests = true;
@@ -291,12 +289,10 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                               ),
                             ],
                           ):Center(
-                              */
-                    /*child: Padding(
+                              *//*child: Padding(
                                 padding: const EdgeInsets.only(top:12.0),
                                 child: Text("No CSV/PDF generated", textAlign: TextAlign.center,),
-                              )*/
-                    /*
+                              )*//*
                           ),
                         ]
                     )
@@ -304,7 +300,12 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
               )*/
                   ],
                 ),
+                Divider(
+                  height: 5,
+                  color: Colors.black,
+                ),
                 getDepartments_DD(),
+                getDeptEmp_DD(),
                 new Container(
                   decoration: new BoxDecoration(color: Colors.black54),
                   child: new TabBar(
@@ -363,7 +364,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                             color: Colors.white,
                             //////////////////////////////////////////////////////////////////////---------------------------------
                             child: new FutureBuilder<List<Attn>>(
-                              future: getCDateAttnDeptWise('present',today.text,dept),
+                              future: _listFuture1,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   countP=snapshot.data.length.toString();
@@ -566,7 +567,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                             color: Colors.white,
                             //////////////////////////////////////////////////////////////////////---------------------------------
                             child: new FutureBuilder<List<Attn>>(
-                              future: getCDateAttnDeptWise('absent',today.text,dept),
+                              future: _listFuture2,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   countA=snapshot.data.length.toString();
@@ -693,7 +694,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                             color: Colors.white,
                             //////////////////////////////////////////////////////////////////////---------------------------------
                             child: new FutureBuilder<List<Attn>>(
-                              future: getCDateAttnDeptWise('latecomings',today.text,dept),
+                              future: _listFuture3,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   countL=snapshot.data.length.toString();
@@ -870,8 +871,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                       ),
                                     );
                                   }
-                                }
-                                else if (snapshot.hasError) {
+                                } else if (snapshot.hasError) {
                                   return new Text("Unable to connect server");
                                 }
 
@@ -885,8 +885,12 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
 
                       ),
                       /////////TAB 3 ENDS
+
+
                       /////////TAB 4 STARTS
                       new Container(
+
+
                         height: MediaQuery.of(context).size.height*0.35,
                         //   shape: Border.all(color: Colors.deepOrange),
                         child: new ListTile(
@@ -896,7 +900,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                             color: Colors.white,
                             //////////////////////////////////////////////////////////////////////---------------------------------
                             child: new FutureBuilder<List<Attn>>(
-                              future: getCDateAttnDeptWise('earlyleavings',today.text,dept),
+                              future: _listFuture4,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   countE=snapshot.data.length.toString();
@@ -1072,8 +1076,7 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                       ),
                                     );
                                   }
-                                }
-                                else if (snapshot.hasError) {
+                                } else if (snapshot.hasError) {
                                   return new Text("Unable to connect server");
                                 }
 
@@ -1113,16 +1116,12 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
           if (snapshot.hasData) {
             try {
               return new Container(
-                //    width: MediaQuery.of(context).size.width*.45,
+                //width: MediaQuery.of(context).size.width*.45,
                 child: InputDecorator(
                   decoration: InputDecoration(
                     labelText: 'Select Department',
                     prefixIcon: Padding(
                       padding: EdgeInsets.all(1.0),
-                      /*child: Icon(
-                        Icons.attach_file,
-                        color: Colors.grey,
-                      ),*/ //
                       child: Icon(const IconData(0xe803, fontFamily: "CustomIcon"),size: 20.0,),// icon is 48px widget.
                     ),
                   ),
@@ -1137,20 +1136,16 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                       value: dept,
                       onChanged: (String newValue) {
                         setState(() {
-                          //  showInSnackBar(newValue);
                           setState(() {
                             dept = newValue;
-                            res = true;
-                            /*if(res = true){
+                            if(res = true){
                               setAlldata();
                             }else {
-                              print('state set----');
                               countP='0';
                               countA='0';
                               countE='0';
                               countL='0';
-                            }*/
-                            print('state set----');
+                            }
                           });
                         });
                       },
@@ -1165,7 +1160,6 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                           ),
                         );
                       }).toList(),
-
                     ),
                   ),
                 ),
@@ -1185,7 +1179,82 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
         });
   }
 
-  /*dialogwidget(msg, filename) {
+  Widget getDeptEmp_DD() {
+    String dc = "0";
+    return new FutureBuilder<List<Map>>(
+      future: getEmployeesList(1, dept, '0'),// with -All- label
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          try {
+            return new Container(
+              //    width: MediaQuery.of(context).size.width*.45,
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: 'Select Employee',
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.all(1.0),
+                    child: Icon(
+                      Icons.person_outline,
+                      color: Colors.grey,
+                    ),
+                    //child: Icon(const IconData(0xe803, fontFamily: "CustomIcon"),size: 20.0,),// icon is 48px widget.
+                  ),
+                ),
+
+                child: DropdownButtonHideUnderline(
+                  child: new DropdownButton<String>(
+                    isDense: true,
+                    style: new TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.black
+                    ),
+                    value: emp,
+                    onChanged: (String newValue) {
+                      setState(() {
+                        setState(() {
+                          emp = newValue;
+                          if(res = true){
+                            setAlldata();
+                          }else {
+                            countP='0';
+                            countA='0';
+                            countE='0';
+                            countL='0';
+                          }
+                        });
+                      });
+                    },
+                    items: snapshot.data.map((Map map) {
+                      return new DropdownMenuItem<String>(
+                        value: map["Id"].toString(),
+                        child: new SizedBox(
+                            width: 250.0,
+                            child: new Text(
+                              map["Name"],
+                            )
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            );
+          }catch(e){
+            return Text("Ex: Unable to fetch departments");
+          }
+        } else if (snapshot.hasError) {
+          return new Text("ER: Unable to fetch departments");
+        }
+        // return loader();
+        return new Center(child: SizedBox(
+          child: CircularProgressIndicator(strokeWidth: 2.2,),
+          height: 20.0,
+          width: 20.0,
+        ),);
+      });
+  }
+
+/*dialogwidget(msg, filename) {
     showDialog(
         context: context,
         // ignore: deprecated_member_use

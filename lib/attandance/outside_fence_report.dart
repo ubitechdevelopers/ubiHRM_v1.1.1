@@ -26,9 +26,12 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
   var profileimage;
   bool showtabbar;
   String orgName="";
+  String empname="";
   String count='0';
   bool filests=false;
-  Future<List<OutsideAttendance>> _listFuture;
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
+  //Future<List<OutsideAttendance>> _listFuture;
 
   String emp='0';
 
@@ -38,11 +41,12 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
     super.initState();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     showtabbar =false;
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
-    // f_dept = FocusNode();
     getOrgName();
-    _listFuture = getOutsidegeoReport(today.text,emp);
+    //_listFuture = getOutsidegeoReport(today.text,emp);
   }
 
   getOrgName() async {
@@ -141,7 +145,6 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
                             setState(() {
                               if (date != null && date.toString() != '') {
                                 res=true; //showInSnackBar(date.toString());
-                                _listFuture=getOutsidegeoReport(today.text, emp);
                               } else {
                                 res=false;
                               }
@@ -297,10 +300,53 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
                     )*/
                   ],
                 ),
-                Divider(
-                  height: 5,
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: _searchController,
+                            focusNode: searchFocusNode,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              border: OutlineInputBorder(
+                                borderRadius:  new BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: Icon(Icons.search, size: 30,),
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              hintText: 'Search Employee',
+                              labelText: 'Search Employee',
+                              /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    //getLateEmpDataList(today.text,empname);
+                                    //res = true;
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => LateComers()),
+                                    );
+                                    Navigator.pop(context);
+                                  }
+                              ):null,*/
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                print("value");
+                                print(value);
+                                empname = value;
+                                res = true;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                getEmployee_DD(),
+                //getEmployee_DD(),
                 Divider(
                   height: 5,
                 ),
@@ -393,7 +439,7 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
 
   getEmpDataList(date) {
     return new FutureBuilder<List<OutsideAttendance>>(
-        future: _listFuture,
+        future: getOutsidegeoReport(today.text,empname),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             count=snapshot.data.length.toString();
@@ -586,7 +632,7 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
   Widget getEmployee_DD() {
     String dc = "0";
     return new FutureBuilder<List<Map>>(
-        future: getEmployeesList(1),// with -select- label
+        future: getEmployeesList(1, '0', '0'),// with -select- label
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             try {
@@ -617,7 +663,7 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
                         setState(() {
                           emp = newValue;
                           if(res = true){
-                            _listFuture = getOutsidegeoReport(today.text,emp);
+                            //_listFuture = getOutsidegeoReport(today.text,emp);
                           }else {
                             count='0';
                           }

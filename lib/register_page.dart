@@ -1,13 +1,17 @@
 import 'dart:convert';
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/home.dart';
 import 'package:ubihrm/login_page.dart';
+import 'package:ubihrm/model/model.dart';
+import 'package:ubihrm/services/checkLogin.dart';
 import 'package:ubihrm/survey.dart';
 import 'global.dart';
 
@@ -19,28 +23,57 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   bool _isServiceCalling = false;
+  bool _isButtonDisabled = false;
+
   final _formKeyKey = GlobalKey<FormState>();
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
-  Position _currentPosition;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  final FocusNode myFocusNodeEmail = FocusNode();
-  final FocusNode myFocusNodeName = FocusNode();
-  final FocusNode myFocusNodePhone = FocusNode();
-  final FocusNode myFocusNodeCity = FocusNode();
-  final FocusNode myFocusNodeCPN = FocusNode();
-  final FocusNode myFocusNodeContcode = FocusNode();
-  final FocusNode myFocusNodePass = FocusNode();
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  Position _currentPosition;
 
-  TextEditingController signupEmailController = new TextEditingController();
+  final FocusNode myFocusNodeName = FocusNode();
+  final FocusNode myFocusNodeCPN = FocusNode();
+  final FocusNode myFocusNodeEmail = FocusNode();
+  final FocusNode myFocusNodeCity = FocusNode();
+  final FocusNode myFocusNodeContcode = FocusNode();
+  final FocusNode myFocusNodePhone = FocusNode();
+  final FocusNode myFocusNodePass = FocusNode();
+  final FocusNode myFocusNodeEmpNum = FocusNode();
+  final FocusNode myFocusNodeReq = FocusNode();
+
+
   TextEditingController signupNameController = new TextEditingController();
+  TextEditingController signupCPNController = new TextEditingController();
+  TextEditingController signupEmailController = new TextEditingController();
+  TextEditingController signupCityController = new TextEditingController();
   TextEditingController signupContcodeController = new TextEditingController();
   TextEditingController signupPhoneController = new TextEditingController();
-  TextEditingController signupCPNController = new TextEditingController();
-  TextEditingController signupCityController = new TextEditingController();
   TextEditingController signupPassController = new TextEditingController();
+  TextEditingController signupEmpNumController = new TextEditingController();
+  TextEditingController signupReqController = new TextEditingController();
 
-  bool _isButtonDisabled = false;
+  bool chkEmpVal = true;
+  bool chkOrgVal = true;
+  bool chkAttVal = false;
+  bool chkLeaveVal = false;
+  bool chkPayrollVal = false;
+  bool chkSalaryVal = false;
+  bool chkTimesheetVal = false;
+  bool chkPerformanceVal = false;
+
+  String empModule='',orgModule='', attModule='', leaveModule='',payrollModule='', expenseModule='', salaryModule='', timesheetModule='', performanceModule='';
+
+  List<String> _timeIST = ['09:00-10:00',
+    '10:00-11:00',
+    '11:00-12:00',
+    '12:00-13:00',
+    '13:00-14:00',
+    '14:00-15:00',
+    '15:00-16:00',
+    '16:00-17:00',
+    '17:00-18:00',
+    '18:00-19:00'];
+  String _selectedISTtime;
 
   setLocal(var fname, var empid, var  orgid) async {
     prefs = await SharedPreferences.getInstance();
@@ -300,7 +333,7 @@ class _RegisterState extends State<Register> {
     super.dispose();
   }
 
-  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+  //FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
 
   String token1="";
   String tokenn="";
@@ -308,12 +341,14 @@ class _RegisterState extends State<Register> {
   @override
   void initState(){
     _getCurrentLocation();
-    signupEmailController = new TextEditingController();
     signupNameController = new TextEditingController();
+    signupCPNController = new TextEditingController();
+    signupEmailController = new TextEditingController();
+    signupCityController = new TextEditingController();
     signupContcodeController = new TextEditingController();
     signupPhoneController = new TextEditingController();
-    signupCPNController = new TextEditingController();
-    signupCityController = new TextEditingController();
+    signupEmpNumController = new TextEditingController();
+    signupEmpNumController.text='5';
     signupPassController = new TextEditingController();
     signupPassController.text='123456';
     super.initState();
@@ -366,606 +401,971 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      key: _scaffoldKey,
-      body: NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (overscroll) {
-          overscroll.disallowGlow();
-        },
-        child: SingleChildScrollView(
-          child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height >= 810.0 ? MediaQuery.of(context).size.height : 810.0,
-              decoration: new BoxDecoration(
-                gradient: new LinearGradient(
-                    colors: [
-                      Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.9),
-                      Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.2)
-                      /*Theme.Colors.loginGradientEnd*/
-                    ],
-                    begin: const FractionalOffset(0.0, 0.0),
-                    end: const FractionalOffset(1.0, 1.0),
-                    stops: [0.0, 1.0],
-                    tileMode: TileMode.clamp),
+    return WillPopScope(
+      onWillPop: () => _exitApp(context),
+      child: new Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        appBar: GradientAppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                child: Text("UBIHRM")
               ),
-              child:ModalProgressHUD(
-                  inAsyncCall: _isServiceCalling,
-                  opacity: 0.5,progressIndicator: SizedBox(
-                    child: new CircularProgressIndicator(
-                        valueColor: new AlwaysStoppedAnimation(Colors.green),
+            ],
+          ),
+          backgroundColorStart: appStartColor(),
+          backgroundColorEnd: appEndColor(),
+        ),
+        body: NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (overscroll) {
+            overscroll.disallowGlow();
+          },
+          child: SingleChildScrollView(
+              /*child: Container(
+                margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height >= 1000.0 ? MediaQuery.of(context).size.height : 1000.0,
+                decoration: new BoxDecoration(
+                  gradient: new LinearGradient(
+                      colors: [
+                        Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.9),
+                        Color.fromRGBO(0, 166, 90,1.0).withOpacity(0.2)
+                        *//*Theme.Colors.loginGradientEnd*//*
+                      ],
+                      begin: const FractionalOffset(0.0, 0.0),
+                      end: const FractionalOffset(1.0, 1.0),
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp),
+                ),*/
+                child:ModalProgressHUD(
+                    inAsyncCall: _isServiceCalling,
+                    opacity: 0.5,progressIndicator: SizedBox(
+                  child: new CircularProgressIndicator(
+                      valueColor: new AlwaysStoppedAnimation(Colors.green),
                       strokeWidth: 5.0),
                   height: 40.0,
                   width: 40.0,),
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(top: 50.0),
-                        child: new Container(
-                          width: 135.0,
-                          height: 132.0,
-                          decoration: new BoxDecoration(
-                            color: const Color(0xff7c94b6),
-                            image: new DecorationImage(
-                              image:new AssetImage('assets/img/logohrmbg.png'),
-                              fit: BoxFit.cover,
+                    child: Column(
+                      children: <Widget>[
+                        /*Padding(
+                          padding: EdgeInsets.only(top: 20.0),
+                          child: new Container(
+                            width: 110.0,
+                            height: 110.0,
+                            decoration: new BoxDecoration(
+                              color: const Color(0xff7c94b6),
+                              image: new DecorationImage(
+                                image:new AssetImage('assets/img/logohrmbg.png'),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: new BorderRadius.all(new Radius.circular(77.0)),
+                              // border: new Border.all(
+                              // color: Colors.red,
+                              //width: 4.0,
+                              // ),
                             ),
-                            borderRadius: new BorderRadius.all(new Radius.circular(77.0)),
-                            // border: new Border.all(
-                            // color: Colors.red,
-                            //width: 4.0,
-                            // ),
                           ),
-                        ),
-                      ),
-
-                      _buildSignUp(context)
-                    ],
-                  )
+                        ),*/
+                        _buildSignUp(context)
+                      ],
+                    )
                 ),
               )
           ),
-        ),
+        //),
+      ),
     );
   }
 
   _buildSignUp(BuildContext context) {
     return Container(
-        //padding: EdgeInsets.only(top: 0.0),
-        child: Form(
-          key: _formKeyKey,
-          child: SafeArea(
-            child: Column(
-              children: <Widget>[
-                Stack(
-                  alignment: Alignment.topCenter,
-                  overflow: Overflow.visible,
-                  children: <Widget>[
-                    Card(
-                      elevation: 2.0,
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Container(
-                        //width: 370.0,
-                        width: MediaQuery.of(context).size.width,
-                        //height: MediaQuery.of(context).size.height,
-                        //height: 550.0,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0,bottom: 0.0),
-                              child: new Text("Register Your Company",
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(fontWeight: FontWeight.bold, fontSize:20.0, color: appStartColor() ),
+      margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+      //padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+      //width: MediaQuery.of(context).size.width*0.9,
+      //      height:MediaQuery.of(context).size.height*0.75,
+      decoration: new ShapeDecoration(
+        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(12.0)),
+        color: Colors.white,
+      ),
+      //padding: EdgeInsets.only(top: 0.0),
+      child: Form(
+        key: _formKeyKey,
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Stack(
+                alignment: Alignment.topCenter,
+                overflow: Overflow.visible,
+                children: <Widget>[
+                  Column(
+                    children: [
+                      /*Card(
+                        elevation: 2.0,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: */Container(
+                          //width: 370.0,
+                          width: MediaQuery.of(context).size.width,
+                          //height: MediaQuery.of(context).size.height,
+                          //height: 550.0,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0,bottom: 5.0),
+                                child: new Text("Register Your Company",
+                                  textAlign: TextAlign.center,
+                                  style: new TextStyle(fontWeight: FontWeight.bold, fontSize:20.0, color: appStartColor() ),
+                                ),
                               ),
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: 14.0, bottom: 7.0, left: 25.0, right: 25.0),
-                                    child: TextFormField(
-                                      focusNode: myFocusNodeName,
-                                      controller: signupNameController,
-                                      keyboardType: TextInputType.text,
-                                      textCapitalization: TextCapitalization.words,
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black),
-                                      decoration: InputDecoration(
-                                        // border: InputBorder.none,
-                                        icon: Icon(
-                                          FontAwesomeIcons.solidBuilding,
-                                          color: Colors.black,
-                                          size: 20.0,
-                                        ),
-                                        hintText: "Company ",
-                                        hintStyle: TextStyle(
-                                            fontSize: 14.0),
-                                      ),
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Please enter company name';
-                                        }
-                                      },
-                                    ),
-                                  ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                                child: new Text("Note: This form is only for company registration. If the company is already registered, employees should not fill this form. They should  only login with admin's help.",
+                                  textAlign: TextAlign.left,
+                                  style: new TextStyle(fontSize:14.0, color: Colors.orange[900],),
                                 ),
-                              ],
-                            ),
-
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
-                                    child: TextFormField(
-                                      focusNode: myFocusNodeCPN,
-                                      controller: signupCPNController,
-                                      keyboardType: TextInputType.text,
-                                      textCapitalization: TextCapitalization.words,
-                                      style: TextStyle(
-
-                                          fontSize: 16.0,
-                                          color: Colors.black),
-                                      decoration: InputDecoration(
-                                        //border: InputBorder.none,
-                                        icon: Icon(
-                                          FontAwesomeIcons.userAlt,
-                                          color: Colors.black,
-                                          size: 20.0,
-                                        ),
-                                        hintText: "Contact Person Name",
-                                        hintStyle: TextStyle(
-                                            fontSize: 14.0),
-                                      ),
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Please enter contact person name';
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
-                                    child: TextFormField(
-                                      focusNode: myFocusNodeEmail,
-                                      controller: signupEmailController,
-                                      keyboardType: TextInputType.emailAddress,
-                                      style: TextStyle(
-
-                                          fontSize: 16.0,
-                                          color: Colors.black),
-                                      decoration: InputDecoration(
-                                        // border: InputBorder.none,
-                                        icon: Icon(
-                                          FontAwesomeIcons.solidEnvelope,
-                                          color: Colors.black,
-                                          size: 20.0,
-                                        ),
-                                        hintText: "Email ",
-                                        hintStyle: TextStyle(
-                                            fontSize: 14.0),
-                                      ),
-                                      validator: validateEmail
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Container(
-                                    //width: 250.0,
-                                    //height: 27,
-                                    width: MediaQuery.of(context).size.width,
-                                    padding: EdgeInsets.only(
-                                        top: 0.0, bottom: 7.0, left: 25.0, right: 25.0),
-                                    child:new InputDecorator(
-                                      decoration: const InputDecoration(
-                                        //labelText: 'Country',
-                                        //hintText: 'Country',
-                                        //icon: const Icon(Icons.satellite,size: 15.0,),
-                                        //labelText: 'Country',
-                                        icon: Icon(
-                                          FontAwesomeIcons.globeAsia,
-                                          color: Colors.black,
-                                          size: 20.0,
-                                        ),
-                                      ),
-                                      //   isEmpty: _color == '',
-                                      child: Container(
-                                        height: 27,
-                                        child: DropdownButtonHideUnderline(
-                                          child:  new DropdownButton<String>(
-                                            isExpanded: false,
-                                            isDense: true,
-                                            hint: new Text("Select Country", style: TextStyle(fontSize: 14.0)),
-                                            //style: TextStyle(fontSize: 14.0),
-                                            value: _country,
-                                            onChanged: (String newValue) {
-                                              setState(() {
-                                                signupCityController.text='';
-                                                _country = newValue;
-                                                signupContcodeController.text = _myJson[int.parse(newValue)]['countrycode'];
-                                                _tempcontry = _myJson[int.parse(newValue)]['id'];
-
-                                              });
-                                              /*setState(() {
-                                                _country = newValue;
-                                              });*/
-                                            },
-                                            items: _myJson.map((Map map) {
-                                              return new DropdownMenuItem<String>(
-                                                value: map["ind"].toString(),
-                                                child: SizedBox(
-                                                  width: MediaQuery.of(context).size.width*0.6,
-                                                  child: new Text(
-                                                    map["name"],
-                                                  ),
-                                                ),
-                                              );
-                                            }).toList(),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 15.0, bottom: 7.0, left: 25.0, right: 25.0),
+                                      child: TextFormField(
+                                        focusNode: myFocusNodeName,
+                                        controller: signupNameController,
+                                        keyboardType: TextInputType.text,
+                                        textCapitalization: TextCapitalization.words,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          // border: InputBorder.none,
+                                          icon: Icon(
+                                            FontAwesomeIcons.solidBuilding,
+                                            color: Colors.black,
+                                            size: 20.0,
                                           ),
+                                          hintText: "Company ",
+                                          hintStyle: TextStyle(
+                                              fontSize: 14.0),
                                         ),
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'Please enter company name';
+                                          }
+                                        },
                                       ),
+                                    ),
+                                  ),
+                                ],
+                              ),
 
-                                    ),),
-                                ),
-                              ],
-                            ),
-                            // ),
-                            /*Container(
-                                width: 250.0,
-                                height: 1.0,
-                                color: Colors.grey[400],
-                              ),*/
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 7.0, bottom: 7.0, left: 22.0, right: 25.0),
-                                    child: TextFormField(
-                                      focusNode: myFocusNodeCity,
-                                      controller: signupCityController,
-                                      //keyboardType: TextInputType.text,
-                                      textCapitalization: TextCapitalization.words,
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black),
-                                      decoration: InputDecoration(
-                                        //border: InputBorder.none,
-                                        icon: Padding(
-                                          padding: const EdgeInsets.only(bottom:5.0, right: 3.0),
-                                          child: Icon(
-                                            FontAwesomeIcons.city,
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
+                                      child: TextFormField(
+                                        focusNode: myFocusNodeCPN,
+                                        controller: signupCPNController,
+                                        keyboardType: TextInputType.text,
+                                        textCapitalization: TextCapitalization.words,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          //border: InputBorder.none,
+                                          icon: Icon(
+                                            FontAwesomeIcons.userAlt,
+                                            color: Colors.black,
+                                            size: 20.0,
+                                          ),
+                                          hintText: "Contact Person Name",
+                                          hintStyle: TextStyle(
+                                              fontSize: 14.0),
+                                        ),
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'Please enter contact person name';
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
+                                      child: TextFormField(
+                                          focusNode: myFocusNodeEmail,
+                                          controller: signupEmailController,
+                                          keyboardType: TextInputType.emailAddress,
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.black),
+                                          decoration: InputDecoration(
+                                            // border: InputBorder.none,
+                                            icon: Icon(
+                                              FontAwesomeIcons.solidEnvelope,
+                                              color: Colors.black,
+                                              size: 20.0,
+                                            ),
+                                            hintText: "Email ",
+                                            hintStyle: TextStyle(
+                                                fontSize: 14.0),
+                                          ),
+                                          validator: validateEmail
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Container(
+                                      //width: 250.0,
+                                      //height: 27,
+                                      width: MediaQuery.of(context).size.width,
+                                      padding: EdgeInsets.only(
+                                          top: 5.0, bottom: 7.0, left: 25.0, right: 25.0),
+                                      child:new InputDecorator(
+                                        decoration: const InputDecoration(
+                                          //labelText: 'Country',
+                                          //hintText: 'Country',
+                                          //icon: const Icon(Icons.satellite,size: 15.0,),
+                                          //labelText: 'Country',
+                                          icon: Icon(
+                                            FontAwesomeIcons.globeAsia,
                                             color: Colors.black,
                                             size: 20.0,
                                           ),
                                         ),
-                                        hintText: "City ",
-                                        hintStyle: TextStyle(
-                                            fontSize: 14.0),
-                                      ),
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Please enter city name';
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                                        //   isEmpty: _color == '',
+                                        child: Container(
+                                          height: 27,
+                                          child: DropdownButtonHideUnderline(
+                                            child:  new DropdownButton<String>(
+                                              isExpanded: false,
+                                              isDense: true,
+                                              hint: new Text("Select Country", style: TextStyle(fontSize: 14.0)),
+                                              //style: TextStyle(fontSize: 14.0),
+                                              value: _country,
+                                              onChanged: (String newValue) {
+                                                setState(() {
+                                                  signupCityController.text='';
+                                                  _country = newValue;
+                                                  signupContcodeController.text = _myJson[int.parse(newValue)]['countrycode'];
+                                                  _tempcontry = _myJson[int.parse(newValue)]['id'];
 
-                            Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 15.0,bottom: 5),
-                                  child: Container(
+                                                });
+                                                /*setState(() {
+                                                    _country = newValue;
+                                                  });*/
+                                              },
+                                              items: _myJson.map((Map map) {
+                                                return new DropdownMenuItem<String>(
+                                                  value: map["ind"].toString(),
+                                                  child: SizedBox(
+                                                    width: MediaQuery.of(context).size.width*0.6,
+                                                    child: new Text(
+                                                      map["name"],
+                                                    ),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ),
+                                        ),
+
+                                      ),),
+                                  ),
+                                ],
+                              ),
+                              // ),
+                              /*Container(
+                                    width: 250.0,
+                                    height: 1.0,
+                                    color: Colors.grey[400],
+                                  ),*/
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        FontAwesomeIcons.phoneAlt,
-                                        color: Colors.black,
-                                        size: 20,
+                                      padding: EdgeInsets.only(
+                                          top: 7.0, bottom: 7.0, left: 22.0, right: 25.0),
+                                      child: TextFormField(
+                                        focusNode: myFocusNodeCity,
+                                        controller: signupCityController,
+                                        keyboardType: TextInputType.text,
+                                        textCapitalization: TextCapitalization.words,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          //border: InputBorder.none,
+                                          icon: Padding(
+                                            padding: const EdgeInsets.only(bottom:5.0, right: 3.0),
+                                            child: Icon(
+                                              FontAwesomeIcons.city,
+                                              color: Colors.black,
+                                              size: 20.0,
+                                            ),
+                                          ),
+                                          hintText: "City ",
+                                          hintStyle: TextStyle(
+                                              fontSize: 14.0),
+                                        ),
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'Please enter city name';
+                                          }
+                                        },
                                       ),
                                     ),
                                   ),
-                                ),
-                                _tempcontry!=''?new Expanded(
-                                  flex: 16,
-                                  child:Padding(
-                                      padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 10.0, right: 0.0),
-                                      child: new TextFormField(
-                                        enabled: false,
-                                        textAlign: TextAlign.justify,
-                                        style: new TextStyle(
-                                          height: 1.25,
+                                ],
+                              ),
+
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15.0,bottom: 5),
+                                    child: Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          FontAwesomeIcons.phoneAlt,
                                           color: Colors.black,
-                                          //fontWeight: FontWeight.bold,
+                                          size: 20,
                                         ),
-                                        decoration: const InputDecoration(
-                                          //icon: const Icon(Icons.phone),
-                                          //fillColor: Colors.black12,
-                                          /*icon: Icon(
-                                          Icons.phone,
-                                          color: Colors.black,
-                                          size: 30,
-                                        ),*/
-                                          // filled: true,
-                                        ),
-                                        controller: signupContcodeController,
-                                        focusNode: myFocusNodeContcode,
+                                      ),
+                                    ),
+                                  ),
+                                  _tempcontry!=''?new Expanded(
+                                    flex: 16,
+                                    child:Padding(
+                                        padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 10.0, right: 0.0),
+                                        child: new TextFormField(
+                                          enabled: false,
+                                          textAlign: TextAlign.justify,
+                                          style: new TextStyle(
+                                            height: 1.25,
+                                            color: Colors.black,
+                                            //fontWeight: FontWeight.bold,
+                                          ),
+                                          decoration: const InputDecoration(
+                                            //icon: const Icon(Icons.phone),
+                                            //fillColor: Colors.black12,
+                                            /*icon: Icon(
+                                              Icons.phone,
+                                              color: Colors.black,
+                                              size: 30,
+                                            ),*/
+                                            // filled: true,
+                                          ),
+                                          controller: signupContcodeController,
+                                          focusNode: myFocusNodeContcode,
+                                          keyboardType: TextInputType.phone,
+                                          inputFormatters: [
+                                            WhitelistingTextInputFormatter.digitsOnly,
+                                          ],
+                                        )
+                                    ),
+                                  ):Center(),
+                                  Expanded(
+                                    flex: 73,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 10.0, right: 25.0),
+                                      child: TextFormField(
+                                        focusNode: myFocusNodePhone,
+                                        controller: signupPhoneController,
                                         keyboardType: TextInputType.phone,
                                         inputFormatters: [
                                           WhitelistingTextInputFormatter.digitsOnly,
                                         ],
-                                      )
-                                  ),
-                                ):Center(),
-                                Expanded(
-                                  flex: 73,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 10.0, right: 25.0),
-                                    child: TextFormField(
-                                      focusNode: myFocusNodePhone,
-                                      controller: signupPhoneController,
-                                      keyboardType: TextInputType.phone,
-                                      inputFormatters: [
-                                        WhitelistingTextInputFormatter.digitsOnly,
-                                      ],
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black),
-                                      decoration: InputDecoration(
-                                        //border: InputBorder.none,
-                                        /*icon: Icon(
-                                          Icons.phone,
-                                          color: Colors.black,
-                                          size: 30,
-                                        ),*/
-                                        hintText: "Phone",
-                                        hintStyle: TextStyle(
-                                            fontSize: 14.0),
-                                      ),
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return 'Please enter phone no.';
-                                        }
-                                      },
-
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: 3.0, bottom: 7.0, left: 24.0, right: 25.0),
-                                    child: TextFormField(
-                                      obscureText: _obscureText,
-                                      focusNode: myFocusNodePass,
-                                      controller: signupPassController,
-                                      keyboardType: TextInputType.text,
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black),
-                                      decoration: InputDecoration(
-                                        // border: InputBorder.none,
-                                        icon: Icon(
-                                          FontAwesomeIcons.lock,
-                                          color: Colors.black,
-                                          size: 20.0,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          //border: InputBorder.none,
+                                          /*icon: Icon(
+                                              Icons.phone,
+                                              color: Colors.black,
+                                              size: 30,
+                                            ),*/
+                                          hintText: "Phone",
+                                          hintStyle: TextStyle(
+                                              fontSize: 14.0),
                                         ),
-                                        hintText: "Password",
-                                        hintStyle: TextStyle(
-                                            fontSize: 14.0),
-                                        suffixIcon: IconButton(
-                                          onPressed: _toggle,
-                                          icon: Icon(_obscureText ?Icons.visibility_off:Icons.visibility,
-                                              color: Colors.black),
-                                        )
-                                      ),
-                                      validator: (value) {
-                                        if (value.isEmpty || value==null ) {
-                                          // FocusScope.of(context).requestFocus(__newPass);
-                                          return 'Please enter password';
-                                        }
-                                        if(value.length<6)
-                                        {
-                                          return 'Password must contain at least 6 characters';
-                                        }
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'Please enter phone no.';
+                                          }
+                                        },
 
-                                        Pattern pattern = r'^[a-zA-Z0-9]+$';
-                                        RegExp regex = new RegExp(pattern);
-                                        if (!regex.hasMatch(value))
-                                          return 'Password should not contain \nany special characters';
-                                      },
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
 
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10.0, bottom: 12.0, left: 0.0, right: 0.0),
-                              child: Row(
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 3.0, bottom: 7.0, left: 24.0, right: 25.0),
+                                      child: TextFormField(
+                                        obscureText: _obscureText,
+                                        focusNode: myFocusNodePass,
+                                        controller: signupPassController,
+                                        keyboardType: TextInputType.text,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          // border: InputBorder.none,
+                                            icon: Icon(
+                                              FontAwesomeIcons.lock,
+                                              color: Colors.black,
+                                              size: 20.0,
+                                            ),
+                                            hintText: "Password",
+                                            hintStyle: TextStyle(
+                                                fontSize: 14.0),
+                                            suffixIcon: IconButton(
+                                              onPressed: _toggle,
+                                              icon: Icon(_obscureText ?Icons.visibility_off:Icons.visibility,
+                                                  color: Colors.black),
+                                            )
+                                        ),
+                                        validator: (value) {
+                                          if (value.isEmpty || value==null ) {
+                                            // FocusScope.of(context).requestFocus(__newPass);
+                                            return 'Please enter password';
+                                          }
+                                          if(value.length<6)
+                                          {
+                                            return 'Password must contain at least 6 characters';
+                                          }
+
+                                          Pattern pattern = r'^[a-zA-Z0-9]+$';
+                                          RegExp regex = new RegExp(pattern);
+                                          if (!regex.hasMatch(value))
+                                            return 'Password should not contain \nany special characters';
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 7.0, bottom: 0.0, left: 22.0, right: 25.0),
+                                      child: TextFormField(
+                                        focusNode: myFocusNodeEmpNum,
+                                        controller: signupEmpNumController,
+                                        keyboardType: TextInputType.number,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          //border: InputBorder.none,
+                                          icon: Padding(
+                                            padding: const EdgeInsets.only(bottom:5.0, right: 3.0),
+                                            child: Icon(
+                                              FontAwesomeIcons.users,
+                                              color: Colors.black,
+                                              size: 20.0,
+                                            ),
+                                          ),
+                                          hintText: "No. of Employees",
+                                          hintStyle: TextStyle(
+                                              fontSize: 14.0),
+                                        ),
+                                        /*validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'Please enter city name';
+                                          }
+                                        },*/
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.only(left: 22.0, top: 20.0,bottom: 0.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    new Text("MODULES REQUIRED",
+                                      //textAlign: TextAlign.center,
+                                      style: new TextStyle(fontWeight: FontWeight.bold, fontSize:16.0, color:Colors.black/*color: appStartColor()*/ ),
+                                    ),
+                                    //Spacer()
+                                  ],
+                                ),
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.only(left:45.0),
+                                child: Column(
+                                  children: <Widget>[
+                                    /*Row(
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkEmpVal,
+                                              onChanged: null
+                                            ),
+                                            Text('Employee')
+                                          ],
+                                        ),
+                                        SizedBox(width:20),
+                                        Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkOrgVal,
+                                              onChanged: null
+                                            ),
+                                            Text('Organization')
+                                          ],
+                                        ),
+                                      ],
+                                    ),*/
+                                    Row(
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkAttVal,
+                                              onChanged: (bool value) {
+                                                setState(() {
+                                                  chkAttVal = value;
+                                                  print("after click");
+                                                  print(chkAttVal);
+                                                  if(chkAttVal==true) {
+                                                    attModule = "true";
+                                                    print(attModule);
+                                                  }
+                                                });
+                                              },
+                                            ),
+                                            Text('Attendance')
+                                          ],
+                                        ),
+                                        SizedBox(width:20),
+                                        Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkLeaveVal,
+                                              onChanged: (bool value) {
+                                                setState(() {
+                                                  chkLeaveVal = value;
+                                                  if(chkLeaveVal==true) {
+                                                    leaveModule = "true";
+                                                  }
+                                                });
+                                              },
+                                            ),
+                                            Text('Leave')
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        signupContcodeController.text=='+91'?Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkPayrollVal,
+                                              onChanged: (bool value) {
+                                                setState(() {
+                                                  chkPayrollVal = value;
+                                                  if(chkPayrollVal==true) {
+                                                    payrollModule = "true";
+                                                  }
+                                                });
+                                              },
+                                            ),
+                                            Text('Payroll')
+                                          ],
+                                        ): Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkSalaryVal,
+                                              onChanged: (bool value) {
+                                                setState(() {
+                                                  chkSalaryVal = value;
+                                                  if(chkSalaryVal==true) {
+                                                    salaryModule = "true";
+                                                  }
+                                                });
+                                              },
+                                            ),
+                                            Text('Salary')
+                                          ],
+                                        ),
+                                        SizedBox(width:53),
+                                        Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkPerformanceVal,
+                                              onChanged: (bool value) {
+                                                setState(() {
+                                                  chkPerformanceVal = value;
+                                                  if(chkPerformanceVal==true) {
+                                                    performanceModule = "true";
+                                                  }
+                                                });
+                                              },
+                                            ),
+                                            Text('Performance')
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkTimesheetVal,
+                                              onChanged: (bool value) {
+                                                setState(() {
+                                                  chkTimesheetVal = value;
+                                                  if(chkTimesheetVal==true) {
+                                                    timesheetModule="true";
+                                                  }
+                                                });
+                                              },
+                                            ),
+                                            Text('Timesheet')
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              Row(
                                 children: <Widget>[
                                   Expanded(
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width*0.5,
-                                      padding: EdgeInsets.only(
-                                          top: 0.0, bottom: 0.0, left: 45.0, right: 15.0),
-                                      decoration: new BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                      width: MediaQuery.of(context).size.width,
+                                      padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
+                                      child:new InputDecorator(
+                                        decoration: const InputDecoration(
+                                          isDense: true,
+                                          icon: Icon(
+                                            FontAwesomeIcons.tty,
+                                            color: Colors.black,
+                                            size: 20.0,
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(bottom:5.0),
+                                          child: Container(
+                                            //height: 21,
+                                            child: DropdownButtonHideUnderline(
+                                              child: new DropdownButton<String>(
+                                                isExpanded: false,
+                                                isDense: true,
+                                                hint: new Text("Select preferred time(IST) to call", style: TextStyle(fontSize: 14.0)),
+                                                //style: TextStyle(fontSize: 14.0),
+                                                value: _selectedISTtime,
+                                                onChanged: (String newValue) {
+                                                  setState(() {
+                                                    _selectedISTtime=newValue;
+                                                  });
+                                                },
+                                                items: _timeIST.map((time) {
+                                                  return new DropdownMenuItem<String>(
+                                                    child: new Text(time),
+                                                    value: time,
+                                                  );
+                                                }).toList(),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      child: _isButtonDisabled?new RaisedButton(
-                                          color: Colors.orange[800],
-                                          textColor: Colors.white,
-                                          padding: EdgeInsets.all(10.0),
-                                          child: const Text('Registering...',style: TextStyle(fontSize: 16.0),),
-                                          onPressed: (){
+                                    ),
+                                  ),
+                                ],
+                              ),
 
-                                          }
-                                      ): new ButtonTheme(
-                                        child:RaisedButton(
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 22.0, right: 25.0),
+                                      child: TextFormField(
+                                        maxLines: 2,
+                                        focusNode: myFocusNodeReq,
+                                        controller: signupReqController,
+                                        keyboardType: TextInputType.text,
+                                        textCapitalization: TextCapitalization.sentences,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black),
+                                        decoration: InputDecoration(
+                                          //border: InputBorder.none,
+                                          icon: Padding(
+                                            padding: const EdgeInsets.only(bottom:5.0, right: 3.0),
+                                            child: Icon(
+                                              FontAwesomeIcons.pencilAlt,
+                                              color: Colors.black,
+                                              size: 20.0,
+                                            ),
+                                          ),
+                                          hintText: "Requirements in brief",
+                                          hintStyle: TextStyle(
+                                              fontSize: 14.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10.0, bottom: 12.0, left: 0.0, right: 0.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width*0.5,
+                                        padding: EdgeInsets.only(
+                                            top: 0.0, bottom: 0.0, left: 45.0, right: 15.0),
+                                        decoration: new BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                        ),
+                                        child: _isButtonDisabled?new RaisedButton(
                                             color: Colors.orange[800],
                                             textColor: Colors.white,
-                                            padding: EdgeInsets.all(5.0),
-                                            child: const Text('Register',style: TextStyle(fontSize: 16.0),),
-                                            onPressed: ()  {
-                                              if (_formKeyKey.currentState.validate()) {
-                                                if(_tempcontry=='' ) {
-                                                  showDialog(context: context, child:
-                                                  new AlertDialog(
-                                                    content: new Text("Please Select a Country."),
-                                                  ));
-                                                  FocusScope.of(context).requestFocus(myFocusNodePhone);
-                                                }else if(_country=='0') {
-                                                  showDialog(context: context, child:
-                                                  new AlertDialog(
-                                                    content: new Text("Please select a country"),
-                                                  ));
-                                                }else{
-                                                  setState(() {
-                                                    _isButtonDisabled=true;
-                                                  });
+                                            padding: EdgeInsets.all(10.0),
+                                            child: const Text('Registering...',style: TextStyle(fontSize: 14.0),),
+                                            onPressed: (){
 
-                                                  print(path+"register_org?org_name=${signupNameController.text.trim()}&name=${signupCPNController.text.trim()}&email=${signupEmailController.text.trim()}&country=${_tempcontry}&city=${signupCityController.text.trim()}&countrycode=${signupContcodeController.text}&phone=${signupPhoneController.text.trim()}&password=${signupPassController.text.trim()}&platform=android");
-                                                  var url = path+"register_org";
-                                                  http.post(url, body: {
-                                                    "org_name": signupNameController.text.trim(),
-                                                    "name": signupCPNController.text.trim(),
-                                                    "email": signupEmailController.text.trim(),
-                                                    "country": _tempcontry,
-                                                    "city": signupCityController.text.trim(),
-                                                    "countrycode": signupContcodeController.text,
-                                                    "phone": signupPhoneController.text.trim(),
-                                                    "password":signupPassController.text.trim(),
-                                                    "platform":"android"
-                                                  }).then((response) {
-                                                    if (response.statusCode == 200) {
-                                                      Map data = json.decode(response.body);
-                                                      print("-----------------> After Registration ---------------->");
-                                                      print(response.body.toString());
-                                                      print(data["trialorgid"]);
-                                                      print(data["status"]);
-                                                      if (data["status"].contains("1")) {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(builder: (context) => SurveyForm(
+                                            }
+                                        ): new ButtonTheme(
+                                          child:RaisedButton(
+                                              color: Colors.orange[800],
+                                              textColor: Colors.white,
+                                              padding: EdgeInsets.all(5.0),
+                                              child: const Text('Register',style: TextStyle(fontSize: 16.0),),
+                                              onPressed: ()  {
+                                                if (_formKeyKey.currentState.validate()) {
+                                                  if(_tempcontry=='' ) {
+                                                    showDialog(context: context, child:
+                                                    new AlertDialog(
+                                                      content: new Text("Please Select a Country."),
+                                                    ));
+                                                    FocusScope.of(context).requestFocus(myFocusNodePhone);
+                                                  }else if(_country=='0') {
+                                                    showDialog(context: context, child:
+                                                    new AlertDialog(
+                                                      content: new Text("Please select a country"),
+                                                    ));
+                                                  }else if((chkAttVal||chkLeaveVal||chkPayrollVal||chkSalaryVal||chkTimesheetVal||chkPerformanceVal)==false){
+                                                    showDialog(context: context, child:
+                                                    new AlertDialog(
+                                                      content: new Text("Please select atleast one module"),
+                                                    ));
+                                                  }else if(_selectedISTtime==null){
+                                                    showDialog(context: context, child:
+                                                    new AlertDialog(
+                                                      content: new Text("Please select preferred time (IST) to call"),
+                                                    ));
+                                                  }else{
+                                                    setState(() {
+                                                      _isButtonDisabled=true;
+                                                    });
+
+                                                    print(path+"addOrganization?org_name=${signupNameController.text.trim()}&name=${signupCPNController.text.trim()}&email=${signupEmailController.text.trim()}&country=${_tempcontry}&city=${signupCityController.text.trim()}&countrycode=${signupContcodeController.text}&phone=${signupPhoneController.text.trim()}&empno=${signupEmpNumController.text.trim()}&attmodule=$attModule&leavemodule=$leaveModule&payrollmodule=$payrollModule&salarymodule=$salaryModule&timesheetmodule=$timesheetModule&performancemodule=$performanceModule&timetocall=$_selectedISTtime&requirements=${signupReqController.text.trim()}&password=${signupPassController.text.trim()}&platform=iOS");
+                                                    var url = path+"addOrganization";
+                                                    http.post(url, body: {
+                                                      "org_name": signupNameController.text.trim(),
+                                                      "name": signupCPNController.text.trim(),
+                                                      "email": signupEmailController.text.trim(),
+                                                      "country": _tempcontry,
+                                                      "city": signupCityController.text.trim(),
+                                                      "countrycode": signupContcodeController.text,
+                                                      "phone": signupPhoneController.text.trim(),
+                                                      "empno": signupEmpNumController.text.trim(),
+                                                      "attmodule": attModule,
+                                                      "leavemodule": leaveModule,
+                                                      "payrollmodule": payrollModule,
+                                                      "salarymodule": salaryModule,
+                                                      "timesheetmodule": timesheetModule,
+                                                      "performancemodule": performanceModule,
+                                                      "timetocall": _selectedISTtime,
+                                                      "requirements": signupReqController.text.trim(),
+                                                      "password":signupPassController.text.trim(),
+                                                      "platform":"iOS"
+                                                    }).then((response) {
+                                                      if (response.statusCode == 200) {
+                                                        Map data = json.decode(response.body);
+                                                        print("-----------------> After Registration ---------------->");
+                                                        print(response.body.toString());
+                                                        print(data["status"]);
+                                                        if (data["status"].contains("1")) {
+                                                          gethome () async{
+                                                            await new Future.delayed(const Duration(seconds: 1));
+                                                            checklogin(signupPhoneController.text.trim(), signupPassController.text.trim(), context);
+                                                          }
+                                                          gethome ();
+                                                          /*Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => SurveyForm(
                                                               trialOrgId: data["trialorgid"],
                                                               orgName: signupNameController.text.trim(),
                                                               name: signupCPNController.text.trim(),
                                                               email: signupEmailController.text.trim(),
                                                               countrycode: signupContcodeController.text,
                                                               phone: signupPhoneController.text.trim(),
-                                                          )),
-                                                        );
-                                                        /*showDialog(context: context, child:
-                                                        new AlertDialog(
-                                                          content: new Text("Company registered successfully, please check your mail."),
-                                                        ));*/
+                                                              password: signupPassController.text.trim(),
+                                                            )),
+                                                          );*/
+                                                          /*showDialog(context: context, child:
+                                                            new AlertDialog(
+                                                              content: new Text("Company registered successfully, please check your mail."),
+                                                            ));*/
 
-                                                      } else if(data["status"].contains("2")){
-                                                        showDialog(context: context, child:
-                                                        new AlertDialog(
-                                                          content: new Text(
-                                                              "Email already exists."),
-                                                        ));
-                                                      } else if(data["status"].contains("3")){
-                                                        showDialog(context: context, child:
-                                                        new AlertDialog(
-                                                          content: new Text(
-                                                              "Phone no. already exists."),
-                                                        ));
-                                                      }else if(data["status"].contains("4")){
-                                                        showDialog(context: context, child:
-                                                        new AlertDialog(
-                                                          content: new Text(
-                                                              "Email or Phone no already exists."),
-                                                        ));
+                                                        } else if(data["status"].contains("2")){
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (context) {
+                                                                Future.delayed(Duration(seconds: 3), () {
+                                                                  Navigator.of(context).pop(true);
+                                                                });
+                                                                return AlertDialog(
+                                                                  content: new Text("Email already exists."),
+                                                                );
+                                                              });
+                                                          /*showDialog(context: context, child:
+                                                          new AlertDialog(
+                                                            content: new Text(
+                                                                "Email already exists."),
+                                                          ));*/
+                                                        } else if(data["status"].contains("3")){
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (context) {
+                                                                Future.delayed(Duration(seconds: 3), () {
+                                                                  Navigator.of(context).pop(true);
+                                                                });
+                                                                return AlertDialog(
+                                                                  content: new Text("Phone no. already exists."),
+                                                                );
+                                                              });
+/*                                                          showDialog(context: context, child:
+                                                          new AlertDialog(
+                                                            content: new Text(
+                                                                "Phone no. already exists."),
+                                                          ));*/
+                                                        }else if(data["status"].contains("4")){
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (context) {
+                                                                Future.delayed(Duration(seconds: 3), () {
+                                                                  Navigator.of(context).pop(true);
+                                                                });
+                                                                return AlertDialog(
+                                                                  content: new Text("Email and Phone no already exists."),
+                                                                );
+                                                              });
+                                                          /*showDialog(context: context, child:
+                                                          new AlertDialog(
+                                                            content: new Text(
+                                                                "Email and Phone no already exists."),
+                                                          ));*/
+                                                        } else {
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (context) {
+                                                                Future.delayed(Duration(seconds: 3), () {
+                                                                  Navigator.of(context).pop(true);
+                                                                });
+                                                                return AlertDialog(
+                                                                  content: new Text("Oops! Company not registered. Try later"),
+                                                                );
+                                                              });
+                                                          /*showDialog(context: context, child:
+                                                          new AlertDialog(
+                                                            content: new Text(
+                                                                "Oops! Company not registered. Try later"),
+                                                          ));*/
+                                                        }
+                                                        setState(() {
+                                                          _isButtonDisabled=false;
+                                                        });
                                                       }
-                                                      else {
-                                                        showDialog(context: context, child:
-                                                        new AlertDialog(
-                                                          content: new Text(
-                                                              "Oops! Company not registered. Try later"),
-                                                        ));
-                                                      }
-                                                      setState(() {
-                                                        _isButtonDisabled=false;
-                                                      });
                                                     }
+                                                    );
                                                   }
-                                                  );
                                                 }
+
                                               }
 
-                                            }
+                                          ),),
 
-                                        ),),
-
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(child:  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    //margin: EdgeInsets.only(top: 450.0),
-                                    padding: EdgeInsets.only(
-                                        top: 0.0, bottom: 0.0, left: 15.0, right: 45.0),
-                                    decoration: new BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                    ),
-                                    child: FlatButton(
+                                    Expanded(child:  Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      //margin: EdgeInsets.only(top: 450.0),
+                                      padding: EdgeInsets.only(
+                                          top: 0.0, bottom: 0.0, left: 15.0, right: 45.0),
+                                      decoration: new BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                      ),
+                                      child: FlatButton(
                                         shape: Border.all(color: Colors.orange[800]),
                                         child: new Text("Back",style:TextStyle( color: Colors.black,)),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => LoginPage()),
-                                        );
-                                      },
-                                  ),
-                                  ),
-                                  )
-                                ],
-                              ),
-                            )
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => LoginPage()),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    )
+                                  ],
+                                ),
+                              )
 
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-
-                    /*Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[]),*/
-                  ],
-                ),
-              ],
-
-
-
-            ),
+                      //),
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
+      ),
     );
   }
 
@@ -974,7 +1374,7 @@ class _RegisterState extends State<Register> {
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
     if (!regex.hasMatch(value))
-      return 'Enter Valid Email';
+      return 'Enter valid email';
     else
       return null;
   }
@@ -990,7 +1390,6 @@ class _RegisterState extends State<Register> {
     }).catchError((e) {
       print(e);
     });
-
   }
 
   _getAddressFromLatLng() async {
@@ -1006,7 +1405,123 @@ class _RegisterState extends State<Register> {
     } catch (e) {
       print(e);
     }
-
   }
 
+  checklogin(String username, String pass, BuildContext context) async{
+    setState(() {
+      _isServiceCalling = true;
+    });
+    Login dologin = Login();
+    UserLogin user = new UserLogin(username: username, password: pass);
+    dologin.checklogin(user, context).then((res){
+      print("response");
+      print(res);
+      if(res=='true'){
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+        );
+      }else if(res=='false1'){
+        setState(() {
+          _isServiceCalling = false;
+        });
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Your trial period has expired!"),
+              );
+            });
+        /*showDialog(context: context, child:
+        new AlertDialog(
+
+          content: new Text("Your trial period has expired!"),
+        )
+        );*/
+      }else if(res=='false2'){
+        setState(() {
+          _isServiceCalling = false;
+        });
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Your plan has expired!"),
+              );
+            });
+        /*showDialog(context: context, child:
+        new AlertDialog(
+
+          content: new Text("Your plan has expired!"),
+        )
+        );*/
+      }else{
+        setState(() {
+          _isServiceCalling = false;
+        });
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Invalid login credentials"),
+              );
+            });
+        /*showDialog(context: context, child:
+        new AlertDialog(
+          content: new Text("Invalid login credentials."),
+        )
+        );*/
+      }
+    }).catchError((exp){
+      setState(() {
+        _isServiceCalling=false;
+      });
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Unable to connect server."),
+            );
+          });
+      /*showDialog(context: context, child:
+      new AlertDialog(
+        content: new Text("Unable to connect server."),
+      )
+      );*/
+    });
+  }
+
+}
+
+Future<bool> _exitApp(BuildContext context) {
+  return showDialog(
+    context: context,
+    child: new AlertDialog(
+      title: new Text('Do you want to exit this register page?'),
+      //content: new Text('We hate to see you leave...'),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () => Navigator.of(context, rootNavigator: true).pop(false),
+          child: new Text('No'),
+        ),
+        new FlatButton(
+          onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
+          child: new Text('Yes'),
+        ),
+      ],
+    ),
+  ) ??
+      false;
 }

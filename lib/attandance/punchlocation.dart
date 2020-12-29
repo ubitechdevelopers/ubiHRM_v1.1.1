@@ -1,13 +1,11 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
 import 'dart:async';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
-import 'package:permission_handler/permission_handler.dart';
+//import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/model/timeinout.dart';
@@ -85,9 +83,8 @@ class _PunchLocation extends State<PunchLocation> {
 
     initPlatformState();
     getOrgName();
-    setLocationAddress();
-    //  startTimer();
-
+    //setLocationAddress();
+    //startTimer();
   }
 
   getOrgName() async{
@@ -97,12 +94,7 @@ class _PunchLocation extends State<PunchLocation> {
     });
   }
 
-  /*@override
-  void dispose() {
-    super.dispose();
-    timer.cancel();
-  }*/
-  startTimer() {
+  /*startTimer() {
     const fiveSec = const Duration(seconds: 5);
     int count = 0;
     timer = new Timer.periodic(fiveSec, (Timer t) {
@@ -144,7 +136,7 @@ class _PunchLocation extends State<PunchLocation> {
 
       //print(stopstreamingstatus.toString());
     });
-  }
+  }*/
 
   launchMap(String lat, String long) async {
     String url = "https://maps.google.com/?q=" + lat + "," + long;
@@ -167,8 +159,8 @@ class _PunchLocation extends State<PunchLocation> {
 
 
     //  if (response == 1) {
-    Loc lock = new Loc();
-    location_addr = await lock.initPlatformState();
+    //Loc lock = new Loc();
+    //location_addr = await lock.initPlatformState();
     Home ho = new Home();
     act = await ho.checkTimeIn(empid, orgdir);
     ho.managePermission(empid, orgdir, desinationId);
@@ -406,8 +398,9 @@ class _PunchLocation extends State<PunchLocation> {
                       color:appStartColor(), decoration: TextDecoration.underline),
                 ),
                 onPressed: () {
-                  sl.startStreaming(5);
-                  startTimer();
+                  /*startTimer();
+                  sl.startStreaming(5);*/
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => PunchLocation()),
@@ -426,12 +419,12 @@ class _PunchLocation extends State<PunchLocation> {
                 'Location permission is restricted from app settings, click "Open Settings" to allow permission.',
                 textAlign: TextAlign.center,
                 style: new TextStyle(fontSize: 14.0, color: Colors.red)),
-            RaisedButton(
+            /*RaisedButton(
               child: Text('Open Settings'),
               onPressed: () {
                 PermissionHandler().openAppSettings();
               },
-            ),
+            ),*/
           ]);
     }
   }
@@ -493,8 +486,9 @@ class _PunchLocation extends State<PunchLocation> {
                       color: appStartColor(), decoration: TextDecoration.underline),
                 ),
                 onPressed: () {
-                  sl.startStreaming(5);
-                  startTimer();
+                  /*startTimer();
+                  sl.startStreaming(5);*/
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => PunchLocation()),
@@ -596,8 +590,8 @@ class _PunchLocation extends State<PunchLocation> {
                             decoration: TextDecoration.underline),
                       ),
                       onTap: () {
-                        startTimer();
-                        sl.startStreaming(5);
+                        /*startTimer();
+                        sl.startStreaming(5);*/
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => PunchLocation()),
@@ -612,12 +606,12 @@ class _PunchLocation extends State<PunchLocation> {
     } else {
       return Column(children: [
         Text('Location permission is restricted from app settings, click "Open Settings" to allow permission.', textAlign: TextAlign.center, style: new TextStyle(fontSize: 14.0, color: Colors.red)),
-        RaisedButton(
+        /*RaisedButton(
           child: Text('Open Settings'),
           onPressed: () {
             PermissionHandler().openAppSettings();
           },
-        ),
+        ),*/
       ]);
     }
     return Container(width: 0.0, height: 0.0);
@@ -658,7 +652,7 @@ class _PunchLocation extends State<PunchLocation> {
   }
 
   saveVisitImage() async {
-    sl.startStreaming(5);
+    //sl.startStreaming(5);
     client = _clientname.text.trim();
     MarkVisit mk = new MarkVisit(empid, client, streamlocationaddr, orgdir, lat, long);
     /* mk1 = mk;*/
@@ -692,8 +686,8 @@ class _PunchLocation extends State<PunchLocation> {
       } else {
         showDialog(context: context, child:
         new AlertDialog(
-          //content: new Text("Selfie not captured, please punch again!"),
-          content: new Text("Attendance was not captured. Please punch again!"),
+          //title: new Text("Warning!"),
+          content: new Text("Selfie not captured, please punch again!"),
         )
         );
         setState(() {
@@ -764,9 +758,8 @@ class _PunchLocation extends State<PunchLocation> {
       child: Form(
         child: TextFormField(
           controller: _clientname,
-
           keyboardType: TextInputType.text,
-
+          textCapitalization: TextCapitalization.words,
           decoration: InputDecoration(
               labelText: 'Client Name',
               prefixIcon: Padding(

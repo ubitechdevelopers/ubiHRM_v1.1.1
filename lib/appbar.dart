@@ -1,26 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
-
 import 'global.dart';
 import 'profile.dart';
 import 'services/services.dart';
-/*
-void main() => runApp(new HeaderApp());
-final mTitle = "HeaderApp";
-class HeaderApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: AppHeader(),
-      //... another code
-    );
-  }
-}
-*/
-/*class AppHeader extends StatefulWidget  implements PreferredSizeWidget{
-  // code removed for brevity
-  _AppHeaderState createState() => _AppHeaderState();
-}*/
+
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   bool _checkLoadedprofile = true;
   var profileimage;
@@ -30,34 +13,24 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   AppHeader(profileimage1,showtabbar1,orgname1){
     profileimage = profileimage1;
     orgname = orgname1;
-    /*print("--------->");
-    print(profileimage);
-    print(orgname);
-    print("--------->");
-    print(_checkLoadedprofile);*/
     if (profileimage!=null) {
       _checkLoadedprofile = false;
-  //    print(_checkLoadedprofile);
     };
     showtabbar= showtabbar1;
   }
-  /*void initState() {
-    super.initState();
- //   initPlatformState();
-  }
-*/
+
   @override
   Widget build(BuildContext context) {
     return new GradientAppBar(
         backgroundColorStart: appStartColor(),
-       backgroundColorEnd: appEndColor(),
-       automaticallyImplyLeading: false,
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-             IconButton(icon:Icon(Icons.arrow_back),
+            IconButton(icon:Icon(Icons.arrow_back),
               onPressed:(){
-               print("ICON PRESSED");
+                print("ICON PRESSED");
                 Navigator.pop(context,false);
               },),
             GestureDetector(
@@ -72,11 +45,10 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                   width: 40.0,
                   height: 40.0,
                   decoration: new BoxDecoration(
-                  shape: BoxShape.circle,
+                      shape: BoxShape.circle,
                       color: Colors.white,
                       image: new DecorationImage(
                         fit: BoxFit.fill,
-                        // image: AssetImage('assets/avatar.png'),
                         image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
                       )
                   )
@@ -98,9 +70,6 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           tabs: choices.map((Choice choice) {
             return Tab(
               text: choice.title,
-             //   unselectedLabelColor: Colors.white70,
-             //   indicatorColor: Colors.white,
-             //   icon: Icon(choice.icon),
             );
           }).toList(),
         ):null

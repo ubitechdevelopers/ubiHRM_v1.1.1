@@ -340,8 +340,13 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                     containerDecoration: BoxDecoration(color: appStartColor().withOpacity(0.1)),
                   )
               ),
-
-
+              Container(
+                padding: EdgeInsets.only(top:5.0,),
+                child:Center(
+                  child:Text("Team's Attendance Log",
+                    style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
+                ),
+              ),
               Container(
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
@@ -361,9 +366,10 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                       suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
                           onPressed: () {
                             _searchController.clear();
+                            empname='';
                             /*Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => EmployeeList()),
+                              MaterialPageRoute(builder: (context) => MyTeamAtt()),
                             );*/
                           }
                       ):null,
@@ -379,14 +385,6 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                 ),
               ),
 
-              Container(
-                padding: EdgeInsets.only(top:5.0,),
-                child:Center(
-                  child:Text("Team's Attendance Log",
-                    style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
-                ),
-              ),
-              Divider(),
               new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 //crossAxisAlignment: CrossAxisAlignment.start,

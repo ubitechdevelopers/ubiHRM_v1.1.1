@@ -96,8 +96,8 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
     super.initState();
     initPlatformState();
     getOrgName();
-    setLocationAddress();
-    startTimer();
+    /*setLocationAddress();
+    startTimer();*/
   }
 
   getOrgName() async{
@@ -154,7 +154,7 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
     return "$hoursStr:$minutesStr:$secondsStr";
   }
 
-  startTimer() {
+/*  startTimer() {
     const fiveSec = const Duration(seconds: 5);
     int count = 0;
     timer = new Timer.periodic(fiveSec, (Timer t) {
@@ -191,7 +191,7 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
         }
       });
     }
-  }
+  }*/
 
   launchMap(String lat, String long) async {
     String url = "https://maps.google.com/?q=" + lat + "," + long;
@@ -209,9 +209,9 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
     orgdir = prefs.getString('orgdir') ?? '';
     desinationId = globalcompanyinfomap['Designation'];
     response = prefs.getInt('response') ?? 0;
-    Loc lock = new Loc();
-    location_addr = await lock.initPlatformState();
-    print(location_addr);
+    //Loc lock = new Loc();
+    //location_addr = await lock.initPlatformState();
+    //print(location_addr);
 
     Home ho = new Home();
     act = await ho.checkTimeIn(empid, orgdir);
@@ -360,9 +360,8 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
                       color: appStartColor(), decoration: TextDecoration.underline),
                 ),
                 onPressed: () {
-                  sl.startStreaming(5);
-                  print("shaifali-----------");
-                  startTimer();
+                  /*startTimer();
+                  sl.startStreaming(5);*/
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => TimeOffTimer()),
@@ -452,8 +451,8 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
                       color: appStartColor(), decoration: TextDecoration.underline),
                 ),
                 onPressed: () {
-                  sl.startStreaming(5);
-                  startTimer();
+                  /*startTimer();
+                  sl.startStreaming(5);*/
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => TimeOffTimer()),
@@ -590,8 +589,8 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
                             decoration: TextDecoration.underline),
                       ),
                       onTap: () {
-                        startTimer();
-                        sl.startStreaming(5);
+                        /*startTimer();
+                        sl.startStreaming(5);*/
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => TimeOffTimer()),
@@ -622,7 +621,7 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
   getStartTimeOffButton() {
     if (widget.action == "Start") {
       return RaisedButton(
-        child: Text('START TIME OFF', style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+        child: Text('START TIME OFF', style: new TextStyle(fontSize: 18.0, color: Colors.white)),
         color: Colors.orange[800],
         onPressed: () {
           /*setState(() {
@@ -640,7 +639,7 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
       );
     } else if (widget.action == "Stop"){
       return RaisedButton(
-        child: Text('STOP TIME OFF', style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+        child: Text('STOP TIME OFF', style: new TextStyle(fontSize: 18.0, color: Colors.white)),
         color: Colors.orange[800],
         onPressed: () {
          /* setState(() {
@@ -687,27 +686,57 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
             )),
           );
         } else if(issave.contains("unmarked")){
-          showDialog(context: context, child:
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Before Starting TimeOff you need to mark Time In"),
+                );
+              });
+          /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text("Before Starting TimeOff you need to mark Time In"),
           )
-          );
+          );*/
         } else {
-          showDialog(context: context, child:
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("There is some problem"),
+                );
+              });
+          /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text("There is some problem"),
           )
-          );
+          );*/
         }
       }catch(e){
         print("EXCEPTION PRINT: "+e.toString());
       }
     }else{
-      showDialog(context: context, child:
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Internet connection not found."),
+            );
+          });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Internet connection not found."),
       )
-      );
+      );*/
     }
   }
 

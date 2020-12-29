@@ -119,11 +119,11 @@ class RequestTimeOffService{
         return "4";
       }else if (timeoffMap.contains("5")){
         return "5";
-      }else if (timeoffMap.contains("6")){
+      }/*else if (timeoffMap.contains("6")){
         return "6";
       }else if (timeoffMap.contains("7")){
         return "7";
-      }else {
+      }*/ else {
         return "true";
       }
     }catch(e){
@@ -131,6 +131,7 @@ class RequestTimeOffService{
       return "No Connection";
     }
   }
+
 
   withdrawTimeOff(TimeOff timeoff) async{
     try {
@@ -168,9 +169,12 @@ class SaveTimerTime {
       String orgid = prefs.getString('organization') ?? '';
       String empid = prefs.getString('employeeid')??"";
       String location = globals.globalstreamlocationaddr;
-      LocationData _currentLocation = globals.list[globals.list.length - 1];
+      String city = globals.globalcity;
+      String lat = globals.assign_lat.toString();
+      String long = globals.assign_long.toString();
+      /*LocationData _currentLocation = globals.list[globals.list.length - 1];
       String lat = _currentLocation.latitude.toString();
-      String long = _currentLocation.longitude.toString();
+      String long = _currentLocation.longitude.toString();*/
       FormData formData = new FormData.from({
         "empid": empid,
         "orgid": orgid,
@@ -200,7 +204,7 @@ class SaveTimerTime {
   }
 
 
-  /*Future<bool> saveStartTimeOff(MarkStartTimeOff mk) async {
+/*Future<bool> saveStartTimeOff(MarkStartTimeOff mk) async {
     try {
       Dio dio = new Dio();
       final prefs = await SharedPreferences.getInstance();

@@ -27,12 +27,17 @@ class _TimeOffList extends State<TimeOffList> {
   var profileimage;
   bool showtabbar;
   String orgName="";
+  String empname="";
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
 
   @override
   void initState() {
     super.initState();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     showtabbar =false;
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     // f_dept = FocusNode();
@@ -132,6 +137,7 @@ class _TimeOffList extends State<TimeOffList> {
                           lastDate: DateTime(2100));
                     },
                     decoration: InputDecoration(
+                      border: InputBorder.none,
                       prefixIcon: Padding(
                         padding: EdgeInsets.all(0.0),
                         child: Icon(
@@ -156,7 +162,53 @@ class _TimeOffList extends State<TimeOffList> {
                     },
                   ),
                 ),
-                SizedBox(height: 12.0),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: _searchController,
+                            focusNode: searchFocusNode,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              border: OutlineInputBorder(
+                                borderRadius:  new BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: Icon(Icons.search, size: 30,),
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              hintText: 'Search Employee',
+                              labelText: 'Search Employee',
+                              /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    //getLateEmpDataList(today.text,empname);
+                                    //res = true;
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => LateComers()),
+                                    );
+                                    Navigator.pop(context);
+                                  }
+                              ):null,*/
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                print("value");
+                                print(value);
+                                empname = value;
+                                res = true;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                //SizedBox(height: 12.0),
                 Container(
                   //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
                   width: MediaQuery.of(context).size.width * .9,
@@ -241,7 +293,7 @@ class _TimeOffList extends State<TimeOffList> {
 
   getEmpDataList(date) {
     return new FutureBuilder<List<EmpListTimeOff>>(
-        future: getTimeOFfDataList(date),
+        future: getTimeOFfDataList(date,empname),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
@@ -262,8 +314,7 @@ class _TimeOffList extends State<TimeOffList> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    new Text(
-                                        snapshot.data[index].name.toString()),
+                                    new Text(snapshot.data[index].name.toString(),style: TextStyle(fontWeight: FontWeight.bold,)),
 
                                   ],
                                 )),
@@ -281,7 +332,7 @@ class _TimeOffList extends State<TimeOffList> {
                             ),
                             Flexible(
                               child: new Container(
-                                width: MediaQuery.of(context).size.width * 0.10,
+                                width: MediaQuery.of(context).size.width * 0.12,
                                 child: new Text(
                                   snapshot.data[index].diff.toString(),
                                   style: TextStyle(

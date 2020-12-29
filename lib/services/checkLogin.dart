@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart';
+import 'package:ubihrm/login_page.dart';
 import 'package:ubihrm/model/model.dart';
+import 'package:ubihrm/survey.dart';
 import 'services.dart';
 
 class Login{
@@ -32,6 +36,11 @@ class Login{
       if(employeeMap['response']==1){
         prefs.setInt("response", 1);
         prefs.setString("employeeid", employeeMap['employeeid']);
+        prefs.setString("empemail", employeeMap['empemail']);
+        prefs.setString("empnumber", employeeMap['empnumber']);
+        prefs.setString("email", employeeMap['email']);
+        prefs.setString("number", employeeMap['number']);
+        prefs.setString("name", employeeMap['name']);
         prefs.setString("organization", employeeMap['organization']);
         prefs.setString("userprofileid", employeeMap['userprofileid']);
         prefs.setString("countryid", employeeMap['countryid']);
@@ -50,52 +59,53 @@ class Login{
         String empid = prefs.getString('employeeid')??"";
         String organization =prefs.getString('organization')??"";
         String userprofileid =prefs.getString('userprofileid')??"";
-        int profiletype =prefs.getInt('profiletype')??0;
-        int hrsts =prefs.getInt('hrsts')??0;
-        int adminsts =prefs.getInt('adminsts')??0;
-        int dataaccess =prefs.getInt('dataaccess')??0;
-        int SAPintegrationsts =prefs.getInt('SAPintegrationsts')??0;
-        int divhrsts =prefs.getInt('divhrsts')??0;
 
         Employee emp = new Employee(
           employeeid: empid,
           organization: organization,
           userprofileid: userprofileid,
-          profiletype:profiletype,
-          hrsts:hrsts,
-          adminsts:adminsts,
-          dataaccess:dataaccess,
-          SAPintegrationsts:SAPintegrationsts,
-          divhrsts:divhrsts,
         );
 
         await getAllPermission(emp);
         await getProfileInfo(emp, context);
         await getReportingTeam(emp);
 
-        perEmployeeLeave= getModulePermission("18","view");
-        perAttendance=  getModulePermission("5","view");
-        perTimeoff=  getModulePermission("179","view");
+        perEmployeeLeave = getModulePermission("18","view");
+        perAttendance = getModulePermission("5","view");
+        perTimeoff = getModulePermission("179","view");
         perSalary = getModulePermission("66", "view");
         perPayroll = getModulePermission("458", "view");
         perPayPeriod = getModulePermission("491", "view");
+        perGeoFence = getModulePermission("138", "view");
         perSalaryExpense = getModulePermission("170", "view");
         perPayrollExpense = getModulePermission("473", "view");
         perFlexi = getModulePermission("448", "view");
         perPunchLocation = getModulePermission("305", "view");
-        perLeaveApproval=  getModuleUserPermission("124","view");
+
+        perLeaveApproval = getModuleUserPermission("124","view");
         perTimeoffApproval = getModuleUserPermission("180", "view");
-        perSalaryExpenseApproval=  getModuleUserPermission("170","view");
-        perPayrollExpenseApproval=  getModuleUserPermission("473","view");
-        perAttReport=getModuleUserPermission("68", "view");
-        perLeaveReport=getModuleUserPermission("69", "view");
-        perFlexiReport=getModuleUserPermission("448", "view");
+        perSalaryExpenseApproval = getModuleUserPermission("170","view");
+        perPayrollExpenseApproval = getModuleUserPermission("473","view");
+
+        perAttReport = getModuleUserPermission("68", "view");
+        perLeaveReport = getModuleUserPermission("69", "view");
+        perFlexiReport = getModuleUserPermission("448", "view");
 
         return "true";
       } else if(employeeMap['response']==2){
         return "false1";
       } else if(employeeMap['response']==3){
         return "false2";
+      } else if(employeeMap['response']==4){
+        prefs.setString("orgid", employeeMap['orgid']);
+        prefs.setString("name", employeeMap['name']);
+        prefs.setString("email", employeeMap['email']);
+        print(prefs.getString('orgid'));
+        print(prefs.getString('name'));
+        print(prefs.getString('email'));
+        return "false3";
+      } else if(employeeMap['response']==5){
+        return "false4";
       } else{
         return "false";
       }
@@ -129,6 +139,10 @@ class Login{
         if(employeeMap['response']==1){
           prefs.setInt("response", 1);
           prefs.setString("employeeid", employeeMap['employeeid']);
+          prefs.setString("empemail", employeeMap['empemail']);
+          prefs.setString("empnumber", employeeMap['empnumber']);
+          prefs.setString("email", employeeMap['email']);
+          prefs.setString("number", employeeMap['number']);
           prefs.setString("organization", employeeMap['organization']);
           prefs.setString("userprofileid", employeeMap['userprofileid']);
           prefs.setString("countryid", employeeMap['countryid']);
@@ -145,42 +159,37 @@ class Login{
           String empid = prefs.getString('employeeid')??"";
           String organization =prefs.getString('organization')??"";
           String userprofileid =prefs.getString('userprofileid')??"";
-          int profiletype =prefs.getInt('profiletype')??0;
-          int hrsts =prefs.getInt('hrsts')??0;
-          int adminsts =prefs.getInt('adminsts')??0;
-          int dataaccess =prefs.getInt('dataaccess')??0;
 
           Employee emp = new Employee(
             employeeid: empid,
             organization: organization,
             userprofileid: userprofileid,
-            profiletype:profiletype,
-            hrsts:hrsts,
-            adminsts:adminsts,
-            dataaccess:dataaccess,
           );
 
           await getAllPermission(emp);
           await getProfileInfo(emp, context);
           await getReportingTeam(emp);
 
-          perEmployeeLeave= getModulePermission("18","view");
-          perAttendance=  getModulePermission("5","view");
-          perTimeoff=  getModulePermission("179","view");
+          perEmployeeLeave = getModulePermission("18","view");
+          perAttendance = getModulePermission("5","view");
+          perTimeoff = getModulePermission("179","view");
           perSalary = getModulePermission("66", "view");
           perPayroll = getModulePermission("458", "view");
           perPayPeriod = getModulePermission("491", "view");
+          perGeoFence = getModulePermission("138", "view");
           perSalaryExpense = getModulePermission("170", "view");
           perPayrollExpense = getModulePermission("473", "view");
           perFlexi = getModulePermission("448", "view");
           perPunchLocation = getModulePermission("305", "view");
-          perLeaveApproval=  getModuleUserPermission("124","view");
+
+          perLeaveApproval = getModuleUserPermission("124","view");
           perTimeoffApproval = getModuleUserPermission("180", "view");
-          perSalaryExpenseApproval=  getModuleUserPermission("170","view");
-          perPayrollExpenseApproval=  getModuleUserPermission("473","view");
-          perAttReport=getModuleUserPermission("68", "view");
-          perLeaveReport=getModuleUserPermission("69", "view");
-          perFlexiReport=getModuleUserPermission("448", "view");
+          perSalaryExpenseApproval = getModuleUserPermission("170","view");
+          perPayrollExpenseApproval = getModuleUserPermission("473","view");
+
+          perAttReport = getModuleUserPermission("68", "view");
+          perLeaveReport = getModuleUserPermission("69", "view");
+          perFlexiReport = getModuleUserPermission("448", "view");
 
           return "Success";
         } else {

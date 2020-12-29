@@ -92,19 +92,7 @@ class _DashboardStatemain extends State<DashboardMain> {
       String empid = prefs.getString('employeeid')??"";
       String organization =prefs.getString('organization')??"";
       String userprofileid =prefs.getString('userprofileid')??"";
-      int profiletype =prefs.getInt('profiletype')??0;
-      int hrsts =prefs.getInt('hrsts')??0;
-      int adminsts =prefs.getInt('adminsts')??0;
-      int dataaccess =prefs.getInt('dataaccess')??0;
-      Employee emp = new Employee(
-        employeeid: empid,
-        organization: organization,
-        userprofileid:userprofileid,
-        profiletype:profiletype,
-        hrsts:hrsts,
-        adminsts:adminsts,
-        dataaccess:dataaccess
-      );
+      Employee emp = new Employee(employeeid: empid, organization: organization,userprofileid:userprofileid);
 
       await getfiscalyear(emp);
       await getovertime(emp);
@@ -340,7 +328,7 @@ class _DashboardStatemain extends State<DashboardMain> {
                 SizedBox(height: 40.0,),
                 Row(children: <Widget>[
                   SizedBox(width: 20.0,),
-                 // Text("Monthly Holidays ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
+                  // Text("Monthly Holidays ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                   Flexible(child: Text("Upcoming Holidays ["+fiscalyear+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold))),
                 ]
                 ),
@@ -439,7 +427,7 @@ class _DashboardStatemain extends State<DashboardMain> {
                   Divider(height: 10.0,),
                   SizedBox(height: 10.0,),
                   Row(children: <Widget>[
-                   Text('1. Makar sankranti ',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
+                   Text('1.Makar sankranti ',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
                    Expanded(
                      child: Container(
                       width:0.5,

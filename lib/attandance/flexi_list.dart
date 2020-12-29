@@ -20,12 +20,9 @@ class FlexiList extends StatefulWidget {
 
 TextEditingController today;
 String _orgName;
-String orgName ;
-//FocusNode f_dept ;
+
 class _FlexiList extends State<FlexiList> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  int _currentIndex = 1;
-
   String admin_sts='0';
   bool res = true;
   var formatter = new DateFormat('dd-MMM-yyyy');
@@ -39,21 +36,16 @@ class _FlexiList extends State<FlexiList> {
     super.initState();
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
-    // f_dept = FocusNode();
     getOrgName();
   }
 
   getOrgName() async {
-
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _orgName = prefs.getString('org_name') ?? '';
       orgName  = prefs.getString('orgname') ?? '';
       admin_sts = prefs.getString('sstatus') ?? '0';
-
       profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
-
-      //      print("ABCDEFGHI-"+profile);
       profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
         if (mounted) {
           setState(() {
@@ -62,25 +54,15 @@ class _FlexiList extends State<FlexiList> {
         }
       }));
       showtabbar=false;
-
     });
-  }
-
-  void showInSnackBar(String value) {
-    final snackBar = SnackBar(
-        content: Text(
-          value,
-          textAlign: TextAlign.center,
-        ));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   @override
   Widget build(BuildContext context) {
     return getmainhomewidget();
   }
+
   Future<bool> sendToHome() async{
-    print("-------> back button pressed");
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => Flexitime()), (Route<dynamic> route) => false,
@@ -104,10 +86,8 @@ class _FlexiList extends State<FlexiList> {
             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
             color: Colors.white,
           ),
-          //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
           child: Column(
             children: <Widget>[
-              //SizedBox(height: 5.0),
               Center(
                 child: Text(
                     'Flexi Logs',
@@ -117,19 +97,17 @@ class _FlexiList extends State<FlexiList> {
               Divider(
                 height: 1.0,
               ),
-              //SizedBox(height: 2.0),
               Container(
                 child: DateTimeField(
-                  //dateOnly: true,
                   format: formatter,
                   controller: today,
                   readOnly: true,
                   onShowPicker: (context, currentValue) {
                     return showDatePicker(
-                        context: context,
-                        firstDate: DateTime(1900),
-                        initialDate: currentValue ?? DateTime.now(),
-                        lastDate: DateTime(2100));
+                      context: context,
+                      firstDate: DateTime(1900),
+                      initialDate: currentValue ?? DateTime.now(),
+                      lastDate: DateTime(2100));
                   },
                   decoration: InputDecoration(
                     border:InputBorder.none,
@@ -160,25 +138,14 @@ class _FlexiList extends State<FlexiList> {
               Divider(height: 1,),
               SizedBox(height: 5.0),
               Container(
-                //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
-                //  width: MediaQuery.of(context).size.width * .9,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     SizedBox(width: 1.0,),
-                    /*Container(
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    child: Text(
-                      'Name',
-                      style: TextStyle(color: Colors.orange),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),*/
                     Expanded(
                       flex: 48,
                       child: Padding(
-                        // width: MediaQuery.of(context).size.width * 0.37,
                         padding: EdgeInsets.only(left: 4.0),
                         child: Text(
                           'Location',
@@ -191,7 +158,6 @@ class _FlexiList extends State<FlexiList> {
                     Expanded(
                       flex: 26,
                       child:Container(
-                        //  width: MediaQuery.of(context).size.width * 0.15,
                         child: Text('Time In',
                             style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
                             textAlign: TextAlign.center),
@@ -201,7 +167,6 @@ class _FlexiList extends State<FlexiList> {
                     Expanded(
                       flex: 26,
                       child:Container(
-                        //  width: MediaQuery.of(context).size.width * 0.15,
                         child: Text('Time Out ',
                             style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
                             textAlign: TextAlign.center),
@@ -225,180 +190,144 @@ class _FlexiList extends State<FlexiList> {
     );
   }
 
-  loader() {
-    return new Container(
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            //Image.asset('assets/spinner.gif', height: 50.0, width: 50.0),
-            CircularProgressIndicator()
-          ]
-        ),
-      ),
+  getEmpDataList(date) {
+    return new FutureBuilder<List<FlexiAtt>>(
+      future: getFlexiDataList(date),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            return new ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return new Container(
+                    child:Column(children: <Widget>[
+                      new Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 46,
+                            child: new Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  InkWell(
+                                    child:Text("In: "+
+                                        snapshot.data[index].pi_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
+                                    onTap: () {
+                                      goToMap(snapshot.data[index].pi_latit,snapshot.data[index].pi_longi.toString());
+                                    },
+                                  ),
+                                  SizedBox(height: 5.0),
+                                  InkWell(
+                                    child:Text("Out: "+
+                                        snapshot.data[index].po_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
+                                    onTap: () {
+                                      goToMap(snapshot.data[index].po_latit.toString(),snapshot.data[index].po_longi.toString());
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Expanded(
+                            flex: 27,
+                            child:Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(snapshot.data[index].pi_time.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
+                                  Container(
+                                    width: 62.0,
+                                    height: 62.0,
+                                    child:InkWell(
+                                      child: Container(
+                                        decoration: new BoxDecoration(
+                                          shape: BoxShape .circle,
+                                          image: new DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: new NetworkImage(snapshot.data[index].pi_img)
+                                          )
+                                        )),
+                                      onTap: (){
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].pi_img,org_name: _orgName)),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Text(snapshot.data[index].timeindate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
+                                ],
+                              )
+                            ),
+                          ),
+
+                          Expanded(
+                            flex: 27,
+                            child:Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(snapshot.data[index].po_time
+                                      .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
+                                  Container(
+                                    width: 62.0,
+                                    height: 62.0,
+                                    child:InkWell(
+                                      child: Container(
+                                        decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: new DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: new NetworkImage(snapshot.data[index].po_img)
+                                          )
+                                        )),
+                                      onTap: (){
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].po_img,org_name: _orgName)),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Text(snapshot.data[index].timeoutdate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
+                                ],
+                              )
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      Divider(
+                        color: Colors.blueGrey.withOpacity(0.25),
+                        height: 10.2,
+                      ),
+                    ]),
+                  );
+                });
+          } else {
+            return new Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width*1,
+                color: appStartColor().withOpacity(0.1),
+                padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                child:Text("No flexi log found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          return new Text("Unable to connect server");
+        }
+        return new Center(child: CircularProgressIndicator());
+      }
     );
   }
 
-  getEmpDataList(date) {
-    return new FutureBuilder<List<FlexiAtt>>(
-        future: getFlexiDataList(date),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              return new ListView.builder(
-                  itemCount: snapshot.data.length,
-                  //    padding: EdgeInsets.only(left: 15.0,right: 15.0),
-                  itemBuilder: (BuildContext context, int index) {
-                    return new Container(
-                      //          width: MediaQuery.of(context).size.width * .9,
-                      child:Column(children: <Widget>[
-                        new Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            // SizedBox(width: 8.0,),
-                            /*   new Container(
-                                width: MediaQuery.of(context).size.width * 0.18,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    new Text(
-                                      snapshot.data[index].Emp.toString(),style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.left,),
-                                  ],
-                                )),*/
-                            Expanded(
-                              flex: 46,
-                              child: new Container(
-                                // width: MediaQuery.of(context).size.width * 0.37,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    /* new Text(
-                                    snapshot.data[index].client.toString(),style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.left,
-                                  ),*/
-                                    InkWell(
-                                      child:Text("In: "+
-                                          snapshot.data[index].pi_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
-                                      onTap: ()
-                                      {
-                                        goToMap(snapshot.data[index].pi_latit,snapshot.data[index].pi_longi.toString());
-                                      },
-                                    ),
-                                    SizedBox(height: 5.0),
-                                    InkWell(
-                                      child:Text("Out: "+
-                                          snapshot.data[index].po_loc.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),),
-                                      onTap: () {goToMap(snapshot.data[index].po_latit.toString(),snapshot.data[index].po_longi.toString());},
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+}
 
-                            Expanded(
-                              flex: 27,
-                              child:Container(
-                                //width: MediaQuery.of(context).size.width * 0.19,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(snapshot.data[index].pi_time
-                                          .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
-                                      Container(
-                                        width: 62.0,
-                                        height: 62.0,
-                                        child:InkWell(
-                                          child: Container(
-                                              decoration: new BoxDecoration(
-                                                  shape: BoxShape .circle,
-                                                  image: new DecorationImage(
-                                                      fit: BoxFit.fill,
-                                                      image: new NetworkImage(snapshot.data[index].pi_img)
-                                                  )
-                                              )),
-                                          onTap: (){
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].pi_img,org_name: _orgName)),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      Text(snapshot.data[index].timeindate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
-                                    ],
-                                  )
-                              ),
-                            ),
-
-                            Expanded(
-                              flex: 27,
-                              child:Container(
-                                // width: MediaQuery.of(context).size.width * 0.22,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(snapshot.data[index].po_time
-                                          .toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0),),
-                                      Container(
-                                        width: 62.0,
-                                        height: 62.0,
-                                        child:InkWell(
-                                          child: Container(
-                                              decoration: new BoxDecoration(
-                                                  shape: BoxShape
-                                                      .circle,
-                                                  image: new DecorationImage(
-                                                      fit: BoxFit.fill,
-                                                      image: new NetworkImage(
-                                                          snapshot
-                                                              .data[index]
-                                                              .po_img)
-                                                  )
-                                              )),
-                                          onTap: (){
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(builder: (context) => ImageView(myimage: snapshot.data[index].po_img,org_name: _orgName)),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      Text(snapshot.data[index].timeoutdate.toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0,color: Colors.grey),),
-
-                                    ],
-                                  )
-                              ),
-                            ),
-
-                          ],
-                        ),
-
-                        Divider(
-                          color: Colors.blueGrey.withOpacity(0.25),
-                          height: 10.2,
-                        ),
-                      ]),
-                    );
-                  });
-            } else {
-              return new Center(
-                child: Container(
-                  width: MediaQuery.of(context).size.width*1,
-                  color: appStartColor().withOpacity(0.1),
-                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                  child:Text("No flexi log found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
-                ),
-              );
-            }
-          } else if (snapshot.hasError) {
-            return new Text("Unable to connect server");
-          }
-          // return loader();
-          return new Center(child: CircularProgressIndicator());
-        });
-  }
-} /////////mail class close
 
 class FlexiAppHeader extends StatelessWidget implements PreferredSizeWidget {
   bool _checkLoadedprofile = true;
@@ -409,84 +338,69 @@ class FlexiAppHeader extends StatelessWidget implements PreferredSizeWidget {
   FlexiAppHeader(profileimage1,showtabbar1,orgname1){
     profileimage = profileimage1;
     orgname = orgname1;
-    // print("--------->");
-    // print(profileimage);
-    //  print("--------->");
-    //   print(_checkLoadedprofile);
     if (profileimage!=null) {
       _checkLoadedprofile = false;
-      //    print(_checkLoadedprofile);
     };
     showtabbar= showtabbar1;
   }
-  /*void initState() {
-    super.initState();
- //   initPlatformState();
-  }
-*/
+
   @override
   Widget build(BuildContext context) {
     return new GradientAppBar(
-        backgroundColorStart: appStartColor(),
-        backgroundColorEnd: appEndColor(),
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            IconButton(icon:Icon(Icons.arrow_back),
-              onPressed:(){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Flexitime()),
-                );
-              },),
-            GestureDetector(
-              // When the child is tapped, show a snackbar
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CollapsingTab()),
-                );
-              },
-              child:Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
-                      )
-                  )
-              ),
+      backgroundColorStart: appStartColor(),
+      backgroundColorEnd: appEndColor(),
+      automaticallyImplyLeading: false,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          IconButton(icon:Icon(Icons.arrow_back),
+            onPressed:(){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Flexitime()),
+              );
+            },),
+          GestureDetector(
+            // When the child is tapped, show a snackbar
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CollapsingTab()),
+              );
+            },
+            child:Container(
+              width: 40.0,
+              height: 40.0,
+              decoration: new BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                image: new DecorationImage(
+                  fit: BoxFit.fill,
+                  image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                )
+              )
             ),
-            Flexible(
-              child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(orgname,overflow: TextOverflow.ellipsis,)
-              ),
-            )
-          ],
-        ),
-        bottom:
-        showtabbar==true ? TabBar(
-          unselectedLabelColor: Colors.white70,
-          indicatorColor: Colors.white,
-          isScrollable: true,
-          tabs: choices.map((Choice choice) {
-            return Tab(
-              text: choice.title,
-              //   unselectedLabelColor: Colors.white70,
-              //   indicatorColor: Colors.white,
-              //   icon: Icon(choice.icon),
-            );
-          }).toList(),
-        ):null
+          ),
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(orgname,overflow: TextOverflow.ellipsis,)
+            ),
+          )
+        ],
+      ),
+      bottom: showtabbar==true ? TabBar(
+        unselectedLabelColor: Colors.white70,
+        indicatorColor: Colors.white,
+        isScrollable: true,
+        tabs: choices.map((Choice choice) {
+          return Tab(
+            text: choice.title,
+          );
+        }).toList(),
+      ):null
     );
   }
   @override
   Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
-
 }

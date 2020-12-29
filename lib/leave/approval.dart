@@ -85,8 +85,8 @@ class _TabState extends State<TabbedApp> {
       home: DefaultTabController(
         length: choices.length,
         child: Scaffold(
-          endDrawer: new AppDrawer(),
-          appBar: new ApprovalAppHeader(profileimage,showtabbar,orgName),
+        endDrawer: new AppDrawer(),
+        appBar: new ApprovalAppHeader(profileimage,showtabbar,orgName),
 
 /*          appBar:PreferredSize(
             preferredSize: Size.fromHeight(100.0),
@@ -198,7 +198,7 @@ class _TabState extends State<TabbedApp> {
 
           ),
           bottomNavigationBar:new HomeNavigation(),
-          /* bottomNavigationBar:new Theme(
+         /* bottomNavigationBar:new Theme(
               data: Theme.of(context).copyWith(
                 // sets the background color of the `BottomNavigationBar`
                 canvasColor: bottomNavigationColor(),
@@ -404,38 +404,38 @@ class ChoiceCard1 extends StatelessWidget {
                               color: Colors.white,
                             ),//////////////////////////////////////////////////////////////////////---------------------------------
                             child: new FutureBuilder<List<LeaveA>>(
-                              future: getApprovals(choice.title),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  if(snapshot.data.length>0) {
+                            future: getApprovals(choice.title),
+                            builder: (context, snapshot) {
+                           if (snapshot.hasData) {
+                            if(snapshot.data.length>0) {
 
-                                    return new ListView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: snapshot.data.length,
+                            return new ListView.builder(
+                             scrollDirection: Axis.vertical,
+                             itemCount: snapshot.data.length,
 
-                                        itemBuilder: (BuildContext context, int index) {
-                                          return new Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                        itemBuilder: (BuildContext context, int index) {
+                      return new Column(
+                       crossAxisAlignment: CrossAxisAlignment.start,
 
-                                              children: <Widget>[
-                                                new Row(
-                                                  mainAxisAlignment: MainAxisAlignment .spaceAround,
-                                                  children: <Widget>[
-                                                    //SizedBox(height: 40.0,),
-                                                    new Expanded(
+                       children: <Widget>[
+                        new Row(
+                          mainAxisAlignment: MainAxisAlignment .spaceAround,
+                          children: <Widget>[
+                           //SizedBox(height: 40.0,),
+                             new Expanded(
 
-                                                      child: Container(
-                                                        width: MediaQuery.of(context) .size.width * 0.90,
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment  .start,
-                                                          children: <Widget>[
-                                                            GestureDetector(
-                                                              // When the child is tapped, show a snackbar
-                                                              onTap: () {
+                                 child: Container(
+                                  width: MediaQuery.of(context) .size.width * 0.90,
+                                   child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment  .start,
+                                     children: <Widget>[
+                                       GestureDetector(
+                                    // When the child is tapped, show a snackbar
+                                      onTap: () {
                                                                 //  final snackBar = SnackBar(content: Text("Tap"));
 
                                                                 //Scaffold.of(context).showSnackBar(snackBar);
-                                                                /*  showDialog(
+                                         /*  showDialog(
                                            context: context,
                                            builder: (_) => new AlertDialog(
                                            //title: new Text("Dialog Title"),
@@ -443,27 +443,27 @@ class ChoiceCard1 extends StatelessWidget {
                                            )
                                           );*/
 
-                                                              },
-                                                              child:   Text(snapshot.data[index].name.toString(), style: TextStyle(
-                                                                  color: Colors.black87,
-                                                                  fontWeight: FontWeight.bold,
-                                                                  fontSize: 16.0),),
-                                                            ), ],
-                                                        ),
-                                                      ),  ),
+                                         },
+                                   child:   Text(snapshot.data[index].name.toString(), style: TextStyle(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0),),
+                                                   ), ],
+                                          ),
+                                         ),  ),
 
-                                                    new Expanded(
-                                                      child:Container(
-                                                          width: MediaQuery .of(context)  .size.width * 0.20,
-                                                          child: Column(
-                                                            crossAxisAlignment: CrossAxisAlignment .center,
-                                                            children: <Widget>[
-                                                              Text("         "+snapshot.data[index].applydate
-                                                                  .toString()),
-                                                            ],
-                                                          )
+                                      new Expanded(
+                                    child:Container(
+                                      width: MediaQuery .of(context)  .size.width * 0.20,
+                                        child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment .center,
+                                        children: <Widget>[
+                                         Text("         "+snapshot.data[index].applydate
+                                          .toString()),
+                                                ],
+                                              )
 
-                                                      ),),
+                                              ),),
 
                                                     /*  new Expanded(
                                   child:Container(
@@ -541,18 +541,18 @@ class ChoiceCard1 extends StatelessWidget {
                             ),
                               ],),*/
 
-                                                SizedBox(height: 2.5,),
+                              SizedBox(height: 2.5,),
                                                 new Row(
                                                   // mainAxisAlignment: MainAxisAlignment .spaceAround,
                                                   children: <Widget>[
                                                     //   SizedBox(height: 10.0,),
 
                                                     Container(
-                                                        width: MediaQuery.of(context) .size .width * 0.55,
-                                                        //height: MediaQuery .of(context).size.height * 0.03,
+                                                        width: MediaQuery.of(context) .size .width * 0.65,
+                                                        height: MediaQuery .of(context).size.height * 0.03,
                                                         //height: MediaQuery.of(context) .size .height * 0.03,
                                                         //padding: EdgeInsets.only(top: 1.5, bottom: .0),
-                                                        margin: EdgeInsets.only(top: 4.0),
+                                                        //margin: EdgeInsets.only(top: 0.5),
                                                         child: RichText(
                                                           text: new TextSpan(
                                                             style: new TextStyle(
@@ -574,16 +574,16 @@ class ChoiceCard1 extends StatelessWidget {
                                                     snapshot.data[index].Leavests.toString() == 'Pending' && snapshot.data[index].Psts.toString() == ""  ?
                                                     new Expanded(
                                                       child: Padding(
-                                                        padding: const EdgeInsets.fromLTRB(0.0,0.0,0.0,0.0),
+                                                        padding: const EdgeInsets.fromLTRB(0.0,0.0,38.0,0.0),
                                                         child: Container(
-                                                          //height: MediaQuery .of(context).size.height * 0.04,
+                                                          height: MediaQuery .of(context).size.height * 0.04,
                                                           //width: MediaQuery.of(context) .size .width * 0.30,
                                                           //height: MediaQuery.of(context) .size .height * 0.03,
                                                           //height: 28.0,
                                                           child: new OutlineButton(
                                                             onPressed: () {
                                                               //  confirmApprove(context,snapshot.data[index].Id.toString());
-                                                              if(snapshot.data[index].HRSts.toString()=='1'||snapshot.data[index].DivHrSts.toString()=='1') {
+                                                              if(snapshot.data[index].HRSts.toString()=='1') {
                                                                 showDialog(context: context, child:
                                                                 new AlertDialog(
                                                                   //title: new Text("Sorry!"),
@@ -613,28 +613,28 @@ class ChoiceCard1 extends StatelessWidget {
 
                                                   ],),
 
-                                                Container(
-                                                    width: MediaQuery.of(context) .size .width * 0.70,
-                                                    //height: MediaQuery.of(context) .size .height * 0.03,
-                                                    //padding: EdgeInsets.only(top: 1.5, bottom: .0),
-                                                    margin: EdgeInsets.only(top: 4.0),
-                                                    child: RichText(
-                                                      text: new TextSpan(
-                                                        style: new TextStyle(
-                                                          fontSize: 14.0,
-                                                          color: Colors.black,
-                                                        ),
-                                                        children: <TextSpan>[
-                                                          new TextSpan(
-                                                              text: 'Leave Type: ',
-                                                              style: new TextStyle()),
-                                                          new TextSpan(
-                                                            text: snapshot.data[index].LeaveType.toString(),style: TextStyle(color: Colors.grey[600]), ),
-                                                          /*   new TextSpan(text: " Days: "+snapshot.data[index].Ldays.toString(),style: TextStyle(color: Colors.black), ),*/
-                                                        ],
-                                                      ),
-                                                    )
-                                                ),
+                                                 Container(
+                                                     width: MediaQuery.of(context) .size .width * 0.70,
+                                                     //height: MediaQuery.of(context) .size .height * 0.03,
+                                                     //padding: EdgeInsets.only(top: 1.5, bottom: .0),
+                                                     //margin: EdgeInsets.only(top: 4.0),
+                                                     child: RichText(
+                                                       text: new TextSpan(
+                                                         style: new TextStyle(
+                                                           fontSize: 14.0,
+                                                           color: Colors.black,
+                                                         ),
+                                                         children: <TextSpan>[
+                                                           new TextSpan(
+                                                               text: 'Leave Type: ',
+                                                               style: new TextStyle()),
+                                                           new TextSpan(
+                                                             text: snapshot.data[index].LeaveType.toString(),style: TextStyle(color: Colors.grey[600]), ),
+                                                           /*   new TextSpan(text: " Days: "+snapshot.data[index].Ldays.toString(),style: TextStyle(color: Colors.black), ),*/
+                                                         ],
+                                                       ),
+                                                     )
+                                                 ),
 
                                                 snapshot.data[index].Reason.toString() != '-'
                                                     ? Container(
@@ -653,7 +653,7 @@ class ChoiceCard1 extends StatelessWidget {
                                                           new TextSpan(text: 'Reason: ' ,style: new TextStyle()),
                                                           new TextSpan(text: snapshot.data[index].Reason.toString(),style: TextStyle(color: Colors.grey[600])),
 
-                                                          /*snapshot.data[index].Psts.toString() != ''
+                                                /*snapshot.data[index].Psts.toString() != ''
                                                               ? new TextSpan(text: "\n"+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold
                                                           ), ): new TextSpan(text: ""+snapshot.data[index].Psts.toString(),style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold), ),*/
 
@@ -741,7 +741,7 @@ class ChoiceCard1 extends StatelessWidget {
 
 
 
-  /* _modalBottomSheetHR(context,String leaveid,days,leavetypeid) async{
+ /* _modalBottomSheetHR(context,String leaveid,days,leavetypeid) async{
 
     final FocusNode myFocusNodeComment = FocusNode();
     final FocusNode myFocusNodeEntitle = FocusNode();
@@ -2033,21 +2033,42 @@ print("ff"+sts);
                                 if(sts=="true") {
                                   showDialog(
                                       context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Leave application approved successfully."),
+                                        );
+                                      });
+                                  /*showDialog(
+                                      context: context,
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
                                         content: new Text("Leave application approved successfully."),
                                       )
-                                  );
-                                }else{
+                                  );*/
+                                }
+                                else{
                                   showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Leave application rejected successfully."),
+                                        );
+                                      });
+                                  /*showDialog(
                                       context: context,
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
-                                        content: new Text("Leave application Could not be approved."),
+                                        content: new Text("Leave application rejected successfully."),
                                       )
-                                  );
+                                  );*/
                                 }
 
                                 Navigator.push(
@@ -2124,22 +2145,42 @@ print("ff"+sts);
                                 if(sts=="true") {
                                   showDialog(
                                       context: context,
-                                      builder: (_) =>
-                                      new AlertDialog(
-                                        //title: new Text("Dialog Title"),
-                                        content: new Text("Leave application rejected successfully."),
-                                      )
-                                  );
-                                }
-                                else{
-                                  showDialog(
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Leave has been rejected successfully."),
+                                        );
+                                      });
+                                  /*showDialog(
                                       context: context,
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
-                                        content: new Text("Leave application could not be rejected."),
+                                        content: new Text("Leave has been rejected successfully."),
                                       )
-                                  );
+                                  );*/
+                                }
+                                else{
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Leave could not be rejected. Try again!"),
+                                        );
+                                      });
+                                  /*showDialog(
+                                      context: context,
+                                      builder: (_) =>
+                                      new AlertDialog(
+                                        //title: new Text("Dialog Title"),
+                                        content: new Text("Leave could not be rejected. Try again!"),
+                                      )
+                                  );*/
                                 }
 
                                 Navigator.push(

@@ -19,15 +19,18 @@ class SaveImage{
     try{
       File imagei = null;
       imageCache.clear();
+      Dio dio = new Dio();
+      String location = globals.globalstreamlocationaddr;
+      String city = globals.globalcity;
+      String lat = globals.assign_lat.toString();
+      String long = globals.assign_long.toString();
+      /*LocationData _currentLocation = globals.list[globals.list.length - 1];
+      String lat = _currentLocation.latitude.toString();
+      String long = _currentLocation.longitude.toString();*/
+
       if (globalogrperminfomap['attselfiests'] == "1") {
         imagei = await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 200.0, maxHeight: 200.0);
         if (imagei!= null) {
-          Dio dio = new Dio();
-          String location = globals.globalstreamlocationaddr;
-          LocationData _currentLocation = globals.list[globals.list.length - 1];
-          String lat = _currentLocation.latitude.toString();
-          String long = _currentLocation.longitude.toString();
-
           FormData formData = new FormData.from({
             "uid": mk.uid,
             "location": location,
@@ -37,33 +40,40 @@ class SaveImage{
             "refid": mk.refid,
             "latit": lat,
             "longi": long,
+            "city": city,
             "file": new UploadFileInfo(imagei, "image.png"),
-            "platform":'Android',
+            "platform":'iOS',
             "appVersion": globals.appVersion,
           });
           print("Mark attendance with image");
           print(path_ubiattendance +
               "saveImage?uid=${mk.uid}&location=$location&aid=${mk.aid}&act=${mk
                   .act}&shiftid=${mk.shiftid}&refid=${mk
-                  .refid}&latit=$lat&longi=$long&file=$imagei&platform='Android'&appVersion=${globals.appVersion}");
+                  .refid}&latit=$lat&longi=$long&city=$city&file=$imagei&platform=iOS&appVersion=${globals.appVersion}");
+          print("Mark attendance with image");
           Response<String> response1 = await dio.post(path_ubiattendance + "saveImage", data: formData);
+          print("response1.toString()");
           print(response1.toString());
           imagei.deleteSync();
           imageCache.clear();
           Map MarkAttMap = json.decode(response1.data);
-          if (MarkAttMap["status"] == 1 || MarkAttMap["status"] == 2)
+          print(MarkAttMap.toString());
+          print("MarkAttMap");
+          print(MarkAttMap["status"].toString());
+          if (MarkAttMap["status"] == 1 || MarkAttMap["status"] == 2) {
+            print("MarkAttMap1");
+            print(MarkAttMap["status"].toString());
             return true;
-          else
+          }else {
+            print("MarkAttMap2");
+            print(MarkAttMap["status"].toString());
             return false;
+          }
         } else {
+          print("In else part");
           return false;
         }
       }else{
-        Dio dio = new Dio();
-        String location = globals.globalstreamlocationaddr;
-        LocationData _currentLocation = globals.list[globals.list.length - 1];
-        String lat = _currentLocation.latitude.toString();
-        String long = _currentLocation.longitude.toString();
         FormData formData = new FormData.from({
           "uid": mk.uid,
           "location": location,
@@ -73,24 +83,33 @@ class SaveImage{
           "refid": mk.refid,
           "latit": lat,
           "longi": long,
-          "platform":'Android',
+          "city": city,
+          "platform":'iOS',
           "appVersion": globals.appVersion,
         });
         print("Mark attendance without image");
         print(path_ubiattendance + "saveImage?uid=${mk.uid}&location=$location&aid=${mk.aid}&act=${mk
-                .act}&shiftid=${mk.shiftid}&refid=${mk
-                .refid}&latit=$lat&longi=$long&platform='Android'&appVersion=${globals.appVersion}");
+            .act}&shiftid=${mk.shiftid}&refid=${mk
+            .refid}&latit=$lat&longi=$long&city=$city&platform=iOS&appVersion=${globals.appVersion}");
         Response<String> response1 = await dio.post(path_ubiattendance + "saveImage", data: formData);
         print(response1.toString());
         Map MarkAttMap = json.decode(response1.data);
-        if (MarkAttMap["status"] == 1 || MarkAttMap["status"] == 2)
+        print(MarkAttMap.toString());
+        print("MarkAttMap");
+        print(MarkAttMap["status"].toString());
+        if (MarkAttMap["status"] == 1 || MarkAttMap["status"] == 2) {
+          print("MarkAttMap1");
+          print(MarkAttMap["status"]);
           return true;
-        else
+        } else {
+          print("MarkAttMap2");
+          print(MarkAttMap["status"]);
           return false;
+        }
       }
     } catch (e) {
+      print(e.toString());
       print("ONCE AGAIN");
-      print(e);
       return false;
     }
   }
@@ -100,15 +119,17 @@ class SaveImage{
     try{
       File imagei = null;
       imageCache.clear();
+      Dio dio = new Dio();
+      String location = globals.globalstreamlocationaddr;
+      String lat = globals.assign_lat.toString();
+      String long = globals.assign_long.toString();
+      /*LocationData _currentLocation = globals.list[globals.list.length - 1];
+      String lat = _currentLocation.latitude.toString();
+      String long = _currentLocation.longitude.toString();*/
+
       if (globalogrperminfomap['visitselfiests'] == "1") {
         imagei = await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 350.0, maxHeight: 350.0);
         if (imagei != null ) {
-          Dio dio = new Dio();
-          String location = globals.globalstreamlocationaddr;
-          LocationData _currentLocation = globals.list[globals.list.length - 1];
-          String lat = _currentLocation.latitude.toString();
-          String long = _currentLocation.longitude.toString();
-
           FormData formData = new FormData.from({
             "uid": mk.uid,
             "location": location,
@@ -139,12 +160,6 @@ class SaveImage{
           return false;
         }
       }else{ // if image is optional at the time of marking visit
-        Dio dio = new Dio();
-        String location = globals.globalstreamlocationaddr;
-        LocationData _currentLocation = globals.list[globals.list.length - 1];
-        String lat = _currentLocation.latitude.toString();
-        String long = _currentLocation.longitude.toString();
-
         FormData formData = new FormData.from({
           "uid": mk.uid,
           "location": location,
@@ -180,17 +195,18 @@ class SaveImage{
 
   Future<bool> saveVisitOut(empid,addr,visit_id,latit,longi,remark,refid) async { // visit in function
     try{
+      Dio dio = new Dio();
+      String location = globals.globalstreamlocationaddr;
+      LocationData _currentLocation = globals.list[globals.list.length - 1];
+      String lat = globals.assign_lat.toString();
+      String long = globals.assign_long.toString();
+      /*String lat = _currentLocation.latitude.toString();
+      String long = _currentLocation.longitude.toString();*/
       File imagei = null;
       imageCache.clear();
       if (globalogrperminfomap['visitselfiests'] == "1") {
         imagei = await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 350.0, maxHeight: 350.0);
         if (imagei != null) {
-          Dio dio = new Dio();
-          String location = globals.globalstreamlocationaddr;
-          LocationData _currentLocation = globals.list[globals.list.length - 1];
-          String lat = _currentLocation.latitude.toString();
-          String long = _currentLocation.longitude.toString();
-
           FormData formData = new FormData.from({
             "empid": empid,
             "visit_id": visit_id,
@@ -224,11 +240,6 @@ class SaveImage{
           return false;
         }
       }else { // if image is notmandatory while marking punchout
-        Dio dio = new Dio();
-        String location = globals.globalstreamlocationaddr;
-        LocationData _currentLocation = globals.list[globals.list.length - 1];
-        String lat = _currentLocation.latitude.toString();
-        String long = _currentLocation.longitude.toString();
         FormData formData = new FormData.from({
           "empid": empid,
           "visit_id": visit_id,
@@ -264,17 +275,19 @@ class SaveImage{
 
   Future<bool> saveFlexi(MarkVisit mk) async {
     try {
+      Dio dio = new Dio();
+      String location = globals.globalstreamlocationaddr;
+      String lat = globals.assign_lat.toString();
+      String long = globals.assign_long.toString();
+      /*LocationData _currentLocation = globals.list[globals.list.length - 1];
+      String lat = _currentLocation.latitude.toString();
+      String long = _currentLocation.longitude.toString();*/
+
       File imagei = null;
       imageCache.clear();
       if (globalogrperminfomap['flexiselfiests'] == "1") {
         imagei = await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 350.0, maxHeight: 350.0);
         if (imagei != null) {
-          Dio dio = new Dio();
-          String location = globals.globalstreamlocationaddr;
-          LocationData _currentLocation = globals.list[globals.list.length - 1];
-          String lat = _currentLocation.latitude.toString();
-          String long = _currentLocation.longitude.toString();
-
           FormData formData = new FormData.from({
             "uid": mk.uid,
             "location": location,
@@ -299,6 +312,7 @@ class SaveImage{
           Map MarkAttMap = json.decode(response1.data);
 
           if (MarkAttMap["res"].toString() == '1')
+
             return true;
           else
             return false;
@@ -306,12 +320,6 @@ class SaveImage{
           return false;
         }
       }else{
-        Dio dio = new Dio();
-        String location = globals.globalstreamlocationaddr;
-        LocationData _currentLocation = globals.list[globals.list.length - 1];
-        String lat = _currentLocation.latitude.toString();
-        String long = _currentLocation.longitude.toString();
-
         FormData formData = new FormData.from({
           "uid": mk.uid,
           "location": location,
@@ -347,17 +355,18 @@ class SaveImage{
 
   Future<bool> saveFlexiOut(empid, addr, visit_id, latit, longi,  refid) async {
     try {
+      Dio dio = new Dio();
+      String location = globals.globalstreamlocationaddr;
+      LocationData _currentLocation = globals.list[globals.list.length - 1];
+      String lat = globals.assign_lat.toString();
+      String long = globals.assign_long.toString();
+      /*String lat = _currentLocation.latitude.toString();
+      String long = _currentLocation.longitude.toString();*/
       File imagei = null;
       imageCache.clear();
       if (globalogrperminfomap['flexiselfiests'] == "1") {
         imagei = await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 350.0, maxHeight: 350.0);
         if (imagei != null) {
-          Dio dio = new Dio();
-          String location = globals.globalstreamlocationaddr;
-          LocationData _currentLocation = globals.list[globals.list.length - 1];
-          String lat = _currentLocation.latitude.toString();
-          String long = _currentLocation.longitude.toString();
-
           FormData formData = new FormData.from({
             "empid": empid,
             "visit_id": visit_id,
@@ -387,12 +396,6 @@ class SaveImage{
           return false;
         }
       }else{
-        Dio dio = new Dio();
-        String location = globals.globalstreamlocationaddr;
-        LocationData _currentLocation = globals.list[globals.list.length - 1];
-        String lat = _currentLocation.latitude.toString();
-        String long = _currentLocation.longitude.toString();
-
         FormData formData = new FormData.from({
           "empid": empid,
           "visit_id": visit_id,
@@ -418,6 +421,7 @@ class SaveImage{
           return false;
       }
     } catch (e) {
+      print("e.toString()");
       print(e.toString());
       return false;
     }

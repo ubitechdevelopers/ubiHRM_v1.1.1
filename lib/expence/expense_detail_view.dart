@@ -102,23 +102,43 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
           context,
           MaterialPageRoute(builder: (context) => MyExpence()),
         );
-        showDialog(context: context, child:
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Expense claim withdrawn successfully."),
+              );
+            });
+        /*showDialog(context: context, child:
         new AlertDialog(
           //  title: new Text("Congrats!"),
           content: new Text("Expense claim withdrawn successfully."),
         )
-        );
+        );*/
       }else if(islogin=="failure"){
         setState(() {
           _isButtonDisabled=false;
           _checkwithdrawnexpense = false;
         });
-        showDialog(context: context, child:
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Expense claim could not be withdrawn."),
+              );
+            });
+        /*showDialog(context: context, child:
         new AlertDialog(
           //title: new Text("Sorry!"),
           content: new Text("Expense claim could not be withdrawn."),
         )
-        );
+        );*/
       }/*else{
         setState(() {
           _isButtonDisabled=false;

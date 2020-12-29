@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/attandance/image_view.dart';
+import 'package:ubihrm/attandance/view_employee.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/edit_employee.dart';
 import 'package:ubihrm/global.dart';
@@ -78,12 +79,6 @@ class _EmployeeList extends State<EmployeeList> {
     return getmainhomewidget();
   }
 
-  /*void showInSnackBar(String value) {
-    final snackBar = SnackBar(
-        content: Text(value, textAlign: TextAlign.center,));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
-  }*/
-
   Future<bool> move() async {
     Navigator.pushAndRemoveUntil(
       context,
@@ -104,8 +99,7 @@ class _EmployeeList extends State<EmployeeList> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              new Text(
-                  'Employee Directory', style: new TextStyle(fontSize: 20.0)),
+              new Text(orgname, style: new TextStyle(fontSize: 20.0)),
             ],
           ),
           leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {
@@ -135,9 +129,18 @@ class _EmployeeList extends State<EmployeeList> {
             children: <Widget>[
               Column(
                 children: <Widget>[
+                  Center(
+                    child: Text(
+                      'Employees',
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        color: appStartColor(),
+                      ),
+                    )
+                  ),
                   Container(
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         controller: _searchController,
                         focusNode: searchFocusNode,
@@ -175,10 +178,10 @@ class _EmployeeList extends State<EmployeeList> {
               ),
 
               _searchController.text.isEmpty?Padding(
-                padding: const EdgeInsets.only(top:65.0),
+                padding: const EdgeInsets.only(top:90.0),
                 child: tabBarView()
               ):Padding(
-                padding: const EdgeInsets.only(top:70.0),
+                padding: const EdgeInsets.only(top:90.0),
                 child: Center(child:getDeptWidget(0, empCount),),
               )
             ],
@@ -304,8 +307,7 @@ class _EmployeeList extends State<EmployeeList> {
                                                 .toString(),
                                             style: TextStyle(
                                               color: Colors.black87,
-                                              fontSize: 18.0,
-                                              //   fontWeight: FontWeight.w500
+                                              fontSize: 15.0, fontWeight: FontWeight.bold
                                             ),
                                           ),
                                         ),
@@ -314,13 +316,115 @@ class _EmployeeList extends State<EmployeeList> {
                                             padding: const EdgeInsets.only(
                                                 left: 10.0),
                                             child: Icon(
-                                              Icons.edit,
+                                              Icons.visibility_outlined,
                                               color: Colors.blue,
                                               size: 22.0,
                                             ),
                                           ),
                                           onTap: () {
-                                            showDialog<String>(
+                                            Navigator
+                                                .push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (
+                                                      context) =>
+                                                      ViewEmployee(
+                                                          empid: snapshot.data[index]
+                                                              .Id
+                                                              .toString(),
+                                                          profileimg: snapshot.data[index]
+                                                              .Profile
+                                                              .toString(),
+                                                          empcode: snapshot.data[index]
+                                                            .EmpCode
+                                                            .toString(),
+                                                          fname: snapshot.data[index]
+                                                              .FName
+                                                              .toString(),
+                                                          lname: snapshot.data[index]
+                                                              .LName
+                                                              .toString(),
+                                                          dob: snapshot.data[index]
+                                                              .DOB
+                                                              .toString(),
+                                                          nationality: snapshot.data[index]
+                                                              .Nationality
+                                                              .toString(),
+                                                          maritalsts: snapshot.data[index]
+                                                            .MaritalSts
+                                                            .toString(),
+                                                          religion: snapshot.data[index]
+                                                              .Religion
+                                                              .toString(),
+                                                          bloodg: snapshot.data[index]
+                                                              .BloodG
+                                                              .toString(),
+                                                          doc: snapshot.data[index]
+                                                              .DOC
+                                                              .toString(),
+                                                          gender: snapshot.data[index]
+                                                              .Gender
+                                                              .toString(),
+                                                          reportingto: snapshot.data[index]
+                                                            .ReportingTo
+                                                            .toString(),
+                                                          div: snapshot.data[index]
+                                                              .Division
+                                                              .toString(),
+                                                          divid: snapshot.data[index]
+                                                              .DivisionId
+                                                              .toString(),
+                                                          dept: snapshot.data[index]
+                                                            .Department
+                                                            .toString(),
+                                                          deptid: snapshot.data[index]
+                                                            .DepartmentId
+                                                            .toString(),
+                                                          desg: snapshot.data[index]
+                                                            .Designation
+                                                            .toString(),
+                                                          desgid: snapshot.data[index]
+                                                            .DesignationId
+                                                            .toString(),
+                                                          loc: snapshot.data[index]
+                                                            .Location
+                                                            .toString(),
+                                                          locid: snapshot.data[index]
+                                                            .LocationId
+                                                            .toString(),
+                                                          shift: snapshot.data[index]
+                                                              .Shift
+                                                              .toString(),
+                                                          shiftid: snapshot.data[index]
+                                                              .ShiftId
+                                                              .toString(),
+                                                          empsts: snapshot.data[index]
+                                                              .EmpSts
+                                                              .toString(),
+                                                          grade: snapshot.data[index]
+                                                              .Grade
+                                                              .toString(),
+                                                          emptype: snapshot.data[index]
+                                                            .EmpType
+                                                            .toString(),
+                                                          email: snapshot.data[index]
+                                                            .Email
+                                                            .toString(),
+                                                          phone: snapshot.data[index]
+                                                            .Mobile
+                                                            .toString(),
+                                                          father: snapshot.data[index]
+                                                              .FatherName
+                                                              .toString(),
+                                                          doj: snapshot.data[index]
+                                                              .DOJ
+                                                              .toString(),
+                                                          profiletype: snapshot.data[index]
+                                                            .ProfileType
+                                                            .toString(),
+                                                          )),
+                                            );
+                                            /*showDialog<String>(
                                               context: context,
                                               // ignore: deprecated_member_use
                                               child: AlertDialog(
@@ -452,21 +556,21 @@ class _EmployeeList extends State<EmployeeList> {
                                                                 .top,
                                                             columnWidths: {
                                                               0: FlexColumnWidth(
-                                                                  5),
+                                                                  8),
                                                               // 0: FlexColumnWidth(4.501), // - is ok
                                                               // 0: FlexColumnWidth(4.499), //- ok as well
                                                               1: FlexColumnWidth(
                                                                   5),
                                                             },
                                                             children: [
-                                                              TableRow(
+                                                              globallabelinfomap["depart"]!=""?TableRow(
                                                                   children: [
                                                                     TableCell(
                                                                       child: Row(
                                                                         children: <
                                                                             Widget>[
                                                                           new Text(
-                                                                            'Department:',
+                                                                            globallabelinfomap["depart"]+':',
                                                                             style: TextStyle(
                                                                               color: Colors
                                                                                   .black87,
@@ -500,16 +604,15 @@ class _EmployeeList extends State<EmployeeList> {
                                                                       ),
                                                                     )
                                                                   ]
-
-                                                              ),
-                                                              TableRow(
+                                                              ):Center(),
+                                                              globallabelinfomap["desig"]!=""?TableRow(
                                                                   children: [
                                                                     TableCell(
                                                                       child: Row(
                                                                         children: <
                                                                             Widget>[
                                                                           new Text(
-                                                                            'Designation:',
+                                                                            globallabelinfomap["desig"]+':',
                                                                             style: TextStyle(
                                                                                 color: Colors
                                                                                     .black87,
@@ -543,15 +646,15 @@ class _EmployeeList extends State<EmployeeList> {
                                                                       ),
                                                                     )
                                                                   ]
-                                                              ),
-                                                              TableRow(
+                                                              ):Center(),
+                                                              globallabelinfomap["personal_no"]!=""?TableRow(
                                                                   children: [
                                                                     TableCell(
                                                                       child: Row(
                                                                         children: <
                                                                             Widget>[
                                                                           new Text(
-                                                                            'Phone:',
+                                                                            globallabelinfomap["personal_no"]+':',
                                                                             style: TextStyle(
                                                                                 color: Colors
                                                                                     .black87,
@@ -585,15 +688,15 @@ class _EmployeeList extends State<EmployeeList> {
                                                                       ),
                                                                     )
                                                                   ]
-                                                              ),
-                                                              TableRow(
+                                                              ):Center(),
+                                                              globallabelinfomap["shift"]!=""?TableRow(
                                                                   children: [
                                                                     TableCell(
                                                                       child: Row(
                                                                         children: <
                                                                             Widget>[
                                                                           new Text(
-                                                                            'Shift:',
+                                                                            globallabelinfomap["shift"]+':',
                                                                             style: TextStyle(
                                                                                 color: Colors
                                                                                     .black87,
@@ -627,7 +730,7 @@ class _EmployeeList extends State<EmployeeList> {
                                                                       ),
                                                                     )
                                                                   ]
-                                                              ),
+                                                              ):Center(),
                                                               TableRow(
                                                                   children: [
                                                                     TableCell(
@@ -679,7 +782,7 @@ class _EmployeeList extends State<EmployeeList> {
                                                   ],
                                                 ),
                                               ),
-                                            );
+                                            );*/
                                           },
                                         ),
                                       ],

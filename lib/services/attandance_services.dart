@@ -8,27 +8,28 @@ import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/global.dart' as globals;
+import 'package:ubihrm/model/model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
 Future checkNow() async {
-  final res = await http.get(path_ubiattendance + 'getAppVersion?platform=Android');
-  print(path_ubiattendance + 'getAppVersion?platform=Android');
+  final res = await http.get(path_ubiattendance + 'getAppVersion?platform=ios');
+  print(path_ubiattendance + 'getAppVersion?platform=ios');
   return ((json.decode(res.body.toString()))[0]['version']).toString();
 }
 
 
 Future checkMandUpdate() async {
-  print(path_ubiattendance + 'checkMandUpdate?platform=Android');
-  final res = await http.get(path_ubiattendance+ 'checkMandUpdate?platform=Android');
+  print(path_ubiattendance + 'checkMandUpdate?platform=ios');
+  final res = await http.get(path_ubiattendance+ 'checkMandUpdate?platform=ios');
   return ((json.decode(res.body))[0]['is_update']).toString();
 }
 
 
 Future UpdateStatus() async {
   try{
-    print(path_ubiattendance+ 'UpdateStatus?platform=Android');
-    final res = await http.get(path_ubiattendance+ 'UpdateStatus?platform=Android');
+    print(path_ubiattendance+ 'UpdateStatus?platform=ios');
+    final res = await http.get(path_ubiattendance+ 'UpdateStatus?platform=ios');
     return ((json.decode(res.body.toString()))[0]['status']).toString();
   }
   catch(e){
@@ -37,7 +38,6 @@ Future UpdateStatus() async {
   }
 }
 
-// Future
 
 String Formatdate(String date_) {
   var months = [
@@ -157,28 +157,51 @@ class StreamLocation{
   String streamlocationaddr="";
   String lat="";
   String long="";
-  void startStreaming(int listlength) async{
-    int counter = 0;
-    stopstreamingstatus = false;
-    _locationSubscription =
-        _location.onLocationChanged().listen((LocationData result) {
-          _currentLocation = result;
-          list.add(result);
-          getAddress(list[list.length - 1]);
-          if(counter>listlength) {
-            list.removeAt(0);
-            stopstreamingstatus = true;
-            _locationSubscription.cancel();
-          }
-          counter++;
-        });
-  }
+  bool _permission = true;
+  String error;
+
+/*  void startStreaming(int listlength) async{
+    try {
+      _permission = await _location.hasPermission();
+      error = null;
+    }catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        error = 'Permission denied';
+      } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
+        error =
+        'Permission denied - please ask the user to enable it from the app settings';
+      }
+      _location = null;
+    }
+
+    try {
+      int counter = 0;
+      stopstreamingstatus = false;
+      _locationSubscription =
+          _location.onLocationChanged().listen((LocationData result) async{
+            _currentLocation = result;
+            list.add(result);
+            print("List streaming in newservices " +list[list.length - 1].toString());
+            getAddress(list[list.length - 1]);
+            if (counter > listlength) {
+              list.removeAt(0);
+              stopstreamingstatus = true;
+              _locationSubscription.cancel();
+            }
+            counter++;
+          });
+    } catch(e){
+      //print(e.toString());
+      _currentLocation = null;
+    }
+  }*/
 
   getAddress( LocationData _currentLocation) async{
     try {
       if (_currentLocation != null) {
         var addresses = await Geocoder.local.findAddressesFromCoordinates(
-            Coordinates(_currentLocation.latitude, _currentLocation.longitude));
+            Coordinates(
+                _currentLocation.latitude, _currentLocation.longitude));
         var first = addresses.first;
         streamlocationaddr = "${first.addressLine}";
         globalstreamlocationaddr = streamlocationaddr;
@@ -187,6 +210,7 @@ class StreamLocation{
       if (_currentLocation != null) {
         globalstreamlocationaddr = "${_currentLocation.latitude},${_currentLocation.longitude}";
       }
+
     }
   }
 }
@@ -234,7 +258,6 @@ class Home{
     }
   }
 
-
   managePermission(String empid, String orgid, String designation) async{
     final prefs = await SharedPreferences.getInstance();
     String admin_sts=prefs.getString('sstatus') ?? '0';
@@ -249,7 +272,6 @@ class Home{
       globals.report_permission = 1;
     }
   }
-
 
 /*  checkTimeInQR(String empid, String orgid) async{
     try {
@@ -769,7 +791,7 @@ Future<DateTime> getOrgCreatedDate() async {
 
 
 //////////////////////////////////generate employees list for DD starts///////////////////////////////////////
-Future<List<Map>> getEmployeesList(int label) async{
+Future<List<Map>> getEmployeesList(int label, String dept, String desg) async{
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? '';
@@ -777,8 +799,8 @@ Future<List<Map>> getEmployeesList(int label) async{
   int hrsts =prefs.getInt('hrsts')??0;
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
-  final response = await http.get(path_ubiattendance + 'getEmployeesList?orgid=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  print(path_ubiattendance + 'getEmployeesList?orgid=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final response = await http.get(path_ubiattendance + 'getEmployeesList?orgid=$orgid&empid=$empid&dept=$dept&desg=$desg&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  print(path_ubiattendance + 'getEmployeesList?orgid=$orgid&empid=$empid&dept=$dept&desg=$desg&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   List data = json.decode(response.body.toString());
   List<Map> depts = createEMpListDD(data,label);
   return depts;
@@ -802,12 +824,44 @@ List<Map> createEMpListDD(List data,int label) {
 
 
 //*************************************************************************************************************************//
+
+Future<List<Map>> getDivisionsList(int label) async{
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('organization') ?? '';
+  print(path_ubiattendance + 'DivisionMaster?orgid=$orgdir');
+  final response = await http.get(path_ubiattendance + 'DivisionMaster?orgid=$orgdir');
+  List data = json.decode(response.body.toString());
+  //print(data);
+  List<Map> div = create(data, label);
+  return div;
+}
+
+List<Map> create(List data, int label) {
+  List<Map> list = new List();
+  if (label == 1) // with -All- label
+    list.add({"Id": "0", "Name": "-All-"});
+  else
+    list.add({"Id": "0", "Name": "-Select-"});
+
+  for (int i = 0; i < data.length; i++) {
+    if (data[i]["archive"].toString() == '0') {
+      Map tos = {
+        "Name": data[i]["Name"].toString(),
+        "Id": data[i]["Id"].toString()
+      };
+      list.add(tos);
+    }
+  }
+  return list;
+}
+
 Future<List<Map>> getDepartmentsList(int label) async {
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
   print(path_ubiattendance + 'DepartmentMaster?orgid=$orgid');
   final response = await http.get(path_ubiattendance + 'DepartmentMaster?orgid=$orgid');
   List data = json.decode(response.body.toString());
+  //print(data);
   List<Map> depts = createList(data, label);
   return depts;
 }
@@ -819,62 +873,51 @@ Future<List<Map>> getDesignationsList(int label) async {
   print(path_ubiattendance + 'DesignationMaster?orgid=$orgid');
   final response = await http.get(path_ubiattendance + 'DesignationMaster?orgid=$orgid');
   List data = json.decode(response.body.toString());
-  List<Map> depts = createList(data, label);
-  return depts;
+  //print(data);
+  List<Map> desg = createList(data, label);
+  return desg;
 }
 
 
-Future<List<Map>> getShiftsList() async {
+Future<List<Map>> getLocationsList(int label) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'LocationMaster?orgid=$orgid');
+  final response = await http.get(path_ubiattendance + 'LocationMaster?orgid=$orgid');
+  List data = json.decode(response.body.toString());
+  //print(data);
+  List<Map> loc = createLocationList(data, label);
+  return loc;
+}
+
+List<Map> createLocationList(List data, int label) {
+  List<Map> list = new List();
+  if (label == 1) // with -All- label
+    list.add({"Id": "0", "Name": "-All-"});
+  else
+    list.add({"Id": "0", "Name": "-Select-"});
+
+  for (int i = 0; i < data.length; i++) {
+    Map tos = {
+      "Name":data[i]["Name"].toString(),
+      "Id":data[i]["Id"].toString()
+    };
+    list.add(tos);
+  }
+  return list;
+}
+
+
+Future<List<Map>> getShiftsList(int label) async {
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
   print(path_ubiattendance + 'shiftMaster?orgid=$orgid');
   final response = await http.get(path_ubiattendance + 'shiftMaster?orgid=$orgid');
   List data = json.decode(response.body.toString());
-  List<Map> depts = createList(data, 0);
-  return depts;
+  //print(data);
+  List<Map> shift = createList(data, 0);
+  return shift;
 }
-
-////////////////////////////////// __HOLIDAYS FETCH DATA START__ ////////////////////////////////////////////
-Future<List<Holidays>> getHolidaysList() async {
-  final prefs = await SharedPreferences.getInstance();
-  String orgid = prefs.getString('orgdir') ?? '';
-  print(path_ubiattendance+'getHolidaysList?orgid=$orgid');
-  Response response = await Dio().get(path_ubiattendance+'getHolidaysList?orgid=$orgid');
-  print(json.decode(response.data.toString()));
-  List data1=json.decode(response.data.toString());
-  List<Holidays> holiday = createlist(data1);
-  return holiday;
-}
-
-List<Holidays> createlist(List data2){
-  List<Holidays> holidaydata = new List();
-  for(int i=0; i<data2.length; i++){
-    String Name = data2[i]['Name'];
-    String DateFrom = data2[i]['DateFrom'];
-    String DateTo = data2[i]['DateTo'];
-    String Duration = data2[i]['Duration'];
-
-    Holidays h = Holidays(
-      Name:Name,
-      DateFrom:DateFrom,
-      DateTo:DateTo,
-      Duration:Duration,
-    );
-    holidaydata.add(h);
-  }
-  return holidaydata;
-}
-
-class Holidays{
-  String Id;
-  String Name;
-  String DateFrom;
-  String DateTo;
-  String Duration;
-
-  Holidays({this.Id, this.Name, this.DateFrom, this.DateTo, this.Duration});
-}
-////////////////////////////////// __HOLIDAYS FETCH DATA END__ ////////////////////////////////////////////
 
 List<Map> createList(List data, int label) {
   List<Map> list = new List();
@@ -882,6 +925,7 @@ List<Map> createList(List data, int label) {
     list.add({"Id": "0", "Name": "-All-"});
   else
     list.add({"Id": "0", "Name": "-Select-"});
+
   for (int i = 0; i < data.length; i++) {
     if (data[i]["archive"].toString() == '1') {
       Map tos = {
@@ -893,6 +937,95 @@ List<Map> createList(List data, int label) {
   }
   return list;
 }
+
+//*************************************************************************************************************************//
+
+//*************************************************************************************************************************//
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+/////////////////////////DIVISION CODE STARTS FROM HERE////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+class Div {
+  String id;
+  String div;
+  String status;
+  Div({this.id, this.div, this.status});
+}
+
+Future<List<Map>> getDivForDropDown() async{
+  final prefs = await SharedPreferences.getInstance();
+  Dio dio = new Dio();
+  String orgdir = prefs.getString('organization') ?? '';
+  print(path_ubiattendance + 'DivisionMaster?orgid=$orgdir');
+  final response = await dio.post(path_ubiattendance + 'DivisionMaster?orgid=$orgdir');
+  List data = json.decode(response.data.toString());
+  print(data);
+  List<Map> divList = createDivList(data);
+  return divList;
+}
+
+List<Map> createDivList(List data) {
+  List<Map> list = new List();
+  for (int i = 0; i < data.length; i++) {
+    Map tos={"Id":data[i]["Id"].toString(), "Name":data[i]["Name"].toString()};
+    list.add(tos);
+  }
+  return list;
+}
+
+Future<List<Div>> getDivision(String divname) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'DivisionMaster?orgid=$orgid');
+  final response = await http.get(path_ubiattendance + 'DivisionMaster?orgid=$orgid');
+  List responseJson = json.decode(response.body.toString());
+  print("data");
+  print(responseJson);
+  List<Div> divList = createDivisionList(responseJson,divname);
+  return divList;
+}
+
+List<Div> createDivisionList(List data, String divname) {
+  List<Div> list = new List();
+  if(divname.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      String id = data[i]["Id"];
+      String div = toBeginningOfSentenceCase(data[i]["Name"]);
+      String status = data[i]["archive"] == '0' ? 'Active' : 'Inactive';
+      Div divison = new Div(id: id, div: div, status: status);
+      if(div.toLowerCase().contains(divname.toLowerCase()))
+        list.add(divison);
+    }
+  }else{
+    for (int i = 0; i < data.length; i++) {
+      String id = data[i]["Id"];
+      String div = toBeginningOfSentenceCase(data[i]["Name"]);
+      String status = data[i]["archive"] == '0' ? 'Active' : 'Inactive';
+      Div divison = new Div(id: id, div: div, status: status);
+      list.add(divison);
+    }
+  }
+  return list;
+}
+
+
+Future<String> updateDiv(String sts, String id) async {
+  print( sts + "   " + id);
+  final prefs = await SharedPreferences.getInstance();
+  String empid = prefs.getString('empid') ?? '';
+  String orgdir = prefs.getString('orgdir') ?? '';
+  sts = sts.toString() == 'Active' ? '0' : '1';
+  print(path_ubiattendance + 'UpdateDiv?uid=$empid&orgid=$orgdir&sts=$sts&id=$id');
+  final response = await http.get(path_ubiattendance + 'UpdateDiv?uid=$empid&orgid=$orgdir&sts=$sts&id=$id');
+  print(response.body.toString());
+  return response.body.toString();
+}
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+/////////////////////////DIVISION CODE ENDS HERE////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 //*************************************************************************************************************************//
 
 //*************************************************************************************************************************//
@@ -905,30 +1038,43 @@ class Dept {
   String dept;
   String status;
   String id;
-  Dept({this.dept, this.status, this.id,});
+  Dept({this.dept, this.status, this.id});
 }
 
-Future<List<Dept>> getDepartments() async {
+
+Future<List<Dept>> getDepartments(String deptname) async {
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
   print(path_ubiattendance + 'DepartmentMaster?orgid=$orgid');
   final response = await http.get(path_ubiattendance + 'DepartmentMaster?orgid=$orgid');
   List responseJson = json.decode(response.body.toString());
-  List<Dept> deptList = createDeptList(responseJson);
+  List<Dept> deptList = createDeptList(responseJson,deptname);
   return deptList;
 }
 
-List<Dept> createDeptList(List data) {
+List<Dept> createDeptList(List data,String deptname) {
   List<Dept> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String dept = toBeginningOfSentenceCase(data[i]["Name"]);
-    String status = data[i]["archive"] == '1' ? 'Active' : 'Inactive';
-    String id = data[i]["Id"];
-    Dept dpt = new Dept(dept: dept, status: status, id: id);
-    list.add(dpt);
+  if(deptname.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      String dept = toBeginningOfSentenceCase(data[i]["Name"]);
+      String status = data[i]["archive"] == '1' ? 'Active' : 'Inactive';
+      String id = data[i]["Id"];
+      Dept dpt = new Dept(dept: dept, status: status, id: id);
+      if(dept.toLowerCase().contains(deptname.toLowerCase()))
+        list.add(dpt);
+    }
+  }else{
+    for (int i = 0; i < data.length; i++) {
+      String dept = toBeginningOfSentenceCase(data[i]["Name"]);
+      String status = data[i]["archive"] == '1' ? 'Active' : 'Inactive';
+      String id = data[i]["Id"];
+      Dept dpt = new Dept(dept: dept, status: status, id: id);
+      list.add(dpt);
+    }
   }
   return list;
 }
+
 
 Future<String> addDept(name, status) async {
   final prefs = await SharedPreferences.getInstance();
@@ -972,24 +1118,36 @@ class Desg {
   Desg({this.desg, this.status, this.id, this.modulepermissions});
 }
 
-Future<List<Desg>> getDesignation() async {
+
+Future<List<Desg>> getDesignation(String desgname) async {
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
   print(path_ubiattendance + 'DesignationMaster?orgid=$orgid');
   final response = await http.get(path_ubiattendance + 'DesignationMaster?orgid=$orgid');
   List responseJson = json.decode(response.body.toString());
-  List<Desg> desgList = createDesgList(responseJson);
+  List<Desg> desgList = createDesgList(responseJson,desgname);
   return desgList;
 }
 
-List<Desg> createDesgList(List data) {
+List<Desg> createDesgList(List data,String desgname) {
   List<Desg> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String desg = toBeginningOfSentenceCase(data[i]["Name"]);
-    String status = data[i]["archive"] == '1' ? 'Active' : 'Inactive';
-    String id = data[i]["Id"];
-    Desg dpt = new Desg(desg: desg, status: status, id: id);
-    list.add(dpt);
+  if(desgname.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      String desg = toBeginningOfSentenceCase(data[i]["Name"]);
+      String status = data[i]["archive"] == '1' ? 'Active' : 'Inactive';
+      String id = data[i]["Id"];
+      Desg dpt = new Desg(desg: desg, status: status, id: id);
+      if(desg.toLowerCase().contains(desgname.toLowerCase()))
+        list.add(dpt);
+    }
+  }else{
+    for (int i = 0; i < data.length; i++) {
+      String desg = toBeginningOfSentenceCase(data[i]["Name"]);
+      String status = data[i]["archive"] == '1' ? 'Active' : 'Inactive';
+      String id = data[i]["Id"];
+      Desg dpt = new Desg(desg: desg, status: status, id: id);
+      list.add(dpt);
+    }
   }
   return list;
 }
@@ -1016,7 +1174,6 @@ Future<String> updateDesg(desg, sts, did) async {
   print(response.body.toString());
   return response.body.toString();
 }
-
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 /////////////////////////DESIGNATION CODE ENDS HERE////////////////////////
@@ -1024,106 +1181,226 @@ Future<String> updateDesg(desg, sts, did) async {
 ///////////////////////////////////////////////////////////////////////////
 //*************************************************************************************************************************//
 
-
 //*************************************************************************************************************************//
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-/////////////////////////DIVISION CODE STARTS FROM HERE////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-class Div {
-  String id;
-  String div;
-  String status;
-  Div({this.id, this.div, this.status});
+// /////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+/////////////////////////SHIFT CODE STARTS FORM HERE////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+class Shift {
+  String Id;
+  String Name;
+  String TimeIn;
+  String TimeOut;
+  String Status;
+  String Type;
+
+  Shift({this.Id, this.Name, this.TimeIn, this.TimeOut, this.Status, this.Type});
 }
 
-Future<List<Map>> getDivForDropDown() async{
-  final prefs = await SharedPreferences.getInstance();
-  Dio dio = new Dio();
-  String orgdir = prefs.getString('organization') ?? '';
-  print(path_ubiattendance + 'DivisionMaster?orgid=$orgdir');
-  final response = await dio.post(path_ubiattendance + 'DivisionMaster?orgid=$orgdir');
-  List data = json.decode(response.data.toString());
-  print(data);
-  List<Map> divList = createDivList(data);
-  return divList;
-}
 
-List<Map> createDivList(List data) {
-  List<Map> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    Map tos={"Id":data[i]["Id"].toString(), "Name":data[i]["Name"].toString()};
-    list.add(tos);
-  }
-  return list;
-}
-
-Future<List<Div>> getDivision() async {
+Future<List<Shift>> getShifts(String shiftname) async {
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
-  print(path_ubiattendance + 'DivisionMaster?orgid=$orgid');
-  final response = await http.get(path_ubiattendance + 'DivisionMaster?orgid=$orgid');
+  print(path_ubiattendance + 'shiftMaster?orgid=$orgid');
+  final response = await http.get(path_ubiattendance + 'shiftMaster?orgid=$orgid');
   List responseJson = json.decode(response.body.toString());
-  print("data");
-  print(responseJson);
-  List<Div> divList = createDivisionList(responseJson);
-  return divList;
+  List<Shift> shiftList = createShiftList(responseJson,shiftname);
+  return shiftList;
 }
 
-List<Div> createDivisionList(List data) {
-  List<Div> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String id = data[i]["Id"];
-    String div = toBeginningOfSentenceCase(data[i]["Name"]);
-    String status = data[i]["ArchiveSts"] == '0' ? 'Active' : 'Inactive';
-    Div divison = new Div(id: id, div: div, status: status);
-    list.add(divison);
+List<Shift> createShiftList(List data,String shiftname) {
+  List<Shift> list = new List();
+  if(shiftname.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      String name = toBeginningOfSentenceCase(data[i]["Name"]);
+      String timein = data[i]["TimeIn"];
+      String timeout = data[i]["TimeOut"];
+      String id = data[i]["Id"];
+      String status = data[i]["archive"] == '0' ? 'Inactive' : 'Active';
+      String type = data[i]["shifttype"] == '1' ? 'Single Date' : 'Multi Date';
+      Shift shift = new Shift(
+          Id: id,
+          Name: name,
+          TimeIn: timein,
+          TimeOut: timeout,
+          Status: status,
+          Type: type);
+      if(name.toLowerCase().contains(shiftname.toLowerCase()))
+        list.add(shift);
+    }
+  }else{
+    for (int i = 0; i < data.length; i++) {
+      String name = toBeginningOfSentenceCase(data[i]["Name"]);
+      String timein = data[i]["TimeIn"];
+      String timeout = data[i]["TimeOut"];
+      String id = data[i]["Id"];
+      String status = data[i]["archive"] == '0' ? 'Inactive' : 'Active';
+      String type = data[i]["shifttype"] == '1' ? 'Single Date' : 'Multi Date';
+      Shift shift = new Shift(
+          Id: id,
+          Name: name,
+          TimeIn: timein,
+          TimeOut: timeout,
+          Status: status,
+          Type: type);
+      list.add(shift);
+    }
   }
   return list;
 }
 
-Future<String> addDiv(name, status) async {
+
+Future<int> createShift(name, type, from, to, from_b, to_b) async {
   final prefs = await SharedPreferences.getInstance();
   String empid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
-  status = status.toString() == 'Active' ? '1' : '0';
-  final response = await http.get(path_ubiattendance + 'addDesg?uid=$empid&orgid=$orgdir&name=$name&sts=$status');
-  return response.body.toString();
+  final response = await http.get(path_ubiattendance + 'addShift?name=$name&org_id=$orgdir&ti=$from&to=$to&tib=$from_b&tob=$to_b&sts=1&shifttype=$type');
+  int res = int.parse(response.body);
+  return res;
 }
 
-Future<String> updateDiv(String sts, String id) async {
-  print( sts + "   " + id);
+
+Future<String> updateShift(shift, sts, did) async {
+  print(shift + "   " + sts + "   " + did);
   final prefs = await SharedPreferences.getInstance();
   String empid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
-  sts = sts.toString() == 'Active' ? '0' : '1';
-  print(path_ubiattendance + 'UpdateDiv?uid=$empid&orgid=$orgdir&sts=$sts&id=$id');
-  final response = await http.get(path_ubiattendance + 'UpdateDiv?uid=$empid&orgid=$orgdir&sts=$sts&id=$id');
+  sts = sts.toString() == 'Active' ? '1' : '0';
+  print(path_ubiattendance + 'updateShift?uid=$empid&orgid=$orgdir&shift=$shift&sts=$sts&id=$did');
+  final response = await http.get(path_ubiattendance + 'updateShift?uid=$empid&orgid=$orgdir&shift=$shift&sts=$sts&id=$did');
   print(response.body.toString());
   return response.body.toString();
 }
 
+// ///////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+/////////////////////////SHIFT CODE ENDS HERE/////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//*************************************************************************************************************************//
+
+//*************************************************************************************************************************//
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
-/////////////////////////DIVISION CODE ENDS HERE////////////////////////
+/////////////////////////Geofence CODE STARTS FROM HERE////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+class Geo{
+  String id;
+  String name;
+  String status;
+  Geo({this.id, this.name, this.status});
+
+}
+
+Future<List<Geo>> getGeofence(String geofence) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'Geofence?orgid=$orgid');
+  final response = await http.get(path_ubiattendance + 'Geofence?orgid=$orgid');
+  List responseJson = json.decode(response.body.toString());
+  print(response.body.toString());
+  print(responseJson);
+  List<Geo> gioList = createGeofenceList(responseJson,geofence);
+  return gioList;
+}
+
+List<Geo> createGeofenceList(List data,String geofence) {
+  List<Geo> list = new List();
+  if(geofence.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      String id = data[i]["Id"];
+      String name = toBeginningOfSentenceCase(data[i]["Name"]);
+      String status = data[i]["archive"] == '1' ? 'Active' : 'Inactive';
+      Geo giofence = new Geo(id: id, name: name, status: status);
+      if(name.toLowerCase().contains(geofence.toLowerCase()))
+        list.add(giofence);
+    }
+  }else{
+    for (int i = 0; i < data.length; i++) {
+      String id = data[i]["Id"];
+      String name = toBeginningOfSentenceCase(data[i]["Name"]);
+      String status = data[i]["archive"] == '1' ? 'Active' : 'Inactive';
+      Geo giofence = new Geo(id: id, name: name, status: status);
+      list.add(giofence);
+    }
+  }
+  return list;
+}
+
+
+Future<String> UpdateGeo(String sts, String id) async {
+  print( sts + "   " + id);
+  final prefs = await SharedPreferences.getInstance();
+  String empid = prefs.getString('empid') ?? '';
+  String orgdir = prefs.getString('orgdir') ?? '';
+  sts = sts.toString() == 'Active' ? '1' : '0';
+  print(path_ubiattendance + 'UpdateGeo?uid=$empid&orgid=$orgdir&sts=$sts&id=$id');
+  final response = await http.get(path_ubiattendance + 'UpdateGeo?uid=$empid&orgid=$orgdir&sts=$sts&id=$id');
+  print(response.body.toString());
+  return response.body.toString();
+}
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+/////////////////////////Geofence CODE ENDS HERE////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 //*************************************************************************************************************************//
 
 //*************************************************************************************************************************//
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////..LOCATION CODE STARTS FROM HERE../////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-class Location1 {
-  String id;
-  String div;
-  String status;
-  List modulepermissions;
-  Location1({this.id, this.div, this.status, this.modulepermissions});
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+/////////////////////////Holodays CODE STARTS FROM HERE////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+Future<List<Holi>> getHolidaysList(String holiday) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance+'getHolidaysList?orgid=$orgid');
+  Response response = await Dio().get(path_ubiattendance+'getHolidaysList?orgid=$orgid');
+  print(json.decode(response.data.toString()));
+  List data=json.decode(response.data.toString());
+  List<Holi> holi = createlist(data,holiday);
+  return holi;
 }
+
+List<Holi> createlist(List data,String holiday){
+  List<Holi> holidaydata = new List();
+  if(holiday.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      String Name = toBeginningOfSentenceCase(data[i]['Name']);
+      String DateFrom = data[i]['DateFrom'];
+      String DateTo = data[i]['DateTo'];
+      String Duration = data[i]['Duration'];
+      Holi h = Holi(
+        name: Name,
+        DateFrom: DateFrom,
+        DateTo: DateTo,
+        Duration: Duration,
+      );
+      if(Name.toLowerCase().contains(holiday.toLowerCase()))
+        holidaydata.add(h);
+    }
+  }else{
+    for(int i=0; i<data.length; i++){
+      String Name = toBeginningOfSentenceCase(data[i]['Name']);
+      String DateFrom = data[i]['DateFrom'];
+      String DateTo = data[i]['DateTo'];
+      String Duration = data[i]['Duration'];
+      Holi h = Holi(
+        name:Name,
+        DateFrom:DateFrom,
+        DateTo:DateTo,
+        Duration:Duration,
+      );
+      holidaydata.add(h);
+    }
+  }
+  return holidaydata;
+}
+
+
 Future<List<Map>> getLocForDropDown() async{
   final prefs = await SharedPreferences.getInstance();
   Dio dio = new Dio();
@@ -1138,9 +1415,6 @@ Future<List<Map>> getLocForDropDown() async{
 
 List<Map> createLocList(List data) {
   List<Map> list = new List();
- /* if(label==1) // with -All- label
-    list.add({"Id":"0","Name":"All"});*/
-
   for (int i = 0; i < data.length; i++) {
     Map tos={"Id":data[i]["Id"].toString(), "Name":data[i]["Name"].toString()};
     list.add(tos);
@@ -1148,95 +1422,33 @@ List<Map> createLocList(List data) {
   return list;
 }
 
- addHoliday(String name,String from,String to,String description,String div,String loc) async {
-   try {
-     final prefs = await SharedPreferences.getInstance();
-     String empid = prefs.getString('empid') ?? '';
-     String orgdir = prefs.getString('orgdir') ?? '';
-     Dio dio = new Dio();
-     print(path_ubiattendance+'addHoliday?name=$name&from=$from&to=$to&description=$description&div=$div&loc=$loc&empid=$empid&orgdir=$orgdir');
-     Response response = await dio.post(path_ubiattendance+'addHoliday?name=$name&from=$from&to=$to&description=$description&div=$div&loc=$loc&empid=$empid&orgdir=$orgdir');
-     print("response");
-     print(response.data.toString());
-     final statusMap = response.data.toString();
-     print(statusMap.contains("false"));
-       if (statusMap.contains("false")) {
-         return "false";
-       } else if (statusMap.contains("alreadyexist")) {
-         return "alreadyexist";
-       } else{
-         return "true";
-       }
-   } catch (e) {
-     print("Exception" + e.toString());
-   }
- }
 
-
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-/////////////////////////LOCATION CODE ENDS HERE////////////////////////
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-//*************************************************************************************************************************//
-
-//*************************************************************************************************************************//
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-/////////////////////////Geofence CODE ENDS HERE////////////////////////
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-
-class Geo {
-  String id;
-  String name;
-  String status;
-  Geo({this.id, this.name, this.status});
-
-}
-Future<List<Geo>> getGeofence() async {
-  final prefs = await SharedPreferences.getInstance();
-  String orgid = prefs.getString('orgdir') ?? '';
-  print(path_ubiattendance + 'Geofence?orgid=$orgid');
-  final response = await http.get(path_ubiattendance + 'Geofence?orgid=$orgid');
-  print("response");
-  print(response);
-  List responseJson = json.decode(response.body.toString());
-  print(response.body.toString());
-  print("data111111");
-  print(responseJson);
-  List<Geo> gioList = createGeofenceList(responseJson);
-  return gioList;
-}
-
-
-List<Geo> createGeofenceList(List data) {
-  List<Geo> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String id = data[i]["Id"];
-    String name = toBeginningOfSentenceCase(data[i]["Name"]);
-    String status = data[i]["archive"] == '1' ? 'Active' : 'Inactive';
-    Geo giofence = new Geo(id: id, name: name, status: status);
-    list.add(giofence);
+addHoliday(String name,String from,String to,String description,String div,String loc) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    String empid = prefs.getString('empid') ?? '';
+    String orgdir = prefs.getString('orgdir') ?? '';
+    Dio dio = new Dio();
+    print(path_ubiattendance+'addHoliday?name=$name&from=$from&to=$to&description=$description&div=$div&loc=$loc&empid=$empid&orgdir=$orgdir');
+    Response response = await dio.post(path_ubiattendance+'addHoliday?name=$name&from=$from&to=$to&description=$description&div=$div&loc=$loc&empid=$empid&orgdir=$orgdir');
+    print("response");
+    print(response.data.toString());
+    final statusMap = response.data.toString();
+    print(statusMap.contains("false"));
+    if (statusMap.contains("false")) {
+      return "false";
+    } else if (statusMap.contains("alreadyexist")) {
+      return "alreadyexist";
+    } else{
+      return "true";
+    }
+  } catch (e) {
+    print("Exception" + e.toString());
   }
-  return list;
 }
-Future<String> UpdateGeo(String sts, String id) async {
-  print( sts + "   " + id);
-  final prefs = await SharedPreferences.getInstance();
-  String empid = prefs.getString('empid') ?? '';
-  String orgdir = prefs.getString('orgdir') ?? '';
-  sts = sts.toString() == 'Active' ? '1' : '0';
-  print(path_ubiattendance + 'UpdateGeo?uid=$empid&orgid=$orgdir&sts=$sts&id=$id');
-  final response = await http.get(path_ubiattendance + 'UpdateGeo?uid=$empid&orgid=$orgdir&sts=$sts&id=$id');
-  print(response.body.toString());
-  return response.body.toString();
-}
-
-
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
-/////////////////////////Geofence CODE ENDS HERE////////////////////////
+/////////////////////////Holoday CODE ENDS HERE////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 //*************************************************************************************************************************//
@@ -1248,46 +1460,82 @@ Future<String> UpdateGeo(String sts, String id) async {
 ///////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 class Emp {
+  String Id;
+  String Profile;
+  String EmpCode;
   String Name;
   String FName;
   String LName;
-  String Department;
-  String Designation;
-  String Shift;
+  String DOB;
+  String Nationality;
+  String MaritalSts;
+  String Religion;
+  String BloodG;
+  String DOC;
+  String DOJ;
+  String Gender;
+  String ReportingTo;
+  String DivisionId;
+  String Division;
   String DepartmentId;
+  String Department;
   String DesignationId;
+  String Designation;
+  String LocationId;
+  String Location;
   String ShiftId;
-  String Status;
+  String Shift;
+  String EmpSts;
+  String Grade;
+  String EmpType;
   String Email;
+  String Mobile;
+  String FatherName;
+  String Status;
   String UserProfileId;
   String UserProfileName;
   String ProfileTypeId;
   String ProfileType;
-  String Mobile;
-  //String Admin;
-  String Profile;
-  String Id;
+  String Admin;
   String Password;
   Emp({
+    this.Id,
+    this.Profile,
+    this.EmpCode,
     this.Name,
     this.FName,
     this.LName,
-    this.Department,
-    this.Designation,
-    this.Shift,
+    this.DOB,
+    this.Nationality,
+    this.MaritalSts,
+    this.Religion,
+    this.BloodG,
+    this.DOC,
+    this.DOJ,
+    this.Gender,
+    this.ReportingTo,
+    this.DivisionId,
+    this.Division,
     this.DepartmentId,
+    this.Department,
     this.DesignationId,
+    this.Designation,
+    this.LocationId,
+    this.Location,
     this.ShiftId,
-    this.Status,
+    this.Shift,
+    this.EmpSts,
+    this.Grade,
+    this.EmpType,
     this.Email,
+    this.Mobile,
+    this.FatherName,
+    this.Status,
     this.UserProfileId,
     this.UserProfileName,
     this.ProfileTypeId,
     this.ProfileType,
-    this.Mobile,
-    //this.Admin,
-    this.Profile,
-    this.Id,
+    this.Admin,
     this.Password
   });
 
@@ -1356,100 +1604,166 @@ List<Emp> createEmpList(List data, String empname) {
   List<Emp> list = new List();
   if(empname !='' )
     for (int i = 0; i < data.length; i++) {
-      //String name = data[i]["name"].length > 20 ? data[i]["name"].substring(0, 15) + '..' : data[i]["name"];
-      //String dept = data[i]["Department"].length > 20 ? data[i]["Department"].substring(0, 15) + '..' : data[i]["Department"];
-      //String desg = data[i]["Designation"].length > 20 ? data[i]["Designation"].substring(0, 15) + '..' : data[i]["Designation"];
+      String id = data[i]["Id"];
+      String Profile = data[i]["Profile"];
+      String empcode = data[i]["EmployeeCode"];
       String name = data[i]["name"];
       String fname = data[i]["fname"];
       String lname = data[i]["lname"];
+      String dob = data[i]["DOB"];
+      String nationality = data[i]["Nationality"];
+      String maritalsts = data[i]["MaritalStatus"];
+      String religion = data[i]["Religion"];
+      String bloodg = data[i]["BloodGroup"];
+      String gender = data[i]["Gender"];
+      String reportingto = data[i]["ReportingTo"];
+      String doc = data[i]["DOC"];
+      String div = data[i]["Division"];
+      String divid = data[i]["DivisionId"];
       String dept = data[i]["Department"];
-      String desg = data[i]["Designation"];
-      String shift = data[i]["Shift"];
       String deptid = data[i]["DepartmentId"];
+      String desg = data[i]["Designation"];
       String desgid = data[i]["DesignationId"];
+      String loc = data[i]["Location"];
+      String locid = data[i]["LocationId"];
+      String shift = data[i]["Shift"];
       String shiftid = data[i]["ShiftId"];
+      String empsts = data[i]["EmployeeStatus"];
+      String grade = data[i]["Grade"];
+      String emptype = data[i]["EmploymentType"];
+      String email = data[i]["Email"];
+      String phone = data[i]["Mobile"];
+      String father = data[i]["FatherName"];
+      String doj = data[i]["DOJ"];
       String password = data[i]["Password"];
       String status = data[i]["archive"] == '1' ? 'Active' : 'Inactive';
-      String id = data[i]["Id"];
-      String Email = data[i]["Email"];
-      String Mobile = data[i]["Mobile"];
       String UserProfileId = data[i]["UserProfileId"];
       String UserProfileName = data[i]["UserProfileName"];
       String ProfileTypeId = data[i]["ProfileTypeId"];
       String ProfileType = data[i]["ProfileType"];
       //String Admin = data[i]["Admin"] == '1' ? 'Mobile Admin' : 'User';
-      String Profile = data[i]["Profile"];
+
       Emp emp = new Emp(
+          Id: id,
+          Profile: Profile,
+          EmpCode: empcode,
           Name: name,
           FName: fname,
           LName: lname,
+          DOB: dob,
+          Nationality: nationality,
+          MaritalSts: maritalsts,
+          Religion: religion,
+          BloodG: bloodg,
+          Gender: gender,
+          ReportingTo: reportingto,
+          Division: div,
+          DivisionId: divid,
           Department: dept,
-          Designation: desg,
-          Shift: shift,
           DepartmentId: deptid,
+          Designation: desg,
           DesignationId: desgid,
+          Location: loc,
+          LocationId: locid,
+          Shift: shift,
           ShiftId: shiftid,
+          EmpSts: empsts,
+          Grade: grade,
+          EmpType: emptype,
+          Email: email,
+          Mobile: phone,
+          FatherName: father,
+          DOJ: doj,
+          Password: password,
           Status: status,
-          Email: Email,
           UserProfileId: UserProfileId,
           UserProfileName: UserProfileName,
           ProfileTypeId: ProfileTypeId,
           ProfileType: ProfileType,
-          Mobile: Mobile,
           //Admin: Admin,
-          Profile: Profile,
-          Id: id,
-          Password: password
       );
       if(name.toLowerCase().contains(empname.toLowerCase()))
         list.add(emp);
     }
   else
     for (int i = 0; i < data.length; i++) {
-      //String name = data[i]["name"].length > 20 ? data[i]["name"].substring(0, 15) + '..' : data[i]["name"];
-      //String dept = data[i]["Department"].length > 20 ? data[i]["Department"].substring(0, 15) + '..' : data[i]["Department"];
-      //String desg = data[i]["Designation"].length > 20 ? data[i]["Designation"].substring(0, 15) + '..' : data[i]["Designation"];
+      String id = data[i]["Id"];
+      String Profile = data[i]["Profile"];
+      String empcode = data[i]["EmployeeCode"];
       String name = data[i]["name"];
       String fname = data[i]["fname"];
       String lname = data[i]["lname"];
+      String dob = data[i]["DOB"];
+      String nationality = data[i]["Nationality"];
+      String maritalsts = data[i]["MaritalStatus"];
+      String religion = data[i]["Religion"];
+      String bloodg = data[i]["BloodGroup"];
+      String gender = data[i]["Gender"];
+      String reportingto = data[i]["ReportingTo"];
+      String doc = data[i]["DOC"];
+      String div = data[i]["Division"];
+      String divid = data[i]["DivisionId"];
       String dept = data[i]["Department"];
-      String desg = data[i]["Designation"];
-      String shift = data[i]["Shift"];
       String deptid = data[i]["DepartmentId"];
+      String desg = data[i]["Designation"];
       String desgid = data[i]["DesignationId"];
+      String loc = data[i]["Location"];
+      String locid = data[i]["LocationId"];
+      String shift = data[i]["Shift"];
       String shiftid = data[i]["ShiftId"];
+      String empsts = data[i]["EmployeeStatus"];
+      String grade = data[i]["Grade"];
+      String emptype = data[i]["EmploymentType"];
+      String email = data[i]["Email"];
+      String phone = data[i]["Mobile"];
+      String father = data[i]["FatherName"];
+      String doj = data[i]["DOJ"];
       String password = data[i]["Password"];
       String status = data[i]["archive"] == '1' ? 'Active' : 'Inactive';
-      String id = data[i]["Id"];
-      String Email = data[i]["Email"];
       String UserProfileId = data[i]["UserProfileId"];
       String UserProfileName = data[i]["UserProfileName"];
       String ProfileTypeId = data[i]["ProfileTypeId"];
       String ProfileType = data[i]["ProfileType"];
-      String Mobile = data[i]["Mobile"];
-      // String Admin = data[i]["Admin"] == '1' ? 'Mobile Admin' : 'User';
-      String Profile = data[i]["Profile"];
+      //String Admin = data[i]["Admin"] == '1' ? 'Mobile Admin' : 'User';
+
       Emp emp = new Emp(
-          Name: name,
-          FName: fname,
-          LName: lname,
-          Department: dept,
-          Designation: desg,
-          Shift: shift,
-          DepartmentId: deptid,
-          DesignationId: desgid,
-          ShiftId: shiftid,
-          Status: status,
-          Email: Email,
-          UserProfileId: UserProfileId,
-          UserProfileName: UserProfileName,
-          ProfileTypeId: ProfileTypeId,
-          ProfileType: ProfileType,
-          Mobile: Mobile,
-          //Admin: Admin,
-          Profile: Profile,
-          Id: id,
-          Password: password
+        Id: id,
+        Profile: Profile,
+        EmpCode: empcode,
+        Name: name,
+        FName: fname,
+        LName: lname,
+        DOB: dob,
+        Nationality: nationality,
+        MaritalSts: maritalsts,
+        Religion: religion,
+        BloodG: bloodg,
+        Gender: gender,
+        ReportingTo: reportingto,
+        Division: div,
+        DivisionId: divid,
+        Department: dept,
+        DepartmentId: deptid,
+        Designation: desg,
+        DesignationId: desgid,
+        Location: loc,
+        LocationId: locid,
+        Shift: shift,
+        ShiftId: shiftid,
+        EmpSts: empsts,
+        Grade: grade,
+        EmpType: emptype,
+        Email: email,
+        Mobile: phone,
+        FatherName: father,
+        DOJ: doj,
+        Password: password,
+        Status: status,
+        UserProfileId: UserProfileId,
+        UserProfileName: UserProfileName,
+        ProfileTypeId: ProfileTypeId,
+        ProfileType: ProfileType,
+        //Admin: Admin,
       );
       list.add(emp);
     }
@@ -1486,85 +1800,6 @@ Future<int> editEmployee(fname, lname, email, contact, dept, desg, shift, empid)
 ///////////////////////////////////////////////////////////////////////////////////
 //*************************************************************************************************************************//
 
-//*************************************************************************************************************************//
-// /////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-/////////////////////////SHIFT CODE STARTS FORM HERE////////////////////////
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-class Shift {
-  String Id;
-  String Name;
-  String TimeIn;
-  String TimeOut;
-  String Status;
-  String Type;
-
-  Shift({this.Id, this.Name, this.TimeIn, this.TimeOut, this.Status, this.Type});
-}
-
-
-Future<List<Shift>> getShifts() async {
-  final prefs = await SharedPreferences.getInstance();
-  String orgid = prefs.getString('orgdir') ?? '';
-  print(path_ubiattendance + 'shiftMaster?orgid=$orgid');
-  final response = await http.get(path_ubiattendance + 'shiftMaster?orgid=$orgid');
-  List responseJson = json.decode(response.body.toString());
-  List<Shift> shiftList = createShiftList(responseJson);
-  return shiftList;
-}
-
-List<Shift> createShiftList(List data) {
-  List<Shift> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String name = toBeginningOfSentenceCase(data[i]["Name"]);
-    String timein = data[i]["TimeIn"];
-    String timeout = data[i]["TimeOut"];
-    String id = data[i]["Id"];
-    String status = data[i]["archive"] == '0' ? 'Inactive' : 'Active';
-    String type = data[i]["shifttype"] == '1' ? 'Single Date' : 'Multi Date';
-
-    Shift shift = new Shift(
-      Id: id,
-      Name: name,
-      TimeIn: timein,
-      TimeOut: timeout,
-      Status: status,
-      Type: type);
-    list.add(shift);
-  }
-  return list;
-}
-
-
-Future<int> createShift(name, type, from, to, from_b, to_b) async {
-  final prefs = await SharedPreferences.getInstance();
-  String empid = prefs.getString('empid') ?? '';
-  String orgdir = prefs.getString('orgdir') ?? '';
-  final response = await http.get(path_ubiattendance + 'addShift?name=$name&org_id=$orgdir&ti=$from&to=$to&tib=$from_b&tob=$to_b&sts=1&shifttype=$type');
-  int res = int.parse(response.body);
-  return res;
-}
-
-
-Future<String> updateShift(shift, sts, did) async {
-  print(shift + "   " + sts + "   " + did);
-  final prefs = await SharedPreferences.getInstance();
-  String empid = prefs.getString('empid') ?? '';
-  String orgdir = prefs.getString('orgdir') ?? '';
-  sts = sts.toString() == 'Active' ? '1' : '0';
-  print(path_ubiattendance + 'updateShift?uid=$empid&orgid=$orgdir&shift=$shift&sts=$sts&id=$did');
-  final response = await http.get(path_ubiattendance + 'updateShift?uid=$empid&orgid=$orgdir&shift=$shift&sts=$sts&id=$did');
-  print(response.body.toString());
-  return response.body.toString();
-}
-
-// ///////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-/////////////////////////SHIFT CODE ENDS HERE/////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-//*************************************************************************************************************************//
 
 //*************************************************************************************************************************//
 // ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1682,7 +1917,7 @@ Future<List<Map<String, String>>> getChartDataYes() async {
 
 
 //******************Last 7/30 Days Attn Chart Data****************//
-Future<List<Map<String, String>>> getChartDataLast(dys, month) async {
+Future<List<Map<String, String>>> getChartDataLast(dys, month, emp) async {
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? '';
@@ -1691,27 +1926,14 @@ Future<List<Map<String, String>>> getChartDataLast(dys, month) async {
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
   List<Map<String, String>> val = [];
-  //if (dys.toString() == 'l7') {
-  print(path_ubiattendance + 'getChartDataLast_7?refno=$orgdir&limit=$dys&month=$month&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  final response = await http.get(path_ubiattendance + 'getChartDataLast_7?refno=$orgdir&limit=$dys&month=$month&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  print(path_ubiattendance + 'getChartDataLast_7?refno=$orgdir&limit=$dys&month=$month&emp=$emp&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final response = await http.get(path_ubiattendance + 'getChartDataLast_7?refno=$orgdir&limit=$dys&month=$month&emp=$emp&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   final data = json.decode(response.body);
   for (int i = 0; i < data.length; i++)
     val.add({
       "date": data[i]['event'].toString(),
       "total": data[i]['total'].toString()
     });
-  /*  print("---------------------"+val.toString());
-  } else if (dys.toString() == 'l30') {
-    print(path_ubiattendance + 'getChartDataLast_30?refno=$orgdir&limit=$dys&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&dataaccess=$dataaccess');
-    final response = await http.get(
-        path_ubiattendance + 'getChartDataLast_30?refno=$orgdir&limit=$dys&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&dataaccess=$dataaccess');
-    final data = json.decode(response.body);
-    for (int i = 0; i < data.length; i++)
-      val.add({
-        "date": data[i]['event'].toString(),
-        "total": data[i]['total'].toString()
-      });
-  }*/
   return val;
 }
 //******************Last 7/30 Days Attn Chart Data****************//
@@ -1750,6 +1972,7 @@ class Attn {
   String AttSts;
   String ShiftTime;
   String BreakTime;
+  String TimeOffTime;
   String OverTime;
   String LateComingHours;
   String EarlyLeavingHours;
@@ -1776,6 +1999,7 @@ class Attn {
     this.AttSts,
     this.ShiftTime,
     this.BreakTime,
+    this.TimeOffTime,
     this.OverTime,
     this.LateComingHours,
     this.EarlyLeavingHours,
@@ -1786,7 +2010,7 @@ class Attn {
 
 
 //******************Todays Attn List Data**********************//
-Future<List<Attn>> getTodaysAttn(listType) async {
+/*Future<List<Attn>> getTodaysAttn(listType) async {
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? '';
@@ -1808,94 +2032,10 @@ Future<List<Attn>> getTodaysAttn(listType) async {
   else if (listType == 'earlyleavings') responseJson = res['earlyLeavings'];
   List<Attn> userList = createTodayEmpList(responseJson);
   return userList;
-}
-//******************Todays Attn List Data**********************//
-
-
-//******************Custom Date Attn List Data**********************//
-Future<List<Attn>> getCDateAttn(listType, date) async {
-  final prefs = await SharedPreferences.getInstance();
-  String orgdir = prefs.getString('orgdir') ?? '';
-  String empid = prefs.getString('employeeid') ?? '';
-  int profiletype = prefs.getInt('profiletype')??0;
-  int hrsts =prefs.getInt('hrsts')??0;
-  int adminsts =prefs.getInt('adminsts')??0;
-  int dataaccess = prefs.getInt('dataaccess')??0;
-  print(path_ubiattendance + 'getCDateAttendances_new?refno=$orgdir&date=$date&datafor=$listType&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  final response = await http.get(
-      path_ubiattendance + 'getCDateAttendances_new?refno=$orgdir&date=$date&datafor=$listType&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  final res = json.decode(response.body);
-  List responseJson;
-  if (listType == 'present')
-    responseJson = res['present'];
-  else if (listType == 'absent')
-    responseJson = res['absent'];
-  else if (listType == 'latecomings')
-    responseJson = res['lateComings'];
-  else if (listType == 'earlyleavings') responseJson = res['earlyLeavings'];
-  List<Attn> userList = createTodayEmpList(responseJson);
-  return userList;
-}
-//******************Custom Date Attn List Data**********************//
-
-
-//******************Custom Date Attn Departmentwise****************//
-Future<List<Attn>> getCDateAttnDeptWise(listType, date,dept) async {
-  final prefs = await SharedPreferences.getInstance();
-  String orgdir = prefs.getString('orgdir') ?? '';
-  String empid = prefs.getString('employeeid') ?? '';
-  int profiletype = prefs.getInt('profiletype')??0;
-  int hrsts =prefs.getInt('hrsts')??0;
-  int adminsts =prefs.getInt('adminsts')??0;
-  int dataaccess = prefs.getInt('dataaccess')??0;
-  print(path_ubiattendance + 'getCDateAttnDeptWise_new?refno=$orgdir&date=$date&datafor=$listType&dept=$dept&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  final response = await http.get(
-      path_ubiattendance + 'getCDateAttnDeptWise_new?refno=$orgdir&date=$date&datafor=$listType&dept=$dept&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  final res = json.decode(response.body);
-  List responseJson;
-  if (listType == 'present')
-    responseJson = res['present'];
-  else if (listType == 'absent')
-    responseJson = res['absent'];
-  else if (listType == 'latecomings')
-    responseJson = res['lateComings'];
-  else if (listType == 'earlyleavings') responseJson = res['earlyLeavings'];
-  List<Attn> userList = createTodayEmpList(responseJson);
-  return userList;
-}
-//******************Custom Date Attn Departmentwise****************//
-
-
-//******************Custom Date Attn DesignationWise*******************//
-Future<List<Attn>> getCDateAttnDesgWise(listType, date,desg) async {
-  final prefs = await SharedPreferences.getInstance();
-  String orgdir = prefs.getString('orgdir') ?? '';
-  String empid = prefs.getString('employeeid') ?? '';
-  int profiletype = prefs.getInt('profiletype')??0;
-  int hrsts =prefs.getInt('hrsts')??0;
-  int adminsts =prefs.getInt('adminsts')??0;
-  int dataaccess = prefs.getInt('dataaccess')??0;
-  print(path_ubiattendance + 'getCDateAttnDesgWise_new?refno=$orgdir&date=$date&datafor=$listType&desg=$desg&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  final response = await http.get(
-      path_ubiattendance + 'getCDateAttnDesgWise_new?refno=$orgdir&date=$date&datafor=$listType&desg=$desg&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  final res = json.decode(response.body);
-  print(res);
-  List responseJson;
-  if (listType == 'present')
-    responseJson = res['present'];
-  else if (listType == 'absent')
-    responseJson = res['absent'];
-  else if (listType == 'latecomings')
-    responseJson = res['lateComings'];
-  else if (listType == 'earlyleavings') responseJson = res['earlyLeavings'];
-  List<Attn> userList = createTodayEmpList(responseJson);
-  return userList;
-}
-//******************Custom Date Attn DesignationWise*******************//
-
-
+}*/
+//********************Todays Attn List Data************************//
 //******************Yesterday's Attn List Data**********************//
-Future<List<Attn>> getYesAttn(listType) async {
+/*Future<List<Attn>> getYesAttn(listType) async {
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? '';
@@ -1918,23 +2058,104 @@ Future<List<Attn>> getYesAttn(listType) async {
   else if (listType == 'earlyleavings') responseJson = res['earlyLeavings'];
   List<Attn> userList = createTodayEmpList(responseJson);
   return userList;
-}
+}*/
 //******************Yesterday's Attn List Data*******************//
+
+
+//******************Custom Date Attn List Data**********************//
+Future<List<Attn>> getCDateAttn(listType, date) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('orgdir') ?? '';
+  String empid = prefs.getString('employeeid') ?? '';
+  int profiletype = prefs.getInt('profiletype')??0;
+  int hrsts =prefs.getInt('hrsts')??0;
+  int adminsts =prefs.getInt('adminsts')??0;
+  int dataaccess = prefs.getInt('dataaccess')??0;
+  print(path_ubiattendance + 'getCDateAttendances_new?refno=$orgdir&date=$date&datafor=$listType&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final response = await http.get(
+      path_ubiattendance + 'getCDateAttendances_new?refno=$orgdir&date=$date&datafor=$listType&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final res = json.decode(response.body);
+  List responseJson;
+  if (listType == 'present')
+    responseJson = res['present'];
+  else if (listType == 'absent')
+    responseJson = res['absent'];
+  else if (listType == 'latecomings')
+    responseJson = res['lateComings'];
+  else if (listType == 'earlyleavings')
+    responseJson = res['earlyLeavings'];
+  List<Attn> userList = createTodayEmpList(responseJson);
+  return userList;
+}
+//******************Custom Date Attn List Data**********************//
+
+
+//******************Custom Date Attn Departmentwise****************//
+Future<List<Attn>> getCDateAttnDeptWise(String listType, String date, String dept, String emp) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('orgdir') ?? '';
+  String empid = prefs.getString('employeeid') ?? '';
+  int profiletype = prefs.getInt('profiletype')??0;
+  int hrsts =prefs.getInt('hrsts')??0;
+  int adminsts =prefs.getInt('adminsts')??0;
+
+  int dataaccess = prefs.getInt('dataaccess')??0;
+  print(path_ubiattendance + 'getCDateAttnDeptWise_new?refno=$orgdir&date=$date&datafor=$listType&dept=$dept&emp=$emp&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final response = await http.get(
+      path_ubiattendance + 'getCDateAttnDeptWise_new?refno=$orgdir&date=$date&datafor=$listType&dept=$dept&emp=$emp&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final res = json.decode(response.body);
+  List responseJson;
+  if (listType == 'present')
+    responseJson = res['present'];
+  else if (listType == 'absent')
+    responseJson = res['absent'];
+  else if (listType == 'latecomings')
+    responseJson = res['lateComings'];
+  else if (listType == 'earlyleavings')
+    responseJson = res['earlyLeavings'];
+  List<Attn> userList = createTodayEmpList(responseJson);
+  return userList;
+}
+//******************Custom Date Attn Departmentwise****************//
+
+
+//******************Custom Date Attn DesignationWise*******************//
+Future<List<Attn>> getCDateAttnDesgWise(String listType, String date, String desg, String emp) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('orgdir') ?? '';
+  String empid = prefs.getString('employeeid') ?? '';
+  int profiletype = prefs.getInt('profiletype')??0;
+  int hrsts =prefs.getInt('hrsts')??0;
+  int adminsts =prefs.getInt('adminsts')??0;
+  int dataaccess = prefs.getInt('dataaccess')??0;
+  print(path_ubiattendance + 'getCDateAttnDesgWise_new?refno=$orgdir&date=$date&datafor=$listType&desg=$desg&emp=$emp&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final response = await http.get(path_ubiattendance + 'getCDateAttnDesgWise_new?refno=$orgdir&date=$date&datafor=$listType&desg=$desg&emp=$emp&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final res = json.decode(response.body);
+  print(res);
+  List responseJson;
+  if (listType == 'present')
+    responseJson = res['present'];
+  else if (listType == 'absent')
+    responseJson = res['absent'];
+  else if (listType == 'latecomings')
+    responseJson = res['lateComings'];
+  else if (listType == 'earlyleavings')
+    responseJson = res['earlyLeavings'];
+  List<Attn> userList = createTodayEmpList(responseJson);
+  return userList;
+}
+//******************Custom Date Attn DesignationWise*******************//
+
 
 List<Attn> createTodayEmpList(List data) {
   List<Attn> list = new List();
   for (int i = 0; i < data.length; i++) {
+    String Id = data[i]["Id"].toString();
     String Name = data[i]["name"].toString();
     String TimeIn = data[i]["TimeIn"].toString();
-    String TimeOut = data[i]["TimeOut"].toString() == '00:00'
-        ? '-'
-        : data[i]["TimeOut"].toString();
-    String EntryImage = data[i]["EntryImage"].toString() == ''
-        ? 'http://ubiattendance.ubihrm.com/assets/img/avatar.png'
-        : data[i]["EntryImage"].toString();
-    String ExitImage = data[i]["ExitImage"].toString() == ''
-        ? 'http://ubiattendance.ubihrm.com/assets/img/avatar.png'
-        : data[i]["ExitImage"].toString();
+    String TimeOut = data[i]["TimeOut"].toString() == '00:00' ? '-' : data[i]["TimeOut"].toString();
+    String EntryImage = data[i]["EntryImage"].toString() == '' ? 'http://ubiattendance.ubihrm.com/assets/img/avatar.png' : data[i]["EntryImage"].toString();
+    String ExitImage = data[i]["ExitImage"].toString() == '' ? 'http://ubiattendance.ubihrm.com/assets/img/avatar.png' : data[i]["ExitImage"].toString();
     String CheckInLoc = data[i]["checkInLoc"].toString();
     String CheckOutLoc = data[i]["CheckOutLoc"].toString();
     String LatitIn = data[i]["latit_in"].toString();
@@ -1942,6 +2163,7 @@ List<Attn> createTodayEmpList(List data) {
     String LongiIn = data[i]["longi_in"].toString();
     String LongiOut = data[i]["longi_out"].toString();
     Attn tos = new Attn(
+        Id: Id,
         Name: Name,
         TimeIn: TimeIn,
         TimeOut: TimeOut,
@@ -1959,8 +2181,7 @@ List<Attn> createTodayEmpList(List data) {
 }
 
 
-//******************Attn list for last 7/30 days******************//
-Future<List<Attn>> getAttnDataLast(days,month,listType,empname) async {
+Future<List<Attn>> getAttnDataLast(String days, var month, String listType, String emp) async {
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? '';
@@ -1968,115 +2189,65 @@ Future<List<Attn>> getAttnDataLast(days,month,listType,empname) async {
   int hrsts =prefs.getInt('hrsts')??0;
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
-  final response = await http.get(path_ubiattendance + 'getAttnDataLast?refno=$orgdir&datafor=$listType&limit=$days&month=$month&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  print(path_ubiattendance + 'getAttnDataLast?refno=$orgdir&datafor=$listType&limit=$days&month=$month&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final response = await http.get(path_ubiattendance + 'getAttnDataLast?refno=$orgdir&datafor=$listType&limit=$days&month=$month&emp=$emp&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  print(path_ubiattendance + 'getAttnDataLast?refno=$orgdir&datafor=$listType&limit=$days&month=$month&emp=$emp&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   final res = json.decode(response.body.toString());
   List responseJson;responseJson = res['elist'];
-  List<Attn> userList = createLastEmpList(responseJson,empname);
+  List<Attn> userList = createLastEmpList(responseJson);
   return userList;
 }
 
-List<Attn> createLastEmpList(List data,String empname) {
+List<Attn> createLastEmpList(List data) {
   data = data.reversed.toList();
   List<Attn> list = new List();
-  if(empname.isNotEmpty)
-    for (int i = 0; i < data.length; i++) {
-      String Name = '';
-      String TimeIn = '';
-      String TimeOut = '';
-      String date = '';
-      String ExitImage = '';
-      String CheckInLoc = '';
-      String CheckOutLoc = '';
-      String LatitIn = '';
-      String LatitOut = '';
-      String LongiIn = '';
-      String LongiOut = '';
-      if (data[i].length != 0) {
-        for (int j = 0; j < data[i].length; j++) {
-          Name = data[i][j]["name"].toString();
-          TimeIn = data[i][j]["TimeIn"].toString() == '00:00:00'||data[i][j]["TimeIn"].toString() == '-'
-              ? '-'
-              : data[i][j]["TimeIn"].toString().substring(0, 5);
-          TimeOut = data[i][j]["TimeOut"].toString() == '00:00:00' ||data[i][j]["TimeOut"].toString() == '-'
-              ? '-'
-              : data[i][j]["TimeOut"].toString().substring(0, 5);
-          date = Formatdate1(data[i][j]["AttendanceDate"].toString());
-          ExitImage = '';
-          CheckInLoc = '';
-          CheckOutLoc = '';
-          LatitIn = '';
-          LatitOut = '';
-          LongiIn = '';
-          LongiOut = '';
+  for (int i = 0; i < data.length; i++) {
+    String Name = '';
+    String TimeIn = '';
+    String TimeOut = '';
+    String date = '';
+    String ExitImage = '';
+    String CheckInLoc = '';
+    String CheckOutLoc = '';
+    String LatitIn = '';
+    String LatitOut = '';
+    String LongiIn = '';
+    String LongiOut = '';
+    if (data[i].length != 0) {
+      for (int j = 0; j < data[i].length; j++) {
+        Name = data[i][j]["name"].toString();
+        TimeIn = data[i][j]["TimeIn"].toString() == '00:00:00'||data[i][j]["TimeIn"].toString() == '-'
+            ? '-'
+            : data[i][j]["TimeIn"].toString().substring(0, 5);
+        TimeOut = data[i][j]["TimeOut"].toString() == '00:00:00' ||data[i][j]["TimeOut"].toString() == '-'
+            ? '-'
+            : data[i][j]["TimeOut"].toString().substring(0, 5);
+        date = Formatdate1(data[i][j]["AttendanceDate"].toString());
+        ExitImage = '';
+        CheckInLoc = '';
+        CheckOutLoc = '';
+        LatitIn = '';
+        LatitOut = '';
+        LongiIn = '';
+        LongiOut = '';
 
-          Attn tos = new Attn(
-              Name: Name,
-              TimeIn: TimeIn,
-              TimeOut: TimeOut,
-              EntryImage: date,
-              ExitImage: ExitImage,
-              CheckInLoc: CheckInLoc,
-              CheckOutLoc: CheckOutLoc,
-              LatitIn: LatitIn,
-              LatitOut: LatitOut,
-              LongiIn: LongiIn,
-              LongiOut: LongiOut);
-          if(Name.toLowerCase().contains(empname.toLowerCase()))
-            list.add(tos);
-        }
+        Attn tos = new Attn(
+            Name: Name,
+            TimeIn: TimeIn,
+            TimeOut: TimeOut,
+            EntryImage: date,
+            ExitImage: ExitImage,
+            CheckInLoc: CheckInLoc,
+            CheckOutLoc: CheckOutLoc,
+            LatitIn: LatitIn,
+            LatitOut: LatitOut,
+            LongiIn: LongiIn,
+            LongiOut: LongiOut);
+        list.add(tos);
       }
     }
-  else
-    for (int i = 0; i < data.length; i++) {
-      String Name = '';
-      String TimeIn = '';
-      String TimeOut = '';
-      String date = '';
-      String ExitImage = '';
-      String CheckInLoc = '';
-      String CheckOutLoc = '';
-      String LatitIn = '';
-      String LatitOut = '';
-      String LongiIn = '';
-      String LongiOut = '';
-      if (data[i].length != 0) {
-        for (int j = 0; j < data[i].length; j++) {
-          Name = data[i][j]["name"].toString();
-          TimeIn = data[i][j]["TimeIn"].toString() == '00:00:00'||data[i][j]["TimeIn"].toString() == '-'
-              ? '-'
-              : data[i][j]["TimeIn"].toString().substring(0, 5);
-          TimeOut = data[i][j]["TimeOut"].toString() == '00:00:00' ||data[i][j]["TimeOut"].toString() == '-'
-              ? '-'
-              : data[i][j]["TimeOut"].toString().substring(0, 5);
-          date = Formatdate1(data[i][j]["AttendanceDate"].toString());
-          ExitImage = '';
-          CheckInLoc = '';
-          CheckOutLoc = '';
-          LatitIn = '';
-          LatitOut = '';
-          LongiIn = '';
-          LongiOut = '';
-
-          Attn tos = new Attn(
-              Name: Name,
-              TimeIn: TimeIn,
-              TimeOut: TimeOut,
-              EntryImage: date,
-              ExitImage: ExitImage,
-              CheckInLoc: CheckInLoc,
-              CheckOutLoc: CheckOutLoc,
-              LatitIn: LatitIn,
-              LatitOut: LatitOut,
-              LongiIn: LongiIn,
-              LongiOut: LongiOut);
-          list.add(tos);
-        }
-      }
-    }
+  }
   return list;
 }
-//******************Attn list for last 7/30 days******************//
 
 
 //******************Late Comer Attn Data****************//
@@ -2091,7 +2262,7 @@ class EmpList {
 }
 
 
-Future<List<EmpList>> getLateEmpDataList(date,empname) async {
+Future<List<EmpList>> getLateEmpDataList(String date,String empname) async {
   if (date == '' || date == null) return null;
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
@@ -2103,21 +2274,21 @@ Future<List<EmpList>> getLateEmpDataList(date,empname) async {
   print(path_ubiattendance + 'getlateComings?refno=$orgid&cdate=$date&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   final response = await http.get(path_ubiattendance + 'getlateComings?refno=$orgid&cdate=$date&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   List responseJson = json.decode(response.body.toString());
-  List<EmpList> list = createListLateComings(responseJson, empname);
+  List<EmpList> list = createListLateComings(responseJson,empname);
   return list;
 }
 
 List<EmpList> createListLateComings(List data,String empname) {
   List<EmpList> list = new List();
   if(empname.isNotEmpty) {
-    print("inside if");
     for (int i = 0; i < data.length; i++) {
       String diff = data[i]["lateby"];
       String timeAct = data[i]["timein"];
       String name = data[i]["name"];
       String shift = data[i]["shift"];
       String date = data[i]["date"];
-      EmpList row = new EmpList(diff: diff,
+      EmpList row = new EmpList(
+          diff: diff,
           timeAct: timeAct,
           name: name,
           shift: shift,
@@ -2126,8 +2297,7 @@ List<EmpList> createListLateComings(List data,String empname) {
       if (name.toLowerCase().contains(empname.toLowerCase()))
         list.add(row);
     }
-  }else {
-    print("outside if");
+  }else{
     for (int i = 0; i < data.length; i++) {
       String diff = data[i]["lateby"];
       String timeAct = data[i]["timein"];
@@ -2142,13 +2312,13 @@ List<EmpList> createListLateComings(List data,String empname) {
       list.add(row);
     }
   }
-    return list;
+  return list;
 }
 //******************Late Comer Attn Data****************//
 
 
 //******************Early Leaver Attn Data****************//
-Future<List<EmpList>> getEarlyEmpDataList(date,empname) async {
+Future<List<EmpList>> getEarlyEmpDataList(String date, String empname) async {
   if (date == '' || date == null) return null;
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
@@ -2166,10 +2336,9 @@ Future<List<EmpList>> getEarlyEmpDataList(date,empname) async {
   return list;
 }
 
-List<EmpList> createListEarlyLeaving(List data,empname) {
+List<EmpList> createListEarlyLeaving(List data, String empname) {
   List<EmpList> list = new List();
   if(empname.isNotEmpty) {
-    print("inside if");
     for (int i = 0; i < data.length; i++) {
       String diff = data[i]["earlyby"];
       String timeAct = data[i]["timeout"];
@@ -2177,19 +2346,29 @@ List<EmpList> createListEarlyLeaving(List data,empname) {
       String shift = data[i]["shift"];
       String date = data[i]["date"];
       EmpList row = new EmpList(
-          diff: diff, timeAct: timeAct, name: name, shift: shift, date: date);
+          diff: diff,
+          timeAct: timeAct,
+          name: name,
+          shift: shift,
+          date: date);
+      if (name.toLowerCase().contains(empname.toLowerCase()))
+        list.add(row);
+    }
+  }else{
+    for (int i = 0; i < data.length; i++) {
+      String diff = data[i]["earlyby"];
+      String timeAct = data[i]["timeout"];
+      String name = data[i]["name"];
+      String shift = data[i]["shift"];
+      String date = data[i]["date"];
+      EmpList row = new EmpList(
+          diff: diff,
+          timeAct: timeAct,
+          name: name,
+          shift: shift,
+          date: date);
       list.add(row);
     }
-  }else
-  for (int i = 0; i < data.length; i++) {
-    String diff = data[i]["earlyby"];
-    String timeAct = data[i]["timeout"];
-    String name = data[i]["name"];
-    String shift = data[i]["shift"];
-    String date = data[i]["date"];
-    EmpList row = new EmpList(
-        diff: diff, timeAct: timeAct, name: name, shift: shift, date: date);
-    list.add(row);
   }
   return list;
 }
@@ -2209,7 +2388,7 @@ class EmpListTimeOff {
 }
 
 
-Future<List<EmpListTimeOff>> getTimeOFfDataList(date) async {
+Future<List<EmpListTimeOff>> getTimeOFfDataList(String date, String empname) async {
   if (date == '' || date == null) return null;
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
@@ -2221,28 +2400,49 @@ Future<List<EmpListTimeOff>> getTimeOFfDataList(date) async {
   final response = await http.get(path_ubiattendance + 'getTimeoffList?fd=$date&to=$date&refno=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   print(path_ubiattendance + 'getTimeoffList?fd=$date&to=$date&refno=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   List responseJson = json.decode(response.body);
-  List<EmpListTimeOff> list = createTimeOFfDataList(responseJson);
+  List<EmpListTimeOff> list = createTimeOFfDataList(responseJson,empname);
   return list;
 }
 
-List<EmpListTimeOff> createTimeOFfDataList(List data) {
+List<EmpListTimeOff> createTimeOFfDataList(List data,String empname) {
   List<EmpListTimeOff> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String diff = data[i]["diff"];
-    String to = data[i]["TimeTo"];
-    String from = data[i]["TimeFrom"];
-    String name = data[i]["name"];
-    String date = data[i]["tod"];
-    String sts = data[i]["sts"];
-    EmpListTimeOff row = new EmpListTimeOff(
-        diff: diff,
-        to: to,
-        from: from,
-        name: name,
-        date: date,
-        sts: sts
-    );
-    list.add(row);
+  if(empname.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      String diff = data[i]["diff"];
+      String to = data[i]["TimeTo"];
+      String from = data[i]["TimeFrom"];
+      String name = data[i]["name"];
+      String date = data[i]["tod"];
+      String sts = data[i]["sts"];
+      EmpListTimeOff row = new EmpListTimeOff(
+          diff: diff,
+          to: to,
+          from: from,
+          name: name,
+          date: date,
+          sts: sts
+      );
+      if(name.toLowerCase().contains(empname.toLowerCase()))
+        list.add(row);
+    }
+  }else {
+    for (int i = 0; i < data.length; i++) {
+      String diff = data[i]["diff"];
+      String to = data[i]["TimeTo"];
+      String from = data[i]["TimeFrom"];
+      String name = data[i]["name"];
+      String date = data[i]["tod"];
+      String sts = data[i]["sts"];
+      EmpListTimeOff row = new EmpListTimeOff(
+          diff: diff,
+          to: to,
+          from: from,
+          name: name,
+          date: date,
+          sts: sts
+      );
+      list.add(row);
+    }
   }
   return list;
 }
@@ -2279,10 +2479,9 @@ Future<List<Punch>> getVisitsDataList(date,empname) async {
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
   print(path_ubiattendance + 'getPunchInfo?orgid=$orgdir&date=$date&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  final response = await http.get(path_ubiattendance + 'getPunchInfo?orgid=$orgdir&date=$date&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final response =
+  await http.get(path_ubiattendance + 'getPunchInfo?orgid=$orgdir&date=$date&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   List responseJson = json.decode(response.body.toString());
-  print("responseJson");
-  print(responseJson);
   List<Punch> userList = createUserList(responseJson,empname);
   return userList;
 }
@@ -2327,7 +2526,7 @@ class OutsideAttendance {
 }
 
 
-Future<List<OutsideAttendance>> getOutsidegeoReport(date, emp) async {
+Future<List<OutsideAttendance>> getOutsidegeoReport(String date, String empname) async {
   final prefs = await SharedPreferences.getInstance();
   String empid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
@@ -2335,52 +2534,100 @@ Future<List<OutsideAttendance>> getOutsidegeoReport(date, emp) async {
   int hrsts =prefs.getInt('hrsts')??0;
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
-  print(path_ubiattendance + 'getOutsidegeoReport?seid=$emp&uid=$empid&orgid=$orgdir&date=$date&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  final response = await http.get(path_ubiattendance + 'getOutsidegeoReport?seid=$emp&uid=$empid&orgid=$orgdir&date=$date&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  print(path_ubiattendance + 'getOutsidegeoReport?&uid=$empid&orgid=$orgdir&date=$date&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final response = await http.get(path_ubiattendance + 'getOutsidegeoReport?&uid=$empid&orgid=$orgdir&date=$date&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   List responseJson = json.decode(response.body.toString());
-  List<OutsideAttendance> userList = createListOutsidefance(responseJson);
+  List<OutsideAttendance> userList = createListOutsidefance(responseJson,empname);
   return userList;
 }
 
-List<OutsideAttendance> createListOutsidefance(List data) {
+List<OutsideAttendance> createListOutsidefance(List data,String emp) {
   List<OutsideAttendance> list = new List();
-  for (int i = data.length - 1; i >= 0; i--) {
-    String id = data[i]["id"];
-    String timein = data[i]["timein"] == "00:00:00" ? '-'
-        : data[i]["timein"].toString().substring(0, 5);
-    String timeout = data[i]["timeout"] == "00:00:00" ? '-'
-        : data[i]["timeout"].toString().substring(0, 5);
-    String locationin = data[i]["locationin"];
-    String locationout = data[i]["locationout"];
-    String attdate = data[i]["attdate"];
-    String empname = data[i]["empname"];
-    String latin = data[i]["latin"];
-    String lonin = data[i]["lonin"];
-    String latout = data[i]["latout"];
-    String lonout = data[i]["lonout"];
-    String outstatus = data[i]["outstatus"];
-    String instatus = data[i]["instatus"];
-    String incolor = data[i]["incolor"];
-    String outcolor = data[i]["outcolor"];
+  if(emp.isNotEmpty) {
+    for (int i = data.length - 1; i >= 0; i--) {
+      String id = data[i]["id"];
+      String timein = data[i]["timein"] == "00:00:00" ? '-'
+          : data[i]["timein"].toString().substring(0, 5);
+      String timeout = data[i]["timeout"] == "00:00:00" ? '-'
+          : data[i]["timeout"].toString().substring(0, 5);
+      String locationin = data[i]["locationin"];
+      String locationout = data[i]["locationout"];
+      String attdate = data[i]["attdate"];
+      String empname = data[i]["empname"];
+      String latin = data[i]["latin"];
+      String lonin = data[i]["lonin"];
+      String latout = data[i]["latout"];
+      String lonout = data[i]["lonout"];
+      String outstatus = data[i]["outstatus"];
+      String instatus = data[i]["instatus"];
+      String incolor = data[i]["incolor"];
+      String outcolor = data[i]["outcolor"];
 
-    OutsideAttendance Outsid = new OutsideAttendance(
-      Id: id,
-      empname: empname,
-      timein: timein == '00:00' ? '-' : timein,
-      timeout: timeout == '00:00' ? '-' : timeout,
-      locationin: locationin.length > 40 ? locationin.substring(0, 40) + '...' : locationin,
-      locationout: locationout.length > 40 ? locationout.substring(0, 40) + '...' : locationout,
-      attdate: attdate,
-      latin: latin,
-      lonin: lonin,
-      latout: latout,
-      lonout: lonout,
-      outstatus: outstatus,
-      instatus: instatus,
-      incolor: incolor,
-      outcolor: outcolor,
-    );
-    list.add(Outsid);
+      OutsideAttendance Outsid = new OutsideAttendance(
+        Id: id,
+        empname: empname,
+        timein: timein == '00:00' ? '-' : timein,
+        timeout: timeout == '00:00' ? '-' : timeout,
+        locationin: locationin.length > 40
+            ? locationin.substring(0, 40) + '...'
+            : locationin,
+        locationout: locationout.length > 40 ? locationout.substring(0, 40) +
+            '...' : locationout,
+        attdate: attdate,
+        latin: latin,
+        lonin: lonin,
+        latout: latout,
+        lonout: lonout,
+        outstatus: outstatus,
+        instatus: instatus,
+        incolor: incolor,
+        outcolor: outcolor,
+      );
+      if(empname.toLowerCase().contains(emp.toLowerCase()))
+       list.add(Outsid);
+    }
+  }else {
+    for (int i = data.length - 1; i >= 0; i--) {
+      String id = data[i]["id"];
+      String timein = data[i]["timein"] == "00:00:00" ? '-'
+          : data[i]["timein"].toString().substring(0, 5);
+      String timeout = data[i]["timeout"] == "00:00:00" ? '-'
+          : data[i]["timeout"].toString().substring(0, 5);
+      String locationin = data[i]["locationin"];
+      String locationout = data[i]["locationout"];
+      String attdate = data[i]["attdate"];
+      String empname = data[i]["empname"];
+      String latin = data[i]["latin"];
+      String lonin = data[i]["lonin"];
+      String latout = data[i]["latout"];
+      String lonout = data[i]["lonout"];
+      String outstatus = data[i]["outstatus"];
+      String instatus = data[i]["instatus"];
+      String incolor = data[i]["incolor"];
+      String outcolor = data[i]["outcolor"];
+
+      OutsideAttendance Outsid = new OutsideAttendance(
+        Id: id,
+        empname: empname,
+        timein: timein == '00:00' ? '-' : timein,
+        timeout: timeout == '00:00' ? '-' : timeout,
+        locationin: locationin.length > 40
+            ? locationin.substring(0, 40) + '...'
+            : locationin,
+        locationout: locationout.length > 40 ? locationout.substring(0, 40) +
+            '...' : locationout,
+        attdate: attdate,
+        latin: latin,
+        lonin: lonin,
+        latout: latout,
+        lonout: lonout,
+        outstatus: outstatus,
+        instatus: instatus,
+        incolor: incolor,
+        outcolor: outcolor,
+      );
+      list.add(Outsid);
+    }
   }
   return list;
 }
@@ -2388,7 +2635,7 @@ List<OutsideAttendance> createListOutsidefance(List data) {
 
 
 //******************Employees List For Employee Wise Report****************//
-Future<List<Attn>> getTotalEmployeesList(month) async{
+Future<List<Attn>> getTotalEmployeesList(DateTime month, String empname) async{
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('employeeid') ?? '';
@@ -2399,26 +2646,45 @@ Future<List<Attn>> getTotalEmployeesList(month) async{
   print(path_ubiattendance + 'getTotalEmployeesList?orgid=$orgid&empid=$empid&month=$month&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   final response = await http.get(path_ubiattendance + 'getTotalEmployeesList?orgid=$orgid&empid=$empid&month=$month&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   List data = json.decode(response.body.toString());
-  List<Attn> emp = createTotalEmployeesList(data);
+  List<Attn> emp = createTotalEmployeesList(data,empname);
   return emp;
 }
 
-List<Attn> createTotalEmployeesList(List data) {
+List<Attn> createTotalEmployeesList(List data,String empname) {
   List<Attn> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String Id = data[i]["id"].toString();
-    String Name = data[i]["name"].toString();
-    String Shift = data[i]["shift"].toString();
-    String ShiftTime = data[i]["shifttime"].toString();
-    String Break = data[i]["break"].toString();
-    Attn tos = new Attn(
-      Id:Id,
-      Name: Name,
-      Shift:Shift,
-      ShiftTime:ShiftTime,
-      Break:Break,
-    );
-    list.add(tos);
+  if(empname.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      String Id = data[i]["id"].toString();
+      String Name = data[i]["name"].toString();
+      String Shift = data[i]["shift"].toString();
+      String ShiftTime = data[i]["shifttime"].toString();
+      String Break = data[i]["break"].toString();
+      Attn tos = new Attn(
+        Id: Id,
+        Name: Name,
+        Shift: Shift,
+        ShiftTime: ShiftTime,
+        Break: Break,
+      );
+      if(Name.toLowerCase().contains(empname.toLowerCase()))
+        list.add(tos);
+    }
+  }else{
+    for (int i = 0; i < data.length; i++) {
+      String Id = data[i]["id"].toString();
+      String Name = data[i]["name"].toString();
+      String Shift = data[i]["shift"].toString();
+      String ShiftTime = data[i]["shifttime"].toString();
+      String Break = data[i]["break"].toString();
+      Attn tos = new Attn(
+        Id:Id,
+        Name: Name,
+        Shift:Shift,
+        ShiftTime:ShiftTime,
+        Break:Break,
+      );
+      list.add(tos);
+    }
   }
   return list;
 }
@@ -2447,6 +2713,7 @@ List<Attn> createAttList(List data){
     String ShiftTime=data[i]["totalshifttime"];
     String TotalTime=data[i]["totaltime"];
     String BreakTime=data[i]["breakTime"];
+    String TimeOffTime=data[i]["timeoff"];
     String LateComingHours=data[i]["latehrs"];
     String EarlyLeavingHours=data[i]["earlyhrs"];
     String OverTime=data[i]["overtime"];
@@ -2460,6 +2727,7 @@ List<Attn> createAttList(List data){
       AttSts: AttSts,
       ShiftTime: ShiftTime,
       BreakTime: BreakTime,
+      TimeOffTime: TimeOffTime,
       TotalTime: TotalTime,
       LateComingHours: LateComingHours,
       EarlyLeavingHours: EarlyLeavingHours,
@@ -2754,4 +3022,3 @@ List<FlexiAtt> createListFlexiReport(List data) {
   return list;
 }
 ///////////////////////////////////Flexi Attendance Service Ends Here/////////////////////////////////////
-

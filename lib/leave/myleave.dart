@@ -81,55 +81,48 @@ class _MyLeaveState extends State<MyLeave> {
   }
 
   withdrawlLeave(String leaveid, String compoffsts) async{
-    try {
+    setState(() {
+      _checkwithdrawnleave = true;
+    });
+    print("----> withdrawn service calling "+_checkwithdrawnleave.toString());
+    final prefs = await SharedPreferences.getInstance();
+    String empid = prefs.getString('employeeid')??"";
+    String orgid =prefs.getString('organization')??"";
+    var leave = Leave(leaveid: leaveid, orgid: orgid, uid: empid, approverstatus: '5', compoffsts: compoffsts);
+    var islogin = await withdrawLeave(leave);
+    print(islogin);
+    if(islogin=="success"){
       setState(() {
-        _checkwithdrawnleave = true;
+        _isButtonDisabled=false;
       });
-      final prefs = await SharedPreferences.getInstance();
-      String empid = prefs.getString('employeeid')??"";
-      String orgid =prefs.getString('organization')??"";
-      var leave = Leave(leaveid: leaveid, orgid: orgid, uid: empid, approverstatus: '5', compoffsts: compoffsts);
-      var islogin = await withdrawLeave(leave);
-
-      if (islogin == "success") {
-        setState(() {
-          _checkwithdrawnleave = false;
-          _isButtonDisabled = false;
-        });
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyLeave()),
-        );
-        showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text("Leave application withdrawn successfully."),
-        )
-        );
-      } else {
-        setState(() {
-          _checkwithdrawnleave = false;
-          _isButtonDisabled = false;
-        });
-        showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text("Leave could not be withdrawn."),
-        )
-        );
-      } /*else {
-        setState(() {
-          _checkwithdrawnleave = false;
-          _isButtonDisabled = false;
-        });
-        showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text("Some error occurred."),
-        )
-        );
-      }*/
-    }catch(e){
-      print(e.toString());
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyLeave()),
+      );
       showDialog(context: context, child:
       new AlertDialog(
+        //backgroundColor: appEndColor(),
+      //  title: new Text("Congrats!"),
+        content: new Text("Leave application withdrawn successfully."),
+      )
+      );
+    }else if(islogin=="failure"){
+      setState(() {
+        _isButtonDisabled=false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+        //title: new Text("Sorry!"),
+        content: new Text("Leave could not be withdrawn."),
+      )
+      );
+    }else{
+      setState(() {
+        _isButtonDisabled=false;
+      });
+      showDialog(context: context, child:
+      new AlertDialog(
+       // title: new Text("Sorry!"),
         content: new Text("Poor network connection."),
       )
       );
@@ -164,6 +157,12 @@ class _MyLeaveState extends State<MyLeave> {
       ),
     )
     );
+    /*return new Center(child: SizedBox(
+      child: CircularProgressIndicator(strokeWidth: 2.2,),
+      height: 20.0,
+      width: 20.0,
+    ),
+    );*/
   }
 
   void showInSnackBar(String value) {
@@ -443,12 +442,12 @@ class _MyLeaveState extends State<MyLeave> {
                                             (snapshot.data[index].withdrawlsts && snapshot.data[index].approverstatus.toString() !='Withdrawn' && snapshot.data[index].approverstatus.toString() !="Rejected" && snapshot.data[index].approverstatus.toString()!="Approved")?
                                               new Expanded(
                                                 child: Padding(
-                                                  padding: const EdgeInsets.fromLTRB(115.0,3.0,0.0,0.0),
+                                                  padding: const EdgeInsets.fromLTRB(0.0,0.0,0.0,0.0),
                                                   child: Container (
                             //                   color:Colors.yellow,
                                                    height: MediaQuery .of(context).size.height * 0.04,
-                                                   //margin: EdgeInsets.only(left:40.0),
-                                                   //padding: EdgeInsets.only(left:40.0),
+                                                   margin: EdgeInsets.only(left:40.0),
+                                                   padding: EdgeInsets.only(left:60.0),
                                                    width: MediaQuery .of(context).size.width * 0.30,
                                                    child: new OutlineButton(
                                                       onPressed: () {
