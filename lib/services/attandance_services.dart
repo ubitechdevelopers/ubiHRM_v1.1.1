@@ -1422,15 +1422,14 @@ List<Map> createLocList(List data) {
   return list;
 }
 
-
-addHoliday(String name,String from,String to,String description,String div,String loc) async {
+addHoliday(String name,String from,String to,String description,String orAndsts,String div,String loc) async {
   try {
     final prefs = await SharedPreferences.getInstance();
     String empid = prefs.getString('empid') ?? '';
     String orgdir = prefs.getString('orgdir') ?? '';
     Dio dio = new Dio();
-    print(path_ubiattendance+'addHoliday?name=$name&from=$from&to=$to&description=$description&div=$div&loc=$loc&empid=$empid&orgdir=$orgdir');
-    Response response = await dio.post(path_ubiattendance+'addHoliday?name=$name&from=$from&to=$to&description=$description&div=$div&loc=$loc&empid=$empid&orgdir=$orgdir');
+    print(path_ubiattendance+'addHoliday?name=$name&from=$from&to=$to&description=$description&div=$div&orandsts=$orAndsts&loc=$loc&empid=$empid&orgdir=$orgdir');
+    Response response = await dio.post(path_ubiattendance+'addHoliday?name=$name&from=$from&to=$to&description=$description&div=$div&orandsts=$orAndsts&loc=$loc&empid=$empid&orgdir=$orgdir');
     print("response");
     print(response.data.toString());
     final statusMap = response.data.toString();
@@ -1446,6 +1445,7 @@ addHoliday(String name,String from,String to,String description,String div,Strin
     print("Exception" + e.toString());
   }
 }
+
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 /////////////////////////Holoday CODE ENDS HERE////////////////////////

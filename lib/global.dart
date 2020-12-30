@@ -93,6 +93,7 @@ int areaId=0;
 var orgCreatedDate='0000-00-00';
 String geoFenceOrgPerm="0";//Geo Fence org permission
 String mailVerifySts="0";//Geo Fence org permission
+String grpCompanySts="0";//Geo Fence org permission
 String fenceAreaSts="0";
 String areaSts='';
 String assignedAreaIds = "";

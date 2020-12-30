@@ -61,6 +61,9 @@ class _ViewEmployeeState extends State<ViewEmployee> {
   var profileimage;
   bool showtabbar;
   String orgName="";
+  int hrsts=0;
+  int adminsts=0;
+  int divhrsts=0;
 
   @override
   void initState() {
@@ -84,6 +87,9 @@ class _ViewEmployeeState extends State<ViewEmployee> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
+      hrsts =prefs.getInt('hrsts')??0;
+      adminsts =prefs.getInt('adminsts')??0;
+      divhrsts =prefs.getInt('divhrsts')??0;
     });
   }
 
@@ -145,7 +151,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                         padding: const EdgeInsets.only(left:8.0, right:8.0),
                         child: Column(
                           children: <Widget>[
-                            widget.profiletype=='Admin'?new InkWell(
+                            (adminsts==1||hrsts==1||divhrsts==1)?new InkWell(
                               child: Padding(
                                 padding: const EdgeInsets.all(0.0),
                                 child: Align(

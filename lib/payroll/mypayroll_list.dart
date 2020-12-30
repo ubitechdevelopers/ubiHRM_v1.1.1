@@ -245,8 +245,8 @@ class _PayrollSummary extends State<PayrollSummary> {
                                                     onPressed: () async{
                                                       final prefs = await SharedPreferences.getInstance();
                                                       //String path1 = prefs.getString('path');
-                                                      print(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid+"/"+globalogrperminfomap['groupcompaniessts']);
-                                                      launchMap(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid+"/"+globalogrperminfomap['groupcompaniessts']);
+                                                      print(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid+"/"+grpCompanySts);
+                                                      launchMap(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid+"/"+grpCompanySts);
                                                     },
                                                     child: new Icon(
                                                       Icons.print,

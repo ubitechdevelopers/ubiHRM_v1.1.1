@@ -87,7 +87,7 @@ class _GeofenceState extends State<Geofence> {
             children: [
               Center(
                   child: Text(
-                    'Geofence',
+                    'Geo Fence',
                     style: TextStyle(
                       fontSize: 22.0,
                       color: appStartColor(),
@@ -278,6 +278,17 @@ class _GeofenceState extends State<Geofence> {
           showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Geofence update successfully.'),
+          )
+          );
+          getGeofenceWidget();
+          setState(() {
+            _isButtonDisabled=false;
+          });
+        }else if(sts.contains("-2")){
+          Navigator.of(context, rootNavigator: true).pop('dialog');
+          showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text("Employees assigned to this departement therefore can't be updated"),
           )
           );
           getGeofenceWidget();

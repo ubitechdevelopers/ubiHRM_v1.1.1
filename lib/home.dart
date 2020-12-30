@@ -205,10 +205,27 @@ class _HomePageStatemain extends State<HomePageMain> {
                 children: <Widget>[
                   RaisedButton(
                     child: Text(
-                      'Verify', style: TextStyle(color: Colors.white),),
+                      'VERIFY', style: TextStyle(color: Colors.white),),
                     color: Colors.orange[800],
                     onPressed: () {
-                      verification(organization, name, email);
+                      verification(organization, name, email).then((result) {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context, child:
+                        new AlertDialog(
+                          title: new Text("Mail verification link has been sent on your registered mail id, by clicking on sent verification link you can verify you mail id",
+                            style: TextStyle(fontSize: 16.0),),
+                          content: RaisedButton(
+                            child: Text('Open Mail', style: TextStyle(color: Colors.white),),
+                            color: Colors.orange[800],
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              openEmailApp(context);
+                            },
+                          ),
+                        )
+                        );
+                      });
                     },
                   ),
                   FlatButton(

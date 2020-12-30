@@ -70,6 +70,30 @@ class _AddHolidayState extends State<AddHoliday> {
     _myDivisions = new List();
   }
 
+  String _radioValue ='1'; //Initial definition of radio button value
+  String choice;
+
+  void radioButtonChanges(String value) {
+    setState(() {
+      _radioValue = value;
+      switch (value) {
+        case '1':
+          print("value1");
+          print(value);
+          choice = value;
+          break;
+        case '2':
+          print("value2");
+          print(value);
+          choice = value;
+          break;
+        default:
+          choice = null;
+      }
+      debugPrint(choice); //Debug the choice in console
+    });
+  }
+
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -159,6 +183,23 @@ class _AddHolidayState extends State<AddHoliday> {
                                   )
                               ),
                             ),
+                            TextFormField(
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.sentences,
+                              controller: _desController,
+                              focusNode: textfourthFocusNode,
+                              decoration: InputDecoration(
+                                  labelText: 'Description',
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.only(bottom:0.0),
+                                    child: Icon(
+                                      Icons.event_note,
+                                      color: Colors.grey,
+                                    ), // icon is 48px widget.
+                                  )
+                              ),
+                              maxLines: 1,
+                            ),
                             Container(
                                     child:DateTimeField(
                                       format: dateFormat,
@@ -195,7 +236,7 @@ class _AddHolidayState extends State<AddHoliday> {
                                       },
                                     ),
                                   ),
-                            SizedBox(height: 5.0,),
+                            //SizedBox(height: 5.0,),
                             Container(
                                     child:DateTimeField(
                                       format: dateFormat,
@@ -230,22 +271,64 @@ class _AddHolidayState extends State<AddHoliday> {
                                     ),
                                   ),
                             SizedBox(height: 5.0,),
-                            TextFormField(
-                              keyboardType: TextInputType.text,
-                              textCapitalization: TextCapitalization.sentences,
-                              controller: _desController,
-                              focusNode: textfourthFocusNode,
-                              decoration: InputDecoration(
-                                  labelText: 'Description',
-                                  prefixIcon: Padding(
-                                    padding: EdgeInsets.only(bottom:0.0),
-                                    child: Icon(
-                                      Icons.event_note,
-                                      color: Colors.grey,
-                                    ), // icon is 48px widget.
-                                  )
-                              ),
-                              maxLines: 1,
+                            //***************************
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 70.0),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Radio(
+                                                value: '1',
+                                                groupValue: _radioValue,
+                                                onChanged: radioButtonChanges,
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              Text("OR"),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 5.0,),
+                                Padding(
+                                  padding: const EdgeInsets.only(right:70.0),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Radio(
+                                                value: '2',
+                                                groupValue: _radioValue,
+                                                onChanged: radioButtonChanges,
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              Text("AND",),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                              ],
                             ),
                             SizedBox(height: 0.5,),
                             getDivision_DD(),
@@ -307,6 +390,7 @@ class _AddHolidayState extends State<AddHoliday> {
                                             _fromController.text.trim(),
                                             _toController.text.trim(),
                                             _desController.text.trim(),
+                                            _radioValue,
                                             _myDivisionIds,
                                             _myLocationIds,
                                         );

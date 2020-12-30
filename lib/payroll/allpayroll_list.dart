@@ -2,13 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/drawer.dart';
 import 'package:ubihrm/global.dart';
+import 'package:ubihrm/home.dart';
 import 'package:ubihrm/model/model.dart';
+import 'package:ubihrm/profile.dart';
 import 'package:ubihrm/services/payroll_services.dart';
+import 'package:ubihrm/services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // This app is a stateful, it tracks the user's current choice.
@@ -110,7 +114,7 @@ class _allPayrollSummary extends State<allPayrollSummary> {
       key: _scaffoldKey,
       backgroundColor:scaffoldBackColor(),
       endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
+      appBar: new AllPayrollAppHeader(profileimage,showtabbar,orgName),
       bottomNavigationBar:  new HomeNavigation(),
       body:getMarkAttendanceWidgit(),
     );
@@ -125,7 +129,7 @@ class _allPayrollSummary extends State<allPayrollSummary> {
             margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
             //width: MediaQuery.of(context).size.width*0.9,
-            //     height:MediaQuery.of(context).size.height*0.75,
+            //height:MediaQuery.of(context).size.height*0.75,
             decoration: new ShapeDecoration(
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
               color: Colors.white,
@@ -141,7 +145,7 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                   SizedBox(height: 5.0,),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-//            crossAxisAlignment: CrossAxisAlignment.start,
+                    //crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(height: 10.0,),
                       new Expanded(
@@ -246,8 +250,8 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                                                     onPressed: () async{
                                                       final prefs = await SharedPreferences.getInstance();
                                                       //String path1 = prefs.getString('path');
-                                                      print(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid+"/"+globalogrperminfomap['groupcompaniessts']);
-                                                      launchMap(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid+"/"+globalogrperminfomap['groupcompaniessts']);
+                                                      print(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid+"/"+grpCompanySts);
+                                                      launchMap(path+"viewpayrollslip/"+snapshot.data[index].id.toString()+"/1/"+orgdir+"/"+empid+"/"+grpCompanySts);
                                                     },
                                                     child: new Icon(
                                                       Icons.print,
@@ -295,7 +299,6 @@ class _allPayrollSummary extends State<allPayrollSummary> {
     );
   }
 
-
   launchMap(String url) async{
     if (await canLaunch(url)) {
       await launch(url);
@@ -313,3 +316,80 @@ class _allPayrollSummary extends State<allPayrollSummary> {
 /////////////////////futere method dor getting today's punched liist-close
 }
 
+class AllPayrollAppHeader extends StatelessWidget implements PreferredSizeWidget {
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+  AllPayrollAppHeader(profileimage1,showtabbar1,orgname1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+    };
+    showtabbar= showtabbar1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+                );
+              },),
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(orgname, overflow: TextOverflow.ellipsis,)
+              ),
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
+
+}

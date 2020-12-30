@@ -134,6 +134,9 @@ getProfileInfo(Employee emp, BuildContext context) async{
       orgCreatedDate=globalogrperminfomap['createddate'];
       print("orgCreatedDate");
       print(orgCreatedDate);
+      grpCompanySts=globalogrperminfomap['groupcompaniessts'];
+      print("grpCompanySts");
+      print(grpCompanySts);
       mailVerifySts=globalogrperminfomap['mailverifiedsts'];
       print("mailVerifySts");
       print(mailVerifySts);

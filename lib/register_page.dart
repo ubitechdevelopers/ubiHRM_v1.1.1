@@ -625,7 +625,17 @@ class _RegisterState extends State<Register> {
                                             hintStyle: TextStyle(
                                                 fontSize: 14.0),
                                           ),
-                                          validator: validateEmail
+                                          //validator: validateEmail
+                                        validator: (value) {
+                                          if (value.isEmpty || value==null ) {
+                                            return 'Please enter email';
+                                          }
+
+                                          Pattern pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                          RegExp regex = new RegExp(pattern);
+                                          if (!regex.hasMatch(value))
+                                            return 'Enter valid email';
+                                        },
                                       ),
                                     ),
                                   ),
@@ -853,9 +863,9 @@ class _RegisterState extends State<Register> {
                                         ),
                                         validator: (value) {
                                           if (value.isEmpty || value==null ) {
-                                            // FocusScope.of(context).requestFocus(__newPass);
                                             return 'Please enter password';
                                           }
+
                                           if(value.length<6)
                                           {
                                             return 'Password must contain at least 6 characters';
@@ -898,11 +908,11 @@ class _RegisterState extends State<Register> {
                                           hintStyle: TextStyle(
                                               fontSize: 14.0),
                                         ),
-                                        /*validator: (value) {
+                                        validator: (value) {
                                           if (value.isEmpty) {
-                                            return 'Please enter city name';
+                                            return "Please enter no. of employees";
                                           }
-                                        },*/
+                                        },
                                       ),
                                     ),
                                   ),
@@ -1118,7 +1128,7 @@ class _RegisterState extends State<Register> {
                                     child: Padding(
                                       padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 22.0, right: 25.0),
                                       child: TextFormField(
-                                        maxLines: 2,
+                                        //maxLines: 2,
                                         focusNode: myFocusNodeReq,
                                         controller: signupReqController,
                                         keyboardType: TextInputType.text,
@@ -1377,6 +1387,21 @@ class _RegisterState extends State<Register> {
       return 'Enter valid email';
     else
       return null;
+  }
+
+  String validatePassword(String value) {
+    Pattern pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    RegExp regex = new RegExp(pattern);
+    print(value);
+    if (value.isEmpty) {
+      return 'Please enter password';
+    } else {
+      if (!regex.hasMatch(value))
+        return 'Enter valid password';
+      else
+        return null;
+    }
   }
 
   _getCurrentLocation() {
