@@ -56,6 +56,16 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
     });
   }
 
+  static const rowSpacer=TableRow(
+      children: [
+        SizedBox(
+          height: 0,
+        ),
+        SizedBox(
+          height: 0,
+        )
+      ]);
+
   @override
   void initState() {
     super.initState();
@@ -844,10 +854,10 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                   Table(
                                                                     defaultVerticalAlignment: TableCellVerticalAlignment.top,
                                                                     columnWidths: {
-                                                                      0: FlexColumnWidth(55),
+                                                                      0: FlexColumnWidth(45),
                                                                       // 0: FlexColumnWidth(4.501), // - is ok
                                                                       // 0: FlexColumnWidth(4.499), //- ok as well
-                                                                      1: FlexColumnWidth(25),
+                                                                      1: FlexColumnWidth(35),
                                                                     },
                                                                     children: [
                                                                       TableRow(
@@ -856,7 +866,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                               child: Row(
                                                                                 children: <Widget>[
                                                                                   new Text(
-                                                                                    'Shift Hours:',
+                                                                                    'Status',
                                                                                     style: TextStyle(
                                                                                         color: Colors
                                                                                             .black87,
@@ -873,166 +883,17 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                                 children: <Widget>[
                                                                                   Expanded(
                                                                                     child: Text(
-                                                                                      snapshot.data[index]
-                                                                                          .ShiftTime.toString(),
-                                                                                      style: TextStyle(
-                                                                                          color: Colors
-                                                                                              .black87,
-                                                                                          fontSize: 15.0,
-                                                                                          fontWeight: FontWeight
-                                                                                              .w400
-                                                                                      ),
-                                                                                    ),
-                                                                                  )
-                                                                                ],
-                                                                              ),
-                                                                            )
-                                                                          ]
-                                                                      ),
-                                                                      TableRow(
-                                                                          children: [
-                                                                            TableCell(
-                                                                              child: Row(
-                                                                                children: <Widget>[
-                                                                                  new Text(
-                                                                                    'Break Hours:',
-                                                                                    style: TextStyle(
-                                                                                        color: Colors
-                                                                                            .black87,
-                                                                                        fontSize: 15.0,
-                                                                                        fontWeight: FontWeight
-                                                                                            .bold
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                            TableCell(
-                                                                              child: Row(
-                                                                                children: <Widget>[
-                                                                                  Expanded(
-                                                                                    child: Text(
-                                                                                      snapshot.data[index]
-                                                                                          .BreakTime.toString(),
-                                                                                      style: TextStyle(
-                                                                                          color: Colors
-                                                                                              .black87,
-                                                                                          fontSize: 15.0,
-                                                                                          fontWeight: FontWeight
-                                                                                              .w400
-                                                                                      ),
-                                                                                    ),
-                                                                                  )
-                                                                                ],
-                                                                              ),
-                                                                            )
-                                                                          ]
-                                                                      ),
-                                                                      TableRow(
-                                                                          children: [
-                                                                            TableCell(
-                                                                              child: Row(
-                                                                                children: <Widget>[
-                                                                                  new Text(
-                                                                                    'Time Off Hours:',
-                                                                                    style: TextStyle(
-                                                                                        color: Colors
-                                                                                            .black87,
-                                                                                        fontSize: 15.0,
-                                                                                        fontWeight: FontWeight
-                                                                                            .bold
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                            TableCell(
-                                                                              child: Row(
-                                                                                children: <Widget>[
-                                                                                  Expanded(
-                                                                                    child: Text(
-                                                                                      snapshot.data[index]
-                                                                                          .TimeOffTime.toString(),
-                                                                                      style: TextStyle(
-                                                                                          color: Colors
-                                                                                              .black87,
-                                                                                          fontSize: 15.0,
-                                                                                          fontWeight: FontWeight
-                                                                                              .w400
-                                                                                      ),
-                                                                                    ),
-                                                                                  )
-                                                                                ],
-                                                                              ),
-                                                                            )
-                                                                          ]
-                                                                      ),
-                                                                      TableRow(
-                                                                          children: [
-                                                                            TableCell(
-                                                                              child: Row(
-                                                                                children: <Widget>[
-                                                                                  new Text(
-                                                                                    'Working Hours:',
-                                                                                    style: TextStyle(
-                                                                                        color: Colors
-                                                                                            .black87,
-                                                                                        fontSize: 15.0,
-                                                                                        fontWeight: FontWeight
-                                                                                            .bold
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                            TableCell(
-                                                                              child: Row(
-                                                                                children: <Widget>[
-                                                                                  Expanded(
-                                                                                    child: Text(
-                                                                                      snapshot.data[index]
-                                                                                          .TotalTime
-                                                                                          .toString(),
-                                                                                      style: TextStyle(
-                                                                                          color: Colors
-                                                                                              .black87,
-                                                                                          fontSize: 15.0,
-                                                                                          fontWeight: FontWeight
-                                                                                              .w400
-                                                                                      ),
-                                                                                    ),
-                                                                                  )
-                                                                                ],
-                                                                              ),
-                                                                            )
-                                                                          ]
-                                                                      ),
-                                                                      TableRow(
-                                                                          children: [
-                                                                            TableCell(
-                                                                              child: Row(
-                                                                                children: <Widget>[
-                                                                                  new Text(
-                                                                                    'Status:',
-                                                                                    style: TextStyle(
-                                                                                        color: Colors
-                                                                                            .black87,
-                                                                                        fontSize: 15.0,
-                                                                                        fontWeight: FontWeight
-                                                                                            .bold
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                            TableCell(
-                                                                              child: Row(
-                                                                                children: <Widget>[
-                                                                                  Expanded(
-                                                                                    child: Text(
-                                                                                      snapshot.data[index]
-                                                                                          .AttSts
-                                                                                          .toString(),
+                                                                                      snapshot.data[index].AttSts=='P'?"Present":
+                                                                                      snapshot.data[index].AttSts=='A'?"Absent":
+                                                                                      snapshot.data[index].AttSts=='W'?"Week Off":
+                                                                                      snapshot.data[index].AttSts=='HD'?"Half Day":
+                                                                                      snapshot.data[index].AttSts=='H'?"Holiday":
+                                                                                      snapshot.data[index].AttSts=='L'?"Leave":
+                                                                                      snapshot.data[index].AttSts=='CO'?"Comp Off":
+                                                                                      snapshot.data[index].AttSts=='WFH'?"Work From Home":
+                                                                                      snapshot.data[index].AttSts=='UL'?"Unpaid Leave":
+                                                                                      snapshot.data[index].AttSts=='HDU'?"Half Day - Unpaid":
+                                                                                      snapshot.data[index].AttSts=='PW'?"Present on Week Off":"-",
                                                                                       style: TextStyle(
                                                                                           color: snapshot.data[index].AttSts=='P'?Colors.blueAccent:
                                                                                           snapshot.data[index].AttSts=='A'?Colors.red:
@@ -1062,7 +923,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                               child: Row(
                                                                                 children: <Widget>[
                                                                                   new Text(
-                                                                                    'Time In:',
+                                                                                    'Time In',
                                                                                     style: TextStyle(
                                                                                         color: Colors
                                                                                             .black87,
@@ -1102,7 +963,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                               child: Row(
                                                                                 children: <Widget>[
                                                                                   new Text(
-                                                                                    'Time Out:',
+                                                                                    'Time Out',
                                                                                     style: TextStyle(
                                                                                         color: Colors
                                                                                             .black87,
@@ -1142,7 +1003,47 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                               child: Row(
                                                                                 children: <Widget>[
                                                                                   new Text(
-                                                                                    'Late Coming By:',
+                                                                                    'Logged Hours',
+                                                                                    style: TextStyle(
+                                                                                        color: Colors
+                                                                                            .black87,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight
+                                                                                            .bold
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      snapshot.data[index]
+                                                                                          .TotalTime
+                                                                                          .toString(),
+                                                                                      style: TextStyle(
+                                                                                          color: Colors
+                                                                                              .black87,
+                                                                                          fontSize: 15.0,
+                                                                                          fontWeight: FontWeight
+                                                                                              .w400
+                                                                                      ),
+                                                                                    ),
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            )
+                                                                          ]
+                                                                      ),
+                                                                      TableRow(
+                                                                          children: [
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  new Text(
+                                                                                    'Late By',
                                                                                     style: TextStyle(
                                                                                         color: Colors
                                                                                             .black87,
@@ -1182,7 +1083,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                               child: Row(
                                                                                 children: <Widget>[
                                                                                   new Text(
-                                                                                    'Early Leaving By:',
+                                                                                    'Early Leaving By',
                                                                                     style: TextStyle(
                                                                                         color: Colors
                                                                                             .black87,
@@ -1262,7 +1163,7 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                               child: Row(
                                                                                 children: <Widget>[
                                                                                   new Text(
-                                                                                    'Device:',
+                                                                                    'Time In Device',
                                                                                     style: TextStyle(
                                                                                         color: Colors
                                                                                             .black87,
@@ -1296,6 +1197,166 @@ class _EmployeeWise_att extends State<EmployeeWise_att> with SingleTickerProvide
                                                                             )
                                                                           ]
                                                                       ),
+                                                                      snapshot.data[index]
+                                                                          .DeviceTimeOut
+                                                                          .toString()!=""?TableRow(
+                                                                          children: [
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  new Text(
+                                                                                    'Time Out Device',
+                                                                                    style: TextStyle(
+                                                                                        color: Colors
+                                                                                            .black87,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight
+                                                                                            .bold
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      snapshot.data[index]
+                                                                                          .DeviceTimeOut
+                                                                                          .toString(),
+                                                                                      style: TextStyle(
+                                                                                          color: Colors
+                                                                                              .black87,
+                                                                                          fontSize: 15.0,
+                                                                                          fontWeight: FontWeight
+                                                                                              .w400
+                                                                                      ),
+                                                                                    ),
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            )
+                                                                          ]
+                                                                      ):rowSpacer,
+                                                                      snapshot.data[index]
+                                                                          .TimeOffTime.toString()!=""?TableRow(
+                                                                          children: [
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  new Text(
+                                                                                    'Time Off Hours',
+                                                                                    style: TextStyle(
+                                                                                        color: Colors
+                                                                                            .black87,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight
+                                                                                            .bold
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      snapshot.data[index]
+                                                                                          .TimeOffTime.toString(),
+                                                                                      style: TextStyle(
+                                                                                          color: Colors
+                                                                                              .black87,
+                                                                                          fontSize: 15.0,
+                                                                                          fontWeight: FontWeight
+                                                                                              .w400
+                                                                                      ),
+                                                                                    ),
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            )
+                                                                          ]
+                                                                      ):rowSpacer,
+                                                                      /*TableRow(
+                                                                          children: [
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  new Text(
+                                                                                    'Shift Hours:',
+                                                                                    style: TextStyle(
+                                                                                        color: Colors
+                                                                                            .black87,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight
+                                                                                            .bold
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      snapshot.data[index]
+                                                                                          .ShiftTime.toString(),
+                                                                                      style: TextStyle(
+                                                                                          color: Colors
+                                                                                              .black87,
+                                                                                          fontSize: 15.0,
+                                                                                          fontWeight: FontWeight
+                                                                                              .w400
+                                                                                      ),
+                                                                                    ),
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            )
+                                                                          ]
+                                                                      ),
+                                                                      TableRow(
+                                                                          children: [
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  new Text(
+                                                                                    'Break Hours:',
+                                                                                    style: TextStyle(
+                                                                                        color: Colors
+                                                                                            .black87,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight
+                                                                                            .bold
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            TableCell(
+                                                                              child: Row(
+                                                                                children: <Widget>[
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      snapshot.data[index]
+                                                                                          .BreakTime.toString(),
+                                                                                      style: TextStyle(
+                                                                                          color: Colors
+                                                                                              .black87,
+                                                                                          fontSize: 15.0,
+                                                                                          fontWeight: FontWeight
+                                                                                              .w400
+                                                                                      ),
+                                                                                    ),
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            )
+                                                                          ]
+                                                                      ),*/
                                                                     ],
                                                                   ),
 

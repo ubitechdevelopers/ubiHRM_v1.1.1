@@ -3,6 +3,7 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/drawer.dart';
 import 'package:ubihrm/edit_employee.dart';
@@ -64,6 +65,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
   int hrsts=0;
   int adminsts=0;
   int divhrsts=0;
+  bool _checkLoaded = true;
 
   @override
   void initState() {
@@ -113,7 +115,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
           key: _scaffoldKey,
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
-          appBar: new ViewEmpAppHeader(profileimage,showtabbar,orgName),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:  new HomeNavigation(),
           body: ModalProgressHUD(
               inAsyncCall: isServiceCalling,
@@ -156,10 +158,13 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                 padding: const EdgeInsets.all(0.0),
                                 child: Align(
                                   alignment: Alignment.centerRight,
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.blue,
-                                    size: 26.0,
+                                  child: Tooltip(
+                                    message: 'Edit',
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Colors.blue,
+                                      size: 26.0,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -200,24 +205,45 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                       image: new DecorationImage(
                                           fit: BoxFit
                                               .fill,
-                                          image:
-                                          NetworkImage(widget.profileimg)
+                                          image: _checkLoaded ? AssetImage('assets/default.png') : NetworkImage(widget.profileimg)
                                       )
                                   )
                               ),
                             ),
-                            SizedBox(
-                                height: 10.0),
-                            new Text(
-                              widget.fname+" "+widget.lname,
-                              style: TextStyle(
-                                  color: Colors
-                                      .black87,
-                                  fontSize: 20.0,
-                                fontWeight: FontWeight.bold
-                              ),
+                            SizedBox(height: 10.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                new Text(
+                                  widget.fname+" "+widget.lname,
+                                  style: TextStyle(
+                                      color: Colors
+                                          .black87,
+                                      fontSize: 20.0,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                new Text(
+                                  " ("+widget.profiletype+")",
+                                  style: TextStyle(
+                                      color: appStartColor(),
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(height: 20,),
+                            Row(
+                              children: <Widget>[
+                                new Text("COMPANY DETAILS",
+                                  //textAlign: TextAlign.center,
+                                  style: new TextStyle(fontWeight: FontWeight.bold, fontSize:16.0, color:Colors.black/*color: appStartColor()*/ ),
+                                ),
+                                //Spacer()
+                              ],
+                            ),
+                            Divider(),
                             Table(
                               defaultVerticalAlignment: TableCellVerticalAlignment.top,
                               columnWidths: {
@@ -236,7 +262,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             new Text(
-                                              globallabelinfomap['emp_code']+':',
+                                              globallabelinfomap['emp_code'],
                                               style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -274,343 +300,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             new Text(
-                                              globallabelinfomap['dob']+':',
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .black87,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight
-                                                      .w600
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            Expanded(
-                                              child: Text(
-                                                widget.dob!='null'?widget.dob:"",
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ]
-                                ),
-                                rowSpacer,
-                                TableRow(
-                                    children: [
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            new Text(
-                                              globallabelinfomap['nationality']+':',
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .black87,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight
-                                                      .w600
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            Expanded(
-                                              child: Text(
-                                                widget.nationality!='null'?widget.nationality:"",
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ]
-                                ),
-                                rowSpacer,
-                                TableRow(
-                                    children: [
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            new Text(
-                                              globallabelinfomap['maritalsts']+':',
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .black87,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight
-                                                      .w600
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            Expanded(
-                                              child: Text(
-                                                widget.maritalsts!='null'?widget.maritalsts:"",
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ]
-                                ),
-                                rowSpacer,
-                                TableRow(
-                                    children: [
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            new Text(
-                                        globallabelinfomap['religion']+':',
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .black87,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight
-                                                      .w600
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            Expanded(
-                                              child: Text(
-                                                widget.religion!='null'?widget.religion:"",
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ]
-                                ),
-                                rowSpacer,
-                                TableRow(
-                                    children: [
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            new Text(
-                                        globallabelinfomap['bloodg']+':',
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .black87,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight
-                                                      .w600
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            Expanded(
-                                              child: Text(
-                                                widget.bloodg!='null'?widget.bloodg:"",
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ]
-                                ),
-                                rowSpacer,
-                                TableRow(
-                                    children: [
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            new Text(
-                                          globallabelinfomap['doc']+':',
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .black87,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight
-                                                      .w600
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            Expanded(
-                                              child: Text(
-                                                widget.doc!='null'?widget.doc:"",
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ]
-                                ),
-                                rowSpacer,
-                                TableRow(
-                                    children: [
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            new Text(
-                                              globallabelinfomap['gender']+':',
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .black87,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight
-                                                      .w600
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            Expanded(
-                                              child: Text(
-                                                widget.gender!='null'?widget.gender:"",
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                ),
-                                              ),
-                                            ),
-
-                                          ],
-                                        ),
-                                      )
-                                    ]
-                                ),
-                                rowSpacer,
-                                TableRow(
-                                    children: [
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            new Text(
-                                              globallabelinfomap['reporting_to']+':',
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .black87,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight
-                                                      .w600
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            Expanded(
-                                              child: Text(
-                                                widget.reportingto!='null'?widget.reportingto:"",
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                ),
-                                              ),
-                                            ),
-
-                                          ],
-                                        ),
-                                      )
-                                    ]
-                                ),
-                                rowSpacer,
-                                TableRow(
-                                    children: [
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            new Text(
-                                              globallabelinfomap['division']+':',
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .black87,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight
-                                                      .w600
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            Expanded(
-                                              child: Text(
-                                                widget.div!='null'?widget.div:"",
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                ),
-                                              ),
-                                            ),
-
-                                          ],
-                                        ),
-                                      )
-                                    ]
-                                ),
-                                rowSpacer,
-                                TableRow(
-                                    children: [
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            new Text(
-                                              globallabelinfomap['depart']+':',
+                                              globallabelinfomap['depart'],
                                               style: TextStyle(
                                                 color: Colors
                                                     .black87,
@@ -630,9 +320,9 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               child: Text(
                                                 widget.dept!='null'?widget.dept:"",
                                                 style: TextStyle(
-                                                    color: Colors
-                                                        .black87,
-                                                    fontSize: 15.0,
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
                                                 ),
                                               ),
                                             )
@@ -649,7 +339,45 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             new Text(
-                                              globallabelinfomap['desig']+':',
+                                              globallabelinfomap['division'],
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight
+                                                      .w600
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            Expanded(
+                                              child: Text(
+                                                widget.div!='null'?widget.div:"",
+                                                style: TextStyle(
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
+                                      )
+                                    ]
+                                ),
+                                rowSpacer,
+                                TableRow(
+                                    children: [
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            new Text(
+                                              globallabelinfomap['desig'],
                                               style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -669,9 +397,9 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               child: Text(
                                                 widget.desg!='null'?widget.desg:"",
                                                 style: TextStyle(
-                                                    color: Colors
-                                                        .black87,
-                                                    fontSize: 15.0,
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
                                                 ),
                                               ),
                                             )
@@ -688,7 +416,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             new Text(
-                                              globallabelinfomap['location']+':',
+                                              globallabelinfomap['location'],
                                               style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -708,7 +436,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               child: Text(
                                                 widget.loc!='null'?widget.loc:"",
                                                 style: TextStyle(
-                                                    fontSize: 15.0,
+                                                  fontSize: 15.0,
                                                 ),
                                               ),
                                             ),
@@ -726,45 +454,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             new Text(
-                                              globallabelinfomap['shift']+':',
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .black87,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight
-                                                      .w600
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            Expanded(
-                                              child: Text(widget.shift!='null'?widget.shift:"",
-                                                style: TextStyle(
-                                                    color: Colors
-                                                        .black87,
-                                                    fontSize: 15.0,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ]
-                                ),
-                                rowSpacer,
-                                TableRow(
-                                    children: [
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            new Text(
-                                              globallabelinfomap['empsts']+':',
+                                              globallabelinfomap['empsts'],
                                               style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -784,45 +474,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               child: Text(
                                                 widget.empsts!='null'?widget.empsts:"",
                                                 style: TextStyle(
-                                                    fontSize: 15.0,
-                                                ),
-                                              ),
-                                            ),
-
-                                          ],
-                                        ),
-                                      )
-                                    ]
-                                ),
-                                rowSpacer,
-                                TableRow(
-                                    children: [
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            new Text(
-                                              globallabelinfomap['grade']+':',
-                                              style: TextStyle(
-                                                  color: Colors
-                                                      .black87,
                                                   fontSize: 15.0,
-                                                  fontWeight: FontWeight
-                                                      .w600
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      TableCell(
-                                        child: Row(
-                                          children: <
-                                              Widget>[
-                                            Expanded(
-                                              child: Text(
-                                                widget.grade!='null'?widget.grade:"",
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
                                                 ),
                                               ),
                                             ),
@@ -839,7 +491,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             new Text(
-                                              globallabelinfomap['emptype']+':',
+                                              globallabelinfomap['emptype'],
                                               style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -859,7 +511,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               child: Text(
                                                 widget.emptype!='null'?widget.emptype:"",
                                                 style: TextStyle(
-                                                    fontSize: 15.0,
+                                                  fontSize: 15.0,
                                                 ),
                                               ),
                                             ),
@@ -876,7 +528,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             new Text(
-                                              globallabelinfomap['current_email_id']+':',
+                                              globallabelinfomap['current_email_id'],
                                               style: TextStyle(
                                                 color: Colors
                                                     .black87,
@@ -896,9 +548,9 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               child: Text(
                                                 widget.email!='null'?widget.email:"",
                                                 style: TextStyle(
-                                                    color: Colors
-                                                        .black87,
-                                                    fontSize: 15.0,
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
                                                 ),
                                               ),
                                             )
@@ -915,7 +567,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             new Text(
-                                              globallabelinfomap['personal_no']+':',
+                                              globallabelinfomap['grade'],
                                               style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -933,11 +585,47 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.phone!='null'?widget.phone:"",
+                                                widget.grade!='null'?widget.grade:"",
                                                 style: TextStyle(
-                                                    color: Colors
-                                                        .black87,
-                                                    fontSize: 15.0,
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ]
+                                ),
+                                rowSpacer,
+                                TableRow(
+                                    children: [
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            new Text(
+                                              globallabelinfomap['shift'],
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight
+                                                      .w600
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            Expanded(
+                                              child: Text(widget.shift!='null'?widget.shift:"",
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
                                                 ),
                                               ),
                                             )
@@ -954,7 +642,69 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             new Text(
-                                              globallabelinfomap['fathername']+':',
+                                              globallabelinfomap['reporting_to'],
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight
+                                                      .w600
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            Expanded(
+                                              child: Text(
+                                                widget.reportingto!='null'?widget.reportingto:"",
+                                                style: TextStyle(
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
+                                      )
+                                    ]
+                                ),
+                                rowSpacer
+                              ],
+                            ),
+                            SizedBox(height: 20,),
+                            Row(
+                              children: <Widget>[
+                                new Text("PERSONAL DETAILS",
+                                  //textAlign: TextAlign.center,
+                                  style: new TextStyle(fontWeight: FontWeight.bold, fontSize:16.0, color:Colors.black/*color: appStartColor()*/ ),
+                                ),
+                                //Spacer()
+                              ],
+                            ),
+                            Divider(),
+                            Table(
+                              defaultVerticalAlignment: TableCellVerticalAlignment.top,
+                              columnWidths: {
+                                0: FlexColumnWidth(
+                                    5),
+                                // 0: FlexColumnWidth(4.501), // - is ok
+                                // 0: FlexColumnWidth(4.499), //- ok as well
+                                1: FlexColumnWidth(
+                                    5),
+                              },
+                              children: [
+                                TableRow(
+                                    children: [
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            new Text(
+                                              globallabelinfomap['fathername'],
                                               style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -974,7 +724,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               child: Text(
                                                 widget.father!='null'?widget.father:"",
                                                 style: TextStyle(
-                                                    fontSize: 15.0,
+                                                  fontSize: 15.0,
                                                 ),
                                               ),
                                             ),
@@ -991,7 +741,230 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             new Text(
-                                              globallabelinfomap['doj']+':',
+                                              globallabelinfomap['maritalsts'],
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight
+                                                      .w600
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            Expanded(
+                                              child: Text(
+                                                widget.maritalsts!='null'?widget.maritalsts:"",
+                                                style: TextStyle(
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ]
+                                ),
+                                rowSpacer,
+                                TableRow(
+                                    children: [
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            new Text(
+                                              globallabelinfomap['dob'],
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight
+                                                      .w600
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            Expanded(
+                                              child: Text(
+                                                widget.dob!='null'?widget.dob:"",
+                                                style: TextStyle(
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ]
+                                ),
+                                rowSpacer,
+                                TableRow(
+                                    children: [
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            new Text(
+                                              globallabelinfomap['bloodg'],
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight
+                                                      .w600
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            Expanded(
+                                              child: Text(
+                                                widget.bloodg!='null'?widget.bloodg:"",
+                                                style: TextStyle(
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ]
+                                ),
+                                rowSpacer,
+                                TableRow(
+                                    children: [
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            new Text(
+                                              globallabelinfomap['gender'],
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight
+                                                      .w600
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            Expanded(
+                                              child: Text(
+                                                widget.gender!='null'?widget.gender:"",
+                                                style: TextStyle(
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
+                                      )
+                                    ]
+                                ),
+                                rowSpacer,
+                                TableRow(
+                                    children: [
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            new Text(
+                                              globallabelinfomap['nationality'],
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight
+                                                      .w600
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            Expanded(
+                                              child: Text(
+                                                widget.nationality!='null'?widget.nationality:"",
+                                                style: TextStyle(
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ]
+                                ),
+                                rowSpacer,
+                                TableRow(
+                                    children: [
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            new Text(
+                                              globallabelinfomap['religion'],
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight
+                                                      .w600
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            Expanded(
+                                              child: Text(
+                                                widget.religion!='null'?widget.religion:"",
+                                                style: TextStyle(
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ]
+                                ),
+                                rowSpacer,
+                                TableRow(
+                                    children: [
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            new Text(
+                                              globallabelinfomap['doj'],
                                               style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -1011,7 +984,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               child: Text(
                                                 widget.doj!='null'?widget.doj:"",
                                                 style: TextStyle(
-                                                    fontSize: 15.0,
+                                                  fontSize: 15.0,
                                                 ),
                                               ),
                                             ),
@@ -1028,7 +1001,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             new Text(
-                                              'Permissions:',
+                                              globallabelinfomap['doc'],
                                               style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -1045,14 +1018,91 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                           children: <
                                               Widget>[
                                             Expanded(
-                                              child: Text(widget.profiletype,
+                                              child: Text(
+                                                widget.doc!='null'?widget.doc:"",
                                                 style: TextStyle(
-                                                    color: Colors.green,
-                                                    fontSize: 15.0,
+                                                  fontSize: 15.0,
                                                 ),
                                               ),
                                             ),
-
+                                          ],
+                                        ),
+                                      )
+                                    ]
+                                ),
+                                rowSpacer,
+                                TableRow(
+                                    children: [
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            new Text(
+                                              globallabelinfomap['personal_no'],
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight
+                                                      .w600
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            Expanded(
+                                              child: Text(
+                                                widget.phone!='null'?widget.phone:"",
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ]
+                                ),
+                                rowSpacer,
+                                TableRow(
+                                    children: [
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            new Text(
+                                              globallabelinfomap['current_email_id'],
+                                              style: TextStyle(
+                                                color: Colors
+                                                    .black87,
+                                                fontSize: 15.0,
+                                                fontWeight: FontWeight
+                                                    .w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      TableCell(
+                                        child: Row(
+                                          children: <
+                                              Widget>[
+                                            Expanded(
+                                              child: Text(
+                                                widget.email!='null'?widget.email:"",
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .black87,
+                                                  fontSize: 15.0,
+                                                ),
+                                              ),
+                                            )
                                           ],
                                         ),
                                       )
@@ -1060,29 +1110,6 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                 ),
                               ],
                             ),
-
-                            /*widget.profiletype=='Admin'?ButtonBar(
-                              children: <Widget>[
-                                RaisedButton(
-                                  child: isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('Edit',style: TextStyle(color: Colors.white),),
-                                  color: Colors.orange[800],
-                                  onPressed: () async {
-
-                                  },
-                                ),
-                                FlatButton(
-                                  shape: Border.all(color: Colors.orange[800]),
-                                  child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => EmployeeList()),
-                                    );
-                                  },
-                                ),
-
-                              ],
-                            ):Center(),*/
                           ],
                         ),
                       ),
@@ -1092,84 +1119,4 @@ class _ViewEmployeeState extends State<ViewEmployee> {
           ]),
     );
   }
-}
-
-class ViewEmpAppHeader extends StatelessWidget implements PreferredSizeWidget {
-  bool _checkLoadedprofile = true;
-  var profileimage;
-  bool showtabbar;
-  var orgname;
-  ViewEmpAppHeader(profileimage1,showtabbar1,orgname1){
-    profileimage = profileimage1;
-    orgname = orgname1;
-    if (profileimage!=null) {
-      _checkLoadedprofile = false;
-    };
-    showtabbar= showtabbar1;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new GradientAppBar(
-        backgroundColorStart: appStartColor(),
-        backgroundColorEnd: appEndColor(),
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            IconButton(icon:Icon(Icons.arrow_back),
-              onPressed:(){
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => EmployeeList()), (Route<dynamic> route) => false,
-                );
-              },),
-            GestureDetector(
-              // When the child is tapped, show a snackbar
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CollapsingTab()),
-                );
-              },
-              child:Container(
-                  width: 40.0,
-                  height: 40.0,
-                  decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
-                      )
-                  )
-              ),
-            ),
-            Flexible(
-              child: Container(
-                  padding: const EdgeInsets.all(8.0), child: Text(orgname)
-              ),
-            )
-          ],
-        ),
-        bottom:
-        showtabbar==true ? TabBar(
-          unselectedLabelColor: Colors.white70,
-          indicatorColor: Colors.white,
-          isScrollable: true,
-          tabs: choices.map((Choice choice) {
-            return Tab(
-              text: choice.title,
-              //   unselectedLabelColor: Colors.white70,
-              //   indicatorColor: Colors.white,
-              //   icon: Icon(choice.icon),
-            );
-          }).toList(),
-        ):null
-    );
-  }
-  @override
-  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
-
 }

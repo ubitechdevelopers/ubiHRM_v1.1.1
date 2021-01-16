@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:barcode_scan/barcode_scan.dart';
 //import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +11,8 @@ import 'package:rounded_modal/rounded_modal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/register_page.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:ubihrm/services/checkLogin.dart';
 import 'package:ubihrm/services/services.dart';
-import 'package:ubihrm/survey.dart';
-
 import 'global.dart';
 import 'home.dart';
 import 'services/attandance_services.dart';
@@ -327,22 +323,21 @@ class _LoginPageState extends State<LoginPage>
                             ),
 
                             onFieldSubmitted: (String value) {
-
                               if (loginEmailController.text.trim().isNotEmpty && loginPasswordController.text.trim().isNotEmpty) {
                                 checklogin(loginEmailController.text,loginPasswordController.text);
                               }else{
 
                                 if(loginEmailController.text.trim().isEmpty) {
                                   showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        Future.delayed(Duration(seconds: 3), () {
-                                          Navigator.of(context).pop(true);
-                                        });
-                                        return AlertDialog(
-                                            content: new Text("Please enter Email or Phone no."),
-                                        );
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
                                       });
+                                      return AlertDialog(
+                                          content: new Text("Please enter Email or Phone no."),
+                                      );
+                                    });
                                   /*showDialog(context: context, child:
                                   new AlertDialog(
                                     content: new Text("Please enter Email or Phone no."),
@@ -350,15 +345,15 @@ class _LoginPageState extends State<LoginPage>
                                   );*/
                                 }else if(loginPasswordController.text.trim().isEmpty){
                                   showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        Future.delayed(Duration(seconds: 3), () {
-                                          Navigator.of(context).pop(true);
-                                        });
-                                        return AlertDialog(
-                                          content: new Text("Please enter Password."),
-                                        );
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
                                       });
+                                      return AlertDialog(
+                                        content: new Text("Please enter Password"),
+                                      );
+                                    });
                                   /*showDialog(context: context, child:
                                   new AlertDialog(
                                     content: new Text("Please enter Password."),
@@ -432,21 +427,20 @@ class _LoginPageState extends State<LoginPage>
                                 ),
                                 onPressed: () {
                                   if (loginEmailController.text.trim().isNotEmpty && loginPasswordController.text.trim().isNotEmpty) {
-
                                     checklogin(loginEmailController.text.trim(),loginPasswordController.text.trim(),);
                                   }else{
 
                                     if(loginEmailController.text.trim().isEmpty) {
                                       showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            Future.delayed(Duration(seconds: 3), () {
-                                              Navigator.of(context).pop(true);
-                                            });
-                                            return AlertDialog(
-                                              content: new Text("Please enter Email or Phone no."),
-                                            );
+                                        context: context,
+                                        builder: (context) {
+                                          Future.delayed(Duration(seconds: 3), () {
+                                            Navigator.of(context).pop(true);
                                           });
+                                          return AlertDialog(
+                                            content: new Text("Please enter Email or Phone no"),
+                                          );
+                                        });
                                       /*showDialog(context: context, child:
                                       new AlertDialog(
                                         content: new Text("Please enter Email or Phone no."),
@@ -454,15 +448,15 @@ class _LoginPageState extends State<LoginPage>
                                       );*/
                                     }else if(loginPasswordController.text.trim().isEmpty){
                                       showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            Future.delayed(Duration(seconds: 3), () {
-                                              Navigator.of(context).pop(true);
-                                            });
-                                            return AlertDialog(
-                                              content: new Text("Please enter Password."),
-                                            );
+                                        context: context,
+                                        builder: (context) {
+                                          Future.delayed(Duration(seconds: 3), () {
+                                            Navigator.of(context).pop(true);
                                           });
+                                          return AlertDialog(
+                                            content: new Text("Please enter Password"),
+                                          );
+                                        });
                                       /*showDialog(context: context, child:
                                       new AlertDialog(
                                         content: new Text("Please enter Password."),
@@ -548,15 +542,15 @@ class _LoginPageState extends State<LoginPage>
           _isServiceCalling = false;
         });
         showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
-              });
-              return AlertDialog(
-                content: new Text("Your trial period has expired!"),
-              );
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
             });
+            return AlertDialog(
+              content: new Text("Your trial period has expired"),
+            );
+          });
         /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text("Your trial period has expired!"),
@@ -567,15 +561,15 @@ class _LoginPageState extends State<LoginPage>
           _isServiceCalling = false;
         });
         showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
-              });
-              return AlertDialog(
-                content: new Text("Your plan has expired!"),
-              );
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
             });
+            return AlertDialog(
+              content: new Text("Your plan has expired"),
+            );
+          });
         /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text("Your plan has expired!"),
@@ -589,77 +583,100 @@ class _LoginPageState extends State<LoginPage>
         String orgid = prefs.getString('orgid')??"";
         String name = prefs.getString('name')??"";
         String email = prefs.getString('email')??"";
-        print(orgid+" "+name+" "+email);
+        //print(orgid+" "+name+" "+email);
         showDialog(
+          context: context,
           barrierDismissible: false,
-          context: context, child:
-          new AlertDialog(
-            title: new Text("You have not verified your registered mail id, please verify to login again.",
-              style: TextStyle(fontSize: 16.0),),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text(
-                    'VERIFY', style: TextStyle(color: Colors.white),),
-                  color: Colors.orange[800],
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true).pop();
-                    verification(orgid, name, email).then((result) {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context, child:
-                        new AlertDialog(
-                          title: new Text("Mail verification link has been sent on your registered mail id, by clicking on sent verification link you can verify you mail id",
-                          style: TextStyle(fontSize: 16.0),),
-                          content: RaisedButton(
-                            child: Text('Open Mail', style: TextStyle(color: Colors.white),),
-                            color: Colors.orange[800],
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true).pop();
-                              openEmailApp(context);
-                            },
-                          ),
-                        )
-                      );
-                    });
-                  },
+            builder: (BuildContext context) {
+              return WillPopScope(
+                onWillPop: () async => false,
+                child: new AlertDialog(
+                  title: new Text(
+                    "Kindly verify your registered email to Sign in.",
+                    style: TextStyle(fontSize: 16.0),),
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      RaisedButton(
+                        child: Text(
+                          'VERIFY', style: TextStyle(color: Colors.white),),
+                        color: Colors.orange[800],
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          verification(orgid, name, email).then((result) {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: _scaffoldKey.currentContext,
+                              builder: (BuildContext context) {
+                                return WillPopScope(
+                                    onWillPop: () async => false,
+                                    child: new AlertDialog(
+                                      title: new Text(
+                                        "Email verification link has been sent on your registered Email ID. Kindly verify.",
+                                        style: TextStyle(fontSize: 16.0),),
+                                      content: RaisedButton(
+                                        child: Text('Open Mail',
+                                          style: TextStyle(color: Colors.white),),
+                                        color: Colors.orange[800],
+                                        onPressed: () {
+                                          Navigator.of(_scaffoldKey.currentContext, rootNavigator: true).pop();
+                                          openEmailApp(context);
+                                        },
+                                      ),
+                                    )
+                                );
+                              }
+                            );
+                          });
+                        },
+                      ),
+                      FlatButton(
+                        shape: Border.all(color: Colors.orange[800]),
+                        child: Text(
+                          'LATER', style: TextStyle(color: Colors.black87),),
+                        onPressed: () {
+                          _exitApp(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-                FlatButton(
-                  shape: Border.all(color: Colors.orange[800]),
-                  child: Text(
-                    'CANCEL', style: TextStyle(color: Colors.black87),),
-                  onPressed: () {
-                    _exitApp(context);
-                  },
-                ),
-              ],
-            ),
-          )
+              );
+            }
         );
       }else if(res=='false4'){
         setState(() {
           _isServiceCalling = false;
         });
-        showDialog(context: context, child:
+        showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Email verification is pending at the admin's end. Kindly contact your admin."),
+            );
+          });
+        /*showDialog(context: context, child:
           new AlertDialog(
-            content: new Text("Please conatct your admin."),
+            content: new Text("Please conatct your admin to login."),
           )
-        );
+        );*/
       }else{
         setState(() {
           _isServiceCalling = false;
         });
         showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
-              });
-              return AlertDialog(
-                content: new Text("Invalid login credentials."),
-              );
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
             });
+            return AlertDialog(
+              content: new Text("Invalid login credentials"),
+            );
+          });
         /*showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Invalid login credentials."),
@@ -672,15 +689,15 @@ class _LoginPageState extends State<LoginPage>
         _isServiceCalling=false;
       });
       showDialog(
-          context: context,
-          builder: (context) {
-            Future.delayed(Duration(seconds: 3), () {
-              Navigator.of(context).pop(true);
-            });
-            return AlertDialog(
-              content: new Text("Unable to connect server."),
-            );
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
           });
+          return AlertDialog(
+            content: new Text("Unable to connect server"),
+          );
+        });
       /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Unable to connect server."),
@@ -718,88 +735,6 @@ class _LoginPageState extends State<LoginPage>
     });
   }
 
-  /*markAttByQR(var qr, BuildContext context,token1) async{
-    Login dologin = Login();
-    setState(() {
-      loader = true;
-    });
-    var islogin = await dologin.markAttByQR(qr,token1, context);
-    print(islogin);
-    if(islogin=='Success'){
-      setState(() {
-        loader = false;
-      });
-      showDialog(
-          context : context,
-          builder: (_) => new
-          AlertDialog(
-            //title: new Text("Dialog Title"),
-            content: new Text("Successfull"
-            ),
-          )
-      );
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
-      );
-    }else if(islogin=='false1'){
-      setState(() {
-        loader = false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-
-        content: new Text("Your trial period has expired!"),
-      )
-      );
-    }else if(islogin=='false2'){
-      setState(() {
-        loader = false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-
-        content: new Text("Your plan has expired!"),
-      )
-      );
-    }else if(islogin=="false"){
-      setState(() {
-        loader = false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-
-        content: new Text("Invalid login!"),
-
-      )
-      );
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
-      );
-    }else if(islogin=="imposed"){
-      setState(() {
-        loader = false;
-      });
-      showDialog(
-          context : context,
-          builder: (_) => new
-          AlertDialog(
-            //title: new Text("Dialog Title"),
-            content: new Text("Invalid login."
-            ),
-          )
-      );
-    }else{
-      setState(() {
-        loader = false;
-      });
-      *//*Scaffold.of(context)
-          .showSnackBar(
-          SnackBar(content: Text("Attendance is already marked")));*//*
-    }
-  }*/
-
 
   markAttByQR(var qr, BuildContext context, token1) async{
     Login dologin = Login();
@@ -812,20 +747,20 @@ class _LoginPageState extends State<LoginPage>
       setState(() {
         loader = false;
       });
+      /*showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 1), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Successfully Logged In"),
+          );
+        });*/
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
       );
-      showDialog(
-          context: context,
-          builder: (context) {
-            Future.delayed(Duration(seconds: 3), () {
-              Navigator.of(context).pop(true);
-            });
-            return AlertDialog(
-              content: new Text("Successfully Logged In"),
-            );
-          });
       /*showDialog(
           context : context,
           builder: (_) => new
@@ -835,23 +770,20 @@ class _LoginPageState extends State<LoginPage>
             ),
           )
       );*/
-      Scaffold.of(context)
-          .showSnackBar(
-          SnackBar(content: Text("Attendance marked successfully.")));
     }else if(islogin=="failure"){
       setState(() {
         loader = false;
       });
       showDialog(
-          context: context,
-          builder: (context) {
-            Future.delayed(Duration(seconds: 3), () {
-              Navigator.of(context).pop(true);
-            });
-            return AlertDialog(
-              content: new Text("Invalid login"),
-            );
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
           });
+          return AlertDialog(
+            content: new Text("Invalid login"),
+          );
+        });
       /*showDialog(
           context : context,
           builder: (_) => new
@@ -865,15 +797,21 @@ class _LoginPageState extends State<LoginPage>
         context,
         MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,
       );
-
-      Scaffold.of(context)
-          .showSnackBar(
-          SnackBar(content: Text("Invalid login credentials")));
     }else if(islogin=="imposed"){
       setState(() {
         loader = false;
       });
       showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Invalid login"),
+          );
+        });
+      /*showDialog(
           context : context,
           builder: (_) => new
           AlertDialog(
@@ -881,14 +819,21 @@ class _LoginPageState extends State<LoginPage>
             content: new Text("Invalid login."
             ),
           )
-      );
+      );*/
     }else{
       setState(() {
         loader = false;
       });
-      Scaffold.of(context)
-          .showSnackBar(
-          SnackBar(content: Text("Attendance is already marked")));
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Attendance is already marked"),
+          );
+        });
     }
   }
 
@@ -988,12 +933,22 @@ class _LoginPageState extends State<LoginPage>
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
                                 if (_username.text == ''||_username.text == null) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
+                                      });
+                                      return AlertDialog(
+                                        content: new Text("Please Enter Email"),
+                                      );
+                                    });
                                   //showInSnackBar("Please Enter Email");
-                                  showDialog(context: context, child:
+                                  /*showDialog(context: context, child:
                                   new AlertDialog(
                                     content: new Text("Please Enter Email"),
                                   )
-                                  );
+                                  );*/
                                   FocusScope.of(context).requestFocus(__username);
                                 } else {
                                   if(_isButtonDisabled)
@@ -1005,12 +960,22 @@ class _LoginPageState extends State<LoginPage>
                                     if(res==1) {
                                       username = _username.text;
                                       _username.text='';
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          Future.delayed(Duration(seconds: 3), () {
+                                            Navigator.of(context).pop(true);
+                                          });
+                                          return AlertDialog(
+                                            content: new Text("Mail to reset your password has been successfully sent"),
+                                          );
+                                        });
                                       //showInSnackBar("Request submitted successfully");
-                                      showDialog(context: context, child:
+                                      /*showDialog(context: context, child:
                                       new AlertDialog(
                                         content: new Text("Mail to reset your password has been successfully sent."),
                                       )
-                                      );
+                                      );*/
                                       setState(() {
                                         login=true;
                                         succ=true;
@@ -1019,15 +984,15 @@ class _LoginPageState extends State<LoginPage>
                                       });
                                     } else {
                                       showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            Future.delayed(Duration(seconds: 3), () {
-                                              Navigator.of(context).pop(true);
-                                            });
-                                            return AlertDialog(
-                                              content: new Text("Email Not Found"),
-                                            );
+                                        context: context,
+                                        builder: (context) {
+                                          Future.delayed(Duration(seconds: 3), () {
+                                            Navigator.of(context).pop(true);
                                           });
+                                          return AlertDialog(
+                                            content: new Text("Email Not Found"),
+                                          );
+                                        });
                                       /*showDialog(context: context, child:
                                       new AlertDialog(
                                         content: new Text("Email Not Found"),
@@ -1044,15 +1009,15 @@ class _LoginPageState extends State<LoginPage>
                                   }).catchError((onError){
                                     //showInSnackBar("Unable to call reset password service");
                                     showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          Future.delayed(Duration(seconds: 3), () {
-                                            Navigator.of(context).pop(true);
-                                          });
-                                          return AlertDialog(
-                                            content: new Text("Unable to call reset password service"),
-                                          );
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
                                         });
+                                        return AlertDialog(
+                                          content: new Text("Unable to call reset password service"),
+                                        );
+                                      });
                                     /*showDialog(context: context, child:
                                     new AlertDialog(
                                       content: new Text("Unable to call reset password service"),

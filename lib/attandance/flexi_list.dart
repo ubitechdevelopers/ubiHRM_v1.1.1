@@ -376,7 +376,7 @@ class FlexiAppHeader extends StatelessWidget implements PreferredSizeWidget {
                 color: Colors.white,
                 image: new DecorationImage(
                   fit: BoxFit.fill,
-                  image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                  image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                 )
               )
             ),

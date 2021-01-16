@@ -10,7 +10,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/register_page.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
@@ -497,7 +496,7 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
                               shape: BoxShape.circle,
                               image: new DecorationImage(
                                 fit: BoxFit.fill,
-                                image:_checkLoaded ? AssetImage('assets/avatar.png') : profileimage,
+                                image:_checkLoaded ? AssetImage('assets/default.png') : profileimage,
                               ))),
                     ]),
                   ),
@@ -639,7 +638,7 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
       );
     } else if (widget.action == "Stop"){
       return RaisedButton(
-        child: Text('STOP TIME OFF', style: new TextStyle(fontSize: 18.0, color: Colors.white)),
+        child: Text('END TIME OFF', style: new TextStyle(fontSize: 18.0, color: Colors.white)),
         color: Colors.orange[800],
         onPressed: () {
          /* setState(() {
@@ -687,15 +686,15 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
           );
         } else if(issave.contains("unmarked")){
           showDialog(
-              context: context,
-              builder: (context) {
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(context).pop(true);
-                });
-                return AlertDialog(
-                  content: new Text("Before Starting TimeOff you need to mark Time In"),
-                );
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
               });
+              return AlertDialog(
+                content: new Text("Before Starting TimeOff you need to mark Time In"),
+              );
+            });
           /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text("Before Starting TimeOff you need to mark Time In"),
@@ -703,15 +702,15 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
           );*/
         } else {
           showDialog(
-              context: context,
-              builder: (context) {
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(context).pop(true);
-                });
-                return AlertDialog(
-                  content: new Text("There is some problem"),
-                );
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
               });
+              return AlertDialog(
+                content: new Text("There is some problem"),
+              );
+            });
           /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text("There is some problem"),
@@ -723,15 +722,15 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
       }
     }else{
       showDialog(
-          context: context,
-          builder: (context) {
-            Future.delayed(Duration(seconds: 3), () {
-              Navigator.of(context).pop(true);
-            });
-            return AlertDialog(
-              content: new Text("Internet connection not found."),
-            );
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
           });
+          return AlertDialog(
+            content: new Text("Internet connection not found."),
+          );
+        });
       /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Internet connection not found."),
@@ -739,86 +738,6 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
       );*/
     }
   }
-
-/*  saveStartTimeOff(time) async {
-    //sl.startStreaming(5);
-    MarkStartTimeOff mk = new MarkStartTimeOff(empid, orgid, time, widget.timeoffId, streamlocationaddr, lat, long);
-    var connectivityResult = await (new Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-      SaveTimerTime save = new SaveTimerTime();
-      bool issave = false;
-      try {
-        issave = await save.saveStartTimeOff(mk);
-        print("issave");
-        print(issave);
-        if (issave) {
-          showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text("Your Time off started"),
-          )
-          );
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TimeoffSummary()),
-          );
-        } else {
-          showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text("There is some problem"),
-          )
-          );
-        }
-      }catch(e){
-        print("EXCEPTION PRINT: "+e.toString());
-      }
-    }else{
-      showDialog(context: context, child:
-      new AlertDialog(
-        content: new Text("Internet connection not found."),
-      )
-      );
-    }
-  }
-
-  saveStopTimeOff(time) async {
-    sl.startStreaming(5);
-    MarkStartTimeOff mk = new MarkStartTimeOff(empid, orgid, time, widget.timeoffId, streamlocationaddr, lat, long);
-    var connectivityResult = await (new Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-      SaveTimerTime save = new SaveTimerTime();
-      bool issave = false;
-      try {
-        issave = await save.saveStopTimeOff(mk);
-        print("issave");
-        print(issave);
-        if (issave) {
-          showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text("Your Time off stopped"),
-          )
-          );
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TimeoffSummary()),
-          );
-        } else {
-          showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text("There is some problem"),
-          )
-          );
-        }
-      }catch(e){
-        print("EXCEPTION PRINT: "+e.toString());
-      }
-    }else{
-      showDialog(context: context, child:
-      new AlertDialog(
-        content: new Text("Internet connection not found."),
-      )
-      );
-    }
-  }*/
 
   resendVarification() async{
     NewServices ns= new NewServices();
@@ -936,7 +855,7 @@ class AttendanceHomeAppHeader extends StatelessWidget implements PreferredSizeWi
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

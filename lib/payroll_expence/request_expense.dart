@@ -496,7 +496,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                                           ),
                                           InkWell(
                                             child: Container(
-                                              width: MediaQuery.of(context).size.width*0.6,
+                                              //width: MediaQuery.of(context).size.width*0.6,
                                               padding: EdgeInsets.fromLTRB(10.0,0.0, 0.0, 0.0),
                                               //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                                               child:showFile(_file),
@@ -509,6 +509,20 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                                               setState(() {
                                                 //_image = image;
                                                 _file = file;
+                                                /*int sizeInBytes = _file.lengthSync();
+                                                print("sizeInBytes");
+                                                print(sizeInBytes);
+                                                double sizeInMb = sizeInBytes / (1024 * 1024);
+                                                print("sizeInMb");
+                                                print(sizeInMb);
+                                                if (sizeInMb > 2){
+                                                  showDialog(context: context, child:
+                                                  new AlertDialog(
+                                                    content: new Text(
+                                                        "file size should not be greater than 2 MB"),
+                                                  )
+                                                  );
+                                                }*/
                                               });
                                             },
                                           )
@@ -520,6 +534,23 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                               ),
                             ]),
                         SizedBox(height: 5.0),
+                        Row(
+                          children: [
+                            Text("Note: Supported Document: png, jpg, doc, docx, pdf",
+                              textAlign: TextAlign.start,
+                              style: new TextStyle(fontSize:14.0, color: Colors.orange[900],),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text("File Size: Max 2 MB",
+                              textAlign: TextAlign.start,
+                              style: new TextStyle(fontSize:14.0, color: Colors.orange[900],),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 5.0),
                         ButtonBar(
                           children: <Widget>[
                             RaisedButton(
@@ -528,14 +559,24 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
                                   if (headtype == '0') {
-                                    showDialog(context: context, child:
+                                    /*showDialog(context: context, child:
                                     new AlertDialog(
                                       content: new Text(
                                           "Please select headtype!"),
                                     )
-                                    );
+                                    );*/
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Please select headtype"),
+                                        );
+                                      });
                                   }else {
-                                    print("hello1234");
                                     savePayrollExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _file, context);
                                   }
                                 }
@@ -637,7 +678,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
   }
 
 
-  Future<bool> savePayrollExpense(var expensedate, var category, var desc, var amount/*, FilePickerResult file*/, File file, BuildContext context) async { // visit in function
+  Future<bool> savePayrollExpense(var expensedate, var category, var desc, var amount, File file, BuildContext context) async { // visit in function
     try {
       Dio dio = new Dio();
       setState(() {
@@ -646,10 +687,9 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
       final prefs = await SharedPreferences.getInstance();
       String orgid = prefs.getString('organization') ?? '';
       String empid = prefs.getString('employeeid') ?? "";
-      String ext = p.extension(file.path);
-      //List<String> ext = file.names;
-      print(ext);
       if (file!=null) {
+        String ext = p.extension(file.path);
+        print(ext);
         FormData formData = new FormData.from({
           "empid": empid,
           "orgid": orgid,
@@ -664,8 +704,6 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
         print(file);
         Response<String> response1;
         try {
-          //final prefs = await SharedPreferences.getInstance();
-          //String path1 = prefs.getString('path');
           print(path +"savePayrollExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount+"&file=$file");
           response1 = await dio.post(path + "savePayrollExpense", data: formData);
           print("----->save payroll Expense* --->" + response1.toString());
@@ -673,14 +711,15 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
           print(e.toString());
         }
 
-        Map MarkAttMap = json.decode(response1.data);
-        print(MarkAttMap["status"].toString());
-        if ((response1.toString().contains("true"))) {
+        var MarkAttMap = json.decode(response1.data);
+        print("MarkAttMap");
+        print(MarkAttMap[0]);
+        //if ((response1.toString().contains("true"))) {
+        if (MarkAttMap[0]["status"].toString()=="true" && MarkAttMap[0]["imgsts"].toString()=="true") {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyPayrollExpense()),
           );
-          // ignore: deprecated_member_use
           showDialog(
               context: context,
               builder: (context) {
@@ -688,16 +727,44 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                   Navigator.of(context).pop(true);
                 });
                 return AlertDialog(
-                  content: new Text("Expense submitted successfully."),
+                  content: new Text("Expense submitted successfully"),
+                );
+              });
+          // ignore: deprecated_member_use
+          /*showDialog(context: context, child:
+            new AlertDialog(
+              content: new Text('Expense submitted successfully.'),
+            )
+          );*/
+          return true;
+          //} else if((response1.toString().contains("false1"))){
+        } else if (MarkAttMap[0]["status"].toString()=="true" && MarkAttMap[0]["imgsts"].toString()=="false") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyPayrollExpense()),
+          );
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Expense submitted successfully, but unable to upload attachment"),
                 );
               });
           /*showDialog(context: context, child:
           new AlertDialog(
-            content: new Text('Expense submitted successfully.'),
-          )
-          );*/
-          return true;
-        } else if((response1.toString().contains("false1"))){
+            content: new Text('Expense submitted successfully, but unable to upload attachment'),
+          ));*/
+          setState(() {
+            isServiceCalling = false;
+          });
+        } else if (MarkAttMap[0]["status"].toString()=="true" && MarkAttMap[0]["imgsts"].toString()=="false1") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyPayrollExpense()),
+          );
           showDialog(
               context: context,
               builder: (context) {
@@ -705,13 +772,53 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                   Navigator.of(context).pop(true);
                 });
                 return AlertDialog(
-                  content: new Text("Expense already applied on this date."),
+                  content: new Text("Expense submitted successfully, but invalid file type"),
                 );
               });
+          /*showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text('Expense submitted successfully, but invalid file type.'),
+          ));*/
+          setState(() {
+            isServiceCalling = false;
+          });
+        } else if (MarkAttMap[0]["status"].toString()=="true" && MarkAttMap[0]["imgsts"].toString()=="false2") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyPayrollExpense()),
+          );
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Expense submitted successfully, but file size should not be greater than 2 MB"),
+                );
+              });
+          /*showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text('Expense submitted successfully, but file size should not be greater than 2 MB.'),
+          ));*/
+          setState(() {
+            isServiceCalling = false;
+          });
+        } else if (MarkAttMap[0]["status"].toString().contains("false1") && MarkAttMap[0]["imgsts"].toString().contains("false")) {
           /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense already applied on this date.'),
           ));*/
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Expense already applied on this date"),
+                );
+              });
           setState(() {
             isServiceCalling = false;
           });
@@ -723,7 +830,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                   Navigator.of(context).pop(true);
                 });
                 return AlertDialog(
-                  content: new Text("There is some problem while applying for expense."),
+                  content: new Text("There is some problem while applying for expense"),
                 );
               });
           /*showDialog(context: context, child:
@@ -742,7 +849,6 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
           "category": category,
           "desc": desc,
           "amt": amount,
-          "file":"",
         });
         Response<String> response1;
         try {
@@ -754,13 +860,12 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
           print(e.toString());
           print('------------*');
         }
-        Map expensemap = json.decode(response1.data);
-        if ((response1.toString().contains("true"))) {
+        var MarkAttMap = json.decode(response1.data);
+        if (MarkAttMap[0]["status"].toString()=="true" && MarkAttMap[0]["imgsts"].toString()=="false") {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyPayrollExpense()),
           );
-          // ignore: deprecated_member_use
           showDialog(
               context: context,
               builder: (context) {
@@ -768,17 +873,17 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                   Navigator.of(context).pop(true);
                 });
                 return AlertDialog(
-                  content: new Text("Expense submitted successfully."),
+                  content: new Text("Expense submitted successfully"),
                 );
               });
+          // ignore: deprecated_member_use
           /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense submitted successfully.'),
           )
-          );*/
+        );*/
           return true;
-        } else if((response1.toString().contains("false1"))){
-          // ignore: deprecated_member_use
+        } else if(MarkAttMap[0]["status"].toString()=="false1" && MarkAttMap[0]["imgsts"].toString()=="false"){
           showDialog(
               context: context,
               builder: (context) {
@@ -786,14 +891,15 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                   Navigator.of(context).pop(true);
                 });
                 return AlertDialog(
-                  content: new Text("Expense already applied on this date."),
+                  content: new Text("Expense already applied on this date"),
                 );
               });
+          // ignore: deprecated_member_use
           /*showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text('Expense already applied on this date.'),
-          )
-          );*/
+        new AlertDialog(
+          content: new Text('Expense already applied on this date.'),
+        )
+        );*/
           setState(() {
             isServiceCalling = false;
           });
@@ -805,20 +911,19 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                   Navigator.of(context).pop(true);
                 });
                 return AlertDialog(
-                  content: new Text("There is some problem while applying for expense."),
+                  content: new Text("There is some problem while applying for expense"),
                 );
               });
           /*showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text('There is some problem while applying for expense.'),
-          )
-          );*/
+        new AlertDialog(
+          content: new Text('There is some problem while applying for expense.'),
+        )
+        );*/
           setState(() {
             isServiceCalling = false;
           });
         }
-      }
-    } catch (e) {
+      }    } catch (e) {
       print(e.toString());
       return false;
     }
@@ -831,7 +936,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
           return new Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text(_file.path.split('/').last,style: TextStyle(fontSize: 16.0, color: Colors.green),
+              Text(_file.path.split('/').last,style: TextStyle(fontSize: 13.0, color: Colors.green),
                 overflow: TextOverflow.ellipsis, ),
             ]);
         } else if (snapshot.error != null) {

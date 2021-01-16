@@ -40,10 +40,12 @@ class _MyTeamAtt extends State<MyTeamAtt> {
   String orgName="";
   bool res = true;
   var formatter = new DateFormat('dd-MMM-yyyy');
-  DateTime startDate;
   DateTime startDate1;
+  DateTime startDate;
   DateTime endDate;
   DateTime endDate1;
+  DateTime selectedDate;
+  DateTime selectedDate1;
   DateTime firstDate;
   DateTime lastDate;
   //DateTime selectedDate;
@@ -61,6 +63,18 @@ class _MyTeamAtt extends State<MyTeamAtt> {
     searchFocusNode = FocusNode();
     initPlatformState();
     getOrgName();
+    /*startDate = DateTime.now().subtract(Duration(days: 30));
+    startDate1 = DateTime(startDate.year, startDate.month, startDate.day);
+    print("startDate");
+    print(startDate);
+    print(startDate1);
+    endDate = DateTime.now();
+    endDate1 = DateTime(endDate.year, endDate.month, endDate.day);
+    print("endDate");
+    print(endDate);
+    print(endDate1);
+    date = startDate1;*/
+
     startDate = DateTime.now().subtract(Duration(days: 30));
     startDate1 = DateTime(startDate.year, startDate.month, startDate.day);
     print("startDate");
@@ -71,18 +85,18 @@ class _MyTeamAtt extends State<MyTeamAtt> {
     print("endDate");
     print(endDate);
     print(endDate1);
-    /*selectedDate = DateTime.now().subtract(Duration(days: 2));
+    selectedDate = DateTime.now().subtract(Duration(days: 0));
+    selectedDate1 = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
     print("selectedDate");
-    print(selectedDate);*/
+    print(selectedDate);
+    print(selectedDate1);
     date = startDate1;
-    /*markedDates = [
-      DateTime.now().subtract(Duration(days: 1)),
-      DateTime.now().subtract(Duration(days: 2)),
-      DateTime.now().add(Duration(days: 4))
-    ];*/
+    print("date");
+    print(date);
   }
 
 
+/*
   String dateFormat = 'dd';
   String monthFormat = 'MMM';
   String weekDayFormat = 'EEE';
@@ -102,6 +116,7 @@ class _MyTeamAtt extends State<MyTeamAtt> {
   bool isCircularRadiusDisabled = true;
 
   int maxSelectedDateCount = 1;
+*/
 
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
@@ -111,15 +126,29 @@ class _MyTeamAtt extends State<MyTeamAtt> {
   }
 
   onSelect(data) {
-    setState(() {
-      if (data != null && data.toString() != '') {
-        res=true;
-        date=data;
-      } else {
-        res=false;
-      }
-    });
+    if (data != null && data.toString() != '') {
+      setState(() {
+        res = true;
+        /*DateTime date1 = data;
+        print("date1");
+        print(date1);
+        DateTime date2 = DateTime(date1.year, date1.month, date1.day);
+        print("date2");
+        print(date2);*/
+        date = data;
+        print("date");
+        print(date);
+      });
+    }else{
+      setState(() {
+        res = false;
+      });
+    }
     print("Selected Date -> $data");
+  }
+
+  onWeekSelect(data) {
+    print("Selected week starting at -> $data");
   }
 
   _monthNameWidget(monthName) {
@@ -326,25 +355,28 @@ class _MyTeamAtt extends State<MyTeamAtt> {
               ),
               /// My log start here
 
-              Container(
-                //padding: EdgeInsets.only(top:3.0,),
-                  height: MediaQuery.of(context).size.height*0.11,
-                  child: CalendarStrip(
-                    startDate: startDate1,
-                    endDate: endDate1,
-                    onDateSelected: onSelect,
-                    dateTileBuilder: dateTileBuilder,
-                    iconColor: Colors.black87,
-                    monthNameWidget: _monthNameWidget,
-                    //markedDates: markedDates,
-                    containerDecoration: BoxDecoration(color: appStartColor().withOpacity(0.1)),
-                  )
+              CalendarStrip(
+                startDate: startDate,
+                endDate: endDate,
+                //selectedDate: selectedDate,
+                onDateSelected: onSelect,
+                //onWeekSelected: onWeekSelect,
+                dateTileBuilder: dateTileBuilder,
+                iconColor: Colors.black87,
+                monthNameWidget: _monthNameWidget,
+                //markedDates: markedDates,
+                containerDecoration: BoxDecoration(color: appStartColor().withOpacity(0.1)),
+                //addSwipeGesture: true,
               ),
               Container(
                 padding: EdgeInsets.only(top:5.0,),
-                child:Center(
-                  child:Text("Team's Attendance Log",
-                    style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
+                child:Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Team's Attendance Log",
+                        style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                    Text(" ("+new DateFormat("d-MMM-y").format(date)+")",style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),),
+                  ],
                 ),
               ),
               Container(
@@ -410,6 +442,7 @@ class _MyTeamAtt extends State<MyTeamAtt> {
               Divider(),
               new Expanded(
                   child: res == true ? mainbody() : Center()
+                //child: mainbody()
               ),
 
               /*Expanded(

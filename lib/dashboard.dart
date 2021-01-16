@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'appbar.dart';
 import 'b_navigationbar.dart';
 import 'drawer.dart';
@@ -64,7 +62,6 @@ class _DashboardStatemain extends State<DashboardMain> {
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       setState(() {
-        // print("HIIIIIIIIIIIIII");
         mainWidget = loadingWidget();
       });
       islogin().then((Widget configuredWidget) {
@@ -76,11 +73,21 @@ class _DashboardStatemain extends State<DashboardMain> {
       setState(() {
         mainWidget = plateformstatee();
       });
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Internet connection not found"),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Internet connection not found!."),
       )
-      );
+      );*/
     }
   }
 
@@ -163,132 +170,59 @@ class _DashboardStatemain extends State<DashboardMain> {
             ),
             child: ListView(
               children: <Widget>[
-                overtime!=null?Divider(height: 10.0,):undertime!=null?Divider(height: 10.0,):Center(),
-                SizedBox(height: 20.0,),
+                //overtime!=null?SizedBox(height: 10.0,):undertime!=null?SizedBox(height: 10.0,):Center(),
                 overtime!=null?getimg():undertime!=null?getimg1():Center(),
-
-
-                SizedBox(height: 20.0,),
-                perAttendance=='1'?  Row(children: <Widget>[
-                  SizedBox(width: 20.0,),
+                overtime!=null?SizedBox(height: 20.0,):undertime!=null?SizedBox(height: 20.0,):Center(),
+                //SizedBox(height: 20.0,),
+                perAttendance=='1'?Row(children: <Widget>[
+                  //SizedBox(width: 20.0,),
                   Text("Monthly summary ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ]
                 ):Center(),
 
                 perAttendance=='1'?  Divider(height: 10.0,):Center(),
-                /*SimpleBarChart.withSampleData(),*/
                 perAttendance=='1'?  new Container(
-
                   padding: EdgeInsets.all(0.2),
                   margin: EdgeInsets.all(0.2),
                   height: 200.0,
-
                   child: new FutureBuilder<List<Map<String,String>>>(
-
-                      future: getAttsummaryChart(),
-                      builder: (context, snapshot)
-                      {
-                        if (snapshot.hasData){
-                          if (snapshot.data.length > 0)
-                          {
-                            return new DonutAutoLabelChart.withSampleData(snapshot.data);
-                          }
-                          return new Center(
-                              child: CircularProgressIndicator()
-                          );
-
+                    future: getAttsummaryChart(),
+                    builder: (context, snapshot)
+                    {
+                      if (snapshot.hasData){
+                        if (snapshot.data.length > 0)
+                        {
+                          return new DonutAutoLabelChart.withSampleData(snapshot.data);
                         }
-                        //return new Center( child: Text("No data found"), );
                         return new Center(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width*1,
-                            color: appStartColor().withOpacity(0.1),
-                            padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                            child:Text("No data found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
-                          ),
+                            child: CircularProgressIndicator()
                         );
-                        // return new Center( child: CircularProgressIndicator());
-
                       }
+                      //return new Center( child: Text("No data found"), );
+                      return new Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*1,
+                          color: appStartColor().withOpacity(0.1),
+                          padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                          child:Text("No data found",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                        ),
+                      );
+                      // return new Center( child: CircularProgressIndicator());
+                    }
                   ),
-
-
                   //child: new DonutAutoLabelChart .withSampleData(),
                 ):Center(),
-                /*new Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                  Flexible(
-                    child: Text('Present(P)',
-                    style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                  ),
-                  Flexible(
-                    child: Text('Absent(A)',
-                    style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                  ),
-                  Flexible(
-                    child: Text('Week Off(W)',
-                    style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                  ),
-                  Flexible(
-                    child: Text('Halfday(HD)',
-                    style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                  ),
-                  ],
-                ),
-                new Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Flexible(
-                      child: Text('Comp Off(C)',
-                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                    ),
-                    Flexible(
-                      child: Text('Work From Home(WFH)',
-                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                    ),
-                    Flexible(
-                      child: Text('Unpaid Leave(UL)',
-                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                    ),
-                    Flexible(
-                      child: Text('Unpaid Halfday(UND)',
-                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                    ),
-                  ],
-                ),
-                new Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Flexible(
-                      child: Text('Unpaid Leave(UL)',
-                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                    ),
-                    Flexible(
-                      child: Text('Unpaid Halfday(UND)',
-                        style: TextStyle(color: Colors.black87, fontSize: 12.0),),
-                    ),
-                  ],
-                ),*/
-                SizedBox(height: 40.0,),
-                //SizedBox(width: 40.0,),
-                perEmployeeLeave =='1' ?
 
+                perAttendance =='1' ?SizedBox(height: 40.0,):Center(),
+
+                perEmployeeLeave =='1' ?
                 Row(children: <Widget>[
                   SizedBox(width: 20.0,),
                   Text("Leave Data ["+fiscalyear+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ]
                 ):Center(),
-                Divider(height: 10.0,),
-
-                //   perEmployeeLeave =='1' ? Divider(height: 0.0,):Center(),
-                /*SimpleBarChart.withSampleData(),*/
-
+                perEmployeeLeave =='1' ? Divider(height: 10.0,):Center(),
                 perEmployeeLeave =='1' ?  new Container(
-
                   padding: EdgeInsets.all(0.2),
                   margin: EdgeInsets.all(0.2),
                   height: 200.0,
@@ -321,50 +255,45 @@ class _DashboardStatemain extends State<DashboardMain> {
                       }
                   ),
                   // child: new StackedHorizontalBarChart .withSampleData()
-                ):Center(
-                  child: Text(""),
+                ):Center(),
 
-                ),
-                SizedBox(height: 40.0,),
+                perEmployeeLeave =='1' ?SizedBox(height: 40.0,):Center(),
+                //SizedBox(height: 20.0,),
+
                 Row(children: <Widget>[
                   SizedBox(width: 20.0,),
                   // Text("Monthly Holidays ["+month+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold)),
-                  Flexible(child: Text("Upcoming Holidays ["+fiscalyear+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold))),
-                ]
+                  Flexible(child:
+                    Text("Upcoming Holidays ["+fiscalyear+"]",style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold))),
+                  ]
                 ),
                 Divider(height: 10.0,),
                 SizedBox(height: 10.0,),
-
                 new Column(
                   children: <Widget>[
-                    new   Row(children: <Widget>[
+                    new Row(children: <Widget>[
                       SizedBox(height: height),
                       new Expanded(
                         child: Container(
                             height: MediaQuery.of(context).size.height*.1,
-                            //height: insideContainerHeight,
                             width: MediaQuery.of(context).size.width*.99,
-                            //height: insideContainerHeight,
-                            //width: 400.0,
-                            //  padding: new EdgeInsets.all(2.0),
-                            //color: Colors.green[50],
-
                             child: FutureBuilder<List<Holi>>(
                               future: getHolidays(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
+                                  print("snapshot.data.length------->>>>");
+                                  print(snapshot.data.length);
                                   if(snapshot.data.length>0) {
                                     return new ListView.builder(
                                         scrollDirection: Axis.vertical,
                                         itemCount: snapshot.data.length,
                                         itemBuilder: (BuildContext context, int index) {
                                           var string=snapshot.data[index].name;
-                                          var name =  string.replaceAll("Holiday - ", "");                            return new Column(
-                                            children: <Widget>
-                                            [
+                                          var name =  string.replaceAll("Holiday - ", "");
+                                          return new Column(
+                                            children: <Widget>[
                                               new Row(
-                                                children: <Widget>
-                                                [
+                                                children: <Widget>[
                                                   SizedBox(width: 20.0,),
                                                   Text(name+" ",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
                                                   Text("-"),
@@ -372,139 +301,35 @@ class _DashboardStatemain extends State<DashboardMain> {
                                                   Text(snapshot.data[index].date,style: TextStyle(color: Colors.grey[600]),textAlign: TextAlign.right),
 
                                                 ],),
-                                              /*  new Row(
-                                                children: <Widget>
-                                                [
-                                                  SizedBox(width: 20.0,),
-                                                  snapshot.data[index].message.toString() != '-'
-                                                      ? Container(
-
-                                                    //  SizedBox(width: 20.0,),
-                                                    child: Text("Indian Ritual"+snapshot.data[index].message,style: TextStyle(color: Colors.grey[600]),),
-                                                  ): Center(),
-                                                  Divider(color: Colors.black45,),
-
-                                                ],)*/
                                             ],);
-
                                         }
-
                                     );
-
                                   }else{
                                     return new Center(
                                       child: Container(
                                         width: MediaQuery.of(context).size.width*1,
                                         color: appStartColor().withOpacity(0.1),
                                         padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                        child:Text("No Holidays this month",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                                        child:Text("No upcoming holidays",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                                       ),
                                     );
                                   }
-                                }
-                                else if (snapshot.hasError) {
+                                }else if (snapshot.hasError) {
                                   return new Text("Unable to connect server");
                                 }
-
                                 // By default, show a loading spinner
                                 return new Center(child: CircularProgressIndicator());
                               },
                             )
                         ),),
                     ],),
-
-                    //undertime!='null'?getimg1():getimg(),
-
                   ],)
-
-
-
-                /*      Row(children: <Widget>[
-                    SizedBox(width: 20.0,),
-                    Text("Holidays this month",style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold)),
-                  ]
-                  ),
-                  Divider(height: 10.0,),
-                  SizedBox(height: 10.0,),
-                  Row(children: <Widget>[
-                   Text('1.Makar sankranti ',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
-                   Expanded(
-                     child: Container(
-                      width:0.5,
-                     ),
-                   ),
-                   Container(child:Text("14th Jan 2019",style: TextStyle(color: Colors.grey[600]),)) ,
-                  ],
-                  )
-                  ,
-                /*  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('14th Jan 2019',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
-
-                  ],
-
-                  ),*/
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('Indian rituals')
-                    ],),
-                  SizedBox(width: 30.0,),
-                  Row(children: <Widget>[
-                    Text('2.Republic Day 2019',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
-
-
-                  ],),
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('26th Jan',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
-
-                    ],),
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('National holiday on republic day of india')
-                    ],),
-                  SizedBox(width: 30.0,),
-                  Row(children: <Widget>[
-                    Text('3. Holiday - Holi 2019',style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
-
-
-                  ],),
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('4th Mar',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
-                      Text(' - ',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
-                      Text('9th Mar',style: TextStyle(color: Colors.blueGrey,fontWeight: FontWeight.bold),),
-                    ],),
-                  Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(width: 20.0,),
-                      Text('Festival of colors')
-                    ],),
-                  SizedBox(width: 20.0,),
-*/
               ],
             )
-
         ),
-
-
-
       ],
     );
   }
-
-
 
 
   Widget getimg() {
@@ -512,8 +337,8 @@ class _DashboardStatemain extends State<DashboardMain> {
       // SizedBox(width: 20.0,),
       Row(children: <Widget>[
         new  Text("    "+month+"",textAlign: TextAlign.left,style: TextStyle(color: headingColor(), fontSize: 15.0, fontWeight: FontWeight.bold,)),
-
       ]),
+      Divider(),
       Container(
         height: 165,
         width: 120,
@@ -531,7 +356,6 @@ class _DashboardStatemain extends State<DashboardMain> {
           Text(
             "Overtime \n     "+overtime,
             style: TextStyle(
-
                 fontSize: 16.0,
                 color: overtime!=''? Colors.green:appStartColor()),
           ),
@@ -545,10 +369,9 @@ class _DashboardStatemain extends State<DashboardMain> {
       // SizedBox(width: 20.0,),
       Row(children: <Widget>[
         new  Text("     "+month+"",textAlign: TextAlign.left,style: TextStyle(color: headingColor(), fontSize: 16.0, fontWeight: FontWeight.bold,)),
-
       ]),
+      Divider(),
       Container(
-
         height: 165,
         width: 120,
         decoration: new BoxDecoration(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_services.dart';
-
 import 'drawer.dart';
 
 class Designation extends StatefulWidget {
@@ -15,17 +15,22 @@ class _Designation extends State<Designation> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String _sts1 = 'Active';
   String orgName="";
+  int hrsts=0;
   int adminsts=0;
+  int divhrsts=0;
   bool _isButtonDisabled= false;
   TextEditingController _searchController;
   FocusNode searchFocusNode;
   String desgname = "";
+  var profileimage;
+  bool showtabbar;
 
   @override
   void initState() {
     super.initState();
     _searchController = new TextEditingController();
     searchFocusNode = FocusNode();
+    profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     getOrgName();
   }
 
@@ -33,35 +38,22 @@ class _Designation extends State<Designation> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
-      adminsts= prefs.getInt('adminsts') ?? 0;
+      hrsts =prefs.getInt('hrsts')??0;
+      adminsts =prefs.getInt('adminsts')??0;
+      divhrsts =prefs.getInt('divhrsts')??0;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return getmainhomewidget();
   }
 
-  /*void showInSnackBar(String value) {
-    final snackBar = SnackBar(
-        content: Text(value, textAlign: TextAlign.center,));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
-  }*/
-
   getmainhomewidget() {
     return new Scaffold(
       backgroundColor: scaffoldBackColor(),
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            new Text(orgName, style: new TextStyle(fontSize: 20.0)),
-          ],
-        ),
-        leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-          Navigator.pop(context);}),
-        backgroundColor: appStartColor(),
-      ),
+      appBar: AppHeader(profileimage,showtabbar,orgName),
       bottomNavigationBar: new HomeNavigation(),
       endDrawer: new AppDrawer(),
       body: Container(
@@ -93,7 +85,7 @@ class _Designation extends State<Designation> {
                     prefixIcon: Icon(Icons.search, size: 30,),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     hintText: 'Search Designation',
-                    labelText: 'Search Designation',
+                    //labelText: 'Search Designation',
                     suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
                         onPressed: () {
                           _searchController.clear();
@@ -128,6 +120,9 @@ class _Designation extends State<Designation> {
                           color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold ),),
                     ),
                   ),
+                  SizedBox(
+                    width: 5,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(right:20.0),
                     child: Container(
@@ -146,6 +141,23 @@ class _Designation extends State<Designation> {
           ],
         ),
       ),
+      floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
+        backgroundColor: Colors.orange[800],
+        onPressed: (){
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("To Add a new Designation, login to the web panel"),
+              );
+            });
+        },
+        tooltip: 'Add Designation',
+        child: new Icon(Icons.add),
+      ):Center(),
     );
   }
 
@@ -170,6 +182,9 @@ class _Designation extends State<Designation> {
                                   child: new Text(
                                       snapshot.data[index].desg.toString(),style: TextStyle(
                                       fontSize: 14, fontWeight: FontWeight.bold)),
+                                ),
+                                SizedBox(
+                                  width: 10,
                                 ),
                                 new Container(
                                   child: new Text(
@@ -217,8 +232,8 @@ class _Designation extends State<Designation> {
 //////////edit department
   editDesg(context,dept,sts,did) async {
     _sts1=sts;
-    var new_dept = new TextEditingController();
-    new_dept.text=dept;
+    var new_desg = new TextEditingController();
+    new_desg.text=dept;
     await showDialog<String>(
       context: context,
       // ignore: deprecated_member_use
@@ -235,10 +250,9 @@ class _Designation extends State<Designation> {
               SizedBox(height: 15.0),
               new Expanded(
                 child: new TextField(
-                  controller: new_dept,
-                  //    focusNode: f_dept,
+                  enabled: false,
+                  controller: new_desg,
                   autofocus: false,
-                  //   controller: client_name,
                   decoration: new InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -286,57 +300,45 @@ class _Designation extends State<Designation> {
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right:8.0),
-            child: new FlatButton(
-                highlightColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  side: BorderSide( color: Colors.grey.withOpacity(0.5), width: 1,),
-                ),
-                child: const Text('CANCEL',style: TextStyle(color: Colors.black),),
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop('dialog');
-                }),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right:8.0),
             child: new RaisedButton(
-              elevation: 2.0,
-              highlightElevation: 5.0,
-              highlightColor: Colors.transparent,
-              disabledElevation: 0.0,
-              focusColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
               color: Colors.orange[800],
               child: const Text('UPDATE', style: TextStyle(color: Colors.white)),
               onPressed: (){
-                if( new_dept.text.trim()==''){
+                if( new_desg.text.trim()==''){
                   //showInSnackBar('Enter Designation Name');
-                  showDialog(context: context, child:
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      Future.delayed(Duration(seconds: 3), () {
+                        Navigator.of(context).pop(true);
+                      });
+                      return AlertDialog(
+                        content: new Text("Please enter the Designation's name"),
+                      );
+                    });
+                  /*showDialog(context: context, child:
                   new AlertDialog(
                     content: new Text("Enter designation name"),
-                  ));
+                  ));*/
                 }else{
                   if(_isButtonDisabled)
                     return null;
                   setState(() {
                     _isButtonDisabled=true;
                   });
-                  updateDesg(new_dept.text,_sts1,did).then((res) {
+                  updateDesg(new_desg.text,_sts1,did).then((res) {
                     if(res=='0') {
                       //showInSnackBar('Unable to update designation');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Unable to update designation"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("Unable to update designation"),
+                          );
+                        });
                       /*showDialog(context: context, child:
                       new AlertDialog(
                         content: new Text("Unable to update designation"),
@@ -344,15 +346,15 @@ class _Designation extends State<Designation> {
                     }else if(res=='-1') {
                       //showInSnackBar('Designation name already exist');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Designation name already exist"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("This designation already exists"),
+                          );
+                        });
                       /*showDialog(context: context, child:
                       new AlertDialog(
                         content: new Text("Designation name already exist"),
@@ -361,15 +363,15 @@ class _Designation extends State<Designation> {
                       Navigator.of(context, rootNavigator: true).pop('dialog');
                       //showInSnackBar('Designation name already exist');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Employees assigned to this designation therefore can't be updated"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("This designation can't be deactivated. Employees are already assigned to it"),
+                          );
+                        });
                       /*showDialog(context: context, child:
                       new AlertDialog(
                         content: new Text("Employees assigned to this designation therefore can't be updated"),
@@ -378,21 +380,21 @@ class _Designation extends State<Designation> {
                       Navigator.of(context, rootNavigator: true).pop('dialog');
                       //showInSnackBar('Designation updated successfully');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Designation updated successfully"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("Designation is updated successfully"),
+                          );
+                        });
                       /*showDialog(context: context, child:
                       new AlertDialog(
                       content: new Text("Designation updated successfully"),
                       ));*/
                       getDesgWidget();
-                      new_dept.text = '';
+                      new_desg.text = '';
                       _sts1 = 'Active';
                     }
                     setState(() {
@@ -402,6 +404,15 @@ class _Designation extends State<Designation> {
                 }
               }
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right:8.0),
+            child: new FlatButton(
+                shape: Border.all(color: Colors.orange[800]),
+                child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop('dialog');
+                }),
           ),
         ],
       ),

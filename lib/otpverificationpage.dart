@@ -507,7 +507,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
         showDialog(context: context, child:
         new AlertDialog(
 
-          content: new Text("Your trial period has expired!"),
+          content: new Text("Your trial period has expired"),
         )
         );
       }else if(res=='false2'){
@@ -517,7 +517,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
         showDialog(context: context, child:
         new AlertDialog(
 
-          content: new Text("Your plan has expired!"),
+          content: new Text("Your plan has expired"),
         )
         );
       }else{
@@ -526,8 +526,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
         });
         showDialog(context: context, child:
         new AlertDialog(
-
-          content: new Text("Invalid login credentials."),
+          content: new Text("Invalid login credentials"),
         )
         );
       }
@@ -538,7 +537,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
       showDialog(context: context, child:
       new AlertDialog(
 
-        content: new Text("Unable to connect server."),
+        content: new Text("Unable to connect server"),
       )
       );
     });
@@ -616,7 +615,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
         });
         showDialog(context: context, child:
         new AlertDialog(
-          content: new Text("Unable to Connect server."),
+          content: new Text("Unable to connect server"),
         ));
       });
     });
@@ -712,7 +711,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
         });
         showDialog(context: context, child:
         new AlertDialog(
-          content: new Text("Unable to Connect server."),
+          content: new Text("Unable to connect server"),
         ));
       });
     });

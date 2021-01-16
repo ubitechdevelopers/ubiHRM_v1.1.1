@@ -117,7 +117,7 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                 ),
                 Container(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(5.0),
                     child: TextFormField(
                       controller: _searchController,
                       focusNode: searchFocusNode,
@@ -130,17 +130,13 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                         prefixIcon: Icon(Icons.search, size: 30,),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         hintText: 'Search Employee',
-                        labelText: 'Search Employee',
-                        /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
-                            onPressed: () {
-                              _searchController.clear();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => Employee_list()),
-                              );
-                            }
-                        ):null,*/
-                        //focusColor: Colors.white,
+                        //labelText: 'Search Employee',
+                        suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            empname="";
+                          }
+                        ):null,
                       ),
                       onChanged: (value) {
                         setState(() {
@@ -165,8 +161,7 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                           if (v != null && v.toString()!='') {
                             res=true; //showInSnackBar(date.toString());
                             setAlldata();
-                          }
-                          else {
+                          } else {
                             res=false;
                             countE='0';
                           }
@@ -395,11 +390,13 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                                                             .center,
                                                         children: <Widget>[
                                                           //Text('view', style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),)
-                                                          Icon(
-                                                            Icons.visibility,
-                                                            color: Colors.blue,
-                                                            size: 20,
-
+                                                          Tooltip(
+                                                            message: "view",
+                                                            child: Icon(
+                                                              Icons.visibility,
+                                                              color: Colors.blue,
+                                                              size: 20,
+                                                            ),
                                                           ),
                                                         ],
                                                       )
@@ -421,7 +418,6 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                                                   },
                                                 ),
                                               ],
-
                                             ),
                                           ],
                                         );
@@ -442,7 +438,6 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                                 return new Text("Unable to connect server");
                                 // return new Text("${snapshot.error}");
                               }
-
                               // By default, show a loading spinner
                               return new Center( child: CircularProgressIndicator());
                             },

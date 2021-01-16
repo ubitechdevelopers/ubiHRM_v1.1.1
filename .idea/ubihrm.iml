@@ -66,6 +66,12 @@
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/firebase_messaging/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/firebase_messaging/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/firebase_messaging/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_appavailability/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_appavailability/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_appavailability/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_appavailability/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_appavailability/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_appavailability/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_plugin_android_lifecycle/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_plugin_android_lifecycle/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/ios/.symlinks/plugins/flutter_plugin_android_lifecycle/build" />

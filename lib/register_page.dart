@@ -12,7 +12,6 @@ import 'package:ubihrm/home.dart';
 import 'package:ubihrm/login_page.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/services/checkLogin.dart';
-import 'package:ubihrm/survey.dart';
 import 'global.dart';
 
 
@@ -61,7 +60,7 @@ class _RegisterState extends State<Register> {
   bool chkTimesheetVal = false;
   bool chkPerformanceVal = false;
 
-  String empModule='',orgModule='', attModule='', leaveModule='',payrollModule='', expenseModule='', salaryModule='', timesheetModule='', performanceModule='';
+  //String empModule='',orgModule='', attModule='', leaveModule='',payrollModule='', expenseModule='', salaryModule='', timesheetModule='', performanceModule='';
 
   List<String> _timeIST = ['09:00-10:00',
     '10:00-11:00',
@@ -348,7 +347,7 @@ class _RegisterState extends State<Register> {
     signupContcodeController = new TextEditingController();
     signupPhoneController = new TextEditingController();
     signupEmpNumController = new TextEditingController();
-    signupEmpNumController.text='5';
+    //signupEmpNumController.text='5';
     signupPassController = new TextEditingController();
     signupPassController.text='123456';
     super.initState();
@@ -527,7 +526,19 @@ class _RegisterState extends State<Register> {
                                 padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                                 child: new Text("Note: This form is only for company registration. If the company is already registered, employees should not fill this form. They should  only login with admin's help.",
                                   textAlign: TextAlign.left,
-                                  style: new TextStyle(fontSize:14.0, color: Colors.orange[900],),
+                                  style: new TextStyle(fontSize:14.0, color: Colors.orange[800],),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 22.0, top: 20.0,bottom: 0.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    new Text("COMPANY DETAILS",
+                                      //textAlign: TextAlign.center,
+                                      style: new TextStyle(fontWeight: FontWeight.bold, fontSize:16.0, color:Colors.black/*color: appStartColor()*/ ),
+                                    ),
+                                    //Spacer()
+                                  ],
                                 ),
                               ),
                               Row(
@@ -555,9 +566,12 @@ class _RegisterState extends State<Register> {
                                               fontSize: 14.0),
                                         ),
                                         validator: (value) {
-                                          if (value.isEmpty) {
+                                          if (value.isEmpty || value.trim().isEmpty) {
                                             return 'Please enter company name';
                                           }
+                                        },
+                                        onFieldSubmitted: (String value) {
+                                          if (_formKeyKey.currentState.validate()) {}
                                         },
                                       ),
                                     ),
@@ -586,14 +600,17 @@ class _RegisterState extends State<Register> {
                                             color: Colors.black,
                                             size: 20.0,
                                           ),
-                                          hintText: "Contact Person Name",
+                                          hintText: "Contact Person",
                                           hintStyle: TextStyle(
                                               fontSize: 14.0),
                                         ),
                                         validator: (value) {
-                                          if (value.isEmpty) {
+                                          if (value.isEmpty || value.trim().isEmpty) {
                                             return 'Please enter contact person name';
                                           }
+                                        },
+                                        onFieldSubmitted: (String value) {
+                                          if (_formKeyKey.currentState.validate()) {}
                                         },
                                       ),
                                     ),
@@ -627,7 +644,7 @@ class _RegisterState extends State<Register> {
                                           ),
                                           //validator: validateEmail
                                         validator: (value) {
-                                          if (value.isEmpty || value==null ) {
+                                          if (value.isEmpty || value==null) {
                                             return 'Please enter email';
                                           }
 
@@ -739,9 +756,12 @@ class _RegisterState extends State<Register> {
                                               fontSize: 14.0),
                                         ),
                                         validator: (value) {
-                                          if (value.isEmpty) {
+                                          if (value.isEmpty || value.trim().isEmpty) {
                                             return 'Please enter city name';
                                           }
+                                        },
+                                        onFieldSubmitted: (String value) {
+                                          if (_formKeyKey.currentState.validate()) {}
                                         },
                                       ),
                                     ),
@@ -821,11 +841,13 @@ class _RegisterState extends State<Register> {
                                               fontSize: 14.0),
                                         ),
                                         validator: (value) {
-                                          if (value.isEmpty) {
+                                          if (value.isEmpty || value.trim().isEmpty) {
                                             return 'Please enter phone no.';
                                           }
                                         },
-
+                                        onFieldSubmitted: (String value) {
+                                          if (_formKeyKey.currentState.validate()) {}
+                                        },
                                       ),
                                     ),
                                   ),
@@ -862,7 +884,7 @@ class _RegisterState extends State<Register> {
                                             )
                                         ),
                                         validator: (value) {
-                                          if (value.isEmpty || value==null ) {
+                                          if (value.isEmpty || value==null) {
                                             return 'Please enter password';
                                           }
 
@@ -875,6 +897,7 @@ class _RegisterState extends State<Register> {
                                           RegExp regex = new RegExp(pattern);
                                           if (!regex.hasMatch(value))
                                             return 'Password should not contain \nany special characters';
+
                                         },
                                       ),
                                     ),
@@ -909,9 +932,12 @@ class _RegisterState extends State<Register> {
                                               fontSize: 14.0),
                                         ),
                                         validator: (value) {
-                                          if (value.isEmpty) {
+                                          if (value.isEmpty || value==null) {
                                             return "Please enter no. of employees";
                                           }
+                                        },
+                                        onFieldSubmitted: (String value) {
+                                          if (_formKeyKey.currentState.validate()) {}
                                         },
                                       ),
                                     ),
@@ -936,7 +962,7 @@ class _RegisterState extends State<Register> {
                                 padding: const EdgeInsets.only(left:45.0),
                                 child: Column(
                                   children: <Widget>[
-                                    /*Row(
+                                    Row(
                                       children: <Widget>[
                                         Row(
                                           children: <Widget>[
@@ -947,7 +973,7 @@ class _RegisterState extends State<Register> {
                                             Text('Employee')
                                           ],
                                         ),
-                                        SizedBox(width:20),
+                                        SizedBox(width:30),
                                         Row(
                                           children: <Widget>[
                                             Checkbox(
@@ -958,8 +984,8 @@ class _RegisterState extends State<Register> {
                                           ],
                                         ),
                                       ],
-                                    ),*/
-                                    Row(
+                                    ),
+                                    /*Row(
                                       children: <Widget>[
                                         Row(
                                           children: <Widget>[
@@ -1008,8 +1034,20 @@ class _RegisterState extends State<Register> {
                                               onChanged: (bool value) {
                                                 setState(() {
                                                   chkPayrollVal = value;
-                                                  if(chkPayrollVal==true) {
+                                                  chkAttVal = value;
+                                                  if(chkPayrollVal==true && chkAttVal==true) {
                                                     payrollModule = "true";
+                                                    attModule = "true";
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        Future.delayed(Duration(seconds: 3), () {
+                                                          Navigator.of(context).pop(true);
+                                                        });
+                                                        return AlertDialog(
+                                                          content: new Text("Attendance module is mandatory with Payroll module"),
+                                                        );
+                                                      });
                                                   }
                                                 });
                                               },
@@ -1050,6 +1088,146 @@ class _RegisterState extends State<Register> {
                                           ],
                                         ),
                                       ],
+                                    ),*/
+                                    Row(
+                                      children: <Widget>[
+                                        signupContcodeController.text=='+91'?Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkAttVal,
+                                              onChanged: ((chkPayrollVal==true && chkAttVal!=true)
+                                                  ||(chkPayrollVal!=true && chkAttVal==true)
+                                                  ||(chkPayrollVal!=true && chkAttVal!=true))?(bool value) {
+                                                setState(() {
+                                                  chkAttVal = value;
+                                                  print("after click");
+                                                  print(chkAttVal);
+                                                  /*if(chkAttVal==true) {
+                                                    attModule = "true";
+                                                    print(attModule);
+                                                  }*/
+                                                });
+                                              }:null,
+                                            ),
+                                            Text('Attendance')
+                                          ],
+                                        ):Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkAttVal,
+                                              onChanged: ((chkSalaryVal==true && chkAttVal!=true)
+                                                  ||(chkSalaryVal!=true && chkAttVal==true)
+                                                  ||(chkSalaryVal!=true && chkAttVal!=true))?(bool value) {
+                                                setState(() {
+                                                  chkAttVal = value;
+                                                  print("after click");
+                                                  print(chkAttVal);
+                                                  /*if(chkAttVal==true) {
+                                                    attModule = "true";
+                                                    print(attModule);
+                                                  }*/
+                                                });
+                                              }:null,
+                                            ),
+                                            Text('Attendance')
+                                          ],
+                                        ),
+                                        SizedBox(width:20),
+                                        Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkLeaveVal,
+                                              onChanged: (bool value) {
+                                                setState(() {
+                                                  chkLeaveVal = value;
+                                                  /*if(chkLeaveVal==true) {
+                                                    leaveModule = "true";
+                                                  }*/
+                                                });
+                                              },
+                                            ),
+                                            Text('Leave')
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        signupContcodeController.text=='+91'?Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkPayrollVal,
+                                              onChanged: (bool value) {
+                                                setState(() {
+                                                  chkPayrollVal = value;
+                                                  /*if(chkPayrollVal==true) {
+                                                    payrollModule = "true";
+                                                  }*/
+                                                  if(chkPayrollVal==true && chkAttVal!=true) {
+                                                    chkAttVal = value;
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          Future.delayed(Duration(seconds: 3), () {
+                                                            Navigator.of(context).pop(true);
+                                                          });
+                                                          return AlertDialog(
+                                                            content: new Text("Attendance module is mandatory with Payroll module"),
+                                                          );
+                                                        });
+                                                  }
+                                                });
+                                              },
+                                            ),
+                                            Text('Payroll')
+                                          ],
+                                        ): Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkSalaryVal,
+                                              onChanged:(bool value) {
+                                                setState(() {
+                                                  chkSalaryVal = value;
+                                                  /*if(chkSalaryVal==true) {
+                                                    salaryModule = "true";
+                                                  }*/
+                                                  if(chkSalaryVal==true && chkAttVal!=true) {
+                                                    chkAttVal = value;
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          Future.delayed(Duration(seconds: 3), () {
+                                                            Navigator.of(context).pop(true);
+                                                          });
+                                                          return AlertDialog(
+                                                            content: new Text("Attendance module is mandatory with Salary module"),
+                                                          );
+                                                        });
+                                                  }
+                                                });
+                                              },
+                                            ),
+                                            Text('Salary')
+                                          ],
+                                        ),
+                                        SizedBox(width:53),
+                                        Row(
+                                          children: <Widget>[
+                                            Checkbox(
+                                              value: chkPerformanceVal,
+                                              onChanged: (bool value) {
+                                                setState(() {
+                                                  chkPerformanceVal = value;
+                                                  /*if(chkPerformanceVal==true) {
+                                                    performanceModule = "true";
+                                                  }*/
+                                                });
+                                              },
+                                            ),
+                                            Text('Performance')
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                     Row(
                                       children: <Widget>[
@@ -1060,9 +1238,9 @@ class _RegisterState extends State<Register> {
                                               onChanged: (bool value) {
                                                 setState(() {
                                                   chkTimesheetVal = value;
-                                                  if(chkTimesheetVal==true) {
+                                                  /*if(chkTimesheetVal==true) {
                                                     timesheetModule="true";
-                                                  }
+                                                  }*/
                                                 });
                                               },
                                             ),
@@ -1122,7 +1300,7 @@ class _RegisterState extends State<Register> {
                                 ],
                               ),
 
-                              Row(
+                              /*Row(
                                 children: <Widget>[
                                   Expanded(
                                     child: Padding(
@@ -1154,7 +1332,7 @@ class _RegisterState extends State<Register> {
                                     ),
                                   ),
                                 ],
-                              ),
+                              ),*/
 
                               Padding(
                                 padding: const EdgeInsets.only(top: 10.0, bottom: 12.0, left: 0.0, right: 0.0),
@@ -1183,34 +1361,78 @@ class _RegisterState extends State<Register> {
                                               padding: EdgeInsets.all(5.0),
                                               child: const Text('Register',style: TextStyle(fontSize: 16.0),),
                                               onPressed: ()  {
+                                                FocusScopeNode currentFocus = FocusScope.of(context);
+                                                if (!currentFocus.hasPrimaryFocus) {
+                                                  currentFocus.unfocus();
+                                                }
                                                 if (_formKeyKey.currentState.validate()) {
                                                   if(_tempcontry=='' ) {
-                                                    showDialog(context: context, child:
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        Future.delayed(Duration(seconds: 3), () {
+                                                          Navigator.of(context).pop(true);
+                                                        });
+                                                        return AlertDialog(
+                                                          content: new Text("Please Select a Country"),
+                                                        );
+                                                      });
+                                                    /*showDialog(context: context, child:
                                                     new AlertDialog(
                                                       content: new Text("Please Select a Country."),
-                                                    ));
+                                                    ));*/
                                                     FocusScope.of(context).requestFocus(myFocusNodePhone);
                                                   }else if(_country=='0') {
-                                                    showDialog(context: context, child:
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        Future.delayed(Duration(seconds: 3), () {
+                                                          Navigator.of(context).pop(true);
+                                                        });
+                                                        return AlertDialog(
+                                                          content: new Text("Please Select a Country"),
+                                                        );
+                                                      });
+                                                    /*showDialog(context: context, child:
                                                     new AlertDialog(
                                                       content: new Text("Please select a country"),
-                                                    ));
+                                                    ));*/
                                                   }else if((chkAttVal||chkLeaveVal||chkPayrollVal||chkSalaryVal||chkTimesheetVal||chkPerformanceVal)==false){
-                                                    showDialog(context: context, child:
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        Future.delayed(Duration(seconds: 3), () {
+                                                          Navigator.of(context).pop(true);
+                                                        });
+                                                        return AlertDialog(
+                                                          content: new Text("Please select atleast one module"),
+                                                        );
+                                                      });
+                                                    /*showDialog(context: context, child:
                                                     new AlertDialog(
                                                       content: new Text("Please select atleast one module"),
-                                                    ));
+                                                    ));*/
                                                   }else if(_selectedISTtime==null){
-                                                    showDialog(context: context, child:
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        Future.delayed(Duration(seconds: 3), () {
+                                                          Navigator.of(context).pop(true);
+                                                        });
+                                                        return AlertDialog(
+                                                          content: new Text("Please select preferred time(IST) to call"),
+                                                        );
+                                                      });
+                                                   /* showDialog(context: context, child:
                                                     new AlertDialog(
                                                       content: new Text("Please select preferred time (IST) to call"),
-                                                    ));
+                                                    ));*/
                                                   }else{
                                                     setState(() {
                                                       _isButtonDisabled=true;
                                                     });
 
-                                                    print(path+"addOrganization?org_name=${signupNameController.text.trim()}&name=${signupCPNController.text.trim()}&email=${signupEmailController.text.trim()}&country=${_tempcontry}&city=${signupCityController.text.trim()}&countrycode=${signupContcodeController.text}&phone=${signupPhoneController.text.trim()}&empno=${signupEmpNumController.text.trim()}&attmodule=$attModule&leavemodule=$leaveModule&payrollmodule=$payrollModule&salarymodule=$salaryModule&timesheetmodule=$timesheetModule&performancemodule=$performanceModule&timetocall=$_selectedISTtime&requirements=${signupReqController.text.trim()}&password=${signupPassController.text.trim()}&platform=iOS");
+                                                    print(path+"addOrganization?org_name=${signupNameController.text.trim()}&name=${signupCPNController.text.trim()}&email=${signupEmailController.text.trim()}&country=${_tempcontry}&city=${signupCityController.text.trim()}&countrycode=${signupContcodeController.text}&phone=${signupPhoneController.text.trim()}&empno=${signupEmpNumController.text.trim()}&attmodule=${chkAttVal.toString()}&leavemodule=${chkLeaveVal.toString()}&payrollmodule=${chkPayrollVal.toString()}&salarymodule=${chkSalaryVal.toString()}&timesheetmodule=${chkTimesheetVal.toString()}&performancemodule=${chkPerformanceVal.toString()}&timetocall=$_selectedISTtime&requirements=${signupReqController.text.trim()}&password=${signupPassController.text.trim()}&platform=android");
                                                     var url = path+"addOrganization";
                                                     http.post(url, body: {
                                                       "org_name": signupNameController.text.trim(),
@@ -1221,16 +1443,16 @@ class _RegisterState extends State<Register> {
                                                       "countrycode": signupContcodeController.text,
                                                       "phone": signupPhoneController.text.trim(),
                                                       "empno": signupEmpNumController.text.trim(),
-                                                      "attmodule": attModule,
-                                                      "leavemodule": leaveModule,
-                                                      "payrollmodule": payrollModule,
-                                                      "salarymodule": salaryModule,
-                                                      "timesheetmodule": timesheetModule,
-                                                      "performancemodule": performanceModule,
+                                                      "attmodule": chkAttVal.toString(),
+                                                      "leavemodule": chkLeaveVal.toString(),
+                                                      "payrollmodule": chkPayrollVal.toString(),
+                                                      "salarymodule": chkSalaryVal.toString(),
+                                                      "timesheetmodule": chkTimesheetVal.toString(),
+                                                      "performancemodule": chkPerformanceVal.toString(),
                                                       "timetocall": _selectedISTtime,
                                                       "requirements": signupReqController.text.trim(),
                                                       "password":signupPassController.text.trim(),
-                                                      "platform":"iOS"
+                                                      "platform":"android"
                                                     }).then((response) {
                                                       if (response.statusCode == 200) {
                                                         Map data = json.decode(response.body);
@@ -1239,7 +1461,7 @@ class _RegisterState extends State<Register> {
                                                         print(data["status"]);
                                                         if (data["status"].contains("1")) {
                                                           gethome () async{
-                                                            await new Future.delayed(const Duration(seconds: 1));
+                                                            //await new Future.delayed(const Duration(seconds: 1));
                                                             checklogin(signupPhoneController.text.trim(), signupPassController.text.trim(), context);
                                                           }
                                                           gethome ();
@@ -1262,15 +1484,15 @@ class _RegisterState extends State<Register> {
 
                                                         } else if(data["status"].contains("2")){
                                                           showDialog(
-                                                              context: context,
-                                                              builder: (context) {
-                                                                Future.delayed(Duration(seconds: 3), () {
-                                                                  Navigator.of(context).pop(true);
-                                                                });
-                                                                return AlertDialog(
-                                                                  content: new Text("Email already exists."),
-                                                                );
+                                                            context: context,
+                                                            builder: (context) {
+                                                              Future.delayed(Duration(seconds: 3), () {
+                                                                Navigator.of(context).pop(true);
                                                               });
+                                                              return AlertDialog(
+                                                                content: new Text("Email already exists"),
+                                                              );
+                                                            });
                                                           /*showDialog(context: context, child:
                                                           new AlertDialog(
                                                             content: new Text(
@@ -1278,15 +1500,15 @@ class _RegisterState extends State<Register> {
                                                           ));*/
                                                         } else if(data["status"].contains("3")){
                                                           showDialog(
-                                                              context: context,
-                                                              builder: (context) {
-                                                                Future.delayed(Duration(seconds: 3), () {
-                                                                  Navigator.of(context).pop(true);
-                                                                });
-                                                                return AlertDialog(
-                                                                  content: new Text("Phone no. already exists."),
-                                                                );
+                                                            context: context,
+                                                            builder: (context) {
+                                                              Future.delayed(Duration(seconds: 3), () {
+                                                                Navigator.of(context).pop(true);
                                                               });
+                                                              return AlertDialog(
+                                                                content: new Text("Phone no. already exists"),
+                                                              );
+                                                            });
 /*                                                          showDialog(context: context, child:
                                                           new AlertDialog(
                                                             content: new Text(
@@ -1294,15 +1516,15 @@ class _RegisterState extends State<Register> {
                                                           ));*/
                                                         }else if(data["status"].contains("4")){
                                                           showDialog(
-                                                              context: context,
-                                                              builder: (context) {
-                                                                Future.delayed(Duration(seconds: 3), () {
-                                                                  Navigator.of(context).pop(true);
-                                                                });
-                                                                return AlertDialog(
-                                                                  content: new Text("Email and Phone no already exists."),
-                                                                );
+                                                            context: context,
+                                                            builder: (context) {
+                                                              Future.delayed(Duration(seconds: 3), () {
+                                                                Navigator.of(context).pop(true);
                                                               });
+                                                              return AlertDialog(
+                                                                content: new Text("Email and Phone no already exists"),
+                                                              );
+                                                            });
                                                           /*showDialog(context: context, child:
                                                           new AlertDialog(
                                                             content: new Text(
@@ -1310,15 +1532,15 @@ class _RegisterState extends State<Register> {
                                                           ));*/
                                                         } else {
                                                           showDialog(
-                                                              context: context,
-                                                              builder: (context) {
-                                                                Future.delayed(Duration(seconds: 3), () {
-                                                                  Navigator.of(context).pop(true);
-                                                                });
-                                                                return AlertDialog(
-                                                                  content: new Text("Oops! Company not registered. Try later"),
-                                                                );
+                                                            context: context,
+                                                            builder: (context) {
+                                                              Future.delayed(Duration(seconds: 3), () {
+                                                                Navigator.of(context).pop(true);
                                                               });
+                                                              return AlertDialog(
+                                                                content: new Text("Oops! Company not registered. Try later"),
+                                                              );
+                                                            });
                                                           /*showDialog(context: context, child:
                                                           new AlertDialog(
                                                             content: new Text(
@@ -1394,7 +1616,7 @@ class _RegisterState extends State<Register> {
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
     RegExp regex = new RegExp(pattern);
     print(value);
-    if (value.isEmpty) {
+    if (value.isEmpty || value.trim().isEmpty) {
       return 'Please enter password';
     } else {
       if (!regex.hasMatch(value))
@@ -1451,15 +1673,15 @@ class _RegisterState extends State<Register> {
           _isServiceCalling = false;
         });
         showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
-              });
-              return AlertDialog(
-                content: new Text("Your trial period has expired!"),
-              );
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
             });
+            return AlertDialog(
+              content: new Text("Your trial period has expired"),
+            );
+          });
         /*showDialog(context: context, child:
         new AlertDialog(
 
@@ -1471,15 +1693,15 @@ class _RegisterState extends State<Register> {
           _isServiceCalling = false;
         });
         showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
-              });
-              return AlertDialog(
-                content: new Text("Your plan has expired!"),
-              );
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
             });
+            return AlertDialog(
+              content: new Text("Your plan has expired"),
+            );
+          });
         /*showDialog(context: context, child:
         new AlertDialog(
 
@@ -1491,15 +1713,15 @@ class _RegisterState extends State<Register> {
           _isServiceCalling = false;
         });
         showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
-              });
-              return AlertDialog(
-                content: new Text("Invalid login credentials"),
-              );
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
             });
+            return AlertDialog(
+              content: new Text("Invalid login credentials"),
+            );
+          });
         /*showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Invalid login credentials."),
@@ -1511,15 +1733,15 @@ class _RegisterState extends State<Register> {
         _isServiceCalling=false;
       });
       showDialog(
-          context: context,
-          builder: (context) {
-            Future.delayed(Duration(seconds: 3), () {
-              Navigator.of(context).pop(true);
-            });
-            return AlertDialog(
-              content: new Text("Unable to connect server."),
-            );
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
           });
+          return AlertDialog(
+            content: new Text("Unable to connect server"),
+          );
+        });
       /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Unable to connect server."),
@@ -1542,7 +1764,8 @@ Future<bool> _exitApp(BuildContext context) {
           child: new Text('No'),
         ),
         new FlatButton(
-          onPressed: () => Navigator.of(context, rootNavigator: true).pop(true),
+          onPressed: () => Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false,),
           child: new Text('Yes'),
         ),
       ],

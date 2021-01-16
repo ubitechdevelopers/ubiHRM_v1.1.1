@@ -229,7 +229,7 @@ class ChoiceCard extends StatelessWidget {
                                                             },
                                                             child: new Icon(
                                                               Icons.thumb_up,
-                                                              size: 16.0,
+                                                              size: 20.0,
                                                               color: appStartColor(),
                                                             ),
                                                             borderSide: BorderSide(color:  appStartColor()),
@@ -290,7 +290,8 @@ class ChoiceCard extends StatelessWidget {
                                                     //child: Text('Actual Duration: '+snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(color: Colors.black54),),
                                                     child: Row(
                                                       children: <Widget>[
-                                                        Text('Actual Duration: ', style: TextStyle(fontSize: 14.0,
+                                                        snapshot.data[index].StopTimeTo.toString()=='-'?Text('Actual Time Off Start: ', style: TextStyle(fontSize: 14.0,
+                                          color: Colors.black,),):Text('Actual Duration: ', style: TextStyle(fontSize: 14.0,
                                                           color: Colors.black,),),
                                                         RichText(
                                                             text: TextSpan(
@@ -320,7 +321,7 @@ class ChoiceCard extends StatelessWidget {
                                                         color: Colors.black,
                                                       ),
                                                       children: <TextSpan>[
-                                                        new TextSpan(text: 'TimeOff Status: ' ,style: new TextStyle()),
+                                                        new TextSpan(text: 'Time Off Status: ' ,style: new TextStyle()),
                                                         new TextSpan(text: snapshot.data[index].TimeOffSts.toString(),style: TextStyle(color: Colors.grey[600])),
                                                       ],
                                                     ),
@@ -458,29 +459,54 @@ class ChoiceCard extends StatelessWidget {
                               //  print("kk");
                               // print("kk"+sts);
                               if(sts=="true") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => TimeOffApp()),
+                                );
                                 showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context).pop(true);
+                                    });
+                                    return AlertDialog(
+                                      content: new Text("Time Off application approved successfully."),
+                                    );
+                                  });
+                                /*showDialog(
                                     context: context,
                                     builder: (_) =>
                                     new AlertDialog(
                                       //title: new Text("Dialog Title"),
                                       content: new Text("Time Off application approved successfully."),
                                     )
-                                );
+                                );*/
                               }else{
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => TimeOffApp()),
+                                );
                                 showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context).pop(true);
+                                    });
+                                    return AlertDialog(
+                                      content: new Text("Time Off application could not be approved."),
+                                    );
+                                  });
+                                /*showDialog(
                                     context: context,
                                     builder: (_) =>
                                     new AlertDialog(
                                       //title: new Text("Dialog Title"),
                                       content: new Text("Time Off application could not be approved."),
                                     )
-                                );
+                                );*/
                               }
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => TimeOffApp()),
-                              ); },
+                              },
                             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0)),
                             child: new Text('Approve',
                                 style: new TextStyle(
@@ -502,29 +528,53 @@ class ChoiceCard extends StatelessWidget {
                                 //getApprovals(choice.title);
                                 var sts = await ApproveTimeoff(timeoffid,CommentController.text,1);
                                 if(sts=="true") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => TimeOffApp()),
+                                  );
                                   showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
+                                      });
+                                      return AlertDialog(
+                                        content: new Text("Time Off application rejected successfully."),
+                                      );
+                                    });
+                                  /*showDialog(
                                       context: context,
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
                                         content: new Text("Time Off application rejected successfully."),
                                       )
-                                  );
+                                  );*/
                                 }else{
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => TimeOffApp()),
+                                  );
                                   showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
+                                      });
+                                      return AlertDialog(
+                                        content: new Text("Time Off application could not be rejected."),
+                                      );
+                                    });
+                                  /*showDialog(
                                       context: context,
                                       builder: (_) =>
                                       new AlertDialog(
                                         //title: new Text("Dialog Title"),
                                         content: new Text("Time Off application could not be rejected."),
                                       )
-                                  );
+                                  );*/
                                 }
-
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => TimeOffApp()),
-                                ); },
+                                },
 
                               child: new Text('Reject',
                                   style: new TextStyle(
@@ -597,7 +647,7 @@ class ApprovalAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

@@ -65,16 +65,6 @@ class _PayrollExpenseApproval extends State<PayrollExpenseApproval> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle label = new TextStyle(
-      fontSize: 16.0, color: Colors.blue,
-      //fontWeight: FontWeight.w500
-      // color: 'red',
-    );
-    TextStyle unselectedLabel = new TextStyle(
-      // fontWeight: FontWeight.w200
-        fontSize: 15.0, color: Colors.white
-    );
-    print(label);
     return MaterialApp(
       home: DefaultTabController(
         length: choices.length,
@@ -516,18 +506,20 @@ class ChoiceCard1 extends StatelessWidget {
                               onPressed: () async  {
                                 //getApprovals(choice.title);
                                 final sts= await ApprovePayrollExpense(expenseid,CommentController.text,2);
-                                print("kk");
-                                print("kk"+sts);
                                 if(sts=="true") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => PayrollExpenseApproval()),
+                                  );
                                   showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        Future.delayed(Duration(seconds: 3), () {
-                                          Navigator.of(context).pop(true);
-                                        });
-                                        return AlertDialog(
-                                          content: new Text("Expense claim approved successfully."),
-                                        );
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
+                                      });
+                                      return AlertDialog(
+                                        content: new Text("Expense claim approved successfully"),
+                                      );
                                       });
                                   /*showDialog(
                                       context: context,
@@ -540,15 +532,15 @@ class ChoiceCard1 extends StatelessWidget {
                                 }
                                 else{
                                   showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        Future.delayed(Duration(seconds: 3), () {
-                                          Navigator.of(context).pop(true);
-                                        });
-                                        return AlertDialog(
-                                          content: new Text("Expense claim could not be approved."),
-                                        );
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
                                       });
+                                      return AlertDialog(
+                                        content: new Text("Expense claim could not be approved"),
+                                      );
+                                    });
                                   /*showDialog(
                                       context: context,
                                       builder: (_) =>
@@ -584,6 +576,10 @@ class ChoiceCard1 extends StatelessWidget {
                                 var sts = await ApprovePayrollExpense(expenseid,CommentController.text,1);
                                 print("ff"+sts);
                                 if(sts=="true") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => PayrollExpenseApproval()),
+                                  );
                                   showDialog(
                                       context: context,
                                       builder: (context) {
@@ -591,7 +587,7 @@ class ChoiceCard1 extends StatelessWidget {
                                           Navigator.of(context).pop(true);
                                         });
                                         return AlertDialog(
-                                          content: new Text("Expense claim rejected successfully."),
+                                          content: new Text("Expense claim rejected successfully"),
                                         );
                                       });
                                   /*showDialog(
@@ -602,8 +598,7 @@ class ChoiceCard1 extends StatelessWidget {
                                         content: new Text("Expense claim rejected successfully."),
                                       )
                                   );*/
-                                }
-                                else{
+                                } else{
                                   showDialog(
                                       context: context,
                                       builder: (context) {
@@ -611,7 +606,7 @@ class ChoiceCard1 extends StatelessWidget {
                                           Navigator.of(context).pop(true);
                                         });
                                         return AlertDialog(
-                                          content: new Text("Expense claim could not be rejected."),
+                                          content: new Text("Expense claim could not be rejected"),
                                         );
                                       });
                                   /*showDialog(
@@ -699,7 +694,7 @@ class ApprovalAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

@@ -119,9 +119,9 @@ class RequestTimeOffService{
         return "4";
       }else if (timeoffMap.contains("5")){
         return "5";
-      }/*else if (timeoffMap.contains("6")){
+      }else if (timeoffMap.contains("6")){
         return "6";
-      }else if (timeoffMap.contains("7")){
+      }/*else if (timeoffMap.contains("7")){
         return "7";
       }*/ else {
         return "true";

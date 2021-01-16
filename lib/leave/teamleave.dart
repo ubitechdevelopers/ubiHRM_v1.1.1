@@ -353,16 +353,22 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                                     child: new OutlineButton(
                                                       onPressed: () {
                                                         if(snapshot.data[index].HRSts.toString()=='1') {
-                                                          /*_modalBottomSheetHR(
-                                                          context, snapshot.data[index].Id.toString(),snapshot.data[index].Ldays.toString(),snapshot.data[index].LeaveTypeId.toString());
-                                                      getleavehistory(snapshot.data[index].LeaveTypeId.toString());
-*/
-                                                          showDialog(context: context, child:
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (context) {
+                                                                Future.delayed(Duration(seconds: 3), () {
+                                                                  Navigator.of(context).pop(true);
+                                                                });
+                                                                return AlertDialog(
+                                                                  content: new Text("Kindly check from the portal."),
+                                                                );
+                                                              });
+                                                          /*showDialog(context: context, child:
                                                           new AlertDialog(
                                                             //title: new Text("Sorry!"),
                                                             content: new Text("Kindly check from the portal."),
                                                           )
-                                                          );
+                                                          );*/
                                                         }else{
                                                           _modalBottomSheet(
                                                               context, snapshot.data[index].Id.toString(), snapshot.data[index].Ldays.toString());
@@ -548,15 +554,15 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                             if(sts=="true") {
                               Navigator.pop(context);
                               showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    Future.delayed(Duration(seconds: 3), () {
-                                      Navigator.of(context).pop(true);
-                                    });
-                                    return AlertDialog(
-                                      content: new Text("Leave application approved successfully."),
-                                    );
+                                context: context,
+                                builder: (context) {
+                                  Future.delayed(Duration(seconds: 3), () {
+                                    Navigator.of(context).pop(true);
                                   });
+                                  return AlertDialog(
+                                    content: new Text("Leave application approved successfully."),
+                                  );
+                                });
                               /*showDialog(
                                   context: context,
                                   builder: (_) =>
@@ -565,23 +571,23 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                                     content: new Text("Leave application approved successfully."),
                                   )
                               );*/
-                              await new Future.delayed(const Duration(seconds: 2));
-                              Navigator.pop(context);
+                              //await new Future.delayed(const Duration(seconds: 2));
+                              //Navigator.pop(context);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => MyTeamLeave()),
                               );
                             }else{
                               showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    Future.delayed(Duration(seconds: 3), () {
-                                      Navigator.of(context).pop(true);
-                                    });
-                                    return AlertDialog(
-                                      content: new Text("Leave application Could not be approved."),
-                                    );
+                                context: context,
+                                builder: (context) {
+                                  Future.delayed(Duration(seconds: 3), () {
+                                    Navigator.of(context).pop(true);
                                   });
+                                  return AlertDialog(
+                                    content: new Text("Leave application Could not be approved."),
+                                  );
+                                });
                               /*showDialog(
                                   context: context,
                                   builder: (_) =>
@@ -616,15 +622,15 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                             if(sts=="true") {
                               Navigator.pop(context);
                               showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    Future.delayed(Duration(seconds: 3), () {
-                                      Navigator.of(context).pop(true);
-                                    });
-                                    return AlertDialog(
-                                      content: new Text("Leave application rejected successfully."),
-                                    );
+                                context: context,
+                                builder: (context) {
+                                  Future.delayed(Duration(seconds: 3), () {
+                                    Navigator.of(context).pop(true);
                                   });
+                                  return AlertDialog(
+                                    content: new Text("Leave application rejected successfully."),
+                                  );
+                                });
                               /*showDialog(
                                   context: context,
                                   builder: (_) =>
@@ -641,15 +647,15 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                               );
                             }else{
                               showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    Future.delayed(Duration(seconds: 3), () {
-                                      Navigator.of(context).pop(true);
-                                    });
-                                    return AlertDialog(
-                                      content: new Text("Leave application could not be rejected"),
-                                    );
+                                context: context,
+                                builder: (context) {
+                                  Future.delayed(Duration(seconds: 3), () {
+                                    Navigator.of(context).pop(true);
                                   });
+                                  return AlertDialog(
+                                    content: new Text("Leave application could not be rejected"),
+                                  );
+                                });
                               /*showDialog(
                                   context: context,
                                   builder: (_) =>

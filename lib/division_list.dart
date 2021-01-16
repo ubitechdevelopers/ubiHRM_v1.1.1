@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_services.dart';
@@ -18,16 +19,21 @@ class _DivisionState extends State<Division> {
   static const statuses =  ['Active', 'Inactive'];
   String orgName = "";
   bool _isButtonDisabled = false;
-  int adminsts = 0;
+  int hrsts=0;
+  int adminsts=0;
+  int divhrsts=0;
   TextEditingController _searchController;
   FocusNode searchFocusNode;
   String divname = "";
+  var profileimage;
+  bool showtabbar;
 
   @override
   void initState() {
     super.initState();
     _searchController = new TextEditingController();
     searchFocusNode = FocusNode();
+    profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     getOrgName();
   }
 
@@ -35,7 +41,9 @@ class _DivisionState extends State<Division> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName = prefs.getString('orgname') ?? '';
-      adminsts = prefs.getInt('adminsts') ?? 0;
+      hrsts =prefs.getInt('hrsts')??0;
+      adminsts =prefs.getInt('adminsts')??0;
+      divhrsts =prefs.getInt('divhrsts')??0;
     });
   }
 
@@ -58,23 +66,7 @@ class _DivisionState extends State<Division> {
       child: new Scaffold(
         backgroundColor: scaffoldBackColor(),
         key: _scaffoldKey,
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              new Text(orgName, style: new TextStyle(fontSize: 20.0)),
-            ],
-          ),
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AllSetting()),
-                );
-              }),
-          backgroundColor: appStartColor(),
-        ),
+        appBar: AppHeader(profileimage,showtabbar,orgName),
         bottomNavigationBar: new HomeNavigation(),
         endDrawer: new AppDrawer(),
         body: Container(
@@ -96,8 +88,8 @@ class _DivisionState extends State<Division> {
                 ),
               )),
               //Divider(),
-              //SizedBox(height: 5.0,),
-              Container(
+              SizedBox(height: 5.0,),
+              /*Container(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
@@ -131,7 +123,7 @@ class _DivisionState extends State<Division> {
                     },
                   ),
                 ),
-              ),
+              ),*/
               Container(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,6 +132,7 @@ class _DivisionState extends State<Division> {
                     Padding(
                       padding: const EdgeInsets.only(left: 15.0),
                       child: Container(
+                        //width: MediaQuery.of(context).size.width*0.65,
                         child: Text(
                           'Name',
                           style: TextStyle(
@@ -149,8 +142,11 @@ class _DivisionState extends State<Division> {
                         ),
                       ),
                     ),
+                    /*SizedBox(
+                      width: 5,
+                    ),*/
                     Padding(
-                      padding: const EdgeInsets.only(right: 20.0),
+                      padding: const EdgeInsets.only(right: 30.0),
                       child: Container(
                         child: Text(
                           'Status',
@@ -171,6 +167,23 @@ class _DivisionState extends State<Division> {
             ],
           ),
         ),
+        floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
+          backgroundColor: Colors.orange[800],
+          onPressed: (){
+            showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("To Add a new Division, login to the web panel"),
+                );
+              });
+          },
+          tooltip: 'Add Division',
+          child: new Icon(Icons.add),
+        ):Center(),
       ),
     );
   }
@@ -193,7 +206,7 @@ class _DivisionState extends State<Division> {
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.height * 0.35,
+                        width: MediaQuery.of(context).size.width * 0.65,
                         child: Text(snapshot.data[index].div.toString(),
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold)),
@@ -244,35 +257,16 @@ class _DivisionState extends State<Division> {
     var Name = new TextEditingController();
     Name.text=div;
     Widget cancelButton = FlatButton(
-      highlightColor: Colors.transparent,
-      focusColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-        side: BorderSide(
-          color: Colors.grey.withOpacity(0.5),
-          width: 1,
-        )),
-      child: Text(
-        "Cancel",
-        style: TextStyle(color: Colors.black),
-      ),
+      shape: Border.all(color: Colors.orange[800]),
+      child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
       onPressed: () {
         Navigator.of(context, rootNavigator: true).pop('dialog');
       },
     );
-    Widget updateButton = FlatButton(
-      color: Colors.orange,
-      highlightColor: Colors.transparent,
-      focusColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-        side: BorderSide(
-          color: Colors.grey.withOpacity(0.5),
-          width: 1,
-        ),
-      ),
+    Widget updateButton = RaisedButton(
+      color: Colors.orange[800],
       child: Text(
-        "Update",
+        "UPDATE",
         style: TextStyle(color: Colors.white),
       ),
       onPressed: () async {
@@ -285,15 +279,15 @@ class _DivisionState extends State<Division> {
         if(sts.contains("1")){
           Navigator.of(context, rootNavigator: true).pop('dialog');
           showDialog(
-              context: context,
-              builder: (context) {
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(context).pop(true);
-                });
-                return AlertDialog(
-                  content: new Text("Division update successfully."),
-                );
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
               });
+              return AlertDialog(
+                content: new Text("Division is updated successfully"),
+              );
+            });
           /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Division update successfully.'),
@@ -306,15 +300,15 @@ class _DivisionState extends State<Division> {
         }else if(sts.contains("-2")){
           Navigator.of(context, rootNavigator: true).pop('dialog');
           showDialog(
-              context: context,
-              builder: (context) {
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(context).pop(true);
-                });
-                return AlertDialog(
-                  content: new Text("Employees assigned to this division therefore can't be updated"),
-                );
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
               });
+              return AlertDialog(
+                content: new Text("This division can't be deactivated. Employees are already assigned to it"),
+              );
+            });
           /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text("Employees assigned to this division therefore can't be updated"),
@@ -327,15 +321,15 @@ class _DivisionState extends State<Division> {
         }else{
           Navigator.of(context, rootNavigator: true).pop('dialog');
           showDialog(
-              context: context,
-              builder: (context) {
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(context).pop(true);
-                });
-                return AlertDialog(
-                  content: new Text("Unable to update division"),
-                );
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
               });
+              return AlertDialog(
+                content: new Text("Unable to update division"),
+              );
+            });
           /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Unable to update division'),
@@ -407,8 +401,8 @@ class _DivisionState extends State<Division> {
         ),
       ),
       actions: [
-        cancelButton,
         updateButton,
+        cancelButton,
       ],
     );
     // show the dialog

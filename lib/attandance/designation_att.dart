@@ -302,50 +302,12 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
               )*/
                   ],
                 ),
-                Divider(
+                today.text.isNotEmpty?Divider(
                   height: 5,
                   color: Colors.black,
-                ),
-                getDesignations_DD(),
-                getDesgEmp_DD(),
-                /* res==true?new Container(
-            padding: EdgeInsets.all(0.1),
-            margin: EdgeInsets.all(0.1),
-            child: new ListTile(
-              title: new SizedBox(height: MediaQuery.of(context).size.height*0.27,
-
-                child: new FutureBuilder<List<Map<String,String>>>(
-                    future: getChartDataCDate(today.text),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data.length > 0) {
-                          return new PieOutsideLabelChart.withRandomData(snapshot.data);
-                        }
-                      }
-                      return new Center( child: CircularProgressIndicator());
-                    }
-                ),
-
-                //  child: new PieOutsideLabelChart.withRandomData(),
-
-                width: MediaQuery.of(context).size.width*1.0,),
-            ),
-          ):Container(
-            height: MediaQuery.of(context).size.height*0.25,
-            child: Center(
-              child:Text('No Chart Available'),
-            ),
-          ),
-          res==true?new Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Text('Early Leavers(EL)',style: TextStyle(color:Colors.black87,fontSize: 12.0),),
-              Text('Late Comers(LC)',style: TextStyle(color:Colors.black87,fontSize: 12.0),),
-              Text('Absent(A)',style: TextStyle(color:Colors.black87,fontSize: 12.0),),
-              Text('Present(P)',style: TextStyle(color:Colors.black87,fontSize: 12.0),),
-            ],
-          ):Center(),*/
+                ):Center(),
+                today.text.isNotEmpty?getDesignations_DD():Center(),
+                today.text.isNotEmpty?getDesgEmp_DD():Center(),
                 new Container(
                   decoration: new BoxDecoration(color: Colors.black54),
                   child: new TabBar(
@@ -1286,10 +1248,11 @@ class _Designation_att extends State<Designation_att> with SingleTickerProviderS
                 ),
               );
             }catch(e){
-              return Text("Ex: Unable to fetch departments");
+              print(e);
+              return Text("Ex: Unable to fetch designations");
             }
           } else if (snapshot.hasError) {
-            return new Text("ER: Unable to fetch departments");
+            return new Text("ER: Unable to fetch designations");
           }
           // return loader();
           return new Center(child: SizedBox(

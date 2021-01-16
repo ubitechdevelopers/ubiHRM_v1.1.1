@@ -152,13 +152,9 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                             if (date != null && date.toString()!='') {
                               res=true; //showInSnackBar(date.toString());
                               //setAlldata();
-                            } /*else {
+                            } else {
                               res=false;
-                              countP='0';
-                              countA='0';
-                              countE='0';
-                              countL='0';
-                            }*/
+                            }
                           });
                         },
                         validator: (date) {
@@ -599,8 +595,7 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
                                       )
                                   );
                                 }
-                              }
-                              else if (snapshot.hasError) {
+                              } else if (snapshot.hasError) {
                                 return new Text("Unable to connect server");
                                 //  return new Text("${snapshot.error}");
                               }

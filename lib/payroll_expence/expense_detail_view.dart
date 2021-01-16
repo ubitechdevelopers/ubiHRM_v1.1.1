@@ -100,15 +100,15 @@ class _PayrollExpenseDetailViewState extends State<PayrollExpenseDetailView> {
           MaterialPageRoute(builder: (context) => MyPayrollExpense()),
         );
         showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
-              });
-              return AlertDialog(
-                content: new Text("Expense claim withdrawn successfully."),
-              );
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
             });
+            return AlertDialog(
+              content: new Text("Expense claim withdrawn successfully"),
+            );
+          });
         /*showDialog(context: context, child:
         new AlertDialog(
           //  title: new Text("Congrats!"),
@@ -121,39 +121,39 @@ class _PayrollExpenseDetailViewState extends State<PayrollExpenseDetailView> {
           _checkwithdrawnexpense = false;
         });
         showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
-              });
-              return AlertDialog(
-                content: new Text("Expense claim could not be withdrawn."),
-              );
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
             });
+            return AlertDialog(
+              content: new Text("Expense claim could not be withdrawn"),
+            );
+          });
         /*showDialog(context: context, child:
         new AlertDialog(
           //title: new Text("Sorry!"),
           content: new Text("Expense claim could not be withdrawn."),
         )
         );*/
-      } /*else{
-        setState(() {
-          _isButtonDisabled=false;
-        });
-        showDialog(context: context, child:
-        new AlertDialog(
-          // title: new Text("Sorry!"),
-          content: new Text("Poor network connection."),
-        )
-        );
-      }*/
+      }
     }catch(e){
       print(e.toString());
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Poor network connection"),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Poor network connection."),
       )
-      );
+      );*/
     }
   }
 

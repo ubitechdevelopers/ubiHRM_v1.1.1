@@ -660,28 +660,48 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                           if(sts=="true") {
                             Navigator.pop(context);
                             showDialog(
+                              context: context,
+                              builder: (context) {
+                                Future.delayed(Duration(seconds: 3), () {
+                                  Navigator.of(context).pop(true);
+                                });
+                                return AlertDialog(
+                                  content: new Text("Time Off application approved successfully"),
+                                );
+                              });
+                            /*showDialog(
                                 context: context,
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
                                   content: new Text("Time Off application approved successfully."),
                                 )
-                            );
-                            await new Future.delayed(const Duration(seconds: 2));
-                            Navigator.pop(context);
+                            );*/
+                            //await new Future.delayed(const Duration(seconds: 2));
+                            //Navigator.pop(context);
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => TeamTimeoffSummary()),
                             );
                           }else{
                             showDialog(
-                                context: context,
-                                builder: (_) =>
-                                new AlertDialog(
-                                  //title: new Text("Dialog Title"),
-                                  content: new Text("Time Off application could not be approved."),
-                                )
-                            );
+                              context: context,
+                              builder: (context) {
+                                Future.delayed(Duration(seconds: 3), () {
+                                  Navigator.of(context).pop(true);
+                                });
+                                return AlertDialog(
+                                  content: new Text("Time Off application could not be approved"),
+                                );
+                              });
+                            /*showDialog(
+                              context: context,
+                              builder: (_) =>
+                              new AlertDialog(
+                                //title: new Text("Dialog Title"),
+                                content: new Text("Time Off application could not be approved."),
+                              )
+                            );*/
                           }
                         },
                         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0),),
@@ -710,47 +730,51 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                           if(sts=="true") {
                             Navigator.pop(context);
                             showDialog(
-                                context: context,
-                                builder: (_) =>
-                                new AlertDialog(
-                                  //title: new Text("Dialog Title"),
-                                  content: new Text("Time Off application rejected successfully."),
-                                )
-                            );
-
-                            await new Future.delayed(const Duration(seconds: 2));
-                            Navigator.pop(context);
+                              context: context,
+                              builder: (context) {
+                                Future.delayed(Duration(seconds: 3), () {
+                                  Navigator.of(context).pop(true);
+                                });
+                                return AlertDialog(
+                                  content: new Text("Time Off application rejected successfully"),
+                                );
+                              });
+                            /*showDialog(
+                              context: context,
+                              builder: (_) =>
+                              new AlertDialog(
+                                //title: new Text("Dialog Title"),
+                                content: new Text("Time Off application rejected successfully."),
+                              )
+                            );*/
+                            //await new Future.delayed(const Duration(seconds: 2));
+                            //Navigator.pop(context);
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => TeamTimeoffSummary()),
                             );
-
                           }else{
                             showDialog(
+                                context: context,
+                                builder: (context) {
+                                  Future.delayed(Duration(seconds: 3), () {
+                                    Navigator.of(context).pop(true);
+                                  });
+                                  return AlertDialog(
+                                    content: new Text("Time Off application could not be rejected"),
+                                  );
+                                });
+                            /*showDialog(
                                 context: context,
                                 builder: (_) =>
                                 new AlertDialog(
                                   //title: new Text("Dialog Title"),
                                   content: new Text("Time Off application could not be rejected."),
                                 )
-                            );
+                            );*/
                           }
-
-
-
-                          /* Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => TimeOffApp()),
-                          );*/
                         },
                         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0),),
-
-                        /* color: Colors.red,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),*/
-                        /* gradient: LinearGradient(
-                          colors: <Color>[Colors.red[700], Colors.red[700]],
-                        ),*/
                         child: new Text('Reject',
                             style: new TextStyle(
                                 color: Colors.red[700],
@@ -765,10 +789,8 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
               ),
             ),
           );
-
         }
     );
-
   }
 
 
@@ -777,7 +799,6 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
     print('getPunchPrefs called: new lid- '+ prefs.getString('lid').toString());
     return prefs.getString('lid');
   }
-
 
 /////////////////////futere method dor getting today's punched liist-start
 

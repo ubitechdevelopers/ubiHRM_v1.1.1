@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,12 +9,8 @@ import 'package:ubihrm/global.dart';
 import 'package:ubihrm/home.dart';
 import '../appbar.dart';
 import '../drawer.dart';
-import '../services/attandance_saveimage.dart';
 import '../services/attandance_services.dart';
 import 'punchlocation_summary.dart';
-//import 'Image_view.dart';
-
-//import 'package:intl/intl.dart';
 
 
 void main() => runApp(new TeamPunchLocationSummary());
@@ -90,7 +85,6 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
 
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
 
-    //      print("ABCDEFGHI-"+profile);
     profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
         setState(() {
@@ -101,60 +95,14 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
     showtabbar=false;
   }
 
-/*  setLocationAddress() async {
-    setState(() {
-      streamlocationaddr = globalstreamlocationaddr;
-      if (list != null && list.length > 0) {
-        lat = list[list.length - 1].latitude.toString();
-        long = list[list.length - 1].longitude.toString();
-        if (streamlocationaddr == '') {
-          streamlocationaddr = lat + ", " + long;
-        }
-      }
-      if(streamlocationaddr == ''){
-        sl.startStreaming(5);
-        startTimer();
-      }
-      //print("home addr" + streamlocationaddr);
-      //print(lat + ", " + long);
-      //print(stopstreamingstatus.toString());
-    });
-  }
-
-  startTimer() {
-    const fiveSec = const Duration(seconds: 5);
-    int count = 0;
-    timer = new Timer.periodic(fiveSec, (Timer t) {
-      //print("timmer is running");
-      count++;
-      //print("timer counter" + count.toString());
-      setLocationAddress();
-      if (stopstreamingstatus) {
-        t.cancel();
-        //print("timer canceled");
-      }
-    });
-  }*/
-
-  // This widget is the root of your application.
-  void showInSnackBar(String value) {
-    final snackBar = SnackBar(
-        content: Text(value, textAlign: TextAlign.center,));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
-  }
   Future<bool> sendToHome() async{
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );*/
-    print("-------> back button pressed");
-    //  return false;
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
     );
     return false;
   }
+
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
@@ -411,7 +359,7 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
               Divider(),
 
               Expanded(
-                //        height: MediaQuery.of(context).size.height*0.60,
+                //height: MediaQuery.of(context).size.height*0.60,
                 child: new FutureBuilder<List<Punch>>(
                   future: getTeamSummaryPunch(today.text,empname),
                   builder: (context, snapshot) {
@@ -618,131 +566,9 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
                                       ),
                                     ]),
                               );
-                              /*return new Column(
-                                // crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .start,
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: <Widget>[
-                                        Expanded(
-                                            flex: 50,
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment
-                                                  .start,
-                                              mainAxisAlignment: MainAxisAlignment
-                                                  .start,
-                                              children: <Widget>[
-                                                Text(
-                                                  snapshot.data[index].Emp
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight
-                                                          .bold),),
-                                                SizedBox(height: 10.0,),
-                                                Text("TimeIn:    " +
-                                                    snapshot.data[index]
-                                                        .pi_time
-                                                        .toString(),),
-                                                SizedBox(height: 5.0,),
-                                                Text("TimeOut: " +
-                                                    snapshot.data[index]
-                                                        .po_time
-                                                        .toString(),),
-
-
-                                              ],
-                                            )
-                                        ),
-
-                                        Expanded(
-                                          flex: 50,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment
-                                                .start,
-                                            children: <Widget>[
-                                              Text(
-                                                snapshot.data[index].client
-                                                    .toString(),
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight
-                                                      .bold,
-                                                ),),
-
-                                              InkWell(
-                                                child: Text('In: ' +
-                                                    snapshot.data[index]
-                                                        .pi_loc.toString(),
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .black54,
-                                                        fontSize: 12.0)),
-                                                onTap: () {
-                                                  goToMap(
-                                                      snapshot.data[index]
-                                                          .pi_latit,
-                                                      snapshot.data[index]
-                                                          .pi_longi);
-                                                },
-                                              ),
-                                              SizedBox(height: 2.0),
-                                              InkWell(
-                                                child: Text('Out: ' +
-                                                    snapshot.data[index]
-                                                        .po_loc.toString(),
-                                                  style: TextStyle(
-                                                      color: Colors.black54,
-                                                      fontSize: 12.0),),
-                                                onTap: () {
-                                                  goToMap(
-                                                      snapshot.data[index]
-                                                          .po_latit,
-                                                      snapshot.data[index]
-                                                          .po_longi);
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-
-
-                                      ],
-                                    ),
-
-                                    snapshot.data[index].desc == ''
-                                        ? Container()
-                                        : snapshot.data[index].desc !=
-                                        'Visit out not punched' ?
-                                    Row(
-                                      children: <Widget>[
-                                        // SizedBox(width: 16.0,),
-                                        Text('Remark: ', style: TextStyle(
-                                          fontWeight: FontWeight.bold,),),
-                                        Text(snapshot.data[index].desc)
-                                      ],
-
-                                    ) :
-                                    Row(
-                                      children: <Widget>[
-                                        // SizedBox(width: 16.0,),
-                                        Text('Remark: ', style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.red),),
-                                        Text(snapshot.data[index].desc,
-                                          style: TextStyle(color: Colors.red),)
-                                      ],
-
-                                    ),
-                                    Divider(color: Colors.black26,),
-                                  ]);*/
-
                             }
                         );
-                      }
-                      else
-                      {
+                      }else{
                         return new Center(
                           child: Container(
                             width: MediaQuery.of(context).size.width*1,
@@ -755,7 +581,6 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
                     } else if (snapshot.hasError) {
                       return new Text("Unable to connect server");
                     }
-
                     // By default, show a loading spinner
                     return new Center( child: CircularProgressIndicator());
                   },

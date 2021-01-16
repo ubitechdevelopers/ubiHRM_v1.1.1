@@ -154,120 +154,200 @@ class _RequestLeaveState extends State<RequestLeave> {
     String orgid = prefs.getString("organization")??"";
     Leave leave =new Leave(uid: uid, leavefrom: leavefrom, leaveto: leaveto, orgid: orgid, reason: reason, leavetypeid: leavetype, leavetypefrom: leavetypefrom, leavetypeto: leavetypeto, halfdayfromtype: halfdayfromtype, halfdaytotype: halfdaytotype, substituteemp: substituteemp, compoffsts:compoffsts);
     var islogin1 = await requestLeave(leave);
-    //print("---ss>"+islogin1);
     if(islogin1=="true"){
       //showInSnackBar("Leave has been applied successfully.");
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Leave application applied successfully"),
+          );
+        });
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => MyLeave()), (Route<dynamic> route) => false,
       );
+      setState(() {
+        isServiceCalling = false;
+      });
       // ignore: deprecated_member_use
-      showDialog(context: context, child:
+      /*showDialog(context: context, child:
       new AlertDialog(
-
         content: new Text('Leave application applied successfully.'),
       )
-      );
+      );*/
     }else if(islogin1=="false1"){
       // ignore: deprecated_member_use
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("There is some problem while applying for Leave"),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('There is some problem while applying for Leave.'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling = false;
       });
       //showInSnackBar("There is some problem while applying for Leave.");
     }else if(islogin1=="false2"){
       // ignore: deprecated_member_use
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Please Select leave type"),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Please Select leave type.'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling = false;
       });
       //showInSnackBar("There is some problem while applying for Leave.");
     }else if(islogin1=="false3"){
       // ignore: deprecated_member_use
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Fiscal year not found"),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Fiscal year not found'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling = false;
       });
       //showInSnackBar("There is some problem while applying for Leave.");
     }else if(islogin1=="wrong"){
       // ignore: deprecated_member_use
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Leave format is wrong"),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Leave format is wrong'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling = false;
       });
       //showInSnackBar("Leave format is wrong");
     }else if(islogin1=="You cannot apply for comp off"){
       // ignore: deprecated_member_use
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("You cannot apply for comp off"),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('You cannot apply for comp off'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling = false;
       });
       //showInSnackBar("Leave format is wrong");
     }else if(islogin1=="You cannot apply more than credited leaves"){
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("You cannot apply more than credited leaves"),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('You cannot apply more than credited leaves'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling = false;
       });
       //showInSnackBar("Leave format is wrong");
     }else if(islogin1=="alreadyApply"){
       // ignore: deprecated_member_use
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("You have already applied for same date"),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('You have already applied for same date'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling = false;
       });
       //showInSnackBar("You already applied for same date");
     }else{
       // ignore: deprecated_member_use
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Poor Network Connection"),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text('Poor Network Connection'),
       )
-      );
+      );*/
       setState(() {
         isServiceCalling = false;
       });
       //showInSnackBar("Poor Network Connection");
     }
   }
-
-/*  Future<Widget> islogin() async{
-    final prefs = await SharedPreferences.getInstance();
-    int response = prefs.getInt('response')??0;
-    if(response==1){
-      return mainScafoldWidget();
-    }else{
-      return new LoginPage();
-    }
-
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -278,18 +358,13 @@ class _RequestLeaveState extends State<RequestLeave> {
 
   Widget loadingWidget(){
     return Center(child:SizedBox(
-
       child:
       Text("Loading..", style: TextStyle(fontSize: 10.0,color: Colors.white),),
     ));
   }
 
   Future<bool> sendToLeaveList() async{
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );*/
-    print("-------> back button pressed");
+    //print("-------> back button pressed");
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => MyLeave()), (Route<dynamic> route) => false,
@@ -318,7 +393,6 @@ class _RequestLeaveState extends State<RequestLeave> {
               ),
               child: homewidget()
           )
-
       ),
     );
   }
@@ -479,14 +553,14 @@ class _RequestLeaveState extends State<RequestLeave> {
                                 Text("Second Half",style: TextStyle(fontSize: 16.0),)
                               ],
                             ):Container(),
-                            SizedBox(height: 5.0,),
+                            //SizedBox(height: 5.0,),
                             Row(
                               children: <Widget>[
                                 new Expanded(
                                   child: Container(
                                     //margin: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                                     //height: 70.0,
-                                    height: MediaQuery.of(context).size.height*0.1,
+                                    //height: MediaQuery.of(context).size.height*0.1,
                                     child:DateTimeField(
                                       //firstDate: new DateTime.now(),
                                       //initialDate: new DateTime.now(),
@@ -502,7 +576,6 @@ class _RequestLeaveState extends State<RequestLeave> {
                                             initialDate: currentValue ?? DateTime.now(),
                                             firstDate: DateTime.now().subtract(Duration(days: 8)),
                                             lastDate: DateTime(2100));
-
                                       },
                                       decoration: InputDecoration(
                                         prefixIcon: Padding(
@@ -538,10 +611,10 @@ class _RequestLeaveState extends State<RequestLeave> {
                                 (CompoffSts=='0')?SizedBox(width: 10.0):Center(),
                                 (CompoffSts=='0')?Expanded(
                                     child:Padding(
-                                      padding: const EdgeInsets.only(top:9.0),
+                                      padding: const EdgeInsets.only(top:0.0),
                                       child: Container(
                                         //height: 50.0,
-                                        height: MediaQuery.of(context).size.height*0.08,
+                                        //height: MediaQuery.of(context).size.height*0.08,
                                         child: new InputDecorator(
                                             decoration: InputDecoration(
                                               // labelText: 'Leave Type',
@@ -637,54 +710,103 @@ class _RequestLeaveState extends State<RequestLeave> {
                               maxLines: 1,
                             ),
 
-                            SizedBox(height: 10.0,),
+                            SizedBox(height: 5.0,),
 
                             (CompoffSts=='0')?getSubstituteEmp_DD():Center(),
                             //getSubstituteEmp_DD(),
 
                             ButtonBar(
                               children: <Widget>[
-
                                 RaisedButton(
                                   child: isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('APPLY',style: TextStyle(color: Colors.white),),
                                   color: Colors.orange[800],
                                   onPressed: () {
                                     if (_formKey.currentState.validate()) {
                                       if (leavetype == '0') {
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please select leave type"),
+                                            );
+                                          });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                           //title: new Text("Sorry!"),
                                           content: new Text("Please select leave type!"),
                                         )
-                                        );
+                                        );*/
                                       }else if(_dateController.text==""){
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please enter leave start date"),
+                                            );
+                                          });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                           //title: new Text("Sorry!"),
                                           content: new Text("Please enter leave from date"),
                                         )
-                                        );
+                                        );*/
                                       }else if(_dateController1.text==""){
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please enter leave end date"),
+                                            );
+                                          });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                           //title: new Text("Sorry!"),
                                           content: new Text("Please enter leave to date"),
                                         )
-                                        );
+                                        );*/
                                       }else if(Date2.isBefore(Date1)){
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("End date can't be earlier than start date"),
+                                            );
+                                          });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                           //title: new Text("Sorry!"),
                                           content: new Text("To date can't be smaller"),
                                         )
-                                        );
+                                        );*/
                                       }else if(_reasonController.text==""){
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please enter reason"),
+                                            );
+                                          });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                           //title: new Text("Sorry!"),
                                           content: new Text("Please enter reason"),
                                         )
-                                        );
+                                        );*/
                                       }else{
                                         if(CompoffSts=='0')
                                           requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text.trim(), substituteemp, CompoffSts);

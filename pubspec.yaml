@@ -62,6 +62,7 @@ dependencies:
   multiselect_formfield: ^0.1.5
   flutter_appavailability: ^0.0.21
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -83,6 +84,7 @@ flutter:
   uses-material-design: true
   assets:
         - assets/avatar.png
+        - assets/default.png
         - assets/attendance_icon.png
         - assets/leave_icon.png
         - assets/timeoff_icon.png
@@ -119,6 +121,7 @@ flutter:
         - assets/icons/Dashboard_icon.png
         - assets/icons/Flexi_icon.png
         - assets/icons/visits_icon.png
+        - assets/icons/Employee_icon.png
 
   fonts:
     - family:  CustomIcon

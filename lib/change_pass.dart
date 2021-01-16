@@ -89,7 +89,7 @@ class _changePassword extends State<changePassword> {
     return Scaffold(
       backgroundColor:scaffoldBackColor(),
       key: _scaffoldKey,
-      appBar:  new AppHeader(profileimage,showtabbar,orgName),
+      appBar: new AppHeader(profileimage,showtabbar,orgName),
       bottomNavigationBar: new HomeNavigation(),
       endDrawer: new AppDrawer(),
       body:  mainbodyWidget(),
@@ -269,15 +269,15 @@ class _changePassword extends State<changePassword> {
                               //showInSnackBar("New password can't same as old");
                               // ignore: deprecated_member_use
                               showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    Future.delayed(Duration(seconds: 3), () {
-                                      Navigator.of(context).pop(true);
-                                    });
-                                    return AlertDialog(
-                                      content: new Text("New password can't same as old"),
-                                    );
+                                context: context,
+                                builder: (context) {
+                                  Future.delayed(Duration(seconds: 3), () {
+                                    Navigator.of(context).pop(true);
                                   });
+                                  return AlertDialog(
+                                    content: new Text("New password can't same as old"),
+                                  );
+                                });
                               /*showDialog(context: context, child:
                               new AlertDialog(
                                 // title: new Text("Sorry!"),
@@ -291,15 +291,15 @@ class _changePassword extends State<changePassword> {
                                   _newPass.text='';
                                   _oldPass.text='';
                                   showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        Future.delayed(Duration(seconds: 3), () {
-                                          Navigator.of(context).pop(true);
-                                        });
-                                        return AlertDialog(
-                                          content: new Text("Password changed successfully"),
-                                        );
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
                                       });
+                                      return AlertDialog(
+                                        content: new Text("Password changed successfully"),
+                                      );
+                                    });
                                   //showInSnackBar("Password changed successfully");
                                   // ignore: deprecated_member_use
                                   /*showDialog(context: context, child:
@@ -312,15 +312,15 @@ class _changePassword extends State<changePassword> {
                                   //showInSnackBar("Old Password did not match");
                                   // ignore: deprecated_member_use
                                   showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        Future.delayed(Duration(seconds: 3), () {
-                                          Navigator.of(context).pop(true);
-                                        });
-                                        return AlertDialog(
-                                          content: new Text("Old Password did not match"),
-                                        );
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
                                       });
+                                      return AlertDialog(
+                                        content: new Text("Old Password did not match"),
+                                      );
+                                    });
                                   /*showDialog(context: context, child:
                                   new AlertDialog(
                                     // title: new Text("Sorry!"),
@@ -331,15 +331,15 @@ class _changePassword extends State<changePassword> {
                                   //showInSnackBar("New password can't be the same as old password");
                                   // ignore: deprecated_member_use
                                   showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        Future.delayed(Duration(seconds: 3), () {
-                                          Navigator.of(context).pop(true);
-                                        });
-                                        return AlertDialog(
-                                          content: new Text("New password can't be the same as old password"),
-                                        );
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
                                       });
+                                      return AlertDialog(
+                                        content: new Text("New password can't be the same as old password"),
+                                      );
+                                    });
                                   /*showDialog(context: context, child:
                                   new AlertDialog(
                                     // title: new Text("Sorry!"),
@@ -350,15 +350,15 @@ class _changePassword extends State<changePassword> {
                                   //showInSnackBar("Unable to set password "+res.toString());
                                   // ignore: deprecated_member_use
                                   showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        Future.delayed(Duration(seconds: 3), () {
-                                          Navigator.of(context).pop(true);
-                                        });
-                                        return AlertDialog(
-                                          content: new Text("Unable to set password "+res.toString()),
-                                        );
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
                                       });
+                                      return AlertDialog(
+                                        content: new Text("Unable to set password "+res.toString()),
+                                      );
+                                    });
                                   /*showDialog(context: context, child:
                                   new AlertDialog(
                                     // title: new Text("Sorry!"),
@@ -369,15 +369,15 @@ class _changePassword extends State<changePassword> {
                                 //showInSnackBar("Unable to connect server");
                                 // ignore: deprecated_member_use
                                 showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      Future.delayed(Duration(seconds: 3), () {
-                                        Navigator.of(context).pop(true);
-                                      });
-                                      return AlertDialog(
-                                        content: new Text("Unable to connect server"),
-                                      );
+                                  context: context,
+                                  builder: (context) {
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context).pop(true);
                                     });
+                                    return AlertDialog(
+                                      content: new Text("Unable to connect server"),
+                                    );
+                                  });
                                 /*showDialog(context: context, child:
                                 new AlertDialog(
                                   // title: new Text("Sorry!"),

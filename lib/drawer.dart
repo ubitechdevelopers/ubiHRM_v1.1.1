@@ -104,14 +104,14 @@ class _AppDrawerState extends State<AppDrawer> {
                                   image: new DecorationImage(
                                     fit: BoxFit.fill,
                                     //  image: NetworkImage(globalcompanyinfomap['ProfilePic']),
-                                    image: _checkLoaded ? AssetImage('assets/avatar.png') : NetworkImage(globalcompanyinfomap['ProfilePic']),
+                                    image: _checkLoaded ? AssetImage('assets/default.png') : NetworkImage(globalcompanyinfomap['ProfilePic']),
                                   )
                                 )
                               ),
                             ),
                           ]),
                                                 SizedBox(height: 4.0,),
-                        Text("Hi "+globalpersnalinfomap['FirstName'],style: new TextStyle(fontSize: 18.0,color: Colors.white)),
+                        Text("Hi "+globalpersnalinfomap['FirstName']+" "+globalpersnalinfomap['LastName'],style: new TextStyle(fontSize: 18.0,color: Colors.white)),
                         SizedBox(height: 3.0),
                         Text(globalcompanyinfomap['Designation'],style: new TextStyle(fontSize: 12.0,color: Colors.white)),
                         sstatus!=''?Text(sstatus,style: new TextStyle(fontSize: 10.0,color: Colors.white)):Center(),
@@ -186,7 +186,7 @@ class _AppDrawerState extends State<AppDrawer> {
             },
           ):Center(),
 
-          (perPayroll=='1') ? new ListTile(
+          (perPayroll=='1' || perPayPeriod=='1') ? new ListTile(
             title: Row(
               children: <Widget>[
                 Icon(Icons.monetization_on,size: 20.0),SizedBox(width: 5.0),

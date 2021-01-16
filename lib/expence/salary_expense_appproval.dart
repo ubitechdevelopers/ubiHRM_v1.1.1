@@ -546,16 +546,20 @@ class ChoiceCard1 extends StatelessWidget {
                                 print("kk");
                                 print("kk"+sts);
                                 if(sts=="true") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => SalaryExpenseApproval()),
+                                  );
                                   showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        Future.delayed(Duration(seconds: 3), () {
-                                          Navigator.of(context).pop(true);
-                                        });
-                                        return AlertDialog(
-                                          content: new Text("Expense claim approved successfully."),
-                                        );
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
                                       });
+                                      return AlertDialog(
+                                        content: new Text("Expense claim approved successfully."),
+                                      );
+                                    });
                                   /*showDialog(
                                       context: context,
                                       builder: (_) =>
@@ -564,18 +568,21 @@ class ChoiceCard1 extends StatelessWidget {
                                         content: new Text("Expense claim approved successfully."),
                                       )
                                   );*/
-                                }
-                                else{
+                                } else{
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => SalaryExpenseApproval()),
+                                  );
                                   showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        Future.delayed(Duration(seconds: 3), () {
-                                          Navigator.of(context).pop(true);
-                                        });
-                                        return AlertDialog(
-                                          content: new Text("Expense claim could not be approved."),
-                                        );
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
                                       });
+                                      return AlertDialog(
+                                        content: new Text("Expense claim could not be approved."),
+                                      );
+                                    });
                                   /*showDialog(
                                       context: context,
                                       builder: (_) =>
@@ -585,10 +592,6 @@ class ChoiceCard1 extends StatelessWidget {
                                       )
                                   );*/
                                 }
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => SalaryExpenseApproval()),
-                                );
                               },
                               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0),),
                             )
@@ -611,16 +614,20 @@ class ChoiceCard1 extends StatelessWidget {
                                 var sts = await ApproveExpense(expenseid,CommentController.text,1);
                                 print("ff"+sts);
                                 if(sts=="true") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => SalaryExpenseApproval()),
+                                  );
                                   showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        Future.delayed(Duration(seconds: 3), () {
-                                          Navigator.of(context).pop(true);
-                                        });
-                                        return AlertDialog(
-                                          content: new Text("Expense claim rejected successfully."),
-                                        );
+                                    context: context,
+                                    builder: (context) {
+                                      Future.delayed(Duration(seconds: 3), () {
+                                        Navigator.of(context).pop(true);
                                       });
+                                      return AlertDialog(
+                                        content: new Text("Expense claim rejected successfully."),
+                                      );
+                                    });
                                   /*showDialog(
                                       context: context,
                                       builder: (_) =>
@@ -629,8 +636,11 @@ class ChoiceCard1 extends StatelessWidget {
                                         content: new Text("Expense claim rejected successfully."),
                                       )
                                   );*/
-                                }
-                                else{
+                                } else{
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => SalaryExpenseApproval()),
+                                  );
                                   showDialog(
                                       context: context,
                                       builder: (context) {
@@ -649,11 +659,8 @@ class ChoiceCard1 extends StatelessWidget {
                                         content: new Text("Expense claim could not be rejected."),
                                       )
                                   );*/
+
                                 }
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => SalaryExpenseApproval()),
-                                );
                               },
                               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(0.0))
                           ),
@@ -726,7 +733,7 @@ class ApprovalAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

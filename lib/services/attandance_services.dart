@@ -13,23 +13,23 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 Future checkNow() async {
-  final res = await http.get(path_ubiattendance + 'getAppVersion?platform=ios');
-  print(path_ubiattendance + 'getAppVersion?platform=ios');
+  final res = await http.get(path_ubiattendance + 'getAppVersion?platform=Android');
+  print(path_ubiattendance + 'getAppVersion?platform=Android');
   return ((json.decode(res.body.toString()))[0]['version']).toString();
 }
 
 
 Future checkMandUpdate() async {
-  print(path_ubiattendance + 'checkMandUpdate?platform=ios');
-  final res = await http.get(path_ubiattendance+ 'checkMandUpdate?platform=ios');
+  final res = await http.get(path_ubiattendance+ 'checkMandUpdate?platform=Android');
+  print(path_ubiattendance + 'checkMandUpdate?platform=Android');
   return ((json.decode(res.body))[0]['is_update']).toString();
 }
 
 
 Future UpdateStatus() async {
   try{
-    print(path_ubiattendance+ 'UpdateStatus?platform=ios');
-    final res = await http.get(path_ubiattendance+ 'UpdateStatus?platform=ios');
+    final res = await http.get(path_ubiattendance+ 'UpdateStatus?platform=Android');
+    print(path_ubiattendance+ 'UpdateStatus?platform=Android');
     return ((json.decode(res.body.toString()))[0]['status']).toString();
   }
   catch(e){
@@ -1782,13 +1782,12 @@ Future<int> addEmployee(fname, lname, email, countryCode, countryId, contact, pa
 }
 
 
-Future<int> editEmployee(fname, lname, email, contact, dept, desg, shift, empid) async {
+Future<int> editEmployee(fname, lname, email, contact, div, dept, desg, loc, shift, empid) async {
   final prefs = await SharedPreferences.getInstance();
   String uid = prefs.getString('empid') ?? '';
   String orgdir = prefs.getString('orgdir') ?? '';
-  int adminsts = prefs.getInt('adminsts') ?? 0;
-  print(path_ubiattendance+'updateEmp?uid=$uid&org_id=$orgdir&f_name=$fname&l_name=$lname&username=$email&contact=$contact&admin=1&designation=$desg&department=$dept&shift=$shift&empid=$empid');
-  final response = await http.get(path_ubiattendance +'updateEmp?uid=$uid&org_id=$orgdir&f_name=$fname&l_name=$lname&username=$email&contact=$contact&admin=1&designation=$desg&department=$dept&shift=$shift&empid=$empid');
+  print(path_ubiattendance+'updateEmp?uid=$uid&org_id=$orgdir&f_name=$fname&l_name=$lname&username=$email&contact=$contact&admin=1&division=$div&designation=$desg&department=$dept&location=$loc&shift=$shift&empid=$empid');
+  final response = await http.get(path_ubiattendance +'updateEmp?uid=$uid&org_id=$orgdir&f_name=$fname&l_name=$lname&username=$email&contact=$contact&admin=1&division=$div&designation=$desg&department=$dept&location=$loc&shift=$shift&empid=$empid');
   var res = json.decode(response.body);
   return res['sts'];
 }
@@ -1820,9 +1819,10 @@ Future<int> changeMyPassword(oldPass, newPass) async {
 }
 
 Future<int> resetMyPassword(username) async {
-  final prefs = await SharedPreferences.getInstance();
-  print(path_ubiattendance +'resetPasswordLink?una=$username');
-  final response = await http.get(path_ubiattendance +'resetPasswordLink?una=$username');
+  var url = path_ubiattendance+"resetPasswordLink";
+  final response = await http.post(url, body: {
+  "una":username});
+  print(path+'resetPasswordLink?una=$username');
   return int.parse(response.body);
 }
 //'https://ubiattendance.ubihrm.com/index.php/services/resetPasswordLink?una='+una+'&refno='+refno,
@@ -1977,6 +1977,7 @@ class Attn {
   String LateComingHours;
   String EarlyLeavingHours;
   String Device;
+  String DeviceTimeOut;
   String TotalTime;
 
   Attn({
@@ -2004,6 +2005,7 @@ class Attn {
     this.LateComingHours,
     this.EarlyLeavingHours,
     this.Device,
+    this.DeviceTimeOut,
     this.TotalTime,
   });
 }
@@ -2297,7 +2299,7 @@ List<EmpList> createListLateComings(List data,String empname) {
       if (name.toLowerCase().contains(empname.toLowerCase()))
         list.add(row);
     }
-  }else{
+  }else
     for (int i = 0; i < data.length; i++) {
       String diff = data[i]["lateby"];
       String timeAct = data[i]["timein"];
@@ -2311,7 +2313,6 @@ List<EmpList> createListLateComings(List data,String empname) {
           date: date);
       list.add(row);
     }
-  }
   return list;
 }
 //******************Late Comer Attn Data****************//
@@ -2713,11 +2714,12 @@ List<Attn> createAttList(List data){
     String ShiftTime=data[i]["totalshifttime"];
     String TotalTime=data[i]["totaltime"];
     String BreakTime=data[i]["breakTime"];
-    String TimeOffTime=data[i]["timeoff"];
+    String TimeOffTime=data[i]["timeoff"]=="00:00"?'':data[i]["timein"].toString();
     String LateComingHours=data[i]["latehrs"];
     String EarlyLeavingHours=data[i]["earlyhrs"];
     String OverTime=data[i]["overtime"];
     String Device=data[i]["device"];
+    String DeviceTimeOut=data[i]["devicetimeout"];
     int id = 0;
     Attn att = new Attn(
       Date: Date,
@@ -2733,6 +2735,7 @@ List<Attn> createAttList(List data){
       EarlyLeavingHours: EarlyLeavingHours,
       OverTime: OverTime,
       Device: Device,
+      DeviceTimeOut: DeviceTimeOut,
     );
     list.add(att);
   }

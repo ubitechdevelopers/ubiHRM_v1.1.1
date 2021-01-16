@@ -60,7 +60,6 @@ List<Permission> createPermList(List data) {
 getModulePermission(String moduleid, String permission_type){
   List<Permission> list = new List();
   list = globalpermissionlist;
-
   for (int i = 0; i < list.length; i++) {
     if(list[i].moduleid==moduleid){
       for (int j = 0; j < list[i].permissionlist.length; j++) {
@@ -131,9 +130,9 @@ getProfileInfo(Employee emp, BuildContext context) async{
       globalogrperminfomap = responseJson['Orgperm'];
       globallabelinfomap = responseJson['Label'];
       geoFenceOrgPerm=globalogrperminfomap['geofencests'];
-      orgCreatedDate=globalogrperminfomap['createddate'];
+      /*orgCreatedDate=globalogrperminfomap['createddate'];
       print("orgCreatedDate");
-      print(orgCreatedDate);
+      print(orgCreatedDate);*/
       grpCompanySts=globalogrperminfomap['groupcompaniessts'];
       print("grpCompanySts");
       print(grpCompanySts);
@@ -143,26 +142,25 @@ getProfileInfo(Employee emp, BuildContext context) async{
       showMailVerificationDialog=globalogrperminfomap['mailverificationdialogsts'];
       print("showMailVerificationDialog");
       print(showMailVerificationDialog);
-
-      print("responseJson['Personal']");
-      print(responseJson['Personal']);
-      print(responseJson['Label']);
-      print(globallabelinfomap['EmployeeCode']);
       assignedAreaIds=globalcompanyinfomap['AssignedAreaIds'];
       prefs.setString("assignedAreaIds", responseJson['AssignedAreaIds']);
       fenceAreaSts=globalcompanyinfomap['UserFenceAreaPerm'];
       prefs.setString("fenceAreaSts", responseJson['UserFenceAreaPerm']);
       areaSts= await getAreaStatus();
       print("***************************************************");
-      print("assignedAreaIds && perGeoFence");
+      print("geoFenceOrgPerm && fenceAreaSts");
       print((geoFenceOrgPerm=="1" || fenceAreaSts=="1"));
-      print((assignedAreaIds.isNotEmpty && perGeoFence=="1"));
+      print("globalcompanyinfomap['AssignedAreaIds']");
       print(globalcompanyinfomap['AssignedAreaIds']);
+      print("globalcompanyinfomap['Areas']");
       print(globalcompanyinfomap['Areas']);
+      print("globalcompanyinfomap['Areas'][0]['id']");
       print(globalcompanyinfomap['Areas'][0]['id']);
-      print(perGeoFence);
+      print("geoFenceOrgPerm");
       print(geoFenceOrgPerm);
+      print("fenceAreaSts");
       print(fenceAreaSts);
+      print("areaSts");
       print(areaSts);
       print("***************************************************");
       List areas = globalcompanyinfomap['Areas'];
@@ -211,7 +209,7 @@ getProfileInfo(Employee emp, BuildContext context) async{
               Navigator.of(context).pop(true);
             });
             return AlertDialog(
-              content: new Text("Your plan has expired!"),
+              content: new Text("Your plan has expired"),
             );
           });
      /* showDialog(context: context, child:
@@ -232,7 +230,7 @@ getProfileInfo(Employee emp, BuildContext context) async{
               Navigator.of(context).pop(true);
             });
             return AlertDialog(
-              content: new Text("Your trial period has expired!"),
+              content: new Text("Your trial period has expired"),
             );
           });
       /*showDialog(context: context, child:
@@ -259,8 +257,10 @@ updateCounter() async {
 }
 
 verification(String orgid, String name, String email) async {
-  print(path_ubiattendance + 'mailVerification?&orgid=$orgid&empemail=$email&name=$name');
-  final response = await http.get(path_ubiattendance + 'mailVerification?&orgid=$orgid&email=$email&name=$name');
+  var url = path_ubiattendance+"mailVerification";
+  final response = await http.post(url, body: {
+    "orgid":orgid,"email":email,"name":name,});
+  print(path_ubiattendance+'mailVerification?&orgid=$orgid&email=$email&name=$name');
   print (response.body.toString());
   return response.body.toString();
 }
@@ -276,9 +276,8 @@ getfiscalyear(Employee emp) async{
       "employeeid": emp.employeeid,
       "organization": emp.organization
     });
-
-    Response<String> response =
-    await dio.post(path + "getfiscalyear", data: formData);
+    print(path + "getfiscalyear?employeeid=${emp.employeeid}&organization=${emp.organization}");
+    Response<String> response = await dio.post(path + "getfiscalyear", data: formData);
 
     Map responseJson = json.decode(response.data.toString());
     fiscalyear = responseJson['year'];
@@ -366,10 +365,11 @@ getCountAproval() async{
 
   if(perLeaveApproval=='1') {
     print(path + "getLeaveApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    var response = await dio.post(path + "getLeaveApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    Map responseJson1 = json.decode(response.data.toString());
-    prefs.setInt('leavecount', responseJson1['leavecount']);
-    leavecount = prefs.getInt('leavecount')??"";
+    final res1 = await http.get(path + "getLeaveApprovalCount?empid=" + empid + "&orgid=" + orgdir);
+    //Map responseJson1 = json.decode(response.data.toString());
+    /*prefs.setInt('leavecount', responseJson1['leavecount']);
+    leavecount = prefs.getInt('leavecount')??"";*/
+    leavecount=json.decode(res1.body);
     print(leavecount);
   }else{
     leavecount=0;
@@ -377,10 +377,11 @@ getCountAproval() async{
 
   if(perTimeoffApproval=='1') {
     print(path + "getTimeoffApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    var response = await dio.post(path + "getTimeoffApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    Map responseJson2 = json.decode(response.data.toString());
-    prefs.setInt('timeoffcount', responseJson2['timeoffcount']);
-    timeoffcount = prefs.getInt('timeoffcount')??"";
+    final res2 = await http.get(path + "getTimeoffApprovalCount?empid=" + empid + "&orgid=" + orgdir);
+    //Map responseJson2 = json.decode(response.data.toString());
+    /*prefs.setInt('timeoffcount', responseJson2['timeoffcount']);
+    timeoffcount = prefs.getInt('timeoffcount')??"";*/
+    timeoffcount=json.decode(res2.body);
     print(timeoffcount);
   }else{
     timeoffcount=0;
@@ -388,10 +389,11 @@ getCountAproval() async{
 
   if(perSalaryExpenseApproval=='1') {
     print(path + "getSalaryExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    var response = await dio.post(path + "getSalaryExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    Map responseJson3 = json.decode(response.data.toString());
+    final res3 = await http.get(path + "getSalaryExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
+    /*Map responseJson3 = json.decode(response.data.toString());
     prefs.setInt('expensecount', responseJson3['expensecount']);
-    expensecount = prefs.getInt('expensecount')??"";
+    expensecount = prefs.getInt('expensecount')??"";*/
+    expensecount=json.decode(res3.body);
     print(expensecount);
   }else{
     expensecount=0;
@@ -399,10 +401,11 @@ getCountAproval() async{
 
   if(perPayrollExpenseApproval=='1') {
     print(path + "getPayrollExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    var response = await dio.post(path + "getPayrollExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    Map responseJson4 = json.decode(response.data.toString());
+    final res4 = await http.get(path + "getPayrollExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
+    /*Map responseJson4 = json.decode(response.data.toString());
     prefs.setInt('payrollexpensecount', responseJson4['payrollexpensecount']);
-    payrollexpensecount = prefs.getInt('payrollexpensecount')??"";
+    payrollexpensecount = prefs.getInt('payrollexpensecount')??"";*/
+    payrollexpensecount=json.decode(res4.body);
     print(payrollexpensecount);
   }else{
     payrollexpensecount=0;
@@ -410,13 +413,14 @@ getCountAproval() async{
 
   total = leavecount+timeoffcount+expensecount+payrollexpensecount;
   print(total);
-  if(total>0) {
-    prefs.setInt('approvalcount', total);
+  return total;
+  /*if(total>0) {
+    //prefs.setInt('approvalcount', total);
     return true;
   } else {
-    prefs.setInt('approvalcount', total);
+    //prefs.setInt('approvalcount', total);
     return false;
-  }
+  }*/
 
 }
 
@@ -587,10 +591,15 @@ Future<List<Holi>> getHolidays() async {
   });*/
   print(path+"getHolidays?&employeeid=$empid&organization=$orgdir");
   Response<String> response = await dio.post(path+"getHolidays?&employeeid=$empid&organization=$orgdir");
+  print("response.data.toString()");
+  print(response.data.toString());
   List responseJson = json.decode(response.data.toString());
+  print("responseJson");
+  print(responseJson);
   List<Holi> holilist = createHolidayList(responseJson);
+  print("holilist");
+  print(holilist);
   return holilist;
-
 }
 
 List<Holi> createHolidayList(List data) {
@@ -669,8 +678,8 @@ class profileup {
     }
   }
 
-  Future<bool> updateProfilePhoto(int uploadtype, String empid, String orgid) async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<String> updateProfilePhoto(int uploadtype, String empid, String orgid) async {
+    String img="";
     //String path_hrm_india1 = prefs.getString('path_hrm_india');
     try{
 
@@ -686,6 +695,9 @@ class profileup {
       }
       //for removing photo
       if(uploadtype==3){
+        img=globalcompanyinfomap['ProfilePic'].split('/').last;
+        //print("img name form profile info");
+        //print(img);
         imagei = null;
       }
 
@@ -695,30 +707,39 @@ class profileup {
           "refno": orgid,
           "file": new UploadFileInfo(imagei, "sample.png"),
         });
+        print(path_hrm_india+"updateProfilePhoto?uid=$empid&refno=$orgid&file=$imagei");
         Response<String> response1=await dio.post(path_hrm_india+"updateProfilePhoto",data:formData);
+        imagei.deleteSync();
         imageCache.clear();
         Map MarkAttMap = json.decode(response1.data);
         if (MarkAttMap["status"])
-          return true;
+          return "true";
         else
-          return false;
+          return "false";
       }else if(uploadtype==3 && imagei==null){
-        FormData formData = new FormData.from({
-          "uid": empid,
-          "refno": orgid,
-        });
-        Response<String> response1=await dio.post(path_hrm_india+"updateProfilePhoto",data:formData);
-        Map MarkAttMap = json.decode(response1.data);
-        if (MarkAttMap["status"])
-          return true;
-        else
-          return false;
+        if(img!="default.png"){
+          FormData formData = new FormData.from({
+            "uid": empid,
+            "refno": orgid,
+          });
+          print("imagei==null");
+          print(imagei==null);
+          print(path_hrm_india+"updateProfilePhoto?uid=$empid&refno=$orgid");
+          Response<String> response1=await dio.post(path_hrm_india+"updateProfilePhoto",data:formData);
+          Map MarkAttMap = json.decode(response1.data);
+          if (MarkAttMap["status"])
+            return "true";
+          else
+            return "false";
+        }else{
+          return "1";
+        }
       }else{
-        return false;
+        return "false";
       }
     } catch (e) {
       print(e.toString());
-      return false;
+      return "false";
     }
   }
 

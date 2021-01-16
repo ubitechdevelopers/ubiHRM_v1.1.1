@@ -67,6 +67,7 @@ Future<List<PayrollExpense>> getPayrollExpenselist(date) async {
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('organization') ?? '';
   String empid =  prefs.getString('employeeid')??"";
+  print(path+"getPayrollExpenseDetail?empid="+empid+'&orgid='+orgdir+'&date='+date);
   Response<String>response = await dio.post(path+"getPayrollExpenseDetail?empid="+empid+'&orgid='+orgdir+'&date='+date);
   final res = json.decode(response.data.toString());
   List<PayrollExpense> userList = createPayrollExpenselist(res);
@@ -107,6 +108,7 @@ Future<List<PayrollExpenseDate>> getPayrollExpenselistbydate() async {
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('organization') ?? '';
   String empid =  prefs.getString('employeeid')??"";
+  print(path+"getPayrollExpenseDetailbydate?empid="+empid+'&orgid='+orgdir);
   Response<String>response = await dio.post(path+"getPayrollExpenseDetailbydate?empid="+empid+'&orgid='+orgdir);
   final res = json.decode(response.data.toString());
   List<PayrollExpenseDate> userList = createPayrollExpenselistbydate(res);
@@ -318,6 +320,7 @@ Future<List<Payroll>> getPayrollSummary() async{
   final prefs = await SharedPreferences.getInstance();
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
+  String empname = "";
   try {
     FormData formData = new FormData.from({
       "employeeid": empid,
@@ -327,7 +330,7 @@ Future<List<Payroll>> getPayrollSummary() async{
     Response response = await dio.post(path+"getPayrollSummary", data: formData);
     List responseJson = json.decode(response.data.toString());
 
-    List<Payroll> userList = createPayrollList(responseJson);
+    List<Payroll> userList = createPayrollList(responseJson,empname);
 
     return userList;
 
@@ -337,7 +340,7 @@ Future<List<Payroll>> getPayrollSummary() async{
 }
 
 
-Future<List<Payroll>> getPayrollSummaryAll() async{
+Future<List<Payroll>> getPayrollSummaryAll(String empname) async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
   String organization = prefs.getString('organization') ?? '';
@@ -347,15 +350,11 @@ Future<List<Payroll>> getPayrollSummaryAll() async{
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
   try {
-    /*FormData formData = new FormData.from({
-      "employeeid": empid,
-      "organization": organization,
-    });*/
     print(path+"getPayrollSummary?all=all&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
     Response response = await dio.post(path+"getPayrollSummary?all=all&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
     List responseJson = json.decode(response.data.toString());
 
-    List<Payroll> userList = createPayrollList(responseJson);
+    List<Payroll> userList = createPayrollList(responseJson,empname);
 
     return userList;
 
@@ -364,19 +363,51 @@ Future<List<Payroll>> getPayrollSummaryAll() async{
   }
 }
 
-List<Payroll> createPayrollList(List data){
+List<Payroll> createPayrollList(List data, String empname){
   List<Payroll> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String id = data[i]["Id"];
-    String empId = data[i]["EmployeeId"];
-    String name=data[i]["name"];
-    String PaidDays=data[i]["PaidDays"];
-    String StartDate=data[i]["SalaryMonth"];
-    String EndDate=data[i]["EndDate"];
-    String EmployeeCTC=data[i]["EmployeeCTC"];
-    String Currency=data[i]["currency"];
-    Payroll payroll = new Payroll(id:id, empId:empId, name:name, paid_days:PaidDays, startdate:StartDate, enddate:EndDate, EmployeeCTC:EmployeeCTC, Currency:Currency);
-    list.add(payroll);
+  if(empname.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      String id = data[i]["Id"];
+      String empId = data[i]["EmployeeId"];
+      String name = data[i]["name"];
+      String PaidDays = data[i]["PaidDays"];
+      String StartDate = data[i]["SalaryMonth"];
+      String EndDate = data[i]["EndDate"];
+      String EmployeeCTC = data[i]["EmployeeCTC"];
+      String Currency = data[i]["currency"];
+      Payroll payroll = new Payroll(id: id,
+        empId: empId,
+        name: name,
+        paid_days: PaidDays,
+        startdate: StartDate,
+        enddate: EndDate,
+        EmployeeCTC: EmployeeCTC,
+        Currency: Currency);
+
+      if (name.toLowerCase().contains(empname.toLowerCase()))
+        list.add(payroll);
+    }
+  }else{
+    for (int i = 0; i < data.length; i++) {
+      String id = data[i]["Id"];
+      String empId = data[i]["EmployeeId"];
+      String name = data[i]["name"];
+      String PaidDays = data[i]["PaidDays"];
+      String StartDate = data[i]["SalaryMonth"];
+      String EndDate = data[i]["EndDate"];
+      String EmployeeCTC = data[i]["EmployeeCTC"];
+      String Currency = data[i]["currency"];
+      Payroll payroll = new Payroll(id: id,
+        empId: empId,
+        name: name,
+        paid_days: PaidDays,
+        startdate: StartDate,
+        enddate: EndDate,
+        EmployeeCTC: EmployeeCTC,
+        Currency: Currency);
+
+      list.add(payroll);
+    }
   }
   return list;
 }

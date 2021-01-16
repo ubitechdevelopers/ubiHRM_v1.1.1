@@ -16,7 +16,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../drawer.dart';
 import '../global.dart';
 import '../profile.dart';
-import '../services/attandance_fetch_location.dart';
 import '../services/attandance_saveimage.dart';
 import 'punchlocation_summary.dart';
 
@@ -669,72 +668,70 @@ class _PunchLocation extends State<PunchLocation> {
         act1 = "";
       });
       issave = await saveImage.saveVisit(mk);
-      ////print(issave);
+      print("issave");
+      print(issave);
       if (issave==true) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => PunchLocationSummary()),
         );
-        showDialog(context: context, child:
+        showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Visit punched successfully"),
+            );
+          });
+        /*showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Visit punched successfully!"),
         )
-        );
+        );*/
         setState(() {
           act1 = act;
         });
       } else {
-        showDialog(context: context, child:
+        showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Visit was not captured, please punch again"),
+            );
+          });
+        /*showDialog(context: context, child:
         new AlertDialog(
           //title: new Text("Warning!"),
-          content: new Text("Selfie not captured, please punch again!"),
+          content: new Text("Visit was not captured, please punch again!"),
         )
-        );
+        );*/
         setState(() {
           act1 = act;
         });
       }
     }else{
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Internet connection not found."),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
-
         content: new Text("Internet connection not found."),
       )
-      );
+      );*/
     }
-
-
-    /*SaveImage saveImage = new SaveImage();
-    bool issave = false;
-    setState(() {
-      act1 = "";
-    });
-    issave = await saveImage.saveTimeInOut(mk);
-    ////print(issave);
-    if (issave) {
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MyApp()),
-      );
-      setState(() {
-        act1 = act;
-      });
-    } else {
-      setState(() {
-        act1 = act;
-      });
-    }*/
   }
-
-/*  saveImage() async {
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CameraApp()),
-      );
-
-  }*/
 
   resendVarification() async{
     NewServices ns= new NewServices();
@@ -774,9 +771,8 @@ class _PunchLocation extends State<PunchLocation> {
         ),
       ),
     );
-
   }
-////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 }
 
 class PunchVisitAppHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -836,7 +832,7 @@ class PunchVisitAppHeader extends StatelessWidget implements PreferredSizeWidget
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

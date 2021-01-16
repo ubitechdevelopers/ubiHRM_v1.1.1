@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'package:pdf/widgets.dart' as prefix0;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_services.dart';
@@ -17,16 +18,21 @@ class _ShiftList extends State<ShiftList> {
   String _sts1 = 'Active';
   String orgName='';
   bool _isButtonDisabled = false;
+  int hrsts=0;
   int adminsts=0;
+  int divhrsts=0;
   TextEditingController _searchController;
   FocusNode searchFocusNode;
   String shiftname = "";
+  var profileimage;
+  bool showtabbar;
 
   @override
   void initState() {
     super.initState();
     _searchController = new TextEditingController();
     searchFocusNode = FocusNode();
+    profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     getOrgName();
   }
 
@@ -42,7 +48,9 @@ class _ShiftList extends State<ShiftList> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
-      adminsts= prefs.getInt('adminsts') ?? 0;
+      hrsts =prefs.getInt('hrsts')??0;
+      adminsts =prefs.getInt('adminsts')??0;
+      divhrsts =prefs.getInt('divhrsts')??0;
     });
   }
   @override
@@ -64,17 +72,7 @@ class _ShiftList extends State<ShiftList> {
       child: Scaffold(
         backgroundColor: scaffoldBackColor(),
         key: _scaffoldKey,
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              new Text(orgName, style: new TextStyle(fontSize: 20.0)),
-            ],
-          ),
-          leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-            Navigator.pop(context);}),
-          backgroundColor: appStartColor(),
-        ),
+        appBar: AppHeader(profileimage,showtabbar,orgName),
         bottomNavigationBar:new HomeNavigation(),
 
         endDrawer: new AppDrawer(),
@@ -108,7 +106,7 @@ class _ShiftList extends State<ShiftList> {
                       prefixIcon: Icon(Icons.search, size: 30,),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       hintText: 'Search Shift',
-                      labelText: 'Search Shift',
+                      //labelText: 'Search Shift',
                       suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
                           onPressed: () {
                             _searchController.clear();
@@ -144,11 +142,11 @@ class _ShiftList extends State<ShiftList> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width*0.15,
-                      child: Text('Time in', style: TextStyle(color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                      child: Text('Time In', style: TextStyle(color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width*0.15,
-                      child: Text('Time out', style: TextStyle( color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.center),
+                      child: Text('Time Out', style: TextStyle( color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.center),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width*0.15,
@@ -164,6 +162,23 @@ class _ShiftList extends State<ShiftList> {
             ],
           ),
         ),
+        floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
+          backgroundColor: Colors.orange[800],
+          onPressed: (){
+            showDialog(
+                context: context,
+                builder: (context) {
+                  Future.delayed(Duration(seconds: 3), () {
+                    Navigator.of(context).pop(true);
+                  });
+                  return AlertDialog(
+                    content: new Text("To Add a new Shift, login to the web panel"),
+                  );
+                });
+          },
+          tooltip: 'Add Shift',
+          child: new Icon(Icons.add),
+        ):Center(),
       ),
     );
   }
@@ -238,7 +253,7 @@ class _ShiftList extends State<ShiftList> {
                           ),
                           onPressed: () {
                             //return null;
-                            editDept(context, snapshot.data[index].Name
+                            editShift(context, snapshot.data[index].Name
                                 .toString(), snapshot.data[index].Status
                                 .toString(), snapshot.data[index].Id
                                 .toString());
@@ -266,10 +281,10 @@ class _ShiftList extends State<ShiftList> {
   }
 
   //////////edit department
-  editDept(context,dept,sts,did) async {
+  editShift(context,dept,sts,did) async {
     _sts1=sts;
-    var new_dept = new TextEditingController();
-    new_dept.text=dept;
+    var new_shift = new TextEditingController();
+    new_shift.text=dept;
     await showDialog<String>(
       context: context,
       // ignore: deprecated_member_use
@@ -284,10 +299,9 @@ class _ShiftList extends State<ShiftList> {
             children: <Widget>[
               new Expanded(
                 child: new TextField(
-                  controller: new_dept,
-                  //    focusNode: f_dept,
+                  enabled: false,
+                  controller: new_shift,
                   autofocus: false,
-                  //   controller: client_name,
                   decoration: new InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -315,7 +329,7 @@ class _ShiftList extends State<ShiftList> {
                           _sts1 = newValue;
                           Navigator.of(context, rootNavigator: true).pop('dialog'); // here I pop to avoid multiple Dialogs
                           //print("this is set state"+_sts1);
-                          editDept(context, dept, _sts1, did);
+                          editShift(context, dept, _sts1, did);
                         });
                       },
                       items: <String>['Active', 'Inactive'].map((String value) {
@@ -332,24 +346,27 @@ class _ShiftList extends State<ShiftList> {
           ),
         ),
         actions: <Widget>[
-          new FlatButton(
-              shape: Border.all(color: Colors.black54),
-              child: const Text('CANCEL',style: TextStyle(color: Colors.black),),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop('dialog');
-              }),
           new RaisedButton(
-              color: Colors.orangeAccent,
+              color: Colors.orange[800],
               child: const Text('UPDATE',style: TextStyle(color: Colors.white),),
-              onPressed: ()
-              {
-                if( new_dept.text==''){
+              onPressed: (){
+                if( new_shift.text==''){
                   //  FocusScope.of(context).requestFocus(f_dept);
                   //showInSnackBar('Input Shift Name');
-                  showDialog(context: context, child:
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      Future.delayed(Duration(seconds: 3), () {
+                        Navigator.of(context).pop(true);
+                      });
+                      return AlertDialog(
+                        content: new Text("Please enter the shift's name"),
+                      );
+                    });
+                  /*showDialog(context: context, child:
                   new AlertDialog(
                     content: new Text("Enter shift name"),
-                  ));
+                  ));*/
                 }
                 else {
                   if(_isButtonDisabled)
@@ -357,20 +374,20 @@ class _ShiftList extends State<ShiftList> {
                   setState(() {
                     _isButtonDisabled=true;
                   });
-                  updateShift(new_dept.text,_sts1,did).
+                  updateShift(new_shift.text,_sts1,did).
                   then((res) {
                     if(res=='0') {
                       //showInSnackBar('Unable to update shift');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Unable to update shift"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("Unable to update shift"),
+                          );
+                        });
                       /*showDialog(context: context, child:
                       new AlertDialog(
                         content: new Text("Unable to update shift"),
@@ -378,15 +395,15 @@ class _ShiftList extends State<ShiftList> {
                     }else if(res=='-1') {
                       //showInSnackBar('Shift name already exist');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Shift name already exist"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("The shift already exists"),
+                          );
+                        });
                       /*showDialog(context: context, child:
                       new AlertDialog(
                         content: new Text("Shift name already exist"),
@@ -395,15 +412,15 @@ class _ShiftList extends State<ShiftList> {
                       Navigator.of(context, rootNavigator: true).pop('dialog');
                       //showInSnackBar('Shift name already exist');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Employees assigned to this shift therefore can't be updated"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("This shift can't be deactivated. Employees are already assigned to it"),
+                          );
+                        });
                       /*showDialog(context: context, child:
                       new AlertDialog(
                         content: new Text("Employees assigned to this shift therefore can't be updated"),
@@ -412,21 +429,21 @@ class _ShiftList extends State<ShiftList> {
                       Navigator.of(context, rootNavigator: true).pop('dialog');
                       //showInSnackBar('Shift updated successfully');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Shift updated successfully"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("Shift is updated successfully"),
+                          );
+                        });
                       /*showDialog(context: context, child:
                       new AlertDialog(
                       content: new Text("Shift updated successfully"),
                       ));*/
                       getShiftWidget();
-                      new_dept.text = '';
+                      new_shift.text = '';
                       _sts1 = 'Active';
                     }
                     setState(() {
@@ -435,7 +452,12 @@ class _ShiftList extends State<ShiftList> {
                   }
                   );
                 }
-
+              }),
+          new FlatButton(
+              shape: Border.all(color: Colors.orange[800]),
+              child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop('dialog');
               }),
         ],
       ),

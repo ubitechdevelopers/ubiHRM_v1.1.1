@@ -4,10 +4,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/drawer.dart';
 import 'package:ubihrm/employees_list.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/login_page.dart';
+import 'package:ubihrm/profile.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -33,33 +35,48 @@ class _EditEmployee extends State<EditEmployee> {
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  final _firstName = TextEditingController();
-  final _lastName = TextEditingController();
-  final _email = TextEditingController();
-  final _contact = TextEditingController();
-  final _department1 = TextEditingController();
-  //final _pass = TextEditingController();
-  int adminsts = 0;
-  int response = 0;
+  TextEditingController _firstName = new TextEditingController();
+  TextEditingController _lastName = new TextEditingController();
+  TextEditingController _email = new TextEditingController();
+  TextEditingController _contact = new TextEditingController();
+
   bool isloading = false;
   bool pageload = true;
   bool _obscureText = true;
   bool supervisor = true;
   bool _isButtonDisabled = false;
+  bool _checkLoadedprofile = true;
+
+  int adminsts = 0;
+  int response = 0;
   int _currentIndex = 2;
+
   String updatedcontact = '';
   String div = '0', dept = '0', desg = '0', loc = '0', shift = '0';
-  String orgname = "";
-  String org_country = "";
-  String admname = '';
-  String departmentname = "";
-  int departmentid = 1;
 
-  List<Map> shiftList;
+  bool showtabbar;
+  var profileimage;
+  String orgName = "";
+  String org_country = "";
 
   @override
   void initState() {
     super.initState();
+    div = widget.divisionid;
+    print("div"+div);
+    dept = widget.departmentid;
+    print("dept"+dept);
+    desg = widget.designationid;
+    print("desg"+desg);
+    loc = widget.locationid;
+    print("loc"+loc);
+    shift = widget.shiftid;
+    print("shift"+shift);
+    _firstName.text =widget.fname;
+    _lastName.text =widget.lname;
+    _contact.text = widget.phone;
+    _email.text = widget.email;
+    profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     initPlatformState();
   }
 
@@ -67,26 +84,9 @@ class _EditEmployee extends State<EditEmployee> {
   initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
     response = prefs.getInt('response') ?? 0;
-    //_pass.text = '123456';
     if (response == 1) {
-      Home ho = new Home();
       setState(() {
-        div = widget.divisionid;
-        print("div"+div);
-        dept = widget.departmentid;
-        print("dept"+dept);
-        desg = widget.designationid;
-        print("desg"+desg);
-        loc = widget.locationid;
-        print("loc"+loc);
-        shift = widget.shiftid;
-        print("shift"+shift);
-        _firstName.text =widget.fname;
-        _lastName.text =widget.lname;
-        _contact.text = widget.phone;
-        _email.text = widget.email;
-        //_pass.text = widget.password;
-        orgname = prefs.getString('orgname') ?? '';
+        orgName = prefs.getString('orgname') ?? '';
         org_country = prefs.getString('countryid') ?? '';
         adminsts = prefs.getInt('adminsts') ?? 0;
       });
@@ -119,25 +119,7 @@ class _EditEmployee extends State<EditEmployee> {
       child: Scaffold(
         backgroundColor:scaffoldBackColor(),
         key: _scaffoldKey,
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              new Text(orgname, style: new TextStyle(fontSize: 20.0)),
-            ],
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              //Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EmployeeList()),
-              );
-            },
-          ),
-          backgroundColor:appStartColor(),
-        ),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
         endDrawer: new AppDrawer(),
         body: mainbodyWidget(),
       ),
@@ -209,7 +191,7 @@ class _EditEmployee extends State<EditEmployee> {
           child: SafeArea(
               child: Column(children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(top: 0.0,bottom: 20.0),
+                  padding: const EdgeInsets.only(top: 0.0,bottom: 10.0),
                   child: Center(
                     child:Text("Edit Employee",style: new TextStyle(fontSize: 22.0,color:appStartColor())),
                   ),
@@ -218,7 +200,7 @@ class _EditEmployee extends State<EditEmployee> {
                   child: ListView(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(left:10.0,right:10.0),
+                        padding: const EdgeInsets.only(left:10.0,right:10.0,top:10.0),
                         child: TextFormField(
                           controller: _firstName,
                           keyboardType: TextInputType.text,
@@ -226,25 +208,24 @@ class _EditEmployee extends State<EditEmployee> {
                           //initialValue: _firstName.text,
                           decoration: InputDecoration(
                             //isDense: true,
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
                             labelText: "First Name",
                             hintText: "First Name",
                             hintStyle: TextStyle(
                                 fontSize: 14.0),
-                            icon: Icon(
-                              Icons.person,
-                              color: Colors.black54,
-                            ),
+                            prefixIcon: Icon(
+                            Icons.person,
+                            color: Colors.black54,
+                          ),
                           ),
                           validator: (value) {
-                            if (value.trim().isEmpty) {
+                            if (value.trim().isEmpty || value.isEmpty || value=="") {
                               return 'Please enter first name';
                             }
                           },
                           onFieldSubmitted: (String value) {
-                            if (_formKey.currentState.validate()) {
-                              //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
-                            }
+                            _firstName.text=value;
+                            if (_formKey.currentState.validate()) {}
                           },
                         ),
                       ),
@@ -258,25 +239,24 @@ class _EditEmployee extends State<EditEmployee> {
                           //initialValue: _firstName.text,
                           decoration: InputDecoration(
                             //isDense: true,
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
                             labelText: "Last Name",
                             hintText: "Last Name",
                             hintStyle: TextStyle(
                                 fontSize: 14.0),
-                            icon: Icon(
+                            prefixIcon: Icon(
                               Icons.person,
                               color: Colors.black54,
                             ),
                           ),
                           validator: (value) {
-                            if (value.trim().isEmpty) {
+                            if (value.trim().isEmpty || value.isEmpty || value=="") {
                               return 'Please enter last name';
                             }
                           },
                           onFieldSubmitted: (String value) {
-                            if (_formKey.currentState.validate()) {
-                              //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
-                            }
+                            _lastName.text=value;
+                            if (_formKey.currentState.validate()) {}
                           },
                         ),
                       ),
@@ -289,12 +269,12 @@ class _EditEmployee extends State<EditEmployee> {
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             //isDense: true,
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
                             labelText: "Phone",
                             hintText: "Phone",
                             hintStyle: TextStyle(
                                 fontSize: 14.0),
-                            icon: Icon(
+                              prefixIcon: Icon(
                               Icons.call,
                               color: Colors.black54,
                               size: 25,
@@ -308,9 +288,8 @@ class _EditEmployee extends State<EditEmployee> {
                             }
                           },
                           onFieldSubmitted: (String value) {
-                            if (_formKey.currentState.validate()) {
-                              //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
-                            }
+                            _contact.text=value;
+                            if (_formKey.currentState.validate()) {}
                           },
                         ),
                       ),
@@ -323,12 +302,12 @@ class _EditEmployee extends State<EditEmployee> {
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             //isDense: true,
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
                             labelText: "Email",
                             hintText: "Email",
                             hintStyle: TextStyle(
                                 fontSize: 14.0),
-                            icon: Icon(
+                              prefixIcon: Icon(
                               Icons.email,
                               color: Colors.black54,
                               size: 25,
@@ -342,53 +321,16 @@ class _EditEmployee extends State<EditEmployee> {
                             }
                           },
                           onFieldSubmitted: (String value) {
-                            if (_formKey.currentState.validate()) {
-                              //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
-                            }
-                          },
+                            _email.text=value;
+                            if (_formKey.currentState.validate()) {}
+                          }
                         ),
                       ),
-                      /*SizedBox(height: 15.0),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0,right: 10.0),
-                        child: TextFormField(
-                          controller: _pass,
-                          //initialValue: widget.password,
-                          keyboardType: TextInputType.text,
-                          obscureText: _obscureText,
-                          decoration: InputDecoration(
-                            //isDense: true,
-                            border: OutlineInputBorder(),
-                            labelText: "Password",
-                            hintText: "Password",
-                            hintStyle: TextStyle(
-                                fontSize: 14.0),
-                            icon: Icon(
-                              Icons.lock,
-                              color: Colors.black54,
-                              size: 25,
-                            )
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty || value.length < 6) {
-                              return 'Password must be at least 6 characters';
-                            }
-                          },
-                          onFieldSubmitted: (String value) {
-                            if (_formKey.currentState.validate()) {
-                              //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
-                            }
-                          },
-                        )
-                      ),*/
-                      ////////////////////-----------------
-                      //(supervisor) ? getDepartments_DD() : getDepartments_DD1(),
                       getDivisions_DD(),
                       getDepartments_DD(),
                       getDesignations_DD(),
                       getLocations_DD(),
                       getShifts_DD(),
-                      ////////////////////-----------------
                       SizedBox(height: 40,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -410,29 +352,102 @@ class _EditEmployee extends State<EditEmployee> {
                                 ),
                                 color: Colors.orange[800],
                                 onPressed: () {
-                                  if (dept == '0') {
-                                    showDialog(context: context, child:
-                                    new AlertDialog(
-                                      content: new Text("Please select the department"),
-                                    ));
-                                    return null;
-                                  }
-                                  if (desg == '0') {
-                                    showDialog(context: context, child:
-                                    new AlertDialog(
-                                      content: new Text("Please select the designation"),
-                                    ));
-                                    return null;
-                                  }
-                                  if (shift == '0') {
-                                    showDialog(context: context, child:
-                                    new AlertDialog(
-                                      content: new Text("Please select the shift"),
-                                    ));
-                                    return null;
-                                  }
-
                                   if (_formKey.currentState.validate()) {
+                                    /*if (_firstName.text=="" || _firstName.text.trim().isEmpty) {
+                                      showDialog(context: context, child:
+                                      new AlertDialog(
+                                        content: new Text("Please enter first name"),
+                                      ));
+                                      return null;
+                                    }else if (_lastName.text=="" || _lastName.text.trim().isEmpty) {
+                                      showDialog(context: context, child:
+                                      new AlertDialog(
+                                        content: new Text("Please enter last name"),
+                                      ));
+                                      return null;
+                                    }else if (_contact.text=="" || _contact.text.trim().isEmpty) {
+                                      showDialog(context: context, child:
+                                      new AlertDialog(
+                                        content: new Text("Please enter contact no."),
+                                      ));
+                                      if(_contact.text.isNotEmpty && (_contact.text.length<6 || _contact.text.length>15))
+                                        showDialog(context: context, child:
+                                        new AlertDialog(
+                                          content: new Text("Please enter valid contact no."),
+                                        ));
+                                      return null;
+                                    }else if(_email.text!="" && !(validateEmail(_email.text.trim()))) {
+                                        showDialog(context: context, child:
+                                        new AlertDialog(
+                                          content: new Text("Please enter valid Email ID"),
+                                        ));
+                                        return null;
+                                    }else*/if (div == '0') {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          Future.delayed(Duration(seconds: 3), () {
+                                            Navigator.of(context).pop(true);
+                                          });
+                                          return AlertDialog(
+                                            content: new Text("Please select the division"),
+                                          );
+                                        });
+                                      /*showDialog(context: context, child:
+                                      new AlertDialog(
+                                        content: new Text("Please select the division"),
+                                      ));*/
+                                      return null;
+                                    }else if (dept == '0') {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          Future.delayed(Duration(seconds: 3), () {
+                                            Navigator.of(context).pop(true);
+                                          });
+                                          return AlertDialog(
+                                            content: new Text("Please select the department"),
+                                          );
+                                        });
+                                      /*showDialog(context: context, child:
+                                      new AlertDialog(
+                                        content: new Text("Please select the department"),
+                                      ));*/
+                                      return null;
+                                    }else if (desg == '0') {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          Future.delayed(Duration(seconds: 3), () {
+                                            Navigator.of(context).pop(true);
+                                          });
+                                          return AlertDialog(
+                                            content: new Text("Please select the designation"),
+                                          );
+                                        });
+                                      /*showDialog(context: context, child:
+                                      new AlertDialog(
+                                        content: new Text("Please select the designation"),
+                                      ));*/
+                                      return null;
+                                    }else if (shift == '0') {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          Future.delayed(Duration(seconds: 3), () {
+                                            Navigator.of(context).pop(true);
+                                          });
+                                          return AlertDialog(
+                                            content: new Text("Please select the shift"),
+                                          );
+                                        });
+                                      /*showDialog(context: context, child:
+                                      new AlertDialog(
+                                        content: new Text("Please select the shift"),
+                                      ));*/
+                                      return null;
+                                    }
+
                                     if (_isButtonDisabled) return null;
                                     setState(() {
                                       _isButtonDisabled = true;
@@ -448,7 +463,7 @@ class _EditEmployee extends State<EditEmployee> {
                                     updatedcontact = updatedcontact.replaceAll('-', '');
                                     updatedcontact = updatedcontact.replaceAll(' ', '');
                                     // prevented by parth sir
-                                    editEmployee(_firstName.text.trim(), _lastName.text.trim(), _email.text.trim(), updatedcontact.trim(), dept, desg, shift, widget.empid).then((res) {
+                                    editEmployee(_firstName.text.trim(), _lastName.text.trim(), _email.text.trim(), updatedcontact.trim(), div, dept, desg, loc, shift, widget.empid).then((res) {
                                       if (res == 1) {
                                         Navigator.push(
                                           context,
@@ -456,34 +471,84 @@ class _EditEmployee extends State<EditEmployee> {
                                               builder: (context) => EmployeeList()),
                                         );
                                         showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Employee details update successfully"),
+                                            );
+                                          });
+                                        /*showDialog(
                                             context: context,
                                             child: new AlertDialog(
                                               content: new Text("Employee details update successfully."),
-                                            ));
+                                            ));*/
                                       } else if (res == 3)
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Contact already exists"),
+                                            );
+                                          });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                           content: new Text("Contact already exists"),
-                                        ));
+                                        ));*/
                                       else if (res == 2)
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Email ID already exists"),
+                                            );
+                                          });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                           content: new Text("Email ID already exists"),
-                                        ));
+                                        ));*/
                                       else
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Unable to update employee record"),
+                                            );
+                                        });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                         content: new Text("Unable to update employee record"),
-                                        ));
+                                        ));*/
                                       setState(() {
                                         _isButtonDisabled = false;
                                       });
                                       // TimeOfDay.fromDateTime(10000);
                                     }).catchError((exp) {
-                                      showDialog(context: context, child:
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          Future.delayed(Duration(seconds: 3), () {
+                                            Navigator.of(context).pop(true);
+                                          });
+                                          return AlertDialog(
+                                            content: new Text("Unable to call service"),
+                                          );
+                                        });
+                                      /*showDialog(context: context, child:
                                       new AlertDialog(
                                         content: new Text("Unable to call service"),
-                                      ));
+                                      ));*/
                                       print(exp.toString());
                                       setState(() {
                                         _isButtonDisabled = false;
@@ -536,13 +601,13 @@ class _EditEmployee extends State<EditEmployee> {
                   child: InputDecorator(
                     decoration: InputDecoration(
                      // isDense: true,
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
                       labelText: "Division",
                       hintText: "Division",
                       hintStyle: TextStyle(
                           fontSize: 14.0),
-                      icon: Icon(
-                        Icons.group,
+                        prefixIcon: Icon(
+                        Icons.home_work_outlined,
                         color: Colors.black54,
                         size: 25,
                       )
@@ -611,13 +676,13 @@ class _EditEmployee extends State<EditEmployee> {
                   child: InputDecorator(
                     decoration: InputDecoration(
                      // isDense: true,
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
                       labelText: "Department",
                       hintText: "Department",
                       hintStyle: TextStyle(
                           fontSize: 14.0),
-                      icon: Icon(
-                        Icons.group,
+                      prefixIcon: Icon(
+                        const IconData(0xe803, fontFamily: "CustomIcon"),
                         color: Colors.black54,
                         size: 25,
                       )
@@ -686,13 +751,13 @@ class _EditEmployee extends State<EditEmployee> {
                   child: InputDecorator(
                     decoration: InputDecoration(
                       //isDense: true,
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
                       labelText: "Designation",
                       hintText: "Designation",
                       hintStyle: TextStyle(
                           fontSize: 14.0),
-                      icon: Icon(
-                        Icons.desktop_windows,
+                      prefixIcon: Icon(
+                        const IconData(0xe804, fontFamily: "CustomIcon"),
                         color: Colors.black54,
                         size: 25
                       ),
@@ -760,13 +825,13 @@ class _EditEmployee extends State<EditEmployee> {
                   child: InputDecorator(
                     decoration: InputDecoration(
                       //isDense: true,
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
                       labelText: "Location",
                       hintText: "Location",
                       hintStyle: TextStyle(
                           fontSize: 14.0),
-                      icon: Icon(
-                        Icons.desktop_windows,
+                      prefixIcon: Icon(
+                        Icons.location_on_outlined,
                         color: Colors.black54,
                         size: 25
                       ),
@@ -834,9 +899,9 @@ class _EditEmployee extends State<EditEmployee> {
                   child: InputDecorator(
                     decoration: InputDecoration(
                       //isDense: true,
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
                       //border: InputBorder.none,
-                      icon: Icon(
+                      prefixIcon: Icon(
                         Icons.access_alarm,
                         color: Colors.black54,
                         size: 25,
@@ -929,4 +994,14 @@ class _EditEmployee extends State<EditEmployee> {
     );
   }
 
+}
+
+bool validateEmail(String value) {
+  Pattern pattern =
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  RegExp regex = new RegExp(pattern);
+  if (!regex.hasMatch(value))
+    return false;
+  else
+    return true;
 }

@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_appavailability/flutter_appavailability.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/employees_list.dart';
 import 'package:ubihrm/payroll_expence/expenselist.dart';
 
 import 'all_reports.dart';
@@ -34,6 +37,7 @@ class HomePageMain extends StatefulWidget {
 }
 
 class _HomePageStatemain extends State<HomePageMain> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   static const platform = const MethodChannel('location.spoofing.check');
   var orgname;
   double height = 0.0;
@@ -51,7 +55,7 @@ class _HomePageStatemain extends State<HomePageMain> {
   bool fakeLocationDetected = false;
   String address = "";
   bool _checkLoadedprofile = true;
-
+  String sts="";
   String location_addr = "";
 
   Widget mainWidget = new Container(
@@ -119,10 +123,10 @@ class _HomePageStatemain extends State<HomePageMain> {
         mainWidget = plateformstatee();
       });
       showDialog(
-          context: context,
-          child: new AlertDialog(
-            content: new Text("Internet connection not found!."),
-          ));
+        context: context,
+        child: new AlertDialog(
+          content: new Text("Internet connection not found!."),
+        ));
     }
   }
 
@@ -190,117 +194,95 @@ class _HomePageStatemain extends State<HomePageMain> {
           userprofileid: userprofileid,
       );
 
+
       await getAllPermission(emp);
       await getProfileInfo(emp, context);
+      await getfiscalyear(emp);
       await getReportingTeam(emp);
 
       if(empemail==email || empnumber==number) {
         if (showMailVerificationDialog == 'true') {
           showDialog(
             barrierDismissible: false,
-            context: context, child:
-            new AlertDialog(
-              title: new Text("Verify Mail ID?"),
-              content: ButtonBar(
-                children: <Widget>[
-                  RaisedButton(
-                    child: Text(
-                      'VERIFY', style: TextStyle(color: Colors.white),),
-                    color: Colors.orange[800],
-                    onPressed: () {
-                      verification(organization, name, email).then((result) {
-                        showDialog(
-                            barrierDismissible: false,
-                            context: context, child:
-                        new AlertDialog(
-                          title: new Text("Mail verification link has been sent on your registered mail id, by clicking on sent verification link you can verify you mail id",
-                            style: TextStyle(fontSize: 16.0),),
-                          content: RaisedButton(
-                            child: Text('Open Mail', style: TextStyle(color: Colors.white),),
-                            color: Colors.orange[800],
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true).pop();
-                              openEmailApp(context);
-                            },
-                          ),
-                        )
-                        );
-                      });
-                    },
+            context: context,
+            builder: (BuildContext context) {
+              return WillPopScope(
+                onWillPop: () async => false,
+                child: new AlertDialog(
+                  title: new Text("Verify Email"),
+                  content: ButtonBar(
+                    children: <Widget>[
+                      RaisedButton(
+                        child: Text(
+                          'VERIFY', style: TextStyle(color: Colors.white),),
+                        color: Colors.orange[800],
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          updateCounter();
+                          verification(organization, name, email).then((result) {
+                            print("result");
+                            print(result=="true");
+                            if(result=="true") {
+                              showDialog(
+                                  barrierDismissible: false,
+                                  context: _scaffoldKey.currentContext,
+                                  builder: (BuildContext context) {
+                                    return WillPopScope(
+                                        onWillPop: () async => false,
+                                        child: new AlertDialog(
+                                          title: new Text(
+                                            "Email verification link has been sent on your registered Email ID. Kindly verify.",
+                                            style: TextStyle(fontSize: 16.0),),
+                                          content: RaisedButton(
+                                            child: Text('Open Mail',
+                                              style: TextStyle(
+                                                  color: Colors.white),),
+                                            color: Colors.orange[800],
+                                            onPressed: () {
+                                              Navigator.of(
+                                                  _scaffoldKey.currentContext,
+                                                  rootNavigator: true).pop();
+                                              openEmailApp(context);
+                                            },
+                                          ),
+                                        )
+                                    );
+                                  }
+                              );
+                            } else {
+                              showDialog(
+                                context: _scaffoldKey.currentContext,
+                                builder: (context) {
+                                  Future.delayed(Duration(seconds: 3), () {
+                                    Navigator.of(context).pop(true);
+                                  });
+                                  return AlertDialog(
+                                    content: new Text("Unable to send verification link"),
+                                  );
+                                });
+                            }
+                          });
+                        },
+                      ),
+                      FlatButton(
+                        shape: Border.all(color: Colors.orange[800]),
+                        child: Text(
+                          'LATER', style: TextStyle(color: Colors.black87),),
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          updateCounter();
+                        },
+                      ),
+                    ],
                   ),
-                  FlatButton(
-                    shape: Border.all(color: Colors.orange[800]),
-                    child: Text(
-                      'CANCEL', style: TextStyle(color: Colors.black87),),
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                      updateCounter();
-                    },
-                  ),
-                ],
-              ),
-            )
+                )
+              );
+            }
           );
         } else if(showMailVerificationDialog == 'logout') {
           logout();
         }
       }
-      /*var orgCreationDate = DateTime.parse(orgCreatedDate);
-      print(orgCreationDate);
-      var tillDate = orgCreationDate.add(Duration(days: 3));
-      print(tillDate);
-      var nowDate = DateTime.now();
-      print(nowDate);
-      print(nowDate.isAfter(tillDate));
-      print(empemail);
-      print(email);
-      print(empnumber);
-      print(number);
-      print(empemail.contains(email));
-      print(empnumber.contains(number));
-      print(empemail.contains(email) || empnumber.contains(number));
-      if(empemail.contains(email) || empnumber.contains(number)) {
-        //if (nowDate.isBefore(tillDate) || nowDate.isAtSameMomentAs(nowDate)) {
-        if (nowDate.isAfter(tillDate)) {
-          if (mailVerifySts == '0') {
-            showDialog(context: context, child:
-            new AlertDialog(
-              title: new Text("Verify Mail ID?"),
-              content: ButtonBar(
-                children: <Widget>[
-                  RaisedButton(
-                    child: Text(
-                      'Verify', style: TextStyle(color: Colors.white),),
-                    color: Colors.orange[800],
-                    onPressed: () {},
-                  ),
-                  FlatButton(
-                    shape: Border.all(color: Colors.orange[800]),
-                    child: Text(
-                      'CANCEL', style: TextStyle(color: Colors.black87),),
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                    },
-                  ),
-                ],
-              ),
-            )
-            );
-          }
-        } else {
-          print("false condition");
-          logout() async {
-            final prefs = await SharedPreferences.getInstance();
-            prefs.remove('response');
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => LoginPage()), (
-                Route<dynamic> route) => false,
-            );
-          }
-          logout();
-        }
-      }*/
 
       perEmployeeLeave = getModulePermission("18", "view");
       perAttendance = getModulePermission("5", "view");
@@ -308,10 +290,12 @@ class _HomePageStatemain extends State<HomePageMain> {
       perSalary = getModulePermission("66", "view");
       perPayroll = getModulePermission("458", "view");
       perPayPeriod = getModulePermission("491", "view");
+      perGeoFence = getModulePermission("318", "view");
       perSalaryExpense = getModulePermission("170", "view");
       perPayrollExpense = getModulePermission("473", "view");
       perFlexi = getModulePermission("448", "view");
       perPunchLocation = getModulePermission("305", "view");
+
       perLeaveApproval = getModuleUserPermission("124", "view");
       perTimeoffApproval = getModuleUserPermission("180", "view");
       perSalaryExpenseApproval = getModuleUserPermission("170", "view");
@@ -366,11 +350,12 @@ class _HomePageStatemain extends State<HomePageMain> {
     return WillPopScope(
       //onWillPop: () async => true,
       child: Scaffold(
-          backgroundColor: scaffoldBackColor(),
-          endDrawer: new AppDrawer(),
-          appBar: new HomeAppHeader(profileimage, showtabbar, orgName),
-          bottomNavigationBar: new HomeNavigation(),
-          body: homewidget()
+        key: _scaffoldKey,
+        backgroundColor: scaffoldBackColor(),
+        endDrawer: new AppDrawer(),
+        appBar: new HomeAppHeader(profileimage, showtabbar, orgName),
+        bottomNavigationBar: new HomeNavigation(),
+        body: homewidget()
       ),
     );
   }
@@ -382,11 +367,19 @@ class _HomePageStatemain extends State<HomePageMain> {
         child: Container(
           child: new InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => functionname),
-              );
+              if((title=="Dashboard"|| title=="Leave") && fiscalyear=="") {
+                showDialog(context: context, child:
+                new AlertDialog(
+                  content: new Text("Fiscal year is not generated yet"),
+                )
+                );
+              }else{
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => functionname),
+                );
+              }
             },
             child: Column(
               //   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -433,6 +426,7 @@ class _HomePageStatemain extends State<HomePageMain> {
             children: <Widget>[
               makeDashboardItem("Dashboard",DashboardMain(), 'assets/icons/Dashboard_icon.png'),
               makeDashboardItem("Profile", CollapsingTab(), 'assets/icons/profile_icon.png'),
+              makeDashboardItem("Employee", EmployeeList(sts: "1"), 'assets/icons/Employee_icon.png'),
               if(perAttendance == '1') makeDashboardItem("Attendance", HomePage(), 'assets/icons/Attendance_icon.png'),
               if(perEmployeeLeave == '1')  makeDashboardItem("Leave",  MyLeave(), 'assets/icons/leave_icon.png'),
               if(perTimeoff == '1') makeDashboardItem("Time Off", TimeoffSummary(), 'assets/icons/Timeoff_icon.png'),
@@ -440,8 +434,8 @@ class _HomePageStatemain extends State<HomePageMain> {
               if(perFlexi == '1') makeDashboardItem("Flexi Time", Flexitime(), 'assets/icons/Flexi_icon.png'),
               if(perSalary == '1') makeDashboardItem("Salary", SalarySummary(), 'assets/icons/Salary_icon.png'),
               if(perPayroll == '1' || perPayPeriod == '1') makeDashboardItem("Payroll", PayrollSummary(), 'assets/icons/Salary_icon.png'),
-              if(perSalaryExpense == '1') makeDashboardItem("Salary\nExpense", MyExpence(), 'assets/icons/Expense_icon.png'),
-              if(perPayrollExpense == '1') makeDashboardItem("Payroll\nExpense", MyPayrollExpense(), 'assets/icons/Expense_icon.png'),
+              if(perSalaryExpense == '1') makeDashboardItem("Expense", MyExpence(), 'assets/icons/Expense_icon.png'),
+              if(perPayrollExpense == '1') makeDashboardItem("Expense", MyPayrollExpense(), 'assets/icons/Expense_icon.png'),
               if(perAttendance == '1' || perEmployeeLeave == '1' || perTimeoff == '1') makeDashboardItem("Reports", AllReports(), 'assets/icons/graph_icon.png'),
             ],
           ),
@@ -449,344 +443,7 @@ class _HomePageStatemain extends State<HomePageMain> {
       ],
     );
   }
-
-  Widget homewidget1() {
-    return Stack(
-      children: <Widget>[
-        Container(
-          //height: MediaQuery.of(context).size.height,
-            margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-            padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-            // width: MediaQuery.of(context).size.width*0.9,
-            decoration: new ShapeDecoration(
-              shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(20.0)),
-              color: Colors.white,
-            ),
-            child: ListView(
-              children: <Widget>[
-                SizedBox(
-                  height: 60.0,
-                ),
-                GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DashboardMain()),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        new Container(
-                            width: 60.0,
-                            height: 60.0,
-                            decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: AssetImage(
-                                      'assets/Attendanc_icon.png'),
-                                ),
-                                color: circleIconBackgroundColor())),
-                        Text('Dashboard',
-                            textAlign: TextAlign.center,
-                            style: new TextStyle(
-                                fontSize: 15.0, color: Colors.black)),
-                      ],
-                    )),
-
-                GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CollapsingTab()),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        new Container(
-                            width: 60.0,
-                            height: 60.0,
-                            decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: AssetImage(
-                                      'assets/icons/profile_icon.png'),
-                                ),
-                                color: circleIconBackgroundColor())),
-                        Text('Profile',
-                            textAlign: TextAlign.center,
-                            style: new TextStyle(
-                                fontSize: 15.0, color: Colors.black)),
-                      ],
-                    )),
-
-                if( perAttendance == '1')
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomePage()),
-                        );
-                      },
-                      child: Column(
-                        children: [
-                          new Container(
-                              width: 60.0,
-                              height: 60.0,
-                              decoration: new BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: new DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: AssetImage(
-                                        'assets/Attendanc_icon.png'),
-                                  ),
-                                  color: circleIconBackgroundColor())),
-                          Text('Attendance',
-                              textAlign: TextAlign.center,
-                              style: new TextStyle(
-                                  fontSize: 15.0, color: Colors.black)),
-                        ],
-                      )),
-
-                if(perEmployeeLeave == '1')
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyLeave()),
-                        );
-                      },
-                      child: Column(
-                        children: [
-                          new Container(
-                              width: 60.0,
-                              height: 60.0,
-                              decoration: new BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: new DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: AssetImage(
-                                        'assets/icons/leave_icon.png'),
-                                  ),
-                                  color:
-                                  circleIconBackgroundColor())),
-                          Text('Leave',
-                              textAlign: TextAlign.center,
-                              style: new TextStyle(
-                                  fontSize: 15.0,
-                                  color: Colors.black)),
-                        ],
-                      )),
-
-                SizedBox(
-                  height: 60.0,
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    perTimeoff == '1'
-                        ? GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TimeoffSummary()),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            new Container(
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: AssetImage(
-                                          'assets/icons/Timeoff_icon.png'),
-                                    ),
-                                    color: circleIconBackgroundColor())),
-                            Text(' Time off  ',
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(
-                                    fontSize: 15.0, color: Colors.black)),
-                          ],
-                        ))
-                        : Center(),
-
-                    perPunchLocation == '1'
-                        ? GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    PunchLocationSummary()),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            new Container(
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: AssetImage(
-                                          'assets/icons/Timeoff_icon.png'),
-                                    ),
-                                    color: circleIconBackgroundColor())),
-                            Text('Visits',
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(
-                                    fontSize: 15.0, color: Colors.black)),
-                          ],
-                        ))
-                        : Center(),
-                  ],
-                ),
-
-                SizedBox(
-                  height: 60.0,
-                ),
-
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      (perSalaryExpense == '1' || perPayrollExpense == '1')
-                          ? GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MyExpence()),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage(
-                                            'assets/icons/Expense_icon.png'),
-                                      ),
-                                      color: circleIconBackgroundColor())),
-                              Text(' Expense  ',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(
-                                      fontSize: 15.0, color: Colors.black)),
-                            ],
-                          ))
-                          : Center(),
-
-                      (perSalary == '1')
-                          ? GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SalarySummary()),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage(
-                                            'assets/icons/Salary_icon.png'),
-                                      ),
-                                      color: circleIconBackgroundColor())),
-                              Text('Salary',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(
-                                      fontSize: 15.0, color: Colors.black)),
-                            ],
-                          ))
-                          : Center(),
-
-                      (perPayroll == '1' || perPayPeriod == '1')
-                          ? GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PayrollSummary()),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage(
-                                            'assets/icons/Salary_icon.png'),
-                                      ),
-                                      color: circleIconBackgroundColor())),
-                              Text('Payroll',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(
-                                      fontSize: 15.0, color: Colors.black)),
-                            ],
-                          ))
-                          : Center(),
-
-                      (perAttendance == '1' ||  perEmployeeLeave == '1' ||  perTimeoff == '1')
-                          ? GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AllReports()),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              new Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage(
-                                            'assets/icons/graph_icon.png'),
-                                      ),
-                                      color: circleIconBackgroundColor())),
-                              Text(' Reports',
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(
-                                      fontSize: 15.0, color: Colors.black)),
-                            ],
-                          ))
-                          : Center(),
-                    ]),
-              ],
-            )),
-      ],
-    );
-  }
-
+  
   logout() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('response');
@@ -839,7 +496,7 @@ class HomeAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),
@@ -859,10 +516,6 @@ class HomeAppHeader extends StatelessWidget implements PreferredSizeWidget {
           tabs: choices.map((Choice choice) {
             return Tab(
               text: choice.title,
-
-              //   unselectedLabelColor: Colors.white70,
-              //   indicatorColor: Colors.white,
-              //   icon: Icon(choice.icon),
             );
           }).toList(),
         ):null
@@ -873,4 +526,19 @@ class HomeAppHeader extends StatelessWidget implements PreferredSizeWidget {
 
 }
 
+void openEmailApp(BuildContext context){
+  try{
+    AppAvailability.launchApp(Platform.isIOS ? "message://" : "com.google.android.gm").then((_) {
+      print("App Email launched!");
+    }).catchError((err) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text("App Email not found!")
+      ));
+      print(err);
+    });
+  } catch(e) {
+    print(e);
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text("Email App not found!")));
+  }
+}
 

@@ -81,16 +81,8 @@ class _SalarySummary extends State<SalarySummary> {
     orgdir = prefs.getString('orgdir') ?? '';
     //   response = prefs.getInt('response') ?? 0;
     admin_sts = prefs.getString('sstatus') ?? 0.toString();
-    //  if (response == 1) {
-    //    Loc lock = new Loc();
-    //    location_addr = await lock.initPlatformState();
-    //act =await checkPunch(empid, orgdir);
-
-    //act= 'PunchOut';
 
     setState(() {
-      //      location_addr1 = location_addr;
-      //    response = prefs.getInt('response') ?? 0;
       fname = prefs.getString('fname') ?? '';
       lname = prefs.getString('lname') ?? '';
       empid = prefs.getString('empid') ?? '';
@@ -103,7 +95,6 @@ class _SalarySummary extends State<SalarySummary> {
       desination = prefs.getString('desination') ?? '';
       profile = prefs.getString('profile') ?? '';
       lid = prefs.getString('lid') ?? "0";
-      //    act= lid!='0'?'PunchOut':'PunchIn';
       showtabbar=false;
       profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
       profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __){
@@ -113,82 +104,9 @@ class _SalarySummary extends State<SalarySummary> {
           });
         }
       }));
-      //     latit = prefs.getString('latit') ?? '';
-      //      longi = prefs.getString('longi') ?? '';
-      //      shiftId = prefs.getString('shiftId') ?? "";
-      //      print("this is set state " + lid);
-      //     act1 = act;
+
     });
-//    }
   }
-
-  /*withdrawlTimeOff(String timeoffid) async{
-    RequestTimeOffService ns = new RequestTimeOffService();
-
-    var timeoff = TimeOff(TimeOffId: timeoffid, OrgId: orgid, EmpId: empid, ApprovalSts: '5');
-    var islogin = await ns.withdrawTimeOff(timeoff);
-    // print(islogin);
-    if(islogin=="success"){
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SalarySummary()),
-      );
-
-    }else if(islogin=="failure"){
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-        title: new Text("Sorry!"),
-        content: new Text("Timeoff withdrawl failed."),
-      )
-      );
-    }else{
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      showDialog(context: context, child:
-      new AlertDialog(
-        title: new Text("Sorry!"),
-        content: new Text("Poor network connection."),
-      )
-      );
-    }
-  }
-
-  confirmWithdrawl(String timeoffid) async{
-    showDialog(context: context, child:
-    new AlertDialog(
-      title: new Text("Are you sure?",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18.0),),
-      content:  ButtonBar(
-        children: <Widget>[
-          FlatButton(
-            shape: Border.all(color: Colors.orange[800]),
-            child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
-            onPressed: () {
-              setState(() {
-                _isButtonDisabled=false;
-              });
-              Navigator.of(context, rootNavigator: true).pop();
-            },
-          ),
-          RaisedButton(
-            child: Text('Withdraw',style: TextStyle(color: Colors.white),),
-            color: Colors.orange[800],
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-              withdrawlTimeOff(timeoffid);
-            },
-          ),
-        ],
-      ),
-    )
-    );
-  }*/
 
   @override
   Widget build(BuildContext context) {

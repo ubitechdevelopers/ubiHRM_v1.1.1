@@ -26,6 +26,7 @@ class _allPayrollSummary extends State<allPayrollSummary> {
   var profileimage;
   bool showtabbar;
   String orgName="";
+  String empname = "";
   bool _checkLoaded = true;
   int checkProcessing = 0;
   String location_addr = "";
@@ -50,12 +51,16 @@ class _allPayrollSummary extends State<allPayrollSummary> {
   String shiftId = "";
 
   TextEditingController client_name,comments;
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
 
   @override
   void initState() {
     client_name = new TextEditingController();
     comments = new TextEditingController();
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     super.initState();
     initPlatformState();
     getOrgName();
@@ -141,8 +146,48 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                       style: new TextStyle(fontSize: 22.0, color: appStartColor())),
                   //SizedBox(height: 10.0),
                   //new Divider(color: Colors.black54,height: 1.5,),
-                  new Divider(height: 2,),
+                  //new Divider(height: 2,),
                   SizedBox(height: 5.0,),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 5.0,bottom: 5.0),
+                            child: TextFormField(
+                              controller: _searchController,
+                              focusNode: searchFocusNode,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                border: OutlineInputBorder(
+                                  borderRadius:  new BorderRadius.circular(10.0),
+                                ),
+                                prefixIcon: Icon(Icons.search, size: 30,),
+                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                                hintText: 'Search Employee',
+                                suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                                    onPressed: () {
+                                      _searchController.clear();
+                                      empname='';
+                                    }
+                                ):null,
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  print("value");
+                                  print(value);
+                                  empname = value;
+                                  if(value=="")
+                                    empname='';
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     //crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +226,6 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                     ],
                   ),
                   new Divider(),
-
                   new Expanded(
                     child:  Container(
                       height: MediaQuery.of(context).size.height*.55,
@@ -190,7 +234,7 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<Payroll>>(
-                        future: getPayrollSummaryAll(),
+                        future: getPayrollSummaryAll(empname),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if(snapshot.data.length>0){
@@ -363,7 +407,7 @@ class AllPayrollAppHeader extends StatelessWidget implements PreferredSizeWidget
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

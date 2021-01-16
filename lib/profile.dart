@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-
 import 'b_navigationbar.dart';
 import 'global.dart';
 import 'home.dart';
@@ -47,7 +46,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
                 shape: BoxShape.circle,
                 image: new DecorationImage(
                   fit: BoxFit.fill,
-                  image: AssetImage('assets/avatar.png'),
+                  image: AssetImage('assets/default.png'),
                 )
             ))
     );
@@ -123,13 +122,8 @@ class _CollapsingTabState extends State<CollapsingTab> {
     empid = prefs.getString('employeeid')??"";
     organization =prefs.getString('organization')??"";
     countryid =prefs.getString('countryid')??"";
-
     emp = new Employee(employeeid: empid, organization: organization);
-//print("-1111111111111"+emp.employeeid);
-//print ("22222222222222"+empid);
-    // if(empid!='')
-    // bool ish = await getAllPermission(emp);
-
+    await getProfileInfo(emp, context);
     reporttoprofileimage = new NetworkImage( globalcompanyinfomap['ReportingToProfilePic']);
     reporttoprofileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
@@ -245,106 +239,85 @@ class _CollapsingTabState extends State<CollapsingTab> {
           ]),*/
 
         background: Column(
-
-            children:<Widget>[
-              Stack(
-                  children: <Widget>[
-                    SizedBox(height: 50.0,),
-                    new GestureDetector(
-                      onTap: (){
-                        showBottomNavigation();
-                      },
-                      child:_isProfileUploading?new Container(
-                        margin: EdgeInsets.only(
-                            top: 40.0),
-                        height: 40.0,
-                        width: 40.0,
-                        child: new CircularProgressIndicator(),
-                        /*decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                       image: new DecorationImage(
-                          fit: BoxFit.fill,
-                          image:AssetImage('assets/spinner.gif'),
-                        )
-                    )*/
-                      ):Container(
-                        margin: EdgeInsets.only(
-                            top: 30.0),
-                        height: 100.0,
-                        width: 100.0,
-                        decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          image: new DecorationImage(
-                            //image: new ExactAssetImage("assets/avatar.png"),
-                            fit: BoxFit.fill,
-                            //image: NetworkImage(globalcompanyinfomap['ProfilePic']),
-                            image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
-                            // fit: BoxFit.cover,
+          children:<Widget>[
+            Stack(
+                children: <Widget>[
+                  SizedBox(height: 50.0,),
+                  new GestureDetector(
+                    onTap: (){
+                      showBottomNavigation();
+                    },
+                    child:_isProfileUploading?new Container(
+                      margin: EdgeInsets.only(
+                          top: 40.0),
+                      height: 40.0,
+                      width: 40.0,
+                      child: new CircularProgressIndicator(),
+                    ):Container(
+                      margin: EdgeInsets.only(
+                          top: 30.0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.black54,
+                              borderRadius:BorderRadius.circular(100)
                           ),
-                          //border:
-                          //Border.all(color: Colors.black, width: 2.0),
-
+                          //child: Icon(Icons.camera_alt,color: Colors.white,size: 20),
+                          child: SizedBox(
+                            width:35,
+                            height: 35,
+                            child: Tooltip(
+                              message: 'Change Profile',
+                              child: IconButton(
+                                padding: new EdgeInsets.all(0.0),
+                                icon: Icon(Icons.camera_alt,size: 20,color:const Color(0xFFFFFFFF),),
+                                onPressed: () {
+                                  showBottomNavigation();
+                                },
+                              ),
+                            ),
+                          ),
                         ),
-
+                      ),
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        image: new DecorationImage(
+                          //image: new ExactAssetImage("assets/avatar.png"),
+                          fit: BoxFit.fill,
+                          //image: NetworkImage(globalcompanyinfomap['ProfilePic']),
+                          image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage, // fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                    /*  new Positioned(
-              left: MediaQuery.of(context).size.width*.11,
-                top: MediaQuery.of(context).size.height*.09,
-                child: new RawMaterialButton(
-                  onPressed: () {
-                   // controller.close();
-                    showBottomNavigation();
-                  },
-                  child: new Icon(
-                    Icons.camera_alt,
-                    size: 18.0,
                   ),
-                  shape: new CircleBorder(),
-                  elevation: 0.5,
-                  fillColor: Colors.teal,
-                  padding: const EdgeInsets.all(1.0),
-                ),
-              ),*/
-
-
-                  ]),
-              SizedBox(height: 10.0,),
-              Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                  )),
-              SizedBox(height: 5.0,),
-              Text(globalcompanyinfomap['CompanyEmail'],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                  )),
-              SizedBox(height: 5.0,),
-              Text(globalcompanyinfomap['Designation'],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14.0,
-                  ))
-
-            ]),
-
+                ]),
+            SizedBox(height: 10.0,),
+            Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"],
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+              )),
+            SizedBox(height: 5.0,),
+            Text(globalcompanyinfomap['CompanyEmail'],
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+              )),
+            SizedBox(height: 5.0,),
+            Text(globalcompanyinfomap['Designation'],
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14.0,
+              ))
+          ]),
       ),
-      /*actions: <Widget>[
-        new Padding(
-          padding: EdgeInsets.all(5.0),
-          child: _buildActions(),
-        ),
-      ],*/
     );
+
     Future<bool> sendToHome() async{
-      /*Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );*/
       print("-------> back button pressed");
       Navigator.pushAndRemoveUntil(
         context,
@@ -421,127 +394,73 @@ class _CollapsingTabState extends State<CollapsingTab> {
                               padding: new EdgeInsets.symmetric(horizontal: 9.0),
                               child: Column(
                                 children: <Widget>[
-
-                                  //SizedBox(height: 10.0,),
-                                  globallabelinfomap['emp_code']!=""?
+                                  (globallabelinfomap['emp_code']!="" && globalcompanyinfomap["EmpCode"]!="")?
                                   Row(children: <Widget>[
-                                    Container(child:Text(globallabelinfomap['emp_code']+":",style: TextStyle(color: Colors.grey[600]),) ,
-                                      width: 100.0,),
-                                    Text(globalcompanyinfomap["EmpCode"]),
+                                    Container(child:Text(globallabelinfomap['emp_code'],style: TextStyle(fontWeight: FontWeight.w600),) ,
+                                      width: 150.0,),
+                                    Text(globalcompanyinfomap["EmpCode"],style: TextStyle(color: Colors.grey[600])),
                                   ],):Center(),
 
-                                  globallabelinfomap['first_name']!=""?SizedBox(height: 10.0,):Center(),
-                                  globallabelinfomap['first_name']!=""?
+                                  (globallabelinfomap['first_name']!="" && globalpersnalinfomap["FirstName"]!="")?SizedBox(height: 10.0,):Center(),
+                                  (globallabelinfomap['first_name']!="" && globalpersnalinfomap["FirstName"]!="")?
                                   Row(children: <Widget>[
-                                    Container(child:Text(globallabelinfomap['first_name']+":",style: TextStyle(color: Colors.grey[600]),) ,
-                                      width: 100.0,),
-                                    Flexible(child: Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"])),
+                                    Container(child:Text(globallabelinfomap['first_name'],style: TextStyle(fontWeight: FontWeight.w600),) ,
+                                      width: 150.0,),
+                                    Flexible(child: Text(globalpersnalinfomap["FirstName"]+" "+globalpersnalinfomap["LastName"],style: TextStyle(color: Colors.grey[600]))),
                                   ],):Center(),
 
-                                  globallabelinfomap["doj"]!=""?SizedBox(height: 10.0,):Center(),
-                                  globallabelinfomap["doj"]!=""?
+                                  (globallabelinfomap['doj']!="" && globalpersnalinfomap["DOJ"]!="")?SizedBox(height: 10.0,):Center(),
+                                  (globallabelinfomap['doj']!="" && globalpersnalinfomap["DOJ"]!="")?
                                   Row(children: <Widget>[
-                                    Container(child:Text(globallabelinfomap["doj"]+":",style: TextStyle(color: Colors.grey[600]),) ,
-                                      width: 100.0,),
-                                    Text(globalpersnalinfomap["DOJ"]),
+                                    Container(child:Text(globallabelinfomap["doj"],style: TextStyle(fontWeight: FontWeight.w600),) ,
+                                      width: 150.0,),
+                                    Text(globalpersnalinfomap["DOJ"],style: TextStyle(color: Colors.grey[600])),
                                   ],):Center(),
 
-                                  globallabelinfomap["division"]!=""?SizedBox(height: 10.0,):Center(),
-                                  globallabelinfomap["division"]!=""?
+                                  (globallabelinfomap['division']!="" && globalcompanyinfomap["Division"]!="")?SizedBox(height: 10.0,):Center(),
+                                  (globallabelinfomap['division']!="" && globalcompanyinfomap["Division"]!="")?
                                   Row(children: <Widget>[
-                                    Container(child: Text(globallabelinfomap["division"]+":",
-                                      style: TextStyle(color: Colors.grey[600]),),
-                                      width: 100.0,),
-                                    Flexible(child: Text(
-                                        globalcompanyinfomap["Division"])),
+                                    Container(child: Text(globallabelinfomap["division"],style: TextStyle(fontWeight: FontWeight.w600),),
+                                      width: 150.0,),
+                                    Flexible(child: Text(globalcompanyinfomap["Division"],
+                                        style: TextStyle(color: Colors.grey[600]))),
                                   ],):Center(),
 
-                                  globallabelinfomap["location"]!=""?SizedBox(height: 10.0,):Center(),
-                                  globallabelinfomap["location"]!=""?
+                                  (globallabelinfomap['location']!="" && globalcompanyinfomap["Location"]!="")?SizedBox(height: 10.0,):Center(),
+                                  (globallabelinfomap['location']!="" && globalcompanyinfomap["Location"]!="")?
                                   Row(children: <Widget>[
-                                    Container(child: Text(globallabelinfomap["location"]+":",
-                                      style: TextStyle(color: Colors.grey[600]),),
-                                      width: 100.0,),
-                                    Flexible(child: Text(globalcompanyinfomap["Location"])),
+                                    Container(child: Text(globallabelinfomap["location"],style: TextStyle(fontWeight: FontWeight.w600),),
+                                      width: 150.0,),
+                                    Flexible(child: Text(globalcompanyinfomap["Location"],
+                                        style: TextStyle(color: Colors.grey[600]))),
                                   ],):Center(),
 
-                                  /*countryid=='93'?
-                               //SizedBox(height: 10.0,),
-                               Row(children: <Widget>[
-                                 Container(child: Text("Location:",
-                                   style: TextStyle(color: Colors.grey[600]),),
-                                   width: 100.0,),
-
-                                 Flexible(child: Text(
-                                     globalcompanyinfomap["Location"])),
-                               ],) :
-                               //SizedBox(height: 10.0,),
-                               Row(children: <Widget>[
-                                 Container(child: Text("Division:",
-                                   style: TextStyle(color: Colors.grey[600]),),
-                                   width: 100.0,),
-
-                                 Flexible(child: Text(
-                                     globalcompanyinfomap["Division"])),
-                               ],),
-
-                                countryid!='93'?
-                                SizedBox(height: 10.0,):Center(),
-
-                                countryid!='93'?
-                            //    SizedBox(height: 10.0,),
-                                Row(children: <Widget>[
-                                  Container(child:Text("Location",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),
-
-                                  Flexible(child: Text(globalcompanyinfomap["Location"])),
-                                ],):Center(),*/
-                                  /* SizedBox(height: 10.0,),
-                                Row(children: <Widget>[
-                                  new Expanded(
-                                    child:Container(child:Text("Email:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),),
-                                  Text(globalcompanyinfomap["CompanyEmail"]),
-                                ],),*/
-
-                                  /*  SizedBox(height: 10.0,),
-                                Row(children: <Widget>[
-                                  new Expanded(
-                                    child:Container(child:Text("Reporting To:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),),
-                                  Text(globalcompanyinfomap["ReportingTo"]),
-                                ],),*/
-                                  globallabelinfomap["depart"]!=""?SizedBox(height: 10.0,):Center(),
-                                  globallabelinfomap["depart"]!=""?
+                                  (globallabelinfomap['depart']!="" && globalcompanyinfomap["Department"]!="")?SizedBox(height: 10.0,):Center(),
+                                  (globallabelinfomap['depart']!="" && globalcompanyinfomap["Department"]!="")?
                                   Row(children: <Widget>[
-                                    Container(child:Text(globallabelinfomap["depart"]+":",style: TextStyle(color: Colors.grey[600]),) ,
-                                      width: 100.0,),
-                                    Flexible(child: Text(globalcompanyinfomap["Department"])),
+                                    Container(child:Text(globallabelinfomap["depart"],style: TextStyle(fontWeight: FontWeight.w600),) ,
+                                      width: 150.0,),
+                                    Flexible(child: Text(globalcompanyinfomap["Department"],
+                                        style: TextStyle(color: Colors.grey[600]))),
                                   ],):Center(),
 
-                                  globallabelinfomap["desig"]!=""?SizedBox(height: 10.0,):Center(),
-                                  globallabelinfomap["desig"]!=""?
+                                  (globallabelinfomap['desig']!="" && globalcompanyinfomap["Designation"]!="")?SizedBox(height: 10.0,):Center(),
+                                  (globallabelinfomap['desig']!="" && globalcompanyinfomap["Designation"]!="")?
                                   Row(children: <Widget>[
-                                    //new Expanded(
-                                    Container(child:Text(globallabelinfomap["desig"]+":",style: TextStyle(color: Colors.grey[600])) ,
-                                      width: 100.0,),
-                                    //),
-                                    Flexible(child: Text(globalcompanyinfomap["Designation"])),
+                                    Container(child:Text(globallabelinfomap["desig"],style: TextStyle(fontWeight: FontWeight.w600),),
+                                      width: 150.0,),
+                                    Flexible(child: Text(globalcompanyinfomap["Designation"],style: TextStyle(color: Colors.grey[600]))),
+                                  ],):Center(),
+
+                                  (globallabelinfomap['shift']!="" && globalcompanyinfomap["Shift"]!="")?SizedBox(height: 10.0,):Center(),
+                                  (globallabelinfomap['shift']!="" && globalcompanyinfomap["Shift"]!="")?
+                                  Row(children: <Widget>[
+                                    Container(child:Text(globallabelinfomap["shift"],style: TextStyle(fontWeight: FontWeight.w600)) ,
+                                      width: 150.0,),
+                                    Flexible(child: Text(globalcompanyinfomap["Shift"],style: TextStyle(color: Colors.grey[600]))),
                                   ],):Center(),
 
                                   SizedBox(height: 15.0,),
-                                  /*Row(children: <Widget>[
-                                  Container(child:Text("Blood Group:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),
-                                  Text(globalpersnalinfomap["BloodGroup"]),
-                                ],),
-                                SizedBox(height: 10.0,),
-                                Row(children: <Widget>[
-                                  Container(child:Text("Nationality:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),
-                                  Text(globalpersnalinfomap["Nationality"]),
-                                ],),
-                                SizedBox(height: 10.0,),*/
 
                                 ],
                               ),
@@ -549,11 +468,9 @@ class _CollapsingTabState extends State<CollapsingTab> {
                           ),
                         ),
 
-                        globallabelinfomap["reporting_to"]!=''? Container(
-                          //height: MediaQuery.of(context).size.height,
+                        (globallabelinfomap['reporting_to']!="" && globalcompanyinfomap["ReportingTo"]!="")? Container(
                           margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                          //width: MediaQuery.of(context).size.width*0.9,
                           decoration: new ShapeDecoration(
                             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
                             color: Colors.grey[100],
@@ -584,14 +501,11 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                             shape: BoxShape.circle,
                                             image: new DecorationImage(
                                               fit: BoxFit.fill,
-                                              //  image: NetworkImage(globalcompanyinfomap['ReportingToProfilePic']) ,
-                                              image: _checkLoaded ? AssetImage('assets/avatar.png') : reporttoprofileimage,
+                                              image: _checkLoaded ? AssetImage('assets/default.png') : reporttoprofileimage,
                                             )
                                         ))
                                     ),SizedBox(width: 20.0,),
                                     Flexible(child: Text(globalcompanyinfomap["ReportingTo"]+"\n("+globalcompanyinfomap["ReportingToDesignation"]+")")),
-                                    //Text("-"),
-                                    //Text(globalcompanyinfomap["ReportingToDesignation"],overflow: TextOverflow.ellipsis),
                                   ],),
                                   SizedBox(height: 10.0,),
                                 ],
@@ -627,59 +541,36 @@ class _CollapsingTabState extends State<CollapsingTab> {
                               padding: new EdgeInsets.symmetric(horizontal: 9.0),
                               child: Column(
                                 children: <Widget>[
-                                  // SizedBox(height: 10.0,),
-                                  globallabelinfomap["personal_no"]!=""?
+                                  (globallabelinfomap['personal_no']!="" && globalcontactusinfomap["Phone"]!="")?
                                   Row(children: <Widget>[
-                                    // new Expanded(
-                                    Container(child:Text(globallabelinfomap["personal_no"]+":",style: TextStyle(color: Colors.grey[600]),) ,
-                                      width: 100.0,),
-                                    // ),
-                                    Text(globalcontactusinfomap["Phone"]),
+                                    Container(child:Text(globallabelinfomap["personal_no"],style: TextStyle(fontWeight: FontWeight.w600)) ,
+                                      width: 150.0,),
+                                    Text(globalcontactusinfomap["Phone"],style: TextStyle(color: Colors.grey[600])),
                                   ],):Center(),
 
-                                  globallabelinfomap["current_email_id"]!=""?SizedBox(height: 10.0,):Center(),
-                                  globallabelinfomap["current_email_id"]!=""?Row(children: <Widget>[
-                                    //  new Expanded(child:
-                                    Container(child:Text(globallabelinfomap["current_email_id"]+":",style: TextStyle(color: Colors.grey[600])) ,
-                                      width: 100.0,),
-                                    //),
-                                    //Text(globalcontactusinfomap["Email"]),
-                                    Flexible(child: Text(globalcompanyinfomap["CompanyEmail"]))
-                                  ],):Center(),
-                                  /*     SizedBox(height: 10.0,),
-                                Row(children: <Widget>[
-                                  new Expanded(
-                                    child: Container(child:Text("Address:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),),
-                                  Text(globalcontactusinfomap["Address"]),
-                                ],),
-                                SizedBox(height: 10.0,),
-                                Row(children: <Widget>[
-                                  new Expanded(
-                                    child: Container(child:Text("Postal Code:",style: TextStyle(color: Colors.grey[600]),) ,
-                                    width: 100.0,),),
-                                  Text(globalcontactusinfomap["PostalCode"]),
-                                ],),*/
-
-                                  globallabelinfomap["current_city"]!=""?SizedBox(height: 10.0,):Center(),
-                                  globallabelinfomap["current_city"]!=""?
-                                  Row(children: <Widget>[
-                                    // new Expanded( child:
-                                    Container(child:Text(globallabelinfomap["current_city"]+":",style: TextStyle(color: Colors.grey[600]),) ,
-                                      width: 100.0,),
-                                    //),
-                                    Text(globalcontactusinfomap["City"]),
+                                  (globallabelinfomap['current_email_id']!="" && globalcompanyinfomap["CompanyEmail"]!="")?SizedBox(height: 10.0,):Center(),
+                                  (globallabelinfomap['current_email_id']!="" && globalcompanyinfomap["CompanyEmail"]!="")?Row(children: <Widget>[
+                                    Container(child:Text(globallabelinfomap["current_email_id"],style: TextStyle(fontWeight: FontWeight.w600)) ,
+                                      width: 150.0,),
+                                    Flexible(child: Text(globalcompanyinfomap["CompanyEmail"],style: TextStyle(color: Colors.grey[600])))
                                   ],):Center(),
 
-                                  globallabelinfomap["current_country"]!=""?SizedBox(height: 10.0,):Center(),
-                                  globallabelinfomap["current_country"]!=""?
+                                  (globallabelinfomap['current_city']!="" && globalcontactusinfomap["City"]!="")?SizedBox(height: 10.0,):Center(),
+                                  (globallabelinfomap['current_city']!="" && globalcontactusinfomap["City"]!="")?
                                   Row(children: <Widget>[
-                                    // new Expanded(child:
-                                    Container(child:Text(globallabelinfomap["current_country"]+":",style: TextStyle(color: Colors.grey[600]),) ,
-                                      width: 100.0,),
-                                    //),
-                                    Text(globalcontactusinfomap["Country"]),
+                                    Container(child:Text(globallabelinfomap["current_city"],style: TextStyle(fontWeight: FontWeight.w600),) ,
+                                      width: 150.0,),
+                                    Text(globalcontactusinfomap["City"],style: TextStyle(color: Colors.grey[600])),
                                   ],):Center(),
+
+                                  (globallabelinfomap['current_country']!="" && globalcontactusinfomap["Country"]!="")?SizedBox(height: 10.0,):Center(),
+                                  (globallabelinfomap['current_country']!="" && globalcontactusinfomap["Country"]!="")?
+                                  Row(children: <Widget>[
+                                    Container(child:Text(globallabelinfomap["current_country"],style: TextStyle(fontWeight: FontWeight.w600),) ,
+                                      width: 150.0,),
+                                    Text(globalcontactusinfomap["Country"],style: TextStyle(color: Colors.grey[600])),
+                                  ],):Center(),
+
                                   SizedBox(height: 15.0,),
 
                                 ],
@@ -687,8 +578,6 @@ class _CollapsingTabState extends State<CollapsingTab> {
                             ),
                           ),
                         ),
-
-
                       ],),
                     ),
                   ),  ],),
@@ -939,46 +828,63 @@ class _CollapsingTabState extends State<CollapsingTab> {
       _isProfileUploading = true;
     });
     profileup ns = profileup();
-    bool isupdate = await ns.updateProfilePhoto(uploadtype,empid,organization);
-    // bool isupdate = true;
-    if(isupdate){
+    String isupdate = await ns.updateProfilePhoto(uploadtype,empid,organization);
+    if(isupdate=="true"){
       if(uploadtype==3){
         setState(() {
           _checkLoadedprofile = true;
         });
-        print("Profile image has been removed successfully.");
+        print("Profile image has been removed successfully");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => CollapsingTab()),
         );
-        // ignore: deprecated_member_use
-        showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text("Profile image has been removed successfully."),
-        )
-        );
+        showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text(
+                  "Profile image has been removed successfully"),
+            );
+          });
       }else{
         setState(() {
           _isProfileUploading = false;
         });
-        print("Profile image has been changed successfully.");
+        print("Profile image has been changed successfully");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => CollapsingTab()),
         );
-        // ignore: deprecated_member_use
-        showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text("Profile image has been changed successfully."),
-        )
-        );
+        showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Profile image has been changed successfully"),
+            );
+          });
       }
-      // ignore: deprecated_member_use
-      /*showDialog(context: context, child:
-      new AlertDialog(
-        content: new Text("Profile image has been changed successfully."),
-      )
-      );*/
+    }else if(isupdate=="1"){
+      setState(() {
+        _isProfileUploading = false;
+      });
+      print("No found to remove");
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("No image found to remove"),
+          );
+        });
     }else{
       setState(() {
         _isProfileUploading = false;
@@ -987,62 +893,19 @@ class _CollapsingTabState extends State<CollapsingTab> {
         context,
         MaterialPageRoute(builder: (context) => CollapsingTab()),
       );
-      // ignore: deprecated_member_use
-      showDialog(context: context, child:
-      new AlertDialog(
-        //title: new Text("Congrats!"),
-        content: new Text("No image has been selected, Please try again."),
-      )
-      );
+      print("error in changing profile image");
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("No image has been selected, Please try again"),
+          );
+        });
     }
   }
-
-  updateProfile(String mobile, String countryid) async{
-    var profile = Profile(empid, organization, mobile, countryid);
-    profileup ns = profileup();
-    var islogin = await ns.updateProfile(profile);
-    //print(islogin);
-    if(islogin=="success"){
-      getProfileInfo(emp, context);
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      /* Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );*/
-      // ignore: deprecated_member_use
-      showDialog(context: context, child:
-      new AlertDialog(
-        title: new Text("Congrats!"),
-        content: new Text("Your Profile is updated."),
-      )
-      );
-    }else if(islogin=="failure"){
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      // ignore: deprecated_member_use
-      showDialog(context: context, child:
-      new AlertDialog(
-        title: new Text("Sorry!"),
-        content: new Text("Phone no. already exists"),
-      )
-      );
-    }else{
-      setState(() {
-        _isButtonDisabled=false;
-      });
-      // ignore: deprecated_member_use
-      showDialog(context: context, child:
-      new AlertDialog(
-        title: new Text("Sorry!"),
-        content: new Text("Poor network connection."),
-      )
-      );
-    }
-  }
-
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

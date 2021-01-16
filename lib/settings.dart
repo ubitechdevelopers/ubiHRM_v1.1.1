@@ -133,7 +133,7 @@ class _AllSetting extends State<AllSetting> {
                       );
                     },
                   ):Center(),
-                  SizedBox(height: 6.0),
+                  (adminsts==1||hrsts==1||divhrsts==1)?SizedBox(height: 6.0):Center(),
 
                   (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -169,7 +169,7 @@ class _AllSetting extends State<AllSetting> {
                       );
                     },
                   ):Center(),
-                  SizedBox(height: 6.0),
+                  (adminsts==1||hrsts==1||divhrsts==1)?SizedBox(height: 6.0):Center(),
 
                   (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -205,7 +205,7 @@ class _AllSetting extends State<AllSetting> {
                       );
                     },
                   ):Center(),
-                  SizedBox(height: 6.0),
+                  (adminsts==1||hrsts==1||divhrsts==1)?SizedBox(height: 6.0):Center(),
 
                   (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -241,9 +241,9 @@ class _AllSetting extends State<AllSetting> {
                       );
                     },
                   ):Center(),
-                  SizedBox(height: 6.0),
+                  ((adminsts==1||hrsts==1||divhrsts==1) && perAttendance=='1' && perGeoFence=='1')?SizedBox(height: 6.0):Center(),
 
-                  (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
+                  ((adminsts==1||hrsts==1||divhrsts==1) && perAttendance=='1' && perGeoFence=='1')?new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
                       child: Row(
@@ -280,9 +280,9 @@ class _AllSetting extends State<AllSetting> {
                       );
                     },
                   ):Center(),
-                  SizedBox(height: 6.0),
+                  ((adminsts==1||hrsts==1||divhrsts==1) && perAttendance=='1')?SizedBox(height: 6.0):Center(),
 
-                  (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
+                  new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
                       child: Row(
@@ -316,7 +316,7 @@ class _AllSetting extends State<AllSetting> {
                         MaterialPageRoute(builder: (context) => EmployeeList()),
                       );
                     },
-                  ):Center(),
+                  ),
                   SizedBox(height: 6.0),
 
                   (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
@@ -353,7 +353,8 @@ class _AllSetting extends State<AllSetting> {
                       );
                     },
                   ):Center(),
-                  SizedBox(height: 6.0),
+                  (adminsts==1||hrsts==1||divhrsts==1)?SizedBox(height: 6.0):Center(),
+
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -443,7 +444,7 @@ class SettingsAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

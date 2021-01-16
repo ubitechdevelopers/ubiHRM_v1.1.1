@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
@@ -98,20 +96,20 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
           _isButtonDisabled=false;
           _checkwithdrawnexpense = false;
         });
-         Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MyExpence()),
         );
         showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
-              });
-              return AlertDialog(
-                content: new Text("Expense claim withdrawn successfully."),
-              );
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
             });
+            return AlertDialog(
+              content: new Text("Expense claim withdrawn successfully."),
+            );
+          });
         /*showDialog(context: context, child:
         new AlertDialog(
           //  title: new Text("Congrats!"),
@@ -124,39 +122,39 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
           _checkwithdrawnexpense = false;
         });
         showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
-              });
-              return AlertDialog(
-                content: new Text("Expense claim could not be withdrawn."),
-              );
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
             });
+            return AlertDialog(
+              content: new Text("Expense claim could not be withdrawn."),
+            );
+          });
         /*showDialog(context: context, child:
         new AlertDialog(
           //title: new Text("Sorry!"),
           content: new Text("Expense claim could not be withdrawn."),
         )
         );*/
-      }/*else{
-        setState(() {
-          _isButtonDisabled=false;
-        });
-        showDialog(context: context, child:
-        new AlertDialog(
-          // title: new Text("Sorry!"),
-          content: new Text("Poor network connection."),
-        )
-        );
-      }*/
+      }
     }catch(e){
       print(e.toString());
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Poor network connection."),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Poor network connection."),
       )
-      );
+      );*/
     }
   }
 

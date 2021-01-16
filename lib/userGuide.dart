@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/global.dart';
 
 import 'drawer.dart';
@@ -18,6 +19,9 @@ class _UserGuide extends State<UserGuide> {
   String desination="";
   String profile="";
   String org_name="";
+  String orgName = "";
+  var profileimage;
+  bool showtabbar;
 
   final iconThumbnail =new Container(
     margin: new EdgeInsets.symmetric(
@@ -83,6 +87,7 @@ class _UserGuide extends State<UserGuide> {
   @override
   void initState() {
     super.initState();
+    profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     initPlatformState();
   }
 
@@ -95,26 +100,14 @@ class _UserGuide extends State<UserGuide> {
       desination = prefs.getString('desination') ?? '';
       profile = prefs.getString('profile') ?? '';
       org_name = prefs.getString('org_name') ?? '';
+      orgName = prefs.getString('orgname') ?? '';
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              new Text(org_name, style: new TextStyle(fontSize: 20.0)),
-            ],
-          ),
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-          backgroundColor: appStartColor(),
-        ),
+        appBar: AppHeader(profileimage,showtabbar,orgName),
         endDrawer: new AppDrawer(),
         body: userWidget()
     );
@@ -511,7 +504,7 @@ class _UserGuide extends State<UserGuide> {
                             //style: Theme.of(context).textTheme.body1.copyWith(fontSize: 30),
                               children: [
                                 TextSpan(
-                                    text: '3. Fill the request Leave form and click on ', style: TextStyle(color: Colors.black)
+                                    text: '3. Fill the Leave request form and click on ', style: TextStyle(color: Colors.black)
                                 ),
                                 TextSpan(
                                     text: '“Apply”.', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
@@ -617,10 +610,10 @@ class _UserGuide extends State<UserGuide> {
                             //style: Theme.of(context).textTheme.body1.copyWith(fontSize: 30),
                               children: [
                                 TextSpan(
-                                    text: '3. Fill the request Time Off form and click on ', style: TextStyle(color: Colors.black)
+                                    text: '3. Fill the Time Off request form and click on ', style: TextStyle(color: Colors.black)
                                 ),
                                 TextSpan(
-                                    text: '“Apply” ', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
+                                    text: '“Apply”. ', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
                                 ),
                               ]
                           )
@@ -1017,7 +1010,7 @@ class _UserGuide extends State<UserGuide> {
                           text: TextSpan(
                               children: [
                                 TextSpan(
-                                    text: '3. Fill the request form and click on ', style: TextStyle(color: Colors.black)
+                                    text: '3. Fill the expense request form and click on ', style: TextStyle(color: Colors.black)
                                 ),
                                 TextSpan(
                                     text: '“Submit” ', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
@@ -1164,7 +1157,7 @@ class _UserGuide extends State<UserGuide> {
                                     text: '1. Click on ', style: TextStyle(color: Colors.black)
                                 ),
                                 TextSpan(
-                                    text: '“Leave” ', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
+                                    text: '“Leave”', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
                                 ),
                                 TextSpan(
                                     text: ', you can view the list of pending leave requests.', style: TextStyle(color: Colors.black)
@@ -1204,7 +1197,7 @@ class _UserGuide extends State<UserGuide> {
                                     text: '1. Click on ', style: TextStyle(color: Colors.black)
                                 ),
                                 TextSpan(
-                                    text: '“Time Off” ', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
+                                    text: '“Time Off”', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
                                 ),
                                 TextSpan(
                                     text: ', you can view the list of pending time off requests.', style: TextStyle(color: Colors.black)
@@ -1246,7 +1239,7 @@ class _UserGuide extends State<UserGuide> {
                                     text: '1. Click on ', style: TextStyle(color: Colors.black)
                                 ),
                                 TextSpan(
-                                    text: '“Expense” ', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
+                                    text: '“Expense”', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)
                                 ),
                                 TextSpan(
                                     text: ', you can view the list of pending expense requests.', style: TextStyle(color: Colors.black)

@@ -6,9 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart';
-import 'package:ubihrm/login_page.dart';
 import 'package:ubihrm/model/model.dart';
-import 'package:ubihrm/survey.dart';
 import 'services.dart';
 
 class Login{
@@ -76,7 +74,7 @@ class Login{
         perSalary = getModulePermission("66", "view");
         perPayroll = getModulePermission("458", "view");
         perPayPeriod = getModulePermission("491", "view");
-        perGeoFence = getModulePermission("138", "view");
+        perGeoFence = getModulePermission("318", "view");
         perSalaryExpense = getModulePermission("170", "view");
         perPayrollExpense = getModulePermission("473", "view");
         perFlexi = getModulePermission("448", "view");
@@ -100,9 +98,9 @@ class Login{
         prefs.setString("orgid", employeeMap['orgid']);
         prefs.setString("name", employeeMap['name']);
         prefs.setString("email", employeeMap['email']);
-        print(prefs.getString('orgid'));
-        print(prefs.getString('name'));
-        print(prefs.getString('email'));
+        //print(prefs.getString('orgid'));
+        //print(prefs.getString('name'));
+        //print(prefs.getString('email'));
         return "false3";
       } else if(employeeMap['response']==5){
         return "false4";
@@ -176,7 +174,7 @@ class Login{
           perSalary = getModulePermission("66", "view");
           perPayroll = getModulePermission("458", "view");
           perPayPeriod = getModulePermission("491", "view");
-          perGeoFence = getModulePermission("138", "view");
+          perGeoFence = getModulePermission("318", "view");
           perSalaryExpense = getModulePermission("170", "view");
           perPayrollExpense = getModulePermission("473", "view");
           perFlexi = getModulePermission("448", "view");

@@ -2,9 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:simple_share/simple_share.dart';
 import 'package:ubihrm/services/attandance_services.dart';
-
 import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
@@ -300,12 +298,12 @@ class _VisitList extends State<VisitList> {
                 )*/
               ],
             ),
-            Row(
+            today.text.isNotEmpty?Row(
               children: <Widget>[
                 Expanded(
                   child: Container(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: TextFormField(
                         controller: _searchController,
                         focusNode: searchFocusNode,
@@ -318,19 +316,12 @@ class _VisitList extends State<VisitList> {
                           prefixIcon: Icon(Icons.search, size: 30,),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           hintText: 'Search Employee',
-                          labelText: 'Search Employee',
-                          /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
-                              onPressed: () {
-                                _searchController.clear();
-                                *//*Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => LateComers()),
-                                    );*//*
-                                *//*Navigator.pop(
-                                      context);*//*
-                              }
-                          ):null,*/
-                          //focusColor: Colors.white,
+                          suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              empname='';
+                            }
+                          ):null,
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -345,7 +336,7 @@ class _VisitList extends State<VisitList> {
                   ),
                 ),
               ],
-            ),
+            ):Center(),
 
             Container(
               //  padding: EdgeInsets.only(bottom:10.0,top: 10.0),
@@ -405,9 +396,7 @@ class _VisitList extends State<VisitList> {
               height: 8.2,
             ),
             new Expanded(
-              child: res == true
-                  ? getEmpDataList(today.text)
-                  : Container(
+              child: res == true ? getEmpDataList(today.text) : Container(
                 height: MediaQuery.of(context).size.height * 0.25,
                 child: Center(
                   child: Container(

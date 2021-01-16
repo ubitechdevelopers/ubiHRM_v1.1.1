@@ -170,7 +170,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                     Expanded(
                       child: Container(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: TextFormField(
                             controller: _searchController,
                             focusNode: searchFocusNode,
@@ -183,7 +183,7 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
                               prefixIcon: Icon(Icons.search, size: 30,),
                               floatingLabelBehavior: FloatingLabelBehavior.always,
                               hintText: 'Search Employee',
-                              labelText: 'Search Employee',
+                              //labelText: 'Search Employee',
                               /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
                                   onPressed: () {
                                     _searchController.clear();
@@ -370,7 +370,14 @@ class _EmployeeLeaveList extends State<EmployeeLeaveList> {
             return new Text("Unable to connect server");
           }
           // return loader();
-          return new Center(child: CircularProgressIndicator());
+          return new Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width*1,
+              color:appStartColor().withOpacity(0.1),
+              padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+              child:Text("Please select the date",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+            ),
+          );
         });
   }
 

@@ -11,9 +11,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/attandance/attendance_summary.dart';
 import 'package:ubihrm/b_navigationbar.dart';
+import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/model/timeinout.dart';
 import 'package:ubihrm/register_page.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:ubihrm/services/attandance_saveimage.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
@@ -86,15 +86,15 @@ class _HomePageState extends State<HomePage> {
     initPlatformState();
     getOrgName();
     platform.setMethodCallHandler(_handleMethod);
-
+    print('assignedAreaIds.isNotEmpty && perGeoFence=="1"');
+    print(assignedAreaIds.isNotEmpty && perGeoFence=="1");
     print("assignedAreaIds.isNotEmpty");
     print(assignedAreaIds.isNotEmpty);
     print('perGeoFence=="1"');
     print(perGeoFence=="1");
-    print("perGeoFence");
-    print(perGeoFence);
-    print(areaSts);
+    print('areaSts=="0"');
     print(areaSts=="0");
+    print(areaSts);
     //setLocationAddress();
     //startTimer();
   }
@@ -153,9 +153,18 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('empid') ?? '';
     orgdir = prefs.getString('orgdir') ?? '';
+    String organization = prefs.getString('organization') ?? "";
+    String userprofileid = prefs.getString('userprofileid') ?? "";
     desinationId = globalcompanyinfomap['Designation'];
     response = prefs.getInt('response') ?? 0;
 
+    Employee emp = new Employee(
+      employeeid: empid,
+      organization: organization,
+      userprofileid: userprofileid,
+    );
+
+    await getProfileInfo(emp ,context);
     getAreaStatus().then((res) {
       print('attendance/home dot dart');
       if (mounted) {
@@ -513,7 +522,7 @@ class _HomePageState extends State<HomePage> {
                               shape: BoxShape.circle,
                               image: new DecorationImage(
                                 fit: BoxFit.fill,
-                                image:_checkLoaded ? AssetImage('assets/avatar.png') : profileimage,
+                                image:_checkLoaded ? AssetImage('assets/default.png') : profileimage,
                               ))),
                     ]),
                   ),
@@ -751,7 +760,16 @@ class _HomePageState extends State<HomePage> {
 
         if(geoFenceOrgPerm=="1"||fenceAreaSts=="1") {
           print('geoFenceStatus---->>>>'+geoFenceStatus);
-
+          await showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("You Can't punch Attendance Outside Geofence."),
+              );
+            });
           /*await showDialog(
             context: context,
             // ignore: deprecated_member_use
@@ -773,15 +791,15 @@ class _HomePageState extends State<HomePage> {
     //sl.startStreaming(5);
     if(globalcompanyinfomap['Department']==''){
       await showDialog(
-          context: context,
-          builder: (context) {
-            Future.delayed(Duration(seconds: 3), () {
-              Navigator.of(context).pop(true);
-            });
-            return AlertDialog(
-              content: new Text("Department has not been assigned."),
-            );
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
           });
+          return AlertDialog(
+            content: new Text("Department has not been assigned."),
+          );
+        });
       /*await showDialog(
           context: context,
           // ignore: deprecated_member_use
@@ -810,6 +828,7 @@ class _HomePageState extends State<HomePage> {
           ));*/
       return null;
     }
+
     if(globalcompanyinfomap['Shift']==''){
       await showDialog(
           context: context,
@@ -845,40 +864,41 @@ class _HomePageState extends State<HomePage> {
         print("issave");
         print(issave);
         if (issave) {
-          showDialog(
-              context: context,
-              builder: (context) {
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(context).pop(true);
-                });
-                return AlertDialog(
-                  content: new Text("Attendance marked successfully!"),
-                );
-              });
-          /*showDialog(context: context, barrierDismissible: true, child:
-          new AlertDialog(
-            content: new Text("Attendance marked successfully!"),
-          )
-          );*/
-          //await new Future.delayed(const Duration(seconds: 2));
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyApp()),
           );
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Attendance marked successfully"),
+              );
+            });
+          /*showDialog(context: context, barrierDismissible: true, child:
+            new AlertDialog(
+              content: new Text("Attendance marked successfully!"),
+            )
+          );
+          await new Future.delayed(const Duration(seconds: 2));*/
+
           setState(() {
             act1 = act;
           });
         } else {
           showDialog(
-              context: context,
-              builder: (context) {
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(context).pop(true);
-                });
-                return AlertDialog(
-                  content: new Text("Attendance was not captured. Please punch again!"),
-                );
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
               });
+              return AlertDialog(
+                content: new Text("Attendance was not captured. Please punch again"),
+              );
+            });
           /*showDialog(context: context, child:
           new AlertDialog(
             //content: new Text("Selfie not captured, please punch again!"),
@@ -895,11 +915,21 @@ class _HomePageState extends State<HomePage> {
         print("EXCEPTION PRINT: "+e.toString());
       }
     }else{
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Internet connection not found."),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Internet connection not found."),
       )
-      );
+      );*/
     }
   }
 
@@ -908,13 +938,13 @@ class _HomePageState extends State<HomePage> {
     bool res = await ns.resendVerificationMail(orgid);
     if(res){
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-              content: Row( children:<Widget>[
-                Text("Verification link has been sent to \nyour organization's registered Email."),
-              ]
-              )
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Row( children:<Widget>[
+            Text("Verification link has been sent to \nyour organization's registered Email."),
+          ]
           )
+        )
       );
     }
   }
@@ -949,7 +979,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 new RaisedButton(
                                   child: new Text(
-                                    "Verify",
+                                    "VERIFY",
                                     style: new TextStyle(
                                       color: Colors.white,
                                     ),
@@ -1018,7 +1048,7 @@ class AttendanceHomeAppHeader extends StatelessWidget implements PreferredSizeWi
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

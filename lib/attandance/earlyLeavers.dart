@@ -2,9 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:simple_share/simple_share.dart';
 import 'package:ubihrm/services/attandance_services.dart';
-
 import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
@@ -93,8 +91,7 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                   borderRadius: new BorderRadius.circular(20.0)),
               color: Colors.white,
             ),
-
-            //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
+            //padding: EdgeInsets.only(left: 2.0, right: 2.0),
             child: Column(
               children: <Widget>[
                 SizedBox(height: 1.0),
@@ -108,8 +105,8 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                   ),
                 ),
                 /* Divider(
-              height: 10.0,
-            ),*/
+                  height: 10.0,
+                ),*/
                 SizedBox(height: 2.0),
                 Row(
                   children: <Widget>[
@@ -304,12 +301,12 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                 )*/
                   ],
                 ),
-                Row(
+                today.text.isNotEmpty?Row(
                   children: <Widget>[
                     Expanded(
                       child: Container(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: TextFormField(
                             controller: _searchController,
                             focusNode: searchFocusNode,
@@ -322,19 +319,12 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                               prefixIcon: Icon(Icons.search, size: 30,),
                               floatingLabelBehavior: FloatingLabelBehavior.always,
                               hintText: 'Search Employee',
-                              labelText: 'Search Employee',
-                              /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
-                                  onPressed: () {
-                                    _searchController.clear();
-                                    //getLateEmpDataList(today.text,empname);
-                                    //res = true;
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => LateComers()),
-                                    );
-                                    Navigator.pop(context);
-                                  }
-                              ):null,*/
+                              suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                                onPressed: () {
+                                  _searchController.clear();
+                                  empname='';
+                                }
+                              ):null,
                             ),
                             onChanged: (value) {
                               setState(() {
@@ -349,7 +339,7 @@ class _EarlyLeavers extends State<EarlyLeavers> {
                       ),
                     ),
                   ],
-                ),
+                ):Center(),
                 /*Divider(
                   height: 5,
                 ),
@@ -445,7 +435,7 @@ class _EarlyLeavers extends State<EarlyLeavers> {
             if (snapshot.data.length > 0) {
               return new ListView.builder(
                   itemCount: snapshot.data.length,
-                  //    padding: EdgeInsets.only(left: 15.0,right: 15.0),
+                  // padding: EdgeInsets.only(left: 15.0,right: 15.0),
                   itemBuilder: (BuildContext context, int index) {
                     return new Column(
                         children: <Widget>[

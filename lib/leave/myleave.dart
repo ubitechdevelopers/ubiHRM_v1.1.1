@@ -53,7 +53,6 @@ class _MyLeaveState extends State<MyLeave> {
       }
     }));
     showtabbar=false;
-  //  print(profileimage);
     initPlatformState();
     getOrgName();
   }
@@ -99,33 +98,60 @@ class _MyLeaveState extends State<MyLeave> {
         context,
         MaterialPageRoute(builder: (context) => MyLeave()),
       );
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Leave application withdrawn successfully."),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
-        //backgroundColor: appEndColor(),
-      //  title: new Text("Congrats!"),
         content: new Text("Leave application withdrawn successfully."),
       )
-      );
+      );*/
     }else if(islogin=="failure"){
       setState(() {
         _isButtonDisabled=false;
       });
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Leave could not be withdrawn."),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         //title: new Text("Sorry!"),
         content: new Text("Leave could not be withdrawn."),
       )
-      );
+      );*/
     }else{
       setState(() {
         _isButtonDisabled=false;
       });
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Poor network connection."),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
-       // title: new Text("Sorry!"),
         content: new Text("Poor network connection."),
       )
-      );
+      );*/
     }
   }
 
@@ -157,12 +183,6 @@ class _MyLeaveState extends State<MyLeave> {
       ),
     )
     );
-    /*return new Center(child: SizedBox(
-      child: CircularProgressIndicator(strokeWidth: 2.2,),
-      height: 20.0,
-      width: 20.0,
-    ),
-    );*/
   }
 
   void showInSnackBar(String value) {
@@ -227,16 +247,16 @@ class _MyLeaveState extends State<MyLeave> {
           appBar: new LeaveAppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:new HomeNavigation(),
           body:  ModalProgressHUD(
-              inAsyncCall: _checkwithdrawnleave,
-              opacity: 0.15,
-              progressIndicator: SizedBox(
-                child:new CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation(Colors.green),
-                    strokeWidth: 5.0),
-                height: 40.0,
-                width: 40.0,
-              ),
-              child: homewidget()
+            inAsyncCall: _checkwithdrawnleave,
+            opacity: 0.15,
+            progressIndicator: SizedBox(
+              child:new CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation(Colors.green),
+                  strokeWidth: 5.0),
+              height: 40.0,
+              width: 40.0,
+            ),
+            child: homewidget()
           ),
           //body: homewidget(),
            floatingActionButton: new FloatingActionButton(
@@ -1015,7 +1035,7 @@ class LeaveAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

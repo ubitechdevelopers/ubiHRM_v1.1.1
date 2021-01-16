@@ -300,12 +300,12 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
                     )*/
                   ],
                 ),
-                Row(
+                today.text.isNotEmpty?Row(
                   children: <Widget>[
                     Expanded(
                       child: Container(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(5.0),
                           child: TextFormField(
                             controller: _searchController,
                             focusNode: searchFocusNode,
@@ -318,19 +318,12 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
                               prefixIcon: Icon(Icons.search, size: 30,),
                               floatingLabelBehavior: FloatingLabelBehavior.always,
                               hintText: 'Search Employee',
-                              labelText: 'Search Employee',
-                              /*suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
-                                  onPressed: () {
-                                    _searchController.clear();
-                                    //getLateEmpDataList(today.text,empname);
-                                    //res = true;
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => LateComers()),
-                                    );
-                                    Navigator.pop(context);
-                                  }
-                              ):null,*/
+                              suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                                onPressed: () {
+                                  _searchController.clear();
+                                  empname='';
+                                }
+                              ):null,
                             ),
                             onChanged: (value) {
                               setState(() {
@@ -345,7 +338,7 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
                       ),
                     ),
                   ],
-                ),
+                ):Center(),
                 //getEmployee_DD(),
                 Divider(
                   height: 5,

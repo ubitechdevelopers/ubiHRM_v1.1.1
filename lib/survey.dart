@@ -7,7 +7,6 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/home.dart';
 import 'package:ubihrm/model/model.dart';
-import 'package:ubihrm/otpverificationpage.dart';
 import 'package:ubihrm/services/checkLogin.dart';
 import 'global.dart';
 
@@ -728,7 +727,7 @@ class _SurveyFormState extends State<SurveyForm> {
                                         "performancemodule": performanceModule,
                                         "requirement": ReqController.text,
                                         "timetocall": _selectedISTtime,
-                                        "platform": 'iOS'
+                                        "platform": 'android'
                                       }).then((response) {
                                         if (response.statusCode == 200) {
                                           if (response.body.toString().contains("true")) {
@@ -820,7 +819,7 @@ class _SurveyFormState extends State<SurveyForm> {
         showDialog(context: context, child:
         new AlertDialog(
 
-          content: new Text("Your trial period has expired!"),
+          content: new Text("Your trial period has expired"),
         )
         );
       }else if(res=='false2'){
@@ -830,7 +829,7 @@ class _SurveyFormState extends State<SurveyForm> {
         showDialog(context: context, child:
         new AlertDialog(
 
-          content: new Text("Your plan has expired!"),
+          content: new Text("Your plan has expired"),
         )
         );
       }else{

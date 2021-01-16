@@ -300,12 +300,12 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
               )*/
                   ],
                 ),
-                Divider(
+                today.text.isNotEmpty?Divider(
                   height: 5,
                   color: Colors.black,
-                ),
-                getDepartments_DD(),
-                getDeptEmp_DD(),
+                ):Center(),
+                today.text.isNotEmpty?getDepartments_DD():Center(),
+                today.text.isNotEmpty?getDeptEmp_DD():Center(),
                 new Container(
                   decoration: new BoxDecoration(color: Colors.black54),
                   child: new TabBar(
@@ -541,12 +541,10 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
                                       ),
                                     );
                                   }
-                                }
-                                else if (snapshot.hasError) {
+                                } else if (snapshot.hasError) {
                                   return new Text("Unable to connect server");
                                   //  return new Text("${snapshot.error}");
                                 }
-
                                 // By default, show a loading spinner
                                 return new Center( child: CircularProgressIndicator());
                               },
@@ -1240,10 +1238,10 @@ class _Department_att extends State<Department_att> with SingleTickerProviderSta
               ),
             );
           }catch(e){
-            return Text("Ex: Unable to fetch departments");
+            return Text("Ex: Unable to fetch employees");
           }
         } else if (snapshot.hasError) {
-          return new Text("ER: Unable to fetch departments");
+          return new Text("ER: Unable to fetch employees");
         }
         // return loader();
         return new Center(child: SizedBox(

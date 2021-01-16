@@ -27,13 +27,13 @@ circleIconBackgroundColor(){
   return Colors.green[50];
 }
 
-String path="http://ubihrmglobal.zentylpro.com/ubiapp/";
+/*String path="http://ubihrmglobal.zentylpro.com/ubiapp/";
 String path_ubiattendance="http://ubihrmglobal.zentylpro.com/HRMAPP/index.php/Att_services/";
-String path_hrm_india="http://ubihrmglobal.zentylpro.com/services/";
+String path_hrm_india="http://ubihrmglobal.zentylpro.com/services/";*/
 
-/*String path="https://ubitech.ubihrm.com/ubiapp/";
-String path_ubiattendance="https://ubitech.ubihrm.com/HRMAPP/index.php/Att_services/";
-String path_hrm_india="https://ubitech.ubihrm.com/services/";*/
+String path="https://ubitechglobal.ubihrm.com/ubiapp/";
+String path_ubiattendance="https://ubitechglobal.ubihrm.com/HRMAPP/index.php/Att_services/";
+String path_hrm_india="https://ubitechglobal.ubihrm.com/services/";
 
 int home_load_num = 0;
 List<Permission> globalpermissionlist =new List();
@@ -48,7 +48,7 @@ Map globalyearfiscal;
 
 //////Copied from  attendance global///////
 List<LocationData> list = new List();
-String globalstreamlocationaddr="";
+String globalstreamlocationaddr="Location not fetched";
 bool stopstreamingstatus = false;
 int department_permission = 0, designation_permission = 0, leave_permission = 0, shift_permission = 0, timeoff_permission = 1,punchlocation_permission = 1, employee_permission = 0, permission_module_permission = 0, report_permission = 0;
 int globalalertcount = 0;
@@ -82,7 +82,8 @@ var perSalaryExpense;
 var perPayrollExpense;
 var perFlexi;
 var deprtcurrency;
-String appVersion='1.0.2';
+int approval_count=0;
+String appVersion='1.0.9';
 String latestVersionReleaseDate='01-Dec-2020';
 String appVersionReleaseDate='02-Feb-2020';
 
@@ -95,7 +96,7 @@ String geoFenceOrgPerm="0";//Geo Fence org permission
 String mailVerifySts="0";//Geo Fence org permission
 String grpCompanySts="0";//Geo Fence org permission
 String fenceAreaSts="0";
-String areaSts='';
+String areaSts="";
 String assignedAreaIds = "";
 var assign_lat = 0.0;//These are user to store latitude got from javacode throughout the app
 var assign_long = 0.0;//These are user to store latitude got from javacode throughout the app

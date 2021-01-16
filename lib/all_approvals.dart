@@ -95,7 +95,7 @@ class _AllApprovals extends State<AllApprovals> {
         backgroundColor:scaffoldBackColor(),
         endDrawer: new AppDrawer(),
         appBar: AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar:  new HomeNavigation(),
+        bottomNavigationBar: new HomeNavigation(),
         body:getReportsWidget(),
       ),
     );
@@ -360,7 +360,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

@@ -5,6 +5,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:dio/dio.dart';
@@ -434,50 +435,13 @@ class _RequestExpenceState extends State<RequestExpence> {
 
                         SizedBox(height: 20.0),
 
-
-                       /* Container(
-                          //width: MediaQuery.of(context).size.width*0.9,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              MaterialButton(
-                                child: FlatButton.icon(
-                                  //color: Colors.red,
-                                  icon: Padding(
-                                    padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
-                                    child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],),
-                                  ), //`Icon` to display
-                                  label: Container(
-                                    padding: EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 10.0),
-                                    //margin: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
-                                    child:showImage(_image),), //`Text` to display
-                                  onPressed: () async {
-                                    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                    print("---------------------------->>>>>>>>>>>"+image.toString());
-                                    //  ExpenseDoc=image;
-                                    setState(() {
-                                      _image = image;
-                                    });
-                                  },
-                                  splashColor: Colors.grey,
-                                ),
-                                shape: UnderlineInputBorder(),
-                                minWidth: 371,
-                                //height: 40,
-                              ),
-
-                            ],
-                          ),
-                        ),
-*/
-                          new Row(
+                         new Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 /*new Icon(
                                   Icons.file_upload,
                                   color: Colors.grey,
                                 ),*/
-
                                 Flexible(
                                   child: Container(
                                       width: MediaQuery.of(context).size.width*0.90,
@@ -495,14 +459,14 @@ class _RequestExpenceState extends State<RequestExpence> {
                                             ),
                                             InkWell(
                                               child: Container(
-                                                width: MediaQuery.of(context).size.width*0.6,
+                                                //width: MediaQuery.of(context).size.width*0.6,
                                                 padding: EdgeInsets.fromLTRB(10.0,0.0, 0.0, 0.0),
                                                 //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                                                 child:showFile(_file),
                                               ),
                                               onTap: () async {
-                                                var file = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                                //File file = await FilePicker.getFile(type: FileType.any);
+                                                //var file = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                                File file = await FilePicker.getFile(type: FileType.any);
                                                 print(file);
                                                 setState(() {
                                                   //_image = image;
@@ -512,83 +476,31 @@ class _RequestExpenceState extends State<RequestExpence> {
                                             )
                                           ],
                                         )
-                                        /*child: FlatButton.icon(
-                                              icon: Padding(
-                                                padding: const EdgeInsets.only(bottom:15.0, left:0.0),
-                                                child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],size: 27,),
-                                              ), //
-                                              label: Container(
-                                                  width: MediaQuery.of(context).size.width*0.6,
-                                                  padding: EdgeInsets.fromLTRB(0.0,0.0, 0.0, 15.0),
-                                                  //margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                                                  child:showImage(_image),
-                                              ),
-                                              //child: Text("Select Image", style: TextStyle(color:_image!=null ? Colors.green[500]:Colors.grey[500],),textAlign: TextAlign.start,),
-                                              onPressed: () async {
-                                                var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                                print(image);
-                                                setState(() {
-                                                  _image = image;
-                                                });
-                                              },
-                                              splashColor: Colors.grey,
-                                              //height: 55,
-                                              //minWidth: 350,
-                                              shape: UnderlineInputBorder(),
-                                          ),*/
                                       ),
                                     ),
-
                                 ),
-
                              //showImage(_image)
-
-                             /*ButtonTheme(
-                              //minWidth: 100.0,
-                             // height: 40.0,
-                              child: RaisedButton(
-                              //shape: Border.all(color: Colors.black54),
-                                shape: CircleBorder(),
-                                color:_image!=null ? Colors.green[500]:Colors.grey[500],
-                                onPressed: () async {
-                                  var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                // ExpenseDoc=image;
-                                  setState(() {
-                                    _image = image;
-                                  });
-                                },
-                            child:
-                               new Icon(
-                                  Icons.file_upload,
-                                  color: Colors.white,
-                                ),*//*new Text(
-                              "Supporting docs", textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: 14.0, color: Colors.grey[800]),
-                            ),*//*
-                          ),
-                     ),
-*/
-                    /* Container(
-                       padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                       margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                       child:showImage(_image),
-                     ),*/
                               ]),
                         SizedBox(height: 5.0),
+                        Row(
+                          children: [
+                            Text("Note: Supported Document: png, jpg, doc, docx, pdf",
+                              textAlign: TextAlign.start,
+                              style: new TextStyle(fontSize:14.0, color: Colors.orange[900],),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text("File Size: Max 2 MB",
+                              textAlign: TextAlign.start,
+                              style: new TextStyle(fontSize:14.0, color: Colors.orange[900],),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 5.0),
                        ButtonBar(
-
                           children: <Widget>[
-
-                            /*RaisedButton(
-                              *//* child: _isButtonDisabled?Row(children: <Widget>[Text('Processing ',style: TextStyle(color: Colors.white),),SizedBox(width: 10.0,), SizedBox(child:CircularProgressIndicator(),height: 20.0,width: 20.0,),],):Text('SAVE',style: TextStyle(color: Colors.white),),*//*
-                              child: _isButtonDisabled?Text('Processing..',style: TextStyle(color: Colors.white),):Text('ADD',style: TextStyle(color: Colors.white),),
-                              color: Colors.orange[800],
-                              onPressed: () {
-                                 tempvar="2";
-                saveExpense (_dateController.text,  headtype, _descController.text,amountController.text , _image, tempvar,context);
-
-                              },
-                            ),*/
                             RaisedButton(
                               /* child: _isButtonDisabled?Row(children: <Widget>[Text('Processing ',style: TextStyle(color: Colors.white),),SizedBox(width: 10.0,), SizedBox(child:CircularProgressIndicator(),height: 20.0,width: 20.0,),],):Text('SAVE',style: TextStyle(color: Colors.white),),*/
                               child: isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('SUBMIT',style: TextStyle(color: Colors.white),),
@@ -596,15 +508,24 @@ class _RequestExpenceState extends State<RequestExpence> {
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
                                   if (headtype == '0') {
-                                    showDialog(context: context, child:
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        Future.delayed(Duration(seconds: 3), () {
+                                          Navigator.of(context).pop(true);
+                                        });
+                                        return AlertDialog(
+                                          content: new Text("Please select headtype"),
+                                        );
+                                      });
+                                    /*showDialog(context: context, child:
                                     new AlertDialog(
                                       //title: new Text("Sorry!"),
                                       content: new Text(
                                           "Please select headtype!"),
                                     )
-                                    );
+                                    );*/
                                   }else {
-                                    print("hello");
                                     saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _file, context);
                                   }
                                   //saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
@@ -720,8 +641,9 @@ class _RequestExpenceState extends State<RequestExpence> {
       final prefs = await SharedPreferences.getInstance();
       String orgid = prefs.getString('organization') ?? '';
       String empid = prefs.getString('employeeid') ?? "";
-      String ext = p.extension(file.path);
       if (file!=null) {
+        String ext = p.extension(file.path);
+        print("Save Expense With file");
         FormData formData = new FormData.from({
           "empid": empid,
           "orgid": orgid,
@@ -735,46 +657,145 @@ class _RequestExpenceState extends State<RequestExpence> {
         print(file);
         Response<String> response1;
         try {
-          //final prefs = await SharedPreferences.getInstance();
-          //String path1 = prefs.getString('path');
           print(path +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount+"&file=$file");
           response1 = await dio.post(path + "saveExpense", data: formData);
           print("----->save Expense* --->" + response1.toString());
         } catch (e) {
+          print("e.toString()");
           print(e.toString());
         }
-        Map MarkAttMap = json.decode(response1.data);
-        print(MarkAttMap["status"].toString());
-        if ((response1.toString().contains("true"))) {
+        var MarkAttMap = json.decode(response1.data);
+        print("MarkAttMap");
+        print(MarkAttMap[0]);
+        //if ((response1.toString().contains("true"))) {
+        if (MarkAttMap[0]["status"].toString()=="true" && MarkAttMap[0]["imgsts"].toString()=="true") {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyExpence()),
           );
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Expense submitted successfully."),
+              );
+            });
           // ignore: deprecated_member_use
-          showDialog(context: context, child:
+          /*showDialog(context: context, child:
             new AlertDialog(
               content: new Text('Expense submitted successfully.'),
             )
-          );
+          );*/
           return true;
-        } else if((response1.toString().contains("false1"))){
-          showDialog(context: context, child:
+        //} else if((response1.toString().contains("false1"))){
+        } else if (MarkAttMap[0]["status"].toString()=="true" && MarkAttMap[0]["imgsts"].toString()=="false") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyExpence()),
+          );
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Expense submitted successfully, but unable to upload attachment"),
+              );
+            });
+          /*showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text('Expense submitted successfully, but unable to upload attachment'),
+          ));*/
+          setState(() {
+            isServiceCalling = false;
+          });
+        } else if (MarkAttMap[0]["status"].toString()=="true" && MarkAttMap[0]["imgsts"].toString()=="false1") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyExpence()),
+          );
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Expense submitted successfully, but invalid file type."),
+              );
+            });
+          /*showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text('Expense submitted successfully, but invalid file type.'),
+          ));*/
+          setState(() {
+            isServiceCalling = false;
+          });
+        } else if (MarkAttMap[0]["status"].toString()=="true" && MarkAttMap[0]["imgsts"].toString()=="false2") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MyExpence()),
+          );
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Expense submitted successfully, but file size should not be greater than 2 MB."),
+              );
+            });
+          /*showDialog(context: context, child:
+          new AlertDialog(
+            content: new Text('Expense submitted successfully, but file size should not be greater than 2 MB.'),
+          ));*/
+          setState(() {
+            isServiceCalling = false;
+          });
+        } else if (MarkAttMap[0]["status"].toString().contains("false1") && MarkAttMap[0]["imgsts"].toString().contains("false")) {
+          /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense already applied on this date.'),
-          ));
+          ));*/
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Expense already applied on this date."),
+              );
+            });
           setState(() {
             isServiceCalling = false;
           });
         } else {
-          showDialog(context: context, child:
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("There is some problem while applying for expense."),
+              );
+            });
+          /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('There is some problem while applying for expense.'),
-          ));
+          ));*/
           setState(() {
             isServiceCalling = false;
           });
         }
       } else{
+        print("Save Expense Without file");
         FormData formData = new FormData.from({
           "empid": empid,
           "orgid": orgid,
@@ -782,53 +803,82 @@ class _RequestExpenceState extends State<RequestExpence> {
           "category": category,
           "desc": desc,
           "amt": amount,
-          "file":"",
         });
         Response<String> response1;
         try {
-          //final prefs = await SharedPreferences.getInstance();
-          //String path1 = prefs.getString('path');
-          print(path +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
           response1 = await dio.post(path + "saveExpense", data: formData);
+          print(path +"saveExpense?empid="+empid+"&orgid="+orgid+"&edate="+expensedate+"&desc="+desc+"&category="+category+"&amt="+amount);
           print("----->save Expense* --->" + response1.toString());
         } catch (e) {
           print(e.toString());
         }
-        Map expensemap = json.decode(response1.data);
-        if ((response1.toString().contains("true"))) {
+        var MarkAttMap = json.decode(response1.data);
+        if (MarkAttMap[0]["status"].toString()=="true" && MarkAttMap[0]["imgsts"].toString()=="false") {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyExpence()),
           );
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Expense submitted successfully."),
+              );
+            });
+
         // ignore: deprecated_member_use
-        showDialog(context: context, child:
+        /*showDialog(context: context, child:
           new AlertDialog(
             content: new Text('Expense submitted successfully.'),
           )
-        );
+        );*/
         return true;
-      } else if((response1.toString().contains("false1"))){
+      } else if(MarkAttMap[0]["status"].toString()=="false1" && MarkAttMap[0]["imgsts"].toString()=="false"){
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("Expense already applied on this date."),
+              );
+            });
         // ignore: deprecated_member_use
-        showDialog(context: context, child:
+        /*showDialog(context: context, child:
         new AlertDialog(
           content: new Text('Expense already applied on this date.'),
         )
-        );
+        );*/
         setState(() {
           isServiceCalling = false;
         });
       } else {
-        showDialog(context: context, child:
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("There is some problem while applying for expense."),
+              );
+            });
+        /*showDialog(context: context, child:
         new AlertDialog(
           content: new Text('There is some problem while applying for expense.'),
         )
-        );
+        );*/
         setState(() {
           isServiceCalling = false;
         });
       }
     }
   } catch (e) {
+      print("e.toString()");
       print(e.toString());
       return false;
     }
@@ -838,10 +888,9 @@ class _RequestExpenceState extends State<RequestExpence> {
     return FutureBuilder<File>(
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
         if(_file!=null ) {
-          return new Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+          return new Row(mainAxisAlignment: MainAxisAlignment.start,
              children: <Widget>[
-               Text(_file.path.split('/').last,style: TextStyle(fontSize: 16.0, color: Colors.green),
+               Text(_file.path.split('/').last,style: TextStyle(fontSize: 13.0, color: Colors.green),
                  overflow: TextOverflow.ellipsis, ),
            ]);
         } else if (snapshot.error != null) {

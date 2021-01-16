@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_services.dart';
-
+import 'package:ubihrm/appbar.dart';
 import 'drawer.dart';
 
 class Department extends StatefulWidget {
@@ -16,17 +16,22 @@ class _Department extends State<Department> {
   String _sts = 'Active';
   String _sts1 = 'Active';
   String orgName="";
+  int hrsts=0;
   int adminsts=0;
+  int divhrsts=0;
   bool _isButtonDisabled= false;
   TextEditingController _searchController;
   FocusNode searchFocusNode;
   String deptname = "";
+  var profileimage;
+  bool showtabbar;
 
   @override
   void initState() {
     super.initState();
     _searchController = new TextEditingController();
     searchFocusNode = FocusNode();
+    profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     getOrgName();
   }
 
@@ -34,7 +39,9 @@ class _Department extends State<Department> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
-      adminsts= prefs.getInt('adminsts') ?? 0;
+      hrsts =prefs.getInt('hrsts')??0;
+      adminsts =prefs.getInt('adminsts')??0;
+      divhrsts =prefs.getInt('divhrsts')??0;
     });
   }
 
@@ -53,17 +60,7 @@ class _Department extends State<Department> {
     return new Scaffold(
       backgroundColor: scaffoldBackColor(),
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            new Text(orgName, style: new TextStyle(fontSize: 20.0)),
-          ],
-        ),
-        leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-          Navigator.pop(context);}),
-        backgroundColor: appStartColor(),
-      ),
+      appBar: AppHeader(profileimage,showtabbar,orgName),
       bottomNavigationBar: new HomeNavigation(),
       endDrawer: new AppDrawer(),
       body: Container(
@@ -96,7 +93,7 @@ class _Department extends State<Department> {
                     prefixIcon: Icon(Icons.search, size: 30,),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     hintText: 'Search Department',
-                    labelText: 'Search Department',
+                    //labelText: 'Search Department',
                     suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
                         onPressed: () {
                           _searchController.clear();
@@ -127,12 +124,16 @@ class _Department extends State<Department> {
                   Padding(
                     padding: const EdgeInsets.only(left:15.0),
                     child: Container(
+                      //width: MediaQuery.of(context).size.width*0.65,
                       child: Text('Departments', style: TextStyle(
                           color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
                     ),
                   ),
+                  /*SizedBox(
+                    width: 5,
+                  ),*/
                   Padding(
-                    padding: const EdgeInsets.only(right:20.0),
+                    padding: const EdgeInsets.only(right:30.0),
                     child: Container(
                       child: Text('Status', style: TextStyle(
                           color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
@@ -148,6 +149,23 @@ class _Department extends State<Department> {
           ],
         ),
       ),
+      floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
+        backgroundColor: Colors.orange[800],
+        onPressed: (){
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
+              });
+              return AlertDialog(
+                content: new Text("To Add a new Department, login to the web panel"),
+              );
+            });
+        },
+        tooltip: 'Add Department',
+        child: new Icon(Icons.add),
+      ):Center(),
     );
   }
 
@@ -172,6 +190,9 @@ class _Department extends State<Department> {
                                   child: new Text(
                                       snapshot.data[index].dept.toString(),style: TextStyle(
                                       fontSize: 14, fontWeight: FontWeight.bold)),
+                                ),
+                                SizedBox(
+                                  width: 10,
                                 ),
                                 new Container(
                                   child: new Text(
@@ -233,10 +254,9 @@ class _Department extends State<Department> {
               SizedBox(height: 15.0),
               new Expanded(
                 child: new TextField(
+                  enabled: false,
                   controller: new_dept,
-                  //    focusNode: f_dept,
                   autofocus: false,
-                  //   controller: client_name,
                   decoration: new InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -284,38 +304,26 @@ class _Department extends State<Department> {
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right:8.0),
-            child: new FlatButton(
-                highlightColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  side: BorderSide( color: Colors.grey.withOpacity(0.5), width: 1,),
-                ),
-                child: const Text('CANCEL',style: TextStyle(color: Colors.black),),
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop('dialog');
-                }),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right:8.0),
             child: new RaisedButton(
-              elevation: 2.0,
-              highlightElevation: 5.0,
-              highlightColor: Colors.transparent,
-              disabledElevation: 0.0,
-              focusColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
               color: Colors.orange[800],
               child: const Text('UPDATE',style: TextStyle(color: Colors.white),),
               onPressed: () {
                 if( new_dept.text.trim()==''){
                   //showInSnackBar('Enter Department Name');
-                  showDialog(context: context, child:
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      Future.delayed(Duration(seconds: 3), () {
+                        Navigator.of(context).pop(true);
+                      });
+                      return AlertDialog(
+                        content: new Text("Please enter the Department's name"),
+                      );
+                    });
+                  /*showDialog(context: context, child:
                   new AlertDialog(
                     content: new Text("Enter department name"),
-                  ));
+                  ));*/
                 } else {
                   if(_isButtonDisabled)
                     return null;
@@ -325,66 +333,68 @@ class _Department extends State<Department> {
                   updateDept(new_dept.text,_sts1,did).
                   then((res) {
                     if(res=='0') {
+                      Navigator.of(context, rootNavigator: true).pop('dialog');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Unable to update department"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("Unable to update department"),
+                          );
+                        });
                       //showInSnackBar('Unable to update department');
                       /*showDialog(context: context, child:
                       new AlertDialog(
                         content: new Text("Unable to update department"),
                       ));*/
                     }else if(res=='-1') {
+                      Navigator.of(context, rootNavigator: true).pop('dialog');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Department name already exist"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("This department already exists"),
+                          );
+                        });
                       //showInSnackBar('Department name already exist');
                       /*showDialog(context: context, child:
                       new AlertDialog(
                         content: new Text("Department name already exist"),
                       ));*/
-                    }else if(res=='-2') {
+                    }else if(res=='2') {
                       Navigator.of(context, rootNavigator: true).pop('dialog');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Employees assigned to this departement therefore can't be updated"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("This department can't be deactivated. Employees are already assigned to it"),
+                          );
+                        });
                       //showInSnackBar('Department name already exist');
                       /*showDialog(context: context, child:
                       new AlertDialog(
-                        content: new Text("Employees assigned to this departement therefore can't be updated"),
+                        content: new Text("Employees assigned to this department therefore can't be updated"),
                       ));*/
                     }else {
                       Navigator.of(context, rootNavigator: true).pop('dialog');
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            Future.delayed(Duration(seconds: 3), () {
-                              Navigator.of(context).pop(true);
-                            });
-                            return AlertDialog(
-                              content: new Text("Department updated successfully"),
-                            );
+                        context: context,
+                        builder: (context) {
+                          Future.delayed(Duration(seconds: 3), () {
+                            Navigator.of(context).pop(true);
                           });
+                          return AlertDialog(
+                            content: new Text("Department is updated successfully"),
+                          );
+                        });
                       //showInSnackBar('Department updated successfully');
                       /*showDialog(context: context, child:
                       new AlertDialog(
@@ -401,6 +411,15 @@ class _Department extends State<Department> {
                 }
               }
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right:8.0),
+            child: new FlatButton(
+                shape: Border.all(color: Colors.orange[800]),
+                child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop('dialog');
+                }),
           ),
         ],
       ),

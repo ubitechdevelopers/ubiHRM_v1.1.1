@@ -16,7 +16,7 @@ class AboutApp extends StatefulWidget {
 
 class _AboutApp extends State<AboutApp> {
   String org_name = "";
-  String new_ver='1.0.2';
+  String new_ver='1.0.9';
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   getOrgName() async{
@@ -108,14 +108,14 @@ class _AboutApp extends State<AboutApp> {
                         ),
                       ),
                       //SizedBox(height: 15,),
-                      Center(
+                      /*Center(
                         child: Text(
                           'Released On '+appVersionReleaseDate,
                           style: TextStyle(
                             fontSize: 16.0,
                           ),
                         ),
-                      ),
+                      ),*/
                       SizedBox(height: 15,),
                       Center(
                         child: Text(
@@ -125,14 +125,14 @@ class _AboutApp extends State<AboutApp> {
                           ),
                         ),
                       ),
-                      Center(
+                      /*Center(
                         child: Text(
                           'Released On '+latestVersionReleaseDate,
                           style: TextStyle(
                             fontSize: 16.0,
                           ),
                         ),
-                      ),
+                      ),*/
                       SizedBox(height: 15,),
                       Center(
                           child: new_ver==appVersion?Text(

@@ -15,6 +15,7 @@ import 'all_approvals.dart';
 import 'b_navigationbar.dart';
 import 'drawer.dart';
 
+
 class AddHoliday extends StatefulWidget {
   @override
   final String id;
@@ -123,6 +124,7 @@ class _AddHolidayState extends State<AddHoliday> {
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new AddHolidayAppHeader(profileimage,showtabbar,orgName),
+//          appBar: AppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:  new HomeNavigation(),
           body: ModalProgressHUD(
               inAsyncCall: isServiceCalling,
@@ -201,75 +203,75 @@ class _AddHolidayState extends State<AddHoliday> {
                               maxLines: 1,
                             ),
                             Container(
-                                    child:DateTimeField(
-                                      format: dateFormat,
-                                      controller: _fromController,
-                                      focusNode: textSecondFocusNode,
-                                      readOnly: true,
-                                      onShowPicker: (context, currentValue) {
-                                        print("current value1");
-                                        print(currentValue);
-                                        print(DateTime.now());
-                                        return showDatePicker(
-                                            context: context,
-                                            firstDate: DateTime.now(),
-                                            initialDate: currentValue ?? DateTime.now(),
-                                            lastDate: DateTime(2100)
-                                        );
-                                      },
+                              child:DateTimeField(
+                                format: dateFormat,
+                                controller: _fromController,
+                                focusNode: textSecondFocusNode,
+                                readOnly: true,
+                                onShowPicker: (context, currentValue) {
+                                  print("current value1");
+                                  print(currentValue);
+                                  print(DateTime.now());
+                                  return showDatePicker(
+                                      context: context,
+                                      firstDate: DateTime.now(),
+                                      initialDate: currentValue ?? DateTime.now(),
+                                      lastDate: DateTime(2100)
+                                  );
+                                },
 
-                                      decoration: InputDecoration(
-                                        prefixIcon: Padding(
-                                          padding: EdgeInsets.all(0.0),
-                                          child: Icon(
-                                            Icons.date_range,
-                                            color: Colors.grey,
-                                          ), // icon is 48px widget.
-                                        ), // icon is 48px widget.
-                                        labelText: 'From Date',
-                                      ),
-                                      onChanged: (date) {
-                                        setState(() {
-                                          Date1 = date;
-                                        });
-                                        print("----->Changed date------> "+Date1.toString());
-                                      },
-                                    ),
-                                  ),
+                                decoration: InputDecoration(
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.all(0.0),
+                                    child: Icon(
+                                      Icons.date_range,
+                                      color: Colors.grey,
+                                    ), // icon is 48px widget.
+                                  ), // icon is 48px widget.
+                                  labelText: 'From Date',
+                                ),
+                                onChanged: (date) {
+                                  setState(() {
+                                    Date1 = date;
+                                  });
+                                  print("----->Changed date------> "+Date1.toString());
+                                },
+                              ),
+                            ),
                             //SizedBox(height: 5.0,),
                             Container(
-                                    child:DateTimeField(
-                                      format: dateFormat,
-                                      controller: _toController,
-                                      focusNode: textthirdFocusNode,
-                                      readOnly: true,
-                                      onShowPicker: (context, currentValue) {
-                                        print("current value");
-                                        print(currentValue);
-                                        return showDatePicker(
-                                            context: context,
-                                            initialDate: currentValue ?? DateTime.now(),
-                                            firstDate: DateTime.now(),
-                                            lastDate: DateTime(2100));
-                                      },
-                                      decoration: InputDecoration(
-                                        prefixIcon: Padding(
-                                          padding: EdgeInsets.all(0.0),
-                                          child: Icon(
-                                            Icons.date_range,
-                                            color: Colors.grey,
-                                          ), // icon is 48px widget.
-                                        ), // icon is 48px widget.
-                                        labelText: 'To Date',
-                                      ),
-                                      onChanged: (dt) {
-                                        setState(() {
-                                          Date2 = dt;
-                                        });
-                                        print("----->Changed date------> "+Date2.toString());
-                                      },
-                                    ),
-                                  ),
+                              child:DateTimeField(
+                                format: dateFormat,
+                                controller: _toController,
+                                focusNode: textthirdFocusNode,
+                                readOnly: true,
+                                onShowPicker: (context, currentValue) {
+                                  print("current value");
+                                  print(currentValue);
+                                  return showDatePicker(
+                                      context: context,
+                                      initialDate: currentValue ?? DateTime.now(),
+                                      firstDate: DateTime.now(),
+                                      lastDate: DateTime(2100));
+                                },
+                                decoration: InputDecoration(
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.all(0.0),
+                                    child: Icon(
+                                      Icons.date_range,
+                                      color: Colors.grey,
+                                    ), // icon is 48px widget.
+                                  ), // icon is 48px widget.
+                                  labelText: 'To Date',
+                                ),
+                                onChanged: (dt) {
+                                  setState(() {
+                                    Date2 = dt;
+                                  });
+                                  print("----->Changed date------> "+Date2.toString());
+                                },
+                              ),
+                            ),
                             SizedBox(height: 5.0,),
                             //***************************
                             Row(
@@ -338,61 +340,119 @@ class _AddHolidayState extends State<AddHoliday> {
                             ButtonBar(
                               children: <Widget>[
                                 RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
                                   child: isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('ADD',style: TextStyle(color: Colors.white),),
                                   color: Colors.orange[800],
                                   onPressed: () async {
                                     if (_formKey.currentState.validate()) {
                                       if (_nameController.text.isEmpty) {
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please enter the holiday's name"),
+                                            );
+                                          });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                           content: new Text("Please enter holiday name"),
                                         )
-                                        );
+                                        );*/
                                       }else if(_fromController.text.isEmpty){
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please enter the holiday's start date"),
+                                            );
+                                          });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                           content: new Text("Please enter holiday from date"),
                                         )
-                                        );
+                                        );*/
                                       }else if(_toController.text.isEmpty){
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please enter the holiday's end date"),
+                                            );
+                                          });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                           content: new Text("Please enter holiday to date"),
                                         )
-                                        );
+                                        );*/
                                       }else if(Date2.isBefore(Date1)){
-                                        showDialog(context: context, child:
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("End date can't be earlier than the start date"),
+                                            );
+                                          });
+                                        /*showDialog(context: context, child:
                                         new AlertDialog(
                                           content: new Text("To date can't be smaller"),
                                         )
-                                        );
-                                      }else if(_desController.text.isEmpty){
-                                        showDialog(context: context, child:
-                                        new AlertDialog(
-                                          content: new Text("Please enter description"),
-                                        )
-                                        );
-                                      }else if(_myLocationIds.isEmpty){
-                                        showDialog(context: context, child:
-                                        new AlertDialog(
-                                          content: new Text("Please select atleast one division"),
-                                        )
-                                        );
-                                      }else if(_myLocations.isEmpty){
-                                        showDialog(context: context, child:
-                                        new AlertDialog(
-                                          content: new Text("Please select atleast one location"),
-                                        )
-                                        );
+                                        );*/
+                                      }else if(_radioValue=='2' && _myDivisions.isEmpty){
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please select atleast one Division"),
+                                            );
+                                          });
+                                      }else if(_radioValue=='2' && _myLocations.isEmpty){
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please select atleast one Location"),
+                                            );
+                                          });
+                                      }else if(_radioValue=='1' && ((_myLocations.isNotEmpty || _myDivisions.isEmpty) && (_myLocations.isEmpty || _myDivisions.isNotEmpty) && (_myLocations.isEmpty || _myDivisions.isEmpty) ) ){
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Please select either Division or Location"),
+                                            );
+                                          });
                                       }else {
                                         var status = await addHoliday(
-                                            _nameController.text.trim(),
-                                            _fromController.text.trim(),
-                                            _toController.text.trim(),
-                                            _desController.text.trim(),
-                                            _radioValue,
-                                            _myDivisionIds,
-                                            _myLocationIds,
+                                          _nameController.text.trim(),
+                                          _fromController.text.trim(),
+                                          _toController.text.trim(),
+                                          _desController.text.trim(),
+                                          _radioValue,
+                                          _myDivisionIds,
+                                          _myLocationIds,
                                         );
                                         if(status=='true'){
                                           Navigator.push(
@@ -400,15 +460,15 @@ class _AddHolidayState extends State<AddHoliday> {
                                             MaterialPageRoute(builder: (context) => Holiday()),
                                           );
                                           showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                Future.delayed(Duration(seconds: 3), () {
-                                                  Navigator.of(context).pop(true);
-                                                });
-                                                return AlertDialog(
-                                                  content: new Text("Holiday added successfully."),
-                                                );
+                                            context: context,
+                                            builder: (context) {
+                                              Future.delayed(Duration(seconds: 3), () {
+                                                Navigator.of(context).pop(true);
                                               });
+                                              return AlertDialog(
+                                                content: new Text("Holiday added successfully"),
+                                              );
+                                            });
                                           /*showDialog(context: context, child:
                                             new AlertDialog(
                                               content: new Text('Holiday added successfully.'),
@@ -420,43 +480,36 @@ class _AddHolidayState extends State<AddHoliday> {
                                             MaterialPageRoute(builder: (context) => Holiday()),
                                           );
                                           showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                Future.delayed(Duration(seconds: 3), () {
-                                                  Navigator.of(context).pop(true);
-                                                });
-                                                return AlertDialog(
-                                                  content: new Text("Holiday already exist."),
-                                                );
+                                            context: context,
+                                            builder: (context) {
+                                              Future.delayed(Duration(seconds: 3), () {
+                                                Navigator.of(context).pop(true);
                                               });
-                                          /*showDialog(context: context, child:
-                                          new AlertDialog(
-                                            content: new Text('Already Exist'),
-                                          )
-                                          );*/
-                                        } else{
+                                              return AlertDialog(
+                                                content: new Text("Holiday already exists"),
+                                              );
+                                            });
+                                        }else{
                                           showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                Future.delayed(Duration(seconds: 3), () {
-                                                  Navigator.of(context).pop(true);
-                                                });
-                                                return AlertDialog(
-                                                  content: new Text("There is some problem while adding holiday"),
-                                                );
+                                            context: context,
+                                            builder: (context) {
+                                              Future.delayed(Duration(seconds: 3), () {
+                                                Navigator.of(context).pop(true);
                                               });
-                                          /*showDialog(context: context, child:
-                                          new AlertDialog(
-                                            content: new Text('There is some problem while adding holiday'),
-                                          )
-                                          );*/
+                                              return AlertDialog(
+                                                content: new Text("There is some problem while adding holiday"),
+                                              );
+                                            });
                                         }
                                       }
                                     }
                                   },
                                 ),
                                 FlatButton(
-                                  shape: Border.all(color: Colors.orange[800]),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    side: BorderSide( color: Colors.orange[800].withOpacity(0.5), width: 1,),
+                                  ),
                                   child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
                                   onPressed: () {
                                     Navigator.push(
@@ -550,8 +603,8 @@ class _AddHolidayState extends State<AddHoliday> {
                 style: TextStyle(fontSize: 14,color: Colors.black54),
               ),
               dataSource: snapshot.data.map((data){
-                  return {'display': data["Name"], 'value': data['Id']};
-                }).toList(),
+                return {'display': data["Name"], 'value': data['Id']};
+              }).toList(),
               textField: 'display',
               valueField: 'value',
               okButtonLabel: 'OK',
@@ -579,7 +632,6 @@ class _AddHolidayState extends State<AddHoliday> {
 
 
 }
-
 class AddHolidayAppHeader extends StatelessWidget implements PreferredSizeWidget {
   bool _checkLoadedprofile = true;
   var profileimage;
@@ -607,7 +659,7 @@ class AddHolidayAppHeader extends StatelessWidget implements PreferredSizeWidget
               onPressed:(){
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => AllSetting()), (Route<dynamic> route) => false,
+                  MaterialPageRoute(builder: (context) => Holiday()), (Route<dynamic> route) => false,
                 );
               },),
             GestureDetector(

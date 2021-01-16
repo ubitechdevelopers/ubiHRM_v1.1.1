@@ -139,23 +139,43 @@ class _TimeoffSummary extends State<TimeoffSummary> {
           context,
           MaterialPageRoute(builder: (context) => TimeoffSummary()),
         );
+        showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Time Off application withdrawn successfully."),
+            );
+          });
         // ignore: deprecated_member_use
-        showDialog(context: context, child:
+        /*showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Time Off application withdrawn successfully."),
         )
-        );
+        );*/
       } else if (islogin == "failure") {
         setState(() {
           _isButtonDisabled = false;
           _checkwithdrawntimeoff = false;
         });
+        showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Time Off could not be withdrawn."),
+            );
+          });
         // ignore: deprecated_member_use
-        showDialog(context: context, child:
+        /*showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Time Off could not be withdrawn."),
         )
-        );
+        );*/
       } /*else {
         setState(() {
           _isButtonDisabled = false;
@@ -170,16 +190,25 @@ class _TimeoffSummary extends State<TimeoffSummary> {
       }*/
     }catch(e){
       print(e.toString());
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Poor network connection."),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Poor network connection."),
       )
-      );
+      );*/
     }
   }
 
   confirmWithdrawl(String timeoffid) async{
-    // ignore: deprecated_member_use
     showDialog(context: context, child:
     new AlertDialog(
       title: new Text("Withdraw Time Off?",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18.0),),
@@ -471,7 +500,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                                     //margin: EdgeInsets.only(left:40.0),
                                                     //padding: EdgeInsets.only(left:40.0),
                                                     width: MediaQuery .of(context).size.width * 0.11,
-                                                    child: Icon(Icons.timer, size: 30.0,color:appStartColor(), ),
+                                                    child: Tooltip(message: 'Start Time Off', child: Icon(Icons.timer, size: 30.0,color:appStartColor(), )),
                                                   ),
                                                 ),
                                                 onTap: (){
@@ -494,7 +523,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                                     //margin: EdgeInsets.only(left:40.0),
                                                     //padding: EdgeInsets.only(left:40.0),
                                                     width: MediaQuery .of(context).size.width * 0.11,
-                                                    child: Icon(Icons.timer_off, size: 30.0,color:appStartColor(), ),
+                                                    child: Tooltip(message: 'Stop Time Off', child: Icon(Icons.timer_off, size: 30.0,color:appStartColor(),)),
                                                   ),
                                                 ),
                                                 onTap: (){
@@ -516,9 +545,9 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                                     height: MediaQuery .of(context).size.height * 0.04,
                                                     //margin: EdgeInsets.only(left:40.0),
                                                     //padding: EdgeInsets.only(left:40.0),
-                                                    width: MediaQuery .of(context).size.width * 0.11,
+                                                    width: MediaQuery .of(context).size.width * 0.13,
                                                     child: new OutlineButton(
-                                                      child:new Icon(Icons.replay, size: 16.0,color:appStartColor(), ),
+                                                      child:new Icon(Icons.replay, size: 22.0,color:appStartColor(), ),
                                                       borderSide: BorderSide(color: appStartColor()),
                                                       onPressed: () {
                                                         if(_isButtonDisabled)
@@ -559,7 +588,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                             //child: Text('Actual Duration: '+snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(color: Colors.black54),),
                                             child: Row(
                                               children: <Widget>[
-                                                Text('Actual Duration: ', style: TextStyle(color: Colors.black54),),
+                                                snapshot.data[index].StopTimeTo.toString()=='-'?Text('Actual Time Off Start: ', style: TextStyle(color: Colors.black54),):Text('Actual Duration: ', style: TextStyle(color: Colors.black54),),
                                                 RichText(
                                                     text: TextSpan(
                                                         children: [
@@ -581,7 +610,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                             width: MediaQuery.of(context).size.width*.90,
                                             //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('TimeOff Status: '+snapshot.data[index].TimeOffSts.toString(), style: TextStyle(color: Colors.black54),),
+                                            child: Text('Time Off Status: '+snapshot.data[index].TimeOffSts.toString(), style: TextStyle(color: Colors.black54),),
                                           ),
 
                                           (snapshot.data[index].ApprovalSts.toString()!='-' && snapshot.data[index].ApprovalSts.toString()!='Withdrawn')?Container(
@@ -715,7 +744,7 @@ class TimeOffAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

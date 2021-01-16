@@ -98,7 +98,7 @@ class _CheckUpdate extends State<CheckUpdate> {
                           },
                         ):SizedBox(width: 0.0,),
                         RaisedButton(
-                          color: Colors.orangeAccent,
+                          color: Colors.orange[800],
                           child: Text('Update now',style: TextStyle(color: Colors.white),),
                           onPressed: (){
                             LaunchReview.launch(

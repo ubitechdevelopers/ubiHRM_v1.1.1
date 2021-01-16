@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
@@ -18,8 +17,6 @@ import 'image_view.dart';
 import 'punchlocation.dart';
 import 'teampunchlocatio_summary.dart';
 
-//import 'package:intl/intl.dart';
-
 
 void main() => runApp(new PunchLocationSummary());
 
@@ -27,6 +24,7 @@ class PunchLocationSummary extends StatefulWidget {
   @override
   _PunchLocationSummary createState() => _PunchLocationSummary();
 }
+
 TextEditingController today;
 class _PunchLocationSummary extends State<PunchLocationSummary> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -191,18 +189,6 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
   }
   /////////////
   _showDialog(visit_id) async {
-    //sl.startStreaming(2);
-    setState(() {
-      if(list!=null && list.length>0) {
-        latit = list[list.length - 1].latitude.toString();
-        longi = list[list.length - 1].longitude.toString();
-        location_addr1 = globalstreamlocationaddr;
-      }else{
-        latit = "0.0";
-        longi = "0.0";
-        location_addr1 = "";
-      }
-    });
     await showDialog<String>(
       context: context,
       child: new AlertDialog(
@@ -233,26 +219,24 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                 setState(() {
                   isServiceCalling = true;
                 });
-                print("----> service calling "+isServiceCalling.toString());
-                //sl.startStreaming(5);
                 SaveImage saveImage = new SaveImage();
                 Navigator.of(context, rootNavigator: true).pop();
-                saveImage.saveVisitOut(empid,streamlocationaddr.toString(),visit_id.toString(),latit,longi,_comments.text,orgid).then((res){
+                saveImage.saveVisitOut(empid,streamlocationaddr.toString(),visit_id.toString(),assign_lat.toString(),assign_long.toString(),_comments.text,orgid).then((res){
                   if(res){
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => PunchLocationSummary()),
                     );
                     showDialog(
-                        context: context,
-                        builder: (context) {
-                          Future.delayed(Duration(seconds: 3), () {
-                            Navigator.of(context).pop(true);
-                          });
-                          return AlertDialog(
-                            content: new Text("Visit punched successfully!"),
-                          );
+                      context: context,
+                      builder: (context) {
+                        Future.delayed(Duration(seconds: 3), () {
+                          Navigator.of(context).pop(true);
                         });
+                        return AlertDialog(
+                          content: new Text("Visit punched successfully"),
+                        );
+                      });
                     /*showDialog(context: context, child:
                     new AlertDialog(
                       content: new Text("Visit punched successfully!"),
@@ -261,19 +245,19 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                   }else{
                     _comments.text='';
                     showDialog(
-                        context: context,
-                        builder: (context) {
-                          Future.delayed(Duration(seconds: 3), () {
-                            Navigator.of(context).pop(true);
-                          });
-                          return AlertDialog(
-                            content: new Text("Visit not captured, please punch again!"),
-                          );
+                      context: context,
+                      builder: (context) {
+                        Future.delayed(Duration(seconds: 3), () {
+                          Navigator.of(context).pop(true);
                         });
+                        return AlertDialog(
+                          content: new Text("Visit not captured, please punch again"),
+                        );
+                      });
                     /*showDialog(context: context, child:
                     new AlertDialog(
                       //title: new Text("Warning!"),
-                      content: new Text("Selfie not captured, please punch again!"),
+                      content: new Text("Visit was not captured, please punch again!"),
                     )
                     );*/
                     setState(() {
@@ -283,15 +267,15 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                 }).catchError((ett){
                   //showInSnackBar('Unable to punch visit');
                   showDialog(
-                      context: context,
-                      builder: (context) {
-                        Future.delayed(Duration(seconds: 3), () {
-                          Navigator.of(context).pop(true);
-                        });
-                        return AlertDialog(
-                          content: new Text("Unable to punch visit"),
-                        );
+                    context: context,
+                    builder: (context) {
+                      Future.delayed(Duration(seconds: 3), () {
+                        Navigator.of(context).pop(true);
                       });
+                      return AlertDialog(
+                        content: new Text("Unable to punch visit"),
+                      );
+                    });
                   /*showDialog(context: context, child:
                   new AlertDialog(
                     //title: new Text("Warning!"),
@@ -299,31 +283,6 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                   )
                   );*/
                 });
-                /*       //  Loc lock = new Loc();
-                //   location_addr1 = await lock.initPlatformState();
-                if(_isButtonDisabled)
-                  return null;
-
-                Navigator.of(context, rootNavigator: true).pop('dialog');
-                setState(() {
-                  _isButtonDisabled=true;
-                });
-                //PunchInOut(comments.text,'','empid', location_addr1, 'lid', 'act', 'orgdir', latit, longi).then((res){
-                SaveImage saveImage = new SaveImage();
-                 saveImage.visitOut(comments.text,visit_id,location_addr1,latit, longi).then((res){
-                print('visit out called for visit id:'+visit_id);
-                /*
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PunchLocationSummary()),
-                  );
-*/
-
-
-                }).catchError((onError){
-                  showInSnackBar('Unable to punch visit');
-                });
-*/
               }),
           new FlatButton(
               shape: Border.all(color: Colors.orange[800]),
@@ -815,7 +774,7 @@ class PunchVisitAppHeader extends StatelessWidget implements PreferredSizeWidget
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

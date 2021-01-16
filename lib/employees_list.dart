@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/attandance/image_view.dart';
-import 'package:ubihrm/attandance/view_employee.dart';
+import 'package:ubihrm/home.dart';
+import 'package:ubihrm/view_employee.dart';
 import 'package:ubihrm/b_navigationbar.dart';
-import 'package:ubihrm/edit_employee.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_services.dart';
+import 'package:ubihrm/appbar.dart';
 import 'drawer.dart';
 import 'settings.dart';
 
 class EmployeeList extends StatefulWidget {
+  final sts;
+  EmployeeList({Key key,this.sts}): super(key:key);
+
   @override
   _EmployeeList createState() => _EmployeeList();
 }
@@ -17,19 +20,20 @@ TextEditingController dept;
 class _EmployeeList extends State<EmployeeList> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  int adminsts = 0;
   int profiletype = 0;
-
   int empCount = 0;
   double tabCount = 0;
   int count = 0;
   int limit;
   bool _shouldAnimate = true;
-
-  String orgname = "";
+  String orgName = "";
   String empname = "";
-
+  var profileimage;
+  bool showtabbar;
   String buysts = '0';
+  int hrsts=0;
+  int adminsts=0;
+  int divhrsts=0;
 
   final List<String> data = new List();
   int initPosition = 0;
@@ -37,6 +41,7 @@ class _EmployeeList extends State<EmployeeList> {
   TextEditingController _searchController;
   FocusNode searchFocusNode;
   bool res=true;
+  bool _checkLoadedprofile = true;
 
   @override
   void initState() {
@@ -44,6 +49,7 @@ class _EmployeeList extends State<EmployeeList> {
     dept = new TextEditingController();
     _searchController = new TextEditingController();
     searchFocusNode = FocusNode();
+    profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     getOrgName();
     getEmpCount().then((res) {
       setState(() {
@@ -67,10 +73,11 @@ class _EmployeeList extends State<EmployeeList> {
   getOrgName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      orgname = prefs.getString('orgname') ?? '';
+      orgName = prefs.getString('orgname') ?? '';
       profiletype = prefs.getInt('profiletype') ?? 0;
-      adminsts = prefs.getInt('adminsts') ?? 0;
-      //buysts= prefs.getString('buysts') ?? '0';
+      hrsts =prefs.getInt('hrsts')??0;
+      adminsts =prefs.getInt('adminsts')??0;
+      divhrsts =prefs.getInt('divhrsts')??0;
     });
   }
 
@@ -80,11 +87,18 @@ class _EmployeeList extends State<EmployeeList> {
   }
 
   Future<bool> move() async {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => AllSetting()), (
-        Route<dynamic> route) => false,
-    );
+    if(widget.sts=="1")
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomePageMain()), (
+          Route<dynamic> route) => false,
+      );
+    else
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => AllSetting()), (
+          Route<dynamic> route) => false,
+      );
     return false;
   }
 
@@ -94,22 +108,27 @@ class _EmployeeList extends State<EmployeeList> {
       child: new Scaffold(
         backgroundColor: scaffoldBackColor(),
         key: _scaffoldKey,
-        appBar: AppBar(
-          titleSpacing: 0.0,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              new Text(orgname, style: new TextStyle(fontSize: 20.0)),
-            ],
-          ),
-          leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {
-            move();
-          }),
-          backgroundColor: appStartColor(),
-        ),
+        appBar: AppHeader(profileimage,showtabbar,orgName),
         endDrawer: AppDrawer(),
         bottomNavigationBar: new HomeNavigation(),
         body: mainbodyWidget(),
+        floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
+          backgroundColor: Colors.orange[800],
+          onPressed: (){
+            showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("To Add a new Employee, login to the web panel"),
+                );
+              });
+          },
+          tooltip: 'Add Employee',
+          child: new Icon(Icons.add),
+        ):Center(),
       ),
     );
   }
@@ -153,7 +172,7 @@ class _EmployeeList extends State<EmployeeList> {
                           prefixIcon: Icon(Icons.search, size: 30,),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           hintText: 'Search Employee',
-                          labelText: 'Search Employee',
+                          //labelText: 'Search Employee',
                           suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
                               onPressed: () {
                                 _searchController.clear();
@@ -274,20 +293,17 @@ class _EmployeeList extends State<EmployeeList> {
                                           shape: BoxShape.circle,
                                           image: new DecorationImage(
                                               fit: BoxFit.fill,
-                                              image: NetworkImage(
-                                                  snapshot.data[index].Profile.toString())
+                                              image: NetworkImage(snapshot.data[index].Profile.toString())
                                           )
                                       )
                                   ),
                                   onTap: () {
-                                    Navigator.push(
+                                    /*Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              ImageView(
-                                                  myimage: snapshot.data[index].Profile,
-                                                  org_name: orgname)),
-                                    );
+                                              ImageView(myimage: snapshot.data[index].Profile,
+                                                  org_name: orgName)),);*/
                                   },
                                 ),
                                 SizedBox(width: 10.0,),
@@ -315,10 +331,13 @@ class _EmployeeList extends State<EmployeeList> {
                                           child: Padding(
                                             padding: const EdgeInsets.only(
                                                 left: 10.0),
-                                            child: Icon(
-                                              Icons.visibility_outlined,
-                                              color: Colors.blue,
-                                              size: 22.0,
+                                            child: Tooltip(
+                                              message: 'View',
+                                              child: Icon(
+                                                Icons.visibility,
+                                                color: Colors.blue,
+                                                size: 22.0,
+                                              ),
                                             ),
                                           ),
                                           onTap: () {
@@ -424,365 +443,6 @@ class _EmployeeList extends State<EmployeeList> {
                                                             .toString(),
                                                           )),
                                             );
-                                            /*showDialog<String>(
-                                              context: context,
-                                              // ignore: deprecated_member_use
-                                              child: AlertDialog(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius
-                                                      .circular(10),
-                                                ),
-                                                contentPadding: const EdgeInsets
-                                                    .all(15.0),
-                                                content: Wrap(
-                                                  children: <Widget>[
-                                                    Container(
-                                                      height: MediaQuery
-                                                          .of(context)
-                                                          .size
-                                                          .height * 0.45,
-                                                      width: MediaQuery
-                                                          .of(context)
-                                                          .size
-                                                          .width * 0.70,
-                                                      child: Column(
-                                                        children: <Widget>[
-                                                          Row(
-                                                            mainAxisAlignment: MainAxisAlignment
-                                                                .end,
-                                                            children: <
-                                                                Widget>[
-                                                              InkWell(
-                                                                highlightColor: Colors
-                                                                    .transparent,
-                                                                focusColor: Colors
-                                                                    .transparent,
-                                                                child:
-                                                                Row(
-                                                                  children: <
-                                                                      Widget>[
-                                                                    Text(
-                                                                      "Edit",
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .blueAccent,
-                                                                          fontSize: 16,
-                                                                          fontWeight: FontWeight
-                                                                              .w600
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                onTap: () {
-                                                                  Navigator
-                                                                      .of(
-                                                                      context,
-                                                                      rootNavigator: true)
-                                                                      .pop(
-                                                                      'dialog');
-                                                                  Navigator
-                                                                      .push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (
-                                                                            context) =>
-                                                                            EditEmployee(
-                                                                                fname: snapshot.data[index]
-                                                                                    .FName
-                                                                                    .toString(),
-                                                                                lname: snapshot.data[index]
-                                                                                    .LName
-                                                                                    .toString(),
-                                                                                phone: snapshot.data[index]
-                                                                                    .Mobile
-                                                                                    .toString(),
-                                                                                email: snapshot.data[index]
-                                                                                    .Email
-                                                                                    .toString(),
-                                                                                department: snapshot.data[index]
-                                                                                    .DepartmentId
-                                                                                    .toString(),
-                                                                                designation: snapshot.data[index]
-                                                                                    .DesignationId
-                                                                                    .toString(),
-                                                                                shift: snapshot.data[index]
-                                                                                    .ShiftId
-                                                                                    .toString(),
-                                                                                empid: snapshot.data[index]
-                                                                                    .Id
-                                                                                    .toString())),
-                                                                  );
-                                                                },
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          InkWell(
-                                                            child: Container(
-                                                                width: 70.0,
-                                                                height: 70.0,
-                                                                decoration: new BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                    image: new DecorationImage(
-                                                                        fit: BoxFit
-                                                                            .fill,
-                                                                        image:
-                                                                        NetworkImage(
-                                                                            snapshot.data[index]
-                                                                                .Profile
-                                                                                .toString())
-                                                                    )
-                                                                )
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                              height: 10.0),
-                                                          new Text(
-                                                            snapshot.data[index]
-                                                                .Name
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black87,
-                                                                fontSize: 18.0,
-                                                                fontWeight: FontWeight
-                                                                    .w600
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 20,),
-                                                          Table(
-                                                            defaultVerticalAlignment: TableCellVerticalAlignment
-                                                                .top,
-                                                            columnWidths: {
-                                                              0: FlexColumnWidth(
-                                                                  8),
-                                                              // 0: FlexColumnWidth(4.501), // - is ok
-                                                              // 0: FlexColumnWidth(4.499), //- ok as well
-                                                              1: FlexColumnWidth(
-                                                                  5),
-                                                            },
-                                                            children: [
-                                                              globallabelinfomap["depart"]!=""?TableRow(
-                                                                  children: [
-                                                                    TableCell(
-                                                                      child: Row(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          new Text(
-                                                                            globallabelinfomap["depart"]+':',
-                                                                            style: TextStyle(
-                                                                              color: Colors
-                                                                                  .black87,
-                                                                              fontSize: 15.0,
-                                                                              fontWeight: FontWeight
-                                                                                  .w400,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    TableCell(
-                                                                      child: Row(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Expanded(
-                                                                            child: Text(
-                                                                              snapshot.data[index]
-                                                                                  .Department
-                                                                                  .toString(),
-                                                                              style: TextStyle(
-                                                                                  color: Colors
-                                                                                      .black87,
-                                                                                  fontSize: 15.0,
-                                                                                  fontWeight: FontWeight
-                                                                                      .bold
-                                                                              ),
-                                                                            ),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ]
-                                                              ):Center(),
-                                                              globallabelinfomap["desig"]!=""?TableRow(
-                                                                  children: [
-                                                                    TableCell(
-                                                                      child: Row(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          new Text(
-                                                                            globallabelinfomap["desig"]+':',
-                                                                            style: TextStyle(
-                                                                                color: Colors
-                                                                                    .black87,
-                                                                                fontSize: 15.0,
-                                                                                fontWeight: FontWeight
-                                                                                    .w400
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    TableCell(
-                                                                      child: Row(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Expanded(
-                                                                            child: Text(
-                                                                              snapshot.data[index]
-                                                                                  .Designation
-                                                                                  .toString(),
-                                                                              style: TextStyle(
-                                                                                  color: Colors
-                                                                                      .black87,
-                                                                                  fontSize: 15.0,
-                                                                                  fontWeight: FontWeight
-                                                                                      .bold
-                                                                              ),
-                                                                            ),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ]
-                                                              ):Center(),
-                                                              globallabelinfomap["personal_no"]!=""?TableRow(
-                                                                  children: [
-                                                                    TableCell(
-                                                                      child: Row(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          new Text(
-                                                                            globallabelinfomap["personal_no"]+':',
-                                                                            style: TextStyle(
-                                                                                color: Colors
-                                                                                    .black87,
-                                                                                fontSize: 15.0,
-                                                                                fontWeight: FontWeight
-                                                                                    .w400
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    TableCell(
-                                                                      child: Row(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Expanded(
-                                                                            child: Text(
-                                                                              snapshot.data[index]
-                                                                                  .Mobile
-                                                                                  .toString(),
-                                                                              style: TextStyle(
-                                                                                  color: Colors
-                                                                                      .black87,
-                                                                                  fontSize: 15.0,
-                                                                                  fontWeight: FontWeight
-                                                                                      .bold
-                                                                              ),
-                                                                            ),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ]
-                                                              ):Center(),
-                                                              globallabelinfomap["shift"]!=""?TableRow(
-                                                                  children: [
-                                                                    TableCell(
-                                                                      child: Row(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          new Text(
-                                                                            globallabelinfomap["shift"]+':',
-                                                                            style: TextStyle(
-                                                                                color: Colors
-                                                                                    .black87,
-                                                                                fontSize: 15.0,
-                                                                                fontWeight: FontWeight
-                                                                                    .w400
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    TableCell(
-                                                                      child: Row(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Expanded(
-                                                                            child: Text(
-                                                                              snapshot.data[index]
-                                                                                  .Shift
-                                                                                  .toString(),
-                                                                              style: TextStyle(
-                                                                                  color: Colors
-                                                                                      .black87,
-                                                                                  fontSize: 15.0,
-                                                                                  fontWeight: FontWeight
-                                                                                      .bold
-                                                                              ),
-                                                                            ),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ]
-                                                              ):Center(),
-                                                              TableRow(
-                                                                  children: [
-                                                                    TableCell(
-                                                                      child: Row(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          new Text(
-                                                                            'Permissions:',
-                                                                            style: TextStyle(
-                                                                                color: Colors
-                                                                                    .black87,
-                                                                                fontSize: 15.0,
-                                                                                fontWeight: FontWeight
-                                                                                    .w400
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    TableCell(
-                                                                      child: Row(
-                                                                        children: <
-                                                                            Widget>[
-                                                                          Expanded(
-                                                                            child: Text(
-                                                                              snapshot.data[index]
-                                                                                  .ProfileType
-                                                                                  .toString(),
-                                                                              style: TextStyle(
-                                                                                  color: Colors
-                                                                                      .green,
-                                                                                  fontSize: 15.0,
-                                                                                  fontWeight: FontWeight
-                                                                                      .bold
-                                                                              ),
-                                                                            ),
-                                                                          ),
-
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ]
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );*/
                                           },
                                         ),
                                       ],

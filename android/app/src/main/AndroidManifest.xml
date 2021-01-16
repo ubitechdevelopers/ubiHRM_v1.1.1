@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ubihrm.ubihrm"
-    android:versionCode="10008"
-    android:versionName="1.0.8">
+    android:versionCode="10009"
+    android:versionName="1.0.9">
 
     <!-- The INTERNET permission is required for development. Specifically,
          flutter needs it to communicate with the running application
@@ -17,10 +17,17 @@
         In most cases you can leave this as-is, but you if you want to provide
         additional functionality it is fine to subclass or reimplement
         FlutterApplication and put your custom class here. -->
-    <application
+    <!--<application
         android:name="io.flutter.app.FlutterApplication"
         android:label="ubihrm"
+        android:icon="@mipmap/ic_launcher">-->
+    <application
+        android:label="ubihrm"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

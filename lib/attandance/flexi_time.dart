@@ -13,7 +13,6 @@ import 'package:ubihrm/global.dart';
 import 'package:ubihrm/home.dart';
 import 'package:ubihrm/model/timeinout.dart';
 import 'package:ubihrm/register_page.dart';
-import 'package:ubihrm/services/attandance_fetch_location.dart';
 import 'package:ubihrm/services/attandance_saveimage.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
@@ -424,7 +423,7 @@ class _Flexitime extends State<Flexitime> {
                           shape: BoxShape.circle,
                           image: new DecorationImage(
                             fit: BoxFit.fill,
-                            image:_checkLoaded ? AssetImage('assets/avatar.png') : profileimage,
+                            image:_checkLoaded ? AssetImage('assets/default.png') : profileimage,
                           )
                         )
                       ),
@@ -571,9 +570,8 @@ class _Flexitime extends State<Flexitime> {
 
   saveFlexiImage() async {
     print('saveFlexiImage');
-    //sl.startStreaming(5);
     client ="";
-    MarkVisit mk = new MarkVisit(empid,client, streamlocationaddr, orgdir, lat, long);
+    MarkVisit mk = new MarkVisit(empid,client,streamlocationaddr,orgdir,lat,long);
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       SaveImage saveImage = new SaveImage();
@@ -586,43 +584,71 @@ class _Flexitime extends State<Flexitime> {
       print(issave);
 
       if (issave) {
-        showDialog(context: context, child:
+        /*showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Attendance punched successfully!"),
         )
-        );
-        await new Future.delayed(const Duration(seconds: 2));
+        );*/
+        //await new Future.delayed(const Duration(seconds: 2));
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => FlexiList()),
         );
-
+        showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Attendance punched successfully"),
+            );
+          });
         setState(() {
           act1 = act;
         });
       } else {
-        showDialog(context: context, child:
+        /*showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Flexi Attendance was not captured, please punch again!"),
         )
-        );
+        );*/
+        showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Flexi Attendance was not captured, please punch again"),
+            );
+          });
         setState(() {
           act1 = act;
         });
       }
     }else {
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Internet connection not found."),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Internet connection not found."),
       )
-      );
+      );*/
     }
   }
 
 
   saveFlexioutImage() async {
     print("saveFlexioutImage");
-    //sl.startStreaming(5);
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
 
@@ -641,35 +667,65 @@ class _Flexitime extends State<Flexitime> {
         print("issave");
         print(issave);
 
-        showDialog(context: context, child:
+        /*showDialog(context: context, child:
         new AlertDialog(
           content: new Text("Attendance punched successfully!"),
         )
-        );
-        await new Future.delayed(const Duration(seconds: 2));
+        );*/
+        //await new Future.delayed(const Duration(seconds: 2));
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => FlexiList()),
         );
+        showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Attendance punched successfully!"),
+            );
+          });
         setState(() {
           act1 = act;
         });
       }else{
-        showDialog(context: context, child:
+        /*showDialog(context: context, child:
         new AlertDialog(
           content: new Text('Flexi Attendance was not captured, please punch again!'),
         )
-        );
+        );*/
+        showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(seconds: 3), () {
+              Navigator.of(context).pop(true);
+            });
+            return AlertDialog(
+              content: new Text("Flexi Attendance was not captured, please punch again"),
+            );
+          });
         setState(() {
           act1 = act;
         });
       }
     }else {
-      showDialog(context: context, child:
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop(true);
+          });
+          return AlertDialog(
+            content: new Text("Internet connection not found."),
+          );
+        });
+      /*showDialog(context: context, child:
       new AlertDialog(
         content: new Text("Internet connection not found."),
       )
-      );
+      );*/
     }
   }
 
@@ -724,7 +780,7 @@ class FlexiAppHeader extends StatelessWidget implements PreferredSizeWidget {
                       image: new DecorationImage(
                         fit: BoxFit.fill,
                         // image: AssetImage('assets/avatar.png'),
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),

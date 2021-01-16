@@ -39,7 +39,6 @@ class _BootomNavigationState extends State<HomeNavigation> {
   var PerApprovalLeave;
   String userprofileid;
   @override
-  int approval_count;
 
 
   void initState() {
@@ -62,12 +61,17 @@ class _BootomNavigationState extends State<HomeNavigation> {
         userprofileid: userprofileid);
     //getAllPermission(emp);
 
-    await getCountAproval();
-    if(mounted){
+    //await getCountAproval();
+    getCountAproval().then((res) {
+      setState(() {
+        approval_count = res;
+      });
+    });
+    /*if(mounted){
       setState(() {
         approval_count = prefs.getInt('approvalcount') ?? 0;
       });
-    }
+    }*/
     print('------>123');
     print(approval_count);
     print('------>123');
@@ -112,8 +116,7 @@ class _BootomNavigationState extends State<HomeNavigation> {
                     color: Colors.white,
                     size: 25.0 ),
                 title: Text('Settings',style: TextStyle(color: Colors.white))),*/
-          ((perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1')) ?  new  BottomNavigationBarItem(
-            //      (((perLeaveApproval=='1') )) ?  new  BottomNavigationBarItem(
+          new  BottomNavigationBarItem(
             icon: new Stack(
               children: <Widget>[
                 new Icon(Icons.check_circle_outline,color: Colors.white,),
@@ -146,14 +149,14 @@ class _BootomNavigationState extends State<HomeNavigation> {
               ],
             ),
             title: Text('Approvals',style: TextStyle(color: Colors.white)),
-          ) :
+          ),
 
-          BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
               icon: Icon(
                   Icons.person,
                   color: Colors.white,
                   size: 25.0 ),
-              title: Text('Profile',style: TextStyle(color: Colors.white))),
+              title: Text('Profile',style: TextStyle(color: Colors.white))),*/
 
           BottomNavigationBarItem(
             icon: new Icon(

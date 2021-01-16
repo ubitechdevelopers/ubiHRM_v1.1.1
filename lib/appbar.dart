@@ -49,7 +49,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       color: Colors.white,
                       image: new DecorationImage(
                         fit: BoxFit.fill,
-                        image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
                       )
                   )
               ),
@@ -62,8 +62,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             )
           ],
         ),
-        bottom:
-        showtabbar==true ? TabBar(
+        bottom: showtabbar==true ? TabBar(
           unselectedLabelColor: Colors.white70,
           indicatorColor: Colors.white,
           isScrollable: true,

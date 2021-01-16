@@ -190,7 +190,7 @@ class _AllReports extends State<AllReports> {
 
 
                   SizedBox(height: 6.0),
-                  perLeaveReport=='1' ?
+                  perAttReport=='1' ?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -204,7 +204,7 @@ class _AllReports extends State<AllReports> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                    child: Text('Timeoff',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Time Off',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
                               ],
                             ),
@@ -288,3 +288,4 @@ class _AllReports extends State<AllReports> {
     );
   }
 }
+
