@@ -5,6 +5,7 @@
 import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +32,9 @@ class TimeOffTimer extends StatefulWidget {
   _TimeOffTimerState createState() => _TimeOffTimerState();
 }
 
-class _TimeOffTimerState extends State<TimeOffTimer> {
+class _TimeOffTimerState extends State<TimeOffTimer> with WidgetsBindingObserver{
+  static const platform = const MethodChannel('location.spoofing.check');
+  String address = "";
   StreamLocation sl = new StreamLocation();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var profileimage;
@@ -93,10 +96,78 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     initPlatformState();
     getOrgName();
+    platform.setMethodCallHandler(_handleMethod);
     /*setLocationAddress();
     startTimer();*/
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  initPlatformState() async {
+    print("Time Off start page initplatformstate");
+    appResumedPausedLogic();
+    locationChannel.invokeMethod("openLocationDialog");
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      if (mounted)
+        setState(() {
+          locationThreadUpdatedLocation = locationThreadUpdatedLocation;
+        });
+    });
+
+    final prefs = await SharedPreferences.getInstance();
+    empid = prefs.getString('empid') ?? '';
+    orgdir = prefs.getString('orgdir') ?? '';
+    desinationId = globalcompanyinfomap['Designation'];
+    response = prefs.getInt('response') ?? 0;
+    //Loc lock = new Loc();
+    //location_addr = await lock.initPlatformState();
+    //print(location_addr);
+    if(response==1) {
+      Home ho = new Home();
+      act = await ho.checkTimeIn(empid, orgdir);
+      print(act);
+      ho.managePermission(empid, orgdir, desinationId);
+      await getCountAproval();
+      if(mounted) {
+        setState(() {
+          newpwd = prefs.getString('newpwd') ?? "";
+          userpwd = prefs.getString('usrpwd') ?? "";
+          location_addr1 = location_addr;
+          admin_sts = prefs.getString('sstatus').toString() ?? '0';
+          mail_varified = prefs.getString('mail_varified').toString() ?? '0';
+          alertdialogcount = globalalertcount;
+          response = prefs.getInt('response') ?? 0;
+          fname = prefs.getString('fname') ?? '';
+          lname = prefs.getString('lname') ?? '';
+          empid = prefs.getString('empid') ?? '';
+          email = prefs.getString('email') ?? '';
+          status = prefs.getString('status') ?? '';
+          orgid = prefs.getString('orgid') ?? '';
+          orgdir = prefs.getString('orgdir') ?? '';
+          org_name = prefs.getString('org_name') ?? '';
+          desination = prefs.getString('desination') ?? '';
+          Otimests = prefs.getString('Otimests') ?? '';
+          profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
+          profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
+            if (mounted) {
+              setState(() {
+                _checkLoaded = false;
+              });
+            }
+          }));
+          showtabbar = false;
+          latit = prefs.getString('latit') ?? '';
+          longi = prefs.getString('longi') ?? '';
+          aid = prefs.getString('aid') ?? "";
+          shiftId = prefs.getString('shiftId') ?? "";
+          act1 = act;
+          streamlocationaddr = globalstreamlocationaddr;
+          perPunchLocation = getModulePermission("305", "view");
+        });
+      }
+    }
   }
 
   getOrgName() async{
@@ -108,12 +179,58 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
     }
   }
 
+  Future<dynamic> _handleMethod(MethodCall call) async {
+    switch (call.method) {
+      case "locationAndInternet":
+        locationThreadUpdatedLocation = true;
+        var long = call.arguments["longitude"].toString();
+        var lat = call.arguments["latitude"].toString();
+        assign_lat = double.parse(lat);
+        assign_long = double.parse(long);
+        address = await getAddressFromLati(lat, long);
+        globalstreamlocationaddr = address;
+        print(call.arguments["mocked"].toString());
+
+        getAreaStatus().then((res) {
+          print('home dot dart');
+          if (mounted) {
+            setState(() {
+              areaSts = res.toString();
+              print('response'+res.toString());
+              if (assignedAreaIds.isNotEmpty && perGeoFence=="1") {
+                AbleTomarkAttendance = areaSts;
+              }
+            });
+          }
+        }).catchError((onError) {
+          print('Exception occured in clling function.......');
+          print(onError);
+        });
+
+        setState(() {
+          if (call.arguments["mocked"].toString() == "Yes") {
+            fakeLocationDetected = true;
+          } else {
+            fakeLocationDetected = false;
+          }
+          if (call.arguments["TimeSpoofed"].toString() == "Yes") {
+            timeSpoofed = true;
+          }
+        });
+        break;
+
+        return new Future.value("");
+    }
+  }
+
   updateTime(Timer timer2) {
     if (watch.isRunning) {
-      setState(() {
-        print("startstop Inside=$startStop");
-        elapsedTime = transformMilliSeconds(watch.elapsedMilliseconds);
-      });
+      if (mounted) {
+        setState(() {
+          print("startstop Inside=$startStop");
+          elapsedTime = transformMilliSeconds(watch.elapsedMilliseconds);
+        });
+      }
     }
   }
 
@@ -201,62 +318,6 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
     }
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  initPlatformState() async {
-    final prefs = await SharedPreferences.getInstance();
-    empid = prefs.getString('empid') ?? '';
-    orgdir = prefs.getString('orgdir') ?? '';
-    desinationId = globalcompanyinfomap['Designation'];
-    response = prefs.getInt('response') ?? 0;
-    //Loc lock = new Loc();
-    //location_addr = await lock.initPlatformState();
-    //print(location_addr);
-
-    Home ho = new Home();
-    act = await ho.checkTimeIn(empid, orgdir);
-    print(act);
-    ho.managePermission(empid, orgdir, desinationId);
-    await getCountAproval();
-    if(mounted) {
-      setState(() {
-        newpwd = prefs.getString('newpwd') ?? "";
-        userpwd = prefs.getString('usrpwd') ?? "";
-        location_addr1 = location_addr;
-        admin_sts = prefs.getString('sstatus').toString() ?? '0';
-        mail_varified = prefs.getString('mail_varified').toString() ?? '0';
-        alertdialogcount = globalalertcount;
-        response = prefs.getInt('response') ?? 0;
-        fname = prefs.getString('fname') ?? '';
-        lname = prefs.getString('lname') ?? '';
-        empid = prefs.getString('empid') ?? '';
-        email = prefs.getString('email') ?? '';
-        status = prefs.getString('status') ?? '';
-        orgid = prefs.getString('orgid') ?? '';
-        orgdir = prefs.getString('orgdir') ?? '';
-        org_name = prefs.getString('org_name') ?? '';
-        desination = prefs.getString('desination') ?? '';
-        Otimests = prefs.getString('Otimests') ?? '';
-        profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
-        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
-          if (mounted) {
-            setState(() {
-              _checkLoaded = false;
-            });
-          }
-        }));
-        showtabbar = false;
-        latit = prefs.getString('latit') ?? '';
-        longi = prefs.getString('longi') ?? '';
-        aid = prefs.getString('aid') ?? "";
-        shiftId = prefs.getString('shiftId') ?? "";
-        act1 = act;
-        streamlocationaddr = globalstreamlocationaddr;
-        perPunchLocation = getModulePermission("305", "view");
-      });
-    }
-    //}
-  }
-
   @override
   Widget build(BuildContext context) {
     (mail_varified=='0' && alertdialogcount==0 && admin_sts=='1')?Future.delayed(Duration.zero, () => _showAlert(context)):"";
@@ -283,14 +344,23 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
 
   getmainhomewidget() {
     return new WillPopScope(
-        onWillPop: () => sendToHome(),
+      onWillPop: () => sendToHome(),
+      child: RefreshIndicator(
         child: Scaffold(
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new AttendanceHomeAppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:new HomeNavigation(),
           body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
-        )
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
+      )
     );
   }
 
@@ -300,7 +370,8 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
         index: _currentIndex,
         children: <Widget>[
           underdevelopment(),
-          (streamlocationaddr != '') ? mainbodyWidget() : refreshPageWidgit(),
+          //(streamlocationaddr != '') ? mainbodyWidget() : refreshPageWidgit(),
+          (globalstreamlocationaddr.isNotEmpty || globalstreamlocationaddr!="Location not fetched") ? mainbodyWidget() : refreshPageWidgit(),
           underdevelopment()
         ],
       );
@@ -314,7 +385,8 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
   }
 
   refreshPageWidgit() {
-    if (location_addr1 != "PermissionStatus.deniedNeverAsk") {
+    //if (location_addr1 != "PermissionStatus.deniedNeverAsk") {
+    if (globalstreamlocationaddr.isNotEmpty) {
       return new Container(
         child: Center(
           child: new Column(
@@ -361,6 +433,7 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
                 onPressed: () {
                   /*startTimer();
                   sl.startStreaming(5);*/
+                  locationChannel.invokeMethod("startAssistant");
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => TimeOffTimer()),
@@ -452,9 +525,10 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
                 onPressed: () {
                   /*startTimer();
                   sl.startStreaming(5);*/
+                  locationChannel.invokeMethod("startAssistant");
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => TimeOffTimer()),
+                    MaterialPageRoute(builder: (context) => TimeOffTimer(timeoffId: widget.timeoffId, action: widget.action)),
                   );
                 },
               ),
@@ -521,7 +595,7 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              getwidget(location_addr1),
+              getwidget(globalstreamlocationaddr),
             ]),
       );
     }
@@ -553,7 +627,7 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
   }
 
   getwidget(String addrloc) {
-    if (addrloc != "PermissionStatus.deniedNeverAsk") {
+    if (addrloc != "Location not fetched") {
       return Column(children: [
         Container(
           width: MediaQuery.of(context).size.width * .5,
@@ -567,7 +641,10 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
             child:
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               FlatButton(
-                child: new Text('You are at: ' + streamlocationaddr,
+                child: new Text(
+                    (globalstreamlocationaddr.isNotEmpty || globalstreamlocationaddr!="Location not fetched")
+                    ? 'You are at: ' + globalstreamlocationaddr
+                    : "Location could not be fetched",
                     textAlign: TextAlign.center,
                     style: new TextStyle(fontSize: 14.0)),
                 onPressed: () {
@@ -590,9 +667,10 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
                       onTap: () {
                         /*startTimer();
                         sl.startStreaming(5);*/
+                        locationChannel.invokeMethod("startAssistant");
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => TimeOffTimer()),
+                          MaterialPageRoute(builder: (context) => TimeOffTimer(timeoffId: widget.timeoffId, action: widget.action)),
                         );
                       },
                     )
@@ -668,7 +746,7 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
   }
 
   saveTimeOff(time, act) async {
-    MarkStartTimeOff mk = new MarkStartTimeOff(empid, orgid, time, act, widget.timeoffId, streamlocationaddr, lat, long);
+    MarkStartTimeOff mk = new MarkStartTimeOff(empid, orgid, time, act, widget.timeoffId, globalstreamlocationaddr, lat, long);
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       SaveTimerTime save = new SaveTimerTime();
@@ -684,6 +762,25 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
               time: elapsedTime
             )),
           );
+          widget.action == "Start"?showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Time Off has been started"),
+                );
+              }):showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Time Off has been ended"),
+                );
+              });
         } else if(issave.contains("unmarked")){
           showDialog(
             context: context,
@@ -695,11 +792,6 @@ class _TimeOffTimerState extends State<TimeOffTimer> {
                 content: new Text("Before Starting TimeOff you need to mark Time In"),
               );
             });
-          /*showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text("Before Starting TimeOff you need to mark Time In"),
-          )
-          );*/
         } else {
           showDialog(
             context: context,

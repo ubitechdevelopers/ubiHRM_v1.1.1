@@ -27,7 +27,7 @@ class Flexitime extends StatefulWidget {
   _Flexitime createState() => _Flexitime();
 }
 
-class _Flexitime extends State<Flexitime> {
+class _Flexitime extends State<Flexitime>  with WidgetsBindingObserver{
   StreamLocation sl = new StreamLocation();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   List<Flexi> flexiidsts = null;
@@ -79,9 +79,8 @@ class _Flexitime extends State<Flexitime> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     initPlatformState();
-    /*setLocationAddress();
-    startTimer();*/
     getOrgName();
   }
 
@@ -132,6 +131,15 @@ class _Flexitime extends State<Flexitime> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
+    print("Flexi page initplatformstate");
+    appResumedPausedLogic();
+    locationChannel.invokeMethod("openLocationDialog");
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      if (mounted)
+        setState(() {
+          locationThreadUpdatedLocation = locationThreadUpdatedLocation;
+        });
+    });
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('employeeid') ?? '';
     orgdir = prefs.getString('orgdir') ?? '';
@@ -188,7 +196,7 @@ class _Flexitime extends State<Flexitime> {
       aid = prefs.getString('aid') ?? "";
       shiftId = prefs.getString('shiftId') ?? "";
       act1 = act;
-      streamlocationaddr = globalstreamlocationaddr;
+      //streamlocationaddr = globalstreamlocationaddr;
     });
   }
 
@@ -258,7 +266,7 @@ class _Flexitime extends State<Flexitime> {
         index: _currentIndex,
         children: <Widget>[
           underdevelopment(),
-          (streamlocationaddr != '') ? mainbodyWidget() : refreshPageWidgit(),
+          (globalstreamlocationaddr.isNotEmpty || globalstreamlocationaddr!="Location not fetched") ? mainbodyWidget() : refreshPageWidgit(),
           underdevelopment()
         ],
       );
@@ -271,7 +279,7 @@ class _Flexitime extends State<Flexitime> {
   }
 
   refreshPageWidgit() {
-    if (location_addr1 != "PermissionStatus.deniedNeverAsk") {
+    if (globalstreamlocationaddr.isNotEmpty) {
       return new Container(
         child: Center(
           child: new Column(
@@ -318,7 +326,7 @@ class _Flexitime extends State<Flexitime> {
                 onPressed: () {
                   /*startTimer();
                   sl.startStreaming(5);*/
-
+                  locationChannel.invokeMethod("startAssistant");
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Flexitime()),
@@ -331,19 +339,19 @@ class _Flexitime extends State<Flexitime> {
       );
     } else {
       return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Location permission is restricted from app settings, click "Open Settings" to allow permission.',
-              textAlign: TextAlign.center,
-              style: new TextStyle(fontSize: 14.0, color: Colors.red)),
-            RaisedButton(
-              child: Text('Open Settings'),
-              onPressed: () {
-                PermissionHandler().openAppSettings();
-              },
-            ),
-          ]
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Location permission is restricted from app settings, click "Open Settings" to allow permission.',
+            textAlign: TextAlign.center,
+            style: new TextStyle(fontSize: 14.0, color: Colors.red)),
+          RaisedButton(
+            child: Text('Open Settings'),
+            onPressed: () {
+              PermissionHandler().openAppSettings();
+            },
+          ),
+        ]
       );
     }
   }
@@ -376,7 +384,7 @@ class _Flexitime extends State<Flexitime> {
               onPressed: () {
                 /*startTimer();
                 sl.startStreaming(5);*/
-
+                locationChannel.invokeMethod("startAssistant");
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Flexitime()),
@@ -430,7 +438,14 @@ class _Flexitime extends State<Flexitime> {
                     ]),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * .01),
-                  Text("Hi " + globalpersnalinfomap['FirstName'], style: new TextStyle(fontSize: 16.0)),
+                  //Text("Hi " + globalpersnalinfomap['FirstName'], style: new TextStyle(fontSize: 16.0)),
+                  Text(globalpersnalinfomap['FirstName'].toUpperCase(), style: new TextStyle(
+                    color: Colors.black87,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 3.0,
+                  ),textAlign: TextAlign.center,),
+                  //SizedBox(height: MediaQuery.of(context).size.height*.02),
                   (act1 == '') ? loader() : getMarkAttendanceWidgit(),
                 ],
               ),
@@ -447,14 +462,14 @@ class _Flexitime extends State<Flexitime> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: 20.0),
-          getwidget(location_addr1),
+          getwidget(globalstreamlocationaddr),
         ]
       ),
     );
   }
 
   getwidget(String addrloc) {
-    if (addrloc != "PermissionStatus.deniedNeverAsk") {
+    if (addrloc != "Location not fetched") {
       return Column(children: [
         ButtonTheme(
           minWidth: 120.0,
@@ -468,7 +483,10 @@ class _Flexitime extends State<Flexitime> {
           child:
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             FlatButton(
-              child: new Text('You are at: ' + streamlocationaddr,
+              child: new Text(
+                  globalstreamlocationaddr != null
+                      ? 'You are at: ' + globalstreamlocationaddr
+                      : "Location could not be fetched",
                   textAlign: TextAlign.center,
                   style: new TextStyle(fontSize: 14.0)),
               onPressed: () {
@@ -491,6 +509,7 @@ class _Flexitime extends State<Flexitime> {
                     onTap: () {
                       /*startTimer();
                       sl.startStreaming(5);*/
+                      locationChannel.invokeMethod("startAssistant");
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Flexitime()),
@@ -567,11 +586,10 @@ class _Flexitime extends State<Flexitime> {
     );
   }
 
-
   saveFlexiImage() async {
     print('saveFlexiImage');
     client ="";
-    MarkVisit mk = new MarkVisit(empid,client,streamlocationaddr,orgdir,lat,long);
+    MarkVisit mk = new MarkVisit(empid,client,globalstreamlocationaddr,orgdir,lat,long);
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       SaveImage saveImage = new SaveImage();
@@ -584,12 +602,6 @@ class _Flexitime extends State<Flexitime> {
       print(issave);
 
       if (issave) {
-        /*showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text("Attendance punched successfully!"),
-        )
-        );*/
-        //await new Future.delayed(const Duration(seconds: 2));
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => FlexiList()),
@@ -608,11 +620,6 @@ class _Flexitime extends State<Flexitime> {
           act1 = act;
         });
       } else {
-        /*showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text("Flexi Attendance was not captured, please punch again!"),
-        )
-        );*/
         showDialog(
           context: context,
           builder: (context) {
@@ -638,11 +645,6 @@ class _Flexitime extends State<Flexitime> {
             content: new Text("Internet connection not found."),
           );
         });
-      /*showDialog(context: context, child:
-      new AlertDialog(
-        content: new Text("Internet connection not found."),
-      )
-      );*/
     }
   }
 
@@ -651,28 +653,17 @@ class _Flexitime extends State<Flexitime> {
     print("saveFlexioutImage");
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-
       SaveImage saveImage = new SaveImage();
       bool issave = false;
       setState(() {
         act1 = "";
       });
 
-      print('streamlocationaddr.toString()');
-      print(streamlocationaddr.toString());
-
-      issave = await saveImage.saveFlexiOut(empid,streamlocationaddr.toString(),fid.toString(),lat,long,orgid);
+      issave = await saveImage.saveFlexiOut(empid,globalstreamlocationaddr,fid.toString(),lat,long,orgid);
 
       if(issave){
         print("issave");
         print(issave);
-
-        /*showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text("Attendance punched successfully!"),
-        )
-        );*/
-        //await new Future.delayed(const Duration(seconds: 2));
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => FlexiList()),
@@ -691,11 +682,6 @@ class _Flexitime extends State<Flexitime> {
           act1 = act;
         });
       }else{
-        /*showDialog(context: context, child:
-        new AlertDialog(
-          content: new Text('Flexi Attendance was not captured, please punch again!'),
-        )
-        );*/
         showDialog(
           context: context,
           builder: (context) {
@@ -721,15 +707,8 @@ class _Flexitime extends State<Flexitime> {
             content: new Text("Internet connection not found."),
           );
         });
-      /*showDialog(context: context, child:
-      new AlertDialog(
-        content: new Text("Internet connection not found."),
-      )
-      );*/
     }
   }
-
-
 }
 
 class FlexiAppHeader extends StatelessWidget implements PreferredSizeWidget {

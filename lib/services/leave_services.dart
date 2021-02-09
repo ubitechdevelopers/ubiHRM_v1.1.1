@@ -27,8 +27,8 @@ requestLeave(Leave leave) async{
 
     Response response1 = await dio.post(path_hrm_india+"reqForLeave", data: formData);
     print('*************REQUEST FOR LEAVE*************');
-    print(path_hrm_india+""
-        "?orgid=${leave.orgid}&uid=${leave.uid}&leavefrom=${leave.leavefrom}&leaveto=${leave.leaveto}&leavetypefrom=${leave.leavetypefrom}&leavetypeto=${leave.leavetypeto}&halfdayfromtype=${leave.halfdayfromtype}&halfdaytotype=${leave.halfdaytotype}&leavetypeid=${leave.leavetypeid}&reason=${leave.reason}&substituteemp=${leave.substituteemp}&compoffsts=${leave.compoffsts}");
+
+    print(path_hrm_india+'reqForLeave?orgid=${leave.orgid}&uid=${leave.uid}&leavefrom=${leave.leavefrom}&leaveto=${leave.leaveto}&leavetypefrom=${leave.leavetypefrom}&leavetypeto=${leave.leavetypeto}&halfdayfromtype=${leave.halfdayfromtype}&halfdaytotype=${leave.halfdaytotype}&leavetypeid=${leave.leavetypeid}&reason=${leave.reason}&substituteemp=${leave.substituteemp}&compoffsts=${leave.compoffsts}');
     final leaveMap = response1.data.toString();
     if (leaveMap.contains("false1")) {
       return "false1";
@@ -411,7 +411,7 @@ ApproveLeaveByHr(Leaveid,comment,sts,LBD) async{
 ////////////////////////////////////* SERVICE TO APPROVE LEAVE ENDS HERE *///////////////////////////////////////
 
 
-Future<List<LeaveA>> getTeamApprovals(empname) async {
+Future<List<LeaveA>> getTeamApprovals(String empname, String month) async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('organization') ??"";
@@ -420,8 +420,8 @@ Future<List<LeaveA>> getTeamApprovals(empname) async {
   int hrsts =prefs.getInt('hrsts')??0;
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
-  print(path+"getteamapproval?empid=$empid&orgid=$orgdir&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
-  Response<String> response=await dio.post(path+"getteamapproval?empid=$empid&orgid=$orgdir&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+  print(path+"getteamapproval?month=$month&empid=$empid&orgid=$orgdir&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+  Response<String> response=await dio.post(path+"getteamapproval?month=$month&empid=$empid&orgid=$orgdir&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
   final res = json.decode(response.data.toString());
   List<LeaveA> userList1 = createTeamleaveapporval(res,empname);
   return userList1;

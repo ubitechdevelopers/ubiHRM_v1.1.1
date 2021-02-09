@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
@@ -57,115 +59,132 @@ class _Department extends State<Department> {
   }*/
 
   getmainhomewidget() {
-    return new Scaffold(
-      backgroundColor: scaffoldBackColor(),
-      key: _scaffoldKey,
-      appBar: AppHeader(profileimage,showtabbar,orgName),
-      bottomNavigationBar: new HomeNavigation(),
-      endDrawer: new AppDrawer(),
-      body: Container(
-        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        decoration: new ShapeDecoration(
-          shape: new RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(20.0)),
-          color: Colors.white,
-        ),
+    return RefreshIndicator(
+      child: new Scaffold(
+        backgroundColor: scaffoldBackColor(),
+        key: _scaffoldKey,
+        appBar: AppHeader(profileimage,showtabbar,orgName),
+        bottomNavigationBar: new HomeNavigation(),
+        endDrawer: new AppDrawer(),
+        body: Container(
+          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+          decoration: new ShapeDecoration(
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(20.0)),
+            color: Colors.white,
+          ),
 
-        child: Column(
-          children: <Widget>[
-            Center(
-              child: Text('Departments',
-                style: new TextStyle(fontSize: 22.0, color: appStartColor(),),),
-            ),
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _searchController,
-                  focusNode: searchFocusNode,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderRadius:  new BorderRadius.circular(10.0),
+          child: Column(
+            children: <Widget>[
+              Center(
+                child: Text('Departments',
+                  style: new TextStyle(fontSize: 22.0, color: appStartColor(),),),
+              ),
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _searchController,
+                    focusNode: searchFocusNode,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderRadius:  new BorderRadius.circular(10.0),
+                      ),
+                      prefixIcon: Icon(Icons.search, size: 30,),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      hintText: 'Search Department',
+                      //labelText: 'Search Department',
+                      suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Department()),
+                            );
+                          }
+                      ):null,
+                      //focusColor: Colors.white,
                     ),
-                    prefixIcon: Icon(Icons.search, size: 30,),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    hintText: 'Search Department',
-                    //labelText: 'Search Department',
-                    suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Department()),
-                          );
-                        }
-                    ):null,
-                    //focusColor: Colors.white,
+                    onChanged: (value) {
+                      setState(() {
+                        deptname = value;
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      deptname = value;
-                    });
-                  },
                 ),
               ),
-            ),
-            //Divider(),
-            //Divider(height: 10.0,),
-            //SizedBox(height: 5.0),
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left:15.0),
-                    child: Container(
-                      //width: MediaQuery.of(context).size.width*0.65,
-                      child: Text('Departments', style: TextStyle(
-                          color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+              //Divider(),
+              //Divider(height: 10.0,),
+              //SizedBox(height: 5.0),
+              Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left:15.0),
+                      child: Container(
+                        //width: MediaQuery.of(context).size.width*0.65,
+                        child: Text('Departments', style: TextStyle(
+                            color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                      ),
                     ),
-                  ),
-                  /*SizedBox(
-                    width: 5,
-                  ),*/
-                  Padding(
-                    padding: const EdgeInsets.only(right:30.0),
-                    child: Container(
-                      child: Text('Status', style: TextStyle(
-                          color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    /*SizedBox(
+                      width: 5,
+                    ),*/
+                    Padding(
+                      padding: const EdgeInsets.only(right:30.0),
+                      child: Container(
+                        child: Text('Status', style: TextStyle(
+                            color: appStartColor(),fontWeight:FontWeight.bold,fontSize: 16.0),),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Divider(),
-            new Expanded(
-              child: getDeptWidget(),
-            ),
-          ],
+              Divider(),
+              new Expanded(
+                child: getDeptWidget(),
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
-        backgroundColor: Colors.orange[800],
-        onPressed: (){
-          showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
+        floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
+          backgroundColor: Colors.orange[800],
+          onPressed: (){
+            showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("To Add a new Department, login to the web panel"),
+                );
               });
-              return AlertDialog(
-                content: new Text("To Add a new Department, login to the web panel"),
-              );
-            });
-        },
-        tooltip: 'Add Department',
-        child: new Icon(Icons.add),
-      ):Center(),
+          },
+          tooltip: 'Add Department',
+          child: new Icon(Icons.add),
+        ):Center(),
+      ),
+      onRefresh: () async {
+        Completer<Null> completer = new Completer<Null>();
+        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          setState(() {
+            _searchController.clear();
+            deptname='';
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          });
+          completer.complete();
+        });
+        return completer.future;
+      },
     );
   }
 
@@ -375,7 +394,7 @@ class _Department extends State<Department> {
                             Navigator.of(context).pop(true);
                           });
                           return AlertDialog(
-                            content: new Text("This department can't be deactivated. Employees are already assigned to it"),
+                            content: new Text("This department can't be updated. Employees are already assigned to it"),
                           );
                         });
                       //showInSnackBar('Department name already exist');

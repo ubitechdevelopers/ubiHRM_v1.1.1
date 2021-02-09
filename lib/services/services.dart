@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -129,10 +130,26 @@ getProfileInfo(Employee emp, BuildContext context) async{
       globalprofileinfomap = responseJson['ProfilePic'];
       globalogrperminfomap = responseJson['Orgperm'];
       globallabelinfomap = responseJson['Label'];
+      plansts=globalogrperminfomap['plansts'];
+      prefs.setInt("plansts", plansts);
+      empcount=globalogrperminfomap['empcount'];
+      prefs.setInt("empcount", empcount);
+      attcount=globalogrperminfomap['attcount'];
+      prefs.setInt("attcount", attcount);
       geoFenceOrgPerm=globalogrperminfomap['geofencests'];
-      /*orgCreatedDate=globalogrperminfomap['createddate'];
+      orgCreatedDate=DateTime.parse(globalogrperminfomap['createddate']);
       print("orgCreatedDate");
-      print(orgCreatedDate);*/
+      print(orgCreatedDate);
+      if(globalogrperminfomap['fiscalstart']!='') {
+        fiscalStart = DateTime.parse(globalogrperminfomap['fiscalstart']);
+        print("fiscalStart");
+        print(fiscalStart);
+      }
+      if(globalogrperminfomap['fiscalend']!='') {
+        fiscalEnd = DateTime.parse(globalogrperminfomap['fiscalend']);
+        print("fiscalEnd");
+        print(fiscalEnd);
+      }
       grpCompanySts=globalogrperminfomap['groupcompaniessts'];
       print("grpCompanySts");
       print(grpCompanySts);
@@ -466,6 +483,7 @@ List<Team> createTeamList(List data) {
     String Id = data[i]["Id"];
     String FirstName = data[i]["FirstName"];
     String LastName = data[i]["LastName"];
+    String Name = data[i]["Name"];
     String Designation = data[i]["Designation"];
     String DOB = data[i]["DOB"];
     String Nationality = data[i]["Nationality"];
@@ -477,7 +495,7 @@ List<Team> createTeamList(List data) {
 
     print("juniorlist");
     print(juniorlist);
-    Team team = new Team(Id: Id, FirstName: FirstName, LastName: LastName, Designation: Designation, DOB: DOB, Nationality: Nationality, BloodGroup: BloodGroup, CompanyEmail: CompanyEmail, ProfilePic: ProfilePic, ParentId:ParentId, juniorlist:juniorlist);
+    Team team = new Team(Id: Id, FirstName: FirstName, LastName: LastName, Name: Name, Designation: Designation, DOB: DOB, Nationality: Nationality, BloodGroup: BloodGroup, CompanyEmail: CompanyEmail, ProfilePic: ProfilePic, ParentId:ParentId, juniorlist:juniorlist);
     list.add(team);
   }
 
@@ -824,4 +842,48 @@ Future<String> getAreaStatus() async {
   print(status);
   globals.areaSts=status;
   return status;
+}
+
+var serverConnected=0;
+Future<int> checkConnectionToServer () async{
+  try {
+    var uri = Uri.parse(path);
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty){
+      print('connected');
+      serverConnected=1;
+    }else{
+      serverConnected=0;
+    }
+  } on SocketException catch (_) {
+    print('not connected');
+    serverConnected=0;
+  }on TimeoutException catch(_){
+    serverConnected=0;
+  }
+  return serverConnected;
+}
+
+appResumedPausedLogic(){
+  SystemChannels.lifecycle.setMessageHandler((msg) async {
+    if(msg=='AppLifecycleState.resumed' ){
+      print("------------------------------------App Resumed-----------------------------");
+      locationChannel.invokeMethod("openLocationDialog");
+      var serverConnected= await checkConnectionToServer();
+        if(serverConnected!=1){
+          print("inside condition");
+        }else{
+          if(assign_lat==0.0||assign_lat==null||!locationThreadUpdatedLocation){
+            locationChannel.invokeMethod("openLocationDialog");
+            print("dialog opened");
+          }
+        }
+    }
+
+    if(msg=='AppLifecycleState.paused' ){
+      print("------------------------------------ App Paused -----------------------------");
+      locationThreadUpdatedLocation=false;
+    }
+    return null;
+  });
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -26,7 +27,9 @@ class PunchLocationSummary extends StatefulWidget {
 }
 
 TextEditingController today;
-class _PunchLocationSummary extends State<PunchLocationSummary> {
+class _PunchLocationSummary extends State<PunchLocationSummary> with WidgetsBindingObserver{
+  static const platform = const MethodChannel('location.spoofing.check');
+  String address = "";
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String lat="";
   String long="";
@@ -58,25 +61,30 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-    getOrgName();
-    //setLocationAddress();
+    WidgetsBinding.instance.addObserver(this);
     today = new TextEditingController();
     today.text = formatter.format(DateTime.now());
-  }
-
-  getOrgName() async{
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      orgName= prefs.getString('orgname') ?? '';
-    });
+    initPlatformState();
+    getOrgName();
+    platform.setMethodCallHandler(_handleMethod);
+    //setLocationAddress();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
-    final prefs = await SharedPreferences.getInstance();
+    print("Punchlocation summary initPlatformState");
+    appResumedPausedLogic();
+    locationChannel.invokeMethod("openLocationDialog");
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      if (mounted)
+        setState(() {
+          locationThreadUpdatedLocation = locationThreadUpdatedLocation;
+        });
+    });
 
+    final prefs = await SharedPreferences.getInstance();
     setState(() {
+      setaddress();
       streamlocationaddr = globalstreamlocationaddr;
       desination = prefs.getString('desination') ?? '';
       profile = prefs.getString('profile') ?? '';
@@ -97,48 +105,63 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
     showtabbar=false;
   }
 
-/*  setLocationAddress() async {
-    if(mounted) {
-      setState(() {
-        streamlocationaddr=globalstreamlocationaddr;
-        if (list != null && list.length > 0) {
-          lat=list[list.length - 1].latitude.toString();
-          long=list[list.length - 1].longitude.toString();
-          if (streamlocationaddr == '') {
-            streamlocationaddr=lat + ", " + long;
-          }
-        }
-        if (streamlocationaddr == '') {
-          sl.startStreaming(5);
-          startTimer();
-        }
-        //print("home addr" + streamlocationaddr);
-        //print(lat + ", " + long);
-        //print(stopstreamingstatus.toString());
-      });
+  setaddress() async {
+    globalstreamlocationaddr = await getAddressFromLati(assign_lat.toString(),assign_long.toString());
+    var serverConnected = await checkConnectionToServer();
+    if (serverConnected != 0) if (assign_lat == 0.0 || assign_lat == null || !locationThreadUpdatedLocation) {
+      locationChannel.invokeMethod("openLocationDialog");
     }
   }
 
-  startTimer() {
-    const fiveSec = const Duration(seconds: 5);
-    int count = 0;
-    timer = new Timer.periodic(fiveSec, (Timer t) {
-      //print("timmer is running");
-      count++;
-      //print("timer counter" + count.toString());
-      setLocationAddress();
-      if (stopstreamingstatus) {
-        t.cancel();
-        //print("timer canceled");
-      }
+  getOrgName() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName= prefs.getString('orgname') ?? '';
     });
-  }*/
+  }
 
-  // This widget is the root of your application.
-  void showInSnackBar(String value) {
-    final snackBar = SnackBar(
-        content: Text(value, textAlign: TextAlign.center,));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
+  Future<dynamic> _handleMethod(MethodCall call) async {
+    switch (call.method) {
+      case "locationAndInternet":
+        locationThreadUpdatedLocation = true;
+        var long = call.arguments["longitude"].toString();
+        var lat = call.arguments["latitude"].toString();
+        assign_lat = double.parse(lat);
+        assign_long = double.parse(long);
+        address = await getAddressFromLati(lat, long);
+        globalstreamlocationaddr = address;
+        print(call.arguments["mocked"].toString());
+
+        getAreaStatus().then((res) {
+          print('home dot dart');
+          if (mounted) {
+            setState(() {
+              areaSts = res.toString();
+              print('response'+res.toString());
+              if (assignedAreaIds.isNotEmpty && perGeoFence=="1") {
+                AbleTomarkAttendance = areaSts;
+              }
+            });
+          }
+        }).catchError((onError) {
+          print('Exception occured in clling function.......');
+          print(onError);
+        });
+
+        setState(() {
+          if (call.arguments["mocked"].toString() == "Yes") {
+            fakeLocationDetected = true;
+          } else {
+            fakeLocationDetected = false;
+          }
+          if (call.arguments["TimeSpoofed"].toString() == "Yes") {
+            timeSpoofed = true;
+          }
+        });
+        break;
+
+        return new Future.value("");
+    }
   }
 
   Future<bool> sendToHome() async{
@@ -153,39 +176,53 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
   Widget build(BuildContext context) {
     return new WillPopScope(
       onWillPop: ()=> sendToHome(),
-      child: new Scaffold(
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new PunchVisitAppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar:new HomeNavigation(),
-        body:  ModalProgressHUD(
-            inAsyncCall: isServiceCalling,
-            opacity: 0.15,
-            progressIndicator: SizedBox(
-              child:new CircularProgressIndicator(
-                  valueColor: new AlwaysStoppedAnimation(Colors.green),
-                  strokeWidth: 5.0),
-              height: 40.0,
-              width: 40.0,
-            ),
-            child: getWidgets(context)
+      child: RefreshIndicator(
+        child: new Scaffold(
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new PunchVisitAppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:new HomeNavigation(),
+          body:  ModalProgressHUD(
+              inAsyncCall: isServiceCalling,
+              opacity: 0.15,
+              progressIndicator: SizedBox(
+                child:new CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation(Colors.green),
+                    strokeWidth: 5.0),
+                height: 40.0,
+                width: 40.0,
+              ),
+              child: getWidgets(context)
+          ),
+          //body: getWidgets(context),
+          floatingActionButton: new FloatingActionButton(
+            backgroundColor: Colors.orange[800],
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PunchLocation()),
+              );
+            },
+            tooltip: 'Punch Visit',
+            child: new Icon(Icons.add),
+          ),
         ),
-
-        //body: getWidgets(context),
-        floatingActionButton: new FloatingActionButton(
-          backgroundColor: Colors.orange[800],
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PunchLocation()),
-            );
-          },
-          tooltip: 'Punch Visit',
-          child: new Icon(Icons.add),
-        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            setState(() {
+              today.clear();
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
-
   }
   /////////////
   _showDialog(visit_id) async {
@@ -221,7 +258,7 @@ class _PunchLocationSummary extends State<PunchLocationSummary> {
                 });
                 SaveImage saveImage = new SaveImage();
                 Navigator.of(context, rootNavigator: true).pop();
-                saveImage.saveVisitOut(empid,streamlocationaddr.toString(),visit_id.toString(),assign_lat.toString(),assign_long.toString(),_comments.text,orgid).then((res){
+                saveImage.saveVisitOut(empid,globalstreamlocationaddr.toString(),visit_id.toString(),assign_lat.toString(),assign_long.toString(),_comments.text,orgid).then((res){
                   if(res){
                     Navigator.push(
                       context,

@@ -1,6 +1,8 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/model.dart';
@@ -121,124 +123,22 @@ class _SalarySummary extends State<SalarySummary> {
   }
 
   getmainhomewidget() {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
-
-      /*appBar: GradientAppBar(
-        automaticallyImplyLeading: false,
-        *//*    title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-
-            new Text(org_name, style: new TextStyle(fontSize: 20.0)),
-
-          ],
-        ),
-        leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()),
-          );
-        },),
-        backgroundColor: Colors.teal,*//*
-        backgroundColorStart: appStartColor(),
-        backgroundColorEnd: appEndColor(),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            new Container(
-                width: 40.0,
-                height: 40.0,
-                decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage('assets/avatar.png'),
-                    )
-                )),
-            Container(
-                padding: const EdgeInsets.all(8.0), child: Text('UBIHRM')
-            )
-          ],
-
-        ),
-
-      ),*/
-      bottomNavigationBar:  new HomeNavigation(),
-      /*     bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (newIndex) {
-          if(newIndex==2){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Settings()),
-            );
-            return;
-          }
-          else if (newIndex == 0) {
-            (admin_sts == '1')
-                ? Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Reports()),
-            )
-                : Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
-            );
-            return;
-          }
-          if(newIndex==1){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-            return;
-          }
-          print("Current pressed new indexed "+newIndex.toString());
-          setState((){_currentIndex = newIndex;});
-        }, // this will be set when a new tab is tapped
-        items: [
-          (admin_sts == '1')
-              ? BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.library_books,
-            ),
-            title: new Text('Reports'),
-          )
-              : BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.person,
-            ),
-            title: new Text('Profile'),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.home,color: Colors.black54,),
-            title: new Text('Home',style:TextStyle(color: Colors.black54,)),
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              title: Text('Settings')
-          )
-        ],
-      ),*/
-
-      // endDrawer: new AppDrawer(),
-      //  body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
-      body:getMarkAttendanceWidgit(),
-      /* floatingActionButton: new FloatingActionButton(
-        backgroundColor: Colors.orange[800],
-        onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => TimeOffPage()),
-          );
-        },
-        tooltip: 'Request TimeOff',
-        child: new Icon(Icons.add),
-      ),*/
+    return RefreshIndicator(
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        endDrawer: new AppDrawer(),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
+        bottomNavigationBar:  new HomeNavigation(),
+        body:getMarkAttendanceWidgit(),
+      ),
+      onRefresh: () async {
+        Completer<Null> completer = new Completer<Null>();
+        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          completer.complete();
+        });
+        return completer.future;
+      },
     );
   }
 

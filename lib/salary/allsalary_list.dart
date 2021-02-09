@@ -1,8 +1,12 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:intl/intl.dart';
+import 'package:month_picker_strip/month_picker_strip.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/home.dart';
 import 'package:ubihrm/model/model.dart';
@@ -30,7 +34,9 @@ class _allSalarySummary extends State<allSalarySummary> {
   bool showtabbar;
   String orgName="";
 
-
+  DateTime selectedMonth;
+  DateTime to;
+  DateTime from;
 
   bool _checkLoaded = true;
   int checkProcessing = 0;
@@ -56,17 +62,24 @@ class _allSalarySummary extends State<allSalarySummary> {
       profile = "",
       latit = "",
       longi = "";
+  String empname = "";
   String lid = "";
   String shiftId = "";
-
-
+  TextEditingController _searchController;
+  FocusNode searchFocusNode;
   TextEditingController client_name,comments;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
   @override
   void initState() {
     client_name = new TextEditingController();
     comments = new TextEditingController();
+    _searchController = new TextEditingController();
+    searchFocusNode = FocusNode();
     super.initState();
+    from = new DateTime.now();
+    selectedMonth = new DateTime(from.year, from.month, 1);
+    print("team's salary");
+    print(selectedMonth);
     initPlatformState();
     getOrgName();
 
@@ -142,14 +155,30 @@ class _allSalarySummary extends State<allSalarySummary> {
   }
 
   getmainhomewidget() {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      endDrawer: new AppDrawer(),
-      appBar: new AllSalaryAppHeader(profileimage,showtabbar,orgName),
-
-      bottomNavigationBar:  new HomeNavigation(),
-      body:getMarkAttendanceWidgit(),
+    return RefreshIndicator(
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        endDrawer: new AppDrawer(),
+        appBar: new AllSalaryAppHeader(profileimage,showtabbar,orgName),
+        bottomNavigationBar:  new HomeNavigation(),
+        body:getMarkAttendanceWidgit(),
+      ),
+      onRefresh: () async {
+        Completer<Null> completer = new Completer<Null>();
+        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          setState(() {
+            _searchController.clear();
+            empname='';
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          });
+          completer.complete();
+        });
+        return completer.future;
+      },
     );
   }
 
@@ -204,12 +233,73 @@ class _allSalarySummary extends State<allSalarySummary> {
             child:Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text("Team's Salary",
-                      style: new TextStyle(fontSize: 22.0, color: appStartColor())),
-                  //SizedBox(height: 10.0),
-
-                  new Divider(height: 2,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Team's Salary", style: new TextStyle(fontSize: 22.0, color: appStartColor())),
+                      Text(" ("+new DateFormat("MMM yyyy").format(selectedMonth)+")",style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),),
+                    ],
+                  ),
                   SizedBox(height: 5.0,),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 5.0,bottom: 5.0),
+                            child: TextFormField(
+                              controller: _searchController,
+                              focusNode: searchFocusNode,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                border: OutlineInputBorder(
+                                  borderRadius:  new BorderRadius.circular(10.0),
+                                ),
+                                prefixIcon: Icon(Icons.search, size: 30,),
+                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                                hintText: 'Search Employee',
+                                suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                                    onPressed: () {
+                                      _searchController.clear();
+                                      empname='';
+                                    }
+                                ):null,
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  print("value");
+                                  print(value);
+                                  empname = value;
+                                  if(value=="")
+                                    empname='';
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top:5.0, bottom:5.0),
+                    child: new MonthStrip(
+                      format: 'MMM yyyy',
+                      from: fiscalStart==null?orgCreatedDate:fiscalStart,
+                      to: selectedMonth,
+                      initialMonth: selectedMonth,
+                      height:  25.0,
+                      viewportFraction: 0.25,
+                      onMonthChanged: (v) {
+                        setState(() {
+                          selectedMonth = v;
+                          print("selectedMonth");
+                          print(selectedMonth);
+                        });
+                      },
+                    ),
+                  ),
+                  new Divider(),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     //crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,7 +351,7 @@ class _allSalarySummary extends State<allSalarySummary> {
                     color: Colors.white,
                     //////////////////////////////////////////////////////////////////////---------------------------------
                     child: new FutureBuilder<List<Salary>>(
-                      future: getSalarySummaryAll(),
+                      future: getSalarySummaryAll(empname, formatter.format(selectedMonth)),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           if(snapshot.data.length>0){
@@ -269,7 +359,6 @@ class _allSalarySummary extends State<allSalarySummary> {
                                 scrollDirection: Axis.vertical,
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (BuildContext context, int index) {
-
                                   return new Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'model/model.dart';
 import 'model/timeinout.dart';
@@ -49,6 +51,7 @@ Map globalyearfiscal;
 //////Copied from  attendance global///////
 List<LocationData> list = new List();
 String globalstreamlocationaddr="Location not fetched";
+bool fakeLocationDetected=false;
 bool stopstreamingstatus = false;
 int department_permission = 0, designation_permission = 0, leave_permission = 0, shift_permission = 0, timeoff_permission = 1,punchlocation_permission = 1, employee_permission = 0, permission_module_permission = 0, report_permission = 0;
 int globalalertcount = 0;
@@ -83,15 +86,24 @@ var perPayrollExpense;
 var perFlexi;
 var deprtcurrency;
 int approval_count=0;
-String appVersion='1.0.9';
+String appVersion='1.1.0';
 String latestVersionReleaseDate='01-Dec-2020';
 String appVersionReleaseDate='02-Feb-2020';
+DateFormat formatter = DateFormat('yyyy-MM-dd');
+DateFormat formatter1 = DateFormat('dd-MM-yyyy');
+DateFormat formatter2 = new DateFormat('d MMM yyyy');
 
-
+const locationChannel = const MethodChannel("update.camera.status");
 bool locationThreadUpdatedLocation=false;
 bool timeSpoofed=false;
 int areaId=0;
-var orgCreatedDate='0000-00-00';
+DateTime orgCreatedDate;
+DateTime fiscalStart;
+DateTime fiscalEnd;
+
+int plansts=0;
+int empcount=0;
+int attcount=0;
 String geoFenceOrgPerm="0";//Geo Fence org permission
 String mailVerifySts="0";//Geo Fence org permission
 String grpCompanySts="0";//Geo Fence org permission
@@ -107,3 +119,10 @@ String globalcity='City Not Fetched';
 String showMailVerificationDialog="false";
 String geoFenceStatus='';//Geofence in or out
 String AbleTomarkAttendance='0';
+String divid='0';
+String deptid='0';
+String desgid='0';
+String locid='0';
+String shiftid='0';
+String gradeid='0';
+final dateFormat = DateFormat("dd-MM-yyyy");

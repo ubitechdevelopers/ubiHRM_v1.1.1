@@ -75,6 +75,7 @@ class _RequestExpenceState extends State<RequestExpence> {
   @override
   void initState() {
     super.initState();
+    _dateController.text = formatter1.format(DateTime.now());
     initPlatformState();
     getOrgName();
   }
@@ -126,21 +127,14 @@ class _RequestExpenceState extends State<RequestExpence> {
           });
         }
       }));
-      //   print("2-"+_checkLoaded.toString());
-      //   latit = prefs.getString('latit') ?? '';
-      //  longi = prefs.getString('longi') ?? '';
       aid = prefs.getString('aid') ?? "";
       shiftId = prefs.getString('shiftId') ?? "";
-      //    print("this is set state "+location_addr1);
-      //    act1=act;
-      //   print(act1);
     });
 //    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // return (response==0) ? new LoginPage() : getmainhomewidget();
     return getmainhomewidget();
   }
 
@@ -159,10 +153,6 @@ class _RequestExpenceState extends State<RequestExpence> {
   }
 
   Future<bool> sendToExpenseList() async{
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );*/
     print("-------> back button pressed");
     Navigator.pushAndRemoveUntil(
       context,
@@ -174,26 +164,40 @@ class _RequestExpenceState extends State<RequestExpence> {
   getmainhomewidget(){
     return WillPopScope(
       onWillPop: ()=> sendToExpenseList(),
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor:scaffoldBackColor(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar:  new HomeNavigation(),
-        endDrawer: new AppDrawer(),
-        // body: (act1=='') ? Center(child : loader()) : checkalreadylogin(),
-        //body:  getExpenseWidgit(),
+      child: RefreshIndicator(
+        child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:  new HomeNavigation(),
+          endDrawer: new AppDrawer(),
           body: ModalProgressHUD(
-              inAsyncCall: isServiceCalling,
-              opacity: 0.15,
-              progressIndicator: SizedBox(
-                child:new CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation(Colors.green),
-                    strokeWidth: 5.0),
-                height: 40.0,
-                width: 40.0,
-              ),
-              child: getExpenseWidgit()
+            inAsyncCall: isServiceCalling,
+            opacity: 0.15,
+            progressIndicator: SizedBox(
+              child:new CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation(Colors.green),
+                  strokeWidth: 5.0),
+              height: 40.0,
+              width: 40.0,
+            ),
+            child: getExpenseWidgit()
           )
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            setState(() {
+              _dateController.clear();
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
 
@@ -325,20 +329,19 @@ class _RequestExpenceState extends State<RequestExpence> {
                                   labelText: 'Date',
                                 ),
                                 validator: (date) {
-                                  if (date==null){
+                                  if (_dateController.text.isEmpty){
                                     return 'Please enter expense date';
                                   }
+                                  return null;
                                 },
                               ),
                             ),
                           ],
                         ),//Enter date
-                  new Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: gethead_DD())]),
-
-
+                        new Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: gethead_DD())]),
                         //   SizedBox(height: 5.0),
                         Row(
                           children: <Widget>[
@@ -363,12 +366,10 @@ class _RequestExpenceState extends State<RequestExpence> {
                                     if (value.isEmpty) {
                                       return 'Please enter description';
                                     }
+                                    return null;
                                   },
-                           onFieldSubmitted: (String value) {
-                           /*if (_formKey.currentState.validate()) {
-
-                            saveExpense (_dateController.text, headtype, _descController.text, amountController.text ,_image,context);
-                                    }*/
+                                  onFieldSubmitted: (String value) {
+                                    if (_formKey.currentState.validate()) {}
                                   },
                                   maxLines: null,
                                 ),
@@ -405,31 +406,13 @@ class _RequestExpenceState extends State<RequestExpence> {
                                   if (value.isEmpty) {
                                     return 'Please enter amount';
                                   }
+                                  return null;
+                                },
+                                onFieldSubmitted: (String value) {
+                                  if (_formKey.currentState.validate()) {}
                                 },
                               ),
                             ),
-
-                         /*   Expanded(
-                              child:Container(
-                                width: 50.0,
-                              child:  TextFormField(
-                                  enabled:false,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black),
-                                decoration: InputDecoration(
-                                    fillColor: Colors.grey[200],
-                                    filled: true,
-                                    border: InputBorder.none,
-                                  hintText: deprtcurrency,
-                                 //   labelText: 'Currency',
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.all(0.0),
-                                       // icon is 48px widget.
-                                    )
-                                ),
-                              )),
-                            ),*/
                           ],
                         ),
 
@@ -507,7 +490,7 @@ class _RequestExpenceState extends State<RequestExpence> {
                               color: Colors.orange[800],
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
-                                  if (headtype == '0') {
+                                  /*if (headtype == '0') {
                                     showDialog(
                                       context: context,
                                       builder: (context) {
@@ -518,16 +501,16 @@ class _RequestExpenceState extends State<RequestExpence> {
                                           content: new Text("Please select headtype"),
                                         );
                                       });
-                                    /*showDialog(context: context, child:
+                                    *//*showDialog(context: context, child:
                                     new AlertDialog(
                                       //title: new Text("Sorry!"),
                                       content: new Text(
                                           "Please select headtype!"),
                                     )
-                                    );*/
-                                  }else {
+                                    );*//*
+                                  }else {*/
                                     saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _file, context);
-                                  }
+                                  //}
                                   //saveExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _image, context);
                                 }
                                 //tempvar="1";
@@ -570,10 +553,8 @@ class _RequestExpenceState extends State<RequestExpence> {
        future: getheadtype(0), //with -select- label
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return new Container(
-              //    width: MediaQuery.of(context).size.width*.45,
-              padding: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
-              child: InputDecorator(
+            return DropdownButtonHideUnderline(
+              child: new DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   labelText: 'Category',
                   prefixIcon: Padding(
@@ -583,46 +564,43 @@ class _RequestExpenceState extends State<RequestExpence> {
                       color: Colors.grey,
                     ), // icon is 48px widget.
                     //child: Icon(const IconData(0xe804, fontFamily: "CustomIcon"),size: 20.0,),
-                    ),
-                  // icon is 48px widget.
-                   ),
-
-                  child:  DropdownButtonHideUnderline(
-                    child: new DropdownButton<String>(
-                    isDense: true,
-                    isExpanded: false,
-                    style: new TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.black
-                    ),
-                    value: headtype,
-                    onChanged: (String newValue) {
-                      setState(() {
-                        headtype =newValue;
-                      });
-                    },
-
-                    items: snapshot.data.map((Map map) {
-                      return new DropdownMenuItem<String>(
-                        value: map["Id"].toString(),
-                        child:  new SizedBox(
-                          //width: MediaQuery.of(context).size.width * 10,
-                            child: new Text(
-                              map["Name"],
-                            )
-                        ),
-                      );
-
-                    }).toList(),
-
-                ),
                   ),
+                  // icon is 48px widget.
+                ),
+                isDense: true,
+                isExpanded: false,
+                style: new TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.black
+                ),
+                value: headtype,
+                onChanged: (String newValue) {
+                  setState(() {
+                    headtype =newValue;
+                  });
+                },
+                items: snapshot.data.map((Map map) {
+                  return new DropdownMenuItem<String>(
+                    value: map["Id"].toString(),
+                    child:  new SizedBox(
+                      //width: MediaQuery.of(context).size.width * 10,
+                        child: new Text(
+                          map["Name"],
+                        )
+                    ),
+                  );
+                }).toList(),
+                validator: (String value) {
+                  if (headtype=='0') {
+                    return 'Please select headtype';
+                  }
+                  return null;
+                },
               ),
             );
           } else if (snapshot.hasError) {
             return new Text("${snapshot.error}");
           }
-          // return loader();
           return new Center(child: SizedBox(
             child: CircularProgressIndicator(strokeWidth: 2.2,),
             height: 20.0,

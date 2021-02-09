@@ -8,6 +8,7 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/model/model.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
 import 'package:ubihrm/timeoff/timeoff_timer.dart';
@@ -271,36 +272,45 @@ class _TimeoffSummary extends State<TimeoffSummary> {
   getmainhomewidget() {
     return WillPopScope(
       onWillPop: ()=> sendToHome(),
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new TimeOffAppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar:  new HomeNavigation(),
-        body: ModalProgressHUD(
-            inAsyncCall: _checkwithdrawntimeoff,
-            opacity: 0.15,
-            progressIndicator: SizedBox(
-              child:new CircularProgressIndicator(
-                  valueColor: new AlwaysStoppedAnimation(Colors.green),
-                  strokeWidth: 5.0),
-              height: 40.0,
-              width: 40.0,
-            ),
-            child: getMarkAttendanceWidgit()
+      child: RefreshIndicator(
+        child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new TimeOffAppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:  new HomeNavigation(),
+          body: ModalProgressHUD(
+              inAsyncCall: _checkwithdrawntimeoff,
+              opacity: 0.15,
+              progressIndicator: SizedBox(
+                child:new CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation(Colors.green),
+                    strokeWidth: 5.0),
+                height: 40.0,
+                width: 40.0,
+              ),
+              child: getMarkAttendanceWidgit()
+          ),
+          //body:getMarkAttendanceWidgit(),
+          floatingActionButton: new FloatingActionButton(
+            backgroundColor: Colors.orange[800],
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TimeOffPage()),
+              );
+            },
+            tooltip: 'Request Time Off',
+            child: new Icon(Icons.add),
+          ),
         ),
-        //body:getMarkAttendanceWidgit(),
-        floatingActionButton: new FloatingActionButton(
-          backgroundColor: Colors.orange[800],
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TimeOffPage()),
-            );
-          },
-          tooltip: 'Request Time Off',
-          child: new Icon(Icons.add),
-        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }
@@ -496,11 +506,12 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                                 child: Padding(
                                                   padding: const EdgeInsets.fromLTRB(0.0,0.0,0.0,0.0),
                                                   child: Container(
-                                                    height: MediaQuery .of(context).size.height * 0.04,
-                                                    //margin: EdgeInsets.only(left:40.0),
-                                                    //padding: EdgeInsets.only(left:40.0),
-                                                    width: MediaQuery .of(context).size.width * 0.11,
-                                                    child: Tooltip(message: 'Start Time Off', child: Icon(Icons.timer, size: 30.0,color:appStartColor(), )),
+                                                    height: 30,
+                                                    width:65,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.orange[800],
+                                                    ),
+                                                    child: Center(child: Text("Start",style: TextStyle(fontSize:15.0,fontWeight:FontWeight.bold,color: Colors.white),)),
                                                   ),
                                                 ),
                                                 onTap: (){
@@ -519,13 +530,14 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                                 child: Padding(
                                                   padding: const EdgeInsets.fromLTRB(0.0,0.0,0.0,0.0),
                                                   child: Container(
-                                                    height: MediaQuery .of(context).size.height * 0.04,
-                                                    //margin: EdgeInsets.only(left:40.0),
-                                                    //padding: EdgeInsets.only(left:40.0),
-                                                    width: MediaQuery .of(context).size.width * 0.11,
-                                                    child: Tooltip(message: 'Stop Time Off', child: Icon(Icons.timer_off, size: 30.0,color:appStartColor(),)),
-                                                  ),
-                                                ),
+                                                    height: 25,
+                                                    width:60,
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.orange[800],
+                                                        border: Border.all(color: Colors.orange[800],width: 1)
+                                                    ),
+                                                    child: Center(child: Text("End",style: TextStyle(fontSize:15.0,fontWeight:FontWeight.bold,color: Colors.white),)),
+                                                  ),),
                                                 onTap: (){
                                                   Navigator.push(
                                                     context,
@@ -567,51 +579,33 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                           ),
                                           //SizedBox(width: 30.0,),
 
-                                          Container(
+                                          snapshot.data[index].TimeFrom.toString()!='-'?Container(
                                             width: MediaQuery.of(context).size.width*.70,
                                             //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                             //margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('Requested Duration: '+snapshot.data[index].TimeFrom.toString()+'-'+snapshot.data[index].TimeTo.toString(), style: TextStyle(color: Colors.black54),),
-                                          ),
+                                            child: Text('Requested Duration: '+snapshot.data[index].TimeFrom.toString()+'-'+snapshot.data[index].TimeTo.toString(), style: TextStyle(fontSize: 12.0,color: Colors.black54),),
+                                          ):Center(),
 
                                           snapshot.data[index].Reason.toString()!='-'?Container(
                                             width: MediaQuery.of(context).size.width*.70,
                                             //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('Reason: '+snapshot.data[index].Reason.toString(),overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.black54, ),),
+                                            child: Text('Reason: '+snapshot.data[index].Reason.toString(),overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.0,color: Colors.black54, ),),
                                           ):Center(),
 
                                           snapshot.data[index].StartTimeFrom.toString()!='-'?Container(
                                             width: MediaQuery.of(context).size.width*.70,
                                             //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            //child: Text('Actual Duration: '+snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(color: Colors.black54),),
-                                            child: Row(
-                                              children: <Widget>[
-                                                snapshot.data[index].StopTimeTo.toString()=='-'?Text('Actual Time Off Start: ', style: TextStyle(color: Colors.black54),):Text('Actual Duration: ', style: TextStyle(color: Colors.black54),),
-                                                RichText(
-                                                    text: TextSpan(
-                                                        children: [
-                                                          snapshot.data[index].StopTimeTo.toString()=='-'?
-                                                          TextSpan(
-                                                              text: snapshot.data[index].StartTimeFrom.toString(), style: TextStyle(color: Colors.black54)
-                                                          ) :
-                                                          TextSpan(
-                                                              text: snapshot.data[index].StartTimeFrom.toString()+'-'+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(color: Colors.black54)
-                                                          )
-                                                        ]
-                                                    )
-                                                ),
-                                              ],
-                                            )
+                                            child: Text(snapshot.data[index].StopTimeTo.toString()=='-'?'Actual Time Off Start: '+snapshot.data[index].StartTimeFrom.toString():'Actual Duration: '+snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString()+" "+snapshot.data[index].hrs.toString(), style: TextStyle(fontSize: 12.0,color: Colors.black54),),
                                           ):Center(),
 
-                                          Container(
+                                          snapshot.data[index].TimeOffSts.toString()!='null'?Container(
                                             width: MediaQuery.of(context).size.width*.90,
                                             //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('Time Off Status: '+snapshot.data[index].TimeOffSts.toString(), style: TextStyle(color: Colors.black54),),
-                                          ),
+                                            child: Text('Time Off Status: '+snapshot.data[index].TimeOffSts.toString(), style: TextStyle(fontSize: 12.0,color: Colors.black54),),
+                                          ):Center(),
 
                                           (snapshot.data[index].ApprovalSts.toString()!='-' && snapshot.data[index].ApprovalSts.toString()!='Withdrawn')?Container(
                                             width: MediaQuery.of(context).size.width*.90,
@@ -620,12 +614,12 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                             child: RichText(
                                               text: new TextSpan(
                                                 style: new TextStyle(
-                                                  fontSize: 14.0,
-                                                  color: Colors.black,
+                                                  fontSize: 13.5,
+                                                  color: Colors.black54,
                                                 ),
                                                 children: <TextSpan>[
-                                                  new TextSpan(text: 'Approval Status: ',style:TextStyle(color: Colors.black54,), ),
-                                                  new TextSpan(text: snapshot.data[index].ApprovalSts.toString(), style: TextStyle(color: snapshot.data[index].ApprovalSts.toString()=='Approved'?appStartColor() :snapshot.data[index].ApprovalSts.toString()=='Rejected' || snapshot.data[index].ApprovalSts.toString()=='Cancel' ?Colors.red:snapshot.data[index].ApprovalSts.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 14.0),),
+                                                  new TextSpan(text: 'Approval Status: ',style:TextStyle(fontSize: 13.5,color: Colors.black54,), ),
+                                                  new TextSpan(text: snapshot.data[index].ApprovalSts.toString(), style: TextStyle(color: snapshot.data[index].ApprovalSts.toString()=='Approved'?appStartColor() :snapshot.data[index].ApprovalSts.toString()=='Rejected' || snapshot.data[index].ApprovalSts.toString()=='Cancel' ?Colors.red:snapshot.data[index].ApprovalSts.toString().startsWith('Pending')?Colors.orange[800]:Colors.blue[600], fontSize: 13.5),),
                                                 ],
                                               ),
                                             ),
@@ -636,6 +630,46 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                             //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                             margin: EdgeInsets.only(top: 3.0),
                                             child: Text('Comment: '+snapshot.data[index].ApproverComment.toString(), style: TextStyle(color: Colors.black54), ),
+                                          ):Center(),
+
+                                          snapshot.data[index].StartLoc.toString()!='-'?Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: InkWell(
+                                                  child: Container(
+                                                    //width: MediaQuery.of(context).size.width*.90,
+                                                    //padding: EdgeInsets.only(top:1.5,bottom: 1.5),
+                                                    margin: EdgeInsets.only(top: 4.0),
+                                                    child: Text('Start Location: '+snapshot.data[index].StartLoc.toString()+'...', style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 12.0),overflow: TextOverflow.ellipsis,maxLines: 1,),
+                                                  ),
+                                                  onTap: () {
+                                                    goToMap(snapshot.data[index].LatIn, snapshot.data[index].LongIn);
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ):Center(),
+
+                                          snapshot.data[index].EndLoc.toString()!='-'?Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: InkWell(
+                                                  child: Container(
+                                                    //width: MediaQuery.of(context).size.width*.90,
+                                                    //padding: EdgeInsets.only(top:1.5,bottom: 1.5),
+                                                    margin: EdgeInsets.only(top: 4.0),
+                                                    child: Text('End Location: '+snapshot.data[index].EndLoc.toString(), style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 12.0),overflow: TextOverflow.ellipsis,maxLines: 1,),
+                                                  ),
+                                                  onTap: () {
+                                                    goToMap(snapshot.data[index].LatOut , snapshot.data[index].LongOut);
+                                                  },
+                                                ),
+                                              ),
+                                            ],
                                           ):Center(),
 
                                           Divider(color: Colors.black54,),

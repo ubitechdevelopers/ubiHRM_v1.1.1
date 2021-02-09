@@ -1,6 +1,8 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/drawer.dart';
@@ -86,13 +88,30 @@ class _changePassword extends State<changePassword> {
   }
 
   getmainhomewidget(){
-    return Scaffold(
-      backgroundColor:scaffoldBackColor(),
-      key: _scaffoldKey,
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
-      bottomNavigationBar: new HomeNavigation(),
-      endDrawer: new AppDrawer(),
-      body:  mainbodyWidget(),
+    return RefreshIndicator(
+      child: Scaffold(
+        backgroundColor:scaffoldBackColor(),
+        key: _scaffoldKey,
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
+        bottomNavigationBar: new HomeNavigation(),
+        endDrawer: new AppDrawer(),
+        body:  mainbodyWidget(),
+      ),
+      onRefresh: () async {
+        Completer<Null> completer = new Completer<Null>();
+        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          setState(() {
+            _newPass.clear();
+            _oldPass.clear();
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          });
+          completer.complete();
+        });
+        return completer.future;
+      },
     );
 
   }
@@ -238,6 +257,11 @@ class _changePassword extends State<changePassword> {
                                     //FocusScope.of(context).requestFocus(__newPass);
                                     return 'Password must be at least 6 characters';
                                   }
+
+                                  Pattern pattern = r'^[a-zA-Z0-9]+$';
+                                  RegExp regex = new RegExp(pattern);
+                                  if (!regex.hasMatch(value))
+                                    return 'Password should not contain \nany special characters';
                                 },
                               ),
                             ),

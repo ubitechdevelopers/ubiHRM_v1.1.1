@@ -1,9 +1,14 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:month_picker_strip/month_picker_strip.dart';
 import 'package:rounded_modal/rounded_modal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
 
 import '../appbar.dart';
@@ -20,6 +25,11 @@ class TeamTimeoffSummary extends StatefulWidget {
 
 class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  DateTime selectedMonth;
+  DateTime to;
+  DateTime from;
+
   var profileimage;
   bool showtabbar;
   String orgName="";
@@ -63,6 +73,10 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
     comments = new TextEditingController();
     _searchController = new TextEditingController();
     searchFocusNode = FocusNode();
+    from = new DateTime.now();
+    selectedMonth = new DateTime(from.year, from.month, 1);
+    print("team's time off");
+    print(selectedMonth);
     super.initState();
     initPlatformState();
     getOrgName();
@@ -134,7 +148,8 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
   }
   getmainhomewidget() {
     return new WillPopScope(
-        onWillPop: ()=> sendToHome(),
+      onWillPop: ()=> sendToHome(),
+      child: RefreshIndicator(
         child: Scaffold(
           key: _scaffoldKey,
           backgroundColor:scaffoldBackColor(),
@@ -142,7 +157,23 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
           appBar: new AppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:  new HomeNavigation(),
           body:getMarkAttendanceWidgit(),
-        )
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            setState(() {
+              _searchController.clear();
+              empname='';
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return completer.future;
+        },
+      )
     );
   }
 
@@ -296,9 +327,13 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                   ),
                   Container(
                     padding: EdgeInsets.only(top:12.0),
-                    child:Center(
-                      child:Text("Team's Time Off",
-                        style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Team's Time Off",
+                            style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                        Text(" ("+new DateFormat("MMM yyyy").format(selectedMonth)+")",style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),),
+                      ],
                     ),
                   ),
                   Container(
@@ -338,12 +373,35 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                       ),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(top:5.0, bottom:5.0),
+                    child: new MonthStrip(
+                      format: 'MMM yyyy',
+                      from: fiscalStart==null?orgCreatedDate:fiscalStart,
+                      to: selectedMonth,
+                      initialMonth: selectedMonth,
+                      height:  25.0,
+                      viewportFraction: 0.25,
+                      onMonthChanged: (v) {
+                        setState(() {
+                          selectedMonth = v;
+                          if (v != null && v.toString()!='') {
+                            res=true;
+                          } else {
+                            res=false;
+                          }
+                          print(selectedMonth);
+                        });
+                      },
+                    ),
+                  ),
+                  new Divider(),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-//            crossAxisAlignment: CrossAxisAlignment.start,
+                    //crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(height: 20.0,),
-                      //     SizedBox(width: MediaQuery.of(context).size.width*0.02),
+                      //SizedBox(width: MediaQuery.of(context).size.width*0.02),
                       new Expanded(
                         child:  Container(
                           width: MediaQuery.of(context).size.width*0.50,
@@ -369,7 +427,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child:new FutureBuilder<List<TIMEOFFA>>(
-                        future: getTeamTimeoffapproval(empname),
+                        future: getTeamTimeoffapproval(empname,formatter.format(selectedMonth)),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if(snapshot.data.length>0) {
@@ -422,7 +480,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                             width: MediaQuery.of(context).size.width*.90,
                                             //padding: EdgeInsets.only(top:1.5,bottom: .5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('TimeOff Date: '+snapshot.data[index].TimeofDate.toString(), style: TextStyle(color: Colors.black54),),
+                                            child: Text('TimeOff Date: '+snapshot.data[index].TimeofDate.toString(), style: TextStyle(color: Colors.black54,fontSize: 12.0),),
                                           ),
 
                                           new Row(
@@ -436,7 +494,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
-                                                        new Text("Requested Duration: "+snapshot.data[index].Fdate.toString()+" to "+snapshot.data[index].Tdate.toString(),style: TextStyle(color: Colors.grey[600]),)
+                                                        new Text("Requested Duration: "+snapshot.data[index].Fdate.toString()+" to "+snapshot.data[index].Tdate.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 12.0),)
                                                       ],
                                                     )
                                                 ),
@@ -477,7 +535,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                             width: MediaQuery.of(context).size.width*.90,
                                             //padding: EdgeInsets.only(top:1.5,bottom: .5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('Reason: '+snapshot.data[index].Reason.toString(),overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black54),),
+                                            child: Text('Reason: '+snapshot.data[index].Reason.toString(),overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.black54,fontSize: 12.0),),
                                           ):Center(),
 
                                           snapshot.data[index].StartTimeFrom.toString()!='-'?Container(
@@ -487,16 +545,16 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                               //child: Text('Actual Duration: '+snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(color: Colors.black54),),
                                               child: Row(
                                                 children: <Widget>[
-                                                  Text('Actual Duration: ', style: TextStyle(color: Colors.black54),),
+                                                  Text('Actual Duration: ', style: TextStyle(color: Colors.black54,fontSize: 12.0),),
                                                   RichText(
                                                       text: TextSpan(
                                                           children: [
                                                             snapshot.data[index].StopTimeTo.toString()=='-'?
                                                             TextSpan(
-                                                                text: snapshot.data[index].StartTimeFrom.toString(), style: TextStyle(color: Colors.black54)
+                                                                text: snapshot.data[index].StartTimeFrom.toString(), style: TextStyle(color: Colors.black54,fontSize: 13.5)
                                                             ):
                                                             TextSpan(
-                                                                text: snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(color: Colors.black54)
+                                                                text: snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(color: Colors.black54,fontSize: 13.5)
                                                             )
                                                           ]
                                                       )
@@ -509,7 +567,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                             width: MediaQuery.of(context).size.width*.90,
                                             //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('TimeOff Status: '+snapshot.data[index].TimeOffSts.toString(), style: TextStyle(color: Colors.black54),),
+                                            child: Text('TimeOff Status: '+snapshot.data[index].TimeOffSts.toString(), style: TextStyle(color: Colors.black54,fontSize: 12.0),),
                                           ),
 
                                           (snapshot.data[index].Timeoffsts.toString()!='Pending' && snapshot.data[index].TimeOffSts.toString()!='Withdrawn') ?Container(
@@ -525,8 +583,8 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                                   color: Colors.black,
                                                 ),
                                                 children: <TextSpan>[
-                                                  new TextSpan(text: 'Approval Status: ',style:TextStyle(color: Colors.black54,), ),
-                                                  new TextSpan(text: snapshot.data[index].Timeoffsts.toString(), style: TextStyle(color: snapshot.data[index].Timeoffsts.toString()=='Approved'?appStartColor() :snapshot.data[index].Timeoffsts.toString()=='Rejected' || snapshot.data[index].Timeoffsts.toString()=='Cancel' ?Colors.red:Colors.blue[600], fontSize: 14.0),),
+                                                  new TextSpan(text: 'Approval Status: ',style:TextStyle(color: Colors.black54,fontSize: 13.5), ),
+                                                  new TextSpan(text: snapshot.data[index].Timeoffsts.toString(), style: TextStyle(color: snapshot.data[index].Timeoffsts.toString()=='Approved'?appStartColor() :snapshot.data[index].Timeoffsts.toString()=='Rejected' || snapshot.data[index].Timeoffsts.toString()=='Cancel' ?Colors.red:Colors.blue[600], fontSize: 13.5),),
                                                 ],
                                               ),
                                             ),
@@ -544,8 +602,8 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                                   color: Colors.black,
                                                 ),
                                                 children: <TextSpan>[
-                                                  new TextSpan(text: 'Approval Status: ',style:TextStyle(color: Colors.black54,), ),
-                                                  new TextSpan(text: snapshot.data[index].Psts.toString(), style: TextStyle(color: Colors.orange[800], fontSize: 14.0),),
+                                                  new TextSpan(text: 'Approval Status: ',style:TextStyle(color: Colors.black54,fontSize: 13.5), ),
+                                                  new TextSpan(text: snapshot.data[index].Psts.toString(), style: TextStyle(color: Colors.orange[800],fontSize: 13.5),),
                                                 ],
                                               ),
                                             ),
@@ -555,9 +613,48 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                             width: MediaQuery.of(context).size.width*.90,
                                             //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                             margin: EdgeInsets.only(top: 3.0),
-                                            child: Text('Comment: '+snapshot.data[index].ApproverComment.toString(), style: TextStyle(color: Colors.black54), ),
+                                            child: Text('Comment: '+snapshot.data[index].ApproverComment.toString(), style: TextStyle(color: Colors.black54,fontSize: 12.0), ),
                                           ):Center(),
 
+                                          snapshot.data[index].StartLoc.toString()!='-'?Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: InkWell(
+                                                  child: Container(
+                                                    //width: MediaQuery.of(context).size.width*.90,
+                                                    //padding: EdgeInsets.only(top:1.5,bottom: 1.5),
+                                                    margin: EdgeInsets.only(top: 4.0),
+                                                    child: Text('Start Location: '+snapshot.data[index].StartLoc.toString()+'...', style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 12.0),overflow: TextOverflow.ellipsis,maxLines: 1,),
+                                                  ),
+                                                  onTap: () {
+                                                    goToMap(snapshot.data[index].LatIn, snapshot.data[index].LongIn);
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ):Center(),
+
+                                          snapshot.data[index].EndLoc.toString()!='-'?Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: InkWell(
+                                                  child: Container(
+                                                    //width: MediaQuery.of(context).size.width*.90,
+                                                    //padding: EdgeInsets.only(top:1.5,bottom: 1.5),
+                                                    margin: EdgeInsets.only(top: 4.0),
+                                                    child: Text('End Location: '+snapshot.data[index].EndLoc.toString(), style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 12.0),overflow: TextOverflow.ellipsis,maxLines: 1,),
+                                                  ),
+                                                  onTap: () {
+                                                    goToMap(snapshot.data[index].LatOut , snapshot.data[index].LongOut);
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ):Center(),
                                           Divider(color: Colors.black54,),
                                         ] );
                                   }

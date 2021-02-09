@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -89,13 +91,22 @@ class _AllReports extends State<AllReports> {
   getmainhomewidget() {
     return WillPopScope(
       onWillPop: ()=> sendToHome(),
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar:  new HomeNavigation(),
-        body:getReportsWidget(),
+      child: RefreshIndicator(
+        child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:  new HomeNavigation(),
+          body:getReportsWidget(),
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }

@@ -340,7 +340,7 @@ Future<List<Payroll>> getPayrollSummary() async{
 }
 
 
-Future<List<Payroll>> getPayrollSummaryAll(String empname) async{
+Future<List<Payroll>> getPayrollSummaryAll(String empname, String month) async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
   String organization = prefs.getString('organization') ?? '';
@@ -350,8 +350,8 @@ Future<List<Payroll>> getPayrollSummaryAll(String empname) async{
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
   try {
-    print(path+"getPayrollSummary?all=all&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
-    Response response = await dio.post(path+"getPayrollSummary?all=all&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+    print(path+"getPayrollSummary?all=all&month=$month&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+    Response response = await dio.post(path+"getPayrollSummary?all=all&month=$month&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
     List responseJson = json.decode(response.data.toString());
 
     List<Payroll> userList = createPayrollList(responseJson,empname);

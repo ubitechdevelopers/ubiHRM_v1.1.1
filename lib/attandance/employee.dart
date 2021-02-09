@@ -1,6 +1,8 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_strip/month_picker_strip.dart';
@@ -85,13 +87,31 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar,orgName),
-      endDrawer: new AppDrawer(),
-      bottomNavigationBar: HomeNavigation(),
-      body: getReportsWidget(),
+    return RefreshIndicator(
+      child: new Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        appBar: new AppHeader(profileimage, showtabbar,orgName),
+        endDrawer: new AppDrawer(),
+        bottomNavigationBar: HomeNavigation(),
+        body: getReportsWidget(),
+      ),
+      onRefresh: () async {
+        Completer<Null> completer = new Completer<Null>();
+        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          //today.clear();
+          setState(() {
+            _searchController.clear();
+            empname='';
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          });
+          completer.complete();
+        });
+        return completer.future;
+      },
     );
   }
 
@@ -174,10 +194,10 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                     Row(
                         children: <Widget>[
                           //SizedBox(height: 25.0,),
-                          Container(
+                          empname.isEmpty?Container(
                             padding: EdgeInsets.only(left: 20.0, top:4),
                             child: Text("Total Employees: ${countE}",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold,fontSize: 16.0,),),
-                          ),
+                          ):Center(),
 
                           /*SizedBox(width: 40,),
                     Padding(
@@ -300,10 +320,10 @@ class _Employee_list extends State<Employee_list> with SingleTickerProviderState
                     )*/
                         ]
                     ),
-                    SizedBox(height: 5.0,)
+                    empname.isEmpty?SizedBox(height: 5.0,):Center()
                   ],
                 ),
-                new Divider(height: 1.0,),
+                empname.isEmpty?new Divider(height: 1.0,):Center(),
                 res==true?new Container(
                     height: MediaQuery.of(context).size.height*.50,
                     child: new Container(

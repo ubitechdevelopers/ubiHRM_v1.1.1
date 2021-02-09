@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/attandance/employee.dart';
@@ -29,7 +31,7 @@ class _Reports extends State<Reports> {
   String admin_sts = "0";
   var profileimage;
   bool showtabbar;
-  DateTime orgCreatedDate;
+  //DateTime orgCreatedDate;
   String orgName="";
   Future<DateTime> _listFuture;
 
@@ -39,7 +41,7 @@ class _Reports extends State<Reports> {
     showtabbar =false;
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     getOrgName();
-    setAlldata();
+    //setAlldata();
   }
 
   getOrgName() async{
@@ -50,14 +52,14 @@ class _Reports extends State<Reports> {
     });
   }
 
-  setAlldata() async{
+  /*setAlldata() async{
     _listFuture = getOrgCreatedDate();
     _listFuture.then((data) async{
       setState(() {
         orgCreatedDate = data;
       });
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -75,13 +77,22 @@ class _Reports extends State<Reports> {
   getmainhomewidget(){
     return WillPopScope(
       onWillPop: ()=> sendToAllReportsList(),
-      child: new Scaffold(
-        key: _scaffoldKey,
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar: HomeNavigation(),
-        body:getReportsWidget(),
+      child: RefreshIndicator(
+        child: new Scaffold(
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar: HomeNavigation(),
+          body:getReportsWidget(),
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }

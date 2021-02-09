@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,143 +50,160 @@ class _Holiday extends State<Holiday> {
 
 
   getmainhomewidget() {
-    return new Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddHoliday()),
-          );
-        },
-        tooltip: 'Add Holiday',
-        child: Icon(Icons.add),
-        backgroundColor: Colors.orange[800],
-      ),
-      backgroundColor: scaffoldBackColor(),
-      key: _scaffoldKey,
-      appBar: AppHeader(profileimage,showtabbar,orgName),
-      bottomNavigationBar: new HomeNavigation(),
-      endDrawer: new AppDrawer(),
-      body: Container(
-        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        decoration: new ShapeDecoration(
-          shape: new RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(20.0)),
-          color: Colors.white,
+    return RefreshIndicator(
+      child: new Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddHoliday()),
+            );
+          },
+          tooltip: 'Add Holiday',
+          child: Icon(Icons.add),
+          backgroundColor: Colors.orange[800],
         ),
+        backgroundColor: scaffoldBackColor(),
+        key: _scaffoldKey,
+        appBar: AppHeader(profileimage,showtabbar,orgName),
+        bottomNavigationBar: new HomeNavigation(),
+        endDrawer: new AppDrawer(),
+        body: Container(
+          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+          decoration: new ShapeDecoration(
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(20.0)),
+            color: Colors.white,
+          ),
 
-        child: Column(
-          children: <Widget>[
-            Center(
-              child: Text(
-                'Holidays',
-                style: new TextStyle(
-                  fontSize: 22.0,
-                  color: appStartColor(),
+          child: Column(
+            children: <Widget>[
+              Center(
+                child: Text(
+                  'Holidays',
+                  style: new TextStyle(
+                    fontSize: 22.0,
+                    color: appStartColor(),
+                  ),
                 ),
               ),
-            ),
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _searchController,
-                  focusNode: searchFocusNode,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderRadius:  new BorderRadius.circular(10.0),
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _searchController,
+                    focusNode: searchFocusNode,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderRadius:  new BorderRadius.circular(10.0),
+                      ),
+                      prefixIcon: Icon(Icons.search, size: 30,),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      hintText: 'Search Holiday',
+                      //labelText: 'Search Holiday',
+                      suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Holiday()),
+                            );
+                          }
+                      ):null,
+                      //focusColor: Colors.white,
                     ),
-                    prefixIcon: Icon(Icons.search, size: 30,),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    hintText: 'Search Holiday',
-                    //labelText: 'Search Holiday',
-                    suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Holiday()),
-                          );
-                        }
-                    ):null,
-                    //focusColor: Colors.white,
+                    onChanged: (value) {
+                      setState(() {
+                        holiday = value;
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      holiday = value;
-                    });
-                  },
                 ),
               ),
-            ),
-            //Divider(),
-            //SizedBox(height: 5.0),
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
-                    child: Container(
-                      child: Text(
-                        'Name',
-                        style: TextStyle(
-                            color: appStartColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0),
+              //Divider(),
+              //SizedBox(height: 5.0),
+              Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: Container(
+                        child: Text(
+                          'Name',
+                          style: TextStyle(
+                              color: appStartColor(),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0),
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
-                    child: Container(
-                      child: Text(
-                        'From',
-                        style: TextStyle(
-                            color: appStartColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: Container(
+                        child: Text(
+                          'From',
+                          style: TextStyle(
+                              color: appStartColor(),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0),
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0), //15
-                    child: Container(
-                      child: Text(
-                        'To',
-                        style: TextStyle(
-                            color: appStartColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0), //15
+                      child: Container(
+                        child: Text(
+                          'To',
+                          style: TextStyle(
+                              color: appStartColor(),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0),
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5.0), //20
-                    child: Container(
-                      child: Text(
-                        'Days',
-                        style: TextStyle(
-                            color: appStartColor(),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5.0), //20
+                      child: Container(
+                        child: Text(
+                          'Days',
+                          style: TextStyle(
+                              color: appStartColor(),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Divider(),
-            new Expanded(
-              child: getHolidayWidget(),
-            ),
-          ],
+              Divider(),
+              new Expanded(
+                child: getHolidayWidget(),
+              ),
+            ],
+          ),
         ),
       ),
+      onRefresh: () async {
+        Completer<Null> completer = new Completer<Null>();
+        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          setState(() {
+            _searchController.clear();
+            holiday='';
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          });
+          completer.complete();
+        });
+        return completer.future;
+      },
     );
   }
 

@@ -122,6 +122,7 @@ class Team {
   String Id;
   String FirstName; // timein or timeout
   String LastName;
+  String Name;
   String Designation;
   String DOB;
   String Nationality;
@@ -133,7 +134,7 @@ class Team {
   List<dynamic> superjuniorlist;
   List<dynamic> ultrasuperjuniorlist;
 
-  Team({this.Id, this.FirstName, this.LastName, this.Designation, this.DOB, this.Nationality, this.BloodGroup, this.CompanyEmail, this.ProfilePic, this.ParentId, this.juniorlist, this.superjuniorlist, this.ultrasuperjuniorlist});
+  Team({this.Id, this.FirstName, this.LastName, this.Name, this.Designation, this.DOB, this.Nationality, this.BloodGroup, this.CompanyEmail, this.ProfilePic, this.ParentId, this.juniorlist, this.superjuniorlist, this.ultrasuperjuniorlist});
 }
 
 
@@ -209,11 +210,17 @@ class TimeOff {
   String Reason;
   String ApprovalSts;
   String ApproverComment;
+  String StartLoc;
+  String LatIn;
+  String LongIn;
+  String EndLoc;
+  String LatOut;
+  String LongOut;
   bool withdrawlsts;
   bool starticonsts;
   bool stopiconsts;
 
-  TimeOff({this.EmpId,this.OrgId,this.TimeOffId,this.TimeofDate,this.TimeFrom,this.TimeTo,this.StartTimeFrom,this.StopTimeTo,this.TimeOffSts,this.hrs,this.Reason,this.ApprovalSts,this.ApproverComment,this.withdrawlsts,this.starticonsts,this.stopiconsts});
+  TimeOff({this.EmpId,this.OrgId,this.TimeOffId,this.TimeofDate,this.TimeFrom,this.TimeTo,this.StartTimeFrom,this.StopTimeTo,this.TimeOffSts,this.hrs,this.Reason,this.ApprovalSts,this.ApproverComment,this.StartLoc,this.LatIn,this.LongIn,this.EndLoc,this.LatOut,this.LongOut,this.withdrawlsts,this.starticonsts,this.stopiconsts});
 }
 
 

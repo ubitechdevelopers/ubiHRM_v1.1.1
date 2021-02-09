@@ -27,6 +27,7 @@ Future<List<Salary>> getsalarySummary() async{
   final prefs = await SharedPreferences.getInstance();
   String organization = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
+  String empname = "";
   try {
     FormData formData = new FormData.from({
       "employeeid": empid,
@@ -37,7 +38,7 @@ Future<List<Salary>> getsalarySummary() async{
         data: formData);
     List responseJson = json.decode(response.data.toString());
 
-    List<Salary> userList = createsalaryList(responseJson);
+    List<Salary> userList = createsalaryList(responseJson,empname);
 
     return userList;
 
@@ -47,7 +48,7 @@ Future<List<Salary>> getsalarySummary() async{
 }
 
 
-Future<List<Salary>> getSalarySummaryAll() async{
+Future<List<Salary>> getSalarySummaryAll(String empname, String month) async{
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
   String organization = prefs.getString('organization') ?? '';
@@ -57,16 +58,11 @@ Future<List<Salary>> getSalarySummaryAll() async{
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
   try {
-    /*FormData formData = new FormData.from({
-      "employeeid": empid,
-      "organization": organization,
-    });*/
-    print(path+"getSalarysummary?all=all&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
-    Response response = await dio.post(path+"getSalarysummary?all=all&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
-
+    print(path+"getSalarysummary?all=all&month=$month&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+    Response response = await dio.post(path+"getSalarysummary?all=all&month=$month&employeeid=$empid&organization=$organization&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
     List responseJson = json.decode(response.data.toString());
 
-    List<Salary> userList = createsalaryList(responseJson);
+    List<Salary> userList = createsalaryList(responseJson,empname);
 
     return userList;
 
@@ -75,20 +71,46 @@ Future<List<Salary>> getSalarySummaryAll() async{
   }
 }
 
-List<Salary> createsalaryList(List data){
+List<Salary> createsalaryList(List data, String empname){
 
   List<Salary> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String id = data[i]["Id"];
-    String name=data[i]["name"];
-    String PaidDays=data[i]["PaidDays"];
-    String SalaryMonth=data[i]["SalaryMonth"];
-    String EmployeeCTC=data[i]["EmployeeCTC"];
-    String Currency=data[i]["currency"];
+  if(empname.isNotEmpty) {
+    for (int i = 0; i < data.length; i++) {
+      String id = data[i]["Id"];
+      String name = data[i]["name"];
+      String PaidDays = data[i]["PaidDays"];
+      String SalaryMonth = data[i]["SalaryMonth"];
+      String EmployeeCTC = data[i]["EmployeeCTC"];
+      String Currency = data[i]["currency"];
 
-    Salary salary = new Salary(id:id,name:name,paid_days:PaidDays,month:SalaryMonth,EmployeeCTC:EmployeeCTC,Currency:Currency);
+      Salary salary = new Salary(id: id,
+          name: name,
+          paid_days: PaidDays,
+          month: SalaryMonth,
+          EmployeeCTC: EmployeeCTC,
+          Currency: Currency);
 
-    list.add(salary);
+      if (name.toLowerCase().contains(empname.toLowerCase()))
+        list.add(salary);
+    }
+  }else {
+    for (int i = 0; i < data.length; i++) {
+      String id = data[i]["Id"];
+      String name = data[i]["name"];
+      String PaidDays = data[i]["PaidDays"];
+      String SalaryMonth = data[i]["SalaryMonth"];
+      String EmployeeCTC = data[i]["EmployeeCTC"];
+      String Currency = data[i]["currency"];
+
+      Salary salary = new Salary(id: id,
+          name: name,
+          paid_days: PaidDays,
+          month: SalaryMonth,
+          EmployeeCTC: EmployeeCTC,
+          Currency: Currency);
+
+      list.add(salary);
+    }
   }
   return list;
 }

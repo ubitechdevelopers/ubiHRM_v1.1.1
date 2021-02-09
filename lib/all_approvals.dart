@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,13 +92,22 @@ class _AllApprovals extends State<AllApprovals> {
   getmainhomewidget() {
     return WillPopScope(
       onWillPop: ()=> sendToHome(),
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar: new HomeNavigation(),
-        body:getReportsWidget(),
+      child: RefreshIndicator(
+        child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar: new HomeNavigation(),
+          body:getReportsWidget(),
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }
@@ -145,8 +156,7 @@ class _AllApprovals extends State<AllApprovals> {
                 children: <Widget>[
                   Text('Approvals',
                       style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center),
-                  perLeaveApproval=='1' ?SizedBox(height: 16.0):Center(),
-                  perLeaveApproval=='1' ?
+                  SizedBox(height: 16.0),
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -180,10 +190,9 @@ class _AllApprovals extends State<AllApprovals> {
                         MaterialPageRoute(builder: (context) => TabbedApp()),
                       );
                     },
-                  ): Center(),
+                  ),
 
-                  perTimeoffApproval=='1' ?SizedBox(height: 6.0):Center(),
-                  perTimeoffApproval=='1' ?
+                  SizedBox(height: 6.0),
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -218,10 +227,10 @@ class _AllApprovals extends State<AllApprovals> {
                         MaterialPageRoute(builder: (context) => TimeOffApp()),
                       );
                     },
-                  ):Center(),
+                  ),
 
-                  perSalaryExpenseApproval=='1' ?SizedBox(height: 6.0):Center(),
-                  perSalaryExpenseApproval=='1' ?
+                  perSalary=='1' ?SizedBox(height: 6.0):Center(),
+                  perSalary=='1' ?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -257,8 +266,8 @@ class _AllApprovals extends State<AllApprovals> {
                     },
                   ): Center(),
 
-                  perPayrollExpenseApproval=='1' ?SizedBox(height: 6.0):Center(),
-                  perPayrollExpenseApproval=='1' ?
+                  perPayroll=='1' ?SizedBox(height: 6.0):Center(),
+                  perPayroll=='1' ?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -294,7 +303,7 @@ class _AllApprovals extends State<AllApprovals> {
                     },
                   ): Center(),
 
-                  (perLeaveApproval!='1' &&  perTimeoffApproval!='1' && perSalaryExpenseApproval!='1' && perPayrollExpenseApproval!='1') ?new Center(
+                  /*(perLeaveApproval!='1' &&  perTimeoffApproval!='1' && perSalaryExpenseApproval!='1' && perPayrollExpenseApproval!='1') ?new Center(
                     child: Padding(
                       padding: EdgeInsets.only(top:100.0),
                       child: Container(
@@ -304,7 +313,7 @@ class _AllApprovals extends State<AllApprovals> {
                         child:Text("No Approvals found for you",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
                       ),
                     ),
-                  ) : Center()
+                  ) : Center()*/
 
                 ]
             )

@@ -107,15 +107,30 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
   Widget build(BuildContext context) {
     return new WillPopScope(
       onWillPop: ()=> sendToHome(),
-      child: new Scaffold(
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar:new HomeNavigation(),
-        body: getWidgets(context),
+      child: RefreshIndicator(
+        child: new Scaffold(
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:new HomeNavigation(),
+          body: getWidgets(context),
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            setState(() {
+              today.clear();
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
-
   }
 
   /////////////

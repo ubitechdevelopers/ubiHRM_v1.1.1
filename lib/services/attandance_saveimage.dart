@@ -372,8 +372,8 @@ class SaveImage{
             "empid": empid,
             "visit_id": visit_id,
             "addr": addr,
-            "latit": latit,
-            "longi": longi,
+            "latit": lat,
+            "longi": long,
             "refid": refid,
             "file": new UploadFileInfo(imagei, "image.png"),
           });
@@ -401,8 +401,8 @@ class SaveImage{
           "empid": empid,
           "visit_id": visit_id,
           "addr": addr,
-          "latit": latit,
-          "longi": longi,
+          "latit": lat,
+          "longi": long,
           "refid": refid,
         });
         print("Flexi time out without image");

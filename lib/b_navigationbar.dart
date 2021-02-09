@@ -32,15 +32,19 @@ class HomeNavigation extends StatefulWidget {
 // Home Page state
 class _BootomNavigationState extends State<HomeNavigation> {
   int _currentIndex = 0;
+  int adminsts=0;
+  int hrsts=0;
+  int divhrsts=0;
   String empid;
   String organization;
   Employee emp;
   var PerLeave;
   var PerApprovalLeave;
   String userprofileid;
+  //int empcount=0;
+  //int plansts=0;
+
   @override
-
-
   void initState() {
     super.initState();
     initPlatformState();
@@ -51,34 +55,26 @@ class _BootomNavigationState extends State<HomeNavigation> {
     empid = prefs.getString('employeeid') ?? "";
     organization = prefs.getString('organization') ?? "";
     userprofileid = prefs.getString('userprofileid') ?? "";
-    // PerLeave =prefs.getString('PerLeave')??"";
-    // PerApprovalLeave =prefs.getString('PerApprovalLeave')??"";
-    //  print("22222222222"+perA);
-    // print("22222222222"+PerApprovalLeave);
+    hrsts = prefs.getInt('hrsts')??0;
+    adminsts = prefs.getInt('adminsts')??0;
+    divhrsts = prefs.getInt('divhrsts')??0;
+    plansts = prefs.getInt('plansts');
+    empcount = prefs.getInt('empcount');
 
     emp = new Employee(employeeid: empid,
         organization: organization,
         userprofileid: userprofileid);
-    //getAllPermission(emp);
 
-    //await getCountAproval();
     getCountAproval().then((res) {
-      setState(() {
-        approval_count = res;
-      });
+      if(mounted) {
+        setState(() {
+          approval_count = res;
+        });
+      }
     });
-    /*if(mounted){
-      setState(() {
-        approval_count = prefs.getInt('approvalcount') ?? 0;
-      });
-    }*/
     print('------>123');
     print(approval_count);
     print('------>123');
-    //  PLeave= "1";
-    //  emp = new Employee(employeeid: empid, organization: organization);
-    //setState(() {
-    // });
   }
 
   Widget build(BuildContext context) {
@@ -100,7 +96,7 @@ class _BootomNavigationState extends State<HomeNavigation> {
               title: new Text('Reports', style: TextStyle(color: Colors.white)),
             ),*/
 
-          /*   BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
               /*  icon:  new Image.asset("assets/approval.png",
                       height: 40.0,
                       width: 35.0),*/
@@ -120,7 +116,6 @@ class _BootomNavigationState extends State<HomeNavigation> {
             icon: new Stack(
               children: <Widget>[
                 new Icon(Icons.check_circle_outline,color: Colors.white,),
-
                 new Positioned(
                     right: 0,
                     top:0,
@@ -130,7 +125,7 @@ class _BootomNavigationState extends State<HomeNavigation> {
                       decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.red,
-                        //            borderRadius: BorderRadius.circular(6),
+                        //borderRadius: BorderRadius.circular(6),
                       ),
                       constraints: BoxConstraints(
                         minWidth: 12,
@@ -174,12 +169,11 @@ class _BootomNavigationState extends State<HomeNavigation> {
                   size: 25.0 ),
               title: Text('Settings',style: TextStyle(color: Colors.white))),
         ],
-        //onTap: (){},
+
         currentIndex: _currentIndex,
         onTap: (newIndex) {
           if (newIndex == 0) {
-            (perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1') ?
-            //    (perLeaveApproval=='1') ?
+            ((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0)))?null:(perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1')?
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AllApprovals()),
@@ -188,7 +182,7 @@ class _BootomNavigationState extends State<HomeNavigation> {
               MaterialPageRoute(builder: (context) => CollapsingTab()),
             );
             return;
-          } else if  (newIndex == 1) {
+          } else if (newIndex == 1) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => HomePageMain()),
@@ -197,37 +191,13 @@ class _BootomNavigationState extends State<HomeNavigation> {
           }
 
           if (newIndex == 2) {
-            Navigator.push(
+            ((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0)))?null:Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AllSetting()),
             );
             return;
           }
 
-          if (newIndex == 3) {
-            /*Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TabbedApp()),
-              );
-              return;*/
-          }else if (newIndex == 0) {
-            /* Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TabbedApp()),
-            );*/
-
-            /* (admin_sts == '1')
-                  ? Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Reports()),
-              )
-                  : Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );*/
-
-            // return;
-          }
           setState(() {
             _currentIndex = newIndex;
           });

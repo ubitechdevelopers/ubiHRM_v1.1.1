@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -241,36 +243,44 @@ class _MyLeaveState extends State<MyLeave> {
   Widget mainScafoldWidget(){
     return  WillPopScope(
       onWillPop: ()=> sendToHome(),
-      child: Scaffold(
-          backgroundColor:scaffoldBackColor(),
-          endDrawer: new AppDrawer(),
-          appBar: new LeaveAppHeader(profileimage,showtabbar,orgName),
-          bottomNavigationBar:new HomeNavigation(),
-          body:  ModalProgressHUD(
-            inAsyncCall: _checkwithdrawnleave,
-            opacity: 0.15,
-            progressIndicator: SizedBox(
-              child:new CircularProgressIndicator(
-                  valueColor: new AlwaysStoppedAnimation(Colors.green),
-                  strokeWidth: 5.0),
-              height: 40.0,
-              width: 40.0,
+      child: RefreshIndicator(
+        child: Scaffold(
+            backgroundColor:scaffoldBackColor(),
+            endDrawer: new AppDrawer(),
+            appBar: new LeaveAppHeader(profileimage,showtabbar,orgName),
+            bottomNavigationBar:new HomeNavigation(),
+            body:  ModalProgressHUD(
+              inAsyncCall: _checkwithdrawnleave,
+              opacity: 0.15,
+              progressIndicator: SizedBox(
+                child:new CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation(Colors.green),
+                    strokeWidth: 5.0),
+                height: 40.0,
+                width: 40.0,
+              ),
+              child: homewidget()
             ),
-            child: homewidget()
-          ),
-          //body: homewidget(),
-           floatingActionButton: new FloatingActionButton(
-            backgroundColor: Colors.orange[800],
-            onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RequestLeave()),
-              );
-            },
-            tooltip: 'Request Leave',
-            child: new Icon(Icons.add),
-          ),
-
+            //body: homewidget(),
+             floatingActionButton: new FloatingActionButton(
+              backgroundColor: Colors.orange[800],
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RequestLeave()),
+                );
+              },
+              tooltip: 'Request Leave',
+              child: new Icon(Icons.add),
+            ),
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }

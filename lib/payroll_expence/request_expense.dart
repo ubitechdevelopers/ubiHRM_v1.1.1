@@ -75,6 +75,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
   @override
   void initState() {
     super.initState();
+    _dateController.text = formatter1.format(DateTime.now());
     initPlatformState();
     getOrgName();
   }
@@ -174,7 +175,8 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
   getmainhomewidget(){
     return WillPopScope(
       onWillPop: ()=> sendToExpenseList(),
-      child: Scaffold(
+      child: RefreshIndicator(
+        child: Scaffold(
           key: _scaffoldKey,
           backgroundColor:scaffoldBackColor(),
           appBar: new AppHeader(profileimage,showtabbar,orgName),
@@ -183,21 +185,36 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
           // body: (act1=='') ? Center(child : loader()) : checkalreadylogin(),
           //body:  getExpenseWidgit(),
           body: ModalProgressHUD(
-              inAsyncCall: isServiceCalling,
-              opacity: 0.15,
-              progressIndicator: SizedBox(
-                child:new CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation(Colors.green),
-                    strokeWidth: 5.0),
-                height: 40.0,
-                width: 40.0,
-              ),
-              child: getExpenseWidgit()
+            inAsyncCall: isServiceCalling,
+            opacity: 0.15,
+            progressIndicator: SizedBox(
+              child:new CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation(Colors.green),
+                  strokeWidth: 5.0),
+              height: 40.0,
+              width: 40.0,
+            ),
+            child: getExpenseWidgit()
           )
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            setState(() {
+              _dateController.clear();
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
-
   }
+
   checkalreadylogin(){
     //   if(response==1) {
     return new IndexedStack(
@@ -215,6 +232,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
       );
     } */
   }
+
   loader(){
     return new Container(
       child: Center(
@@ -227,6 +245,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
       ),
     );
   }
+
   underdevelopment(){
     return new Container(
       child: Center(
@@ -238,30 +257,6 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
       ),
     );
   }
-
-/*
-  mainbodyWidget() {
-    return SafeArea(
-      child: ListView(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(height: 15.0),
-              getTimeoffWidgit(),
-              //getMarkAttendanceWidgit(),
-            ],
-          ),
-
-
-        ],
-      ),
-
-    );
-  }
-  */
-
-
 
   Widget getExpenseWidgit() {
     return Stack(
@@ -276,7 +271,6 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                 borderRadius: new BorderRadius.circular(20.0)),
             color: Colors.white,
           ),
-
           child:Form(
             key: _formKey,
             child: SafeArea(
@@ -294,10 +288,8 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                         SizedBox(height: 5.0),
                         Row(
                           children: <Widget>[
-                            //     SizedBox(height: MediaQuery.of(context).size.height * .01),
-
+                            //SizedBox(height: MediaQuery.of(context).size.height * .01),
                             new Expanded(
-
                               child:  DateTimeField(
                                 //firstDate: new DateTime.now(),
                                 //initialDate: new DateTime.now(),
@@ -321,25 +313,27 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                                       color: Colors.grey,
                                     ), // icon is 48px widget.
                                   ), // icon is 48px widget.
-
                                   labelText: 'Date',
                                 ),
                                 validator: (date) {
-                                  if (date==null){
+                                  if (_dateController.text.isEmpty){
                                     return 'Please enter expense date';
                                   }
+                                  return null;
+                                },
+                                onFieldSubmitted: (value) {
+                                  if (_formKey.currentState.validate()) {}
                                 },
                               ),
                             ),
                           ],
                         ),//Enter date
                         new Row(
-                            children: <Widget>[
-                              Expanded(
-                                  child: gethead_DD())]),
-
-
-                        //   SizedBox(height: 5.0),
+                          children: <Widget>[
+                            Expanded(child: gethead_DD())
+                          ]
+                        ),
+                        //SizedBox(height: 5.0),
                         Row(
                           children: <Widget>[
                             Expanded(
@@ -363,12 +357,10 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                                     if (value.isEmpty) {
                                       return 'Please enter description';
                                     }
+                                    return null;
                                   },
                                   onFieldSubmitted: (String value) {
-                                    /*if (_formKey.currentState.validate()) {
-
-                            saveExpense (_dateController.text, headtype, _descController.text, amountController.text ,_image,context);
-                                    }*/
+                                    if (_formKey.currentState.validate()) {}
                                   },
                                   maxLines: null,
                                 ),
@@ -405,80 +397,20 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                                   if (value.isEmpty) {
                                     return 'Please enter amount';
                                   }
+                                  return null;
+                                },
+                                onFieldSubmitted: (String value) {
+                                  if (_formKey.currentState.validate()) {}
                                 },
                               ),
                             ),
-
-                            /*   Expanded(
-                              child:Container(
-                                width: 50.0,
-                              child:  TextFormField(
-                                  enabled:false,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black),
-                                decoration: InputDecoration(
-                                    fillColor: Colors.grey[200],
-                                    filled: true,
-                                    border: InputBorder.none,
-                                  hintText: deprtcurrency,
-                                 //   labelText: 'Currency',
-                                    prefixIcon: Padding(
-                                      padding: EdgeInsets.all(0.0),
-                                       // icon is 48px widget.
-                                    )
-                                ),
-                              )),
-                            ),*/
                           ],
                         ),
 
                         SizedBox(height: 20.0),
-
-
-                        /* Container(
-                          //width: MediaQuery.of(context).size.width*0.9,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              MaterialButton(
-                                child: FlatButton.icon(
-                                  //color: Colors.red,
-                                  icon: Padding(
-                                    padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
-                                    child: Icon(Icons.file_upload,color:_image!=null ? Colors.green[500]:Colors.grey[500],),
-                                  ), //`Icon` to display
-                                  label: Container(
-                                    padding: EdgeInsets.fromLTRB(4.0, 0.0, 0.0, 10.0),
-                                    //margin: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
-                                    child:showImage(_image),), //`Text` to display
-                                  onPressed: () async {
-                                    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                    print("---------------------------->>>>>>>>>>>"+image.toString());
-                                    //  ExpenseDoc=image;
-                                    setState(() {
-                                      _image = image;
-                                    });
-                                  },
-                                  splashColor: Colors.grey,
-                                ),
-                                shape: UnderlineInputBorder(),
-                                minWidth: 371,
-                                //height: 40,
-                              ),
-
-                            ],
-                          ),
-                        ),
-*/
                         new Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              /*new Icon(
-                                  Icons.file_upload,
-                                  color: Colors.grey,
-                                ),*/
-
                               Flexible(
                                 child: Container(
                                   width: MediaQuery.of(context).size.width*0.90,
@@ -558,14 +490,7 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                               color: Colors.orange[800],
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
-                                  if (headtype == '0') {
-                                    /*showDialog(context: context, child:
-                                    new AlertDialog(
-                                      content: new Text(
-                                          "Please select headtype!"),
-                                    )
-                                    );*/
-
+                                  /*if (headtype == '0') {
                                     showDialog(
                                       context: context,
                                       builder: (context) {
@@ -576,9 +501,9 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                                           content: new Text("Please select headtype"),
                                         );
                                       });
-                                  }else {
+                                  }else {*/
                                     savePayrollExpense(_dateController.text, headtype, _descController.text.trim(), amountController.text.trim(), _file, context);
-                                  }
+                                  //}
                                 }
                               },
                             ),
@@ -595,10 +520,8 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
                             ),
                           ],
                         ),
-
                       ],
                     ),
-
                   ],
                 ),),],
               ),),),
@@ -611,70 +534,66 @@ class _RequestPayrollExpenseState extends State<RequestPayrollExpense> {
   Widget gethead_DD() {
     String dc = "0";
     return new FutureBuilder<List<Map>>(
-        future: getpayrollheadtype(0), //with -select- label
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return new Container(
-              //    width: MediaQuery.of(context).size.width*.45,
-              padding: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
-              child: InputDecorator(
-                decoration: InputDecoration(
-                  labelText: 'Category',
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: Icon(
-                      Icons.account_balance_wallet,
-                      color: Colors.grey,
-                    ), // icon is 48px widget.
-                    //child: Icon(const IconData(0xe804, fontFamily: "CustomIcon"),size: 20.0,),
-                  ),
-                  // icon is 48px widget.
-                ),
-
-                child:  DropdownButtonHideUnderline(
-                  child: new DropdownButton<String>(
-                    isDense: true,
-                    isExpanded: false,
-                    style: new TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.black
-                    ),
-                    value: headtype,
-                    onChanged: (String newValue) {
-                      setState(() {
-                        headtype =newValue;
-                      });
-                    },
-
-                    items: snapshot.data.map((Map map) {
-                      return new DropdownMenuItem<String>(
-                        value: map["Id"].toString(),
-                        child:  new SizedBox(
-                          //width: MediaQuery.of(context).size.width * 10,
-                            child: new Text(
-                              map["Name"],
-                            )
-                        ),
-                      );
-
-                    }).toList(),
-
-                  ),
-                ),
+    future: getpayrollheadtype(0), //with -select- label
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        return DropdownButtonHideUnderline(
+          child: new DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              labelText: 'Category',
+              prefixIcon: Padding(
+                padding: EdgeInsets.all(1.0),
+                child: Icon(
+                  Icons.account_balance_wallet,
+                  color: Colors.grey,
+                ), // icon is 48px widget.
+                //child: Icon(const IconData(0xe804, fontFamily: "CustomIcon"),size: 20.0,),
               ),
-            );
-          }
-          else if (snapshot.hasError)
-          {
-            return new Text("${snapshot.error}");
-          }
-          // return loader();
-          return new Center(child: SizedBox(
-            child: CircularProgressIndicator(strokeWidth: 2.2,),
-            height: 20.0,
-            width: 20.0,
-          ),);
-        });
+              // icon is 48px widget.
+            ),
+            isDense: true,
+            isExpanded: false,
+            style: new TextStyle(
+                fontSize: 15.0,
+                color: Colors.black
+            ),
+            value: headtype,
+            onChanged: (String newValue) {
+              setState(() {
+                headtype =newValue;
+              });
+            },
+            items: snapshot.data.map((Map map) {
+              return new DropdownMenuItem<String>(
+                value: map["Id"].toString(),
+                child:  new SizedBox(
+                  //width: MediaQuery.of(context).size.width * 10,
+                    child: new Text(
+                      map["Name"],
+                    )
+                ),
+              );
+            }).toList(),
+            validator: (String value) {
+              if (headtype=='0') {
+                return 'Please select headtype';
+              }
+              return null;
+            },
+          ),
+        );
+      }
+      else if (snapshot.hasError)
+      {
+        return new Text("${snapshot.error}");
+      }
+      // return loader();
+      return new Center(child: SizedBox(
+        child: CircularProgressIndicator(strokeWidth: 2.2,),
+        height: 20.0,
+        width: 20.0,
+      ),);
+    });
   }
 
 

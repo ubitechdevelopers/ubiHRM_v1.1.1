@@ -1,6 +1,8 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:async';
+
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -92,13 +94,22 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      appBar: new AppHeader(profileimage, showtabbar,orgName),
-      endDrawer: new AppDrawer(),
-      bottomNavigationBar: HomeNavigation(),
-      body: getReportsWidget(),
+    return RefreshIndicator(
+      child: new Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        appBar: new AppHeader(profileimage, showtabbar,orgName),
+        endDrawer: new AppDrawer(),
+        bottomNavigationBar: HomeNavigation(),
+        body: getReportsWidget(),
+      ),
+      onRefresh: () async {
+        Completer<Null> completer = new Completer<Null>();
+        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          completer.complete();
+        });
+        return completer.future;
+      },
     );
   }
 

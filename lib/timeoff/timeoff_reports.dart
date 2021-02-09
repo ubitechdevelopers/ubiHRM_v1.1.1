@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -63,22 +65,26 @@ class _TimeoffReports extends State<TimeoffReports> {
   }
 
   getmainhomewidget(){
-    //  print('99999999999999' + _orgName.toString());
     return WillPopScope(
       onWillPop: ()=> sendToAllReportsList(),
-      child: new Scaffold(
-        key: _scaffoldKey,
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
-
-        bottomNavigationBar: HomeNavigation(),
-
-        body:getReportsWidget(),
-
+      child: RefreshIndicator(
+        child: new Scaffold(
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar: HomeNavigation(),
+          body:getReportsWidget(),
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
-
   }
 
 

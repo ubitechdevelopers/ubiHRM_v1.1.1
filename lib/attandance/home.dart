@@ -29,7 +29,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
   static const platform = const MethodChannel('location.spoofing.check');
   StreamLocation sl = new StreamLocation();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -52,6 +52,10 @@ class _HomePageState extends State<HomePage> {
   String act1 = "";
   String act2 = "";
   int alertdialogcount = 0;
+  int adminsts = 0;
+  int hrsts = 0;
+  int divhrsts = 0;
+
   Timer timer;
   Timer timer1;
   int response;
@@ -77,12 +81,12 @@ class _HomePageState extends State<HomePage> {
   List<Widget> widgets;
   String orgName="";
   int approval_count;
-  bool fakeLocationDetected = false;
   String address = "";
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     initPlatformState();
     getOrgName();
     platform.setMethodCallHandler(_handleMethod);
@@ -95,8 +99,6 @@ class _HomePageState extends State<HomePage> {
     print('areaSts=="0"');
     print(areaSts=="0");
     print(areaSts);
-    //setLocationAddress();
-    //startTimer();
   }
 
   getOrgName() async{
@@ -104,7 +106,54 @@ class _HomePageState extends State<HomePage> {
     if(mounted) {
       setState(() {
         orgName = prefs.getString('orgname') ?? '';
+        adminsts = prefs.getInt('adminsts') ?? 0;
+        hrsts = prefs.getInt('hrsts')??0;
+        divhrsts = prefs.getInt('divhrsts')??0;
       });
+    }
+  }
+
+  Future<dynamic> _handleMethod(MethodCall call) async {
+    switch (call.method) {
+      case "locationAndInternet":
+        locationThreadUpdatedLocation = true;
+        var long = call.arguments["longitude"].toString();
+        var lat = call.arguments["latitude"].toString();
+        assign_lat = double.parse(lat);
+        assign_long = double.parse(long);
+        address = await getAddressFromLati(lat, long);
+        globalstreamlocationaddr = address;
+        print(call.arguments["mocked"].toString());
+
+        getAreaStatus().then((res) {
+          print('home dot dart');
+          if (mounted) {
+            setState(() {
+              areaSts = res.toString();
+              print('response'+res.toString());
+              if (assignedAreaIds.isNotEmpty && perGeoFence=="1") {
+                AbleTomarkAttendance = areaSts;
+              }
+            });
+          }
+        }).catchError((onError) {
+          print('Exception occurred in calling function.......');
+          print(onError);
+        });
+
+        setState(() {
+          if (call.arguments["mocked"].toString() == "Yes") {
+            fakeLocationDetected = true;
+          } else {
+            fakeLocationDetected = false;
+          }
+          if (call.arguments["TimeSpoofed"].toString() == "Yes") {
+            timeSpoofed = true;
+          }
+        });
+        break;
+
+        return new Future.value("");
     }
   }
 
@@ -150,6 +199,17 @@ class _HomePageState extends State<HomePage> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
+    print("Attendance home initplatformstate");
+    appResumedPausedLogic();
+    locationChannel.invokeMethod("openLocationDialog");
+
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      if (mounted)
+        setState(() {
+          locationThreadUpdatedLocation = locationThreadUpdatedLocation;
+        });
+    });
+
     final prefs = await SharedPreferences.getInstance();
     empid = prefs.getString('empid') ?? '';
     orgdir = prefs.getString('orgdir') ?? '';
@@ -165,6 +225,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     await getProfileInfo(emp ,context);
+    await getCountAproval();
     getAreaStatus().then((res) {
       print('attendance/home dot dart');
       if (mounted) {
@@ -183,102 +244,67 @@ class _HomePageState extends State<HomePage> {
     //Loc lock = new Loc();
     //location_addr = await lock.initPlatformState();
     //print(location_addr);
-
-    Home ho = new Home();
-    act = await ho.checkTimeIn(empid, orgdir);
-    print(act);
-    ho.managePermission(empid, orgdir, desinationId);
-    await getCountAproval();
-    if(mounted) {
-      setState(() {
-        newpwd = prefs.getString('newpwd') ?? "";
-        userpwd = prefs.getString('usrpwd') ?? "";
-        location_addr1 = location_addr;
-        admin_sts = prefs.getString('sstatus').toString() ?? '0';
-        mail_varified = prefs.getString('mail_varified').toString() ?? '0';
-        alertdialogcount = globalalertcount;
-        response = prefs.getInt('response') ?? 0;
-        fname = prefs.getString('fname') ?? '';
-        lname = prefs.getString('lname') ?? '';
-        empid = prefs.getString('empid') ?? '';
-        email = prefs.getString('email') ?? '';
-        status = prefs.getString('status') ?? '';
-        orgid = prefs.getString('orgid') ?? '';
-        orgdir = prefs.getString('orgdir') ?? '';
-        org_name = prefs.getString('org_name') ?? '';
-        desination = prefs.getString('desination') ?? '';
-        Otimests = prefs.getString('Otimests') ?? '';
-        profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
-        profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
-          if (mounted) {
-            setState(() {
-              _checkLoaded = false;
-            });
-          }
-        }));
-        showtabbar = false;
-        latit = prefs.getString('latit') ?? '';
-        longi = prefs.getString('longi') ?? '';
-        aid = prefs.getString('aid') ?? "";
-        shiftId = prefs.getString('shiftId') ?? "";
-        act1 = act;
-        streamlocationaddr = globalstreamlocationaddr;
-        print("globalstreamlocationaddr");
-        print(globalstreamlocationaddr);
-        perPunchLocation = getModulePermission("305", "view");
-      });
+    if (response == 1) {
+      Home ho = new Home();
+      act = await ho.checkTimeIn(empid, orgdir);
+      print(act);
+      ho.managePermission(empid, orgdir, desinationId);
+      if (mounted) {
+        setState(() {
+          newpwd = prefs.getString('newpwd') ?? "";
+          userpwd = prefs.getString('usrpwd') ?? "";
+          location_addr1 = location_addr;
+          admin_sts = prefs.getString('sstatus').toString() ?? '0';
+          mail_varified = prefs.getString('mail_varified').toString() ?? '0';
+          alertdialogcount = globalalertcount;
+          response = prefs.getInt('response') ?? 0;
+          fname = prefs.getString('fname') ?? '';
+          lname = prefs.getString('lname') ?? '';
+          empid = prefs.getString('empid') ?? '';
+          email = prefs.getString('email') ?? '';
+          status = prefs.getString('status') ?? '';
+          orgid = prefs.getString('orgid') ?? '';
+          orgdir = prefs.getString('orgdir') ?? '';
+          org_name = prefs.getString('org_name') ?? '';
+          desination = prefs.getString('desination') ?? '';
+          Otimests = prefs.getString('Otimests') ?? '';
+          profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
+          profileimage.resolve(new ImageConfiguration()).addListener(
+            new ImageStreamListener((_, __) {
+              if (mounted) {
+                setState(() {
+                  _checkLoaded = false;
+                });
+              }
+            }));
+          showtabbar = false;
+          latit = prefs.getString('latit') ?? '';
+          longi = prefs.getString('longi') ?? '';
+          aid = prefs.getString('aid') ?? "";
+          shiftId = prefs.getString('shiftId') ?? "";
+          act1 = act;
+          setaddress();
+          /*streamlocationaddr = globalstreamlocationaddr;
+          print("globalstreamlocationaddr");
+          print(globalstreamlocationaddr);
+          perPunchLocation = getModulePermission("305", "view");*/
+        });
+      }
     }
-    //}
+  }
+
+  setaddress() async {
+    globalstreamlocationaddr = await getAddressFromLati(assign_lat.toString(),assign_long.toString());
+    var serverConnected = await checkConnectionToServer();
+    if (serverConnected != 0) if (assign_lat == 0.0 || assign_lat == null || !locationThreadUpdatedLocation) {
+      locationChannel.invokeMethod("openLocationDialog");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     (mail_varified=='0' && alertdialogcount==0 && admin_sts=='1')?Future.delayed(Duration.zero, () => _showAlert(context)):"";
     return getmainhomewidget();
-  }
-
-  Future<dynamic> _handleMethod(MethodCall call) async {
-    switch (call.method) {
-      case "locationAndInternet":
-        locationThreadUpdatedLocation = true;
-        var long = call.arguments["longitude"].toString();
-        var lat = call.arguments["latitude"].toString();
-        assign_lat = double.parse(lat);
-        assign_long = double.parse(long);
-        address = await getAddressFromLati(lat, long);
-        globalstreamlocationaddr = address;
-        print(call.arguments["mocked"].toString());
-
-        getAreaStatus().then((res) {
-          print('home dot dart');
-          if (mounted) {
-            setState(() {
-              areaSts = res.toString();
-              print('response'+res.toString());
-              if (assignedAreaIds.isNotEmpty && perGeoFence=="1") {
-                AbleTomarkAttendance = areaSts;
-              }
-            });
-          }
-        }).catchError((onError) {
-          print('Exception occured in clling function.......');
-          print(onError);
-        });
-
-        setState(() {
-          if (call.arguments["mocked"].toString() == "Yes") {
-            fakeLocationDetected = true;
-          } else {
-            fakeLocationDetected = false;
-          }
-          if (call.arguments["TimeSpoofed"].toString() == "Yes") {
-            timeSpoofed = true;
-          }
-        });
-        break;
-
-        return new Future.value("");
-    }
   }
 
   Future<bool> sendToHome() async{
@@ -291,14 +317,23 @@ class _HomePageState extends State<HomePage> {
 
   getmainhomewidget() {
     return new WillPopScope(
-        onWillPop: () => sendToHome(),
+      onWillPop: () => sendToHome(),
+      child: RefreshIndicator(
         child: Scaffold(
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new AttendanceHomeAppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:new HomeNavigation(),
           body: (act1 == '') ? Center(child: loader()) : checkalreadylogin(),
-        )
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
+      )
     );
   }
 
@@ -308,7 +343,7 @@ class _HomePageState extends State<HomePage> {
         index: _currentIndex,
         children: <Widget>[
           underdevelopment(),
-          (streamlocationaddr != '') ? mainbodyWidget() : refreshPageWidgit(),
+          (globalstreamlocationaddr.isNotEmpty || globalstreamlocationaddr!="Location not fetched") ? mainbodyWidget() : refreshPageWidgit(),
           underdevelopment()
         ],
       );
@@ -322,7 +357,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   refreshPageWidgit() {
-    if (location_addr1 != "PermissionStatus.deniedNeverAsk") {
+    //if (location_addr1 != "PermissionStatus.deniedNeverAsk") {
+    if (globalstreamlocationaddr.isNotEmpty) {
       return new Container(
         child: Center(
           child: new Column(
@@ -386,6 +422,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   /*startTimer();
                   sl.startStreaming(5);*/
+                  locationChannel.invokeMethod("startAssistant");
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => HomePage()),
@@ -411,7 +448,6 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ]);
-
     }
   }
 
@@ -477,6 +513,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   /*sl.startStreaming(5);
                   startTimer();*/
+                  locationChannel.invokeMethod("startAssistant");
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => HomePage()),
@@ -527,10 +564,14 @@ class _HomePageState extends State<HomePage> {
                     ]),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
-                  Text("Hi " + globalpersnalinfomap['FirstName'], style: new TextStyle(fontSize: 16.0)),
+                  Text(globalpersnalinfomap['FirstName'].toUpperCase(), style: new TextStyle(
+                    color: Colors.black87,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 3.0,
+                  ),textAlign: TextAlign.center,),
                   SizedBox(height: MediaQuery.of(context).size.height*.02),
                   (act1 == '') ? loader() : getMarkAttendanceWidgit(),
-
                 ],
               ),
             ),
@@ -548,7 +589,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              getwidget(location_addr1),
+              getwidget(globalstreamlocationaddr),
             ]),
       );
     }
@@ -606,7 +647,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   getwidget(String addrloc) {
-    if (addrloc != "PermissionStatus.deniedNeverAsk") {
+    if (addrloc != "Location not fetched") {
       return Column(children: [
         ButtonTheme(
           minWidth: 120.0,
@@ -619,13 +660,33 @@ class _HomePageState extends State<HomePage> {
             height: MediaQuery.of(context).size.height * .20,
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               FlatButton(
-                child: new Text('You are at: ' + streamlocationaddr,
+                child: new Text(
+                    globalstreamlocationaddr != null
+                        ? 'You are at: ' + globalstreamlocationaddr
+                        : "Location could not be fetched",
                     textAlign: TextAlign.center,
                     style: new TextStyle(fontSize: 14.0)),
                 onPressed: () {
                   launchMap(lat, long);
                 },
               ),
+              if (fakeLocationDetected)
+                Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    color: Color(0xfffc6203),
+                    //  border: Border(left: 1.0,right: 1.0,top: 1.0,bottom: 1.0),
+                  ),
+                  child: Text(
+                    'Fake Location',
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.orange[800],
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 1.0),
+                  ),
+                )
+              else
               (assignedAreaIds.isNotEmpty && perGeoFence=="1")?areaSts=="0"
                   ? Container(
                 padding:
@@ -668,6 +729,7 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         /*startTimer();
                         sl.startStreaming(5);*/
+                        locationChannel.invokeMethod("startAssistant");
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => HomePage()),
@@ -720,7 +782,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ]);
     }
-    return Container(width: 0.0, height: 0.0);
   }
 
   getTimeInOutButton() {
@@ -746,7 +807,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   saveImage() async {
-
     if(perGeoFence=="1") {
       if (areaSts=="0") {
         if(assignedAreaIds.isEmpty){
@@ -770,14 +830,6 @@ class _HomePageState extends State<HomePage> {
                 content: new Text("You Can't punch Attendance Outside Geofence."),
               );
             });
-          /*await showDialog(
-            context: context,
-            // ignore: deprecated_member_use
-            child: new AlertDialog(
-              //title: new Text("Warning!"),
-              content: new Text(
-                  "You Can't punch Attendance Outside Geofence."),
-            ));*/
           return null;
         }
 
@@ -786,10 +838,8 @@ class _HomePageState extends State<HomePage> {
         print('geoFenceStatus--->>>>'+geoFenceStatus);
       }
     }
-    print('geoFenceStatus---->>>>'+geoFenceStatus);
 
-    //sl.startStreaming(5);
-    if(globalcompanyinfomap['Department']==''){
+    if(globalcompanyinfomap['Department']==''||globalcompanyinfomap['Department']=='null'){
       await showDialog(
         context: context,
         builder: (context) {
@@ -800,16 +850,9 @@ class _HomePageState extends State<HomePage> {
             content: new Text("Department has not been assigned."),
           );
         });
-      /*await showDialog(
-          context: context,
-          // ignore: deprecated_member_use
-          child: new AlertDialog(
-            //title: new Text("Warning!"),
-            content: new Text("Department has not been assigned."),
-          ));*/
       return null;
     }
-    if(globalcompanyinfomap['Designation']==''){
+    if(globalcompanyinfomap['Designation']==''||globalcompanyinfomap['Designation']=='null'){
       await showDialog(
           context: context,
           builder: (context) {
@@ -819,17 +862,11 @@ class _HomePageState extends State<HomePage> {
             return AlertDialog(
               content: new Text("Designation has not been assigned."),
             );
-          });/*showDialog(
-          context: context,
-          // ignore: deprecated_member_use
-          child: new AlertDialog(
-            //title: new Text("Warning!"),
-            content: new Text("Designation has not been assigned."),
-          ));*/
+          });
       return null;
     }
 
-    if(globalcompanyinfomap['Shift']==''){
+    if(globalcompanyinfomap['Shift']==''||globalcompanyinfomap['Shift']=='null'){
       await showDialog(
           context: context,
           builder: (context) {
@@ -839,17 +876,11 @@ class _HomePageState extends State<HomePage> {
             return AlertDialog(
               content: new Text("Shift has not been assigned."),
             );
-          });/*showDialog(
-          context: context,
-          // ignore: deprecated_member_use
-          child: new AlertDialog(
-            //title: new Text("Warning!"),
-            content: new Text("Shift has not been assigned."),
-          ));*/
+          });
       return null;
     }
 
-    MarkTime mk = new MarkTime(empid, streamlocationaddr, aid, act1, shiftId, orgdir, lat, long);
+    MarkTime mk = new MarkTime(empid, globalstreamlocationaddr, aid, act1, shiftId, orgdir, lat, long);
     var connectivityResult = await (new Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       SaveImage saveImage = new SaveImage();
@@ -864,27 +895,48 @@ class _HomePageState extends State<HomePage> {
         print("issave");
         print(issave);
         if (issave) {
+          final prefs = await SharedPreferences.getInstance();
+          plansts = prefs.getInt('plansts');
+          empcount = prefs.getInt('empcount');
+          attcount = prefs.getInt('attcount');
+
+          Employee emp = new Employee(
+            employeeid: empid,
+            organization: orgid,
+          );
+
+          await getProfileInfo(emp, context);
+
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyApp()),
           );
-          showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
+
+          ((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==1))?showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Your attendance marked successfully, kindly ask your employees to punch Attendance."),
+                );
+              }):showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("Attendance marked successfully"),
+                );
               });
-              return AlertDialog(
-                content: new Text("Attendance marked successfully"),
-              );
-            });
           /*showDialog(context: context, barrierDismissible: true, child:
             new AlertDialog(
               content: new Text("Attendance marked successfully!"),
             )
           );
           await new Future.delayed(const Duration(seconds: 2));*/
-
           setState(() {
             act1 = act;
           });

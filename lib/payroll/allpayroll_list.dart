@@ -1,8 +1,12 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:intl/intl.dart';
+import 'package:month_picker_strip/month_picker_strip.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
@@ -23,6 +27,11 @@ class allPayrollSummary extends StatefulWidget {
 
 class _allPayrollSummary extends State<allPayrollSummary> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  DateTime selectedMonth;
+  DateTime to;
+  DateTime from;
+  String payPeriodStart='';
+  String payPeriodEnd='';
   var profileimage;
   bool showtabbar;
   String orgName="";
@@ -62,6 +71,10 @@ class _allPayrollSummary extends State<allPayrollSummary> {
     _searchController = new TextEditingController();
     searchFocusNode = FocusNode();
     super.initState();
+    from = new DateTime.now();
+    selectedMonth = new DateTime(from.year, from.month, 1);
+    print("team's payroll");
+    print(selectedMonth);
     initPlatformState();
     getOrgName();
   }
@@ -115,13 +128,23 @@ class _allPayrollSummary extends State<allPayrollSummary> {
   }
 
   getmainhomewidget() {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      endDrawer: new AppDrawer(),
-      appBar: new AllPayrollAppHeader(profileimage,showtabbar,orgName),
-      bottomNavigationBar:  new HomeNavigation(),
-      body:getMarkAttendanceWidgit(),
+    return RefreshIndicator(
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        endDrawer: new AppDrawer(),
+        appBar: new AllPayrollAppHeader(profileimage,showtabbar,orgName),
+        bottomNavigationBar:  new HomeNavigation(),
+        body:getMarkAttendanceWidgit(),
+      ),
+      onRefresh: () async {
+        Completer<Null> completer = new Completer<Null>();
+        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          //_searchController.clear();
+          completer.complete();
+        });
+        return completer.future;
+      },
     );
   }
 
@@ -142,12 +165,26 @@ class _allPayrollSummary extends State<allPayrollSummary> {
             child:Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text("Team's Payroll",
-                      style: new TextStyle(fontSize: 22.0, color: appStartColor())),
-                  //SizedBox(height: 10.0),
-                  //new Divider(color: Colors.black54,height: 1.5,),
-                  //new Divider(height: 2,),
+                  Center(child:Text("Team's Payroll", style: new TextStyle(fontSize: 22.0, color: appStartColor())),),
                   SizedBox(height: 5.0,),
+                  Padding(
+                    padding: const EdgeInsets.only(top:5.0, bottom:5.0),
+                    child: new MonthStrip(
+                      format: 'MMM yyyy',
+                      from: fiscalStart==null?orgCreatedDate:fiscalStart,
+                      to: selectedMonth,
+                      initialMonth: selectedMonth,
+                      height:  25.0,
+                      viewportFraction: 0.25,
+                      onMonthChanged: (v) {
+                        setState(() {
+                          selectedMonth = v;
+                          print("selectedMonth");
+                          print(selectedMonth);
+                        });
+                      },
+                    ),
+                  ),
                   Row(
                     children: <Widget>[
                       Expanded(
@@ -188,6 +225,17 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                       ),
                     ],
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(top:8.0, bottom:8.0),
+                    child: Center(
+                      child:perPayroll=='1'?
+                      Text(new DateFormat("MMM yyyy").format(selectedMonth),style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),):
+                      payPeriodStart.isNotEmpty?
+                      Text(payPeriodStart+" - "+payPeriodEnd,style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),):
+                      Center()
+                    ),
+                  ),
+                  new Divider(),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     //crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +252,7 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                         child:  Container(
                           width: MediaQuery.of(context).size.width*0.25,
                           margin: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                          child:Text('Month',style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
+                          child:Text(perPayroll=='1'?'Month':'Pay Period',style: TextStyle(color: Colors.orange[800],fontWeight:FontWeight.bold,fontSize: 16.0),),
                         ),
                       ),
                       //    SizedBox(height: 50.0,),
@@ -234,7 +282,7 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<Payroll>>(
-                        future: getPayrollSummaryAll(empname),
+                        future: getPayrollSummaryAll(empname, formatter.format(selectedMonth)),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if(snapshot.data.length>0){
@@ -242,7 +290,14 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                                   scrollDirection: Axis.vertical,
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (BuildContext context, int index) {
-
+                                    //DateTime payPeriodStart=DateTime.parse(snapshot.data[index].startdate);
+                                    //DateTime payPeriodEnd=DateTime.parse(snapshot.data[index].enddate);
+                                    payPeriodStart=snapshot.data[index].startdate.toString();
+                                    print("payPeriodStart");
+                                    print(payPeriodStart);
+                                    payPeriodEnd=snapshot.data[index].enddate.toString();
+                                    print("payPeriodEnd");
+                                    print(payPeriodEnd);
                                     return new Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
@@ -316,15 +371,24 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                                         ]);
                                   }
                               );
-                            }else
+                            }else {
+                              payPeriodStart='';
+                              payPeriodEnd='';
                               return new Center(
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width*1,
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width * 1,
                                   color: appStartColor().withOpacity(0.1),
-                                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                                  child:Text("No Records",style: TextStyle(fontSize: 16.0),textAlign: TextAlign.center,),
+                                  padding: EdgeInsets.only(
+                                      top: 5.0, bottom: 5.0),
+                                  child: Text("No Records",
+                                    style: TextStyle(fontSize: 16.0),
+                                    textAlign: TextAlign.center,),
                                 ),
                               );
+                            }
                           } else if (snapshot.hasError) {
                             return new Text("Unable to connect server");
                           }

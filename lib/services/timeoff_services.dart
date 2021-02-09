@@ -28,6 +28,12 @@ class TIMEOFFA {
   String TimeOffSts;
   String sts;
   String TimeofDate;
+  String StartLoc;
+  String LatIn;
+  String LongIn;
+  String EndLoc;
+  String LatOut;
+  String LongOut;
 
   TIMEOFFA({
     this.Id,
@@ -48,7 +54,13 @@ class TIMEOFFA {
     this.TimeoffId,
     this.TimeOffSts,
     this.sts,
-    this.TimeofDate
+    this.TimeofDate,
+    this.StartLoc,
+    this.LatIn,
+    this.LongIn,
+    this.EndLoc,
+    this.LatOut,
+    this.LongOut,
   });
 }
 
@@ -285,8 +297,9 @@ Future<List<TimeOff>> getTimeOffSummary() async{
   try {
     FormData formData = new FormData.from({
       "uid": empid,
+      "orgid": organization
     });
-    print(path_ubiattendance+"fetchTimeOffList?uid=$empid");
+    print(path_ubiattendance+"fetchTimeOffList?uid=$empid&orgid=$organization");
     Response response = await dio.post(path_ubiattendance+"fetchTimeOffList", data: formData);
     List responseJson = json.decode(response.data.toString());
     print( json.decode(response.data.toString()));
@@ -311,11 +324,38 @@ List<TimeOff> createTimeOffList(List data){
     String Reason=data[i]["reason"];
     String ApprovalSts=data[i]["status"];
     String ApproverComment=data[i]["comment"];
+    String StartLoc = data[i]["startloc"];
+    String LatIn = data[i]["latin"];
+    String LongIn = data[i]["longout"];
+    String EndLoc = data[i]["endloc"];
+    String LatOut = data[i]["latout"];
+    String LongOut = data[i]["longout"];
     bool withdrawlsts=data[i]["withdrawlsts"];
     bool starticonsts=data[i]["starticonsts"];
     bool stopiconsts=data[i]["stopiconsts"];
 
-    TimeOff timeoff = new TimeOff(TimeofDate: TimeofDate, TimeFrom: TimeFrom, TimeTo: TimeTo, StartTimeFrom: StartTimeFrom, StopTimeTo: StopTimeTo, TimeOffSts: TimeOffSts, hrs: hrs, Reason: Reason, ApprovalSts: ApprovalSts, ApproverComment: ApproverComment, TimeOffId: TimeOffId, withdrawlsts: withdrawlsts, starticonsts: starticonsts, stopiconsts: stopiconsts);
+    TimeOff timeoff = new TimeOff(
+        TimeofDate: TimeofDate,
+        TimeFrom: TimeFrom,
+        TimeTo: TimeTo,
+        StartTimeFrom: StartTimeFrom,
+        StopTimeTo: StopTimeTo,
+        TimeOffSts: TimeOffSts,
+        hrs: hrs,
+        Reason: Reason,
+        ApprovalSts: ApprovalSts,
+        ApproverComment: ApproverComment,
+        StartLoc: StartLoc,
+        LatIn: LatIn,
+        LongIn: LongIn,
+        EndLoc: EndLoc,
+        LatOut: LatOut,
+        LongOut: LongOut,
+        TimeOffId: TimeOffId,
+        withdrawlsts: withdrawlsts,
+        starticonsts: starticonsts,
+        stopiconsts: stopiconsts
+    );
 
     list.add(timeoff);
   }
@@ -382,7 +422,7 @@ List<TIMEOFFA> createtimeoffapporval(List data) {
 }
 
 
-Future<List<TIMEOFFA>> getTeamTimeoffapproval(empname) async {
+Future<List<TIMEOFFA>> getTeamTimeoffapproval(String empname, String month) async {
   Dio dio = new Dio();
   final prefs = await SharedPreferences.getInstance();
   String orgdir = prefs.getString('organization') ?? '';
@@ -391,8 +431,8 @@ Future<List<TIMEOFFA>> getTeamTimeoffapproval(empname) async {
   int hrsts =prefs.getInt('hrsts')??0;
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
-  print(path+"getTeamTimeoffapproval?&empid=$empid&orgid=$orgdir&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
-  Response<String>response = await dio.post(path+"getTeamTimeoffapproval?&empid=$empid&orgid=$orgdir&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+  print(path+"getTeamTimeoffapproval?month=$month&empid=$empid&orgid=$orgdir&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
+  Response<String>response = await dio.post(path+"getTeamTimeoffapproval?month=$month&empid=$empid&orgid=$orgdir&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess");
   final res = json.decode(response.data.toString());
   List<TIMEOFFA> userList1 = createteamtimeoffapporval(res,empname);
   return userList1;
@@ -416,6 +456,12 @@ List<TIMEOFFA> createteamtimeoffapporval(List data,String empname) {
       String TimeOffSts=data[i]["timeoffsts"];
       String sts = data[i]["sts"].toString();
       String HRSts = data[i]["HRSts"].toString();
+      String StartLoc = data[i]["startloc"];
+      String LatIn = data[i]["latin"];
+      String LongIn = data[i]["longout"];
+      String EndLoc = data[i]["endloc"];
+      String LatOut = data[i]["latout"];
+      String LongOut = data[i]["longout"];
       String Psts="";
       if(data[i]["Pstatus"].contains("Pending at")) {
         Psts = data[i]["Pstatus"].toString();
@@ -437,6 +483,12 @@ List<TIMEOFFA> createteamtimeoffapporval(List data,String empname) {
         HRSts: HRSts,
         sts :sts,
         TimeofDate:TimeofDate,
+        StartLoc:StartLoc,
+        LatIn:LatIn,
+        LongIn:LongIn,
+        EndLoc:EndLoc,
+        LatOut:LatOut,
+        LongOut:LongOut,
       );
       if(name.toLowerCase().contains(empname.toLowerCase()))
         list.add(tos);
@@ -457,6 +509,12 @@ List<TIMEOFFA> createteamtimeoffapporval(List data,String empname) {
       String TimeOffSts=data[i]["timeoffsts"];
       String sts = data[i]["sts"].toString();
       String HRSts = data[i]["HRSts"].toString();
+      String StartLoc = data[i]["startloc"];
+      String LatIn = data[i]["latin"];
+      String LongIn = data[i]["longout"];
+      String EndLoc = data[i]["endloc"];
+      String LatOut = data[i]["latout"];
+      String LongOut = data[i]["longout"];
       String Psts="";
       if(data[i]["Pstatus"].contains("Pending at")) {
         Psts = data[i]["Pstatus"].toString();
@@ -478,6 +536,12 @@ List<TIMEOFFA> createteamtimeoffapporval(List data,String empname) {
         HRSts: HRSts,
         sts :sts,
         TimeofDate:TimeofDate,
+        StartLoc:StartLoc,
+        LatIn:LatIn,
+        LongIn:LongIn,
+        EndLoc:EndLoc,
+        LatOut:LatOut,
+        LongOut:LongOut,
       );
       list.add(tos);
     }

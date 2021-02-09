@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -64,123 +66,140 @@ class _GeofenceState extends State<Geofence> {
   MainDevisionWidget() {
     return WillPopScope(
       onWillPop: () => move(),
-      child: new Scaffold(
-        backgroundColor: scaffoldBackColor(),
-        key: _scaffoldKey,
-        appBar: AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar: new HomeNavigation(),
-        endDrawer: new AppDrawer(),
-        body: Container(
-          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-          decoration: new ShapeDecoration(
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(20.0)),
-            color: Colors.white,
-          ),
-          child: Column(
-            children: [
-              Center(
-                  child: Text(
-                    'Geo Fence',
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      color: appStartColor(),
-                    ),
-                  )),
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _searchController,
-                    focusNode: searchFocusNode,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      border: OutlineInputBorder(
-                        borderRadius:  new BorderRadius.circular(10.0),
+      child: RefreshIndicator(
+        child: new Scaffold(
+          backgroundColor: scaffoldBackColor(),
+          key: _scaffoldKey,
+          appBar: AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar: new HomeNavigation(),
+          endDrawer: new AppDrawer(),
+          body: Container(
+            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            decoration: new ShapeDecoration(
+              shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(20.0)),
+              color: Colors.white,
+            ),
+            child: Column(
+              children: [
+                Center(
+                    child: Text(
+                      'Geo Fence',
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        color: appStartColor(),
                       ),
-                      prefixIcon: Icon(Icons.search, size: 30,),
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      hintText: 'Search Geofence',
-                      //labelText: 'Search Geofence',
-                      suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
-                          onPressed: () {
-                            _searchController.clear();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Geofence()),
-                            );
-                          }
-                      ):null,
-                      //focusColor: Colors.white,
+                    )),
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _searchController,
+                      focusNode: searchFocusNode,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        border: OutlineInputBorder(
+                          borderRadius:  new BorderRadius.circular(10.0),
+                        ),
+                        prefixIcon: Icon(Icons.search, size: 30,),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: 'Search Geofence',
+                        //labelText: 'Search Geofence',
+                        suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Geofence()),
+                              );
+                            }
+                        ):null,
+                        //focusColor: Colors.white,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          geofence = value;
+                        });
+                      },
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        geofence = value;
-                      });
-                    },
                   ),
                 ),
-              ),
-              //Divider(),
-              //SizedBox(height: 5.0,),
-              Container(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Container(
-                        child: Text(
-                          'Name',
-                          style: TextStyle(
-                              color: appStartColor(),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0),
+                //Divider(),
+                //SizedBox(height: 5.0,),
+                Container(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Container(
+                          child: Text(
+                            'Name',
+                            style: TextStyle(
+                                color: appStartColor(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0),
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 30.0),
-                      child: Container(
-                        child: Text(
-                          'Status',
-                          style: TextStyle(
-                              color: appStartColor(),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 30.0),
+                        child: Container(
+                          child: Text(
+                            'Status',
+                            style: TextStyle(
+                                color: appStartColor(),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Divider(),
-              new Expanded(
-                child: getGeofenceWidget(),
-              ),
-            ],
+                Divider(),
+                new Expanded(
+                  child: getGeofenceWidget(),
+                ),
+              ],
+            ),
           ),
-        ),
-        floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
-          backgroundColor: Colors.orange[800],
-          onPressed: (){
-            showDialog(
-                context: context,
-                builder: (context) {
-                  Future.delayed(Duration(seconds: 3), () {
-                    Navigator.of(context).pop(true);
+          floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
+            backgroundColor: Colors.orange[800],
+            onPressed: (){
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    Future.delayed(Duration(seconds: 3), () {
+                      Navigator.of(context).pop(true);
+                    });
+                    return AlertDialog(
+                      content: new Text("To Add a new Geo Fence, login to the web panel"),
+                    );
                   });
-                  return AlertDialog(
-                    content: new Text("To Add a new Geo Fence, login to the web panel"),
-                  );
-                });
-          },
-          tooltip: 'Add Geo Fence',
-          child: new Icon(Icons.add),
-        ):Center(),
+            },
+            tooltip: 'Add Geo Fence',
+            child: new Icon(Icons.add),
+          ):Center(),
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            setState(() {
+              _searchController.clear();
+              geofence='';
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }
@@ -298,7 +317,7 @@ class _GeofenceState extends State<Geofence> {
                 Navigator.of(context).pop(true);
               });
               return AlertDialog(
-                content: new Text("This geofence can't be deactivated. Employees are already assigned to it"),
+                content: new Text("This geofence can't be update. Employees are already assigned to it"),
               );
             });
           /*showDialog(context: context, child:

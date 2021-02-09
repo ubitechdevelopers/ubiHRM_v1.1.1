@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -125,36 +127,32 @@ class _MyPayrollExpenseState extends State<MyPayrollExpense> {
   Widget mainScafoldWidget(){
     return  WillPopScope(
       onWillPop: ()=> sendToHome(),
-      child: Scaffold(
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new ExpenseAppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar:new HomeNavigation(),
-        /*body:  ModalProgressHUD(
-            inAsyncCall: _checkwithdrawnexpense,
-            opacity: 0.15,
-            progressIndicator: SizedBox(
-              child:new CircularProgressIndicator(
-                  valueColor: new AlwaysStoppedAnimation(Colors.green),
-                  strokeWidth: 5.0),
-              height: 40.0,
-              width: 40.0,
-            ),
-            child: homewidget()
-        ),*/
-        body: homewidget(),
-        floatingActionButton: new FloatingActionButton(
-          backgroundColor: Colors.orange[800],
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => RequestPayrollExpense()),
-            );
-          },
-          tooltip: 'Expense Claim',
-          child: new Icon(Icons.add),
+      child: RefreshIndicator(
+        child: Scaffold(
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new ExpenseAppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:new HomeNavigation(),
+          body: homewidget(),
+          floatingActionButton: new FloatingActionButton(
+            backgroundColor: Colors.orange[800],
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RequestPayrollExpense()),
+              );
+            },
+            tooltip: 'Expense Claim',
+            child: new Icon(Icons.add),
+          ),
         ),
-
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }

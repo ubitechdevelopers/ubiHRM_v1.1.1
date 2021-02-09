@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
@@ -73,119 +75,128 @@ class _FlexiList extends State<FlexiList> {
   getmainhomewidget() {
     return new WillPopScope(
       onWillPop: ()=> sendToHome(),
-      child: new Scaffold(
-        key: _scaffoldKey,
-        backgroundColor:scaffoldBackColor(),
-        appBar: new FlexiAppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar: new HomeNavigation(),
-        endDrawer: new AppDrawer(),
-        body: Container(
-          margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-          padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-          decoration: new ShapeDecoration(
-            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
-            color: Colors.white,
-          ),
-          child: Column(
-            children: <Widget>[
-              Center(
-                child: Text(
-                    'Flexi Logs',
-                    style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center
-                ),
-              ),
-              Divider(
-                height: 1.0,
-              ),
-              Container(
-                child: DateTimeField(
-                  format: formatter,
-                  controller: today,
-                  readOnly: true,
-                  onShowPicker: (context, currentValue) {
-                    return showDatePicker(
-                      context: context,
-                      firstDate: DateTime(1900),
-                      initialDate: currentValue ?? DateTime.now(),
-                      lastDate: DateTime(2100));
-                  },
-                  decoration: InputDecoration(
-                    border:InputBorder.none,
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.all(0.0),
-                      child: Icon(
-                        Icons.date_range,
-                        color: Colors.grey,
-                      ), // icon is 48px widget.
-                    ), // icon is 48px widget.
-                    labelText: 'Select Date',
+      child: RefreshIndicator(
+        child: new Scaffold(
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          appBar: new FlexiAppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar: new HomeNavigation(),
+          endDrawer: new AppDrawer(),
+          body: Container(
+            margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+            padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+            decoration: new ShapeDecoration(
+              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+              color: Colors.white,
+            ),
+            child: Column(
+              children: <Widget>[
+                Center(
+                  child: Text(
+                      'Flexi Logs',
+                      style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center
                   ),
-                  onChanged: (date) {
-                    setState(() {
-                      if (date != null && date.toString() != '')
-                        res = true; //showInSnackBar(date.toString());
-                      else
-                        res = false;
-                    });
-                  },
-                  validator: (date) {
-                    if (date == null) {
-                      return 'Please select date';
-                    }
-                  },
                 ),
-              ),
-              Divider(height: 1,),
-              SizedBox(height: 5.0),
-              Container(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    SizedBox(width: 1.0,),
-                    Expanded(
-                      flex: 48,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 4.0),
-                        child: Text(
-                          'Location',
-                          style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
-                          textAlign: TextAlign.left,
+                Divider(
+                  height: 1.0,
+                ),
+                Container(
+                  child: DateTimeField(
+                    format: formatter,
+                    controller: today,
+                    readOnly: true,
+                    onShowPicker: (context, currentValue) {
+                      return showDatePicker(
+                        context: context,
+                        firstDate: DateTime(1900),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime(2100));
+                    },
+                    decoration: InputDecoration(
+                      border:InputBorder.none,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(
+                          Icons.date_range,
+                          color: Colors.grey,
+                        ), // icon is 48px widget.
+                      ), // icon is 48px widget.
+                      labelText: 'Select Date',
+                    ),
+                    onChanged: (date) {
+                      setState(() {
+                        if (date != null && date.toString() != '')
+                          res = true; //showInSnackBar(date.toString());
+                        else
+                          res = false;
+                      });
+                    },
+                    validator: (date) {
+                      if (date == null) {
+                        return 'Please select date';
+                      }
+                    },
+                  ),
+                ),
+                Divider(height: 1,),
+                SizedBox(height: 5.0),
+                Container(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      SizedBox(width: 1.0,),
+                      Expanded(
+                        flex: 48,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 4.0),
+                          child: Text(
+                            'Location',
+                            style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
+                            textAlign: TextAlign.left,
+                          ),
                         ),
                       ),
-                    ),
 
-                    Expanded(
-                      flex: 26,
-                      child:Container(
-                        child: Text('Time In',
-                            style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
-                            textAlign: TextAlign.center),
+                      Expanded(
+                        flex: 26,
+                        child:Container(
+                          child: Text('Time In',
+                              style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
+                              textAlign: TextAlign.center),
+                        ),
                       ),
-                    ),
 
-                    Expanded(
-                      flex: 26,
-                      child:Container(
-                        child: Text('Time Out ',
-                            style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
-                            textAlign: TextAlign.center),
+                      Expanded(
+                        flex: 26,
+                        child:Container(
+                          child: Text('Time Out ',
+                              style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),
+                              textAlign: TextAlign.center),
+                        ),
                       ),
-                    ),
 
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 5.0),
-              Divider(
-                height: 5.2,
-              ),
-              new Expanded(
-                child: res == true ? getEmpDataList(today.text) : Center(),
-              ),
-            ],
+                SizedBox(height: 5.0),
+                Divider(
+                  height: 5.2,
+                ),
+                new Expanded(
+                  child: res == true ? getEmpDataList(today.text) : Center(),
+                ),
+              ],
+            ),
           ),
         ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }

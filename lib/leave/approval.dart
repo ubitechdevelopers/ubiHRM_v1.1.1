@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:rounded_modal/rounded_modal.dart';
@@ -72,230 +74,35 @@ class _TabState extends State<TabbedApp> {
 
     TextStyle label = new TextStyle(
       fontSize: 16.0, color: Colors.blue,
-      //fontWeight: FontWeight.w500
-      // color: 'red',
-
     );
     TextStyle unselectedLabel = new TextStyle(
-      // fontWeight: FontWeight.w200
-        fontSize: 15.0, color: Colors.white
+      fontSize: 15.0, color: Colors.white
     );
     print(label);
     return MaterialApp(
       home: DefaultTabController(
         length: choices.length,
-        child: Scaffold(
-        endDrawer: new AppDrawer(),
-        appBar: new ApprovalAppHeader(profileimage,showtabbar,orgName),
-
-/*          appBar:PreferredSize(
-            preferredSize: Size.fromHeight(100.0),
-            child: GradientAppBar(
-
-              backgroundColorStart: appStartColor(),
-              backgroundColorEnd: appEndColor(),
-
-              // title: const Text('Approvals'),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    // When the child is tapped, show a snackbar
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CollapsingTab()),
-                      );
-                    },
-                    child:Container(
-                      width: 40.0,
-                      height: 40.0,
-                      decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            //image: AssetImage('assets/avatar.png'),
-                            image: _checkLoadedprofile ? AssetImage('assets/avatar.png') : profileimage,
-                          )
-                      )),),
-                  Container(
-                //    color: Colors.red,
-                    width: 127.0,
-                    height: 40.0,
-                  //    padding: EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
-                    padding: EdgeInsets.only(left: 8.0,top: 8.0,bottom: 8.0),
-                      child: Text('Leave Approvals',style: TextStyle(fontSize: 15.0),)
-                  )
-                ],
-
-              ),
-
-
-
-               actions:  <Widget>[
-            perA=='1'?    new DropdownButton<String>(
-                  hint: new Text("My Approvals" , style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15.0,
-                   // background: Paint(),
-
-                  )),
-                  items: <String>['My Approvals', 'My Leave'].map((String value) {
-                    return new DropdownMenuItem<String>(
-                      value: value,
-                      child: new Text(value),
-
-                    );
-                  }).toList(),
-
-                  onChanged: (value) {
-                    value=value;
-                    switch(value) {
-                      case "My Leave" :
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyLeave()),
-                        );
-                        break;
-                      case "My Approvals" :
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => TabbedApp()),
-                        );
-                        break;
-                    }
-                    },
-                ):Center(),
-
-
-              ],
-
-
-              bottom: TabBar(
-                labelStyle: label,
-                unselectedLabelColor: Colors.white70,
-                indicatorColor: Colors.white,
-                unselectedLabelStyle: unselectedLabel,
-                isScrollable: true,
-                tabs: choices.map((Choice choice) {
-                  return Tab(
-
-                    text: choice.title,
-                    // icon: Icon(choice.icon),
+        child: RefreshIndicator(
+          child: Scaffold(
+            endDrawer: new AppDrawer(),
+            appBar: new ApprovalAppHeader(profileimage,showtabbar,orgName),
+              body: TabBarView(
+                children: choices.map((Choice choice) {
+                  return Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: ChoiceCard1(choice: choice),
                   );
                 }).toList(),
               ),
-            ),),*/
-
-
-          body: TabBarView(
-            children: choices.map((Choice choice) {
-              return Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: ChoiceCard1(choice: choice),
-              );
-            }).toList(),
-
+            bottomNavigationBar:new HomeNavigation(),
           ),
-          bottomNavigationBar:new HomeNavigation(),
-         /* bottomNavigationBar:new Theme(
-              data: Theme.of(context).copyWith(
-                // sets the background color of the `BottomNavigationBar`
-                canvasColor: bottomNavigationColor(),
-              ), // sets the inactive color of the `BottomNavigationBar`
-              child:  BottomNavigationBar(
-                currentIndex: _currentIndex,
-                onTap: (newIndex) {
-
-                  if (newIndex == 1) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                    return;
-                  }
-                  if (newIndex == 2) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TabbedApp()),
-                    );
-                    return;
-                  }
-                  if (newIndex == 3) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TabbedApp()),
-                    );
-                    return;
-                  }else if (newIndex == 0) { Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TabbedApp()),
-                  );
-
-                  /* (admin_sts == '1')
-                  ? Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Reports()),
-              )
-                  : Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );*/
-
-                  return;
-                  }
-
-                  setState(() {
-                    _currentIndex = newIndex;
-                  });
-                }, // this will be set when a new tab is tapped
-                items: [
-                  BottomNavigationBarItem(
-
-                    // icon:  new Image.asset("assets/repo.ico", height: 25.0, width: 30.0),
-
-                    //   new Tab(icon: new Image.asset("assets/img/logo.png"), text: "Browse"),
-                    /* icon: new Icon(
-                    Icons.library_books,
-                    color: Colors.white,
-                  ),*/
-
-                    icon: Icon(
-                        Icons.description,
-                        color: Colors.white,
-                        size: 25.0),
-
-                    title: new Text('Reports',style: TextStyle(color: Colors.white)),
-                  ),
-                  BottomNavigationBarItem(
-                    /*   icon: new Icon(
-                    Icons.home,
-                    color: Colors.orangeAccent,
-                  ),*/
-                    icon:  new Image.asset("assets/Hom.png", height: 30.0, width: 30.0),
-
-                    title: new Text('Home', style: TextStyle(color: Colors.orangeAccent)),
-
-                  ),
-                  BottomNavigationBarItem(
-                    /*  icon:  new Image.asset("assets/approval.png",
-                      height: 40.0,
-                      width: 35.0),*/
-                    icon: Icon(
-                        Icons.check_circle_outline,
-                        color: Colors.white,
-                        size: 25.0),
-                    title: new Text('Approvals',style: TextStyle(color: Colors.white)),
-                  ),
-                  BottomNavigationBarItem(
-                      icon: Icon(
-                          Icons.settings,
-                          color: Colors.white,
-                          size: 25.0 ),
-                      title: Text('Settings',style: TextStyle(color: Colors.white)))
-
-                ],
-              )),*/
+          onRefresh: () async {
+            Completer<Null> completer = new Completer<Null>();
+            await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+              completer.complete();
+            });
+            return completer.future;
+          },
         ),
       ),
     );

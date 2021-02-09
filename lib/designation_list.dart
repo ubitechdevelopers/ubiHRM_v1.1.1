@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/appbar.dart';
@@ -50,114 +52,131 @@ class _Designation extends State<Designation> {
   }
 
   getmainhomewidget() {
-    return new Scaffold(
-      backgroundColor: scaffoldBackColor(),
-      key: _scaffoldKey,
-      appBar: AppHeader(profileimage,showtabbar,orgName),
-      bottomNavigationBar: new HomeNavigation(),
-      endDrawer: new AppDrawer(),
-      body: Container(
-        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        decoration: new ShapeDecoration(
-          shape: new RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(20.0)),
-          color: Colors.white,
-        ),
-        child: Column(
-          children: <Widget>[
-            Center(
-              child: Text('Designations',
-                style: new TextStyle(fontSize: 22.0, color: appStartColor(),),),
-            ),
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _searchController,
-                  focusNode: searchFocusNode,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    border: OutlineInputBorder(
-                      borderRadius:  new BorderRadius.circular(10.0),
+    return RefreshIndicator(
+      child: new Scaffold(
+        backgroundColor: scaffoldBackColor(),
+        key: _scaffoldKey,
+        appBar: AppHeader(profileimage,showtabbar,orgName),
+        bottomNavigationBar: new HomeNavigation(),
+        endDrawer: new AppDrawer(),
+        body: Container(
+          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+          decoration: new ShapeDecoration(
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(20.0)),
+            color: Colors.white,
+          ),
+          child: Column(
+            children: <Widget>[
+              Center(
+                child: Text('Designations',
+                  style: new TextStyle(fontSize: 22.0, color: appStartColor(),),),
+              ),
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _searchController,
+                    focusNode: searchFocusNode,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      border: OutlineInputBorder(
+                        borderRadius:  new BorderRadius.circular(10.0),
+                      ),
+                      prefixIcon: Icon(Icons.search, size: 30,),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      hintText: 'Search Designation',
+                      //labelText: 'Search Designation',
+                      suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Designation()),
+                            );
+                          }
+                      ):null,
+                      //focusColor: Colors.white,
                     ),
-                    prefixIcon: Icon(Icons.search, size: 30,),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    hintText: 'Search Designation',
-                    //labelText: 'Search Designation',
-                    suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Designation()),
-                          );
-                        }
-                    ):null,
-                    //focusColor: Colors.white,
+                    onChanged: (value) {
+                      setState(() {
+                        desgname = value;
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      desgname = value;
-                    });
-                  },
                 ),
               ),
-            ),
-            //Divider(),
-            //SizedBox(height: 5.0),
-            Container(
-              child: Row(
-                //crossAxisAlignment: CrossAxisAlignment.start,
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left:15.0),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width*0.65,
-                      child: Text('Designations', style: TextStyle(
-                          color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold ),),
+              //Divider(),
+              //SizedBox(height: 5.0),
+              Container(
+                child: Row(
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left:15.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width*0.65,
+                        child: Text('Designations', style: TextStyle(
+                            color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold ),),
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right:20.0),
-                    child: Container(
-                      child: Text('Status', style: TextStyle(
-                          color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),),
+                    SizedBox(
+                      width: 5,
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(right:20.0),
+                      child: Container(
+                        child: Text('Status', style: TextStyle(
+                            color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Divider(),
-            //SizedBox(height: 5.0),
-            new Expanded(
-              child: getDesgWidget(),
-            ),
-          ],
+              Divider(),
+              //SizedBox(height: 5.0),
+              new Expanded(
+                child: getDesgWidget(),
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
-        backgroundColor: Colors.orange[800],
-        onPressed: (){
-          showDialog(
-            context: context,
-            builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.of(context).pop(true);
+        floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
+          backgroundColor: Colors.orange[800],
+          onPressed: (){
+            showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("To Add a new Designation, login to the web panel"),
+                );
               });
-              return AlertDialog(
-                content: new Text("To Add a new Designation, login to the web panel"),
-              );
-            });
-        },
-        tooltip: 'Add Designation',
-        child: new Icon(Icons.add),
-      ):Center(),
+          },
+          tooltip: 'Add Designation',
+          child: new Icon(Icons.add),
+        ):Center(),
+      ),
+      onRefresh: () async {
+        Completer<Null> completer = new Completer<Null>();
+        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          setState(() {
+            _searchController.clear();
+            desgname='';
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          });
+          completer.complete();
+        });
+        return completer.future;
+      },
     );
   }
 
@@ -369,7 +388,7 @@ class _Designation extends State<Designation> {
                             Navigator.of(context).pop(true);
                           });
                           return AlertDialog(
-                            content: new Text("This designation can't be deactivated. Employees are already assigned to it"),
+                            content: new Text("This designation can't be updated. Employees are already assigned to it"),
                           );
                         });
                       /*showDialog(context: context, child:

@@ -1,6 +1,8 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/appbar.dart';
@@ -108,13 +110,22 @@ class _PayrollSummary extends State<PayrollSummary> {
   }
 
   getmainhomewidget() {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor:scaffoldBackColor(),
-      endDrawer: new AppDrawer(),
-      appBar: new AppHeader(profileimage,showtabbar,orgName),
-      bottomNavigationBar:  new HomeNavigation(),
-      body:getMarkAttendanceWidgit(),
+    return RefreshIndicator(
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor:scaffoldBackColor(),
+        endDrawer: new AppDrawer(),
+        appBar: new AppHeader(profileimage,showtabbar,orgName),
+        bottomNavigationBar:  new HomeNavigation(),
+        body:getMarkAttendanceWidgit(),
+      ),
+      onRefresh: () async {
+        Completer<Null> completer = new Completer<Null>();
+        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          completer.complete();
+        });
+        return completer.future;
+      },
     );
   }
 

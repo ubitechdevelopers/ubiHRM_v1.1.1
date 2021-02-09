@@ -88,16 +88,24 @@ class _MyApp extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-        onWillPop: ()=> sendToHome(),
+      onWillPop: ()=> sendToHome(),
+      child: RefreshIndicator(
         child: new Scaffold(
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new AttendanceAppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:new HomeNavigation(),
           body: getWidgets(context),
-        )
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
+      )
     );
-
   }
 }
 

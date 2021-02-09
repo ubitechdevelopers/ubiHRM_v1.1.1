@@ -206,7 +206,6 @@ List<Expense> createExpenselist(List data) {
       ests: ests,
       amt: amt,
       currency: currency,
-
     );
     list.add(tos);
   }

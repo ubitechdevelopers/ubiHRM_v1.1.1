@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -56,19 +58,14 @@ class _RequestLeaveState extends State<RequestLeave> {
   String orgName="";
   bool _checkLoadedprofile=true;
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
+
   @override
   void initState() {
     super.initState();
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     showtabbar=false;
-    /*  profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
-      if (mounted) {
-        setState(() {
-          _checkLoadedprofile = false;
-        });
-
-      }
-    }));*/
+    _dateController.text=formatter2.format(DateTime.now());
+    _dateController1.text=formatter2.format(DateTime.now());
     initPlatformState();
     getOrgName();
   }
@@ -79,8 +76,6 @@ class _RequestLeaveState extends State<RequestLeave> {
       orgName= prefs.getString('orgname') ?? '';
     });
   }
-
-
 
   initPlatformState() async{
     final prefs = await SharedPreferences.getInstance();
@@ -375,24 +370,48 @@ class _RequestLeaveState extends State<RequestLeave> {
   Widget mainScafoldWidget(){
     return  WillPopScope(
       onWillPop: ()=> sendToLeaveList(),
-      child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor:scaffoldBackColor(),
-          endDrawer: new AppDrawer(),
-          appBar: new AppHeader(profileimage,showtabbar,orgName),
-          bottomNavigationBar:  new HomeNavigation(),
-          body: ModalProgressHUD(
-              inAsyncCall: isServiceCalling,
-              opacity: 0.15,
-              progressIndicator: SizedBox(
-                child:new CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation(Colors.green),
-                    strokeWidth: 5.0),
-                height: 40.0,
-                width: 40.0,
-              ),
-              child: homewidget()
-          )
+      child: RefreshIndicator(
+        child: Scaffold(
+            key: _scaffoldKey,
+            backgroundColor:scaffoldBackColor(),
+            endDrawer: new AppDrawer(),
+            appBar: new AppHeader(profileimage,showtabbar,orgName),
+            bottomNavigationBar:  new HomeNavigation(),
+            body: ModalProgressHUD(
+                inAsyncCall: isServiceCalling,
+                opacity: 0.15,
+                progressIndicator: SizedBox(
+                  child:new CircularProgressIndicator(
+                      valueColor: new AlwaysStoppedAnimation(Colors.green),
+                      strokeWidth: 5.0),
+                  height: 40.0,
+                  width: 40.0,
+                ),
+                child: homewidget()
+            )
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 2)).then((onvalue) {
+            setState(() {
+              leavetype = '0';
+              _dateController.clear();
+              _dateController1.clear();
+              visibilityFromHalf = false;
+              visibilityToHalf = false;
+              leavetimevalue = "1";
+              leavetimevalue1 = "1";
+              _reasonController.clear();
+              substituteemp = '0';
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }
@@ -470,12 +489,15 @@ class _RequestLeaveState extends State<RequestLeave> {
                                         });
                                         print("----->Changed date------> "+Date1.toString());
                                       },
-                                      /*validator: (date) {
-                                        if (date==null){
-                                          return 'Please enter Leave From date';
+                                      validator: (date) {
+                                        if (_dateController.text.isEmpty){
+                                          return 'Please enter eave start date';
                                         }
-                                      },*/
-
+                                        return null;
+                                      },
+                                      onFieldSubmitted: (value) {
+                                        if (_formKey.currentState.validate()) {}
+                                      },
                                     ),
                                   ),
                                 ),
@@ -585,26 +607,28 @@ class _RequestLeaveState extends State<RequestLeave> {
                                             color: Colors.grey,
                                           ), // icon is 48px widget.
                                         ), // icon is 48px widget.
-
                                         labelText: 'To Date',
                                       ),
-                                      onChanged: (dt) {
+                                      onChanged: (date) {
                                         setState(() {
-                                          Date2 = dt;
+                                          Date2 = date;
                                         });
                                         print("----->Changed date------> "+Date2.toString());
                                       },
-                                      /*validator: (dt) {
-                                        *//*if (dt==null){
+                                      validator: (date) {
+                                        if (_dateController1.text.isEmpty){
                                           return 'Please enter Leave to date';
-                                        }*//*
+                                        }
                                         if(Date2.isBefore(Date1)){
                                           print("Date1 ---->"+Date1.toString());
                                           print("Date2---->"+Date2.toString());
-                                          return '\"To Date\" can\'t be smaller.';
+                                          return "End date can't be earlier than start date";
                                         }
-
-                                      },*/
+                                        return null;
+                                      },
+                                      onFieldSubmitted: (value) {
+                                        if (_formKey.currentState.validate()) {}
+                                      },
                                     ),
                                   ),
                                 ),
@@ -697,15 +721,14 @@ class _RequestLeaveState extends State<RequestLeave> {
                                     ), // icon is 48px widget.
                                   )
                               ),
-                              /*validator: (value) {
-                                if (value.isEmpty) {
+                              validator: (value) {
+                                if (value.isEmpty || _reasonController.text.trim().isEmpty) {
                                   return 'Please enter reason';
                                 }
-                              },*/
+                                return null;
+                              },
                               onFieldSubmitted: (String value) {
-                                /*if (_formKey.currentState.validate()) {
-                              //requesttimeoff(_dateController.text ,_starttimeController.text,_endtimeController.text,_reasonController.text, context);
-                              }*/
+                                if (_formKey.currentState.validate()) {}
                               },
                               maxLines: 1,
                             ),
@@ -722,7 +745,7 @@ class _RequestLeaveState extends State<RequestLeave> {
                                   color: Colors.orange[800],
                                   onPressed: () {
                                     if (_formKey.currentState.validate()) {
-                                      if (leavetype == '0') {
+                                      /*if (leavetype == '0') {
                                         showDialog(
                                           context: context,
                                           builder: (context) {
@@ -733,12 +756,12 @@ class _RequestLeaveState extends State<RequestLeave> {
                                               content: new Text("Please select leave type"),
                                             );
                                           });
-                                        /*showDialog(context: context, child:
+                                        *//*showDialog(context: context, child:
                                         new AlertDialog(
                                           //title: new Text("Sorry!"),
                                           content: new Text("Please select leave type!"),
                                         )
-                                        );*/
+                                        );*//*
                                       }else if(_dateController.text==""){
                                         showDialog(
                                           context: context,
@@ -750,12 +773,12 @@ class _RequestLeaveState extends State<RequestLeave> {
                                               content: new Text("Please enter leave start date"),
                                             );
                                           });
-                                        /*showDialog(context: context, child:
+                                        *//*showDialog(context: context, child:
                                         new AlertDialog(
                                           //title: new Text("Sorry!"),
                                           content: new Text("Please enter leave from date"),
                                         )
-                                        );*/
+                                        );*//*
                                       }else if(_dateController1.text==""){
                                         showDialog(
                                           context: context,
@@ -767,12 +790,12 @@ class _RequestLeaveState extends State<RequestLeave> {
                                               content: new Text("Please enter leave end date"),
                                             );
                                           });
-                                        /*showDialog(context: context, child:
+                                        *//*showDialog(context: context, child:
                                         new AlertDialog(
                                           //title: new Text("Sorry!"),
                                           content: new Text("Please enter leave to date"),
                                         )
-                                        );*/
+                                        );*//*
                                       }else if(Date2.isBefore(Date1)){
                                         showDialog(
                                           context: context,
@@ -784,12 +807,12 @@ class _RequestLeaveState extends State<RequestLeave> {
                                               content: new Text("End date can't be earlier than start date"),
                                             );
                                           });
-                                        /*showDialog(context: context, child:
+                                        *//*showDialog(context: context, child:
                                         new AlertDialog(
                                           //title: new Text("Sorry!"),
                                           content: new Text("To date can't be smaller"),
                                         )
-                                        );*/
+                                        );*//*
                                       }else if(_reasonController.text==""){
                                         showDialog(
                                           context: context,
@@ -801,18 +824,18 @@ class _RequestLeaveState extends State<RequestLeave> {
                                               content: new Text("Please enter reason"),
                                             );
                                           });
-                                        /*showDialog(context: context, child:
+                                        *//*showDialog(context: context, child:
                                         new AlertDialog(
                                           //title: new Text("Sorry!"),
                                           content: new Text("Please enter reason"),
                                         )
-                                        );*/
-                                      }else{
+                                        );*//*
+                                      }else{*/
                                         if(CompoffSts=='0')
                                           requestleave(_dateController.text, _dateController1.text ,leavetimevalue, leavetimevalue1, _radioValue, _radioValue1, _reasonController.text.trim(), substituteemp, CompoffSts);
                                         else
                                           requestleave(_dateController.text, _dateController1.text , '0', '0', '0', '0', _reasonController.text.trim(), '0', CompoffSts);
-                                      }
+                                      //}
                                     }
                                   },
                                 ),
@@ -850,80 +873,76 @@ class _RequestLeaveState extends State<RequestLeave> {
   Widget getLeaveType_DD() {
     String dc = "0";
     return new FutureBuilder<List<Map>>(
-        future: getleavetype(0), //with -select- label
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return new Container(
-              //width: MediaQuery.of(context).size.width*.45,
-              //padding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-              child: InputDecorator(
-                decoration: InputDecoration(
-                  labelText: 'Leave Type',
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.all(0.0),
-                    child: Icon(const IconData(0xe821, fontFamily: "CustomIcon"), size: 25.0,), // icon is 48px widget.
-                  ),
-                  // icon is 48px widget.
+    future: getleavetype(0), //with -select- label
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        return DropdownButtonHideUnderline(
+          child: Padding(
+            padding: const EdgeInsets.only(right:0.0),
+            child: new DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: 'Leave Type',
+                prefixIcon: Padding(
+                  padding: EdgeInsets.all(0.0),
+                  child: Icon(const IconData(0xe821, fontFamily: "CustomIcon"), size: 25.0,), // icon is 48px widget.
                 ),
-                child:  DropdownButtonHideUnderline(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right:0.0),
-                    child: new DropdownButton<String>(
-                      //iconSize: 0.0,
-                      isDense: true,
-                      style: new TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.black
-                      ),
-                      value: leavetype,
-                      onChanged: (String newValue) {
-                        for(int i=0;i<snapshot.data.length;i++)
-                        {
-                          if(snapshot.data[i]['Id'].toString()==newValue)
-                          {
-                            setState(() {
-                              CompoffSts= snapshot.data[i]['compoffsts'].toString();
-                              print("CompoffSts");
-                              print(CompoffSts);
-                            });
-                            break;
-                          }
-                          print(i);
-                        }
-                        setState(() {
-                          leavetype=newValue;
-                          print("leavetype");
-                          print(leavetype);
-                        });
-                      },
-                      items: snapshot.data.map((Map map) {
-                        return new DropdownMenuItem<String>(
-                          value: map["Id"].toString(),
-                          child:  new SizedBox(
-                              width: 248,
-                              child: new Text(
-                                map["Name"],
-                              )
-                          ),
-                        );
-                      }).toList(),
-
-                    ),
-                  ),
-                ),
+                // icon is 48px widget.
               ),
-            );
-          } else if (snapshot.hasError) {
-            return new Text("${snapshot.error}");
-          }
-          // return loader();
-          return new Center(child: SizedBox(
-            child: CircularProgressIndicator(strokeWidth: 2.2,),
-            height: 20.0,
-            width: 20.0,
+              isDense: true,
+              style: new TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.black
+              ),
+              value: leavetype,
+              onChanged: (String newValue) {
+                for(int i=0;i<snapshot.data.length;i++){
+                  if(snapshot.data[i]['Id'].toString()==newValue) {
+                    setState(() {
+                      CompoffSts= snapshot.data[i]['compoffsts'].toString();
+                      print("CompoffSts");
+                      print(CompoffSts);
+                    });
+                    break;
+                  }
+                  print(i);
+                }
+                setState(() {
+                  leavetype=newValue;
+                  print("leavetype");
+                  print(leavetype);
+                });
+              },
+              items: snapshot.data.map((Map map) {
+                return new DropdownMenuItem<String>(
+                  value: map["Id"].toString(),
+                  child:  new SizedBox(
+                      width: 248,
+                      child: new Text(
+                        map["Name"],
+                      )
+                  ),
+                );
+              }).toList(),
+              validator: (String value) {
+                if (leavetype=='0') {
+                  return 'Please select leave type';
+                }
+                return null;
+              },
+            ),
           ),
-          );
-        });
+        );
+      } else if (snapshot.hasError) {
+        return new Text("${snapshot.error}");
+      }
+      // return loader();
+      return new Center(child: SizedBox(
+        child: CircularProgressIndicator(strokeWidth: 2.2,),
+        height: 20.0,
+        width: 20.0,
+      ),
+      );
+    });
   }
 
 

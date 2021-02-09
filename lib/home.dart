@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,9 +7,9 @@ import 'package:flutter_appavailability/flutter_appavailability.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/CirclePainter.dart';
 import 'package:ubihrm/employees_list.dart';
 import 'package:ubihrm/payroll_expence/expenselist.dart';
-
 import 'all_reports.dart';
 import 'attandance/flexi_time.dart';
 import 'attandance/home.dart';
@@ -23,22 +22,20 @@ import 'global.dart';
 import 'leave/myleave.dart';
 import 'login_page.dart';
 import 'model/model.dart';
-import 'payroll//mypayroll_list.dart';
+import 'payroll/mypayroll_list.dart';
 import 'profile.dart';
 import 'salary/mysalary_list.dart';
 import 'services/services.dart';
 import 'timeoff/timeoff_summary.dart';
-
-
 
 class HomePageMain extends StatefulWidget {
   @override
   _HomePageStatemain createState() => _HomePageStatemain();
 }
 
-class _HomePageStatemain extends State<HomePageMain> {
+class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMixin, WidgetsBindingObserver{
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  static const platform = const MethodChannel('location.spoofing.check');
+  AnimationController _controller;
   var orgname;
   double height = 0.0;
   double insideContainerHeight = 300.0;
@@ -52,38 +49,44 @@ class _HomePageStatemain extends State<HomePageMain> {
   var profileimage;
   bool showtabbar;
   String orgName = "";
+  int adminsts=0;
+  int hrsts=0;
+  int divhrsts=0;
+  //int plansts=0;
+  //int empcount=0;
   bool fakeLocationDetected = false;
   String address = "";
   bool _checkLoadedprofile = true;
   String sts="";
   String location_addr = "";
+  double _visible = 0.25;
+  double _visible1 = 0.25;
 
   Widget mainWidget = new Container(
     width: 0.0,
     height: 0.0,
   );
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 3),
+    )..repeat();
     initPlatformState();
     getOrgName();
-    platform.setMethodCallHandler(_handleMethod);
-   /*print("orgCreateDate");
-    print(orgCreatedDate);
-    var orgCreationDate = DateTime.parse(orgCreatedDate);
-    print(orgCreationDate.add(Duration(days: 3)));
-    if(mailVerifySts == "1")
-      print("Shaifali Rathore");*/
   }
 
-  getOrgName() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      orgName = prefs.getString('orgname') ?? '';
-    });
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   initPlatformState() async {
+    print("Lib home initplatformstate");
     var now = new DateTime.now();
     var formatter = new DateFormat('MMMM');
     month = formatter.format(now);
@@ -100,7 +103,7 @@ class _HomePageStatemain extends State<HomePageMain> {
         });
       }
     }).catchError((onError) {
-      print('Exception occured in clling function.......');
+      print('Exception occurred in calling function.......');
       print(onError);
     });
 
@@ -130,49 +133,14 @@ class _HomePageStatemain extends State<HomePageMain> {
     }
   }
 
-  Future<dynamic> _handleMethod(MethodCall call) async {
-    print("lib/home.dart's handle method");
-    switch (call.method) {
-      case "locationAndInternet":
-        locationThreadUpdatedLocation = true;
-        var long = call.arguments["longitude"].toString();
-        var lat = call.arguments["latitude"].toString();
-        assign_lat = double.parse(lat);
-        assign_long = double.parse(long);
-        address = await getAddressFromLati(lat, long);
-        globalstreamlocationaddr = address;
-        print(call.arguments["mocked"].toString());
-
-        getAreaStatus().then((res) {
-          print('home.dart');
-          if (mounted) {
-            setState(() {
-              areaSts = res.toString();
-              print('response'+res.toString());
-              if (assignedAreaIds.isNotEmpty && perGeoFence == "1") {
-                AbleTomarkAttendance = areaSts;
-              }
-            });
-          }
-        }).catchError((onError) {
-          print('Exception occured in clling function.......');
-          print(onError);
-        });
-
-        setState(() {
-          if (call.arguments["mocked"].toString() == "Yes") {
-            fakeLocationDetected = true;
-          } else {
-            fakeLocationDetected = false;
-          }
-          if (call.arguments["TimeSpoofed"].toString() == "Yes") {
-            timeSpoofed = true;
-          }
-        });
-        break;
-
-        return new Future.value("");
-    }
+  getOrgName() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      orgName = prefs.getString('orgname') ?? '';
+      hrsts = prefs.getInt('hrsts')??0;
+      adminsts = prefs.getInt('adminsts')??0;
+      divhrsts = prefs.getInt('divhrsts')??0;
+    });
   }
 
   Future<Widget> islogin() async {
@@ -183,10 +151,17 @@ class _HomePageStatemain extends State<HomePageMain> {
       String organization = prefs.getString('organization') ?? "";
       String userprofileid = prefs.getString('userprofileid') ?? "";
       String empemail = prefs.getString('empemail') ?? "";
+      print("empemail");print(empemail);
       String empnumber = prefs.getString('empnumber') ?? "";
+      print("empnumber");print(empnumber);
       String email = prefs.getString('email') ?? "";
+      print("email");print(email);
       String number = prefs.getString('number') ?? "";
+      print("number");print(number);
       String name = prefs.getString('name') ?? "";
+      plansts = prefs.getInt('plansts');
+      empcount = prefs.getInt('empcount');
+      attcount = prefs.getInt('attcount');
 
       Employee emp = new Employee(
           employeeid: empid,
@@ -194,14 +169,24 @@ class _HomePageStatemain extends State<HomePageMain> {
           userprofileid: userprofileid,
       );
 
-
       await getAllPermission(emp);
       await getProfileInfo(emp, context);
       await getfiscalyear(emp);
       await getReportingTeam(emp);
 
-      if(empemail==email || empnumber==number) {
-        if (showMailVerificationDialog == 'true') {
+      if((adminsts==1 || divhrsts==1 || hrsts==1) && plansts==0 && empcount<2) {
+        _visible = 0.25;
+      }else if((adminsts==1 || divhrsts==1 || hrsts==1) && plansts==0 && empcount>1 && attcount==0) {
+        _visible1 = 1.0;
+      }else {
+        _visible = 1.0;
+        _visible1 = 1.0;
+      }
+
+      if(empemail==email || empnumber==number){
+        print("Inside if");
+        if (showMailVerificationDialog == "true") {
+          print("Inside if of if");
           showDialog(
             barrierDismissible: false,
             context: context,
@@ -280,8 +265,12 @@ class _HomePageStatemain extends State<HomePageMain> {
             }
           );
         } else if(showMailVerificationDialog == 'logout') {
+          print("Inside else of if");
           logout();
         }
+      } else if(showMailVerificationDialog == 'logout') {
+        print("Inside else of if");
+        logout();
       }
 
       perEmployeeLeave = getModulePermission("18", "view");
@@ -362,59 +351,127 @@ class _HomePageStatemain extends State<HomePageMain> {
 
   Card makeDashboardItem(String title, functionname, Imagename) {
     return Card(
-        elevation: 1.0,
-        margin: new EdgeInsets.all(8.0),
-        child: Container(
-          child: new InkWell(
-            onTap: () {
-              if((title=="Dashboard"|| title=="Leave") && fiscalyear=="") {
-                showDialog(context: context, child:
+      elevation: 1.0,
+      margin: new EdgeInsets.all(8.0),
+      child: Container(
+        child: new InkWell(
+          onTap: () {
+            if( _visible!=0.25 && _visible1!=0.25 &&(title=="Dashboard"|| title=="Leave") && fiscalyear=="") {
+              showDialog(context: context, child:
                 new AlertDialog(
                   content: new Text("Fiscal year is not generated yet"),
                 )
-                );
-              }else{
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => functionname),
-                );
-              }
-            },
-            child: Column(
-              //   crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              verticalDirection: VerticalDirection.down,
-              children: [
-                new Container(
-                    width: 60.0,
-                    height: 60.0,
-                    decoration: new BoxDecoration(
+              );
+            }else if(_visible==0.25 && _visible1==0.25 && (title=="Profile" || title=="Employee")){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => functionname),
+              );
+            }else if(_visible==0.25 && _visible1!=0.25 && (title=="Profile" || title=="Employee" || title=="Attendance")){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => functionname),
+              );
+            }else if(_visible!=0.25 && _visible1!=0.25){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => functionname),
+              );
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            verticalDirection: VerticalDirection.down,
+            children: [
+              ((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount<2) && title=="Employee")?CustomPaint(
+                painter: CirclePainter(
+                  0,
+                  _controller,
+                  color: appStartColor(),
+                ),
+                child: ScaleTransition(
+                    scale: Tween(begin: 0.90, end: 1.0).animate(
+                      CurvedAnimation(
+                        parent: _controller,
+                        curve: Curves.fastOutSlowIn,
+                      ),
+                    ),
+                    child: new Container(
+                      width: 60.0,
+                      height: 60.0,
+                      decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         image: new DecorationImage(
                           fit: BoxFit.fill,
                           image: AssetImage(
                               Imagename),
                         ),
-                        color: circleIconBackgroundColor())),
-                Text(title,
+                      color: circleIconBackgroundColor())))):((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==0) && title=="Attendance")?CustomPaint(
+                  painter: CirclePainter(
+                    0,
+                    _controller,
+                    color: appStartColor(),
+                  ),
+                  child: ScaleTransition(
+                      scale: Tween(begin: 0.90, end: 1.0).animate(
+                        CurvedAnimation(
+                          parent: _controller,
+                          curve: Curves.fastOutSlowIn,
+                        ),
+                      ),
+                      child: new Container(
+                          width: 60.0,
+                          height: 60.0,
+                          decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: new DecorationImage(
+                                fit: BoxFit.fill,
+                                image: AssetImage(
+                                    Imagename),
+                              ),
+                              color: circleIconBackgroundColor())))):new Container(
+                      width: 60.0,
+                      height: 60.0,
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(
+                                Imagename),
+                          ),
+                          color: circleIconBackgroundColor())),
+              ((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount<2)&& title=="Employee")?ScaleTransition(
+                  scale: Tween(begin: 0.80, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),),
+                  child: Text(title,
+                    textAlign: TextAlign.center,
+                    style: new TextStyle(
+                        fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.bold)),
+                ):((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==0) && title=="Attendance")?ScaleTransition(
+                scale: Tween(begin: 0.90, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),),
+                child: Text(title,
+                    textAlign: TextAlign.center,
+                    style: new TextStyle(
+                        fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.bold)),
+                ):Text(title,
                     textAlign: TextAlign.center,
                     style: new TextStyle(
                         fontSize: 15.0, color: Colors.black)),
-              ],
-            ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget homewidget() {
     return Stack(
       children: <Widget>[
         Container(
-          //height: MediaQuery.of(context).size.height,
           margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
           padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-          // width: MediaQuery.of(context).size.width*0.9,
           decoration: new ShapeDecoration(
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(20.0)),
@@ -424,22 +481,63 @@ class _HomePageStatemain extends State<HomePageMain> {
             crossAxisCount: 3,
             padding: EdgeInsets.all(3.0),
             children: <Widget>[
-              makeDashboardItem("Dashboard",DashboardMain(), 'assets/icons/Dashboard_icon.png'),
+              Opacity(opacity:_visible,child: makeDashboardItem("Dashboard", DashboardMain(), 'assets/icons/Dashboard_icon.png')),
               makeDashboardItem("Profile", CollapsingTab(), 'assets/icons/profile_icon.png'),
-              makeDashboardItem("Employee", EmployeeList(sts: "1"), 'assets/icons/Employee_icon.png'),
-              if(perAttendance == '1') makeDashboardItem("Attendance", HomePage(), 'assets/icons/Attendance_icon.png'),
-              if(perEmployeeLeave == '1')  makeDashboardItem("Leave",  MyLeave(), 'assets/icons/leave_icon.png'),
-              if(perTimeoff == '1') makeDashboardItem("Time Off", TimeoffSummary(), 'assets/icons/Timeoff_icon.png'),
-              if(perPunchLocation == '1') makeDashboardItem("Visits", PunchLocationSummary(), 'assets/icons/visits_icon.png'),
-              if(perFlexi == '1') makeDashboardItem("Flexi Time", Flexitime(), 'assets/icons/Flexi_icon.png'),
-              if(perSalary == '1') makeDashboardItem("Salary", SalarySummary(), 'assets/icons/Salary_icon.png'),
-              if(perPayroll == '1' || perPayPeriod == '1') makeDashboardItem("Payroll", PayrollSummary(), 'assets/icons/Salary_icon.png'),
-              if(perSalaryExpense == '1') makeDashboardItem("Expense", MyExpence(), 'assets/icons/Expense_icon.png'),
-              if(perPayrollExpense == '1') makeDashboardItem("Expense", MyPayrollExpense(), 'assets/icons/Expense_icon.png'),
-              if(perAttendance == '1' || perEmployeeLeave == '1' || perTimeoff == '1') makeDashboardItem("Reports", AllReports(), 'assets/icons/graph_icon.png'),
+              makeDashboardItem("Employee", EmployeeList(sts: 1), 'assets/icons/Employee_icon.png'),
+              if(perAttendance == '1') Opacity(opacity:_visible1,child: makeDashboardItem("Attendance", HomePage(), 'assets/icons/Attendance_icon.png')),
+              if(perEmployeeLeave == '1') Opacity(opacity:_visible,child: makeDashboardItem("Leave",  MyLeave(), 'assets/icons/leave_icon.png')),
+              if(perTimeoff == '1') Opacity(opacity:_visible,child: makeDashboardItem("Time Off", TimeoffSummary(), 'assets/icons/Timeoff_icon.png')),
+              if(perPunchLocation == '1') Opacity(opacity:_visible,child: makeDashboardItem("Visits", PunchLocationSummary(), 'assets/icons/visits_icon.png')),
+              if(perFlexi == '1') Opacity(opacity:_visible,child: makeDashboardItem("Flexi Time", Flexitime(), 'assets/icons/Flexi_icon.png')),
+              if(perSalary == '1') Opacity(opacity:_visible,child: makeDashboardItem("Salary", SalarySummary(), 'assets/icons/Salary_icon.png')),
+              if(perPayroll == '1' || perPayPeriod == '1') Opacity(opacity:_visible,child: makeDashboardItem("Payroll", PayrollSummary(), 'assets/icons/Salary_icon.png')),
+              if(perSalaryExpense == '1') Opacity(opacity:_visible,child: makeDashboardItem("Expense", MyExpence(), 'assets/icons/Expense_icon.png')),
+              if(perPayrollExpense == '1') Opacity(opacity:_visible,child: makeDashboardItem("Expense", MyPayrollExpense(), 'assets/icons/Expense_icon.png')),
+              if(perAttendance == '1' || perEmployeeLeave == '1' || perTimeoff == '1') Opacity(opacity:_visible,child: makeDashboardItem("Reports", AllReports(), 'assets/icons/graph_icon.png')),
             ],
           ),
         ),
+        ((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount<2))?Positioned(
+          left:55.0,
+          top:220.0,
+          child: Container(
+            width: 300,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0)
+              ),
+              color: Colors.transparent
+            ),
+            child:Padding(
+              padding: const EdgeInsets.only(top:10.0, right:10.0, left:10.0, bottom:10.0),
+              child: Text("Kindly tap on the Employee Icon to add an employee", style: new TextStyle(
+                color: Colors.black54,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.0,
+              )),
+            ),
+          ),
+        ):((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==0))?Center(
+          child: Container(
+            width: 300,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                    Radius.circular(10.0)
+                ),
+                color: Colors.transparent
+            ),
+            child:Padding(
+              padding: const EdgeInsets.only(top:10.0, right:10.0, left:10.0, bottom:10.0),
+              child: Text("Kindly tap on the Attendance Icon to punch Attendance", style: new TextStyle(
+                color: Colors.black54,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.0,
+              )),
+            ),
+          ),
+        ):Center()
       ],
     );
   }

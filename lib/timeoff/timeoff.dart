@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -55,11 +57,16 @@ class _TimeOffPageState extends State<TimeOffPage> {
   String fname="", lname="", empid="", email="", status="", orgid="", orgdir="", sstatus="", org_name="", desination="", profile,latit="",longi="";
   String aid="";
   String shiftId="";
+  var time1;
+
   @override
   void initState() {
     super.initState();
     initPlatformState();
     getOrgName();
+    _dateController.text=dateFormat.format(DateTime.now());
+    _starttimeController.text=DateFormat.Hm().format(DateTime.now());
+    _endtimeController.text=DateFormat.Hm().format(DateTime.now().add(Duration(minutes: 1)));
   }
 
   getOrgName() async{
@@ -126,24 +133,42 @@ class _TimeOffPageState extends State<TimeOffPage> {
   getmainhomewidget(){
     return WillPopScope(
       onWillPop: ()=> sendToTimeoffList(),
-      child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor:scaffoldBackColor(),
-          appBar: new AppHeader(profileimage,showtabbar,orgName),
-          bottomNavigationBar:  new HomeNavigation(),
-          endDrawer: new AppDrawer(),
-          body: ModalProgressHUD(
-              inAsyncCall: isServiceCalling,
-              opacity: 0.15,
-              progressIndicator: SizedBox(
-                child:new CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation(Colors.green),
-                    strokeWidth: 5.0),
-                height: 40.0,
-                width: 40.0,
-              ),
-              child: getTimeoffWidgit()
-          )
+      child: RefreshIndicator(
+        child: Scaffold(
+            key: _scaffoldKey,
+            backgroundColor:scaffoldBackColor(),
+            appBar: new AppHeader(profileimage,showtabbar,orgName),
+            bottomNavigationBar:  new HomeNavigation(),
+            endDrawer: new AppDrawer(),
+            body: ModalProgressHUD(
+                inAsyncCall: isServiceCalling,
+                opacity: 0.15,
+                progressIndicator: SizedBox(
+                  child:new CircularProgressIndicator(
+                      valueColor: new AlwaysStoppedAnimation(Colors.green),
+                      strokeWidth: 5.0),
+                  height: 40.0,
+                  width: 40.0,
+                ),
+                child: getTimeoffWidgit()
+            )
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 2)).then((onvalue) {
+            setState(() {
+              _dateController.clear();
+              _starttimeController.clear();
+              _endtimeController.clear();
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }
@@ -213,7 +238,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
                                   print(DateTime.now());
                                   return showDatePicker(
                                       context: context,
-                                      firstDate: DateTime.now().subtract(Duration(days: 1)),
+                                      firstDate: DateTime.now().subtract(Duration(days: 0)),
                                       initialDate: currentValue ?? DateTime.now(),
                                       lastDate: DateTime(2100));
                                 },
@@ -225,13 +250,13 @@ class _TimeOffPageState extends State<TimeOffPage> {
                                       color: Colors.grey,
                                     ), // icon is 48px widget.
                                   ), // icon is 48px widget.
-
                                   labelText: 'Date',
                                 ),
                                 validator: (date) {
-                                  if (date==null){
+                                  if (_dateController.text.isEmpty){
                                     return 'Please enter time off date';
                                   }
+                                  return null;
                                 },
                               ),
                             ),
@@ -265,9 +290,21 @@ class _TimeOffPageState extends State<TimeOffPage> {
                                   ),
                                 ),
                                 validator: (time) {
-                                  if (time==null) {
+                                  if (_starttimeController.text.isEmpty) {
                                     return 'Please enter start time';
                                   }
+                                  var arr=_starttimeController.text.split(':');
+                                  var arrtime=DateFormat.Hm().format(DateTime.now()).split(':');
+                                  print("arrtime[0]");
+                                  print(arrtime[0]);
+                                  print("arrtime[1]");
+                                  print(arrtime[1]);
+                                  final startTime = DateTime(2018, 6, 23,int.parse(arr[0]),int.parse(arr[1]),00,00);
+                                  final currenttime = DateTime(2018, 6, 23,int.parse(arrtime[0]),int.parse(arrtime[1]),00,00);
+                                  if(_dateController.text==dateFormat.format(DateTime.now()) && startTime.isBefore(currenttime)){
+                                    return "You can't apply time off \nbefore current time";
+                                  }
+                                  return null;
                                 },
                               ),
                             ),
@@ -296,7 +333,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
                                   ),
                                 ),
                                 validator: (time) {
-                                  if (time==null) {
+                                  if (_starttimeController.text.isEmpty) {
                                     return 'Please enter end time';
                                   }
 
@@ -309,6 +346,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
                                   }else if(startTime.isAtSameMomentAs(endTime)){
                                     return '\"To Time\" can\'t be equal.';
                                   }
+                                  return null;
                                 },
                               ),
                             ),
@@ -337,9 +375,9 @@ class _TimeOffPageState extends State<TimeOffPage> {
                                   if (value.isEmpty) {
                                     return 'Please enter reason';
                                   }
+                                  return null;
                                 },
-                                onFieldSubmitted: (String value) {
-                                },
+                                onFieldSubmitted: (String value) {},
                                 maxLines: null,
                               ),
                             ),

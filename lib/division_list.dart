@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
@@ -19,6 +22,7 @@ class _DivisionState extends State<Division> {
   static const statuses =  ['Active', 'Inactive'];
   String orgName = "";
   bool _isButtonDisabled = false;
+  bool _isServiceCalling = false;
   int hrsts=0;
   int adminsts=0;
   int divhrsts=0;
@@ -63,127 +67,150 @@ class _DivisionState extends State<Division> {
   mainDivisionWidget() {
     return WillPopScope(
       onWillPop: () => move(),
-      child: new Scaffold(
-        backgroundColor: scaffoldBackColor(),
-        key: _scaffoldKey,
-        appBar: AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar: new HomeNavigation(),
-        endDrawer: new AppDrawer(),
-        body: Container(
-          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-          decoration: new ShapeDecoration(
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(20.0)),
-            color: Colors.white,
-          ),
-          child: Column(
-            children: [
-              Center(
-                  child: Text(
-                'Divisions',
-                style: TextStyle(
-                  fontSize: 22.0,
-                  color: appStartColor(),
+      child: RefreshIndicator(
+        child: new Scaffold(
+          backgroundColor: scaffoldBackColor(),
+          key: _scaffoldKey,
+          appBar: AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar: new HomeNavigation(),
+          endDrawer: new AppDrawer(),
+          body: ModalProgressHUD(
+              inAsyncCall: _isServiceCalling,
+              opacity: 0.15,
+              progressIndicator: SizedBox(
+                child:new CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation(Colors.green),
+                    strokeWidth: 5.0),
+                height: 40.0,
+                width: 40.0,
+              ),
+              child: Container(
+                margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                decoration: new ShapeDecoration(
+                  shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(20.0)),
+                  color: Colors.white,
                 ),
-              )),
-              //Divider(),
-              SizedBox(height: 5.0,),
-              /*Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _searchController,
-                    focusNode: searchFocusNode,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      border: OutlineInputBorder(
-                        borderRadius:  new BorderRadius.circular(10.0),
-                      ),
-                      prefixIcon: Icon(Icons.search, size: 30,),
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      hintText: 'Search Division',
-                      labelText: 'Search Division',
-                      suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
-                          onPressed: () {
-                            _searchController.clear();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Division()),
-                            );
-                          }
-                      ):null,
-                      //focusColor: Colors.white,
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        divname = value;
-                      });
-                    },
-                  ),
-                ),
-              ),*/
-              Container(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Container(
-                        //width: MediaQuery.of(context).size.width*0.65,
+                    Center(
                         child: Text(
-                          'Name',
+                          'Divisions',
                           style: TextStyle(
-                              color: appStartColor(),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0),
+                            fontSize: 22.0,
+                            color: appStartColor(),
+                          ),
+                        )),
+                    //Divider(),
+                    SizedBox(height: 5.0,),
+                    /*Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _searchController,
+                      focusNode: searchFocusNode,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        border: OutlineInputBorder(
+                          borderRadius:  new BorderRadius.circular(10.0),
                         ),
+                        prefixIcon: Icon(Icons.search, size: 30,),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: 'Search Division',
+                        labelText: 'Search Division',
+                        suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Division()),
+                              );
+                            }
+                        ):null,
+                        //focusColor: Colors.white,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          divname = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),*/
+                    Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15.0),
+                            child: Container(
+                              //width: MediaQuery.of(context).size.width*0.65,
+                              child: Text(
+                                'Name',
+                                style: TextStyle(
+                                    color: appStartColor(),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0),
+                              ),
+                            ),
+                          ),
+                          /*SizedBox(
+                        width: 5,
+                      ),*/
+                          Padding(
+                            padding: const EdgeInsets.only(right: 30.0),
+                            child: Container(
+                              child: Text(
+                                'Status',
+                                style: TextStyle(
+                                    color: appStartColor(),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    /*SizedBox(
-                      width: 5,
-                    ),*/
-                    Padding(
-                      padding: const EdgeInsets.only(right: 30.0),
-                      child: Container(
-                        child: Text(
-                          'Status',
-                          style: TextStyle(
-                              color: appStartColor(),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0),
-                        ),
-                      ),
+                    Divider(),
+                    new Expanded(
+                      child: getDivisionWidget(),
                     ),
                   ],
                 ),
               ),
-              Divider(),
-              new Expanded(
-                child: getDivisionWidget(),
-              ),
-            ],
           ),
-        ),
-        floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
-          backgroundColor: Colors.orange[800],
-          onPressed: (){
-            showDialog(
-              context: context,
-              builder: (context) {
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(context).pop(true);
+          floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
+            backgroundColor: Colors.orange[800],
+            onPressed: (){
+              showDialog(
+                context: context,
+                builder: (context) {
+                  Future.delayed(Duration(seconds: 3), () {
+                    Navigator.of(context).pop(true);
+                  });
+                  return AlertDialog(
+                    content: new Text("To Add a new Division, login to the web panel"),
+                  );
                 });
-                return AlertDialog(
-                  content: new Text("To Add a new Division, login to the web panel"),
-                );
-              });
-          },
-          tooltip: 'Add Division',
-          child: new Icon(Icons.add),
-        ):Center(),
+            },
+            tooltip: 'Add Division',
+            child: new Icon(Icons.add),
+          ):Center(),
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            /*setState(() {
+              _searchController.clear();
+            });*/
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }
@@ -266,13 +293,23 @@ class _DivisionState extends State<Division> {
     Widget updateButton = RaisedButton(
       color: Colors.orange[800],
       child: Text(
-        "UPDATE",
+        (_isButtonDisabled && _isServiceCalling)?"Updating..":"UPDATE",
         style: TextStyle(color: Colors.white),
       ),
       onPressed: () async {
-        if(_isButtonDisabled)
-          return null;
+        if(_isButtonDisabled==false)
+          return showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                });
+                return AlertDialog(
+                  content: new Text("No changes found"),
+                );
+              });
         setState(() {
+          _isServiceCalling=true;
           _isButtonDisabled=true;
         });
         var sts = await updateDiv(status, id);
@@ -288,15 +325,7 @@ class _DivisionState extends State<Division> {
                 content: new Text("Division is updated successfully"),
               );
             });
-          /*showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text('Division update successfully.'),
-          )
-          );*/
           getDivisionWidget();
-          setState(() {
-            _isButtonDisabled=false;
-          });
         }else if(sts.contains("-2")){
           Navigator.of(context, rootNavigator: true).pop('dialog');
           showDialog(
@@ -306,18 +335,10 @@ class _DivisionState extends State<Division> {
                 Navigator.of(context).pop(true);
               });
               return AlertDialog(
-                content: new Text("This division can't be deactivated. Employees are already assigned to it"),
+                content: new Text("This division can't be updated. Employees are already assigned to it"),
               );
             });
-          /*showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text("Employees assigned to this division therefore can't be updated"),
-          )
-          );*/
           getDivisionWidget();
-          setState(() {
-            _isButtonDisabled=false;
-          });
         }else{
           Navigator.of(context, rootNavigator: true).pop('dialog');
           showDialog(
@@ -330,28 +351,29 @@ class _DivisionState extends State<Division> {
                 content: new Text("Unable to update division"),
               );
             });
-          /*showDialog(context: context, child:
-          new AlertDialog(
-            content: new Text('Unable to update division'),
-          )
-          );*/
-          setState(() {
-            _isButtonDisabled=false;
-          });
         }
+        setState(() {
+          _isServiceCalling=false;
+          _isButtonDisabled=false;
+        });
       },
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       content: Container(
-        height: MediaQuery.of(context).size.height*0.22,
-        width: MediaQuery.of(context).size.width*0.32,
+        //height: MediaQuery.of(context).size.height*0.15,
+        //width: MediaQuery.of(context).size.width*0.32,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(0.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-               new Expanded(
-                   child:  TextField(
+              Center(
+                child:Text("Update Division",style: new TextStyle(fontSize: 22.0,color:appStartColor())),
+              ),
+              SizedBox(height: 15.0),
+              new Container(
+                   child: TextField(
                      enabled: false, //Disable a `TextField`
                      controller: Name,
                      decoration: new InputDecoration(
@@ -362,14 +384,13 @@ class _DivisionState extends State<Division> {
                          labelText: 'Division', hintText: 'Division Name'),
                    ),
                ),
-
               SizedBox(height: 10,),
-              new Expanded(child:
-                new InputDecorator(
+              new Container(
+                child:new InputDecorator(
                   decoration:  InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide( color: Colors.grey.withOpacity(0.0), width: 1,),
+                      borderSide: BorderSide(color: Colors.grey.withOpacity(0.0), width: 1,),
                     ),
                     labelText: 'Status',
                   ),
@@ -382,6 +403,7 @@ class _DivisionState extends State<Division> {
                           status=newValue;
                           Navigator.of(context, rootNavigator: true).pop('dialog'); // here I pop to avoid multiple Dialogs
                           showAlertDialog(context, id, div, status);
+                          _isButtonDisabled=true;
                         });
                         print("status");
                         print(status);

@@ -313,7 +313,7 @@ class _AllSetting extends State<AllSetting> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => EmployeeList()),
+                        MaterialPageRoute(builder: (context) => EmployeeList(sts: 2)),
                       );
                     },
                   ),

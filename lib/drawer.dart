@@ -29,10 +29,12 @@ class _AppDrawerState extends State<AppDrawer> {
   String desination="";
   String profile="";
   int reportper = 0;
+  int adminsts=0;
+  int hrsts=0;
+  int divhrsts=0;
   String buystatus = "";
   String trialstatus = "";
   String orgmail = "";
-
 
   @override
   void initState() {
@@ -41,10 +43,16 @@ class _AppDrawerState extends State<AppDrawer> {
   }
 
   initPlatformState() async {
+    print("App Drawer");
     final prefs = await SharedPreferences.getInstance();
     setState(() {
+      plansts = prefs.getInt('plansts');
+      empcount = prefs.getInt('empcount');
       fname = prefs.getString('fname') ?? '';
       profile = prefs.getString('profile') ?? '';
+      hrsts = prefs.getInt('hrsts')??0;
+      adminsts = prefs.getInt('adminsts')??0;
+      divhrsts = prefs.getInt('divhrsts')??0;
       profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
       profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __)  {
         if (mounted) {
@@ -54,6 +62,7 @@ class _AppDrawerState extends State<AppDrawer> {
         }
       }));
     });
+    print("App Drawer initplatform");
   }
 
   @override
@@ -110,10 +119,10 @@ class _AppDrawerState extends State<AppDrawer> {
                               ),
                             ),
                           ]),
-                                                SizedBox(height: 4.0,),
+                        SizedBox(height: 4.0,),
                         Text("Hi "+globalpersnalinfomap['FirstName']+" "+globalpersnalinfomap['LastName'],style: new TextStyle(fontSize: 18.0,color: Colors.white)),
                         SizedBox(height: 3.0),
-                        Text(globalcompanyinfomap['Designation'],style: new TextStyle(fontSize: 12.0,color: Colors.white)),
+                        globalcompanyinfomap['Designation']!=""?Text(globalcompanyinfomap['Designation'],style: new TextStyle(fontSize: 12.0,color: Colors.white)):Center(),
                         sstatus!=''?Text(sstatus,style: new TextStyle(fontSize: 10.0,color: Colors.white)):Center(),
                       ],
                     ),
@@ -145,7 +154,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 new Text('Home', style: new TextStyle(fontSize: 15.0)),
               ],
             ),
-            onTap: () {
+            onTap:() {
               Navigator.of(context).pop();
               Navigator.push(
                 context,
@@ -162,11 +171,15 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AllReports()),
-              );
+              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0))) {
+                return null;
+              }else{
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AllReports()),
+                );
+              }
             },
           ),
 
@@ -178,11 +191,15 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => allSalarySummary()),
-              );
+              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0))) {
+                return null;
+              }else{
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => allSalarySummary()),
+                );
+              }
             },
           ):Center(),
 
@@ -194,11 +211,15 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => allPayrollSummary()),
-              );
+              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0))) {
+                return null;
+              }else{
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => allPayrollSummary()),
+                );
+              }
             },
           ):Center(),
 
@@ -210,12 +231,15 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AllSetting()),
-              );
-
+              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0))) {
+                return null;
+              }else{
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AllSetting()),
+                );
+              }
             },
           ),
 
@@ -245,7 +269,7 @@ class _AppDrawerState extends State<AppDrawer> {
             onTap: () {
               Navigator.of(context).pop();
               LaunchReview.launch(
-                  iOSAppId: "1489689034"
+                androidAppId: "com.ubihrm.ubihrm",
               );
             },
           ),

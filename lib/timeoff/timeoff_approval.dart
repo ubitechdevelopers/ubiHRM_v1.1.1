@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:rounded_modal/rounded_modal.dart';
@@ -82,20 +84,27 @@ class _TimeOffApp extends State<TimeOffApp> {
     return MaterialApp(
       home: DefaultTabController(
         length: choices.length,
-        child: Scaffold(
-          endDrawer: new AppDrawer(),
-          appBar:new ApprovalAppHeader(profileimage,showtabbar,orgName),
-          body: TabBarView(
-            children: choices.map((Choice choice) {
-              return Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: ChoiceCard(choice: choice),
-
-              );
-            }).toList(),
+        child: RefreshIndicator(
+          child: Scaffold(
+            endDrawer: new AppDrawer(),
+            appBar:new ApprovalAppHeader(profileimage,showtabbar,orgName),
+            body: TabBarView(
+              children: choices.map((Choice choice) {
+                return Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: ChoiceCard(choice: choice),
+                );
+              }).toList(),
+            ),
+            bottomNavigationBar:new HomeNavigation(),
           ),
-          bottomNavigationBar:new HomeNavigation(),
-
+          onRefresh: () async {
+            Completer<Null> completer = new Completer<Null>();
+            await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+              completer.complete();
+            });
+            return completer.future;
+          },
         ),
       ),
     );

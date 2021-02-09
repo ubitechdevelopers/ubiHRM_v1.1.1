@@ -33,6 +33,9 @@ class Login{
       Map employeeMap = json.decode(response.data);
       if(employeeMap['response']==1){
         prefs.setInt("response", 1);
+        prefs.setInt("plansts", employeeMap['plansts']);
+        prefs.setInt("empcount", employeeMap['empcount']);
+        prefs.setInt("attcount", employeeMap['attcount']);
         prefs.setString("employeeid", employeeMap['employeeid']);
         prefs.setString("empemail", employeeMap['empemail']);
         prefs.setString("empnumber", employeeMap['empnumber']);
@@ -136,11 +139,14 @@ class Login{
         Map employeeMap = json.decode(response1.data);
         if(employeeMap['response']==1){
           prefs.setInt("response", 1);
+          prefs.setInt("plansts", employeeMap['plansts']);
+          prefs.setInt("empcount", employeeMap['empcount']);
           prefs.setString("employeeid", employeeMap['employeeid']);
           prefs.setString("empemail", employeeMap['empemail']);
           prefs.setString("empnumber", employeeMap['empnumber']);
           prefs.setString("email", employeeMap['email']);
           prefs.setString("number", employeeMap['number']);
+          prefs.setString("name", employeeMap['name']);
           prefs.setString("organization", employeeMap['organization']);
           prefs.setString("userprofileid", employeeMap['userprofileid']);
           prefs.setString("countryid", employeeMap['countryid']);
@@ -153,6 +159,8 @@ class Login{
           prefs.setInt('hrsts', employeeMap['hrsts']);
           prefs.setInt('adminsts', employeeMap['adminsts']);
           prefs.setInt('dataaccess', employeeMap['dataaccess']);
+          prefs.setInt('SAPintegrationsts', employeeMap['SAPintegrationsts']);
+          prefs.setInt('divhrsts', employeeMap['divhrsts']);
 
           String empid = prefs.getString('employeeid')??"";
           String organization =prefs.getString('organization')??"";

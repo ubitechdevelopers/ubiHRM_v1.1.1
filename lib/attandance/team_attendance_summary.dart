@@ -243,14 +243,23 @@ class _MyTeamAtt extends State<MyTeamAtt> {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-        onWillPop: ()=> sendToHome(),
+      onWillPop: ()=> sendToHome(),
+      child: RefreshIndicator(
         child: new Scaffold(
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new AppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:new HomeNavigation(),
           body: getWidgets(context),
-        )
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
+      )
     );
   }
 

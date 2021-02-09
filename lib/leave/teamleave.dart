@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:month_picker_strip/month_picker_strip.dart';
 import 'package:rounded_modal/rounded_modal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +21,10 @@ class MyTeamLeave extends StatefulWidget {
 }
 
 class _MyTeamLeaveState extends State<MyTeamLeave> {
+  DateTime selectedMonth;
+  DateTime to;
+  DateTime from;
+
   int _currentIndex = 0;
   int response;
   var profileimage;
@@ -30,6 +38,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
   bool _checkwithdrawnleave = false;
   var PerLeave;
   var PerApprovalLeave;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Widget mainWidget= new Container(width: 0.0,height: 0.0,);
 
@@ -38,6 +47,10 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
     _searchController = new TextEditingController();
     searchFocusNode = FocusNode();
     super.initState();
+    from = new DateTime.now();
+    selectedMonth = new DateTime(from.year, from.month, 1);
+    print("team's leave");
+    print(selectedMonth);
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
     profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
       if (mounted) {
@@ -80,14 +93,31 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
 
   mainScafoldWidget(){
     return new WillPopScope(
-        onWillPop: ()=> sendToHome(),
+      onWillPop: ()=> sendToHome(),
+      child: RefreshIndicator(
         child: Scaffold(
-            backgroundColor:scaffoldBackColor(),
-            endDrawer: new AppDrawer(),
-            appBar: new AppHeader(profileimage,showtabbar,orgName),
-            bottomNavigationBar:new HomeNavigation(),
-            body: homewidget()
-        )
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:new HomeNavigation(),
+          body: homewidget()
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            setState(() {
+              _searchController.clear();
+              empname='';
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return completer.future;
+        },
+      )
     );
   }
 
@@ -199,9 +229,13 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                   ),
                   Container(
                     padding: EdgeInsets.only(top:5.0),
-                    child:Center(
-                      child:Text("Team's Leave",
-                        style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Team's Leave",
+                            style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                        Text(" ("+new DateFormat("MMM yyyy").format(selectedMonth)+")",style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),),
+                      ],
                     ),
                   ),
                   Container(
@@ -241,6 +275,29 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                       ),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(top:5.0, bottom:5.0),
+                    child: new MonthStrip(
+                      format: 'MMM yyyy',
+                      from: fiscalStart==null?orgCreatedDate:fiscalStart,
+                      to: selectedMonth,
+                      initialMonth: selectedMonth,
+                      height:  25.0,
+                      viewportFraction: 0.25,
+                      onMonthChanged: (v) {
+                        setState(() {
+                          selectedMonth = v;
+                          if (v != null && v.toString()!='') {
+                            res=true;
+                          } else {
+                            res=false;
+                          }
+                          print(selectedMonth);
+                        });
+                      },
+                    ),
+                  ),
+                  new Divider(),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     //crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,7 +330,7 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                       color: Colors.white,
                       //////////////////////////////////////////////////////////////////////---------------------------------
                       child: new FutureBuilder<List<LeaveA>>(
-                        future: getTeamApprovals(empname),
+                        future: getTeamApprovals(empname,formatter.format(selectedMonth)),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if (snapshot.data.length>0) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:ubihrm/view_employee.dart';
 import 'b_navigationbar.dart';
 import 'global.dart';
 import 'home.dart';
@@ -71,7 +72,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
     );
   }
 
-  Widget appBarHeading() {
+  /*Widget appBarHeading() {
 
     Widget profile = new GestureDetector(
       child: new Column(
@@ -100,7 +101,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
       alignment: Alignment.center,
       child: profile,
     );
-  }
+  }*/
 
   /* @override
   void dispose() {
@@ -308,11 +309,12 @@ class _CollapsingTabState extends State<CollapsingTab> {
                 fontSize: 16.0,
               )),
             SizedBox(height: 5.0,),
+            globalcompanyinfomap['Designation']!=""?
             Text(globalcompanyinfomap['Designation'],
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14.0,
-              ))
+              )):Center(),
           ]),
       ),
     );
@@ -606,23 +608,32 @@ class _CollapsingTabState extends State<CollapsingTab> {
                                     itemBuilder: (BuildContext context, int index) {
                                       toreportprofileimage = new NetworkImage(snapshot.data[index].ProfilePic);
 //                                      if(snapshot.data[index].juniorlist==null)
-                                        return ListTile(
-                                          leading: new Container(child:Padding(
-                                            padding: const EdgeInsets.only(top:0.0),
-                                            child: Container(
-                                                width: 50.0,
-                                                height: 50.0,
-                                                decoration: new BoxDecoration(
-                                                    color:Colors.grey[300],
-                                                    shape: BoxShape.circle,
-                                                    image: new DecorationImage(
-                                                      fit: BoxFit.fill,
-                                                      image:  toreportprofileimage,
-                                                    )
-                                                )),
-                                          )
+                                        return InkWell(
+                                          child: ListTile(
+                                            leading: new Container(child:Padding(
+                                              padding: const EdgeInsets.only(top:0.0),
+                                              child: Container(
+                                                  width: 50.0,
+                                                  height: 50.0,
+                                                  decoration: new BoxDecoration(
+                                                      color:Colors.grey[300],
+                                                      shape: BoxShape.circle,
+                                                      image: new DecorationImage(
+                                                        fit: BoxFit.fill,
+                                                        image:  toreportprofileimage,
+                                                      )
+                                                  )),
+                                            )
+                                            ),
+                                            //title:Text(snapshot.data[index].FirstName+" "+(snapshot.data[index].LastName.toString()!="null"?snapshot.data[index].LastName.toString():""),style: TextStyle(color: appStartColor(), decoration: TextDecoration.underline),),
+                                            title:Text(snapshot.data[index].Name,style: TextStyle(color: appStartColor(), decoration: TextDecoration.underline),),
                                           ),
-                                          title:Text(snapshot.data[index].FirstName+" "+(snapshot.data[index].LastName.toString()!="null"?snapshot.data[index].LastName.toString():"")),
+                                          onTap: (){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => ViewEmployee(empid: snapshot.data[index].Id, sts: 3)),
+                                            );
+                                          },
                                         );
                                       //print("snapshot.data[index].juniorlist.length");
                                       //print(snapshot.data[index].juniorlist.length.toString());

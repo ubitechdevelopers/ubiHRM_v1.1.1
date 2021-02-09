@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +17,7 @@ class AboutApp extends StatefulWidget {
 
 class _AboutApp extends State<AboutApp> {
   String org_name = "";
-  String new_ver='1.0.9';
+  String new_ver='1.1.0';
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   getOrgName() async{
@@ -47,26 +48,35 @@ class _AboutApp extends State<AboutApp> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        key: _scaffoldKey,
-        backgroundColor:scaffoldBackColor(),
-        appBar: new AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              new Text(org_name, style: new TextStyle(fontSize: 20.0)),
-            ],
+    return RefreshIndicator(
+      child: new Scaffold(
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          appBar: new AppBar(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                new Text(org_name, style: new TextStyle(fontSize: 20.0)),
+              ],
+            ),
+            leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePageMain()),
+              );
+            },),
+            backgroundColor: appStartColor(),
           ),
-          leading: IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePageMain()),
-            );
-          },),
-          backgroundColor: appStartColor(),
-        ),
-        endDrawer: new AppDrawer(),
-        body: userWidget()
+          endDrawer: new AppDrawer(),
+          body: userWidget()
+      ),
+      onRefresh: () async {
+        Completer<Null> completer = new Completer<Null>();
+        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          completer.complete();
+        });
+        return completer.future;
+      },
     );
   }
 

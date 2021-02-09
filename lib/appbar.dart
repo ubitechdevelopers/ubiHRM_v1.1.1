@@ -16,7 +16,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     if (profileimage!=null) {
       _checkLoadedprofile = false;
     };
-    showtabbar= showtabbar1;
+    showtabbar = showtabbar1;
   }
 
   @override

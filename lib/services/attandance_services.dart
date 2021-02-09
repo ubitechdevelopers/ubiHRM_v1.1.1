@@ -31,8 +31,7 @@ Future UpdateStatus() async {
     final res = await http.get(path_ubiattendance+ 'UpdateStatus?platform=Android');
     print(path_ubiattendance+ 'UpdateStatus?platform=Android');
     return ((json.decode(res.body.toString()))[0]['status']).toString();
-  }
-  catch(e){
+  } catch(e){
     print("Error finding current version of the app");
     return"error";
   }
@@ -855,29 +854,6 @@ List<Map> create(List data, int label) {
   return list;
 }
 
-Future<List<Map>> getDepartmentsList(int label) async {
-  final prefs = await SharedPreferences.getInstance();
-  String orgid = prefs.getString('orgdir') ?? '';
-  print(path_ubiattendance + 'DepartmentMaster?orgid=$orgid');
-  final response = await http.get(path_ubiattendance + 'DepartmentMaster?orgid=$orgid');
-  List data = json.decode(response.body.toString());
-  //print(data);
-  List<Map> depts = createList(data, label);
-  return depts;
-}
-
-
-Future<List<Map>> getDesignationsList(int label) async {
-  final prefs = await SharedPreferences.getInstance();
-  String orgid = prefs.getString('orgdir') ?? '';
-  print(path_ubiattendance + 'DesignationMaster?orgid=$orgid');
-  final response = await http.get(path_ubiattendance + 'DesignationMaster?orgid=$orgid');
-  List data = json.decode(response.body.toString());
-  //print(data);
-  List<Map> desg = createList(data, label);
-  return desg;
-}
-
 
 Future<List<Map>> getLocationsList(int label) async {
   final prefs = await SharedPreferences.getInstance();
@@ -908,6 +884,30 @@ List<Map> createLocationList(List data, int label) {
 }
 
 
+Future<List<Map>> getDepartmentsList(int label) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'DepartmentMaster?orgid=$orgid');
+  final response = await http.get(path_ubiattendance + 'DepartmentMaster?orgid=$orgid');
+  List data = json.decode(response.body.toString());
+  //print(data);
+  List<Map> depts = createList(data, label);
+  return depts;
+}
+
+
+Future<List<Map>> getDesignationsList(int label) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'DesignationMaster?orgid=$orgid');
+  final response = await http.get(path_ubiattendance + 'DesignationMaster?orgid=$orgid');
+  List data = json.decode(response.body.toString());
+  //print(data);
+  List<Map> desg = createList(data, label);
+  return desg;
+}
+
+
 Future<List<Map>> getShiftsList(int label) async {
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
@@ -915,7 +915,7 @@ Future<List<Map>> getShiftsList(int label) async {
   final response = await http.get(path_ubiattendance + 'shiftMaster?orgid=$orgid');
   List data = json.decode(response.body.toString());
   //print(data);
-  List<Map> shift = createList(data, 0);
+  List<Map> shift = createList(data, label);
   return shift;
 }
 
@@ -934,6 +934,142 @@ List<Map> createList(List data, int label) {
       };
       list.add(tos);
     }
+  }
+  return list;
+}
+
+/*Future<List<Map>> getList(int label, String val) async {
+  List<Map> datalist = new List();
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'otherMaster?orgid=$orgid');
+  final response = await http.get(path_ubiattendance + 'otherMaster?orgid=$orgid');
+  List data = json.decode(response.body.toString());
+  if(val.contains('EmployeeStatus')) {
+    datalist = createStatusList(data, label);
+    print("EmployeeStatus");
+    print(datalist);
+  } else if(val.contains('Gender')) {
+    print("Gender");
+    print(datalist);
+    datalist = createGenderList(data, label);
+  }
+  return datalist;
+}*/
+
+Future<List<Map>> getEmpStatusList(int label) async {
+  List<Map> datalist = new List();
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'empStatusMaster');
+  final response = await http.get(path_ubiattendance + 'empStatusMaster');
+  List data = json.decode(response.body.toString());
+  datalist = createStatusList(data, label);
+  return datalist;
+}
+
+List<Map> createStatusList(List data, int label) {
+  List<Map> list = new List();
+  if (label == 1) // with -All- label
+    list.add({"Id": "0", "Name": "-All-"});
+  else
+    list.add({"Id": "0", "Name": "-Select-"});
+
+  for (int i = 0; i < data.length; i++) {
+    //if (data[i]['OtherType']=='EmployeeStatus') {
+      Map empsts = {
+        "Id": data[i]["Id"].toString(),
+        "Name": data[i]["DisplayName"].toString(),
+        "ActualValue": data[i]["ActualValue"].toString(),
+      };
+      list.add(empsts);
+    //}
+  }
+  return list;
+}
+
+Future<List<Map>> getGenderList(int label) async {
+  List<Map> datalist = new List();
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'genderMaster');
+  final response = await http.get(path_ubiattendance + 'genderMaster');
+  List data = json.decode(response.body.toString());
+  datalist = createGenderList(data, label);
+  return datalist;
+}
+
+List<Map> createGenderList(List data, int label) {
+  List<Map> list = new List();
+  if (label == 1) // with -All- label
+    list.add({"Id": "0", "Name": "-All-"});
+  else
+    list.add({"Id": "0", "Name": "-Select-"});
+
+  for (int i = 0; i < data.length; i++) {
+    //if (data[i]['OtherType'] == 'Gender') {
+      Map gender = {
+        "Id": data[i]["Id"].toString(),
+        "Name": data[i]["DisplayName"].toString(),
+        "ActualValue": data[i]["ActualValue"].toString(),
+      };
+      list.add(gender);
+    //}
+  }
+  return list;
+}
+
+Future<List<Map>> getNationalityList(int label) async {
+  List<Map> datalist = new List();
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'NationalityMaster');
+  final response = await http.get(path_ubiattendance + 'NationalityMaster');
+  List data = json.decode(response.body.toString());
+  datalist = createnationalityList(data, label);
+  return datalist;
+}
+
+List<Map> createnationalityList(List data, int label) {
+  List<Map> list = new List();
+  if (label == 1) // with -All- label
+    list.add({"Id": "0", "Name": "-All-"});
+  else
+    list.add({"Id": "0", "Name": "-Select-"});
+
+  for (int i = 0; i < data.length; i++) {
+    Map nationality = {
+      "Id": data[i]["Id"].toString(),
+      "Name": data[i]["Name"].toString(),
+    };
+    list.add(nationality);
+  }
+  return list;
+}
+
+Future<List<Map>> getGradeList(int label) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'gradeMaster?orgid=$orgid');
+  final response = await http.get(path_ubiattendance + 'gradeMaster?orgid=$orgid');
+  List data = json.decode(response.body.toString());
+  List<Map> shift = createGradeList(data, label);
+  return shift;
+}
+
+List<Map> createGradeList(List data, int label) {
+  List<Map> list = new List();
+  if (label == 1) // with -All- label
+    list.add({"Id": "0", "Name": "-All-"});
+  else
+    list.add({"Id": "0", "Name": "-Select-"});
+
+  for (int i = 0; i < data.length; i++) {
+    Map tos = {
+      "Name": data[i]["Name"].toString(),
+      "Id": data[i]["Id"].toString()
+    };
+    list.add(tos);
   }
   return list;
 }
@@ -1084,7 +1220,6 @@ Future<String> addDept(name, status) async {
   final response = await http.get(path_ubiattendance +'addDept?uid=$empid&orgid=$orgdir&name=$name&sts=$status');
   return response.body.toString();
 }
-
 
 Future<String> updateDept(dept, sts, did) async {
   print(dept + "   " + sts + "   " + did);
@@ -1584,6 +1719,15 @@ Future getEmpCount() async {
   return ((json.decode(res.body)));
 }
 
+getEmployeeDetailById(id) async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'getUsersDetailById?refno=$orgid&empid=$id');
+  final response = await http.get(path_ubiattendance + 'getUsersDetailById?refno=$orgid&empid=$id');
+  print("json.decode(response.body.toString())");
+  print(json.decode(response.body.toString()));
+  return json.decode(response.body.toString());
+}
 
 Future<List<Emp>> getEmployee(offset, limit, empname) async {
   final prefs = await SharedPreferences.getInstance();
@@ -3025,3 +3169,46 @@ List<FlexiAtt> createListFlexiReport(List data) {
   return list;
 }
 ///////////////////////////////////Flexi Attendance Service Ends Here/////////////////////////////////////
+
+Future getDivCode() async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'getdivisioncode?orgid=$orgid');
+  final res = await http.get(path_ubiattendance + 'getdivisioncode?orgid=$orgid');
+  return((json.decode(res.body)));
+}
+Future getDeptCode() async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'getdepartmentcode?orgid=$orgid');
+  final res = await http.get(path_ubiattendance + 'getdepartmentcode?orgid=$orgid');
+  return((json.decode(res.body)));
+}
+Future getGradeCode() async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'getgradecode?orgid=$orgid');
+  final res = await http.get(path_ubiattendance + 'getgradecode?orgid=$orgid');
+  return((json.decode(res.body)));
+}
+Future getDesgCode() async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'getdesignationcode?orgid=$orgid');
+  final res = await http.get(path_ubiattendance + 'getdesignationcode?orgid=$orgid');
+  return((json.decode(res.body)));
+}
+Future getLocCode() async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path_ubiattendance + 'getlocationcode?orgid=$orgid');
+  final res = await http.get(path_ubiattendance + 'getlocationcode?orgid=$orgid');
+  return((json.decode(res.body)));
+}
+Future getEmpCode() async {
+  final prefs = await SharedPreferences.getInstance();
+  String orgid = prefs.getString('orgdir') ?? '';
+  print(path + 'getempcode?orgid=$orgid');
+  final res = await http.get(path + 'getempcode?orgid=$orgid');
+  return((json.decode(res.body)));
+}

@@ -216,23 +216,32 @@ class _ExpenseDetailViewState extends State<ExpenseDetailView> {
   Widget mainScafoldWidget(){
     return  WillPopScope(
       onWillPop: ()=> sendToExpenseList(),
-      child: Scaffold(
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar:new HomeNavigation(),
-        body:  ModalProgressHUD(
-            inAsyncCall: _checkwithdrawnexpense,
-            opacity: 0.15,
-            progressIndicator: SizedBox(
-              child:new CircularProgressIndicator(
-                  valueColor: new AlwaysStoppedAnimation(Colors.green),
-                  strokeWidth: 5.0),
-              height: 40.0,
-              width: 40.0,
-            ),
-            child: homewidget()
+      child: RefreshIndicator(
+        child: Scaffold(
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:new HomeNavigation(),
+          body:  ModalProgressHUD(
+              inAsyncCall: _checkwithdrawnexpense,
+              opacity: 0.15,
+              progressIndicator: SizedBox(
+                child:new CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation(Colors.green),
+                    strokeWidth: 5.0),
+                height: 40.0,
+                width: 40.0,
+              ),
+              child: homewidget()
+          ),
         ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }

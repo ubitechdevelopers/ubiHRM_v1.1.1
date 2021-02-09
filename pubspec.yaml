@@ -61,6 +61,8 @@ dependencies:
   geolocator: ^5.1.2
   multiselect_formfield: ^0.1.5
   flutter_appavailability: ^0.0.21
+  highlighter_coachmark: ^0.0.3
+  google_maps_place_picker: ^0.9.5
 
 
 dev_dependencies:

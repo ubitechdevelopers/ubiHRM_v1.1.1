@@ -6,53 +6,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/drawer.dart';
-import 'package:ubihrm/edit_employee.dart';
+import 'package:ubihrm/addedit_employee.dart';
 import 'package:ubihrm/employees_list.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/profile.dart';
+import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
 import 'package:ubihrm/settings.dart';
 
 class ViewEmployee extends StatefulWidget {
   @override
   final String empid;
-  final String profileimg;
-  final String empcode;
-  final String fname;
-  final String lname;
-  final String dob;
-  final String nationality;
-  final String maritalsts;
-  final String religion;
-  final String bloodg;
-  final String doc;
-  final String gender;
-  final String reportingto;
-  final String div;
-  final String divid;
-  final String dept;
-  final String deptid;
-  final String desg;
-  final String desgid;
-  final String loc;
-  final String locid;
-  final String shift;
-  final String shiftid;
-  final String empsts;
-  final String grade;
-  final String emptype;
-  final String email;
-  final String phone;
-  final String father;
-  final String doj;
-  final String profiletype;
-  ViewEmployee({Key key,this.empid,this.profileimg,this.empcode,this.fname,this.lname,this.dob,this.nationality,this.maritalsts,this.religion,this.bloodg,this.doc,this.gender,this.reportingto,this.div,this.divid,this.dept,this.deptid,this.desg,this.desgid,this.loc,this.locid,this.shift,this.shiftid,this.empsts,this.grade,this.emptype,this.phone,this.email,this.father,this.doj,this.profiletype}): super(key:key);
+  final int sts;
+  ViewEmployee({Key key,this.empid,this.sts/*,this.profileimg,this.empcode,this.fname,this.lname,this.dob,this.nationality,this.maritalsts,this.religion,this.bloodg,this.doc,this.gender,this.reportingto,this.div,this.divid,this.dept,this.deptid,this.desg,this.desgid,this.loc,this.locid,this.shift,this.shiftid,this.empsts,this.grade,this.emptype,this.phone,this.email,this.father,this.doj,this.profiletype*/}): super(key:key);
   _ViewEmployeeState createState() => _ViewEmployeeState();
 }
+
 class _ViewEmployeeState extends State<ViewEmployee> {
 
   bool isServiceCalling = false;
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
   bool isloading = false;
   final dateFormat = DateFormat("d MMM yyyy");
@@ -66,10 +39,96 @@ class _ViewEmployeeState extends State<ViewEmployee> {
   int adminsts=0;
   int divhrsts=0;
   bool _checkLoaded = true;
+  Future _list;
+  List datalist = new List();
+  String profileimg="";
+  String empcode="";
+  String name="";
+  String dob="";
+  String nationality="";
+  String maritalsts="";
+  String religion="";
+  String bloodg="";
+  String doc="";
+  String gender="";
+  String reportingto="";
+  String div="";
+  String dept="";
+  String desg="";
+  String loc="";
+  String shift="";
+  String empsts="";
+  String grade="";
+  String emptype="";
+  String email="";
+  String phone="";
+  String father="";
+  String doj="";
+  String profiletype="";
 
   @override
   void initState() {
     super.initState();
+    _list=getEmployeeDetailById(widget.empid);
+    _list.then((data) async{
+      setState(() {
+        datalist = data;
+        print("datalist");
+        print(datalist);
+        print(datalist[0]["Id"]);
+        profileimg=datalist[0]["Profile"];
+        print(profileimg);
+        empcode=datalist[0]["EmployeeCode"];
+        print(empcode);
+        name= datalist[0]["name"];
+        print(name);
+        dob=datalist[0]["DOB"];
+        print(dob);
+        nationality=datalist[0]["Nationality"];
+        print(nationality);
+        maritalsts=datalist[0]["MaritalStatus"];
+        print(maritalsts);
+        religion=datalist[0]["Religion"];
+        print(religion);
+        bloodg=datalist[0]["BloodGroup"];
+        print(bloodg);
+        doc=datalist[0]["DOC"];
+        print(doc);
+        gender=datalist[0]["Gender"];
+        print(gender);
+        reportingto=datalist[0]["ReportingTo"];
+        print(reportingto);
+        div=datalist[0]["Division"];
+        print(div);
+        dept=datalist[0]["Department"];
+        print(dept);
+        desg=datalist[0]["Designation"];
+        print(desg);
+        loc=datalist[0]["Location"];
+        print(loc);
+        shift=datalist[0]["Shift"];
+        print(shift);
+        empsts=datalist[0]["EmployeeStatus"];
+        print(empsts);
+        grade=datalist[0]["Grade"];
+        print(grade);
+        emptype=datalist[0]["EmploymentType"];
+        print(emptype);
+        email=datalist[0]["Email"];
+        print(email);
+        if(datalist[0]["CountryCode"]!='')
+          phone=datalist[0]["CountryCode"]+" "+datalist[0]["Mobile"];
+        else
+          phone=datalist[0]["Mobile"];
+        print(phone);
+        father=datalist[0]["FatherName"];
+        print(father);
+        doj=datalist[0]["DOJ"];
+        print(doj);
+        profiletype="("+datalist[0]["ProfileType"]+")";
+        print(profiletype);
+      });
+    });
     profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     showtabbar=false;
     getOrgName();
@@ -101,10 +160,25 @@ class _ViewEmployeeState extends State<ViewEmployee> {
   }
 
   Future<bool> sendToSettings() async{
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => AllSetting()), (Route<dynamic> route) => false,
-    );
+    if(widget.sts==1) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => EmployeeList(sts: widget.sts)), (
+          Route<dynamic> route) => false,
+      );
+    }else if(widget.sts==2) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => EmployeeList(sts: widget.sts)), (
+          Route<dynamic> route) => false,
+      );
+    }else if(widget.sts==3) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => CollapsingTab()), (
+          Route<dynamic> route) => false,
+      );
+    }
     return false;
   }
 
@@ -115,7 +189,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
           key: _scaffoldKey,
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
-          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          appBar: new ViewEmployeeAppHeader(profileimage,showtabbar,orgName,widget.sts),
           bottomNavigationBar:  new HomeNavigation(),
           body: ModalProgressHUD(
               inAsyncCall: isServiceCalling,
@@ -170,12 +244,6 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                               ),
                               onTap: (){
                                 Navigator
-                                    .of(
-                                    context,
-                                    rootNavigator: true)
-                                    .pop(
-                                    'dialog');
-                                Navigator
                                     .push(
                                     context,
                                     MaterialPageRoute(
@@ -183,16 +251,8 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                     context) =>
                                     EditEmployee(
                                         empid: widget.empid,
-                                        fname: widget.fname,
-                                        lname: widget.lname,
-                                        phone: widget.phone,
-                                        email: widget.email,
-                                        divisionid: widget.divid,
-                                        departmentid: widget.deptid,
-                                        designationid: widget.desgid,
-                                        locationid: widget.locid,
-                                        shiftid: widget.shiftid,
-                                        )));
+                                        sts: widget.sts
+                                    )));
                               },
                             ):Center(),
                             InkWell(
@@ -205,7 +265,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                       image: new DecorationImage(
                                           fit: BoxFit
                                               .fill,
-                                          image: _checkLoaded ? AssetImage('assets/default.png') : NetworkImage(widget.profileimg)
+                                          image: NetworkImage(profileimg)
                                       )
                                   )
                               ),
@@ -215,7 +275,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 new Text(
-                                  widget.fname+" "+widget.lname,
+                                  name,
                                   style: TextStyle(
                                       color: Colors
                                           .black87,
@@ -224,7 +284,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                   ),
                                 ),
                                 new Text(
-                                  " ("+widget.profiletype+")",
+                                  profiletype,
                                   style: TextStyle(
                                       color: appStartColor(),
                                       fontSize: 20.0,
@@ -259,8 +319,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                     children: [
                                       TableCell(
                                         child: Row(
-                                          children: <
-                                              Widget>[
+                                          children: <Widget>[
                                             new Text(
                                               globallabelinfomap['emp_code'],
                                               style: TextStyle(
@@ -280,7 +339,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.empcode!='null'?widget.empcode:"",
+                                                empcode!=""?empcode:"",
                                                 style: TextStyle(
                                                     fontSize: 15.0,
                                                 ),
@@ -314,11 +373,10 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                       ),
                                       TableCell(
                                         child: Row(
-                                          children: <
-                                              Widget>[
+                                          children: <Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.dept!='null'?widget.dept:"",
+                                                dept!=""?dept:"",
                                                 style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -357,7 +415,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.div!='null'?widget.div:"",
+                                                div!=""?div:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -395,7 +453,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.desg!='null'?widget.desg:"",
+                                                desg!=""?desg:"",
                                                 style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -434,7 +492,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.loc!='null'?widget.loc:"",
+                                                loc!=""?loc:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -472,7 +530,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.empsts!='null'?widget.empsts:"",
+                                                empsts!=""?empsts:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -509,7 +567,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.emptype!='null'?widget.emptype:"",
+                                                emptype!=""?emptype:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -546,7 +604,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.email!='null'?widget.email:"",
+                                                email!=""?email:"",
                                                 style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -585,7 +643,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.grade!='null'?widget.grade:"",
+                                                grade!=""?grade:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -618,10 +676,10 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                       ),
                                       TableCell(
                                         child: Row(
-                                          children: <
-                                              Widget>[
+                                          children: <Widget>[
                                             Expanded(
-                                              child: Text(widget.shift!='null'?widget.shift:"",
+                                              child: Text(
+                                                shift!=""?shift:"",
                                                 style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -660,7 +718,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.reportingto!='null'?widget.reportingto:"",
+                                                reportingto!=""?reportingto:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -680,7 +738,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                               children: <Widget>[
                                 new Text("PERSONAL DETAILS",
                                   //textAlign: TextAlign.center,
-                                  style: new TextStyle(fontWeight: FontWeight.bold, fontSize:16.0, color:Colors.black/*color: appStartColor()*/ ),
+                                  style: new TextStyle(fontWeight: FontWeight.bold, fontSize:16.0, color:Colors.black),
                                 ),
                                 //Spacer()
                               ],
@@ -722,7 +780,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.father!='null'?widget.father:"",
+                                                father!=""?father:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -759,7 +817,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.maritalsts!='null'?widget.maritalsts:"",
+                                                maritalsts!=""?maritalsts:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -796,7 +854,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.dob!='null'?widget.dob:"",
+                                                dob!=""?dob:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -833,7 +891,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.bloodg!='null'?widget.bloodg:"",
+                                                bloodg!=""?bloodg:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -870,7 +928,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.gender!='null'?widget.gender:"",
+                                                gender!=""?gender:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -908,7 +966,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.nationality!='null'?widget.nationality:"",
+                                                nationality!=""?nationality:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -945,7 +1003,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.religion!='null'?widget.religion:"",
+                                                religion!=""?religion:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -982,7 +1040,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.doj!='null'?widget.doj:"",
+                                                doj!=""?doj:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -1019,7 +1077,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.doc!='null'?widget.doc:"",
+                                                doc!=""?doc:"",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                 ),
@@ -1056,7 +1114,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.phone!='null'?widget.phone:"",
+                                                phone!=""?phone:"",
                                                 style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -1095,7 +1153,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
                                               Widget>[
                                             Expanded(
                                               child: Text(
-                                                widget.email!='null'?widget.email:"",
+                                                email!=""?email:"",
                                                 style: TextStyle(
                                                   color: Colors
                                                       .black87,
@@ -1119,4 +1177,101 @@ class _ViewEmployeeState extends State<ViewEmployee> {
           ]),
     );
   }
+}
+
+
+class ViewEmployeeAppHeader extends StatelessWidget implements PreferredSizeWidget{
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+  int sts;
+
+  ViewEmployeeAppHeader(profileimage1,showtabbar1,orgname1, sts1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+    };
+    showtabbar= showtabbar1;
+    sts=sts1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+                if(sts==1) {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => EmployeeList(sts: sts)), (
+                      Route<dynamic> route) => false,
+                  );
+                }else if(sts==2) {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => EmployeeList(sts: sts)), (
+                      Route<dynamic> route) => false,
+                  );
+                }else if(sts==3) {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => CollapsingTab()), (
+                      Route<dynamic> route) => false,
+                  );
+                }
+              },),
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(orgname, overflow: TextOverflow.ellipsis,)
+              ),
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
+
 }

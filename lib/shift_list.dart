@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 //import 'package:pdf/widgets.dart' as prefix0;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -69,116 +71,133 @@ class _ShiftList extends State<ShiftList> {
   getmainhomewidget() {
     return new WillPopScope(
       onWillPop: ()=> sendToHome(),
-      child: Scaffold(
-        backgroundColor: scaffoldBackColor(),
-        key: _scaffoldKey,
-        appBar: AppHeader(profileimage,showtabbar,orgName),
-        bottomNavigationBar:new HomeNavigation(),
+      child: RefreshIndicator(
+        child: Scaffold(
+          backgroundColor: scaffoldBackColor(),
+          key: _scaffoldKey,
+          appBar: AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar:new HomeNavigation(),
 
-        endDrawer: new AppDrawer(),
-        body: Container(
-          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-          decoration: new ShapeDecoration(
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(20.0)),
-            color: Colors.white,
-          ),
-          //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
-          child: Column(
-            children: <Widget>[
-              Center(
-                child: Text('Shifts',
-                  style: new TextStyle(fontSize: 22.0, color: appStartColor(),),),
-              ),
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _searchController,
-                    focusNode: searchFocusNode,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      border: OutlineInputBorder(
-                        borderRadius:  new BorderRadius.circular(10.0),
+          endDrawer: new AppDrawer(),
+          body: Container(
+            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            decoration: new ShapeDecoration(
+              shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(20.0)),
+              color: Colors.white,
+            ),
+            //   padding: EdgeInsets.only(left: 2.0, right: 2.0),
+            child: Column(
+              children: <Widget>[
+                Center(
+                  child: Text('Shifts',
+                    style: new TextStyle(fontSize: 22.0, color: appStartColor(),),),
+                ),
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _searchController,
+                      focusNode: searchFocusNode,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        border: OutlineInputBorder(
+                          borderRadius:  new BorderRadius.circular(10.0),
+                        ),
+                        prefixIcon: Icon(Icons.search, size: 30,),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: 'Search Shift',
+                        //labelText: 'Search Shift',
+                        suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ShiftList()),
+                              );
+                            }
+                        ):null,
+                        //focusColor: Colors.white,
                       ),
-                      prefixIcon: Icon(Icons.search, size: 30,),
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      hintText: 'Search Shift',
-                      //labelText: 'Search Shift',
-                      suffixIcon: _searchController.text.isNotEmpty?IconButton(icon: Icon(Icons.clear),
-                          onPressed: () {
-                            _searchController.clear();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ShiftList()),
-                            );
-                          }
-                      ):null,
-                      //focusColor: Colors.white,
+                      onChanged: (value) {
+                        setState(() {
+                          shiftname = value;
+                        });
+                      },
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        shiftname = value;
-                      });
-                    },
                   ),
                 ),
-              ),
-              //Divider(height: 1.5,),
-              //Divider(),
-              //SizedBox(height: 5.0),
-              Container(
-                padding: EdgeInsets.only(bottom:10.0,top: 0.0, left:15.0, right: 10.0),
-                width: MediaQuery.of(context).size.width*.9,
-                child: Row(
-                  //crossAxisAlignment: CrossAxisAlignment.start,
-                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.35,
-                      child: Text('Shifts', style: TextStyle(color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.left,),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.15,
-                      child: Text('Time In', style: TextStyle(color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.15,
-                      child: Text('Time Out', style: TextStyle( color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.center),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.15,
-                      child: Text('Status', style: TextStyle(color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.center),
-                    ),
-                  ],
+                //Divider(height: 1.5,),
+                //Divider(),
+                //SizedBox(height: 5.0),
+                Container(
+                  padding: EdgeInsets.only(bottom:10.0,top: 0.0, left:15.0, right: 10.0),
+                  width: MediaQuery.of(context).size.width*.9,
+                  child: Row(
+                    //crossAxisAlignment: CrossAxisAlignment.start,
+                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width*0.35,
+                        child: Text('Shifts', style: TextStyle(color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.left,),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width*0.15,
+                        child: Text('Time In', style: TextStyle(color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width*0.15,
+                        child: Text('Time Out', style: TextStyle( color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.center),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width*0.15,
+                        child: Text('Status', style: TextStyle(color: appStartColor(),fontSize: 16.0, fontWeight: FontWeight.bold),textAlign: TextAlign.center),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Divider(height: 0.2,),
-              new Expanded(
-                child: getShiftWidget(),
-              ),
-            ],
+                Divider(height: 0.2,),
+                new Expanded(
+                  child: getShiftWidget(),
+                ),
+              ],
+            ),
           ),
-        ),
-        floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
-          backgroundColor: Colors.orange[800],
-          onPressed: (){
-            showDialog(
-                context: context,
-                builder: (context) {
-                  Future.delayed(Duration(seconds: 3), () {
-                    Navigator.of(context).pop(true);
+          floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
+            backgroundColor: Colors.orange[800],
+            onPressed: (){
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    Future.delayed(Duration(seconds: 3), () {
+                      Navigator.of(context).pop(true);
+                    });
+                    return AlertDialog(
+                      content: new Text("To Add a new Shift, login to the web panel"),
+                    );
                   });
-                  return AlertDialog(
-                    content: new Text("To Add a new Shift, login to the web panel"),
-                  );
-                });
-          },
-          tooltip: 'Add Shift',
-          child: new Icon(Icons.add),
-        ):Center(),
+            },
+            tooltip: 'Add Shift',
+            child: new Icon(Icons.add),
+          ):Center(),
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            setState(() {
+              _searchController.clear();
+              shiftname='';
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }
@@ -418,7 +437,7 @@ class _ShiftList extends State<ShiftList> {
                             Navigator.of(context).pop(true);
                           });
                           return AlertDialog(
-                            content: new Text("This shift can't be deactivated. Employees are already assigned to it"),
+                            content: new Text("This shift can't be updated. Employees are already assigned to it"),
                           );
                         });
                       /*showDialog(context: context, child:

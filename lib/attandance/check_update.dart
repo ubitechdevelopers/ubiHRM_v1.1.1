@@ -15,10 +15,9 @@
 import 'package:flutter/material.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/home.dart';
 import 'package:ubihrm/login_page.dart';
 import 'package:ubihrm/services/attandance_services.dart';
-
-import 'home.dart';
 
 class CheckUpdate extends StatefulWidget {
   @override
@@ -83,26 +82,27 @@ class _CheckUpdate extends State<CheckUpdate> {
                       children: <Widget>[
                         mand_update=='0'?FlatButton(
                           shape: Border.all(color: Colors.black54),
-                          child:Text('Later',style:TextStyle(color: Colors.black54)),
+                          child:Text('LATER',style:TextStyle(color: Colors.black54)),
                           onPressed: (){
                             print('clicked');
                             (response == 1) ?
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => HomePage()),
+                              MaterialPageRoute(builder: (context) => HomePageMain()),
                             ) :
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => LoginPage()),
                             );
                           },
-                        ):SizedBox(width: 0.0,),
+                        ):SizedBox(width: 0.0),
+                        SizedBox(width: 10.0),
                         RaisedButton(
                           color: Colors.orange[800],
-                          child: Text('Update now',style: TextStyle(color: Colors.white),),
+                          child: Text('UPDATE',style: TextStyle(color: Colors.white),),
                           onPressed: (){
                             LaunchReview.launch(
-                                iOSAppId: "1489689034"
+                                androidAppId: "com.ubihrm.ubihrm",
                             );
                           },
                         ),

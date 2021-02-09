@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/attandance/compoffleave.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../all_reports.dart';
@@ -66,19 +69,24 @@ class _LeaveReports extends State<LeaveReports> {
   }
 
   getmainhomewidget(){
-    //  print('99999999999999' + _orgName.toString());
     return WillPopScope(
       onWillPop: ()=> sendToAllReportsList(),
-      child: new Scaffold(
-        key: _scaffoldKey,
-        backgroundColor:scaffoldBackColor(),
-        endDrawer: new AppDrawer(),
-        appBar: new AppHeader(profileimage,showtabbar,orgName),
-
-        bottomNavigationBar: HomeNavigation(),
-
-        body:getReportsWidget(),
-
+      child: RefreshIndicator(
+        child: new Scaffold(
+          key: _scaffoldKey,
+          backgroundColor:scaffoldBackColor(),
+          endDrawer: new AppDrawer(),
+          appBar: new AppHeader(profileimage,showtabbar,orgName),
+          bottomNavigationBar: HomeNavigation(),
+          body:getReportsWidget(),
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
 
@@ -216,6 +224,55 @@ class _LeaveReports extends State<LeaveReports> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => EmployeeLeaveList()),
+                    );
+                  },
+                ),
+
+                SizedBox(height: 6.0),
+                new RaisedButton(
+                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
+                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: Container(
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(const IconData(0xe821, fontFamily: "CustomIcon"), size: 30.0,),
+                        /*Container(
+                          decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: appStartColor(),
+                          ),
+                          child: Icon(Icons.directions_walk,size: 30.0,color: Colors.white,textDirection: TextDirection.ltr),
+                          padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                        ),*/
+                        SizedBox(width: 15.0),
+                        Expanded(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  child: Text("Compensatory Leave",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        Container(
+                          child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
+                        ),
+                      ],
+                    ),
+                  ),
+                  color: Colors.white,
+                  elevation: 4.0,
+                  textColor: Colors.black54,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CompOffLeave()),
                     );
                   },
                 ),

@@ -1,25 +1,33 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:highlighter_coachmark/highlighter_coachmark.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/CirclePainter.dart';
+import 'package:ubihrm/addedit_employee.dart';
 import 'package:ubihrm/home.dart';
+import 'package:ubihrm/profile.dart';
+import 'package:ubihrm/services/services.dart';
 import 'package:ubihrm/view_employee.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/appbar.dart';
 import 'drawer.dart';
+import 'model/model.dart';
 import 'settings.dart';
 
 class EmployeeList extends StatefulWidget {
-  final sts;
+  final int sts;
   EmployeeList({Key key,this.sts}): super(key:key);
 
   @override
   _EmployeeList createState() => _EmployeeList();
 }
 TextEditingController dept;
-class _EmployeeList extends State<EmployeeList> {
+class _EmployeeList extends State<EmployeeList> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  AnimationController _controller;
   int profiletype = 0;
   int empCount = 0;
   double tabCount = 0;
@@ -34,6 +42,9 @@ class _EmployeeList extends State<EmployeeList> {
   int hrsts=0;
   int adminsts=0;
   int divhrsts=0;
+  Employee emp;
+  //int plansts=0;
+  //int empcount=0;
 
   final List<String> data = new List();
   int initPosition = 0;
@@ -46,10 +57,15 @@ class _EmployeeList extends State<EmployeeList> {
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    )..repeat();
     dept = new TextEditingController();
     _searchController = new TextEditingController();
     searchFocusNode = FocusNode();
     profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
+    initPlatformState();
     getOrgName();
     getEmpCount().then((res) {
       setState(() {
@@ -63,9 +79,18 @@ class _EmployeeList extends State<EmployeeList> {
     });
   }
 
+  initPlatformState() async{
+    final prefs = await SharedPreferences.getInstance();
+    String empid = prefs.getString('employeeid')??"";
+    String organization =prefs.getString('organization')??"";
+    emp = new Employee(employeeid: empid, organization: organization);
+    await getProfileInfo(emp, context);
+  }
+
   @override
   void dispose() {
     // Clean up the focus node when the Form is disposed.
+    _controller.dispose();
     searchFocusNode.dispose();
     super.dispose();
   }
@@ -78,6 +103,8 @@ class _EmployeeList extends State<EmployeeList> {
       hrsts =prefs.getInt('hrsts')??0;
       adminsts =prefs.getInt('adminsts')??0;
       divhrsts =prefs.getInt('divhrsts')??0;
+      plansts = prefs.getInt('plansts');
+      empcount = prefs.getInt('empcount');
     });
   }
 
@@ -87,48 +114,93 @@ class _EmployeeList extends State<EmployeeList> {
   }
 
   Future<bool> move() async {
-    if(widget.sts=="1")
+    if(widget.sts==1 && widget.sts==4) {
+      await getProfileInfo(emp, context);
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => HomePageMain()), (
           Route<dynamic> route) => false,
       );
-    else
+    }else if(widget.sts==2) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => AllSetting()), (
           Route<dynamic> route) => false,
       );
+    }else{
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomePageMain()), (
+          Route<dynamic> route) => false,
+      );
+    }
     return false;
   }
 
   getmainhomewidget() {
     return new WillPopScope(
       onWillPop: () => move(),
-      child: new Scaffold(
-        backgroundColor: scaffoldBackColor(),
-        key: _scaffoldKey,
-        appBar: AppHeader(profileimage,showtabbar,orgName),
-        endDrawer: AppDrawer(),
-        bottomNavigationBar: new HomeNavigation(),
-        body: mainbodyWidget(),
-        floatingActionButton: (adminsts==1||hrsts==1||divhrsts==1)?new FloatingActionButton(
-          backgroundColor: Colors.orange[800],
-          onPressed: (){
-            showDialog(
-              context: context,
-              builder: (context) {
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(context).pop(true);
-                });
-                return AlertDialog(
-                  content: new Text("To Add a new Employee, login to the web panel"),
-                );
-              });
-          },
-          tooltip: 'Add Employee',
-          child: new Icon(Icons.add),
-        ):Center(),
+      child: RefreshIndicator(
+        child: new Scaffold(
+          backgroundColor: scaffoldBackColor(),
+          key: _scaffoldKey,
+          appBar: EmployeeListAppHeader(profileimage,showtabbar,orgName),
+          endDrawer: AppDrawer(),
+          bottomNavigationBar: new HomeNavigation(),
+          body: mainbodyWidget(),
+          floatingActionButton: (plansts==0 && empcount<2 && (adminsts==1||hrsts==1||divhrsts==1))?
+          CustomPaint(
+            painter: CirclePainter(
+              1,
+              _controller,
+              color: appStartColor(),
+            ),
+            child: ScaleTransition(
+              scale: Tween(begin: 0.90, end: 1.0).animate(
+                CurvedAnimation(
+                  parent: _controller,
+                  curve: Curves.fastOutSlowIn,
+                ),
+              ),
+              child: new FloatingActionButton(
+                backgroundColor: Colors.orange[800],
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EditEmployee(sts: 4)),
+                  );
+                },
+                tooltip: 'Add Employee',
+                child: new Icon(Icons.person_add_alt_1),
+              )
+            )
+          ):new FloatingActionButton(
+            backgroundColor: Colors.orange[800],
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditEmployee(sts: 4)),
+              );
+            },
+            tooltip: 'Add Employee',
+            child: new Icon(Icons.person_add_alt_1),
+          )
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            setState(() {
+              _searchController.clear();
+              empname='';
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return mainbodyWidget();
+        },
       ),
     );
   }
@@ -195,14 +267,13 @@ class _EmployeeList extends State<EmployeeList> {
                   ),
                 ],
               ),
-
               _searchController.text.isEmpty?Padding(
                 padding: const EdgeInsets.only(top:90.0),
                 child: tabBarView()
               ):Padding(
                 padding: const EdgeInsets.only(top:90.0),
                 child: Center(child:getDeptWidget(0, empCount),),
-              )
+              ),
             ],
           ),
         ),
@@ -284,32 +355,21 @@ class _EmployeeList extends State<EmployeeList> {
                               crossAxisAlignment: CrossAxisAlignment
                                   .center,
                               children: <Widget>[
-                                InkWell(
-                                  child: new Container(
-                                      margin: EdgeInsets.only(left: 5.0),
-                                      width: 40.0,
-                                      height: 40.0,
-                                      decoration: new BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: new DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: NetworkImage(snapshot.data[index].Profile.toString())
-                                          )
-                                      )
-                                  ),
-                                  onTap: () {
-                                    /*Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ImageView(myimage: snapshot.data[index].Profile,
-                                                  org_name: orgName)),);*/
-                                  },
+                                new Container(
+                                  margin: EdgeInsets.only(left: 5.0),
+                                  width: 40.0,
+                                  height: 40.0,
+                                  decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: new DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(snapshot.data[index].Profile.toString())
+                                    )
+                                  )
                                 ),
                                 SizedBox(width: 10.0,),
                                 Column(
-                                  crossAxisAlignment: CrossAxisAlignment
-                                      .start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Row(
                                       children: <Widget>[
@@ -348,100 +408,9 @@ class _EmployeeList extends State<EmployeeList> {
                                                   builder: (
                                                       context) =>
                                                       ViewEmployee(
-                                                          empid: snapshot.data[index]
-                                                              .Id
-                                                              .toString(),
-                                                          profileimg: snapshot.data[index]
-                                                              .Profile
-                                                              .toString(),
-                                                          empcode: snapshot.data[index]
-                                                            .EmpCode
-                                                            .toString(),
-                                                          fname: snapshot.data[index]
-                                                              .FName
-                                                              .toString(),
-                                                          lname: snapshot.data[index]
-                                                              .LName
-                                                              .toString(),
-                                                          dob: snapshot.data[index]
-                                                              .DOB
-                                                              .toString(),
-                                                          nationality: snapshot.data[index]
-                                                              .Nationality
-                                                              .toString(),
-                                                          maritalsts: snapshot.data[index]
-                                                            .MaritalSts
-                                                            .toString(),
-                                                          religion: snapshot.data[index]
-                                                              .Religion
-                                                              .toString(),
-                                                          bloodg: snapshot.data[index]
-                                                              .BloodG
-                                                              .toString(),
-                                                          doc: snapshot.data[index]
-                                                              .DOC
-                                                              .toString(),
-                                                          gender: snapshot.data[index]
-                                                              .Gender
-                                                              .toString(),
-                                                          reportingto: snapshot.data[index]
-                                                            .ReportingTo
-                                                            .toString(),
-                                                          div: snapshot.data[index]
-                                                              .Division
-                                                              .toString(),
-                                                          divid: snapshot.data[index]
-                                                              .DivisionId
-                                                              .toString(),
-                                                          dept: snapshot.data[index]
-                                                            .Department
-                                                            .toString(),
-                                                          deptid: snapshot.data[index]
-                                                            .DepartmentId
-                                                            .toString(),
-                                                          desg: snapshot.data[index]
-                                                            .Designation
-                                                            .toString(),
-                                                          desgid: snapshot.data[index]
-                                                            .DesignationId
-                                                            .toString(),
-                                                          loc: snapshot.data[index]
-                                                            .Location
-                                                            .toString(),
-                                                          locid: snapshot.data[index]
-                                                            .LocationId
-                                                            .toString(),
-                                                          shift: snapshot.data[index]
-                                                              .Shift
-                                                              .toString(),
-                                                          shiftid: snapshot.data[index]
-                                                              .ShiftId
-                                                              .toString(),
-                                                          empsts: snapshot.data[index]
-                                                              .EmpSts
-                                                              .toString(),
-                                                          grade: snapshot.data[index]
-                                                              .Grade
-                                                              .toString(),
-                                                          emptype: snapshot.data[index]
-                                                            .EmpType
-                                                            .toString(),
-                                                          email: snapshot.data[index]
-                                                            .Email
-                                                            .toString(),
-                                                          phone: snapshot.data[index]
-                                                            .Mobile
-                                                            .toString(),
-                                                          father: snapshot.data[index]
-                                                              .FatherName
-                                                              .toString(),
-                                                          doj: snapshot.data[index]
-                                                              .DOJ
-                                                              .toString(),
-                                                          profiletype: snapshot.data[index]
-                                                            .ProfileType
-                                                            .toString(),
-                                                          )),
+                                                        empid: snapshot.data[index].Id.toString(),
+                                                        sts: widget.sts
+                                                      )),
                                             );
                                           },
                                         ),
@@ -457,6 +426,19 @@ class _EmployeeList extends State<EmployeeList> {
                       SizedBox(height: 15.0,)
                     ]
                   ),
+                  onTap: () {
+                    Navigator
+                        .push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (
+                              context) =>
+                              ViewEmployee(
+                                  empid: snapshot.data[index].Id.toString(),
+                                  sts: widget.sts
+                              )),
+                    );
+                  },
                 );
               },
             );
@@ -574,7 +556,6 @@ class _CustomTabsState extends State<CustomTabView> with TickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
     if (widget.itemCount < 1) return widget.stub ?? Container();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -628,3 +609,80 @@ class _CustomTabsState extends State<CustomTabView> with TickerProviderStateMixi
   }
 }
 
+class EmployeeListAppHeader extends StatelessWidget implements PreferredSizeWidget {
+  bool _checkLoadedprofile = true;
+  var profileimage;
+  bool showtabbar;
+  var orgname;
+  EmployeeListAppHeader(profileimage1,showtabbar1,orgname1){
+    profileimage = profileimage1;
+    orgname = orgname1;
+    if (profileimage!=null) {
+      _checkLoadedprofile = false;
+    };
+    showtabbar= showtabbar1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new GradientAppBar(
+        backgroundColorStart: appStartColor(),
+        backgroundColorEnd: appEndColor(),
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(icon:Icon(Icons.arrow_back),
+              onPressed:(){
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePageMain()), (Route<dynamic> route) => false,
+                );
+              },),
+            GestureDetector(
+              // When the child is tapped, show a snackbar
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CollapsingTab()),
+                );
+              },
+              child:Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        // image: AssetImage('assets/avatar.png'),
+                        image: _checkLoadedprofile ? AssetImage('assets/default.png') : profileimage,
+                      )
+                  )
+              ),
+            ),
+            Flexible(
+              child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(orgname, overflow: TextOverflow.ellipsis,)
+              ),
+            )
+          ],
+        ),
+        bottom:
+        showtabbar==true ? TabBar(
+          unselectedLabelColor: Colors.white70,
+          indicatorColor: Colors.white,
+          isScrollable: true,
+          tabs: choices.map((Choice choice) {
+            return Tab(
+              text: choice.title,
+            );
+          }).toList(),
+        ):null
+    );
+  }
+  @override
+  Size get preferredSize => new Size.fromHeight(showtabbar==true ? 100.0 : 60.0);
+
+}

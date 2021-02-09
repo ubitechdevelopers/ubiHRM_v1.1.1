@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
@@ -119,25 +121,46 @@ class _AddHolidayState extends State<AddHoliday> {
   Widget mainScafoldWidget(){
     return  WillPopScope(
       onWillPop: ()=> sendToSettings(),
-      child: Scaffold(
+      child: RefreshIndicator(
+        child: Scaffold(
           key: _scaffoldKey,
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
           appBar: new AddHolidayAppHeader(profileimage,showtabbar,orgName),
-//          appBar: AppHeader(profileimage,showtabbar,orgName),
           bottomNavigationBar:  new HomeNavigation(),
           body: ModalProgressHUD(
-              inAsyncCall: isServiceCalling,
-              opacity: 0.15,
-              progressIndicator: SizedBox(
-                child:new CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation(Colors.green),
-                    strokeWidth: 5.0),
-                height: 40.0,
-                width: 40.0,
-              ),
-              child: homewidget()
+            inAsyncCall: isServiceCalling,
+            opacity: 0.15,
+            progressIndicator: SizedBox(
+              child:new CircularProgressIndicator(
+                  valueColor: new AlwaysStoppedAnimation(Colors.green),
+                  strokeWidth: 5.0),
+              height: 40.0,
+              width: 40.0,
+            ),
+            child: homewidget()
           )
+        ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            setState(() {
+              _nameController.clear();
+              _fromController.clear();
+              _toController.clear();
+              _desController.clear();
+              _radioValue ='1';
+              _myDivisions = new List();
+              _myLocations = new List();
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            });
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
     );
   }
@@ -184,6 +207,12 @@ class _AddHolidayState extends State<AddHoliday> {
                                     ), // icon is 48px widget.
                                   )
                               ),
+                              validator: (date) {
+                                if (_nameController.text.isEmpty){
+                                  return "Please enter the holiday's name";
+                                }
+                                return null;
+                              },
                             ),
                             TextFormField(
                               keyboardType: TextInputType.text,
@@ -219,7 +248,6 @@ class _AddHolidayState extends State<AddHoliday> {
                                       lastDate: DateTime(2100)
                                   );
                                 },
-
                                 decoration: InputDecoration(
                                   prefixIcon: Padding(
                                     padding: EdgeInsets.all(0.0),
@@ -235,6 +263,12 @@ class _AddHolidayState extends State<AddHoliday> {
                                     Date1 = date;
                                   });
                                   print("----->Changed date------> "+Date1.toString());
+                                },
+                                validator: (date) {
+                                  if (_fromController.text.isEmpty){
+                                    return "Please enter the holiday's start date";
+                                  }
+                                  return null;
                                 },
                               ),
                             ),
@@ -270,16 +304,52 @@ class _AddHolidayState extends State<AddHoliday> {
                                   });
                                   print("----->Changed date------> "+Date2.toString());
                                 },
+                                validator: (date) {
+                                  if (_toController.text.isEmpty){
+                                    return "Please enter the holiday's start date";
+                                  }
+                                  if(Date2.isBefore(Date1)){
+                                    print("Date1 ---->"+Date1.toString());
+                                    print("Date2---->"+Date2.toString());
+                                    return "End date can't be earlier than start date";
+                                  }
+                                  return null;
+                                },
                               ),
                             ),
                             SizedBox(height: 5.0,),
-                            //***************************
                             Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  children: [
+                                    Radio(
+                                      value: '1',
+                                      groupValue: _radioValue,
+                                      onChanged: radioButtonChanges,
+                                    ),
+                                    Text("OR",),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Radio(
+                                      value: '2',
+                                      groupValue: _radioValue,
+                                      onChanged: radioButtonChanges,
+                                    ),
+                                    Text("AND",),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            //***************************
+                            /*Row(
+                              //crossAxisAlignment: CrossAxisAlignment.start,
+                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 70.0),
+                                  padding: const EdgeInsets.only(left: 0.0),
                                   child: Column(
                                     children: [
                                       Row(
@@ -305,23 +375,28 @@ class _AddHolidayState extends State<AddHoliday> {
                                 ),
                                 SizedBox(height: 5.0,),
                                 Padding(
-                                  padding: const EdgeInsets.only(right:70.0),
+                                  padding: const EdgeInsets.only(right:0.0),
                                   child: Column(
                                     children: [
                                       Row(
                                         children: [
                                           Column(
                                             children: [
-                                              Radio(
-                                                value: '2',
-                                                groupValue: _radioValue,
-                                                onChanged: radioButtonChanges,
+                                              Row(
+                                                children: [
+                                                  Radio(
+                                                    value: '2',
+                                                    groupValue: _radioValue,
+                                                    onChanged: radioButtonChanges,
+                                                  ),
+                                                  Text("AND",),
+                                                ],
                                               ),
                                             ],
                                           ),
                                           Column(
                                             children: [
-                                              Text("AND",),
+
                                             ],
                                           ),
                                         ],
@@ -331,7 +406,7 @@ class _AddHolidayState extends State<AddHoliday> {
                                 ),
 
                               ],
-                            ),
+                            ),*/
                             SizedBox(height: 0.5,),
                             getDivision_DD(),
                             SizedBox(height: 0.5,),
@@ -347,7 +422,7 @@ class _AddHolidayState extends State<AddHoliday> {
                                   color: Colors.orange[800],
                                   onPressed: () async {
                                     if (_formKey.currentState.validate()) {
-                                      if (_nameController.text.isEmpty) {
+                                      /*if (_nameController.text.isEmpty) {
                                         showDialog(
                                           context: context,
                                           builder: (context) {
@@ -358,11 +433,11 @@ class _AddHolidayState extends State<AddHoliday> {
                                               content: new Text("Please enter the holiday's name"),
                                             );
                                           });
-                                        /*showDialog(context: context, child:
+                                        *//*showDialog(context: context, child:
                                         new AlertDialog(
                                           content: new Text("Please enter holiday name"),
                                         )
-                                        );*/
+                                        );*//*
                                       }else if(_fromController.text.isEmpty){
                                         showDialog(
                                           context: context,
@@ -374,11 +449,11 @@ class _AddHolidayState extends State<AddHoliday> {
                                               content: new Text("Please enter the holiday's start date"),
                                             );
                                           });
-                                        /*showDialog(context: context, child:
+                                        *//*showDialog(context: context, child:
                                         new AlertDialog(
                                           content: new Text("Please enter holiday from date"),
                                         )
-                                        );*/
+                                        );*//*
                                       }else if(_toController.text.isEmpty){
                                         showDialog(
                                           context: context,
@@ -390,11 +465,11 @@ class _AddHolidayState extends State<AddHoliday> {
                                               content: new Text("Please enter the holiday's end date"),
                                             );
                                           });
-                                        /*showDialog(context: context, child:
+                                        *//*showDialog(context: context, child:
                                         new AlertDialog(
                                           content: new Text("Please enter holiday to date"),
                                         )
-                                        );*/
+                                        );*//*
                                       }else if(Date2.isBefore(Date1)){
                                         showDialog(
                                           context: context,
@@ -406,11 +481,11 @@ class _AddHolidayState extends State<AddHoliday> {
                                               content: new Text("End date can't be earlier than the start date"),
                                             );
                                           });
-                                        /*showDialog(context: context, child:
+                                        *//*showDialog(context: context, child:
                                         new AlertDialog(
                                           content: new Text("To date can't be smaller"),
                                         )
-                                        );*/
+                                        );*//*
                                       }else if(_radioValue=='2' && _myDivisions.isEmpty){
                                         showDialog(
                                           context: context,
@@ -433,7 +508,7 @@ class _AddHolidayState extends State<AddHoliday> {
                                               content: new Text("Please select atleast one Location"),
                                             );
                                           });
-                                      }else if(_radioValue=='1' && ((_myLocations.isNotEmpty || _myDivisions.isEmpty) && (_myLocations.isEmpty || _myDivisions.isNotEmpty) && (_myLocations.isEmpty || _myDivisions.isEmpty) ) ){
+                                      }else */if(_radioValue=='1' && ((_myLocations.isNotEmpty || _myDivisions.isEmpty) && (_myLocations.isEmpty || _myDivisions.isNotEmpty) && (_myLocations.isEmpty || _myDivisions.isEmpty) ) ){
                                         showDialog(
                                           context: context,
                                           builder: (context) {
@@ -570,6 +645,12 @@ class _AddHolidayState extends State<AddHoliday> {
                   _myDivisionIds = _myDivisions.join(',');
                 });
               },
+              validator: (value){
+                if(_radioValue=='2' && _myDivisions.isEmpty){
+                  return "Please select at least one Division";
+                }
+                return null;
+              },
             );
           } else if (snapshot.hasError) {
             return new Text("${snapshot.error}");
@@ -617,6 +698,12 @@ class _AddHolidayState extends State<AddHoliday> {
                   _myLocations = value;
                   _myLocationIds = _myLocations.join(',');
                 });
+              },
+              validator: (value){
+                if(_radioValue=='2' && _myLocations.isEmpty){
+                  return "Please select at least one Location";
+                }
+                return null;
               },
             );
           } else if (snapshot.hasError) {
