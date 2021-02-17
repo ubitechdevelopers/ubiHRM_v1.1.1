@@ -32,6 +32,7 @@ Future UpdateStatus() async {
     print(path_ubiattendance+ 'UpdateStatus?platform=Android');
     return ((json.decode(res.body.toString()))[0]['status']).toString();
   } catch(e){
+    print("Exception"+e);
     print("Error finding current version of the app");
     return"error";
   }
@@ -957,18 +958,18 @@ List<Map> createList(List data, int label) {
   return datalist;
 }*/
 
-Future<List<Map>> getEmpStatusList(int label) async {
+Future<List<Map>> getEmpStatusList(int label, int val) async {
   List<Map> datalist = new List();
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
   print(path_ubiattendance + 'empStatusMaster');
   final response = await http.get(path_ubiattendance + 'empStatusMaster');
   List data = json.decode(response.body.toString());
-  datalist = createStatusList(data, label);
+  datalist = createStatusList(data, label, val);
   return datalist;
 }
 
-List<Map> createStatusList(List data, int label) {
+List<Map> createStatusList(List data, int label, int val) {
   List<Map> list = new List();
   if (label == 1) // with -All- label
     list.add({"Id": "0", "Name": "-All-"});
@@ -976,14 +977,23 @@ List<Map> createStatusList(List data, int label) {
     list.add({"Id": "0", "Name": "-Select-"});
 
   for (int i = 0; i < data.length; i++) {
-    //if (data[i]['OtherType']=='EmployeeStatus') {
+    if (val == 1) {
+      if (data[i]['DisplayName'] == 'On Job' || data[i]['DisplayName'] == 'Probation') {
+        Map empsts = {
+          "Id": data[i]["Id"].toString(),
+          "Name": data[i]["DisplayName"].toString(),
+          "ActualValue": data[i]["ActualValue"].toString(),
+        };
+        list.add(empsts);
+      }
+    }else{
       Map empsts = {
         "Id": data[i]["Id"].toString(),
         "Name": data[i]["DisplayName"].toString(),
         "ActualValue": data[i]["ActualValue"].toString(),
       };
       list.add(empsts);
-    //}
+    }
   }
   return list;
 }

@@ -5,7 +5,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/services/salary_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -231,12 +230,9 @@ class _SalarySummary extends State<SalarySummary> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   //SizedBox(height: 5.0),
-                  Text('My Salary',
-                      style: new TextStyle(fontSize: 22.0, color: appStartColor())),
-                  //SizedBox(height: 10.0),
-
-                  new Divider(height: 2,),
-                  SizedBox(height: 5.0,),
+                  Text('My Salary', style: new TextStyle(fontSize: 22.0, color: appStartColor())),
+                  SizedBox(height: 5.0),
+                  new Divider(),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     //crossAxisAlignment: CrossAxisAlignment.start,

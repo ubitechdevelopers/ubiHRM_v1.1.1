@@ -14,7 +14,7 @@ import '../drawer.dart';
 import '../profile.dart';
 import '../services/attandance_saveimage.dart';
 import '../services/attandance_services.dart';
-import 'image_view.dart';
+import '../image_view.dart';
 import 'punchlocation.dart';
 import 'teampunchlocatio_summary.dart';
 

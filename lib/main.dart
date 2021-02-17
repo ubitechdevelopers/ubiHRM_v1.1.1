@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:splashscreen/splashscreen.dart';
-import 'package:ubihrm/attandance/app.dart';
+import 'package:ubihrm/app.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/services.dart';
 

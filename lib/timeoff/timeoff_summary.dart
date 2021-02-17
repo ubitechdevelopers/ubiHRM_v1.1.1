@@ -12,6 +12,7 @@ import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
 import 'package:ubihrm/timeoff/timeoff_timer.dart';
+
 import '../b_navigationbar.dart';
 import '../drawer.dart';
 import '../global.dart';
@@ -330,8 +331,6 @@ class _TimeoffSummary extends State<TimeoffSummary> {
   }
 
   Widget getMarkAttendanceWidgit() {
-    //  double h_width = MediaQuery.of(context).size.width*0.5; // screen's 50%
-    //  double f_width = MediaQuery.of(context).size.width*1;
     return Stack(
       children: <Widget>[
         Container(
@@ -507,7 +506,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                                   padding: const EdgeInsets.fromLTRB(0.0,0.0,0.0,0.0),
                                                   child: Container(
                                                     height: 30,
-                                                    width:65,
+                                                    width: 65,
                                                     decoration: BoxDecoration(
                                                         color: Colors.orange[800],
                                                     ),
@@ -530,8 +529,8 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                                 child: Padding(
                                                   padding: const EdgeInsets.fromLTRB(0.0,0.0,0.0,0.0),
                                                   child: Container(
-                                                    height: 25,
-                                                    width:60,
+                                                    height: 30,
+                                                    width: 65,
                                                     decoration: BoxDecoration(
                                                         color: Colors.orange[800],
                                                         border: Border.all(color: Colors.orange[800],width: 1)
@@ -583,7 +582,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                             width: MediaQuery.of(context).size.width*.70,
                                             //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                             //margin: EdgeInsets.only(top: 4.0),
-                                            child: Text('Requested Duration: '+snapshot.data[index].TimeFrom.toString()+'-'+snapshot.data[index].TimeTo.toString(), style: TextStyle(fontSize: 12.0,color: Colors.black54),),
+                                            child: Text('Requested Duration: '+snapshot.data[index].TimeFrom.toString()+' - '+snapshot.data[index].TimeTo.toString(), style: TextStyle(fontSize: 12.0,color: Colors.black54),),
                                           ):Center(),
 
                                           snapshot.data[index].Reason.toString()!='-'?Container(
@@ -593,11 +592,12 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                             child: Text('Reason: '+snapshot.data[index].Reason.toString(),overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.0,color: Colors.black54, ),),
                                           ):Center(),
 
+
                                           snapshot.data[index].StartTimeFrom.toString()!='-'?Container(
                                             width: MediaQuery.of(context).size.width*.70,
                                             //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                             margin: EdgeInsets.only(top: 4.0),
-                                            child: Text(snapshot.data[index].StopTimeTo.toString()=='-'?'Actual Time Off Start: '+snapshot.data[index].StartTimeFrom.toString():'Actual Duration: '+snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString()+" "+snapshot.data[index].hrs.toString(), style: TextStyle(fontSize: 12.0,color: Colors.black54),),
+                                            child: Text(snapshot.data[index].StopTimeTo.toString()=='-'?'Actual Time Off Start: '+snapshot.data[index].StartTimeFrom.toString():'Actual Duration: '+snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(fontSize: 12.0,color: Colors.black54),),
                                           ):Center(),
 
                                           snapshot.data[index].TimeOffSts.toString()!='null'?Container(
@@ -629,7 +629,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
                                             width: MediaQuery.of(context).size.width*.90,
                                             //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                             margin: EdgeInsets.only(top: 3.0),
-                                            child: Text('Comment: '+snapshot.data[index].ApproverComment.toString(), style: TextStyle(color: Colors.black54), ),
+                                            child: Text('Comment: '+snapshot.data[index].ApproverComment.toString(), style: TextStyle(fontSize: 12.0,color: Colors.black54), ),
                                           ):Center(),
 
                                           snapshot.data[index].StartLoc.toString()!='-'?Row(
@@ -698,27 +698,9 @@ class _TimeoffSummary extends State<TimeoffSummary> {
 
                 ])
         ),
-
-
-
       ],
     );
   }
-
-
-
-
-  getPunchPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    print('getPunchPrefs called: new lid- '+ prefs.getString('lid').toString());
-    return prefs.getString('lid');
-  }
-
-
-/////////////////////futere method dor getting today's punched liist-start
-
-/////////////////////futere method dor getting today's punched liist-close
-
 }
 
 class TimeOffAppHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -729,21 +711,11 @@ class TimeOffAppHeader extends StatelessWidget implements PreferredSizeWidget {
   TimeOffAppHeader(profileimage1,showtabbar1,orgname1){
     profileimage = profileimage1;
     orgname = orgname1;
-    // print("--------->");
-    // print(profileimage);
-    //  print("--------->");
-    //   print(_checkLoadedprofile);
     if (profileimage!=null) {
       _checkLoadedprofile = false;
-      //    print(_checkLoadedprofile);
     };
     showtabbar= showtabbar1;
   }
-  /*void initState() {
-    super.initState();
- //   initPlatformState();
-  }
-*/
   @override
   Widget build(BuildContext context) {
     return new GradientAppBar(

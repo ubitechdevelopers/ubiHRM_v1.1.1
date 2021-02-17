@@ -10,7 +10,6 @@ import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
 import '../global.dart';
-import '../login_page.dart';
 import '../services/leave_services.dart';
 import 'myleave.dart';
 
@@ -227,15 +226,32 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                         ),
                       ]
                   ),
-                  Container(
-                    padding: EdgeInsets.only(top:5.0),
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Team's Leave",
-                            style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
-                        Text(" ("+new DateFormat("MMM yyyy").format(selectedMonth)+")",style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),),
-                      ],
+                  Padding(
+                    padding: const EdgeInsets.only(top:5.0),
+                    child: Center(
+                      child: Text("Team's Leave", style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top:10.0, bottom:5.0),
+                    child: new MonthStrip(
+                      format: 'MMM yyyy',
+                      from: fiscalStart==null?orgCreatedDate:fiscalStart,
+                      to: selectedMonth,
+                      initialMonth: selectedMonth,
+                      height:  25.0,
+                      viewportFraction: 0.25,
+                      onMonthChanged: (v) {
+                        setState(() {
+                          selectedMonth = v;
+                          if (v != null && v.toString()!='') {
+                            res=true;
+                          } else {
+                            res=false;
+                          }
+                          print(selectedMonth);
+                        });
+                      },
                     ),
                   ),
                   Container(
@@ -276,25 +292,9 @@ class _MyTeamLeaveState extends State<MyTeamLeave> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top:5.0, bottom:5.0),
-                    child: new MonthStrip(
-                      format: 'MMM yyyy',
-                      from: fiscalStart==null?orgCreatedDate:fiscalStart,
-                      to: selectedMonth,
-                      initialMonth: selectedMonth,
-                      height:  25.0,
-                      viewportFraction: 0.25,
-                      onMonthChanged: (v) {
-                        setState(() {
-                          selectedMonth = v;
-                          if (v != null && v.toString()!='') {
-                            res=true;
-                          } else {
-                            res=false;
-                          }
-                          print(selectedMonth);
-                        });
-                      },
+                    padding: const EdgeInsets.only(top:5.0),
+                    child: Center(
+                      child: Text(new DateFormat("MMM yyyy").format(selectedMonth),style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),),
                     ),
                   ),
                   new Divider(),

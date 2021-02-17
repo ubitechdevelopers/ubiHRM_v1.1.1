@@ -8,9 +8,11 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/CirclePainter.dart';
-import 'package:ubihrm/employees_list.dart';
+import 'package:ubihrm/settings/employee/addedit_employee.dart';
+import 'package:ubihrm/settings/employee/employees_list.dart';
 import 'package:ubihrm/payroll_expence/expenselist.dart';
-import 'all_reports.dart';
+import 'package:ubihrm/settings/employee/view_employee.dart';
+import 'salary/all_reports.dart';
 import 'attandance/flexi_time.dart';
 import 'attandance/home.dart';
 import 'attandance/punchlocation_summary.dart';
@@ -147,8 +149,8 @@ class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMix
     final prefs = await SharedPreferences.getInstance();
     int response = prefs.getInt('response') ?? 0;
     if (response == 1) {
-      String empid = prefs.getString('employeeid') ?? "";
-      String organization = prefs.getString('organization') ?? "";
+      empid = prefs.getString('employeeid') ?? "";
+      organization = prefs.getString('organization') ?? "";
       String userprofileid = prefs.getString('userprofileid') ?? "";
       String empemail = prefs.getString('empemail') ?? "";
       print("empemail");print(empemail);
@@ -174,9 +176,31 @@ class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMix
       await getfiscalyear(emp);
       await getReportingTeam(emp);
 
+      perEmployeeLeave = getModulePermission("18", "view");
+      perAttendance = getModulePermission("5", "view");
+      perTimeoff = getModulePermission("179", "view");
+      perSalary = getModulePermission("66", "view");
+      perPayroll = getModulePermission("458", "view");
+      perPayPeriod = getModulePermission("491", "view");
+      perEmployee = getModulePermission("496", "view");
+      perGeoFence = getModulePermission("318", "view");
+      perSalaryExpense = getModulePermission("170", "view");
+      perPayrollExpense = getModulePermission("473", "view");
+      perFlexi = getModulePermission("448", "view");
+      perPunchLocation = getModulePermission("305", "view");
+
+      perLeaveApproval = getModuleUserPermission("124", "view");
+      perTimeoffApproval = getModuleUserPermission("180", "view");
+      perSalaryExpenseApproval = getModuleUserPermission("170", "view");
+      perPayrollExpenseApproval = getModuleUserPermission("473","view");
+      userPerEmployee = getModuleUserPermission("496", "view");
+      perAttReport = getModuleUserPermission("68", "view");
+      perLeaveReport = getModuleUserPermission("69", "view");
+      perFlexiReport = getModuleUserPermission("448", "view");
+
       if((adminsts==1 || divhrsts==1 || hrsts==1) && plansts==0 && empcount<2) {
         _visible = 0.25;
-      }else if((adminsts==1 || divhrsts==1 || hrsts==1) && plansts==0 && empcount>1 && attcount==0) {
+      }else if((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==0 && perAttendance == '1')) {
         _visible1 = 1.0;
       }else {
         _visible = 1.0;
@@ -272,26 +296,6 @@ class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMix
         print("Inside else of if");
         logout();
       }
-
-      perEmployeeLeave = getModulePermission("18", "view");
-      perAttendance = getModulePermission("5", "view");
-      perTimeoff = getModulePermission("179", "view");
-      perSalary = getModulePermission("66", "view");
-      perPayroll = getModulePermission("458", "view");
-      perPayPeriod = getModulePermission("491", "view");
-      perGeoFence = getModulePermission("318", "view");
-      perSalaryExpense = getModulePermission("170", "view");
-      perPayrollExpense = getModulePermission("473", "view");
-      perFlexi = getModulePermission("448", "view");
-      perPunchLocation = getModulePermission("305", "view");
-
-      perLeaveApproval = getModuleUserPermission("124", "view");
-      perTimeoffApproval = getModuleUserPermission("180", "view");
-      perSalaryExpenseApproval = getModuleUserPermission("170", "view");
-      perPayrollExpenseApproval = getModuleUserPermission("473","view");
-      perAttReport = getModuleUserPermission("68", "view");
-      perLeaveReport = getModuleUserPermission("69", "view");
-      perFlexiReport = getModuleUserPermission("448", "view");
 
       showtabbar = false;
       profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
@@ -409,7 +413,7 @@ class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMix
                           image: AssetImage(
                               Imagename),
                         ),
-                      color: circleIconBackgroundColor())))):((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==0) && title=="Attendance")?CustomPaint(
+                      color: circleIconBackgroundColor())))):((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==0 && perAttendance == '1') && title=="Attendance")?CustomPaint(
                   painter: CirclePainter(
                     0,
                     _controller,
@@ -443,13 +447,13 @@ class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMix
                                 Imagename),
                           ),
                           color: circleIconBackgroundColor())),
-              ((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount<2)&& title=="Employee")?ScaleTransition(
+              ((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount<2) && title=="Employee")?ScaleTransition(
                   scale: Tween(begin: 0.80, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),),
                   child: Text(title,
                     textAlign: TextAlign.center,
                     style: new TextStyle(
                         fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.bold)),
-                ):((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==0) && title=="Attendance")?ScaleTransition(
+                ):((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==0 && perAttendance == '1') && title=="Attendance")?ScaleTransition(
                 scale: Tween(begin: 0.90, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),),
                 child: Text(title,
                     textAlign: TextAlign.center,
@@ -483,7 +487,14 @@ class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMix
             children: <Widget>[
               Opacity(opacity:_visible,child: makeDashboardItem("Dashboard", DashboardMain(), 'assets/icons/Dashboard_icon.png')),
               makeDashboardItem("Profile", CollapsingTab(), 'assets/icons/profile_icon.png'),
-              makeDashboardItem("Employee", EmployeeList(sts: 1), 'assets/icons/Employee_icon.png'),
+              makeDashboardItem("Employee",
+              (adminsts==1 || divhrsts==1 || hrsts==1)?
+              EmployeeList(sts: 1):
+              perEmployee=='1'?
+              (adminsts==0 || divhrsts==0 || hrsts==0):
+              userPerEmployee=='1'?
+              EmployeeList(sts: 1):
+              ViewEmployee(empid: empid, sts: 5), 'assets/icons/Employee_icon.png'),
               if(perAttendance == '1') Opacity(opacity:_visible1,child: makeDashboardItem("Attendance", HomePage(), 'assets/icons/Attendance_icon.png')),
               if(perEmployeeLeave == '1') Opacity(opacity:_visible,child: makeDashboardItem("Leave",  MyLeave(), 'assets/icons/leave_icon.png')),
               if(perTimeoff == '1') Opacity(opacity:_visible,child: makeDashboardItem("Time Off", TimeoffSummary(), 'assets/icons/Timeoff_icon.png')),
@@ -518,7 +529,7 @@ class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMix
               )),
             ),
           ),
-        ):((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==0))?Center(
+        ):((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==0 && perAttendance == '1'))?Center(
           child: Container(
             width: 300,
             decoration: BoxDecoration(

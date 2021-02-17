@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'all_approvals.dart';
+import 'approval/all_approvals.dart';
 import 'global.dart';
 import 'home.dart';
 import 'model/model.dart';
 import 'profile.dart';
 import 'services/services.dart';
-import 'settings.dart';
+import 'settings/settings.dart';
 
 void main() => runApp(new TaskyApp());
 
@@ -173,7 +173,7 @@ class _BootomNavigationState extends State<HomeNavigation> {
         currentIndex: _currentIndex,
         onTap: (newIndex) {
           if (newIndex == 0) {
-            ((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0)))?null:(perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1')?
+            ((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && perAttendance=='1' && attcount==0)))?null:(perAttendance=='1' || perEmployeeLeave=='1' || perTimeoff=='1')?
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AllApprovals()),
@@ -191,7 +191,7 @@ class _BootomNavigationState extends State<HomeNavigation> {
           }
 
           if (newIndex == 2) {
-            ((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0)))?null:Navigator.push(
+            ((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && perAttendance=='1' && attcount==0)))?null:Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AllSetting()),
             );

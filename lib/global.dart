@@ -33,9 +33,18 @@ circleIconBackgroundColor(){
 String path_ubiattendance="http://ubihrmglobal.zentylpro.com/HRMAPP/index.php/Att_services/";
 String path_hrm_india="http://ubihrmglobal.zentylpro.com/services/";*/
 
-String path="https://ubitechglobal.ubihrm.com/ubiapp/";
+/*String path="https://ubitechglobal.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://ubitechglobal.ubihrm.com/HRMAPP/index.php/Att_services/";
-String path_hrm_india="https://ubitechglobal.ubihrm.com/services/";
+String path_hrm_india="https://ubitechglobal.ubihrm.com/services/";*/
+
+/*String path="https://ubitechglobal.ubihrm.com/ubiapp1/";
+String path_ubiattendance="https://ubitechglobal.ubihrm.com/HRMAPP/index.php/Att_services1/";
+String path_hrm_india="https://ubitechglobal.ubihrm.com/services1/";*/
+
+String path="http://zentylpro.com/HRMSGLOBAL/ubiapp/";
+String path_ubiattendance="http://zentylpro.com/HRMSGLOBAL/HRMAPP/index.php/Att_services/";
+String path_hrm_india="http://zentylpro.com/HRMSGLOBAL/services/";
+
 
 int home_load_num = 0;
 List<Permission> globalpermissionlist =new List();
@@ -64,6 +73,7 @@ var perLeaveApproval;
 var perTimeoffApproval;
 var perSalaryExpenseApproval;
 var perPayrollExpenseApproval;
+var userPerEmployee;
 var perAttendance;
 var perAttReport;
 var perFlexiReport;
@@ -80,6 +90,7 @@ var undertime;
 var perSalary;
 var perPayroll;
 var perPayPeriod;
+var perEmployee;
 var perGeoFence;
 var perSalaryExpense;
 var perPayrollExpense;
@@ -93,6 +104,7 @@ DateFormat formatter = DateFormat('yyyy-MM-dd');
 DateFormat formatter1 = DateFormat('dd-MM-yyyy');
 DateFormat formatter2 = new DateFormat('d MMM yyyy');
 
+final timeFormat = DateFormat("HH:mm");
 const locationChannel = const MethodChannel("update.camera.status");
 bool locationThreadUpdatedLocation=false;
 bool timeSpoofed=false;
@@ -100,10 +112,14 @@ int areaId=0;
 DateTime orgCreatedDate;
 DateTime fiscalStart;
 DateTime fiscalEnd;
+DateTime payrollMonth;
+DateTime salaryMonth;
 
 int plansts=0;
 int empcount=0;
 int attcount=0;
+int empattcount=0;
+double ab,cd,ef,gh;
 String geoFenceOrgPerm="0";//Geo Fence org permission
 String mailVerifySts="0";//Geo Fence org permission
 String grpCompanySts="0";//Geo Fence org permission

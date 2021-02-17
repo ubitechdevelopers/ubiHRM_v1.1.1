@@ -17,6 +17,7 @@ import 'package:ubihrm/register_page.dart';
 import 'package:ubihrm/services/attandance_saveimage.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
+import 'package:ubihrm/super_tooltip.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../drawer.dart';
 import '../global.dart';
@@ -106,12 +107,41 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     if(mounted) {
       setState(() {
         orgName = prefs.getString('orgname') ?? '';
-        adminsts = prefs.getInt('adminsts') ?? 0;
-        hrsts = prefs.getInt('hrsts')??0;
-        divhrsts = prefs.getInt('divhrsts')??0;
       });
     }
   }
+
+  /*static var tooltipone = SuperTooltip(
+    popupDirection: TooltipDirection.up,
+    arrowTipDistance: 20.0,
+    hasShadow: false,
+    content: new Material(
+      child: Container(
+        width: 300.0,
+        height: 90.0,
+        child: Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: Column(
+            //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text(
+                "Please ask the employees you have added to punch their attendance. Once the attendance is punched you can check their logs in 'Team Tab'",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              RaisedButton(
+                color: Colors.orange[800],
+                child: Text(
+                  'OK',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () async {
+                  SuperTooltip.a.close();
+                },
+              ),
+            ],
+          )),
+      )),
+  );*/
 
   Future<dynamic> _handleMethod(MethodCall call) async {
     switch (call.method) {
@@ -217,6 +247,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
     String userprofileid = prefs.getString('userprofileid') ?? "";
     desinationId = globalcompanyinfomap['Designation'];
     response = prefs.getInt('response') ?? 0;
+    adminsts = prefs.getInt('adminsts') ?? 0;
+    hrsts = prefs.getInt('hrsts')??0;
+    divhrsts = prefs.getInt('divhrsts')??0;
+    plansts = prefs.getInt('plansts');
+    empcount = prefs.getInt('empcount');
+    attcount = prefs.getInt('attcount');
 
     Employee emp = new Employee(
       employeeid: empid,
@@ -564,7 +600,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
                     ]),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * .02),
-                  Text(globalpersnalinfomap['FirstName'].toUpperCase(), style: new TextStyle(
+                  Text(globalpersnalinfomap["LastName"]!=''?globalpersnalinfomap['FirstName'].toUpperCase()+" "+globalpersnalinfomap["LastName"].toUpperCase():globalpersnalinfomap['FirstName'].toUpperCase(), style: new TextStyle(
                     color: Colors.black87,
                     fontSize: 18.0,
                     fontWeight: FontWeight.w700,
@@ -895,48 +931,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver{
         print("issave");
         print(issave);
         if (issave) {
-          final prefs = await SharedPreferences.getInstance();
-          plansts = prefs.getInt('plansts');
-          empcount = prefs.getInt('empcount');
-          attcount = prefs.getInt('attcount');
-
-          Employee emp = new Employee(
-            employeeid: empid,
-            organization: orgid,
-          );
-
-          await getProfileInfo(emp, context);
-
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MyApp()),
           );
 
-          ((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==1))?showDialog(
-              context: context,
-              builder: (context) {
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(context).pop(true);
-                });
-                return AlertDialog(
-                  content: new Text("Your attendance marked successfully, kindly ask your employees to punch Attendance."),
-                );
-              }):showDialog(
-              context: context,
-              builder: (context) {
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(context).pop(true);
-                });
-                return AlertDialog(
-                  content: new Text("Attendance marked successfully"),
-                );
+          showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(seconds: 3), () {
+                Navigator.of(context).pop(true);
               });
-          /*showDialog(context: context, barrierDismissible: true, child:
-            new AlertDialog(
-              content: new Text("Attendance marked successfully!"),
-            )
-          );
-          await new Future.delayed(const Duration(seconds: 2));*/
+              return AlertDialog(
+                content: new Text("Attendance marked successfully"),
+              );
+            });
           setState(() {
             act1 = act;
           });

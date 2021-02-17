@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:async';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,7 @@ import 'package:ubihrm/services/services.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
 import 'package:ubihrm/timeoff/timeoff_summary.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../drawer.dart';
 import '../global.dart';
 import '../home.dart';
@@ -789,7 +791,7 @@ class _TimeOffTimerState extends State<TimeOffTimer> with WidgetsBindingObserver
                 Navigator.of(context).pop(true);
               });
               return AlertDialog(
-                content: new Text("Before Starting TimeOff you need to mark Time In"),
+                content: new Text("Before starting Time Off you need to mark Time In"),
               );
             });
         } else {

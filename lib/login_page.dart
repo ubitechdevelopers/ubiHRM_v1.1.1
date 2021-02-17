@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+
 import 'package:barcode_scan/barcode_scan.dart';
 //import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +13,7 @@ import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/register_page.dart';
 import 'package:ubihrm/services/checkLogin.dart';
 import 'package:ubihrm/services/services.dart';
+
 import 'global.dart';
 import 'home.dart';
 import 'services/attandance_services.dart';
@@ -417,7 +418,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric( vertical: 0.0, horizontal: 0.0),
                                   child: Text(
-                                    "Already registered? Sign In",
+                                    "Company already registered? Sign In",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 15.0,

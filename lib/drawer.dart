@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/attandance/about_app.dart';
+import 'package:ubihrm/about_app.dart';
 import 'package:ubihrm/payroll/allpayroll_list.dart';
 import 'package:ubihrm/salary/allsalary_list.dart';
 import 'package:ubihrm/userGuide.dart';
-import 'all_reports.dart';
+import 'salary/all_reports.dart';
 import 'global.dart';
 import 'home.dart';
 import 'login_page.dart';
 import 'profile.dart';
-import 'settings.dart';
+import 'settings/settings.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -171,7 +171,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0))) {
+              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0 && perAttendance=='1'))) {
                 return null;
               }else{
                 Navigator.of(context).pop();
@@ -191,7 +191,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0))) {
+              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0 && perAttendance=='1'))) {
                 return null;
               }else{
                 Navigator.of(context).pop();
@@ -211,7 +211,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0))) {
+              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0 && perAttendance=='1'))) {
                 return null;
               }else{
                 Navigator.of(context).pop();
@@ -231,7 +231,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
             onTap: () {
-              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0))) {
+              if((adminsts==1 || divhrsts==1 || hrsts==1) && ((plansts==0 && empcount<2) || (plansts==0 && empcount>1 && attcount==0 && perAttendance=='1'))) {
                 return null;
               }else{
                 Navigator.of(context).pop();

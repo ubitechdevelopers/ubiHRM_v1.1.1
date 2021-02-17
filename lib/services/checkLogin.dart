@@ -36,6 +36,7 @@ class Login{
         prefs.setInt("plansts", employeeMap['plansts']);
         prefs.setInt("empcount", employeeMap['empcount']);
         prefs.setInt("attcount", employeeMap['attcount']);
+        prefs.setInt("empattcount", employeeMap['empattcount']);
         prefs.setString("employeeid", employeeMap['employeeid']);
         prefs.setString("empemail", employeeMap['empemail']);
         prefs.setString("empnumber", employeeMap['empnumber']);
@@ -77,6 +78,7 @@ class Login{
         perSalary = getModulePermission("66", "view");
         perPayroll = getModulePermission("458", "view");
         perPayPeriod = getModulePermission("491", "view");
+        perEmployee = getModulePermission("496", "view");
         perGeoFence = getModulePermission("318", "view");
         perSalaryExpense = getModulePermission("170", "view");
         perPayrollExpense = getModulePermission("473", "view");
@@ -87,7 +89,7 @@ class Login{
         perTimeoffApproval = getModuleUserPermission("180", "view");
         perSalaryExpenseApproval = getModuleUserPermission("170","view");
         perPayrollExpenseApproval = getModuleUserPermission("473","view");
-
+        userPerEmployee = getModuleUserPermission("496", "view");
         perAttReport = getModuleUserPermission("68", "view");
         perLeaveReport = getModuleUserPermission("69", "view");
         perFlexiReport = getModuleUserPermission("448", "view");
@@ -182,6 +184,7 @@ class Login{
           perSalary = getModulePermission("66", "view");
           perPayroll = getModulePermission("458", "view");
           perPayPeriod = getModulePermission("491", "view");
+          perEmployee = getModulePermission("496", "view");
           perGeoFence = getModulePermission("318", "view");
           perSalaryExpense = getModulePermission("170", "view");
           perPayrollExpense = getModulePermission("473", "view");
@@ -192,7 +195,7 @@ class Login{
           perTimeoffApproval = getModuleUserPermission("180", "view");
           perSalaryExpenseApproval = getModuleUserPermission("170","view");
           perPayrollExpenseApproval = getModuleUserPermission("473","view");
-
+          userPerEmployee = getModuleUserPermission("496", "view");
           perAttReport = getModuleUserPermission("68", "view");
           perLeaveReport = getModuleUserPermission("69", "view");
           perFlexiReport = getModuleUserPermission("448", "view");

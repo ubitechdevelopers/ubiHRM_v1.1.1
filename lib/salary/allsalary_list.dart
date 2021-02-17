@@ -233,14 +233,26 @@ class _allSalarySummary extends State<allSalarySummary> {
             child:Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Team's Salary", style: new TextStyle(fontSize: 22.0, color: appStartColor())),
-                      Text(" ("+new DateFormat("MMM yyyy").format(selectedMonth)+")",style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),),
-                    ],
-                  ),
+                  Center(child: Text("Team's Salary", style: new TextStyle(fontSize: 22.0, color: appStartColor()))),
                   SizedBox(height: 5.0,),
+                  Padding(
+                    padding: const EdgeInsets.only(top:5.0, bottom:5.0),
+                    child: new MonthStrip(
+                      format: 'MMM yyyy',
+                      from: fiscalStart==null?orgCreatedDate:fiscalStart,
+                      to: selectedMonth,
+                      initialMonth: selectedMonth,
+                      height:  25.0,
+                      viewportFraction: 0.25,
+                      onMonthChanged: (v) {
+                        setState(() {
+                          selectedMonth = v;
+                          print("selectedMonth");
+                          print(selectedMonth);
+                        });
+                      },
+                    ),
+                  ),
                   Row(
                     children: <Widget>[
                       Expanded(
@@ -282,21 +294,9 @@ class _allSalarySummary extends State<allSalarySummary> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top:5.0, bottom:5.0),
-                    child: new MonthStrip(
-                      format: 'MMM yyyy',
-                      from: fiscalStart==null?orgCreatedDate:fiscalStart,
-                      to: selectedMonth,
-                      initialMonth: selectedMonth,
-                      height:  25.0,
-                      viewportFraction: 0.25,
-                      onMonthChanged: (v) {
-                        setState(() {
-                          selectedMonth = v;
-                          print("selectedMonth");
-                          print(selectedMonth);
-                        });
-                      },
+                    padding: const EdgeInsets.only(top:5.0),
+                    child: Center(
+                       child: Text(new DateFormat("MMM yyyy").format(selectedMonth),style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),)
                     ),
                   ),
                   new Divider(),

@@ -13,7 +13,7 @@ import 'package:ubihrm/services/services.dart';
 import '../drawer.dart';
 import '../global.dart';
 import 'flexi_time.dart';
-import 'image_view.dart';
+import '../image_view.dart';
 
 class FlexiList extends StatefulWidget {
   @override

@@ -9,7 +9,6 @@ import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/drawer.dart';
 import 'package:ubihrm/global.dart';
-import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/services/payroll_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -147,11 +146,9 @@ class _PayrollSummary extends State<PayrollSummary> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   //SizedBox(height: 5.0),
-                  Text('My Payroll',
-                      style: new TextStyle(fontSize: 22.0, color: appStartColor())),
-                  //SizedBox(height: 10.0),
-                  new Divider(height: 2,),
-                  SizedBox(height: 5.0,),
+                  Text('My Payroll', style: new TextStyle(fontSize: 22.0, color: appStartColor())),
+                  SizedBox(height: 5.0),
+                  new Divider(),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     //crossAxisAlignment: CrossAxisAlignment.start,

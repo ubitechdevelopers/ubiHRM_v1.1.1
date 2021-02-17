@@ -6,30 +6,37 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
+import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/profile.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/services.dart';
-import './image_view.dart';
+import 'package:ubihrm/super_tooltip.dart';
+import '../image_view.dart';
 import '../drawer.dart';
 import 'home.dart';
 import 'team_attendance_summary.dart';
-
 
 void main() => runApp(new MyApp());
 
 class MyApp extends StatefulWidget {
   @override
   _MyApp createState() => _MyApp();
-
 }
 
 class _MyApp extends State<MyApp> {
+  GlobalKey _key = GlobalKey();
   String fname="";
   String lname="";
+  String empid="";
+
+  String organization="";
   String desination="";
   String profile="";
   String org_name="";
   int _currentIndex = 1;
+  int adminsts = 0;
+  int hrsts = 0;
+  int divhrsts = 1;
   String admin_sts='0';
   bool _checkLoadedprofile = true;
   var profileimage;
@@ -42,20 +49,78 @@ class _MyApp extends State<MyApp> {
     super.initState();
     initPlatformState();
     getOrgName();
-
   }
+
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
     });
   }
+
+  static var tooltipone = SuperTooltip(
+    popupDirection: TooltipDirection.down,
+    arrowTipDistance: 20.0,
+    hasShadow: false,
+    x: ef,
+    y: gh,
+    content: new Material(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white
+          ),
+          //width: 300,
+          //height: 150,
+          child: Padding(
+              padding: const EdgeInsets.only(top:10.0, bottom: 10.0, right:5.0, left:5.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    "Please ask the employee(s) you have added to punch their attendance.",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 10.0),
+                  RichText(
+                    text: new TextSpan(
+                      style: new TextStyle(
+                        fontSize: 19.5,
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        new TextSpan(
+                            text: "Employee's Attendance can be checked in ",
+                            style: new TextStyle(fontSize: 19.5)),
+                        new TextSpan(
+                          text: "Team Attendance Tab.",style: TextStyle(fontSize: 19.5,fontWeight: FontWeight.w600, color: Colors.orange[800]),)
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  RaisedButton(
+                    color: Colors.orange[800],
+                    child: Text(
+                      'OK',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () async {
+                      SuperTooltip.a.close();
+                    },
+                  ),
+                ],
+              )),
+        )),
+  );
+
+  static tooltiptimeinClicked(context) async {
+    print("inside tooltiptimeinClicked");
+    tooltipone.showtool(context);
+  }
+
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
     final prefs = await SharedPreferences.getInstance();
     profile = prefs.getString('profile') ?? '';
-    //   profileimage = new NetworkImage(profile);
-    // //print("1-"+profile);
     profileimage = new NetworkImage( globalcompanyinfomap['ProfilePic']);
 
     profileimage.resolve(new ImageConfiguration()).addListener(new ImageStreamListener((_, __) {
@@ -66,18 +131,53 @@ class _MyApp extends State<MyApp> {
       }
     }));
     showtabbar=false;
+
     setState(() {
+      empid = prefs.getString('empid') ?? '';
+      organization = prefs.getString('organization') ?? "";
       fname = prefs.getString('fname') ?? '';
       lname = prefs.getString('lname') ?? '';
       desination = prefs.getString('desination') ?? '';
       profile = prefs.getString('profile') ?? '';
       org_name = prefs.getString('org_name') ?? '';
       admin_sts = prefs.getString('sstatus') ?? '';
+      hrsts = prefs.getInt('hrsts')??0;
+      adminsts = prefs.getInt('adminsts')??0;
+      divhrsts = prefs.getInt('divhrsts')??0;
+      plansts = prefs.getInt('plansts');
+      empcount = prefs.getInt('empcount');
+      attcount = prefs.getInt('attcount');
+      empattcount = prefs.getInt('empattcount');
     });
+
+    Employee emp = new Employee(
+      employeeid: empid,
+      organization: organization,
+    );
+
+    await getProfileInfo(emp ,context);
+    if((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && empattcount==0)) {
+      print("(adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && empattcount==0)");
+      print((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && empattcount==0));
+      if (_key != null) if (_key.currentContext != null) {
+        final RenderBox renderBoxBlue = _key.currentContext.findRenderObject();
+        final positionBlue = renderBoxBlue.localToGlobal(Offset.zero);
+        final sizeBlue = renderBoxBlue.size;
+        double c = positionBlue.dx;
+        double d = positionBlue.dy;
+        double g = sizeBlue.height;
+        double h = sizeBlue.width;
+
+        setState(() {
+          ef = c + (h / 2);
+          gh = d + (g / 2);
+        });
+        Future.delayed(Duration(seconds: 1), () => tooltiptimeinClicked(context));
+      }
+    }
   }
-  // This widget is the root of your application.
+
   Future<bool> sendToHome() async{
-    print("-------> back button pressed");
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => HomePage()), (Route<dynamic> route) => false,
@@ -107,6 +207,456 @@ class _MyApp extends State<MyApp> {
       )
     );
   }
+
+  Widget getWidgets(BuildContext context){
+    return
+      Container(
+          margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+          padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
+          // width: MediaQuery.of(context).size.width*0.9,
+          decoration: new ShapeDecoration(
+            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
+            color: Colors.white,
+          ),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget> [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        flex:48,
+                        child:Column(
+                            children: <Widget>[
+                              // width: double.infinity,
+                              //height: MediaQuery.of(context).size.height * .07,
+                              SizedBox(height:MediaQuery.of(context).size.width*.02),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                        Icons.person,
+                                        color: Colors.orange[800],
+                                        size: 22.0 ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        false;
+                                      },
+
+                                      child: Text(
+                                          'Self',
+                                          style: TextStyle(fontSize: 18,color: Colors.orange[800],fontWeight:FontWeight.bold)
+                                      ),
+                                    ),
+                                  ]),
+
+                              SizedBox(height:MediaQuery.of(context).size.width*.036),
+                              Divider(
+                                color: Colors.orange[800],
+                                height: 0.4,
+                              ),
+                              Divider(
+                                color: Colors.orange[800],
+                                height: 0.4,
+                              ),
+                              Divider(
+                                color: Colors.orange[800],
+                                height: 0.4,
+                              ),
+                            ]
+                        ),
+                      ),
+
+                      Expanded(
+                        flex:48,
+                        child:InkWell(
+                          key: _key,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyTeamAtt()),
+                            );
+                          },
+                          child: Column(
+                            // width: double.infinity,
+                              children: <Widget>[
+                                SizedBox(height:MediaQuery.of(context).size.width*.02),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(
+                                          Icons.group,
+                                          color: Colors.orange[800],
+                                          size: 22.0 ),
+                                      GestureDetector(
+
+                                        child: Text(
+                                            'Team',
+                                            style: TextStyle(fontSize: 18,color: Colors.orange[800])
+                                        ),
+                                      ),
+                                    ]),
+                                SizedBox(height:MediaQuery.of(context).size.width*.04),
+                              ]
+                          ),
+                        ),
+                      ),
+                    ]),
+
+                Container(
+                  padding: EdgeInsets.only(top:12.0),
+                  child:Center(
+                    child:Text('My Attendance Log',
+                      style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
+                  ),
+                ),
+
+                Divider(),
+                new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 10.0,),
+                    SizedBox(width: MediaQuery.of(context).size.width*0.02),
+                    Container(
+                      width: MediaQuery.of(context).size.width*0.40,
+                      child:Text('Date',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    ),
+                    SizedBox(height: 10.0,),
+                    Container(
+                      width: MediaQuery.of(context).size.width*0.22,
+                      child:Text('Time In',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    ),
+                    SizedBox(height: 10.0,),
+                    Container(
+                      width: MediaQuery.of(context).size.width*0.23,
+                      child:Text('Time Out',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
+                    ),
+                  ],
+                ),
+                Divider(),
+
+                Expanded(
+                    child:  Container(
+                        height: MediaQuery.of(context).size.height*0.60,
+                        child: FutureBuilder<List<User>>(
+                          future: getSummary(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data.length > 0) {
+                                return new ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (context, index) {
+                                      //   double h_width = MediaQuery.of(context).size.width*0.5; // screen's 50%
+                                      //   double f_width = MediaQuery.of(context).size.width*1; // screen's 100%
+                                      return new Column(
+                                          children: <Widget>[
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .spaceAround,
+                                              children: <Widget>[
+                                                SizedBox(height: 40.0,),
+                                                Container(
+                                                  width: MediaQuery
+                                                      .of(context)
+                                                      .size
+                                                      .width * 0.40,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment
+                                                        .start,
+                                                    children: <Widget>[
+                                                      Text(snapshot.data[index]
+                                                          .AttendanceDate
+                                                          .toString(),
+                                                        style: TextStyle(
+                                                            color: Colors.black87,
+                                                            fontWeight: FontWeight
+                                                                .bold,
+                                                            fontSize: 16.0),),
+
+                                                      InkWell(
+                                                        child: Text('Time In: ' +
+                                                            snapshot.data[index]
+                                                                .checkInLoc
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black54,
+                                                                fontSize: 12.0)),
+                                                        onTap: () {
+                                                          goToMap(
+                                                              snapshot.data[index]
+                                                                  .latit_in,
+                                                              snapshot.data[index]
+                                                                  .longi_in);
+                                                        },
+                                                      ),
+                                                      SizedBox(height: 2.0),
+                                                      InkWell(
+                                                        child: Text('Time Out: ' +
+                                                            snapshot.data[index]
+                                                                .CheckOutLoc
+                                                                .toString(),
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .black54,
+                                                              fontSize: 12.0),),
+                                                        onTap: () {
+                                                          goToMap(
+                                                              snapshot.data[index]
+                                                                  .latit_out,
+                                                              snapshot.data[index]
+                                                                  .longi_out);
+                                                        },
+                                                      ),
+                                                      SizedBox(height: 2.0),
+                                                      RichText(
+                                                        text: new TextSpan(
+                                                          // Note: Styles for TextSpans must be explicitly defined.
+                                                          // Child text spans will inherit styles from parent
+                                                          style: new TextStyle(
+                                                            fontSize: 14.0,
+                                                            color: Colors.black54,
+                                                          ),
+                                                          children: <TextSpan>[
+                                                            new TextSpan(
+                                                              text: 'Status: ',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black54,),),
+                                                            new TextSpan(
+                                                              text: snapshot
+                                                                  .data[index]
+                                                                  .AttendanceStatus
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                color: snapshot
+                                                                    .data[index]
+                                                                    .AttendanceStatus ==
+                                                                    'Present'
+                                                                    ? Colors
+                                                                    .blueAccent
+                                                                    :
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .AttendanceStatus ==
+                                                                    'Absent'
+                                                                    ? Colors.red
+                                                                    :
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .AttendanceStatus ==
+                                                                    'Holiday'
+                                                                    ? Colors.green
+                                                                    :
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .AttendanceStatus ==
+                                                                    'Half Day'
+                                                                    ? Colors
+                                                                    .blueGrey
+                                                                    :
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .AttendanceStatus ==
+                                                                    'Week off'
+                                                                    ? Colors
+                                                                    .orange
+                                                                    :
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .AttendanceStatus ==
+                                                                    'Leave'
+                                                                    ? Colors
+                                                                    .lightBlueAccent
+                                                                    :
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .AttendanceStatus ==
+                                                                    'Comp Off'
+                                                                    ? Colors
+                                                                    .purpleAccent
+                                                                    :
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .AttendanceStatus ==
+                                                                    'Work from Home'
+                                                                    ? Colors
+                                                                    .brown[200]
+                                                                    :
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .AttendanceStatus ==
+                                                                    'Unpaid Leave'
+                                                                    ? Colors.brown
+                                                                    :
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .AttendanceStatus ==
+                                                                    'Half Day - Unpaid'
+                                                                    ? Colors.grey
+                                                                    : Colors
+                                                                    .black54,
+                                                              ),),
+                                                          ],
+                                                        ),
+                                                      ),
+
+                                                      snapshot.data[index].bhour.toString() != '' && snapshot.data[index].timoffend.toString() != "00:00:00"
+                                                          ? Container(
+                                                        color: Colors.orange[800],
+                                                        child: Text("" +
+                                                            snapshot.data[index]
+                                                                .bhour
+                                                                .toString() +
+                                                            " Hr(s)",
+                                                          style: TextStyle(),),
+                                                      )
+                                                          : SizedBox(
+                                                        height: 0.0,),
+
+                                                    ],
+                                                  ),
+                                                ),
+
+                                                Container(
+                                                    width: MediaQuery
+                                                        .of(context)
+                                                        .size
+                                                        .width * 0.22,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .center,
+                                                      children: <Widget>[
+                                                        Text(snapshot.data[index]
+                                                            .TimeIn
+                                                            .toString(),
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .bold),),
+                                                        GestureDetector(
+                                                          // When the child is tapped, show a snackbar
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (
+                                                                      context) =>
+                                                                      ImageView(
+                                                                          myimage: snapshot
+                                                                              .data[index]
+                                                                              .EntryImage,
+                                                                          org_name: "Ubitech Solutions")),
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            width: 62.0,
+                                                            height: 62.0,
+                                                            child: Container(
+                                                                decoration: new BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    image: new DecorationImage(
+                                                                        fit: BoxFit
+                                                                            .fill,
+                                                                        image: new NetworkImage(
+                                                                            snapshot
+                                                                                .data[index]
+                                                                                .EntryImage)
+                                                                    )
+                                                                )),),),
+
+                                                      ],
+                                                    )
+
+                                                ),
+                                                Container(
+                                                    width: MediaQuery
+                                                        .of(context)
+                                                        .size
+                                                        .width * 0.22,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .center,
+                                                      children: <Widget>[
+                                                        Text(snapshot.data[index]
+                                                            .TimeOut
+                                                            .toString(),
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .bold),),
+                                                        GestureDetector(
+                                                          // When the child is tapped, show a snackbar
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (
+                                                                      context) =>
+                                                                      ImageView(
+                                                                          myimage: snapshot
+                                                                              .data[index]
+                                                                              .ExitImage,
+                                                                          org_name: "Ubitech Solutions")),
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            width: 62.0,
+                                                            height: 62.0,
+                                                            child: Container(
+                                                                decoration: new BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    image: new DecorationImage(
+                                                                        fit: BoxFit
+                                                                            .fill,
+                                                                        image: new NetworkImage(
+                                                                            snapshot
+                                                                                .data[index]
+                                                                                .ExitImage)
+                                                                    )
+                                                                )),),),
+
+                                                      ],
+                                                    )
+
+                                                ),
+                                              ],
+
+                                            ),
+                                            Divider(color: Colors.black26,),
+                                          ]);
+                                    }
+                                );
+                              } else {
+                                return new Center(
+                                  child: Container(
+                                    width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 1,
+                                    color: appStartColor().withOpacity(0.1),
+                                    padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                    child: Text(
+                                      "No data found", style: TextStyle(fontSize: 16.0),
+                                      textAlign: TextAlign.center,),
+                                  ),
+                                );
+                              }
+                            }else if (snapshot.hasError) {
+                              return new Text("Unable to connect server");
+                            }
+                            // By default, show a loading spinner
+                            return new Center( child: CircularProgressIndicator());
+                          },
+                        )
+                    )),
+              ]
+          ));
+  }
 }
 
 class User {
@@ -135,455 +685,6 @@ String dateFormatter(String date_) {
   var dy = ['st', 'nd', 'rd', 'th', 'th', 'th','th', 'th', 'th', 'th', 'th', 'th', 'th', 'th', 'th', 'th', 'th', 'th', 'th', 'th','st','nd','rd', 'th', 'th', 'th', 'th', 'th', 'th', 'th','st'];
   var date = date_.split("-");
   return(date[2]+""+dy[int.parse(date[2])-1]+" "+months[int.parse(date[1])-1]);
-}
-
-getWidgets(context){
-  return
-    Container(
-        margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-        padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-        // width: MediaQuery.of(context).size.width*0.9,
-        decoration: new ShapeDecoration(
-          shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
-          color: Colors.white,
-        ),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget> [
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      flex:48,
-                      child:Column(
-                          children: <Widget>[
-                            // width: double.infinity,
-                            //height: MediaQuery.of(context).size.height * .07,
-                            SizedBox(height:MediaQuery.of(context).size.width*.02),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                      Icons.person,
-                                      color: Colors.orange[800],
-                                      size: 22.0 ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      false;
-                                    },
-
-                                    child: Text(
-                                        'Self',
-                                        style: TextStyle(fontSize: 18,color: Colors.orange[800],fontWeight:FontWeight.bold)
-                                    ),
-                                  ),
-                                ]),
-
-                            SizedBox(height:MediaQuery.of(context).size.width*.036),
-                            Divider(
-                              color: Colors.orange[800],
-                              height: 0.4,
-                            ),
-                            Divider(
-                              color: Colors.orange[800],
-                              height: 0.4,
-                            ),
-                            Divider(
-                              color: Colors.orange[800],
-                              height: 0.4,
-                            ),
-                          ]
-                      ),
-                    ),
-
-                    Expanded(
-                      flex:48,
-                      child:InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => MyTeamAtt()),
-                          );
-                        },
-                        child: Column(
-                          // width: double.infinity,
-                            children: <Widget>[
-                              SizedBox(height:MediaQuery.of(context).size.width*.02),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(
-                                        Icons.group,
-                                        color: Colors.orange[800],
-                                        size: 22.0 ),
-                                    GestureDetector(
-
-                                      child: Text(
-                                          'Team',
-                                          style: TextStyle(fontSize: 18,color: Colors.orange[800])
-                                      ),
-                                    ),
-                                  ]),
-                              SizedBox(height:MediaQuery.of(context).size.width*.04),
-                            ]
-                        ),
-                      ),
-                    ),
-                  ]),
-
-              Container(
-                padding: EdgeInsets.only(top:12.0),
-                child:Center(
-                  child:Text('My Attendance Log',
-                    style: new TextStyle(fontSize: 18.0, color: Colors.black87,),textAlign: TextAlign.center,),
-                ),
-              ),
-
-              Divider(),
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 10.0,),
-                  SizedBox(width: MediaQuery.of(context).size.width*0.02),
-                  Container(
-                    width: MediaQuery.of(context).size.width*0.40,
-                    child:Text('Date',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                  ),
-                  SizedBox(height: 10.0,),
-                  Container(
-                    width: MediaQuery.of(context).size.width*0.22,
-                    child:Text('Time In',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                  ),
-                  SizedBox(height: 10.0,),
-                  Container(
-                    width: MediaQuery.of(context).size.width*0.23,
-                    child:Text('Time Out',style: TextStyle(color: Colors.green,fontWeight:FontWeight.bold,fontSize: 16.0),),
-                  ),
-                ],
-              ),
-              Divider(),
-
-              Expanded(
-                  child:  Container(
-                      height: MediaQuery.of(context).size.height*0.60,
-                      child: FutureBuilder<List<User>>(
-                        future: getSummary(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data.length > 0) {
-                              return new ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  itemCount: snapshot.data.length,
-                                  itemBuilder: (context, index) {
-                                    //   double h_width = MediaQuery.of(context).size.width*0.5; // screen's 50%
-                                    //   double f_width = MediaQuery.of(context).size.width*1; // screen's 100%
-                                    return new Column(
-                                        children: <Widget>[
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .spaceAround,
-                                            children: <Widget>[
-                                              SizedBox(height: 40.0,),
-                                              Container(
-                                                width: MediaQuery
-                                                    .of(context)
-                                                    .size
-                                                    .width * 0.40,
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment
-                                                      .start,
-                                                  children: <Widget>[
-                                                    Text(snapshot.data[index]
-                                                        .AttendanceDate
-                                                        .toString(),
-                                                      style: TextStyle(
-                                                          color: Colors.black87,
-                                                          fontWeight: FontWeight
-                                                              .bold,
-                                                          fontSize: 16.0),),
-
-                                                    InkWell(
-                                                      child: Text('Time In: ' +
-                                                          snapshot.data[index]
-                                                              .checkInLoc
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black54,
-                                                              fontSize: 12.0)),
-                                                      onTap: () {
-                                                        goToMap(
-                                                            snapshot.data[index]
-                                                                .latit_in,
-                                                            snapshot.data[index]
-                                                                .longi_in);
-                                                      },
-                                                    ),
-                                                    SizedBox(height: 2.0),
-                                                    InkWell(
-                                                      child: Text('Time Out: ' +
-                                                          snapshot.data[index]
-                                                              .CheckOutLoc
-                                                              .toString(),
-                                                        style: TextStyle(
-                                                            color: Colors
-                                                                .black54,
-                                                            fontSize: 12.0),),
-                                                      onTap: () {
-                                                        goToMap(
-                                                            snapshot.data[index]
-                                                                .latit_out,
-                                                            snapshot.data[index]
-                                                                .longi_out);
-                                                      },
-                                                    ),
-                                                    SizedBox(height: 2.0),
-                                                    RichText(
-                                                      text: new TextSpan(
-                                                        // Note: Styles for TextSpans must be explicitly defined.
-                                                        // Child text spans will inherit styles from parent
-                                                        style: new TextStyle(
-                                                          fontSize: 14.0,
-                                                          color: Colors.black54,
-                                                        ),
-                                                        children: <TextSpan>[
-                                                          new TextSpan(
-                                                            text: 'Status: ',
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .black54,),),
-                                                          new TextSpan(
-                                                            text: snapshot
-                                                                .data[index]
-                                                                .AttendanceStatus
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                              color: snapshot
-                                                                  .data[index]
-                                                                  .AttendanceStatus ==
-                                                                  'Present'
-                                                                  ? Colors
-                                                                  .blueAccent
-                                                                  :
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .AttendanceStatus ==
-                                                                  'Absent'
-                                                                  ? Colors.red
-                                                                  :
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .AttendanceStatus ==
-                                                                  'Holiday'
-                                                                  ? Colors.green
-                                                                  :
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .AttendanceStatus ==
-                                                                  'Half Day'
-                                                                  ? Colors
-                                                                  .blueGrey
-                                                                  :
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .AttendanceStatus ==
-                                                                  'Week off'
-                                                                  ? Colors
-                                                                  .orange
-                                                                  :
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .AttendanceStatus ==
-                                                                  'Leave'
-                                                                  ? Colors
-                                                                  .lightBlueAccent
-                                                                  :
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .AttendanceStatus ==
-                                                                  'Comp Off'
-                                                                  ? Colors
-                                                                  .purpleAccent
-                                                                  :
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .AttendanceStatus ==
-                                                                  'Work from Home'
-                                                                  ? Colors
-                                                                  .brown[200]
-                                                                  :
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .AttendanceStatus ==
-                                                                  'Unpaid Leave'
-                                                                  ? Colors.brown
-                                                                  :
-                                                              snapshot
-                                                                  .data[index]
-                                                                  .AttendanceStatus ==
-                                                                  'Half Day - Unpaid'
-                                                                  ? Colors.grey
-                                                                  : Colors
-                                                                  .black54,
-                                                            ),),
-                                                        ],
-                                                      ),
-                                                    ),
-
-                                                    snapshot.data[index].bhour.toString() != '' && snapshot.data[index].timoffend.toString() != "00:00:00"
-                                                        ? Container(
-                                                      color: Colors.orange[800],
-                                                      child: Text("" +
-                                                          snapshot.data[index]
-                                                              .bhour
-                                                              .toString() +
-                                                          " Hr(s)",
-                                                        style: TextStyle(),),
-                                                    )
-                                                        : SizedBox(
-                                                      height: 0.0,),
-
-                                                  ],
-                                                ),
-                                              ),
-
-                                              Container(
-                                                  width: MediaQuery
-                                                      .of(context)
-                                                      .size
-                                                      .width * 0.22,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment
-                                                        .center,
-                                                    children: <Widget>[
-                                                      Text(snapshot.data[index]
-                                                          .TimeIn
-                                                          .toString(),
-                                                        style: TextStyle(
-                                                            fontWeight: FontWeight
-                                                                .bold),),
-                                                      GestureDetector(
-                                                        // When the child is tapped, show a snackbar
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (
-                                                                    context) =>
-                                                                    ImageView(
-                                                                        myimage: snapshot
-                                                                            .data[index]
-                                                                            .EntryImage,
-                                                                        org_name: "Ubitech Solutions")),
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          width: 62.0,
-                                                          height: 62.0,
-                                                          child: Container(
-                                                              decoration: new BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  image: new DecorationImage(
-                                                                      fit: BoxFit
-                                                                          .fill,
-                                                                      image: new NetworkImage(
-                                                                          snapshot
-                                                                              .data[index]
-                                                                              .EntryImage)
-                                                                  )
-                                                              )),),),
-
-                                                    ],
-                                                  )
-
-                                              ),
-                                              Container(
-                                                  width: MediaQuery
-                                                      .of(context)
-                                                      .size
-                                                      .width * 0.22,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment
-                                                        .center,
-                                                    children: <Widget>[
-                                                      Text(snapshot.data[index]
-                                                          .TimeOut
-                                                          .toString(),
-                                                        style: TextStyle(
-                                                            fontWeight: FontWeight
-                                                                .bold),),
-                                                      GestureDetector(
-                                                        // When the child is tapped, show a snackbar
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (
-                                                                    context) =>
-                                                                    ImageView(
-                                                                        myimage: snapshot
-                                                                            .data[index]
-                                                                            .ExitImage,
-                                                                        org_name: "Ubitech Solutions")),
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          width: 62.0,
-                                                          height: 62.0,
-                                                          child: Container(
-                                                              decoration: new BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  image: new DecorationImage(
-                                                                      fit: BoxFit
-                                                                          .fill,
-                                                                      image: new NetworkImage(
-                                                                          snapshot
-                                                                              .data[index]
-                                                                              .ExitImage)
-                                                                  )
-                                                              )),),),
-
-                                                    ],
-                                                  )
-
-                                              ),
-                                            ],
-
-                                          ),
-                                          Divider(color: Colors.black26,),
-                                        ]);
-                                  }
-                              );
-                            } else {
-                              return new Center(
-                                child: Container(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 1,
-                                  color: appStartColor().withOpacity(0.1),
-                                  padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                  child: Text(
-                                    "No data found", style: TextStyle(fontSize: 16.0),
-                                    textAlign: TextAlign.center,),
-                                ),
-                              );
-                            }
-                          }else if (snapshot.hasError) {
-                            return new Text("Unable to connect server");
-                          }
-                          // By default, show a loading spinner
-                          return new Center( child: CircularProgressIndicator());
-                        },
-                      )
-                  )),
-            ]
-        ));
 }
 
 Future<List<User>> getSummary() async {
@@ -634,21 +735,12 @@ class AttendanceAppHeader extends StatelessWidget implements PreferredSizeWidget
   AttendanceAppHeader(profileimage1,showtabbar1,orgname1){
     profileimage = profileimage1;
     orgname = orgname1;
-    // print("--------->");
-    // print(profileimage);
-    //  print("--------->");
-    //   print(_checkLoadedprofile);
     if (profileimage!=null) {
       _checkLoadedprofile = false;
-      //    print(_checkLoadedprofile);
     };
     showtabbar= showtabbar1;
   }
-  /*void initState() {
-    super.initState();
- //   initPlatformState();
-  }
-*/
+
   @override
   Widget build(BuildContext context) {
     return new GradientAppBar(

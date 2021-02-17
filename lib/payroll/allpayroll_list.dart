@@ -8,12 +8,10 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_strip/month_picker_strip.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubihrm/appbar.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/drawer.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/home.dart';
-import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/profile.dart';
 import 'package:ubihrm/services/payroll_services.dart';
 import 'package:ubihrm/services/services.dart';
@@ -77,6 +75,13 @@ class _allPayrollSummary extends State<allPayrollSummary> {
     print(selectedMonth);
     initPlatformState();
     getOrgName();
+    /*getPayrollMonth().then((res) {
+      setState(() {
+        print("res");
+        print(res);
+        payrollMonth = res;
+      });
+    });*/
   }
 
   getOrgName() async{
@@ -226,7 +231,7 @@ class _allPayrollSummary extends State<allPayrollSummary> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top:8.0, bottom:8.0),
+                    padding: const EdgeInsets.only(top:5.0),
                     child: Center(
                       child:perPayroll=='1'?
                       Text(new DateFormat("MMM yyyy").format(selectedMonth),style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),):

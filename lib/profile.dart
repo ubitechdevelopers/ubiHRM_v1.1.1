@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-import 'package:ubihrm/view_employee.dart';
+import 'package:ubihrm/settings/employee/view_employee.dart';
+
 import 'b_navigationbar.dart';
 import 'global.dart';
 import 'home.dart';
@@ -284,7 +285,9 @@ class _CollapsingTabState extends State<CollapsingTab> {
                       height: 100,
                       width: 100,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        //borderRadius: BorderRadius.circular(100),
                         image: new DecorationImage(
                           //image: new ExactAssetImage("assets/avatar.png"),
                           fit: BoxFit.fill,

@@ -2,17 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/global.dart' as globals;
-import 'package:http/http.dart' as http;
 import 'package:ubihrm/model/model.dart';
+
 import '../login_page.dart';
 
 
@@ -56,7 +58,6 @@ List<Permission> createPermList(List data) {
   }
   return list;
 }
-
 
 getModulePermission(String moduleid, String permission_type){
   List<Permission> list = new List();
@@ -103,7 +104,6 @@ getModuleUserPermission(String moduleid, String permission_type){
       }
     }
   }
-
   return "0";
 }
 
@@ -136,20 +136,12 @@ getProfileInfo(Employee emp, BuildContext context) async{
       prefs.setInt("empcount", empcount);
       attcount=globalogrperminfomap['attcount'];
       prefs.setInt("attcount", attcount);
+      empattcount=globalogrperminfomap['empattcount'];
+      prefs.setInt("empattcount", empattcount);
       geoFenceOrgPerm=globalogrperminfomap['geofencests'];
       orgCreatedDate=DateTime.parse(globalogrperminfomap['createddate']);
       print("orgCreatedDate");
       print(orgCreatedDate);
-      if(globalogrperminfomap['fiscalstart']!='') {
-        fiscalStart = DateTime.parse(globalogrperminfomap['fiscalstart']);
-        print("fiscalStart");
-        print(fiscalStart);
-      }
-      if(globalogrperminfomap['fiscalend']!='') {
-        fiscalEnd = DateTime.parse(globalogrperminfomap['fiscalend']);
-        print("fiscalEnd");
-        print(fiscalEnd);
-      }
       grpCompanySts=globalogrperminfomap['groupcompaniessts'];
       print("grpCompanySts");
       print(grpCompanySts);
@@ -163,6 +155,16 @@ getProfileInfo(Employee emp, BuildContext context) async{
       prefs.setString("assignedAreaIds", responseJson['AssignedAreaIds']);
       fenceAreaSts=globalcompanyinfomap['UserFenceAreaPerm'];
       prefs.setString("fenceAreaSts", responseJson['UserFenceAreaPerm']);
+      if(globalogrperminfomap['fiscalstart']!='') {
+        fiscalStart = DateTime.parse(globalogrperminfomap['fiscalstart']);
+        print("fiscalStart");
+        print(fiscalStart);
+      }
+      if(globalogrperminfomap['fiscalend']!='') {
+        fiscalEnd = DateTime.parse(globalogrperminfomap['fiscalend']);
+        print("fiscalEnd");
+        print(fiscalEnd);
+      }
       areaSts= await getAreaStatus();
       print("***************************************************");
       print("geoFenceOrgPerm && fenceAreaSts");
@@ -275,8 +277,7 @@ updateCounter() async {
 
 verification(String orgid, String name, String email) async {
   var url = path_ubiattendance+"mailVerification";
-  final response = await http.post(url, body: {
-    "orgid":orgid,"email":email,"name":name,});
+  final response = await http.post(url, body: {"orgid":orgid,"email":email,"name":name,});
   print(path_ubiattendance+'mailVerification?&orgid=$orgid&email=$email&name=$name');
   print (response.body.toString());
   return response.body.toString();
@@ -299,7 +300,7 @@ getfiscalyear(Employee emp) async{
     Map responseJson = json.decode(response.data.toString());
     fiscalyear = responseJson['year'];
   }catch(e){
-    //print(e.toString());
+    print(e.toString());
     return "Poor network connection";
   }
 }
@@ -311,11 +312,6 @@ getovertime(Employee emp) async{
   String empid = prefs.getString('employeeid')??"";
   Dio dio = new Dio();
   try {
-    /*FormData formData = new FormData.from({
-      "employeeid": emp.employeeid,
-      "organization": emp.organization
-    });*/
-
     Response<String> response =
     await dio.post(path + "getovertime?employeeid=$empid&organization=$orgdir");
     print(path + "getovertime?employeeid=$empid&organization=$orgdir");
@@ -383,9 +379,6 @@ getCountAproval() async{
   if(perLeaveApproval=='1') {
     print(path + "getLeaveApprovalCount?empid=" + empid + "&orgid=" + orgdir);
     final res1 = await http.get(path + "getLeaveApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    //Map responseJson1 = json.decode(response.data.toString());
-    /*prefs.setInt('leavecount', responseJson1['leavecount']);
-    leavecount = prefs.getInt('leavecount')??"";*/
     leavecount=json.decode(res1.body);
     print(leavecount);
   }else{
@@ -395,9 +388,6 @@ getCountAproval() async{
   if(perTimeoffApproval=='1') {
     print(path + "getTimeoffApprovalCount?empid=" + empid + "&orgid=" + orgdir);
     final res2 = await http.get(path + "getTimeoffApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    //Map responseJson2 = json.decode(response.data.toString());
-    /*prefs.setInt('timeoffcount', responseJson2['timeoffcount']);
-    timeoffcount = prefs.getInt('timeoffcount')??"";*/
     timeoffcount=json.decode(res2.body);
     print(timeoffcount);
   }else{
@@ -407,9 +397,6 @@ getCountAproval() async{
   if(perSalaryExpenseApproval=='1') {
     print(path + "getSalaryExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
     final res3 = await http.get(path + "getSalaryExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    /*Map responseJson3 = json.decode(response.data.toString());
-    prefs.setInt('expensecount', responseJson3['expensecount']);
-    expensecount = prefs.getInt('expensecount')??"";*/
     expensecount=json.decode(res3.body);
     print(expensecount);
   }else{
@@ -419,9 +406,6 @@ getCountAproval() async{
   if(perPayrollExpenseApproval=='1') {
     print(path + "getPayrollExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
     final res4 = await http.get(path + "getPayrollExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
-    /*Map responseJson4 = json.decode(response.data.toString());
-    prefs.setInt('payrollexpensecount', responseJson4['payrollexpensecount']);
-    payrollexpensecount = prefs.getInt('payrollexpensecount')??"";*/
     payrollexpensecount=json.decode(res4.body);
     print(payrollexpensecount);
   }else{
@@ -431,14 +415,6 @@ getCountAproval() async{
   total = leavecount+timeoffcount+expensecount+payrollexpensecount;
   print(total);
   return total;
-  /*if(total>0) {
-    //prefs.setInt('approvalcount', total);
-    return true;
-  } else {
-    //prefs.setInt('approvalcount', total);
-    return false;
-  }*/
-
 }
 
 getReportingTeam(Employee emp) async{

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_strip/month_picker_strip.dart';
@@ -10,7 +9,6 @@ import 'package:rounded_modal/rounded_modal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/services/attandance_services.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
-
 import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
@@ -325,15 +323,30 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                         ),
                       ]
                   ),
-                  Container(
-                    padding: EdgeInsets.only(top:12.0),
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Team's Time Off",
-                            style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
-                        Text(" ("+new DateFormat("MMM yyyy").format(selectedMonth)+")",style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),),
-                      ],
+                  Padding(
+                    padding: const EdgeInsets.only(top:5.0),
+                    child: Center(child: Text("Team's Time Off", style: new TextStyle(fontSize: 18.0, color: Colors.black87,)), ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top:10.0, bottom:5.0),
+                    child: new MonthStrip(
+                      format: 'MMM yyyy',
+                      from: fiscalStart==null?orgCreatedDate:fiscalStart,
+                      to: selectedMonth,
+                      initialMonth: selectedMonth,
+                      height:  25.0,
+                      viewportFraction: 0.25,
+                      onMonthChanged: (v) {
+                        setState(() {
+                          selectedMonth = v;
+                          if (v != null && v.toString()!='') {
+                            res=true;
+                          } else {
+                            res=false;
+                          }
+                          print(selectedMonth);
+                        });
+                      },
                     ),
                   ),
                   Container(
@@ -356,10 +369,6 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                               onPressed: () {
                                 _searchController.clear();
                                 empname='';
-                                /* Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => EmployeeList()),
-                                );*/
                               }
                           ):null,
                           //focusColor: Colors.white,
@@ -374,26 +383,8 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top:5.0, bottom:5.0),
-                    child: new MonthStrip(
-                      format: 'MMM yyyy',
-                      from: fiscalStart==null?orgCreatedDate:fiscalStart,
-                      to: selectedMonth,
-                      initialMonth: selectedMonth,
-                      height:  25.0,
-                      viewportFraction: 0.25,
-                      onMonthChanged: (v) {
-                        setState(() {
-                          selectedMonth = v;
-                          if (v != null && v.toString()!='') {
-                            res=true;
-                          } else {
-                            res=false;
-                          }
-                          print(selectedMonth);
-                        });
-                      },
-                    ),
+                    padding: const EdgeInsets.only(top:5.0),
+                    child: Center(child: Text(new DateFormat("MMM yyyy").format(selectedMonth),style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),),),
                   ),
                   new Divider(),
                   new Row(
@@ -494,7 +485,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: <Widget>[
-                                                        new Text("Requested Duration: "+snapshot.data[index].Fdate.toString()+" to "+snapshot.data[index].Tdate.toString(),style: TextStyle(color: Colors.grey[600],fontSize: 12.0),)
+                                                        new Text("Requested Duration: "+snapshot.data[index].Fdate.toString()+" to "+snapshot.data[index].Tdate.toString(),style: TextStyle(color: Colors.black54,fontSize: 12.0),)
                                                       ],
                                                     )
                                                 ),
@@ -543,24 +534,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                               //padding: EdgeInsets.only(top:1.5,bottom: 0.5),
                                               margin: EdgeInsets.only(top: 4.0),
                                               //child: Text('Actual Duration: '+snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(color: Colors.black54),),
-                                              child: Row(
-                                                children: <Widget>[
-                                                  Text('Actual Duration: ', style: TextStyle(color: Colors.black54,fontSize: 12.0),),
-                                                  RichText(
-                                                      text: TextSpan(
-                                                          children: [
-                                                            snapshot.data[index].StopTimeTo.toString()=='-'?
-                                                            TextSpan(
-                                                                text: snapshot.data[index].StartTimeFrom.toString(), style: TextStyle(color: Colors.black54,fontSize: 13.5)
-                                                            ):
-                                                            TextSpan(
-                                                                text: snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(color: Colors.black54,fontSize: 13.5)
-                                                            )
-                                                          ]
-                                                      )
-                                                  ),
-                                                ],
-                                              )
+                                            child: Text(snapshot.data[index].StopTimeTo.toString()=='-'?'Actual Time Off Start: '+snapshot.data[index].StartTimeFrom.toString():'Actual Duration: '+snapshot.data[index].StartTimeFrom.toString()+' - '+snapshot.data[index].StopTimeTo.toString(), style: TextStyle(fontSize: 12.0,color: Colors.black54),),
                                           ):Center(),
 
                                           Container(

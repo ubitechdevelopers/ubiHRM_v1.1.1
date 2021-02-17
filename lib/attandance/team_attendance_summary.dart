@@ -8,13 +8,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/global.dart';
 import 'package:ubihrm/services/attandance_services.dart';
-import './image_view.dart';
+import '../image_view.dart';
 import '../appbar.dart';
 import '../drawer.dart';
 import '../global.dart';
 import 'attendance_summary.dart';
 import 'home.dart';
-import 'image_view.dart';
+import '../image_view.dart';
 
 void main() => runApp(new MyTeamAtt());
 
@@ -382,8 +382,7 @@ class _MyTeamAtt extends State<MyTeamAtt> {
                 child:Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Team's Attendance Log",
-                        style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
+                    Text("Team's Attendance Log", style: new TextStyle(fontSize: 18.0, color: Colors.black87,)),
                     Text(" ("+new DateFormat("d-MMM-y").format(date)+")",style: new TextStyle(fontSize: 16.0, color: Colors.black87, fontWeight: FontWeight.bold),),
                   ],
                 ),

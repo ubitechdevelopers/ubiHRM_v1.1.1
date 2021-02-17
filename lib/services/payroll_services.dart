@@ -411,3 +411,18 @@ List<Payroll> createPayrollList(List data, String empname){
   }
   return list;
 }
+
+getPayrollMonth() async{
+  final prefs = await SharedPreferences.getInstance();
+  String orgdir = prefs.getString('organization') ?? '';
+  Dio dio = new Dio();
+  try {
+    print(path + "getPayrollMonth?orgid=$orgdir");
+    Response<String> response = await dio.post(path + "getPayrollMonth?orgid=$orgdir");
+    return response.data.toString();
+  }catch(e){
+    print("e.toString()");
+    print(e.toString());
+    return "Poor network connection";
+  }
+}

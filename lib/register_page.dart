@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 //import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,7 @@ import 'package:ubihrm/home.dart';
 import 'package:ubihrm/login_page.dart';
 import 'package:ubihrm/model/model.dart';
 import 'package:ubihrm/services/checkLogin.dart';
+
 import 'global.dart';
 
 
@@ -420,38 +422,36 @@ class _RegisterState extends State<Register> {
             backgroundColorEnd: appEndColor(),
           ),
           body: NotificationListener<OverscrollIndicatorNotification>(
-            onNotification: (overscroll) {
-              overscroll.disallowGlow();
-            },
-            child: SingleChildScrollView(
+              onNotification: (overscroll) {
+                overscroll.disallowGlow();
+              },
+              child: SingleChildScrollView(
                 child:ModalProgressHUD(
-                  inAsyncCall: _isServiceCalling,
-                  opacity: 0.5,
-                  progressIndicator: SizedBox(
-                    child: new CircularProgressIndicator(
-                      valueColor: new AlwaysStoppedAnimation(Colors.green),
-                      strokeWidth: 5.0),
-                  height: 40.0,
-                  width: 40.0,),
-                  child: Column(
-                    children: <Widget>[
-                      _buildSignUp(context)
-                    ],
-                  )
+                    inAsyncCall: _isServiceCalling,
+                    opacity: 0.5,
+                    progressIndicator: SizedBox(
+                      child: new CircularProgressIndicator(
+                          valueColor: new AlwaysStoppedAnimation(Colors.green),
+                          strokeWidth: 5.0),
+                      height: 40.0,
+                      width: 40.0,),
+                    child: Column(
+                      children: <Widget>[
+                        _buildSignUp(context)
+                      ],
+                    )
                 ),
               )
-            ),
-          //),
+          ),
         ),
         onRefresh: () async {
           Completer<Null> completer = new Completer<Null>();
-          await Future.delayed(Duration(seconds: 2)).then((onvalue) {
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
             setState(() {
               signupNameController.clear();
               signupCPNController.clear();
               signupEmailController.clear();
               signupCityController.clear();
-              signupContcodeController.clear();
               signupPhoneController.clear();
               signupEmpNumController.clear();
               signupPassController.clear();
@@ -506,7 +506,7 @@ class _RegisterState extends State<Register> {
                         ),
                         child: */Container(
                           //width: 370.0,
-                          width: MediaQuery.of(context).size.width,
+                          //width: MediaQuery.of(context).size.width,
                           //height: MediaQuery.of(context).size.height,
                           //height: 550.0,
                           child: Column(
@@ -971,7 +971,18 @@ class _RegisterState extends State<Register> {
                                           children: <Widget>[
                                             Checkbox(
                                               value: chkEmpVal,
-                                              onChanged: null
+                                              onChanged: (bool value){
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    Future.delayed(Duration(seconds: 3), () {
+                                                      Navigator.of(context).pop(true);
+                                                    });
+                                                    return AlertDialog(
+                                                      content: new Text("Employee module is essential"),
+                                                    );
+                                                  });
+                                              }
                                             ),
                                             Text('Employee')
                                           ],
@@ -981,7 +992,18 @@ class _RegisterState extends State<Register> {
                                           children: <Widget>[
                                             Checkbox(
                                               value: chkOrgVal,
-                                              onChanged: null
+                                                onChanged: (bool value){
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      Future.delayed(Duration(seconds: 3), () {
+                                                        Navigator.of(context).pop(true);
+                                                      });
+                                                      return AlertDialog(
+                                                        content: new Text("Organization module is essential"),
+                                                      );
+                                                    });
+                                                }
                                             ),
                                             Text('Organization')
                                           ],
@@ -1002,7 +1024,18 @@ class _RegisterState extends State<Register> {
                                                   print("after click");
                                                   print(chkAttVal);
                                                 });
-                                              }:null,
+                                              }:(bool value){
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      Future.delayed(Duration(seconds: 3), () {
+                                                        Navigator.of(context).pop(true);
+                                                      });
+                                                      return AlertDialog(
+                                                        content: new Text("Attendance module is essential with Payroll module"),
+                                                      );
+                                                    });
+                                              },
                                             ),
                                             Text('Attendance')
                                           ],
@@ -1018,7 +1051,18 @@ class _RegisterState extends State<Register> {
                                                   print("after click");
                                                   print(chkAttVal);
                                                 });
-                                              }:null,
+                                              }:(bool value){
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    Future.delayed(Duration(seconds: 3), () {
+                                                      Navigator.of(context).pop(true);
+                                                    });
+                                                    return AlertDialog(
+                                                      content: new Text("Attendance module is essential with Salary module"),
+                                                    );
+                                                  });
+                                              },
                                             ),
                                             Text('Attendance')
                                           ],
@@ -1141,48 +1185,42 @@ class _RegisterState extends State<Register> {
                               Row(
                                 children: <Widget>[
                                   Expanded(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      padding: EdgeInsets.only(top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
-                                      child:new InputDecorator(
-                                        decoration: const InputDecoration(
-                                          isDense: true,
-                                          icon: Icon(
-                                            FontAwesomeIcons.tty,
-                                            color: Colors.black,
-                                            size: 20.0,
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(bottom:5.0),
-                                          child: Container(
-                                            //height: 21,
-                                            child: DropdownButtonHideUnderline(
-                                              child: new DropdownButtonFormField<String>(
-                                                isExpanded: false,
-                                                isDense: true,
-                                                hint: new Text("Preferred time(IST) to call", style: TextStyle(fontSize: 14.0)),
-                                                //style: TextStyle(fontSize: 14.0),
-                                                value: _selectedISTtime,
-                                                onChanged: (String newValue) {
-                                                  setState(() {
-                                                    _selectedISTtime=newValue;
-                                                  });
-                                                },
-                                                items: _timeIST.map((time) {
-                                                  return new DropdownMenuItem<String>(
-                                                    child: new Text(time),
-                                                    value: time,
-                                                  );
-                                                }).toList(),
-                                                validator: (value) {
-                                                  if (_selectedISTtime==null) {
-                                                    return "Please select preferred time(IST) to call";
-                                                  }
-                                                  return null;
-                                                },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 7.0, bottom: 7.0, left: 25.0, right: 25.0),
+                                      child: Container(
+                                        //height: 21,
+                                        child: DropdownButtonHideUnderline(
+                                          child: new DropdownButtonFormField<String>(
+                                            decoration: const InputDecoration(
+                                              isDense: true,
+                                              icon: Icon(
+                                                FontAwesomeIcons.tty,
+                                                color: Colors.black,
+                                                size: 20.0,
                                               ),
                                             ),
+                                            isExpanded: false,
+                                            isDense: true,
+                                            hint: new Text("Preferred time(IST) to call", style: TextStyle(fontSize: 14.0)),
+                                            //style: TextStyle(fontSize: 14.0),
+                                            value: _selectedISTtime,
+                                            onChanged: (String newValue) {
+                                              setState(() {
+                                                _selectedISTtime=newValue;
+                                              });
+                                            },
+                                            items: _timeIST.map((time) {
+                                              return new DropdownMenuItem<String>(
+                                                child: new Text(time),
+                                                value: time,
+                                              );
+                                            }).toList(),
+                                            validator: (value) {
+                                              if (_selectedISTtime==null) {
+                                                return "Please select preferred time(IST) to call";
+                                              }
+                                              return null;
+                                            },
                                           ),
                                         ),
                                       ),
@@ -1242,12 +1280,10 @@ class _RegisterState extends State<Register> {
                                               color: Colors.orange[800],
                                               textColor: Colors.white,
                                               padding: EdgeInsets.all(5.0),
-                                              child: (_isServiceCalling && _isButtonDisabled)
-                                                  ? Text(
+                                              child: _isServiceCalling ? Text(
                                                 'Registering..',
                                                 style: TextStyle(color: Colors.white),
-                                              )
-                                                  : Text(
+                                              ): Text(
                                                 'Register',
                                                 style: TextStyle(color: Colors.white),
                                               ),
