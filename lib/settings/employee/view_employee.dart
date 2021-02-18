@@ -3,6 +3,7 @@ import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ubihrm/home.dart';
 import 'package:ubihrm/settings/employee/addedit_employee.dart';
 import 'package:ubihrm/b_navigationbar.dart';
 import 'package:ubihrm/drawer.dart';
@@ -158,13 +159,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
   }
 
   Future<bool> sendToSettings() async{
-    if(widget.sts==1) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => EmployeeList(sts: widget.sts)), (
-          Route<dynamic> route) => false,
-      );
-    }else if(widget.sts==2) {
+    if(widget.sts==1 || widget.sts==2) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => EmployeeList(sts: widget.sts)), (
@@ -174,6 +169,18 @@ class _ViewEmployeeState extends State<ViewEmployee> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => CollapsingTab()), (
+          Route<dynamic> route) => false,
+      );
+    }else if(widget.sts==5) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomePageMain()), (
+          Route<dynamic> route) => false,
+      );
+    }else{
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomePageMain()), (
           Route<dynamic> route) => false,
       );
     }
@@ -1206,13 +1213,7 @@ class ViewEmployeeAppHeader extends StatelessWidget implements PreferredSizeWidg
           children: [
             IconButton(icon:Icon(Icons.arrow_back),
               onPressed:(){
-                if(sts==1) {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => EmployeeList(sts: sts)), (
-                      Route<dynamic> route) => false,
-                  );
-                }else if(sts==2) {
+                if(sts==1 || sts==2) {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => EmployeeList(sts: sts)), (
@@ -1222,6 +1223,12 @@ class ViewEmployeeAppHeader extends StatelessWidget implements PreferredSizeWidg
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => CollapsingTab()), (
+                      Route<dynamic> route) => false,
+                  );
+                }else{
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePageMain()), (
                       Route<dynamic> route) => false,
                   );
                 }

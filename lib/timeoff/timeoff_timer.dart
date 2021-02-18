@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +16,6 @@ import 'package:ubihrm/services/services.dart';
 import 'package:ubihrm/services/timeoff_services.dart';
 import 'package:ubihrm/timeoff/timeoff_summary.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../drawer.dart';
 import '../global.dart';
 import '../home.dart';
@@ -29,7 +27,8 @@ class TimeOffTimer extends StatefulWidget {
   final String timeoffId;
   final String stopTime;
   final String action;
-  TimeOffTimer({Key key, this.timeoffId,this.stopTime,this.action})
+  final BuildContext context;
+  TimeOffTimer({Key key, this.timeoffId,this.stopTime,this.action,this.context})
       : super(key: key);
   _TimeOffTimerState createState() => _TimeOffTimerState();
 }

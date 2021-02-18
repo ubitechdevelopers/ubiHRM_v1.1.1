@@ -601,7 +601,7 @@ class _EditEmployee extends State<EditEmployee> {
   }
 
   Future<bool> move() async {
-    if(widget.sts==1 || widget.sts==2 || widget.sts==3) {
+    if(widget.sts==1 || widget.sts==2 || widget.sts==3 || widget.sts==5) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => ViewEmployee(empid:widget.empid, sts: widget.sts)), (
@@ -1166,6 +1166,7 @@ class _EditEmployee extends State<EditEmployee> {
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           //initialValue: _firstName.text,
+                          inputFormatters: [ FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), ],
                           decoration: InputDecoration(
                             //isDense: true,
                             border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
@@ -1202,6 +1203,7 @@ class _EditEmployee extends State<EditEmployee> {
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           //initialValue: _firstName.text,
+                          inputFormatters: [ FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), ],
                           decoration: InputDecoration(
                             //isDense: true,
                             border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),

@@ -113,7 +113,7 @@ class _AddHolidayState extends State<AddHoliday> {
     print("-------> back button pressed");
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => AllSetting()), (Route<dynamic> route) => false,
+      MaterialPageRoute(builder: (context) => Holiday()), (Route<dynamic> route) => false,
     );
     return false;
   }
@@ -416,7 +416,7 @@ class _AddHolidayState extends State<AddHoliday> {
                               children: <Widget>[
                                 RaisedButton(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
+                                    borderRadius: BorderRadius.circular(0),
                                   ),
                                   child: isServiceCalling?Text('Processing..',style: TextStyle(color: Colors.white),):Text('ADD',style: TextStyle(color: Colors.white),),
                                   color: Colors.orange[800],
@@ -581,18 +581,15 @@ class _AddHolidayState extends State<AddHoliday> {
                                   },
                                 ),
                                 FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    side: BorderSide( color: Colors.orange[800].withOpacity(0.5), width: 1,),
-                                  ),
-                                  child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
+                                  shape: Border.all(color: Colors.orange[800]),
+                                  child: Text(
+                                    'CANCEL', style: TextStyle(color: Colors.black87),),
                                   onPressed: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) => Holiday()),
                                     );
-                                  },
-                                ),
+                                  }),
 
                               ],
                             ),
@@ -716,9 +713,8 @@ class _AddHolidayState extends State<AddHoliday> {
           ),);
         });
   }
-
-
 }
+
 class AddHolidayAppHeader extends StatelessWidget implements PreferredSizeWidget {
   bool _checkLoadedprofile = true;
   var profileimage;
