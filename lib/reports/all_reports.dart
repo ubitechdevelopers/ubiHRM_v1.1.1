@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../appbar.dart';
-import '../reports/flexi_report.dart';
-import '../reports/reports.dart';
+import 'flexi_report.dart';
+import 'reports.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
 import '../global.dart';
@@ -29,6 +29,11 @@ class _AllReports extends State<AllReports> {
   var profileimage;
   bool showtabbar;
   String orgName="";
+  int hrsts=0;
+  int adminsts=0;
+  int divhrsts=0;
+  int dataaccess=0;
+  int profiletype=0;
 
   @override
   void initState() {
@@ -46,25 +51,29 @@ class _AllReports extends State<AllReports> {
     String empid = prefs.getString('employeeid')??"";
     String organization =prefs.getString('organization')??"";
     String userprofileid =prefs.getString('userprofileid')??"";
-    int profiletype =prefs.getInt('profiletype')??0;
-    int hrsts =prefs.getInt('hrsts')??0;
-    int adminsts =prefs.getInt('adminsts')??0;
-    int dataaccess =prefs.getInt('dataaccess')??0;
+    profiletype =prefs.getInt('profiletype')??0;
+    dataaccess =prefs.getInt('dataaccess')??0;
+    hrsts =prefs.getInt('hrsts')??0;
+    adminsts =prefs.getInt('adminsts')??0;
+    divhrsts =prefs.getInt('divhrsts')??0;
 
     Employee emp = new Employee(
       employeeid: empid,
       organization: organization,
       userprofileid: userprofileid,
       profiletype:profiletype,
+      dataaccess:dataaccess,
       hrsts:hrsts,
       adminsts:adminsts,
-      dataaccess:dataaccess,
     );
 
     getAllPermission(emp).then((res) {
       if(mounted) {
         setState(() {
+          perTimeoffReport = getModuleUserPermission("179","view");
           perAttReport=getModuleUserPermission("68", "view");
+          perGeoReport = getModuleUserPermission("318", "view");
+          perVisitReport = getModuleUserPermission("305", "view");
           perLeaveReport=getModuleUserPermission("69", "view");
           perFlexiReport=getModuleUserPermission("448", "view");
           print("attendance " + perAttReport);
@@ -125,7 +134,8 @@ class _AllReports extends State<AllReports> {
                 children: <Widget>[
                   Text('Reports', style: new TextStyle(fontSize: 22.0, color: appStartColor()),textAlign: TextAlign.center),
                   SizedBox(height: 15.0),
-                  perAttReport=='1' ?
+                  perAttendance == '1'?
+                  ((hrsts==1 || adminsts==1 || divhrsts==1) || ((profiletype==0 || profiletype==2) && perAttReport=='1'))?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -159,11 +169,12 @@ class _AllReports extends State<AllReports> {
                         MaterialPageRoute(builder: (context) => Reports()),
                       );
                     },
-                  ):Center(),
+                  ):Center():Center(),
 
 
-                  SizedBox(height: 6.0),
-                  perLeaveReport=='1' ?
+                  (perEmployeeLeave == '1' && perLeaveReport=='1')?SizedBox(height: 6.0):Center(),
+                  perEmployeeLeave == '1'?
+                  ((hrsts==1 || adminsts==1 || divhrsts==1) || ((profiletype==0 || profiletype==2) && perLeaveReport=='1'))?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -197,11 +208,12 @@ class _AllReports extends State<AllReports> {
                         MaterialPageRoute(builder: (context) => LeaveReports()),
                       );
                     },
-                  ):Center(),
+                  ):Center():Center(),
 
 
-                  SizedBox(height: 6.0),
-                  perAttReport=='1' ?
+                  (perAttendance == '1' && perTimeoff=='1')?SizedBox(height: 6.0):Center(),
+                  (perAttendance == '1' && perTimeoff=='1')?
+                  ((hrsts==1 || adminsts==1 || divhrsts==1) || ((profiletype==0 || profiletype==2) && perAttReport == '1' && perTimeoffReport=='1'))?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -235,10 +247,11 @@ class _AllReports extends State<AllReports> {
                         MaterialPageRoute(builder: (context) => TimeoffReports()),
                       );
                     },
-                  ):Center(),
+                  ):Center():Center(),
 
-                  SizedBox(height: 6.0),
-                  perFlexiReport=='1' ?
+                  perFlexi == '1'?SizedBox(height: 6.0):Center(),
+                  perFlexi == '1'?
+                  ((hrsts==1 || adminsts==1 || divhrsts==1) || ((profiletype==0 || profiletype==2) && perFlexiReport=='1'))?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -279,9 +292,9 @@ class _AllReports extends State<AllReports> {
                         MaterialPageRoute(builder: (context) => FlexiReport()),
                       );
                     },
-                  ):Center(),
+                  ):Center():Center(),
 
-                  (perLeaveReport!='1' &&  perAttReport!='1' && perFlexiReport!='1' ) ?
+                  ((perEmployeeLeave == '1' && perLeaveReport!='1') && (perAttendance == '1' && perAttReport!='1' && perTimeoff=='1' && perTimeoffReport=='1') && (perFlexi=='1' && perFlexiReport!='1') ) ?
                   new Center(
                     child: Padding(
                       padding: const EdgeInsets.only(top:100.0),

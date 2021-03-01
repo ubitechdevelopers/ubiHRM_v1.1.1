@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubihrm/reports/compoffleave.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../salary/all_reports.dart';
+import '../reports/all_reports.dart';
 import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
@@ -29,6 +29,10 @@ class _LeaveReports extends State<LeaveReports> {
   var profileimage;
   bool showtabbar;
   String orgName="";
+  int hrsts=0;
+  int adminsts=0;
+  int divhrsts=0;
+  int profiletype=0;
 
   @override
   void initState() {
@@ -41,7 +45,10 @@ class _LeaveReports extends State<LeaveReports> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
-
+      profiletype =prefs.getInt('profiletype')??0;
+      hrsts =prefs.getInt('hrsts')??0;
+      adminsts =prefs.getInt('adminsts')??0;
+      divhrsts =prefs.getInt('divhrsts')??0;
     });
   }
   @override
@@ -113,43 +120,6 @@ class _LeaveReports extends State<LeaveReports> {
     }
   }
 
-/*  showDialogWidget(String loginstr){
-
-    return showDialog(context: context, builder:(context) {
-
-      return new AlertDialog(
-        title: new Text(
-          loginstr,
-          style: TextStyle(fontSize: 15.0),),
-        content: ButtonBar(
-          children: <Widget>[
-            FlatButton(
-              child: Text('Later',style: TextStyle(fontSize: 13.0)),
-              shape: Border.all(),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-            ),
-            RaisedButton(
-              child: Text(
-                'Pay Now', style: TextStyle(color: Colors.white,fontSize: 13.0),),
-              color: Colors.orangeAccent,
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PaymentPage()),
-                );
-              },
-            ),
-          ],
-        ),
-      );
-    }
-    );
-
-  }*/
-
   getReportsWidget(){
     return Stack(
       children: <Widget>[
@@ -179,7 +149,6 @@ class _LeaveReports extends State<LeaveReports> {
                   //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
                   padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                   child: Container(
-
                     //     padding: EdgeInsets.only(left:  5.0),
                     child: Row(
 
@@ -202,10 +171,6 @@ class _LeaveReports extends State<LeaveReports> {
                               Container(
                                   child: Text("Employees on Leave",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 19.0),)
                               ),
-                             /* Container(
-                                //    width: MediaQuery.of(context).size.width*0.5,
-                                  child: Text("Show Today's Attendance ",style: TextStyle(fontSize: 15.0,),)
-                              ),*/
                             ],
                           ),
                         ),
@@ -229,13 +194,11 @@ class _LeaveReports extends State<LeaveReports> {
                 ),
 
                 SizedBox(height: 6.0),
+                perCompOff == '1'?
+                ((hrsts==1 || adminsts==1 || divhrsts==1) || ((profiletype==0 || profiletype==2) && perCompOffReport=='1'))?
                 new RaisedButton(
-                  //   shape: BorderDirectional(bottom: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1),top: BorderSide(color: Colors.green[900],style: BorderStyle.solid,width: 1)),
-                  //   shape: RoundedRectangleBorder(side: BorderSide(color: appStartColor(),style: BorderStyle.solid,width: 1),borderRadius: new BorderRadius.circular(5.0)),
-                  //   shape: RoundedRectangleBorder(side: BorderSide(color:appStartColor(),style: BorderStyle.solid,width: 1)),
                   padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                   child: Container(
-
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -259,7 +222,6 @@ class _LeaveReports extends State<LeaveReports> {
                             ],
                           ),
                         ),
-
                         Container(
                           child: Icon(Icons.keyboard_arrow_right,size: 40.0,),
                         ),
@@ -275,7 +237,7 @@ class _LeaveReports extends State<LeaveReports> {
                       MaterialPageRoute(builder: (context) => CompOffLeave()),
                     );
                   },
-                ),
+                ):Center():Center(),
               ]),
         ),
       ],

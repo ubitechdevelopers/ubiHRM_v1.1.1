@@ -362,14 +362,14 @@ getCountAproval() async{
   Dio dio = new Dio();
   String orgdir = prefs.getString('organization') ?? '';
   String empid = prefs.getString('employeeid')??"";
-  perLeaveApproval=getModuleUserPermission("124","view");
-  perTimeoffApproval=getModuleUserPermission("180","view");
-  perSalaryExpenseApproval=getModuleUserPermission("170","view");
-  perPayrollExpenseApproval=getModuleUserPermission("473","view");
+  perLeaveApproval=getModulePermission("124","view");
+  perTimeoffApproval=getModulePermission("180","view");
+  perSalaryExpense=getModulePermission("170","view");
+  perPayrollExpense=getModulePermission("473","view");
   print("leave>>>>>>>>>> "+perLeaveApproval);
   print("timeoff>>>>>>>>>> "+perTimeoffApproval);
-  print("salary expense>>>>>>>>>>> "+perSalaryExpenseApproval);
-  print("payroll expense>>>>>>>>>>> "+perPayrollExpenseApproval);
+  print("salary expense>>>>>>>>>>> "+perSalaryExpense);
+  print("payroll expense>>>>>>>>>>> "+perPayrollExpense);
   int leavecount;
   int timeoffcount;
   int expensecount;
@@ -394,7 +394,7 @@ getCountAproval() async{
     timeoffcount=0;
   }
 
-  if(perSalaryExpenseApproval=='1') {
+  if(perSalaryExpense=='1') {
     print(path + "getSalaryExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
     final res3 = await http.get(path + "getSalaryExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
     expensecount=json.decode(res3.body);
@@ -403,7 +403,7 @@ getCountAproval() async{
     expensecount=0;
   }
 
-  if(perPayrollExpenseApproval=='1') {
+  if(perPayrollExpense=='1') {
     print(path + "getPayrollExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
     final res4 = await http.get(path + "getPayrollExpenseApprovalCount?empid=" + empid + "&orgid=" + orgdir);
     payrollexpensecount=json.decode(res4.body);

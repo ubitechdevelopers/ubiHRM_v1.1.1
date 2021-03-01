@@ -33,17 +33,17 @@ circleIconBackgroundColor(){
 String path_ubiattendance="http://ubihrmglobal.zentylpro.com/HRMAPP/index.php/Att_services/";
 String path_hrm_india="http://ubihrmglobal.zentylpro.com/services/";*/
 
-/*String path="https://ubitechglobal.ubihrm.com/ubiapp/";
+String path="https://ubitechglobal.ubihrm.com/ubiapp/";
 String path_ubiattendance="https://ubitechglobal.ubihrm.com/HRMAPP/index.php/Att_services/";
-String path_hrm_india="https://ubitechglobal.ubihrm.com/services/";*/
+String path_hrm_india="https://ubitechglobal.ubihrm.com/services/";
 
 /*String path="https://ubitechglobal.ubihrm.com/ubiapp1/";
 String path_ubiattendance="https://ubitechglobal.ubihrm.com/HRMAPP/index.php/Att_services1/";
 String path_hrm_india="https://ubitechglobal.ubihrm.com/services1/";*/
 
-String path="http://zentylpro.com/HRMSGLOBAL/ubiapp/";
+/*String path="http://zentylpro.com/HRMSGLOBAL/ubiapp/";
 String path_ubiattendance="http://zentylpro.com/HRMSGLOBAL/HRMAPP/index.php/Att_services/";
-String path_hrm_india="http://zentylpro.com/HRMSGLOBAL/services/";
+String path_hrm_india="http://zentylpro.com/HRMSGLOBAL/services/";*/
 
 
 int home_load_num = 0;
@@ -71,13 +71,16 @@ int visitImage = 1;
 var perEmployeeLeave;
 var perLeaveApproval;
 var perTimeoffApproval;
-var perSalaryExpenseApproval;
-var perPayrollExpenseApproval;
 var userPerEmployee;
 var perAttendance;
+var perCompOff;
 var perAttReport;
+var perVisitReport;
+var perGeoReport;
 var perFlexiReport;
 var perLeaveReport;
+var perCompOffReport;
+var perTimeoffReport;
 var perTimeoff;
 var perReport;
 var perSet;
@@ -97,7 +100,9 @@ var perPayrollExpense;
 var perFlexi;
 var deprtcurrency;
 int approval_count=0;
-String appVersion='1.1.0';
+int regularizationCount=0;
+int regularizationTotalCount=0;
+String appVersion='1.1.1';
 String latestVersionReleaseDate='01-Dec-2020';
 String appVersionReleaseDate='02-Feb-2020';
 DateFormat formatter = DateFormat('yyyy-MM-dd');

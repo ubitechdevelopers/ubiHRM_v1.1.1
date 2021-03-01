@@ -158,7 +158,7 @@ class _RequestLeaveState extends State<RequestLeave> {
             Navigator.of(context).pop(true);
           });
           return AlertDialog(
-            content: new Text("Leave application applied successfully"),
+            content: new Text("Leave applied successfully"),
           );
         });
       Navigator.pushAndRemoveUntil(
@@ -308,7 +308,7 @@ class _RequestLeaveState extends State<RequestLeave> {
             Navigator.of(context).pop(true);
           });
           return AlertDialog(
-            content: new Text("You have already applied for same date"),
+            content: new Text("Leave already applied for the same date"),
           );
         });
       /*showDialog(context: context, child:

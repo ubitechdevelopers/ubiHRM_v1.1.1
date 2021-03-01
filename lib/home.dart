@@ -12,7 +12,7 @@ import 'package:ubihrm/settings/employee/addedit_employee.dart';
 import 'package:ubihrm/settings/employee/employees_list.dart';
 import 'package:ubihrm/payroll_expence/expenselist.dart';
 import 'package:ubihrm/settings/employee/view_employee.dart';
-import 'salary/all_reports.dart';
+import 'reports/all_reports.dart';
 import 'attandance/flexi_time.dart';
 import 'attandance/home.dart';
 import 'attandance/punchlocation_summary.dart';
@@ -54,6 +54,7 @@ class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMix
   int adminsts=0;
   int hrsts=0;
   int divhrsts=0;
+  int profiletype=0;
   //int plansts=0;
   //int empcount=0;
   bool fakeLocationDetected = false;
@@ -142,6 +143,7 @@ class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMix
       hrsts = prefs.getInt('hrsts')??0;
       adminsts = prefs.getInt('adminsts')??0;
       divhrsts = prefs.getInt('divhrsts')??0;
+      profiletype = prefs.getInt('profiletype')??0;
     });
   }
 
@@ -184,19 +186,23 @@ class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMix
       perPayPeriod = getModulePermission("491", "view");
       perEmployee = getModulePermission("496", "view");
       perGeoFence = getModulePermission("318", "view");
-      perSalaryExpense = getModulePermission("170", "view");
-      perPayrollExpense = getModulePermission("473", "view");
       perFlexi = getModulePermission("448", "view");
       perPunchLocation = getModulePermission("305", "view");
+      perCompOff = getModulePermission("450", "view");
 
-      perLeaveApproval = getModuleUserPermission("124", "view");
-      perTimeoffApproval = getModuleUserPermission("180", "view");
-      perSalaryExpenseApproval = getModuleUserPermission("170", "view");
-      perPayrollExpenseApproval = getModuleUserPermission("473","view");
+      perLeaveApproval = getModulePermission("124", "view");
+      perTimeoffApproval = getModulePermission("180", "view");
+      perSalaryExpense = getModulePermission("170", "view");
+      perPayrollExpense = getModulePermission("473", "view");
+      //perSalaryExpenseApproval = getModuleUserPermission("170", "view");
+      //perPayrollExpenseApproval = getModuleUserPermission("473","view");
       userPerEmployee = getModuleUserPermission("496", "view");
       perAttReport = getModuleUserPermission("68", "view");
+      perVisitReport = getModuleUserPermission("305", "view");
+      perGeoReport = getModuleUserPermission("318", "view");
       perLeaveReport = getModuleUserPermission("69", "view");
       perFlexiReport = getModuleUserPermission("448", "view");
+      perCompOffReport = getModuleUserPermission("450", "view");
 
       if((adminsts==1 || divhrsts==1 || hrsts==1) && plansts==0 && empcount<2) {
         _visible = 0.25;
@@ -487,17 +493,18 @@ class _HomePageStatemain extends State<HomePageMain> with TickerProviderStateMix
             children: <Widget>[
               Opacity(opacity:_visible,child: makeDashboardItem("Dashboard", DashboardMain(), 'assets/icons/Dashboard_icon.png')),
               makeDashboardItem("Profile", CollapsingTab(), 'assets/icons/profile_icon.png'),
-              makeDashboardItem("Employee",
+              makeDashboardItem("Employee", profiletype==0?ViewEmployee(empid: empid, sts: 5):EmployeeList(sts: 1, from: 'libhome'), 'assets/icons/Employee_icon.png'),
+              /*makeDashboardItem("Employee",
               (adminsts==1 || divhrsts==1 || hrsts==1)?
               EmployeeList(sts: 1):
               perEmployee=='1'?
               (adminsts==0 || divhrsts==0 || hrsts==0):
               userPerEmployee=='1'?
               EmployeeList(sts: 1):
-              ViewEmployee(empid: empid, sts: 5), 'assets/icons/Employee_icon.png'),
+              ViewEmployee(empid: empid, sts: 5), 'assets/icons/Employee_icon.png'),*/
               if(perAttendance == '1') Opacity(opacity:_visible1,child: makeDashboardItem("Attendance", HomePage(), 'assets/icons/Attendance_icon.png')),
               if(perEmployeeLeave == '1') Opacity(opacity:_visible,child: makeDashboardItem("Leave",  MyLeave(), 'assets/icons/leave_icon.png')),
-              if(perTimeoff == '1') Opacity(opacity:_visible,child: makeDashboardItem("Time Off", TimeoffSummary(), 'assets/icons/Timeoff_icon.png')),
+              if(perAttendance == '1' && perTimeoff == '1') Opacity(opacity:_visible,child: makeDashboardItem("Time Off", TimeoffSummary(), 'assets/icons/Timeoff_icon.png')),
               if(perPunchLocation == '1') Opacity(opacity:_visible,child: makeDashboardItem("Visits", PunchLocationSummary(), 'assets/icons/visits_icon.png')),
               if(perFlexi == '1') Opacity(opacity:_visible,child: makeDashboardItem("Flexi Time", Flexitime(), 'assets/icons/Flexi_icon.png')),
               if(perSalary == '1') Opacity(opacity:_visible,child: makeDashboardItem("Salary", SalarySummary(), 'assets/icons/Salary_icon.png')),

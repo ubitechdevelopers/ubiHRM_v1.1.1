@@ -211,7 +211,9 @@ class _PunchLocationSummary extends State<PunchLocationSummary> with WidgetsBind
           Completer<Null> completer = new Completer<Null>();
           await Future.delayed(Duration(seconds: 1)).then((onvalue) {
             setState(() {
-              today.clear();
+              today.text = formatter.format(DateTime.now());
+              getSummaryPunch(today.text,empname);
+              empname='';
               FocusScopeNode currentFocus = FocusScope.of(context);
               if (!currentFocus.hasPrimaryFocus) {
                 currentFocus.unfocus();

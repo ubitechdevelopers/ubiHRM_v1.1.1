@@ -461,7 +461,7 @@ class _ShiftList extends State<ShiftList> {
                               });
                               return AlertDialog(
                                 content: new Text(
-                                    "This shift can't be updated. Employees are already assigned to it"),
+                                    "This shift can't be updated. Employees are already assigned to it."),
                               );
                             });
                       } else if (res == '3') {

@@ -41,6 +41,7 @@ class _RegularizationPageState extends State<RegularizationPage> {
   TextEditingController _timeoutController = TextEditingController();
   TextEditingController _remarkController = TextEditingController();
   FocusNode textfirstFocusNode = new FocusNode();
+  Future<List<Regularization>> _listfuture;
 
   @override
   void initState() {
@@ -49,6 +50,11 @@ class _RegularizationPageState extends State<RegularizationPage> {
     selectedMonth = new DateTime(from.year, from.month, 1);
     profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     getOrgName();
+    setData(selectedMonth);
+  }
+
+  setData(month){
+    _listfuture=getRegularization(formatter.format(month));
   }
 
   getOrgName() async {
@@ -75,16 +81,16 @@ class _RegularizationPageState extends State<RegularizationPage> {
   }
 
   mainRegularizationWidget() {
-    return RefreshIndicator(
-      child: WillPopScope(
+    return WillPopScope(
         onWillPop: () => move(),
-        child: new Scaffold(
-          backgroundColor: scaffoldBackColor(),
-          key: _scaffoldKey,
-          appBar: AppHeader(profileimage,showtabbar,orgName),
-          bottomNavigationBar: new HomeNavigation(),
-          endDrawer: new AppDrawer(),
-          body:ModalProgressHUD(
+        child: RefreshIndicator(
+          child: new Scaffold(
+            backgroundColor: scaffoldBackColor(),
+            key: _scaffoldKey,
+            appBar: AppHeader(profileimage,showtabbar,orgName),
+            bottomNavigationBar: new HomeNavigation(),
+            endDrawer: new AppDrawer(),
+            body:ModalProgressHUD(
               inAsyncCall: _isServiceCalling,
               opacity: 0.15,
               progressIndicator: SizedBox(
@@ -97,14 +103,18 @@ class _RegularizationPageState extends State<RegularizationPage> {
               child: getRegularizationWidget(),
           ),
         ),
+        onRefresh: () async {
+          Completer<Null> completer = new Completer<Null>();
+          await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => RegularizationPage()),
+            );
+            completer.complete();
+          });
+          return completer.future;
+        },
       ),
-      onRefresh: () async {
-        Completer<Null> completer = new Completer<Null>();
-        await Future.delayed(Duration(seconds: 1)).then((onvalue) {
-          completer.complete();
-        });
-        return completer.future;
-      },
     );
   }
 
@@ -124,13 +134,19 @@ class _RegularizationPageState extends State<RegularizationPage> {
             children: <Widget> [
               Center(
                   child: Text(
-                    'Regularization',
+                    'Regularization Request',
                     style: TextStyle(
                       fontSize: 22.0,
                       color: appStartColor(),
                     ),
                   )),
               SizedBox(height: 5.0,),
+              Center(
+                child: Text(
+                  'Note: *You can apply for regularization when you missed time punches. You have applied for '+regularizationTotalCount.toString()+' out of '+regularizationCount.toString()+' requests permitted.',
+                  style: TextStyle(color: Colors.red,),
+                )
+              ),
               Padding(
                 padding: const EdgeInsets.only(top:10.0, bottom:5.0),
                 child: new MonthStrip(
@@ -143,6 +159,7 @@ class _RegularizationPageState extends State<RegularizationPage> {
                   onMonthChanged: (v) {
                     setState(() {
                       selectedMonth = v;
+                      setData(selectedMonth);
                       print("selectedMonth");
                       print(selectedMonth);
                     });
@@ -206,7 +223,7 @@ class _RegularizationPageState extends State<RegularizationPage> {
 
   Widget regularizationWidget() {
     return FutureBuilder<List<Regularization>>(
-        future: getRegularization(formatter.format(selectedMonth)),
+        future: _listfuture,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
@@ -230,13 +247,51 @@ class _RegularizationPageState extends State<RegularizationPage> {
                         IconButton(
                           icon:Icon(FontAwesomeIcons.solidPaperPlane,color: appStartColor(), size: 20.0,),
                           onPressed: (){
-                            _remarkController = new TextEditingController();
-                            showAlertDialog(context,
-                                snapshot.data[index].id.toString(),
-                                snapshot.data[index].date.toString(),
-                                snapshot.data[index].timein.toString(),
-                                snapshot.data[index].timeout.toString()
-                            );
+                            if(snapshot.data[index].resultsts==1 && snapshot.data[index].regularizests==1) {
+                              _remarkController = new TextEditingController();
+                              showAlertDialog(context,
+                                  snapshot.data[index].id.toString(),
+                                  snapshot.data[index].date.toString(),
+                                  snapshot.data[index].timein.toString(),
+                                  snapshot.data[index].timeout.toString()
+                              );
+                            }else if(snapshot.data[index].resultsts==1 && snapshot.data[index].regularizests==0) {
+                              _remarkController = new TextEditingController();
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context).pop(true);
+                                    });
+                                    return AlertDialog(
+                                      content: new Text("You are eligible for applying "+regularizationCount.toString()+" regularization in a month"),
+                                    );
+                                  });
+                            }else if(snapshot.data[index].resultsts==0 && snapshot.data[index].regularizests==1) {
+                              _remarkController = new TextEditingController();
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context).pop(true);
+                                    });
+                                    return AlertDialog(
+                                      content: new Text("Regularization time period has been exceeded"),
+                                    );
+                                  });
+                            }else if(snapshot.data[index].resultsts==0 && snapshot.data[index].regularizests==0) {
+                              _remarkController = new TextEditingController();
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    Future.delayed(Duration(seconds: 3), () {
+                                      Navigator.of(context).pop(true);
+                                    });
+                                    return AlertDialog(
+                                      content: new Text("Regularization time period and applying counts has been exceeded"),
+                                    );
+                                  });
+                            }
                           },
                         ),
                       ],
@@ -314,7 +369,7 @@ class _RegularizationPageState extends State<RegularizationPage> {
                               ),
                               validator: (time) {
                                 if (_timeinController.text=='00:00' || _timeinController.text.isEmpty) {
-                                  return 'Please enter start time';
+                                  return 'Please enter time in time';
                                 }
                                 return null;
                               },
@@ -355,16 +410,16 @@ class _RegularizationPageState extends State<RegularizationPage> {
                               ),
                               validator: (time) {
                                 if (_timeoutController.text=='00:00' || _timeoutController.text.isEmpty) {
-                                  return 'Please enter start time';
+                                  return 'Please enter time out time';
                                 }
                                 var arr=_timeinController.text.split(':');
                                 var arr1=_timeoutController.text.split(':');
                                 final startTime = DateTime(2018, 6, 23,int.parse(arr[0]),int.parse(arr[1]),00,00);
                                 final endTime = DateTime(2018, 6, 23,int.parse(arr1[0]),int.parse(arr1[1]),00,00);
                                 if(endTime.isBefore(startTime)){
-                                  return '\"To Time\" can\'t be smaller.';
+                                  return "Time out time can't be earlier \nthan time in time";
                                 }else if(startTime.isAtSameMomentAs(endTime)){
-                                  return '\"To Time\" can\'t be equal.';
+                                  return "Time in time can't be same as \ntime out time";
                                 }
                                 return null;
                               },
@@ -423,8 +478,10 @@ class _RegularizationPageState extends State<RegularizationPage> {
                     });
                     OnSendRegularizeRequest(id, _timeinController.text, _timeoutController.text, _remarkController.text).then((res) {
                       if (res == 'true') {
-                        Navigator.of(context, rootNavigator: true).pop(
-                            'dialog');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RegularizationPage()),
+                        );
                         showDialog(
                             context: context,
                             builder: (context) {
@@ -437,8 +494,7 @@ class _RegularizationPageState extends State<RegularizationPage> {
                               );
                             });
                       } else if (res == 'false') {
-                        Navigator.of(context, rootNavigator: true).pop(
-                            'dialog');
+                        Navigator.of(context, rootNavigator: true).pop('dialog');
                         showDialog(
                             context: context,
                             builder: (context) {
@@ -447,12 +503,11 @@ class _RegularizationPageState extends State<RegularizationPage> {
                               });
                               return AlertDialog(
                                 content: new Text(
-                                    "Unable to submit regularization request"),
+                                    "There is some problem while requesting regularization"),
                               );
                             });
                       } else {
-                        Navigator.of(context, rootNavigator: true).pop(
-                            'dialog');
+                        Navigator.of(context, rootNavigator: true).pop('dialog');
                         showDialog(
                             context: context,
                             builder: (context) {

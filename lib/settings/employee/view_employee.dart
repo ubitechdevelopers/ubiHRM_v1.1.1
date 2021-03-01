@@ -17,7 +17,8 @@ class ViewEmployee extends StatefulWidget {
   @override
   final String empid;
   final int sts;
-  ViewEmployee({Key key,this.empid,this.sts/*,this.profileimg,this.empcode,this.fname,this.lname,this.dob,this.nationality,this.maritalsts,this.religion,this.bloodg,this.doc,this.gender,this.reportingto,this.div,this.divid,this.dept,this.deptid,this.desg,this.desgid,this.loc,this.locid,this.shift,this.shiftid,this.empsts,this.grade,this.emptype,this.phone,this.email,this.father,this.doj,this.profiletype*/}): super(key:key);
+  final String from;
+  ViewEmployee({Key key,this.empid,this.sts,this.from/*,this.profileimg,this.empcode,this.fname,this.lname,this.dob,this.nationality,this.maritalsts,this.religion,this.bloodg,this.doc,this.gender,this.reportingto,this.div,this.divid,this.dept,this.deptid,this.desg,this.desgid,this.loc,this.locid,this.shift,this.shiftid,this.empsts,this.grade,this.emptype,this.phone,this.email,this.father,this.doj,this.profiletype*/}): super(key:key);
   _ViewEmployeeState createState() => _ViewEmployeeState();
 }
 
@@ -159,10 +160,10 @@ class _ViewEmployeeState extends State<ViewEmployee> {
   }
 
   Future<bool> sendToSettings() async{
-    if(widget.sts==1 || widget.sts==2) {
+    if((widget.sts==1 && widget.from=='libhome') || (widget.sts==2 && widget.from=='settings')) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => EmployeeList(sts: widget.sts)), (
+        MaterialPageRoute(builder: (context) => EmployeeList(sts: widget.sts, from: widget.from)), (
           Route<dynamic> route) => false,
       );
     }else if(widget.sts==3) {
@@ -194,7 +195,7 @@ class _ViewEmployeeState extends State<ViewEmployee> {
           key: _scaffoldKey,
           backgroundColor:scaffoldBackColor(),
           endDrawer: new AppDrawer(),
-          appBar: new ViewEmployeeAppHeader(profileimage,showtabbar,orgName,widget.sts),
+          appBar: new ViewEmployeeAppHeader(profileimage,showtabbar,orgName,widget.sts,widget.from),
           bottomNavigationBar:  new HomeNavigation(),
           body: ModalProgressHUD(
               inAsyncCall: isServiceCalling,
@@ -1191,8 +1192,9 @@ class ViewEmployeeAppHeader extends StatelessWidget implements PreferredSizeWidg
   bool showtabbar;
   var orgname;
   int sts;
+  String from;
 
-  ViewEmployeeAppHeader(profileimage1,showtabbar1,orgname1, sts1){
+  ViewEmployeeAppHeader(profileimage1,showtabbar1,orgname1, sts1, from1){
     profileimage = profileimage1;
     orgname = orgname1;
     if (profileimage!=null) {
@@ -1213,10 +1215,10 @@ class ViewEmployeeAppHeader extends StatelessWidget implements PreferredSizeWidg
           children: [
             IconButton(icon:Icon(Icons.arrow_back),
               onPressed:(){
-                if(sts==1 || sts==2) {
+                if((sts==1 && from=='libhome') || (sts==2 && from=='settings')) {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => EmployeeList(sts: sts)), (
+                    MaterialPageRoute(builder: (context) => EmployeeList(sts: sts, from: from)), (
                       Route<dynamic> route) => false,
                   );
                 }else if(sts==3) {

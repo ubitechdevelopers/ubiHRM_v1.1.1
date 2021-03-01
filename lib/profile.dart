@@ -888,7 +888,7 @@ class _CollapsingTabState extends State<CollapsingTab> {
       setState(() {
         _isProfileUploading = false;
       });
-      print("No found to remove");
+      print("No image found to remove");
       showDialog(
         context: context,
         builder: (context) {

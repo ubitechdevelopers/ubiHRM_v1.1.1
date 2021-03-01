@@ -86,7 +86,7 @@ class _OutSideGeoFence extends State<OutSideGeoFence> {
         Completer<Null> completer = new Completer<Null>();
         await Future.delayed(Duration(seconds: 1)).then((onvalue) {
           setState(() {
-            today.clear();
+            today.text = formatter.format(DateTime.now());
             FocusScopeNode currentFocus = FocusScope.of(context);
             if (!currentFocus.hasPrimaryFocus) {
               currentFocus.unfocus();

@@ -160,7 +160,7 @@ class StreamLocation{
   bool _permission = true;
   String error;
 
-/*  void startStreaming(int listlength) async{
+/*void startStreaming(int listlength) async{
     try {
       _permission = await _location.hasPermission();
       error = null;
@@ -1715,7 +1715,7 @@ class Emp {
 }
 
 
-Future getEmpCount() async {
+Future getEmpCount(String from) async {
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('empid')?? '0';
@@ -1724,8 +1724,8 @@ Future getEmpCount() async {
   int divhrsts =prefs.getInt('divhrsts')??0;
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
-  print(path_ubiattendance + 'getEmpCount?refno=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&divhrsts=$divhrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  final res = await http.get(path_ubiattendance + 'getEmpCount?refno=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&divhrsts=$divhrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  print(path_ubiattendance + 'getEmpCount?from=$from&refno=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&divhrsts=$divhrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final res = await http.get(path_ubiattendance + 'getEmpCount?from=$from&refno=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&divhrsts=$divhrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   return ((json.decode(res.body)));
 }
 
@@ -1739,7 +1739,7 @@ getEmployeeDetailById(id) async {
   return json.decode(response.body.toString());
 }
 
-Future<List<Emp>> getEmployee(offset, limit, empname) async {
+Future<List<Emp>> getEmployee(offset, limit, empname, from) async {
   final prefs = await SharedPreferences.getInstance();
   String orgid = prefs.getString('orgdir') ?? '';
   String empid = prefs.getString('empid')?? '0';
@@ -1747,8 +1747,8 @@ Future<List<Emp>> getEmployee(offset, limit, empname) async {
   int hrsts =prefs.getInt('hrsts')??0;
   int adminsts =prefs.getInt('adminsts')??0;
   int dataaccess = prefs.getInt('dataaccess')??0;
-  print(path_ubiattendance + 'getUsersMobile?offset=$offset&limit=$limit&refno=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
-  final response = await http.get(path_ubiattendance + 'getUsersMobile?offset=$offset&limit=$limit&refno=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  print(path_ubiattendance + 'getUsersMobile?offset=$offset&limit=$limit&from=$from&refno=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
+  final response = await http.get(path_ubiattendance + 'getUsersMobile?offset=$offset&limit=$limit&from=$from&refno=$orgid&empid=$empid&profiletype=$profiletype&hrsts=$hrsts&adminsts=$adminsts&dataaccess=$dataaccess');
   List responseJson = json.decode(response.body.toString());
   List<Emp> empList = createEmpList(responseJson,empname);
   return empList;

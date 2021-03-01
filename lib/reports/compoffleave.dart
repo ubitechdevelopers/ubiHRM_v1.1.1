@@ -92,6 +92,10 @@ class _CompOffLeave extends State<CompOffLeave> {
         onRefresh: () async {
           Completer<Null> completer = new Completer<Null>();
           await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            setState(() {
+              emp='0';
+              getCompOffLeave(emp);
+            });
             completer.complete();
           });
           return completer.future;

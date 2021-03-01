@@ -17,7 +17,7 @@ class AboutApp extends StatefulWidget {
 
 class _AboutApp extends State<AboutApp> {
   String org_name = "";
-  String new_ver='1.1.0';
+  String new_ver='1.1.1';
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   getOrgName() async{

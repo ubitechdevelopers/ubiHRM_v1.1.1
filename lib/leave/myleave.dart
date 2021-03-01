@@ -107,7 +107,7 @@ class _MyLeaveState extends State<MyLeave> {
             Navigator.of(context).pop(true);
           });
           return AlertDialog(
-            content: new Text("Leave application withdrawn successfully."),
+            content: new Text("Leave withdrawn successfully."),
           );
         });
       /*showDialog(context: context, child:
@@ -277,6 +277,7 @@ class _MyLeaveState extends State<MyLeave> {
         onRefresh: () async {
           Completer<Null> completer = new Completer<Null>();
           await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            getLeaveSummary();
             completer.complete();
           });
           return completer.future;

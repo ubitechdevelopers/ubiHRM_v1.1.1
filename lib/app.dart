@@ -35,7 +35,7 @@ class _ShrineAppState extends State<ShrineApp> {
   String long="";
   int response;
   int responsestate;
-  String cur_ver='1.1.0', new_ver='1.1.0';
+  String cur_ver='1.1.1', new_ver='1.1.1';
   String updatestatus;
 
   @override

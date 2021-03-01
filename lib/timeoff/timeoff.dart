@@ -161,6 +161,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
               _dateController.clear();
               _starttimeController.clear();
               _endtimeController.clear();
+              _reasonController.clear();
               FocusScopeNode currentFocus = FocusScope.of(context);
               if (!currentFocus.hasPrimaryFocus) {
                 currentFocus.unfocus();
@@ -334,7 +335,7 @@ class _TimeOffPageState extends State<TimeOffPage> {
                                   ),
                                 ),
                                 validator: (time) {
-                                  if (_starttimeController.text.isEmpty) {
+                                  if (_endtimeController.text.isEmpty) {
                                     return 'Please enter end time';
                                   }
 
@@ -343,9 +344,9 @@ class _TimeOffPageState extends State<TimeOffPage> {
                                   final startTime = DateTime(2018, 6, 23,int.parse(arr[0]),int.parse(arr[1]),00,00);
                                   final endTime = DateTime(2018, 6, 23,int.parse(arr1[0]),int.parse(arr1[1]),00,00);
                                   if(endTime.isBefore(startTime)){
-                                    return '\"To Time\" can\'t be smaller.';
+                                    return "Time Off end time can't be \nearlier than time off start time";
                                   }else if(startTime.isAtSameMomentAs(endTime)){
-                                    return '\"To Time\" can\'t be equal.';
+                                    return "Time Off start and end time \ncan't be same";
                                   }
                                   return null;
                                 },
@@ -373,12 +374,11 @@ class _TimeOffPageState extends State<TimeOffPage> {
                                     )
                                 ),
                                 validator: (value) {
-                                  if (value.isEmpty) {
+                                  if (_reasonController.text.isEmpty) {
                                     return 'Please enter reason';
                                   }
                                   return null;
                                 },
-                                onFieldSubmitted: (String value) {},
                                 maxLines: null,
                               ),
                             ),

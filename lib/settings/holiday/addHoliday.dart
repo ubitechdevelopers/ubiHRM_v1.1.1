@@ -590,7 +590,6 @@ class _AddHolidayState extends State<AddHoliday> {
                                       MaterialPageRoute(builder: (context) => Holiday()),
                                     );
                                   }),
-
                               ],
                             ),
                           ],

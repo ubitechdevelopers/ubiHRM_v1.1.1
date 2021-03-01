@@ -479,7 +479,7 @@ class ChoiceCard extends StatelessWidget {
                                       Navigator.of(context).pop(true);
                                     });
                                     return AlertDialog(
-                                      content: new Text("Time Off application approved successfully."),
+                                      content: new Text("Time Off approved successfully."),
                                     );
                                   });
                                 /*showDialog(
@@ -502,7 +502,7 @@ class ChoiceCard extends StatelessWidget {
                                       Navigator.of(context).pop(true);
                                     });
                                     return AlertDialog(
-                                      content: new Text("Time Off application could not be approved."),
+                                      content: new Text("Time Off could not be approved."),
                                     );
                                   });
                                 /*showDialog(
@@ -548,7 +548,7 @@ class ChoiceCard extends StatelessWidget {
                                         Navigator.of(context).pop(true);
                                       });
                                       return AlertDialog(
-                                        content: new Text("Time Off application rejected successfully."),
+                                        content: new Text("Time Off rejected successfully."),
                                       );
                                     });
                                   /*showDialog(
@@ -571,7 +571,7 @@ class ChoiceCard extends StatelessWidget {
                                         Navigator.of(context).pop(true);
                                       });
                                       return AlertDialog(
-                                        content: new Text("Time Off application could not be rejected."),
+                                        content: new Text("Time Off could not be rejected."),
                                       );
                                     });
                                   /*showDialog(

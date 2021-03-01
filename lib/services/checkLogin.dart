@@ -80,19 +80,22 @@ class Login{
         perPayPeriod = getModulePermission("491", "view");
         perEmployee = getModulePermission("496", "view");
         perGeoFence = getModulePermission("318", "view");
-        perSalaryExpense = getModulePermission("170", "view");
-        perPayrollExpense = getModulePermission("473", "view");
         perFlexi = getModulePermission("448", "view");
         perPunchLocation = getModulePermission("305", "view");
+        perCompOff = getModulePermission("450", "view");
 
-        perLeaveApproval = getModuleUserPermission("124","view");
-        perTimeoffApproval = getModuleUserPermission("180", "view");
-        perSalaryExpenseApproval = getModuleUserPermission("170","view");
-        perPayrollExpenseApproval = getModuleUserPermission("473","view");
+        perLeaveApproval = getModulePermission("124","view");
+        perTimeoffApproval = getModulePermission("180", "view");
+        perSalaryExpense = getModulePermission("170", "view");
+        perPayrollExpense = getModulePermission("473", "view");
+
         userPerEmployee = getModuleUserPermission("496", "view");
         perAttReport = getModuleUserPermission("68", "view");
+        perVisitReport = getModuleUserPermission("305", "view");
+        perGeoReport = getModuleUserPermission("318", "view");
         perLeaveReport = getModuleUserPermission("69", "view");
         perFlexiReport = getModuleUserPermission("448", "view");
+        perCompOffReport = getModuleUserPermission("450", "view");
 
         return "true";
       } else if(employeeMap['response']==2){
@@ -186,19 +189,23 @@ class Login{
           perPayPeriod = getModulePermission("491", "view");
           perEmployee = getModulePermission("496", "view");
           perGeoFence = getModulePermission("318", "view");
-          perSalaryExpense = getModulePermission("170", "view");
-          perPayrollExpense = getModulePermission("473", "view");
           perFlexi = getModulePermission("448", "view");
           perPunchLocation = getModulePermission("305", "view");
+          perCompOff = getModulePermission("450", "view");
 
-          perLeaveApproval = getModuleUserPermission("124","view");
-          perTimeoffApproval = getModuleUserPermission("180", "view");
-          perSalaryExpenseApproval = getModuleUserPermission("170","view");
-          perPayrollExpenseApproval = getModuleUserPermission("473","view");
+          perLeaveApproval = getModulePermission("124","view");
+          perTimeoffApproval = getModulePermission("180", "view");
+          perSalaryExpense = getModulePermission("170", "view");
+          perPayrollExpense = getModulePermission("473", "view");
+
           userPerEmployee = getModuleUserPermission("496", "view");
           perAttReport = getModuleUserPermission("68", "view");
+          perVisitReport = getModuleUserPermission("305", "view");
+          perGeoReport = getModuleUserPermission("318", "view");
           perLeaveReport = getModuleUserPermission("69", "view");
           perFlexiReport = getModuleUserPermission("448", "view");
+          perCompOffReport = getModuleUserPermission("450", "view");
+          perTimeoffReport = getModuleUserPermission("179","view");
 
           return "Success";
         } else {

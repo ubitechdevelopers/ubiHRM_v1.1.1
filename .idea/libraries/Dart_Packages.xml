@@ -54,7 +54,7 @@
         <entry key="calendar_strip">
           <value>
             <list>
-              <option value="$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/calendar_strip-1.0.4/lib" />
+              <option value="$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/calendar_strip-1.0.7/lib" />
             </list>
           </value>
         </entry>
@@ -853,7 +853,7 @@
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/barcode-1.17.1/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/barcode_scan-1.0.0/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0-nullsafety.1/lib" />
-      <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/calendar_strip-1.0.4/lib" />
+      <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/calendar_strip-1.0.7/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/camera-0.5.8+17/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0-nullsafety.3/lib" />
       <root url="file://$USER_HOME$/Desktop/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.2.0-nullsafety.1/lib" />

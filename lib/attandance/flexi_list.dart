@@ -193,6 +193,7 @@ class _FlexiList extends State<FlexiList> {
         onRefresh: () async {
           Completer<Null> completer = new Completer<Null>();
           await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            getFlexiDataList(today.text);
             completer.complete();
           });
           return completer.future;

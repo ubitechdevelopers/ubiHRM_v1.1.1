@@ -289,7 +289,7 @@ class _AllSetting extends State<AllSetting> {
                   ):Center(),
                   ((adminsts==1||hrsts==1||divhrsts==1) && perAttendance=='1' && perGeoFence=='1')?SizedBox(height: 6.0):Center(),
 
-                  new RaisedButton(
+                  perEmployee=='1'?new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
                       child: Row(
@@ -320,11 +320,11 @@ class _AllSetting extends State<AllSetting> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => EmployeeList(sts: 2)),
+                        MaterialPageRoute(builder: (context) => EmployeeList(sts: 2, from: 'settings')),
                       );
                     },
-                  ),
-                  SizedBox(height: 6.0),
+                  ):Center(),
+                  perEmployee=='1'?SizedBox(height: 6.0):Center(),
 
                   (adminsts==1||hrsts==1||divhrsts==1)?new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),

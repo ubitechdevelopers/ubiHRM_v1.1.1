@@ -10,8 +10,10 @@ class Regularization {
   String timeout;
   String device;
   String date;
+  int resultsts;
+  int regularizests;
 
-  Regularization({this.id, this.timein, this.timeout,this.device,this.date});
+  Regularization({this.id, this.timein, this.timeout,this.device,this.date,this.resultsts,this.regularizests});
 }
 
 
@@ -21,20 +23,26 @@ Future<List<Regularization>> getRegularization(month) async {
   String orgdir = prefs.getString('orgdir') ?? '';
   final response = await http.get(path_ubiattendance+'getRegularization?&month=$month&uid=$empid&orgid=$orgdir');
   print(path_ubiattendance+'getRegularization?&month=$month&uid=$empid&orgid=$orgdir');
-  List responseJson = json.decode(response.body.toString());
+  Map responseJson = json.decode(response.body.toString());
+
+  regularizationCount = responseJson['TotalRegularizecount'];
+  regularizationTotalCount = responseJson['Regularizecountdone'];
+
   List<Regularization> regList = creategetRegularizationList(responseJson);
   return regList;
 }
 
-List<Regularization> creategetRegularizationList(List data) {
+List<Regularization> creategetRegularizationList(data) {
   List<Regularization> list = new List();
-  for (int i = 0; i < data.length; i++) {
-    String id = data[i]["id"];
-    String timein = data[i]["timein"];
-    String timeout = data[i]["timeout"];
-    String device = data[i]["device"];
-    String regDate = data[i]["date"];
-    Regularization regularization = new Regularization(id: id, timein: timein, timeout: timeout,device: device,  date: regDate);
+  for (int i = 0; i < data['data'].length; i++) {
+    String id = data['data'][i]["id"];
+    String timein = data['data'][i]["timein"];
+    String timeout = data['data'][i]["timeout"];
+    String device = data['data'][i]["device"];
+    String regDate = data['data'][i]["date"];
+    int resultsts = data['data'][i]["resultsts"];
+    int regularizests = data['data'][i]["Regularizessts"];
+    Regularization regularization = new Regularization(id: id,timein: timein,timeout: timeout,device: device,date: regDate,resultsts: resultsts,regularizests: regularizests);
     list.add(regularization);
   }
   return list;

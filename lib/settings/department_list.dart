@@ -404,7 +404,7 @@ class _Department extends State<Department> {
                             Navigator.of(context).pop(true);
                           });
                           return AlertDialog(
-                            content: new Text("This department can't be updated. Employees are already assigned to it"),
+                            content: new Text("This department can't be updated. Employees are already assigned to it."),
                           );
                         });
                     }else if(res=='3') {

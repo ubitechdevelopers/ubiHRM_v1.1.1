@@ -33,9 +33,8 @@ Future<List<Salary>> getsalarySummary() async{
       "employeeid": empid,
       "organization": organization,
     });
-    Response response = await dio.post(
-        path+"getSalarysummary",
-        data: formData);
+    Response response = await dio.post(path+"getSalarysummary", data: formData);
+    print(path+"getSalarysummary?employeeid=$empid&organization=$organization");
     List responseJson = json.decode(response.data.toString());
 
     List<Salary> userList = createsalaryList(responseJson,empname);

@@ -17,7 +17,8 @@ import '../settings.dart';
 
 class EmployeeList extends StatefulWidget {
   final int sts;
-  EmployeeList({Key key,this.sts}): super(key:key);
+  final String from;
+  EmployeeList({Key key,this.sts,this.from}): super(key:key);
 
   @override
   _EmployeeList createState() => _EmployeeList();
@@ -65,7 +66,7 @@ class _EmployeeList extends State<EmployeeList> with TickerProviderStateMixin {
     profileimage = new NetworkImage(globalcompanyinfomap['ProfilePic']);
     initPlatformState();
     getOrgName();
-    getEmpCount().then((res) {
+    getEmpCount(widget.from).then((res) {
       setState(() {
         empCount = res;
         tabCount = (empCount / 10);
@@ -265,12 +266,19 @@ class _EmployeeList extends State<EmployeeList> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              _searchController.text.isEmpty?Padding(
+              empCount!=0?_searchController.text.isEmpty?Padding(
                 padding: const EdgeInsets.only(top:90.0),
                 child: tabBarView()
               ):Padding(
                 padding: const EdgeInsets.only(top:90.0),
-                child: Center(child:getDeptWidget(0, empCount),),
+                child: Center(child: getEmpWidget(0, empCount),),
+              ):Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width*1,
+                  color: appStartColor().withOpacity(0.1),
+                  padding:EdgeInsets.only(top:5.0,bottom: 5.0),
+                  child:Text("No Team found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                ),
               ),
             ],
           ),
@@ -285,7 +293,7 @@ class _EmployeeList extends State<EmployeeList> with TickerProviderStateMixin {
         initPosition: initPosition,
         itemCount: data.length,
         tabBuilder: (context, index) => Tab(text: data[index]),
-        pageBuilder: (context, index) => Center(child: getDeptWidget(index, 10)),
+        pageBuilder: (context, index) => Center(child: getEmpWidget(index, 10)),
         onPositionChange: (index) {
           print('current position: $index');
           initPosition = index;
@@ -330,9 +338,9 @@ class _EmployeeList extends State<EmployeeList> with TickerProviderStateMixin {
     );
   }
 
-  getDeptWidget(int index, int limit) {
+  getEmpWidget(int index, int limit) {
     return new FutureBuilder<List<Emp>>(
-      future: getEmployee(index*10, limit, empname),
+      future: getEmployee(index*10, limit, empname, widget.from),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           print("snapshot.data.length");
@@ -407,7 +415,8 @@ class _EmployeeList extends State<EmployeeList> with TickerProviderStateMixin {
                                                       context) =>
                                                       ViewEmployee(
                                                         empid: snapshot.data[index].Id.toString(),
-                                                        sts: widget.sts
+                                                        sts: widget.sts,
+                                                        from: widget.from
                                                       )),
                                             );
                                           },
@@ -446,7 +455,7 @@ class _EmployeeList extends State<EmployeeList> with TickerProviderStateMixin {
                 width: MediaQuery.of(context).size.width*1,
                 color: appStartColor().withOpacity(0.1),
                 padding:EdgeInsets.only(top:5.0,bottom: 5.0),
-                child:Text("No employees found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
+                child:Text("No Team found",style: TextStyle(fontSize: 14.0),textAlign: TextAlign.center,),
               ),
             );
           }

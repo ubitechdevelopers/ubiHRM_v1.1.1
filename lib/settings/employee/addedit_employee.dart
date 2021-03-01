@@ -31,7 +31,8 @@ class EditEmployee extends StatefulWidget {
   @override
   final String empid;
   final int sts;
-  EditEmployee({Key key, this.empid, this.sts}) : super(key: key);
+  final BuildContext context;
+  EditEmployee({Key key, this.empid, this.sts, this.context}) : super(key: key);
 
   /*static final kInitialPosition = LatLng(assign_lat, assign_long);
   static final apiKey = "AIzaSyDYh77SKpI6kAD1jiILwbiISZEwEOyJLtM";*/
@@ -98,8 +99,9 @@ class _EditEmployee extends State<EditEmployee> {
   bool supervisor = true;
   bool _isButtonDisabled = false;
   bool _checkLoadedprofile = true;
-  bool visibilityTag = false;
+  bool visibilityTag = true;
   bool _isServiceCalling = false;
+  bool _autoValidate = false;
 
   int adminsts = 0;
   int hrsts = 0;
@@ -625,7 +627,7 @@ class _EditEmployee extends State<EditEmployee> {
           backgroundColor:scaffoldBackColor(),
           key: _scaffoldKey,
           appBar: new AppHeader(profileimage,showtabbar,orgName),
-          bottomNavigationBar: Container(
+          /*bottomNavigationBar: Container(
             height: 70.0,
             decoration: new BoxDecoration(
               color: Colors.white,
@@ -960,7 +962,7 @@ class _EditEmployee extends State<EditEmployee> {
                 ),
               ],
             ),
-          ),
+          ),*/
           endDrawer: new AppDrawer(),
           body: ModalProgressHUD(
             inAsyncCall: _isServiceCalling,
@@ -1075,6 +1077,7 @@ class _EditEmployee extends State<EditEmployee> {
       child: Center(
         child: Form(
           key: widget.sts==4?_addformKey:_editformKey,
+          autovalidate: _autoValidate,
           child: SafeArea(
               child: Column(children: <Widget>[
                 Padding(
@@ -1166,7 +1169,7 @@ class _EditEmployee extends State<EditEmployee> {
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           //initialValue: _firstName.text,
-                          inputFormatters: [ FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), ],
+                          inputFormatters: [ FilteringTextInputFormatter.allow(RegExp("[a-zA-Z T]")), ],
                           decoration: InputDecoration(
                             //isDense: true,
                             border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
@@ -1203,7 +1206,7 @@ class _EditEmployee extends State<EditEmployee> {
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           //initialValue: _firstName.text,
-                          inputFormatters: [ FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), ],
+                          inputFormatters: [ FilteringTextInputFormatter.allow(RegExp("[a-zA-Z T]")), ],
                           decoration: InputDecoration(
                             //isDense: true,
                             border: OutlineInputBorder(borderRadius:  new BorderRadius.circular(10.0)),
@@ -1239,6 +1242,7 @@ class _EditEmployee extends State<EditEmployee> {
                             format: dateFormat,
                             controller: _dob,
                             focusNode: __dob,
+                            readOnly: true,
                             onShowPicker: (context, currentValue) {
                               return showDatePicker(
                                   context: context,
@@ -1253,6 +1257,7 @@ class _EditEmployee extends State<EditEmployee> {
                               //hintText: "Date Of Birth",
                               labelText: globallabelinfomap['dob'],
                               hintText: globallabelinfomap['dob'],
+
                               hintStyle: TextStyle(
                                   fontSize: 14.0),
                               prefixIcon: Icon(
@@ -1280,9 +1285,11 @@ class _EditEmployee extends State<EditEmployee> {
                         padding: const EdgeInsets.only(left: 10.0,right: 10.0),
                         child: Container(
                           child:DateTimeField(
+                            enabled: widget.sts==5?false:true,
                             format: dateFormat,
                             controller: _doj,
                             focusNode: __doj,
+                            readOnly: true,
                             onShowPicker: (context, currentValue) {
                               return showDatePicker(
                                   context: context,
@@ -1499,6 +1506,333 @@ class _EditEmployee extends State<EditEmployee> {
                       if(globallabelinfomap['grade']!='' && visibilityTag == true)getGrades_DD(),
                       if(globallabelinfomap['empsts']!='' && visibilityTag == true)getEmployeeStatus_DD(),
                       if(globallabelinfomap['nationality']!='' && visibilityTag == true)getNationality_DD(),
+                      SizedBox(height: 20,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          ButtonBar(
+                            children: <Widget>[
+                              widget.sts==4?RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                child: _isServiceCalling ? Text(
+                                  'Adding..',
+                                  style: TextStyle(color: Colors.white),
+                                ): Text(
+                                  'ADD',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.orange[800],
+                                onPressed: () {
+                                  if (this._addformKey.currentState.validate()) {
+                                    setState(() {
+                                      _isServiceCalling = true;
+                                      _isButtonDisabled = true;
+                                    });
+                                    print(path + 'addEmployee?uid=$uid&orgid=$orgid&empcode=${_empCode.text.trim()}&div=$div&loc=$loc&grade=$grade&dept=$dept&desg=$desg&empsts=$finalempsts&shift=$shift&fname=${_firstName.text.trim()}&lname=${_lastName.text.trim()}&dob=${_dob.text.trim()}&gender=$finalgender&doj=${_doj.text.trim()}&nationality=$nationality&country=$_tempcontry&contcode=${_contCode.text}&contact=${_contact.text.trim()}&email=${_email.text.trim()}');
+                                    var url = path + "addEmployee";
+                                    http.post(url, body: {
+                                      "uid": uid,
+                                      "orgid": orgid,
+                                      "empcode": _empCode.text.trim(),
+                                      "div": div,
+                                      "loc": loc,
+                                      "grade": grade,
+                                      "dept": dept,
+                                      "desg": desg,
+                                      "empsts": finalempsts,
+                                      "shift": shift,
+                                      "fname": _firstName.text.trim(),
+                                      "lname": _lastName.text.trim(),
+                                      "dob": _dob.text.trim(),
+                                      "gender": finalgender,
+                                      "doj": _doj.text.trim(),
+                                      "nationality": nationality,
+                                      "country": _tempcontry,
+                                      "contcode": _contCode.text,
+                                      "contact": _contact.text.trim(),
+                                      "email": _email.text.trim(),
+                                    }).then((response) async {
+                                      if (response.statusCode == 200) {
+                                        Map data = json.decode(response.body);
+                                        if (data['status'] == 'true') {
+                                          final prefs = await SharedPreferences.getInstance();
+                                          plansts = prefs.getInt('plansts');
+                                          empcount = prefs.getInt('empcount');
+                                          attcount = prefs.getInt('attcount');
+
+                                          Employee emp = new Employee(
+                                            employeeid: uid,
+                                            organization: orgid,
+                                          );
+
+                                          await getProfileInfo(emp, context);
+
+                                          if((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount==0))
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => HomePageMain()),
+                                            );
+                                          else
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => EmployeeList()),
+                                            );
+
+                                          showDialog(
+                                              context: this.context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text(
+                                                      "Employee added successfully"),
+                                                );
+                                              });
+                                        } else if (data['status'] == 'false1') {
+                                          showDialog(
+                                              context: this.context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text(
+                                                      "Email ID already exists"),
+                                                );
+                                              });
+                                        } else if (data['status'] == 'false2') {
+                                          showDialog(
+                                              context: this.context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text(
+                                                      "Contact already exists"),
+                                                );
+                                              });
+                                        } else if (data['status'] == 'false3') {
+                                          showDialog(
+                                              context: this.context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text(
+                                                      "Employee Code already exists"),
+                                                );
+                                              });
+                                        } else {
+                                          showDialog(
+                                              context: this.context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text(
+                                                      "There is some while adding employee"),
+                                                );
+                                              });
+                                        }
+                                        setState(() {
+                                          _isServiceCalling = false;
+                                          _isButtonDisabled = false;
+                                        });
+                                      }
+                                    }).catchError((exp) {
+                                      showDialog(
+                                          context: this.context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Unable to connect server"),
+                                            );
+                                          });
+                                      print(exp.toString());
+                                      setState(() {
+                                        _isServiceCalling = false;
+                                        _isButtonDisabled = false;
+                                      });
+                                    });
+                                  }
+                                },
+                              ):RaisedButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                child: _isServiceCalling?Text("Updating..",
+                                  style: TextStyle(color: Colors.white),
+                                ):Text("UPDATE",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.orange[800],
+                                onPressed: () {
+                                  if (_editformKey.currentState.validate()) {
+                                    setState(() {
+                                      _isServiceCalling = true;
+                                      _isButtonDisabled = true;
+                                    });
+                                    var url = path + "updateEmp";
+                                    http.post(url, body: {
+                                      "uid": uid,
+                                      "empid": widget.empid,
+                                      "orgid": orgid,
+                                      "empcode": _empCode.text.trim(),
+                                      "div": div,
+                                      "loc": loc,
+                                      "grade": grade,
+                                      "dept": dept,
+                                      "desg": desg,
+                                      "empsts": finalempsts,
+                                      "shift": shift,
+                                      "fname": _firstName.text.trim(),
+                                      "lname": _lastName.text.trim(),
+                                      "dob": _dob.text.trim(),
+                                      "gender": finalgender,
+                                      "doj": _doj.text.trim(),
+                                      "nationality": nationality,
+                                      "country": _tempcontry,
+                                      "contcode": _contCode.text,
+                                      "contact": _contact.text.trim(),
+                                      "email": _email.text.trim(),
+                                    }).then((response) {
+                                      if (response.statusCode == 200) {
+                                        Map data = json.decode(response.body);
+                                        print(response.body.toString());
+                                        if (data['status'] == 'true') {
+                                          if(widget.sts==2) {
+                                            Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => CollapsingTab()), (
+                                                Route<dynamic> route) => false,
+                                            );
+                                          }else if(widget.sts==5) {
+                                            Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => ViewEmployee(empid:widget.empid, sts: widget.sts)), (
+                                                Route<dynamic> route) => false,
+                                            );
+                                          }else {
+                                            Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => EmployeeList()), (
+                                                Route<dynamic> route) => false,
+                                            );
+                                          }
+                                          showDialog(
+                                              context: this.context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text(
+                                                      "Employee details updated successfully"),
+                                                );
+                                              });
+                                        } else if (data['status'] == 'false1') {
+                                          showDialog(
+                                              context: this.context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text(
+                                                      "Email ID already exists"),
+                                                );
+                                              });
+                                        } else if (data['status'] == 'false2') {
+                                          showDialog(
+                                              context: this.context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text(
+                                                      "Contact already exists"),
+                                                );
+                                              });
+                                        } else {
+                                          showDialog(
+                                              context: this.context,
+                                              builder: (context) {
+                                                Future.delayed(Duration(seconds: 3), () {
+                                                  Navigator.of(context).pop(true);
+                                                });
+                                                return AlertDialog(
+                                                  content: new Text(
+                                                      "There is some while updating employee"),
+                                                );
+                                              });
+                                        }
+                                        setState(() {
+                                          _isServiceCalling = false;
+                                          _isButtonDisabled = false;
+                                        });
+                                      }
+                                    }).catchError((exp) {
+                                      showDialog(
+                                          context: this.context,
+                                          builder: (context) {
+                                            Future.delayed(Duration(seconds: 3), () {
+                                              Navigator.of(context).pop(true);
+                                            });
+                                            return AlertDialog(
+                                              content: new Text("Unable to connect server"),
+                                            );
+                                          });
+                                      print(exp.toString());
+                                      setState(() {
+                                        _isServiceCalling = false;
+                                        _isButtonDisabled = false;
+                                      });
+                                    });
+                                  }
+                                },
+                              ),
+                              SizedBox(width: 10.0),
+                              FlatButton(
+                                shape: Border.all(color: Colors.orange[800]),
+                                child: Text('CANCEL',style: TextStyle(color: Colors.black87),),
+                                onPressed: () {
+                                  //Navigator.pop(context);
+                                  if(widget.sts==1 || widget.sts==2 || widget.sts==3 || widget.sts==5) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => ViewEmployee(empid:widget.empid, sts: widget.sts))
+                                    );
+                                  }else if(widget.sts==4) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => EmployeeList())
+                                    );
+                                  }else{
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => ViewEmployee(empid:widget.empid))
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -1512,10 +1846,17 @@ class _EditEmployee extends State<EditEmployee> {
 
   ///////////////////////common dropdowns/////////////////////
   Widget getDivisions_DD() {
+    String divName='';
     return new FutureBuilder<List<Map>>(
       future: getDivisionsList(0), //with -select- label
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          for (int i = 0; i < snapshot.data.length; i++) {
+            if (snapshot.data[i]["Id"] == div) {
+              divName = snapshot.data[i]["Name"];
+              break;
+            }
+          }
           return Column(
             children: <Widget>[
               Padding(
@@ -1584,7 +1925,8 @@ class _EditEmployee extends State<EditEmployee> {
                       isDense: true,
                       style: new TextStyle(fontSize: 15.0, color: Colors.black),
                       value: div,
-                      onChanged: (String newValue) {
+                      disabledHint: widget.sts==5?Text(div!='0'?divName:'-Select'):null,
+                      onChanged: widget.sts==5?null:(String newValue) {
                         setState(() {
                           div = newValue;
                           print("div");
@@ -1832,10 +2174,17 @@ class _EditEmployee extends State<EditEmployee> {
   }
 
   Widget getDepartments_DD() {
+    String deptName='';
     return new FutureBuilder<List<Map>>(
       future: getDepartmentsList(0), //with -select- label
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          for (int i = 0; i < snapshot.data.length; i++) {
+            if (snapshot.data[i]["Id"] == dept) {
+              deptName = snapshot.data[i]["Name"];
+              break;
+            }
+          }
           /*if(widget.sts==4) {
             for (int i = 0; i < snapshot.data.length; i++) {
               if (snapshot.data[i]["Name"] == "Trial Department") {
@@ -1912,7 +2261,8 @@ class _EditEmployee extends State<EditEmployee> {
                           isDense: true,
                           style: new TextStyle(fontSize: 15.0, color: Colors.black),
                           value: dept,
-                          onChanged: (String newValue) {
+                          disabledHint: widget.sts==5?Text(dept!='0'?deptName:'-Select'):null,
+                          onChanged: widget.sts==5?null:(String newValue) {
                             setState(() {
                               dept = newValue;
                               print("dept");
@@ -2125,10 +2475,17 @@ class _EditEmployee extends State<EditEmployee> {
   }
 
   Widget getDesignations_DD() {
+    String desgName='';
     return new FutureBuilder<List<Map>>(
       future: getDesignationsList(0),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          for (int i = 0; i < snapshot.data.length; i++) {
+            if (snapshot.data[i]["Id"] == desg) {
+              desgName = snapshot.data[i]["Name"];
+              break;
+            }
+          }
           /*if(widget.sts==4) {
             for (int i = 0; i < snapshot.data.length; i++) {
               if (snapshot.data[i]["Name"] == "Trial Designation") {
@@ -2205,7 +2562,8 @@ class _EditEmployee extends State<EditEmployee> {
                       isDense: true,
                       style: new TextStyle(fontSize: 15.0, color: Colors.black),
                       value: desg,
-                      onChanged: (String newValue) {
+                      disabledHint: widget.sts==5?Text(desg!='0'?desgName:'-Select'):null,
+                      onChanged: widget.sts==5?null:(String newValue) {
                         setState(() {
                           desg = newValue;
                         });
@@ -2415,10 +2773,17 @@ class _EditEmployee extends State<EditEmployee> {
   }
 
   Widget getLocations_DD() {
+    String locName='';
     return new FutureBuilder<List<Map>>(
       future: getLocationsList(0),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          for (int i = 0; i < snapshot.data.length; i++) {
+            if (snapshot.data[i]["Id"] == loc) {
+              locName = snapshot.data[i]["Name"];
+              break;
+            }
+          }
           /*if(widget.sts==4) {
             if (snapshot.data.length > 0) {
               for (int i = 0; i < snapshot.data.length; i++) {
@@ -2435,7 +2800,7 @@ class _EditEmployee extends State<EditEmployee> {
           return Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(left:15.0, right:15.0, top:0.0),
+                padding: const EdgeInsets.only(left:15.0, right:15.0, top:5.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -2502,7 +2867,8 @@ class _EditEmployee extends State<EditEmployee> {
                       isDense: true,
                       style: new TextStyle(fontSize: 15.0, color: Colors.black),
                       value: loc,
-                      onChanged: (String newValue) {
+                      disabledHint: widget.sts==5?Text(loc!='0'?locName:'-Select-'):null,
+                      onChanged: widget.sts==5?null:(String newValue) {
                         setState(() {
                           loc = newValue;
                         });
@@ -2701,10 +3067,17 @@ class _EditEmployee extends State<EditEmployee> {
   }
 
   Widget getShifts_DD() {
+    String shiftName='';
     return new FutureBuilder<List<Map>>(
       future: getShiftsList(0),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          for (int i = 0; i < snapshot.data.length; i++) {
+            if (snapshot.data[i]["Id"] == shift) {
+              shiftName = snapshot.data[i]["Name"];
+              break;
+            }
+          }
           /*if(widget.sts==4) {
             for (int i = 0; i < snapshot.data.length; i++) {
               if (snapshot.data[i]["Name"] == "Trial Shift") {
@@ -2772,7 +3145,8 @@ class _EditEmployee extends State<EditEmployee> {
                       isDense: true,
                       style: new TextStyle(fontSize: 15.0, color: Colors.black),
                       value: shift,
-                      onChanged: (String newValue) {
+                      disabledHint: widget.sts==5?Text(shift!='0'?shiftName:'-Select-'):null,
+                      onChanged: widget.sts==5?null:(String newValue) {
                         setState(() {
                           shift = newValue;
                         });
@@ -3103,10 +3477,17 @@ class _EditEmployee extends State<EditEmployee> {
   }
 
   Widget getGrades_DD() {
+    String gradeName='';
     return new FutureBuilder<List<Map>>(
         future: getGradeList(0),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            for (int i = 0; i < snapshot.data.length; i++) {
+              if (snapshot.data[i]["Id"] == grade) {
+                gradeName = snapshot.data[i]["Name"];
+                break;
+              }
+            }
             return Column(
               children: <Widget>[
                 Padding(
@@ -3171,7 +3552,8 @@ class _EditEmployee extends State<EditEmployee> {
                         isDense: true,
                         style: new TextStyle(fontSize: 15.0, color: Colors.black),
                         value: grade,
-                        onChanged: (String newValue) {
+                        disabledHint: widget.sts==5?Text(grade!='0'?gradeName:'-Select-'):null,
+                        onChanged: widget.sts==5?null:(String newValue) {
                           setState(() {
                             grade = newValue;
                           });
@@ -3382,10 +3764,17 @@ class _EditEmployee extends State<EditEmployee> {
   }
 
   Widget getEmployeeStatus_DD() {
+    String empstsName='';
     return new FutureBuilder<List<Map>>(
         future: widget.sts==4?getEmpStatusList(0,1):getEmpStatusList(0,2),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            for (int i = 0; i < snapshot.data.length; i++) {
+              if (snapshot.data[i]["Id"].toString() == empsts) {
+                empstsName = snapshot.data[i]["Name"].toString();
+                break;
+              }
+            }
             return Column(
               children: <Widget>[
                 Padding(
@@ -3423,7 +3812,8 @@ class _EditEmployee extends State<EditEmployee> {
                         isDense: true,
                         style: new TextStyle(fontSize: 15.0, color: Colors.black),
                         value: empsts,
-                        onChanged: (String newValue) {
+                        disabledHint: widget.sts==5?Text(empsts!='0'?empstsName:'-Select-'):null,
+                        onChanged: widget.sts==5?null:(String newValue) {
                           setState(() {
                             empsts = newValue;
                             for(int i=0;i<snapshot.data.length;i++) {

@@ -106,6 +106,13 @@ class _CustomDateAttendance extends State<CustomDateAttendance> with SingleTicke
       onRefresh: () async {
         Completer<Null> completer = new Completer<Null>();
         await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+          setState(() {
+            today.text = formatter.format(DateTime.now());
+            getCDateAttn('present',today.text);
+            getCDateAttn('absent',today.text);
+            getCDateAttn('latecomings',today.text);
+            getCDateAttn('earlyleavings',today.text);
+          });
           completer.complete();
         });
         return completer.future;

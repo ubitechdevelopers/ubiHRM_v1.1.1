@@ -518,7 +518,7 @@ class _DivisionState extends State<Division> {
           ),
           contentPadding: const EdgeInsets.all(15.0),
           content: Container(
-            height: MediaQuery.of(context).size.height*0.20,
+            height: MediaQuery.of(context).size.height*0.22,
             child: Padding(
               padding: const EdgeInsets.all(0.0),
               child: Column(
@@ -627,7 +627,7 @@ class _DivisionState extends State<Division> {
                           Navigator.of(context).pop(true);
                         });
                         return AlertDialog(
-                          content: new Text("This division can't be updated. Employees are already assigned to it"),
+                          content: new Text("This division can't be updated. Employees are already assigned to it."),
                         );
                       });
                 }else if(sts.contains("3")){

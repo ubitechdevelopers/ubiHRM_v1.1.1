@@ -148,7 +148,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
               Navigator.of(context).pop(true);
             });
             return AlertDialog(
-              content: new Text("Time Off application withdrawn successfully."),
+              content: new Text("Time Off withdrawn successfully."),
             );
           });
         // ignore: deprecated_member_use
@@ -308,6 +308,7 @@ class _TimeoffSummary extends State<TimeoffSummary> {
         onRefresh: () async {
           Completer<Null> completer = new Completer<Null>();
           await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            getTimeOffSummary();
             completer.complete();
           });
           return completer.future;

@@ -162,6 +162,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
             setState(() {
               _searchController.clear();
               empname='';
+              getTeamTimeoffapproval(empname,formatter.format(selectedMonth));
               FocusScopeNode currentFocus = FocusScope.of(context);
               if (!currentFocus.hasPrimaryFocus) {
                 currentFocus.unfocus();
@@ -737,7 +738,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                   Navigator.of(context).pop(true);
                                 });
                                 return AlertDialog(
-                                  content: new Text("Time Off application approved successfully"),
+                                  content: new Text("Time Off approved successfully"),
                                 );
                               });
                             /*showDialog(
@@ -762,7 +763,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                   Navigator.of(context).pop(true);
                                 });
                                 return AlertDialog(
-                                  content: new Text("Time Off application could not be approved"),
+                                  content: new Text("Time Off could not be approved"),
                                 );
                               });
                             /*showDialog(
@@ -807,7 +808,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                   Navigator.of(context).pop(true);
                                 });
                                 return AlertDialog(
-                                  content: new Text("Time Off application rejected successfully"),
+                                  content: new Text("Time Off rejected successfully"),
                                 );
                               });
                             /*showDialog(
@@ -832,7 +833,7 @@ class _TeamTimeoffSummary extends State<TeamTimeoffSummary> {
                                     Navigator.of(context).pop(true);
                                   });
                                   return AlertDialog(
-                                    content: new Text("Time Off application could not be rejected"),
+                                    content: new Text("Time Off could not be rejected"),
                                   );
                                 });
                             /*showDialog(

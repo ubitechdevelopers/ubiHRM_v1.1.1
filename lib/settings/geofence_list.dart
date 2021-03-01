@@ -366,7 +366,7 @@ class _GeofenceState extends State<Geofence> {
                           Navigator.of(context).pop(true);
                         });
                         return AlertDialog(
-                          content: new Text("This geofence can't be update. Employees are already assigned to it"),
+                          content: new Text("This geofence can't be update. Employees are already assigned to it."),
                         );
                       });
                   getGeofenceWidget();

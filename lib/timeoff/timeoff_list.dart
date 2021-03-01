@@ -95,6 +95,8 @@ class _TimeOffList extends State<TimeOffList> {
         onRefresh: () async {
           Completer<Null> completer = new Completer<Null>();
           await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            empname='';
+            getTimeOFfDataList(today.text,empname);
             completer.complete();
           });
           return completer.future;

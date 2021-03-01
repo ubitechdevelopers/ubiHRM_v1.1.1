@@ -6,7 +6,7 @@ import 'package:ubihrm/reports/employee.dart';
 import 'package:ubihrm/reports/outside_fence_report.dart';
 import 'package:ubihrm/reports/periodic_att.dart';
 import 'package:ubihrm/services/attandance_services.dart';
-import '../salary/all_reports.dart';
+import 'all_reports.dart';
 import '../appbar.dart';
 import '../b_navigationbar.dart';
 import '../drawer.dart';
@@ -34,6 +34,11 @@ class _Reports extends State<Reports> {
   //DateTime orgCreatedDate;
   String orgName="";
   Future<DateTime> _listFuture;
+  int hrsts=0;
+  int adminsts=0;
+  int divhrsts=0;
+  int dataaccess=0;
+  int profiletype=0;
 
   @override
   void initState() {
@@ -48,7 +53,11 @@ class _Reports extends State<Reports> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       orgName= prefs.getString('orgname') ?? '';
-
+      profiletype =prefs.getInt('profiletype')??0;
+      dataaccess =prefs.getInt('dataaccess')??0;
+      hrsts =prefs.getInt('hrsts')??0;
+      adminsts =prefs.getInt('adminsts')??0;
+      divhrsts =prefs.getInt('divhrsts')??0;
     });
   }
 
@@ -270,8 +279,9 @@ class _Reports extends State<Reports> {
                 ),
 
 
-                SizedBox(height: 6.0),
-                new RaisedButton(
+                perPunchLocation == '1'?SizedBox(height: 6.0):Center(),
+                perPunchLocation == '1'?
+                ((hrsts==1 || adminsts==1 || divhrsts==1) || ((profiletype==0 || profiletype==2) && perVisitReport=='1'))?new RaisedButton(
                   padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                   child: Container(
                     child: Row(
@@ -311,7 +321,7 @@ class _Reports extends State<Reports> {
                       );
                     }
                   },
-                ),
+                ):Center():Center(),
 
 
                 SizedBox(height: 6.0),
@@ -446,8 +456,9 @@ class _Reports extends State<Reports> {
                 ),
 
 
-                SizedBox(height: 6.0),
-                new RaisedButton(
+                perGeoFence=='1'?SizedBox(height: 6.0):Center(),
+                perGeoFence=='1'?
+                ((hrsts==1 || adminsts==1 || divhrsts==1) || ((profiletype==0 || profiletype==2) && perGeoReport=='1'))?new RaisedButton(
                   padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                   child: Container(
                     child: Row(
@@ -487,7 +498,7 @@ class _Reports extends State<Reports> {
                       );
                     }
                   },
-                ),
+                ):Center():Center(),
 
 
                 SizedBox(height: 6.0),

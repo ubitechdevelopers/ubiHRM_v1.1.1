@@ -551,7 +551,7 @@ class _RegisterState extends State<Register> {
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.black),
-                                        inputFormatters: [ FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), ],
+                                        inputFormatters: [ FilteringTextInputFormatter.allow(RegExp("[a-zA-Z T]")), ],
                                         decoration: InputDecoration(
                                           // border: InputBorder.none,
                                           icon: Icon(
@@ -589,7 +589,7 @@ class _RegisterState extends State<Register> {
                                         controller: signupCPNController,
                                         keyboardType: TextInputType.text,
                                         textCapitalization: TextCapitalization.words,
-                                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),],
+                                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[a-zA-Z T]")),],
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.black),

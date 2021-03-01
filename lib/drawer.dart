@@ -6,7 +6,7 @@ import 'package:ubihrm/about_app.dart';
 import 'package:ubihrm/payroll/allpayroll_list.dart';
 import 'package:ubihrm/salary/allsalary_list.dart';
 import 'package:ubihrm/userGuide.dart';
-import 'salary/all_reports.dart';
+import 'reports/all_reports.dart';
 import 'global.dart';
 import 'home.dart';
 import 'login_page.dart';

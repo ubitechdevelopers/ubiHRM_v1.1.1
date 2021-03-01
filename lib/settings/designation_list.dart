@@ -58,6 +58,8 @@ class _Designation extends State<Designation> {
       hrsts =prefs.getInt('hrsts')??0;
       adminsts =prefs.getInt('adminsts')??0;
       divhrsts =prefs.getInt('divhrsts')??0;
+      uid = prefs.getString("employeeid")??"";
+      orgid = prefs.getString("organization")??"";
     });
   }
 
@@ -397,7 +399,7 @@ class _Designation extends State<Designation> {
                           Navigator.of(context).pop(true);
                         });
                         return AlertDialog(
-                          content: new Text("This designation can't be updated. Employees are already assigned to it"),
+                          content: new Text("This designation can't be updated. Employees are already assigned to it."),
                         );
                       });
                   }else if(res=='3') {

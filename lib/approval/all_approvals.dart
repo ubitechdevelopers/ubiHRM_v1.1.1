@@ -64,14 +64,18 @@ class _AllApprovals extends State<AllApprovals> {
 
     getAllPermission(emp).then((res) {
       setState(() {
-        perLeaveApproval=   getModuleUserPermission("124","view");
+        /*perLeaveApproval=   getModuleUserPermission("124","view");
         perTimeoffApproval=  getModuleUserPermission("180","view");
-        perSalaryExpenseApproval=  getModuleUserPermission("170","view");
-        perPayrollExpenseApproval=  getModuleUserPermission("473","view");
+        perSalaryExpense=  getModuleUserPermission("170","view");
+        perPayrollExpense=  getModuleUserPermission("473","view");*/
+        perLeaveApproval=   getModulePermission("124","view");
+        perTimeoffApproval=  getModulePermission("180","view");
+        perSalaryExpense=  getModulePermission("170","view");
+        perPayrollExpense=  getModulePermission("473","view");
         print("leave "+perLeaveApproval);
         print("timeoff "+perTimeoffApproval);
-        print("salary expense "+perSalaryExpenseApproval);
-        print("payroll expense "+perPayrollExpenseApproval);
+        print("salary expense "+perSalaryExpense);
+        print("payroll expense "+perPayrollExpense);
       });
     });
   }
@@ -193,8 +197,8 @@ class _AllApprovals extends State<AllApprovals> {
                     },
                   ):Center(),
 
-                  perAttendance=='1'?SizedBox(height: 6.0):Center(),
-                  perAttendance=='1'?new RaisedButton(
+                  (perAttendance=='1' && perTimeoffApproval=='1')?SizedBox(height: 6.0):Center(),
+                  (perAttendance=='1' && perTimeoffApproval=='1')?new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
                       child: Row(
@@ -230,8 +234,8 @@ class _AllApprovals extends State<AllApprovals> {
                     },
                   ):Center(),
 
-                  perSalary=='1' ?SizedBox(height: 6.0):Center(),
-                  perSalary=='1' ?
+                  perSalaryExpense=='1' ?SizedBox(height: 6.0):Center(),
+                  perSalaryExpense=='1' ?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -245,7 +249,7 @@ class _AllApprovals extends State<AllApprovals> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                    child: Text('Salary Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
                               ],
                             ),
@@ -267,8 +271,8 @@ class _AllApprovals extends State<AllApprovals> {
                     },
                   ): Center(),
 
-                  perPayroll=='1' ?SizedBox(height: 6.0):Center(),
-                  perPayroll=='1' ?
+                  perPayrollExpense=='1' ?SizedBox(height: 6.0):Center(),
+                  perPayrollExpense=='1' ?
                   new RaisedButton(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                     child: Container(
@@ -282,7 +286,7 @@ class _AllApprovals extends State<AllApprovals> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                    child: Text('Payroll Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
+                                    child: Text('Expense',style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                                 ),
                               ],
                             ),

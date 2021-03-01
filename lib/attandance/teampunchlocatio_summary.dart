@@ -121,7 +121,9 @@ class _TeamPunchLocationSummary extends State<TeamPunchLocationSummary> {
           Completer<Null> completer = new Completer<Null>();
           await Future.delayed(Duration(seconds: 1)).then((onvalue) {
             setState(() {
-              today.clear();
+              today.text = formatter.format(DateTime.now());
+              getTeamSummaryPunch(today.text,empname);
+              empname='';
               FocusScopeNode currentFocus = FocusScope.of(context);
               if (!currentFocus.hasPrimaryFocus) {
                 currentFocus.unfocus();

@@ -21,8 +21,8 @@ void main() => runApp(new MyTeamAtt());
 class MyTeamAtt extends StatefulWidget {
   @override
   _MyTeamAtt createState() => _MyTeamAtt();
-
 }
+
 const labelMonth = 'Month';
 const labelDate = 'Date';
 const labelWeekDay = 'Week Day';
@@ -39,7 +39,6 @@ class _MyTeamAtt extends State<MyTeamAtt> {
   bool showtabbar ;
   String orgName="";
   bool res = true;
-  var formatter = new DateFormat('dd-MMM-yyyy');
   DateTime startDate1;
   DateTime startDate;
   DateTime endDate;
@@ -90,33 +89,10 @@ class _MyTeamAtt extends State<MyTeamAtt> {
     print("selectedDate");
     print(selectedDate);
     print(selectedDate1);
-    date = startDate1;
+    date = selectedDate;
     print("date");
     print(date);
   }
-
-
-/*
-  String dateFormat = 'dd';
-  String monthFormat = 'MMM';
-  String weekDayFormat = 'EEE';
-  List<String> order = [labelMonth, labelDate, labelWeekDay];
-  bool forceRender = false;
-
-  Color defaultDecorationColor = Colors.transparent;
-  BoxShape defaultDecorationShape = BoxShape.rectangle;
-  bool isCircularRadiusDefault = true;
-
-  Color selectedDecorationColor = Colors.green;
-  BoxShape selectedDecorationShape = BoxShape.rectangle;
-  bool isCircularRadiusSelected = true;
-
-  Color disabledDecorationColor = Colors.grey;
-  BoxShape disabledDecorationShape = BoxShape.rectangle;
-  bool isCircularRadiusDisabled = true;
-
-  int maxSelectedDateCount = 1;
-*/
 
   getOrgName() async{
     final prefs = await SharedPreferences.getInstance();
@@ -129,12 +105,6 @@ class _MyTeamAtt extends State<MyTeamAtt> {
     if (data != null && data.toString() != '') {
       setState(() {
         res = true;
-        /*DateTime date1 = data;
-        print("date1");
-        print(date1);
-        DateTime date2 = DateTime(date1.year, date1.month, date1.day);
-        print("date2");
-        print(date2);*/
         date = data;
         print("date");
         print(date);
@@ -228,10 +198,6 @@ class _MyTeamAtt extends State<MyTeamAtt> {
   }
   // This widget is the root of your application.
   Future<bool> sendToHome() async{
-    /*Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );*/
     print("-------> back button pressed");
     Navigator.pushAndRemoveUntil(
       context,
@@ -255,6 +221,8 @@ class _MyTeamAtt extends State<MyTeamAtt> {
         onRefresh: () async {
           Completer<Null> completer = new Completer<Null>();
           await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            getTeamSummary(date,empname);
+            empname='';
             completer.complete();
           });
           return completer.future;
@@ -367,15 +335,15 @@ class _MyTeamAtt extends State<MyTeamAtt> {
               CalendarStrip(
                 startDate: startDate,
                 endDate: endDate,
-                //selectedDate: selectedDate,
+                selectedDate: date,
                 onDateSelected: onSelect,
-                //onWeekSelected: onWeekSelect,
+                onWeekSelected: onWeekSelect,
                 dateTileBuilder: dateTileBuilder,
                 iconColor: Colors.black87,
                 monthNameWidget: _monthNameWidget,
                 //markedDates: markedDates,
                 containerDecoration: BoxDecoration(color: appStartColor().withOpacity(0.1)),
-                //addSwipeGesture: true,
+                addSwipeGesture: true,
               ),
               Container(
                 padding: EdgeInsets.only(top:5.0,),
@@ -523,7 +491,7 @@ class _MyTeamAtt extends State<MyTeamAtt> {
   mainbody() {
     return Container(
         child: FutureBuilder<List<User>>(
-          future: getTeamSummary(date,empname),
+          future: getTeamSummary(formatter.format(date),empname),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               print("snapshot.data.length");

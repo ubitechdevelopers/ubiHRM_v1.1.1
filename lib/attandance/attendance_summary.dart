@@ -64,52 +64,53 @@ class _MyApp extends State<MyApp> {
     hasShadow: false,
     x: ef,
     y: gh,
-    content: new Material(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white
-          ),
-          //width: 300,
-          //height: 150,
-          child: Padding(
-              padding: const EdgeInsets.only(top:10.0, bottom: 10.0, right:5.0, left:5.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    "Please ask the employee(s) you have added to punch their attendance.",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(height: 10.0),
-                  RichText(
-                    text: new TextSpan(
-                      style: new TextStyle(
-                        fontSize: 19.5,
-                        color: Colors.black,
+    content: WillPopScope(
+      onWillPop: () async => false,
+      child: new Material(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white
+            ),
+            child: Padding(
+                padding: const EdgeInsets.only(top:10.0, bottom: 10.0, right:5.0, left:5.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      "Please ask the employee(s) you have added to punch their attendance.",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    SizedBox(height: 10.0),
+                    RichText(
+                      text: new TextSpan(
+                        style: new TextStyle(
+                          fontSize: 19.5,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          new TextSpan(
+                              text: "Employee's Attendance can be checked in ",
+                              style: new TextStyle(fontSize: 19.5)),
+                          new TextSpan(
+                            text: "Team Attendance Tab.",style: TextStyle(fontSize: 19.5,fontWeight: FontWeight.w600, color: Colors.orange[800]),)
+                        ],
                       ),
-                      children: <TextSpan>[
-                        new TextSpan(
-                            text: "Employee's Attendance can be checked in ",
-                            style: new TextStyle(fontSize: 19.5)),
-                        new TextSpan(
-                          text: "Team Attendance Tab.",style: TextStyle(fontSize: 19.5,fontWeight: FontWeight.w600, color: Colors.orange[800]),)
-                      ],
                     ),
-                  ),
-                  SizedBox(height: 10.0),
-                  RaisedButton(
-                    color: Colors.orange[800],
-                    child: Text(
-                      'OK',
-                      style: TextStyle(color: Colors.white),
+                    SizedBox(height: 10.0),
+                    RaisedButton(
+                      color: Colors.orange[800],
+                      child: Text(
+                        'OK',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () async {
+                        SuperTooltip.a.close();
+                      },
                     ),
-                    onPressed: () async {
-                      SuperTooltip.a.close();
-                    },
-                  ),
-                ],
-              )),
-        )),
+                  ],
+                )),
+          )),
+    ),
   );
 
   static tooltiptimeinClicked(context) async {
@@ -156,9 +157,9 @@ class _MyApp extends State<MyApp> {
     );
 
     await getProfileInfo(emp ,context);
-    if((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && empattcount==0)) {
+    if((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount ==1 && empattcount==0)) {
       print("(adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && empattcount==0)");
-      print((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && empattcount==0));
+      print((adminsts==1 || divhrsts==1 || hrsts==1) && (plansts==0 && empcount>1 && attcount ==1 && empattcount==0));
       if (_key != null) if (_key.currentContext != null) {
         final RenderBox renderBoxBlue = _key.currentContext.findRenderObject();
         final positionBlue = renderBoxBlue.localToGlobal(Offset.zero);
@@ -200,6 +201,7 @@ class _MyApp extends State<MyApp> {
         onRefresh: () async {
           Completer<Null> completer = new Completer<Null>();
           await Future.delayed(Duration(seconds: 1)).then((onvalue) {
+            getSummary();
             completer.complete();
           });
           return completer.future;
